@@ -1,27 +1,24 @@
-package com.superdroid.facemaker
+package com.superdroid.facemaker.FormClass
 
-import android.content.Intent
-import android.content.Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 
 import androidx.recyclerview.widget.RecyclerView
+import com.superdroid.facemaker.EventBus.Events
+import com.superdroid.facemaker.EventBus.GlobalBus
+import com.superdroid.facemaker.R
 import kotlinx.android.synthetic.main.list_item.view.*
 
 class RecyclerAdapter(private val items: ArrayList<MapList>) :
     RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
     override fun getItemCount() = items.size
-    override fun onBindViewHolder(holder: RecyclerAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = items[position]
         val listener = View.OnClickListener {it ->
             Toast.makeText(it.context, "Clicked: ${item.map_name}", Toast.LENGTH_SHORT).show()
-            /*val nextIntent = Intent(it.context, MainFragment_1::class.java)
-            nextIntent.putExtra("LOADFILENAME",it.map_name.text)
-            nextIntent.addFlags(FLAG_ACTIVITY_REORDER_TO_FRONT)
-            it.context.startActivity(nextIntent)*/
-
+            GlobalBus.getBus()?.post(Events.LoadToMain(it.map_name.text.toString()))
         }
         holder.apply {
             bind(listener, item)
@@ -30,10 +27,10 @@ class RecyclerAdapter(private val items: ArrayList<MapList>) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):
-            RecyclerAdapter.ViewHolder{
+            ViewHolder {
         val inflatedView = LayoutInflater.from(parent.context)
             .inflate(R.layout.list_item, parent, false)
-        return RecyclerAdapter.ViewHolder(inflatedView)
+        return ViewHolder(inflatedView)
     }
 
     class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {

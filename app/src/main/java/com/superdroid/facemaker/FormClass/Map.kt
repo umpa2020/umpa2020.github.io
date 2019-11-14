@@ -1,6 +1,5 @@
-package com.superdroid.facemaker
+package com.superdroid.facemaker.FormClass
 
-import android.app.Activity
 import android.content.Context
 import android.os.Looper
 import android.util.Log
@@ -14,7 +13,6 @@ import com.google.android.gms.maps.model.PolylineOptions
 import com.google.maps.android.SphericalUtil
 import java.util.*
 import kotlin.collections.ArrayList
-import androidx.fragment.app.Fragment
 
 class Map:OnMapReadyCallback {
     lateinit var mMap: GoogleMap    //map 인스턴스

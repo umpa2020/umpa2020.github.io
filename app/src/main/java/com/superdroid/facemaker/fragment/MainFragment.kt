@@ -1,11 +1,7 @@
-package com.superdroid.facemaker
+package com.superdroid.facemaker.fragment
 
 
-import android.Manifest
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -16,15 +12,15 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.fragment.app.FragmentActivity
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
-import com.google.firebase.events.Event
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.squareup.otto.Subscribe
+import com.superdroid.facemaker.EventBus.Events
+import com.superdroid.facemaker.EventBus.GlobalBus
+import com.superdroid.facemaker.FormClass.Map
+import com.superdroid.facemaker.R
 import java.io.*
 import kotlin.concurrent.timer
 
@@ -34,16 +30,16 @@ import kotlin.concurrent.timer
 class MainFragment : Fragment() ,View.OnClickListener{
     override fun onClick(view: View) {
         when{
-            view.id==R.id.btn_start -> start()
-            view.id==R.id.btn_stop -> stop()
+            view.id== R.id.btn_start -> start()
+            view.id== R.id.btn_stop -> stop()
          //   view.id==R.id.btn_load -> load()
         }
     }
 
     var TAG = "what u wanna say?~~!~!"       //로그용 태그
-    lateinit var map:Map
+    lateinit var map: Map
 
-    lateinit var LoadFileName:String
+    var LoadFileName=""
     lateinit var saveFolder:File
     lateinit var storage: FirebaseStorage
     lateinit var mStorageReference:StorageReference
@@ -106,18 +102,20 @@ class MainFragment : Fragment() ,View.OnClickListener{
         return view
     }
 
-  /*  @Subscribe
-    fun connectEvent1(e:Events.Event1){
-        print_log("connectEvent1 :"+e.filelist.toString())
-    }*/
+    @Subscribe
+    fun getFileNameBack(e: Events.FileNameBack){
+        print_log(e.fileName)
+        LoadFileName=e.fileName
+        if(LoadFileName.isNotEmpty()) {  //로드가 된 경우
+            print_log("Success Load File : " + LoadFileName.toString())
+            readFile()      //로드된 파일 읽기
+        }
+  }
 
     override fun onResume() {
         super.onResume()
-        /*if(intent.hasExtra("LOADFILENAME")){                    //로드가 된 경우
-            LoadFileName=intent.getStringExtra("LOADFILENAME")      //intent에서 불러올 파일이름 가져오기
-            print_log("Success Load File : "+LoadFileName.toString())
-            readFile()      //로드된 파일 읽기
-        }*/
+        GlobalBus.getBus()
+            ?.post(Events.FileNameRequest())
     }
 
     private fun readFile() {                //불러온 파일 읽기

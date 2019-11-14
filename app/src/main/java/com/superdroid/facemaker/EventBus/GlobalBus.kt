@@ -1,4 +1,4 @@
-package com.superdroid.facemaker
+package com.superdroid.facemaker.EventBus
 
 import com.squareup.otto.Bus
 
