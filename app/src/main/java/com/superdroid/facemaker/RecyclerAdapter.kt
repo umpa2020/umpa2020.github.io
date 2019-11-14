@@ -1,6 +1,7 @@
 package com.superdroid.facemaker
 
 import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,9 +17,11 @@ class RecyclerAdapter(private val items: ArrayList<MapList>) :
         val item = items[position]
         val listener = View.OnClickListener {it ->
             Toast.makeText(it.context, "Clicked: ${item.map_name}", Toast.LENGTH_SHORT).show()
-            val nextIntent = Intent(it.context, MainActivity::class.java)
-            nextIntent.putExtra("FileName",it.map_name.text)
-            it.context.startActivity(nextIntent)
+            /*val nextIntent = Intent(it.context, MainFragment_1::class.java)
+            nextIntent.putExtra("LOADFILENAME",it.map_name.text)
+            nextIntent.addFlags(FLAG_ACTIVITY_REORDER_TO_FRONT)
+            it.context.startActivity(nextIntent)*/
+
         }
         holder.apply {
             bind(listener, item)
