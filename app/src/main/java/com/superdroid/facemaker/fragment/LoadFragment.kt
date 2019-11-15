@@ -42,7 +42,10 @@ class LoadFragment() : Fragment() {
         filelist=e.filelist
         loadFile()
     }
-
+    @Subscribe
+    fun getImgBack(e:Events.imgBack){
+        e.img
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -51,6 +54,7 @@ class LoadFragment() : Fragment() {
          myView= inflater.inflate(R.layout.load_fragment, container, false)
         GlobalBus.getBus()
             ?.post(Events.FileListRequest())
+        GlobalBus.getBus()?.post(Events.ImgRequest("test_route21.txt"))
         return myView
     }
 

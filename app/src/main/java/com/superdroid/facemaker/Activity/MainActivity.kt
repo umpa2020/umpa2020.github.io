@@ -1,6 +1,7 @@
 package com.superdroid.facemaker.Activity
 
 import android.Manifest
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 
@@ -19,7 +20,8 @@ import com.superdroid.facemaker.EventBus.Events
 import com.superdroid.facemaker.EventBus.GlobalBus
 import com.superdroid.facemaker.R
 import com.superdroid.facemaker.fragment.LoadFragment
-import com.superdroid.facemaker.fragment.MainFragment
+import com.superdroid.facemaker.fragment.MapFragment
+import java.io.File
 
 class MainActivity:AppCompatActivity() {
 
@@ -27,7 +29,7 @@ class MainActivity:AppCompatActivity() {
     private val fragmentManager = supportFragmentManager
     var TAG = "what u wanna say?~~!~!"       //로그용 태그
     // 4개의 메뉴에 들어갈 Fragment들
-     val mainFragment = MainFragment()
+     val mainFragment = MapFragment()
     val loadFragment= LoadFragment()
     private val menuTextView: AppCompatButton? = null
 
@@ -102,6 +104,7 @@ class MainActivity:AppCompatActivity() {
             // 어떤 메뉴 아이템이 터치되었는지 확인합니다.
             when (item.itemId) {
                 R.id.menuitem_bottombar_main -> {
+
                     transaction.replace(R.id.fragment_layout, mainFragment).commitAllowingStateLoss()
                 }
                 R.id.menuitem_bottombar_load -> {
@@ -118,6 +121,16 @@ class MainActivity:AppCompatActivity() {
         super.onDestroy()
         GlobalBus.getBus()?.unregister(this)
     }
+
+   /* override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        var a=intent.getStringExtra("Fragment")
+        var b=intent.getStringExtra("Func")
+        var c=intent.getStringExtra("Route")
+        GlobalBus.getBus()?.post(Events.asd(a,b,c))//activity-> fragment 데이터전달
+        transaction.replace(R.id.fragment_layout, mainFragment).commitAllowingStateLoss()
+
+    }*/
 
     @Subscribe
     fun Receive_LoadToMain(e: Events.LoadToMain){
@@ -148,6 +161,12 @@ class MainActivity:AppCompatActivity() {
         GlobalBus.getBus()
             ?.post(Events.FileNameBack(LoadFileName))
     }
+    @Subscribe
+    fun Receive_ImgRequest(e:Events.ImgRequest){
+        /*asdasd*/
+        GlobalBus.getBus()?.post(Events.imgBack(File(e.fileName)))
+    }
+
     fun print_log(text:String){
         Log.d(TAG,text.toString())
     }

@@ -1,11 +1,17 @@
 package com.superdroid.facemaker.FormClass
 
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat.startActivity
 
 import androidx.recyclerview.widget.RecyclerView
+import com.superdroid.facemaker.Activity.LoadActivity
+import com.superdroid.facemaker.Activity.MainActivity
 import com.superdroid.facemaker.EventBus.Events
 import com.superdroid.facemaker.EventBus.GlobalBus
 import com.superdroid.facemaker.R
@@ -13,12 +19,16 @@ import kotlinx.android.synthetic.main.list_item.view.*
 
 class RecyclerAdapter(private val items: ArrayList<MapList>) :
     RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
+
+
     override fun getItemCount() = items.size
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = items[position]
         val listener = View.OnClickListener {it ->
             Toast.makeText(it.context, "Clicked: ${item.map_name}", Toast.LENGTH_SHORT).show()
-            GlobalBus.getBus()?.post(Events.LoadToMain(it.map_name.text.toString()))
+            var newIntent= Intent(it.context, LoadActivity::class.java)
+            it.context.startActivity(newIntent)
+            //GlobalBus.getBus()?.post(Events.LoadToMain(it.map_name.text.toString()))
         }
         holder.apply {
             bind(listener, item)

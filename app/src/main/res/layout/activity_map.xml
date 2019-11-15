@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.MainFragment"
+    tools:context=".fragment.MapFragment"
     android:orientation="vertical"
     android:weightSum="5">
 
@@ -23,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/map_viewer"
-            tools:context=".fragment.MainFragment"
+            tools:context=".fragment.MapFragment"
             android:name="com.google.android.gms.maps.SupportMapFragment" />
     </FrameLayout>
 
@@ -32,17 +32,12 @@
         android:layout_height="0dp"
         android:layout_weight="0.5"
         android:gravity="center">
+
         <Button
-            android:id="@+id/btn_start"
+            android:id="@+id/btn_stop"
             android:background="@drawable/circle_button"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:text="Start"
-            android:onClick="onClick"/>
-        <Button
-            android:id="@+id/btn_stop"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:text="Stop"
             android:onClick="onClick"/>
 

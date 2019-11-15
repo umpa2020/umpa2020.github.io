@@ -10,6 +10,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.PolylineOptions
+import com.google.firebase.storage.FirebaseStorage
 import com.google.maps.android.SphericalUtil
 import java.util.*
 import kotlin.collections.ArrayList
@@ -81,6 +82,7 @@ class Map:OnMapReadyCallback {
             var S: String = ""
             for (i in latlngs.indices) {             //위도 , 경도 \n 문자열 저장
                 S += latlngs[i].latitude.toString() + "," + latlngs[i].longitude.toString() + "\n"
+
             }
             return S
         }
