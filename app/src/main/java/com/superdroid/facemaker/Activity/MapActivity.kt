@@ -3,18 +3,21 @@ package com.superdroid.facemaker.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.opengl.Visibility
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.superdroid.facemaker.FormClass.Map
+import com.superdroid.facemaker.FormClass.Route
 import com.superdroid.facemaker.R
 import java.io.*
 import kotlin.concurrent.timer
@@ -22,7 +25,7 @@ import kotlin.concurrent.timer
 class MapActivity:AppCompatActivity(){
     var TAG = "what u wanna say?~~!~!"       //로그용 태그
     lateinit var map: Map
-
+    var sec=0
     var LoadFileName=""
     lateinit var saveFolder: File
     lateinit var storage: FirebaseStorage
@@ -35,6 +38,7 @@ class MapActivity:AppCompatActivity(){
     lateinit var start_btn: Button
     lateinit var stop_btn: Button
 
+    var route_save=""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,16 +57,58 @@ class MapActivity:AppCompatActivity(){
         map.startTracking()
         var timerTask = timer(period=1000){
             time++
-            val sec= time
+            sec= time
             runOnUiThread{
                 timer_tv.text=sec.toString()
             }
         }
-    }
+        var stop_btn=findViewById(R.id.btn_stop) as Button
+        stop_btn.setOnLongClickListener{
+            var route_data=Route()
+            route_data.route=route_save
+            route_data.distance=map.getDistance(map.route)
+            route_data.time=sec
 
+            var newIntent= Intent(this,StopActivity::class.java)
+            newIntent.putExtra("MAP", route_data)
+            startActivity(newIntent)
+           /* if (!saveFolder.exists()) {       //폴더 없으면 생성
+                saveFolder.mkdir()
+            }
+            try {
+                val path = "map" + saveFolder.list().size + ".txt"        //파일명 생성하는건데 수정필요
+
+                var myfile = File(saveFolder, path)                //로컬에 파일저장
+                var buf = BufferedWriter(FileWriter(myfile, true))
+                buf.append(route_save);
+                buf.close();
+
+                val stream = FileInputStream(myfile)        //서버에 파일저장
+                var mapRef: StorageReference = mStorageReference.child("maps/${myfile.name}")
+                var uploadTask = mapRef.putFile(Uri.fromFile(myfile))
+                uploadTask.addOnFailureListener {
+                }.addOnSuccessListener {
+                    print_log("succes" + storage.reference)
+
+                    var newIntent= Intent(this,StopActivity::class.java)
+                    startActivity(newIntent)
+                }
+
+            } catch (e: FileNotFoundException) {
+                e.printStackTrace()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+*/
+            true
+
+        }
+    }
     fun onClick(view: View) {
-        when{
-            view.id== R.id.btn_stop -> stop()
+        when(view.id){
+            R.id.btn_pause -> pause()
+            R.id.btn_stop -> stop()
+            R.id.btn_restart -> restart()
         }
     }
 
@@ -97,37 +143,30 @@ class MapActivity:AppCompatActivity(){
         }
     }
 
+    fun pause(){
+        var btn=findViewById<Button>(R.id.btn_pause)
+        btn.visibility=View.GONE
+        btn=findViewById<Button>(R.id.btn_stop)
+        btn.visibility=View.VISIBLE
+        btn=findViewById<Button>(R.id.btn_restart)
+        btn.visibility=View.VISIBLE
+        map.stop_Tracking()
+        route_save = map.stop_Tracking()
+
+    }
+
     fun stop() {    //타이머 멈추는거 만들어야함
-        var S = map.stop_Tracking()
+        Toast.makeText(this,"종료를 원하시면, 길게 눌러주세요",Toast.LENGTH_LONG).show()
+    }
 
-        if (!saveFolder.exists()) {       //폴더 없으면 생성
-            saveFolder.mkdir()
-        }
-        try {
-            val path = "map" + saveFolder.list().size + ".txt"        //파일명 생성하는건데 수정필요
-
-            var myfile = File(saveFolder, path)                //로컬에 파일저장
-            var buf = BufferedWriter(FileWriter(myfile, true))
-            buf.append(S);
-            buf.close();
-
-            val stream = FileInputStream(myfile)        //서버에 파일저장
-            var mapRef: StorageReference = mStorageReference.child("maps/${myfile.name}")
-            var uploadTask = mapRef.putFile(Uri.fromFile(myfile))
-            uploadTask.addOnFailureListener {
-            }.addOnSuccessListener {
-                print_log("succes" + storage.reference)
-
-                var newIntent= Intent(this,StopActivity::class.java)
-                startActivity(newIntent)
-            }
-
-        } catch (e: FileNotFoundException) {
-            e.printStackTrace()
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-
+    fun restart(){
+        var btn=findViewById<Button>(R.id.btn_pause)
+        btn.visibility=View.VISIBLE
+        btn=findViewById<Button>(R.id.btn_stop)
+        btn.visibility=View.GONE
+        btn=findViewById<Button>(R.id.btn_restart)
+        btn.visibility=View.GONE
+        map.startTracking()
     }
 
     fun print_log(text:String){

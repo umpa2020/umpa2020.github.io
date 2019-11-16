@@ -8,7 +8,8 @@
 <TextView
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:text="저장해주세요1~!~!~"/>
+    android:text="저장해주세요1~!~!~"
+    android:id="@+id/test_txt"/>
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

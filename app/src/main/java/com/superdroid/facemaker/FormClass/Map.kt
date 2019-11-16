@@ -12,10 +12,11 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.PolylineOptions
 import com.google.firebase.storage.FirebaseStorage
 import com.google.maps.android.SphericalUtil
+import java.io.Serializable
 import java.util.*
 import kotlin.collections.ArrayList
 
-class Map:OnMapReadyCallback {
+class Map:OnMapReadyCallback{
     lateinit var mMap: GoogleMap    //map 인스턴스
     lateinit var fusedLocationClient: FusedLocationProviderClient   //위치정보 가져오는 인스턴스
     lateinit var locationCallback: LocationCallback
