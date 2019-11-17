@@ -2,6 +2,7 @@ package com.superdroid.facemaker.Activity
 
 import android.content.Context
 import android.content.Intent
+import android.media.Image
 import android.net.Uri
 import android.opengl.Visibility
 import android.os.Bundle
@@ -9,6 +10,7 @@ import android.os.PersistableBundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -68,10 +70,7 @@ class MapActivity:AppCompatActivity(){
             route_data.route=route_save
             route_data.distance=map.getDistance(map.route)
             route_data.time=sec
-
-            var newIntent= Intent(this,StopActivity::class.java)
-            newIntent.putExtra("MAP", route_data)
-            startActivity(newIntent)
+            map.CaptureMapScreen(route_data)
            /* if (!saveFolder.exists()) {       //폴더 없으면 생성
                 saveFolder.mkdir()
             }
@@ -157,6 +156,8 @@ class MapActivity:AppCompatActivity(){
 
     fun stop() {    //타이머 멈추는거 만들어야함
         Toast.makeText(this,"종료를 원하시면, 길게 눌러주세요",Toast.LENGTH_LONG).show()
+
+
     }
 
     fun restart(){

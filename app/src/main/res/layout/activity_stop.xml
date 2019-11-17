@@ -4,17 +4,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.StopActivity">
-<TextView
+    tools:context=".Activity.StopActivity"
+    android:orientation="vertical">
+    <TextView
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:text="저장해주세요1~!~!~"
     android:id="@+id/test_txt"/>
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/map_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="저장"
         android:id="@+id/save_btn"
         android:onClick="onClick"/>
+
 
 </LinearLayout>

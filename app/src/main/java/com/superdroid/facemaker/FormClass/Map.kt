@@ -1,8 +1,14 @@
 package com.superdroid.facemaker.FormClass
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
+import android.graphics.Bitmap
 import android.os.Looper
 import android.util.Log
+import android.widget.ImageView
+import androidx.core.content.ContextCompat.startActivity
+import androidx.core.graphics.set
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -15,38 +21,47 @@ import com.google.maps.android.SphericalUtil
 import java.io.Serializable
 import java.util.*
 import kotlin.collections.ArrayList
+import com.google.android.gms.maps.GoogleMap.SnapshotReadyCallback
+import com.superdroid.facemaker.Activity.StopActivity
+import com.superdroid.facemaker.R
+import java.io.File
+import java.io.FileOutputStream
+import java.lang.Exception
 
-class Map:OnMapReadyCallback{
+class Map:OnMapReadyCallback {
     lateinit var mMap: GoogleMap    //map 인스턴스
     lateinit var fusedLocationClient: FusedLocationProviderClient   //위치정보 가져오는 인스턴스
     lateinit var locationCallback: LocationCallback
     var TAG = "what u wanna say?~~!~!"       //로그용 태그
-    var prev_loc: LatLng = LatLng(0.0,0.0)          //이전위치
+    var prev_loc: LatLng = LatLng(0.0, 0.0)          //이전위치
     lateinit var cur_loc: LatLng            //현재위치
     var latlngs: Vector<LatLng> = Vector<LatLng>()   //움직인 점들의 집합 나중에 저장될 점들 집합
-    var route=ArrayList<LatLng>()     //로드할 점들의 집합
+    var route = ArrayList<LatLng>()     //로드할 점들의 집합
     lateinit var context: Context
-    constructor(smf: SupportMapFragment,context: Context){
-        this.context=context
+
+    constructor(smf: SupportMapFragment, context: Context) {
+        this.context = context
         val mapFragment = smf
         mapFragment.getMapAsync(this)
         initLocation()
     }
+
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(prev_loc,16F))
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(prev_loc, 16F))
     }
-    fun startTracking(){
+
+    fun startTracking() {
         var locationRequest = LocationRequest.create()
         locationRequest.run {
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
             interval = 1000
         }
-        locationCallback = object: LocationCallback() {
+        locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult?) {
                 locationResult?.let {
-                    for((i, location) in it.locations.withIndex()) {
-                        var lat =location.latitude
+                    for ((i, location) in it.locations.withIndex()) {
+                        var lat = location.latitude
                         var lng = location.longitude
                         cur_loc = LatLng(lat, lng)
                         /*if(prev_loc.latitude==cur_loc.latitude&&prev_loc.longitude==cur_loc.longitude) {
@@ -62,66 +77,105 @@ class Map:OnMapReadyCallback{
                             )   //맵에 폴리라인 추가
                             }
                            */
-                            prev_loc = cur_loc                              //현재위치를 이전위치로 변경
-                            mMap.moveCamera(
-                                CameraUpdateFactory.newLatLngZoom(
-                                    cur_loc,
-                                    16F
-                                )
-                            )        //현재위치 따라서 카메라 이동
-                            print_log("위도 : "+lat.toString() + "경도 : " + lng.toString())
+                        prev_loc = cur_loc                              //현재위치를 이전위치로 변경
+                        mMap.moveCamera(
+                            CameraUpdateFactory.newLatLngZoom(
+                                cur_loc,
+                                16F
+                            )
+                        )        //현재위치 따라서 카메라 이동
+                        print_log("위도 : " + lat.toString() + "경도 : " + lng.toString())
 
                     }
                 }
             }
         }
-        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper())        //위에서 설정한 Request와 Callback을 Looper단위로 실행
+        fusedLocationClient.requestLocationUpdates(
+            locationRequest,
+            locationCallback,
+            Looper.myLooper()
+        )        //위에서 설정한 Request와 Callback을 Looper단위로 실행
 
     }
-    fun stop_Tracking():String{
-        if(!fusedLocationClient.removeLocationUpdates(locationCallback).isSuccessful) {  //location 요청 종료
+
+    fun stop_Tracking(): String {
+        if (!fusedLocationClient.removeLocationUpdates(locationCallback).isSuccessful) {  //location 요청 종료
             var S: String = ""
             for (i in latlngs.indices) {             //위도 , 경도 \n 문자열 저장
                 S += latlngs[i].latitude.toString() + "," + latlngs[i].longitude.toString() + "\n"
 
             }
+
             return S
-        }
-        else{
+        } else {
             print_log("Fail to stop")
             return "Fail"
         }
     }
+
     fun drawRoute() {                                                              //로드 된 경로 그리기
         var polyline = mMap.addPolyline(PolylineOptions().addAll(route))        //경로를 그릴 폴리라인 집합
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route[0],16F))                   //맵 줌
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route[0], 16F))                   //맵 줌
         polyline.setTag("A")
     }
+
     fun initLocation() {            //첫 위치 설정하고, prev_loc 설정
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
         fusedLocationClient.lastLocation
             .addOnSuccessListener { location ->
-                if(location == null) {
+                if (location == null) {
                     print_log("Location is null")
                 } else {
-                    print_log("Success to get Init Location : "+location.toString())
-                    prev_loc=LatLng(location.latitude,location.longitude)
+                    print_log("Success to get Init Location : " + location.toString())
+                    prev_loc = LatLng(location.latitude, location.longitude)
                 }
             }
             .addOnFailureListener {
-                print_log("Error is "+it.message.toString())
+                print_log("Error is " + it.message.toString())
                 it.printStackTrace()
             }
     }
-    fun getDistance(locations:ArrayList<LatLng>): Double {  //점들의 집합에서 거리구하기
-        var distance=0.0
-        var i=0;
-        while(i<locations.size-1){
-            distance+= SphericalUtil.computeDistanceBetween(locations[i], locations[i + 1])
+
+    fun getDistance(locations: ArrayList<LatLng>): Double {  //점들의 집합에서 거리구하기
+        var distance = 0.0
+        var i = 0;
+        while (i < locations.size - 1) {
+            distance += SphericalUtil.computeDistanceBetween(locations[i], locations[i + 1])
             i++
         }
         return distance
     }
+
+    fun CaptureMapScreen(route_data: Route) {
+        lateinit var bitmap: Bitmap
+        var callback = SnapshotReadyCallback() {
+            try {
+                var saveFolder = File(context.filesDir, "mapdata"); // 저장 경로
+                if (!saveFolder.exists()) {       //폴더 없으면 생성
+                    saveFolder.mkdir()
+                }
+                val path = "map" + saveFolder.list().size + ".txt"        //파일명 생성하는건데 수정필요
+
+                var myfile = File(saveFolder, path)                //로컬에 파일저장
+                var out = FileOutputStream(myfile)
+                it.compress(Bitmap.CompressFormat.PNG, 90, out);
+                route_data.bitmap = myfile.path
+
+                var newIntent = Intent((context as Activity), StopActivity::class.java)
+                newIntent.putExtra("MAP", route_data)
+                context.startActivity(newIntent)
+
+            } catch (e: Exception) {
+                print_log(e.toString())
+            }
+        }
+
+        mMap.snapshot(callback);
+        // myMap is object of GoogleMap +> GoogleMap myMap;
+        // which is initialized in onCreate() =>
+        // myMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map_pass_home_call)).getMap();
+    }
+
     fun print_log(text:String){
         Log.d(TAG,text.toString())
     }
