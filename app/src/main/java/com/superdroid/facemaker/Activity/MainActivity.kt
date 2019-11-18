@@ -170,6 +170,10 @@ class MainActivity:AppCompatActivity() {
     fun print_log(text:String){
         /*asdasdasdadasd*/
         Log.d(TAG,text.toString())
+        /*// tlqkf tprjewmfekf
+        efsdkfkfskfkmskdfnlks jfkje
+                fsfsdfjksajdfksajf
+        sfksdj*/
     }
 
 }
