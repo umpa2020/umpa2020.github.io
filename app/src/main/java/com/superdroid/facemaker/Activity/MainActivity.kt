@@ -19,6 +19,7 @@ import com.google.firebase.storage.StorageReference
 import com.squareup.otto.Subscribe
 import com.superdroid.facemaker.EventBus.Events
 import com.superdroid.facemaker.EventBus.GlobalBus
+import com.superdroid.facemaker.FormClass.MyUser
 import com.superdroid.facemaker.R
 import com.superdroid.facemaker.fragment.LoadFragment
 import com.superdroid.facemaker.fragment.MapFragment
@@ -89,6 +90,11 @@ class MainActivity:AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        if(intent.hasExtra("id")){
+            MyUser.id=intent.getStringExtra("id")
+        }
+
         checkPermissions()          //모든 권한 확인
         storage = FirebaseStorage.getInstance()      //firebase 가져오기
         mStorageReference = storage.reference

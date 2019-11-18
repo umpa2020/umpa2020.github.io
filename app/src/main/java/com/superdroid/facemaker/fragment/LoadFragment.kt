@@ -54,7 +54,6 @@ class LoadFragment() : Fragment() {
          myView= inflater.inflate(R.layout.load_fragment, container, false)
         GlobalBus.getBus()
             ?.post(Events.FileListRequest())
-        GlobalBus.getBus()?.post(Events.ImgRequest("test_route21.txt"))
         return myView
     }
 
@@ -65,6 +64,7 @@ class LoadFragment() : Fragment() {
         print_log("Succes to get Filelist")
         for(name in filelist){
             map_List.add(MapList(i++, name))
+            print_log(name)
         }
         val adapter =
             RecyclerAdapter(map_List)     //map_List를 이용해 adapter생성

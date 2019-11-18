@@ -58,7 +58,7 @@ class Map:OnMapReadyCallback {
                         var lat = location.latitude
                         var lng = location.longitude
                         cur_loc = LatLng(lat, lng)
-                        /*if(prev_loc.latitude==cur_loc.latitude&&prev_loc.longitude==cur_loc.longitude) {
+                        if(prev_loc.latitude==cur_loc.latitude&&prev_loc.longitude==cur_loc.longitude) {
                             return  //움직임이 없다면 추가안함
                         }else if(false){ //비정상적인 움직임일 경우
                         }else {
@@ -70,7 +70,7 @@ class Map:OnMapReadyCallback {
                                 )
                             )   //맵에 폴리라인 추가
                             }
-                           */
+
                         prev_loc = cur_loc                              //현재위치를 이전위치로 변경
                         mMap.moveCamera(
                             CameraUpdateFactory.newLatLngZoom(
