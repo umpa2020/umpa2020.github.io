@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#84B1ED">
+
+    <ImageView android:id="@+id/imageView"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:layout_marginTop="50dp"
+
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/logo3">
+
+    </ImageView>
+    <EditText android:id="@+id/login_id"
+        android:background="@drawable/edittext_design"
+        android:paddingStart="15dp"
+        android:layout_width="250dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF"
+        android:hint="E-mail"
+        >
+
+    </EditText>
+
+    <EditText android:id="@+id/login_password"
+        android:background="@drawable/edittext_design"
+        android:paddingStart="15dp"
+
+        android:layout_width="250dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="15dp"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF"
+        android:hint="Password"
+        >
+
+    </EditText>
+
+    <Button android:id="@+id/login_btn"
+        android:layout_width="220dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="65dp"
+        android:background="@drawable/btn_round"
+        android:onClick="signIn"
+        android:text="Login">
+
+    </Button>
+
+    <Button android:id="@+id/enroll_btn"
+        android:layout_width="220dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="15dp"
+        android:onClick="signUp"
+        android:background="@drawable/btn_round"
+        android:text="Enroll">
+
+    </Button>
+
+    <Button android:id="@+id/login_facebook_btn"
+        android:layout_width="220dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="15dp"
+        android:backgroundTint="#3B5998"
+        android:textColor="#FFFFFF"
+        android:background="@drawable/btn_round"
+        android:text="Login with Facebook">
+
+    </Button>
+
+    <Button android:id="@+id/login_google_btn"
+        android:layout_width="220dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:background="@drawable/btn_round"
+        android:layout_marginTop="15dp"
+        android:backgroundTint="#DB4437"
+        android:textColor="#FFFFFF"
+        android:text="Login with Google">
+
+    </Button>
+
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/btn_googleSignIn"
+        android:layout_width="220dp"
+        android:layout_height="40dp"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="15dp"
+        android:layout_gravity="center"
+        android:background="@drawable/btn_round"
+        android:layout_below="@+id/linearlayout">
+
+    </com.google.android.gms.common.SignInButton>
+
+</LinearLayout>
+
