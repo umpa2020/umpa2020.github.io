@@ -28,7 +28,6 @@ class RecyclerAdapter(private val items: ArrayList<MapList>) :
             Toast.makeText(it.context, "Clicked: ${item.map_name}", Toast.LENGTH_SHORT).show()
             var newIntent= Intent(it.context, LoadActivity::class.java)
             it.context.startActivity(newIntent)
-            //GlobalBus.getBus()?.post(Events.LoadToMain(it.map_name.text.toString()))
         }
         holder.apply {
             bind(listener, item)
