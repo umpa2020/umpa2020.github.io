@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.net.toUri
+import com.superdroid.facemaker.FormClass.MyUser
 import com.superdroid.facemaker.FormClass.Route
 import com.superdroid.facemaker.R
 
@@ -29,6 +30,7 @@ class StopActivity : AppCompatActivity() {
             R.id.save_btn->{
                 var newIntent= Intent(this,MainActivity::class.java)
                 startActivity(newIntent)
+
             }
         }
     }
