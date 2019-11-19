@@ -3,7 +3,6 @@ package com.superdroid.facemaker.fragment
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -18,14 +17,12 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.squareup.otto.Subscribe
-import com.superdroid.facemaker.Activity.MainActivity
 import com.superdroid.facemaker.Activity.MapActivity
 import com.superdroid.facemaker.EventBus.Events
 import com.superdroid.facemaker.EventBus.GlobalBus
 import com.superdroid.facemaker.FormClass.Map
 import com.superdroid.facemaker.R
 import java.io.*
-import kotlin.concurrent.timer
 
 /**
  * A simple [Fragment] subclass.
