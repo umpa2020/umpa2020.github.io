@@ -81,27 +81,6 @@ class LoginActivity : Activity() {
                 startActivityForResult(signInIntent.signInIntent, RC_SIGN_IN)
             }
         }
-
-/*
-        이거는 아예 파이어 베이스에서 제공하는거 !
-
-        // firebase SNS Login
-
-        val providers = arrayListOf(
-            AuthUI.IdpConfig.EmailBuilder().build(),
-            AuthUI.IdpConfig.GoogleBuilder().build()
-        )
-
-        startActivityForResult(
-            AuthUI.getInstance()
-                .createSignInIntentBuilder()
-                .setAvailableProviders(providers)
-                .setTheme(R.style.com_facebook_activity_theme)
-                .build(),
-            RC_SIGN_IN
-        )
-*/
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
