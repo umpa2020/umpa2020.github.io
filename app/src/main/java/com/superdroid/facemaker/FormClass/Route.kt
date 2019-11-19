@@ -12,6 +12,7 @@ import kotlin.time.hours
 class Route : Serializable {
     var route=""
     var distance =0.0
-    var time=0
+    var time=""
+    var map_title = ""
     lateinit var bitmap: String   //루트 썸네일
 }

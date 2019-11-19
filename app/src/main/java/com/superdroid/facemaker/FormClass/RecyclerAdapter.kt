@@ -15,7 +15,7 @@ import com.superdroid.facemaker.Activity.MainActivity
 import com.superdroid.facemaker.EventBus.Events
 import com.superdroid.facemaker.EventBus.GlobalBus
 import com.superdroid.facemaker.R
-import kotlinx.android.synthetic.main.list_item.view.*
+import kotlinx.android.synthetic.main.list_feed.view.*
 
 class RecyclerAdapter(private val items: ArrayList<MapList>) :
     RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
@@ -28,6 +28,7 @@ class RecyclerAdapter(private val items: ArrayList<MapList>) :
             Toast.makeText(it.context, "Clicked: ${item.map_name}", Toast.LENGTH_SHORT).show()
             var newIntent= Intent(it.context, LoadActivity::class.java)
             it.context.startActivity(newIntent)
+            //GlobalBus.getBus()?.post(Events.LoadToMain(it.map_name.text.toString()))
         }
         holder.apply {
             bind(listener, item)
@@ -38,16 +39,16 @@ class RecyclerAdapter(private val items: ArrayList<MapList>) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):
             ViewHolder {
         val inflatedView = LayoutInflater.from(parent.context)
-            .inflate(R.layout.list_item, parent, false)
+            .inflate(R.layout.list_feed, parent, false)
         return ViewHolder(inflatedView)
     }
 
     class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
-            private var view: View = v
-            fun bind(listener: View.OnClickListener, item: MapList) {
-                view.index.text = item.index.toString()
-                view.map_name.text = item.map_name
-                view.setOnClickListener(listener)
-            }
+        private var view: View = v
+        fun bind(listener: View.OnClickListener, item: MapList) {
+//                view.index.text = item.index.toString()
+            view.map_name.text = item.map_name
+            view.setOnClickListener(listener)
         }
     }
+}
