@@ -1,19 +1,13 @@
 package com.superdroid.facemaker.FormClass
 
-import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.content.ContextCompat.startActivity
 
 import androidx.recyclerview.widget.RecyclerView
 import com.superdroid.facemaker.Activity.LoadActivity
-import com.superdroid.facemaker.Activity.MainActivity
-import com.superdroid.facemaker.EventBus.Events
-import com.superdroid.facemaker.EventBus.GlobalBus
 import com.superdroid.facemaker.R
 import kotlinx.android.synthetic.main.list_item.view.*
 

@@ -1,13 +1,14 @@
 package com.superdroid.facemaker.Activity
 
 import android.Manifest
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 
@@ -22,7 +23,7 @@ import com.superdroid.facemaker.FormClass.MyUser
 import com.superdroid.facemaker.R
 import com.superdroid.facemaker.fragment.LoadFragment
 import com.superdroid.facemaker.fragment.MapFragment
-import java.io.File
+import java.io.*
 
 class MainActivity:AppCompatActivity() {
 
@@ -84,6 +85,7 @@ class MainActivity:AppCompatActivity() {
             }
         }
     }
+    lateinit var saveFolder: File
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,30 +98,7 @@ class MainActivity:AppCompatActivity() {
         checkPermissions()          //모든 권한 확인
         storage = FirebaseStorage.getInstance()      //firebase 가져오기
         mStorageReference = storage.reference
-        // 첫 화면 지정
-        val transaction = fragmentManager.beginTransaction()
-        transaction.replace(R.id.fragment_layout, mainFragment).commitAllowingStateLoss()
-        GlobalBus.getBus()?.register(this)
-        // 버튼 클릭시 사용되는 리스너를 구현합니다.
 
-        val bottomNavigationView =
-            findViewById(R.id.bottomNavigationView_main_menu) as BottomNavigationView
-       bottomNavigationView.setOnNavigationItemSelectedListener { item ->
-            val transaction = fragmentManager.beginTransaction()
-
-            // 어떤 메뉴 아이템이 터치되었는지 확인합니다.
-            when (item.itemId) {
-                R.id.menuitem_bottombar_main -> {
-
-                    transaction.replace(R.id.fragment_layout, mainFragment).commitAllowingStateLoss()
-                }
-                R.id.menuitem_bottombar_load -> {
-                    transaction.replace(R.id.fragment_layout, loadFragment).commitAllowingStateLoss()
-
-                }
-            }
-            true
-        }
 
     }
 
@@ -174,12 +153,7 @@ class MainActivity:AppCompatActivity() {
     }
 
     fun print_log(text:String){
-        /*asdasdasdadasd*/
         Log.d(TAG,text.toString())
-        /*// tlqkf tprjewmfekf
-        efsdkfkfskfkmskdfnlks jfkje
-                fsfsdfjksajdfksajf
-        sfksdj*/
     }
 
 }

@@ -1,30 +1,17 @@
 package com.superdroid.facemaker.Activity
 
-import android.R.attr.button
 import android.app.Activity
-import android.media.Image
 import android.os.Bundle
-import android.os.Handler
 import android.view.View
-import android.widget.ImageView
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.HandlerCompat.postDelayed
-import androidx.core.view.isVisible
-import com.firebase.ui.auth.AuthUI
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.SignInButton
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.android.synthetic.main.activity_loading.*
 import android.content.Intent
-import android.R.attr.data
-import android.util.Log
 import android.util.Patterns
 import android.widget.EditText
 import android.widget.Toast
-import androidx.annotation.NonNull
-import com.facebook.login.Login
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.OnCompleteListener
@@ -33,7 +20,6 @@ import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.GoogleAuthProvider
 import com.superdroid.facemaker.R
 import kotlinx.android.synthetic.main.activity_login.*
-import kotlinx.android.synthetic.main.activity_main.*
 import java.util.regex.Pattern
 
 //import androidx.test.orchestrator.junit.BundleJUnitUtils.getResult
@@ -62,6 +48,9 @@ class LoginActivity : Activity() {
 
         val loadingintent = Intent(this, LoadingActivity::class.java)
         startActivity(loadingintent)
+
+        //googleSignInClient?.signOut()
+
         buttonGoogle = findViewById(R.id.btn_googleSignIn)
         firebaseAuth = FirebaseAuth.getInstance()
 
@@ -72,11 +61,14 @@ class LoginActivity : Activity() {
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
             .build()
-        googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions);
+        googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions)
+
+
 
 
         buttonGoogle?.setOnClickListener {
             val signInIntent = googleSignInClient
+
             if (signInIntent != null) {
                 startActivityForResult(signInIntent.signInIntent, RC_SIGN_IN)
             }
@@ -88,12 +80,15 @@ class LoginActivity : Activity() {
 
         if (requestCode == RC_SIGN_IN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            Toast.makeText(this, task.toString(), Toast.LENGTH_LONG).show()
+
             try {
                 // 구글 로그인 성공
-
                 val account = task.getResult(ApiException::class.java)
+
                 if (account != null) {
                     firebaseAuthWithGoogle(account)
+                    Toast.makeText(this, "로그인 성공", Toast.LENGTH_SHORT).show()
 
                 }
             } catch (e: ApiException) {
@@ -101,6 +96,7 @@ class LoginActivity : Activity() {
 
         }
     }
+
 
     private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
         var nextIntent = Intent(this, MainActivity::class.java)
@@ -115,6 +111,7 @@ class LoginActivity : Activity() {
                     // 로그인 성공
 
                     nextIntent.putExtra("id", acct.email)
+                  //  finish()
                     startActivity(nextIntent)
 
                 } else {
