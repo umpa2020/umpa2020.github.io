@@ -13,6 +13,5 @@ class Route : Serializable {
     var route=""
     var distance =0.0
     var time=0
-    var id=""
     lateinit var bitmap: String   //루트 썸네일
 }

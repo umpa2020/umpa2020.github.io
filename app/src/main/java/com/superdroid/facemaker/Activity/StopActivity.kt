@@ -1,6 +1,7 @@
 package com.superdroid.facemaker.Activity
 
 import android.content.Intent
+import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
