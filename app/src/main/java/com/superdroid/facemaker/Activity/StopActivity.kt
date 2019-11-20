@@ -36,7 +36,7 @@ class StopActivity : AppCompatActivity() {
         when(view.id){
             R.id.save_btn->{
                 route_data.map_title = map_title_edit.text.toString()
-                print_log( route_data.map_title)
+
                 var newIntent= Intent(this,MainActivity::class.java)
                 newIntent.putExtra("MAP", route_data)
                 startActivity(newIntent)

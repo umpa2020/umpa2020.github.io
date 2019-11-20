@@ -6,8 +6,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 
@@ -19,10 +23,11 @@ import com.squareup.otto.Subscribe
 import com.superdroid.facemaker.EventBus.Events
 import com.superdroid.facemaker.EventBus.GlobalBus
 import com.superdroid.facemaker.FormClass.MyUser
+import com.superdroid.facemaker.FormClass.Route
 import com.superdroid.facemaker.R
 import com.superdroid.facemaker.fragment.LoadFragment
 import com.superdroid.facemaker.fragment.MapFragment
-import java.io.File
+import java.io.*
 
 class MainActivity:AppCompatActivity() {
 
@@ -42,6 +47,11 @@ class MainActivity:AppCompatActivity() {
     lateinit var storage: FirebaseStorage
     lateinit var mStorageReference: StorageReference
     var LoadFileName=""
+
+    lateinit var route_data : Route
+
+    lateinit var bitmapImage : Bitmap
+
     private fun checkPermissions() {
         var rejectedPermissionList = ArrayList<String>()
         //필요한 퍼미션들을 하나씩 끄집어내서 현재 권한을 받았는지 체크
@@ -96,6 +106,12 @@ class MainActivity:AppCompatActivity() {
         checkPermissions()          //모든 권한 확인
         storage = FirebaseStorage.getInstance()      //firebase 가져오기
         mStorageReference = storage.reference
+
+        if(intent.hasExtra("MAP")){
+            route_data=intent.getSerializableExtra("MAP") as Route
+            saveStopActivityDate(route_data)
+        }
+
         // 첫 화면 지정
         val transaction = fragmentManager.beginTransaction()
         transaction.replace(R.id.fragment_layout, mainFragment).commitAllowingStateLoss()
@@ -137,6 +153,68 @@ class MainActivity:AppCompatActivity() {
         transaction.replace(R.id.fragment_layout, mainFragment).commitAllowingStateLoss()
 
     }*/
+
+    fun getBitmap(route_data: Route) : Bitmap {
+        var localPathImage = route_data.bitmap // 로컬에 저장된 이미지 ex) /data/user/0/com.superdroid.facemaker/files/mapdata/map64.txt
+        // bitmapImage = BitmapFactory.decodeFile(localPathImage)
+        return BitmapFactory.decodeFile(localPathImage)
+    }
+
+    fun savaBitmap(route_data: Route){
+        var localPathImage = route_data.bitmap // 로컬에 저장된 이미지 ex) /data/user/0/com.superdroid.facemaker/files/mapdata/map64.txt
+        bitmapImage =  BitmapFactory.decodeFile(localPathImage)
+
+        var saveFolder = File(filesDir, "mapdata/map_image"); // 저장 경로
+        if (!saveFolder.exists()) {       //폴더 없으면 생성
+            saveFolder.mkdir()
+        }
+        val path = route_data.map_title+".jpg"        //파일명 생성하는건데 수정필요
+
+        var myfile = File(saveFolder, path)                //로컬에 파일저장
+
+        val baos = ByteArrayOutputStream()
+        bitmapImage.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val data = baos.toByteArray()
+        var mapRef: StorageReference = mStorageReference.child("maps/${MyUser.id}/${route_data.map_title}/${myfile.name}")
+
+        var uploadTask = mapRef.putBytes(data)
+        uploadTask.addOnFailureListener {
+        }.addOnSuccessListener {
+            print_log("succes" + storage.reference)
+        }
+    }
+
+    fun saveStopActivityDate(route_data : Route) {
+        savaBitmap(route_data)
+
+        val S = route_data.route + "%" + route_data.distance + "%" + route_data.time  + "%" + route_data.map_title // 데이터 연결해서 담기
+
+        var saveFolder = File(filesDir, "mapdata/map"); // 저장 경로
+        if (!saveFolder.exists()) {       //폴더 없으면 생성
+            saveFolder.mkdir()
+        }
+        try {
+            val path = route_data.map_title+".txt"        //파일명 생성하는건데 수정필요
+
+            var myfile = File(saveFolder, path)                //로컬에 파일저장
+            var buf = BufferedWriter(FileWriter(myfile, true))
+            buf.append(S);
+            buf.close();
+
+            val stream = FileInputStream(myfile)        //서버에 파일저장
+            var mapRef: StorageReference = mStorageReference.child("maps/${MyUser.id}/${route_data.map_title}/${myfile.name}")
+            var uploadTask = mapRef.putFile(Uri.fromFile(myfile))
+            uploadTask.addOnFailureListener {
+            }.addOnSuccessListener {
+                print_log("succes" + storage.reference)
+            }
+
+        } catch (e: FileNotFoundException) {
+            e.printStackTrace()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+    }
 
     @Subscribe
     fun Receive_LoadToMain(e: Events.LoadToMain){
