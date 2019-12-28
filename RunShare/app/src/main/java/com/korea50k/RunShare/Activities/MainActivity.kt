@@ -1,4 +1,4 @@
-package com.korea50k.RunShare
+package com.korea50k.RunShare.Activities
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import com.korea50k.RunShare.MainFragment.MainPageAdapter
+import com.korea50k.RunShare.R
 import kotlinx.android.synthetic.main.activity_main.*
 
 

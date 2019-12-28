@@ -1,12 +1,15 @@
 package com.korea50k.RunShare.MainFragment
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.google.android.gms.maps.SupportMapFragment
+import com.korea50k.RunShare.Activities.RunningActivity
 import com.korea50k.RunShare.R
 import com.korea50k.RunShare.DataClass.Map
 import kotlinx.android.synthetic.main.fragment_map.view.*
@@ -15,13 +18,11 @@ class MapFragment : Fragment(),View.OnClickListener{
     lateinit var map: Map
 
     override fun onClick(v: View) {
-        when {
-            view?.id == R.id.btn_start -> start()
-        }
+        Log.wtf("WTF","WTF")
+        var newIntent = Intent(activity, RunningActivity::class.java)
+        startActivity(newIntent)
     }
-    fun start(){
 
-    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -36,6 +37,7 @@ class MapFragment : Fragment(),View.OnClickListener{
         val smf = childFragmentManager.findFragmentById(R.id.map_viewer) as SupportMapFragment
         map = Map(smf, context as Context)
         view.btn_start.setOnClickListener(this)
+
         return view
     }
 }
