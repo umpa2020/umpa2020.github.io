@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">RunShare</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">
+        AIzaSyAymdWK_9DnHXKY19cuUvg0oMo_FItNvQ0</string>
+
+    <string name="title_activity_running">RunningActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>
