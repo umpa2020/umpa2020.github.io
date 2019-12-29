@@ -1,8 +1,6 @@
 package com.korea50k.RunShare.DataClass
 
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Looper
 import android.util.Log
@@ -24,17 +22,17 @@ class Map : OnMapReadyCallback {
     lateinit var mMap: GoogleMap    //map 인스턴스
     lateinit var fusedLocationClient: FusedLocationProviderClient   //위치정보 가져오는 인스턴스
     lateinit var locationCallback: LocationCallback
+    lateinit var locationRequest:LocationRequest
     var TAG = "what u wanna say?~~!~!"       //로그용 태그
     var prev_loc: LatLng = LatLng(0.0, 0.0)          //이전위치
     lateinit var cur_loc: LatLng            //현재위치
     var latlngs: Vector<LatLng> = Vector<LatLng>()   //움직인 점들의 집합 나중에 저장될 점들 집합
-    var route = ArrayList<LatLng>()     //로드할 점들의 집합
+    var Arr_latlng = ArrayList<LatLng>()     //로드할 점들의 집합
     lateinit var context: Context
 
     constructor(smf: SupportMapFragment, context: Context) {
         this.context = context
-        val mapFragment = smf
-        mapFragment.getMapAsync(this)
+        smf.getMapAsync(this)
         initLocation()
     }
 
@@ -44,7 +42,7 @@ class Map : OnMapReadyCallback {
     }
 
     fun startTracking() {
-        var locationRequest = LocationRequest.create()
+        locationRequest = LocationRequest.create()
         locationRequest.run {
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
             interval = 1000
@@ -87,27 +85,39 @@ class Map : OnMapReadyCallback {
             locationCallback,
             Looper.myLooper()
         )        //위에서 설정한 Request와 Callback을 Looper단위로 실행
-
     }
 
-    fun stop_Tracking(): String {
-        if (!fusedLocationClient.removeLocationUpdates(locationCallback).isSuccessful) {  //location 요청 종료
-            var S: String = ""
-            for (i in latlngs.indices) {             //위도 , 경도 \n 문자열 저장
-                S += latlngs[i].latitude.toString() + "," + latlngs[i].longitude.toString() + "\n"
-
-            }
-
-            return S
-        } else {
-            print_log("Fail to stop")
-            return "Fail"
+    fun stopTracking(): String {
+        print_log("Stop")
+        var S: String = ""
+        for (i in latlngs.indices) {             //위도 , 경도 \n 문자열 저장
+            S += latlngs[i].latitude.toString() + "," + latlngs[i].longitude.toString() + "\n"
         }
+        return S
+    }
+
+    fun pauseTracking() {
+        print_log("pause")
+        fusedLocationClient.removeLocationUpdates(locationCallback)
+    }
+
+    fun restartTracking() {
+        fusedLocationClient.requestLocationUpdates(
+            locationRequest,
+            locationCallback,
+            Looper.myLooper()
+        )
     }
 
     fun drawRoute() {                                                              //로드 된 경로 그리기
-        var polyline = mMap.addPolyline(PolylineOptions().addAll(route))        //경로를 그릴 폴리라인 집합
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route[0], 16F))                   //맵 줌
+        var polyline =
+            mMap.addPolyline(PolylineOptions().addAll(Arr_latlng))        //경로를 그릴 폴리라인 집합
+        mMap.moveCamera(
+            CameraUpdateFactory.newLatLngZoom(
+                Arr_latlng[0],
+                16F
+            )
+        )                   //맵 줌
         polyline.tag = "A"
     }
 
@@ -139,7 +149,7 @@ class Map : OnMapReadyCallback {
         return distance
     }
 
-    fun CaptureMapScreen(route_data: Route) {
+    fun CaptureMapScreen(runningData_data: RunningData) {
         lateinit var bitmap: Bitmap
         var callback = SnapshotReadyCallback {
             try {
@@ -152,10 +162,10 @@ class Map : OnMapReadyCallback {
                 var myfile = File(saveFolder, path)                //로컬에 파일저장
                 var out = FileOutputStream(myfile)
                 it.compress(Bitmap.CompressFormat.PNG, 90, out)
-                route_data.bitmap = myfile.path
+                runningData_data.bitmap = myfile.path
 
                 /*var newIntent = Intent((context as Activity), StopActivity::class.java)
-                newIntent.putExtra("MAP", route_data)
+                newIntent.putExtra("MAP", runningData_data)
                 context.startActivity(newIntent)*/
 
             } catch (e: Exception) {

@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:layout="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.MapFragment"
+    tools:context=".Activities.Running.RunningActivity"
     android:orientation="vertical"
     android:weightSum="100">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="100"
-        >
+        android:layout_height="match_parent">
         <fragment
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -21,91 +19,75 @@
             tools:context=".fragment.MapFragment"
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_centerInParent="true"/>
+
         <hollowsoft.slidingdrawer.SlidingDrawer
             android:id="@+id/drawer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="450dp"
-            android:layout_weight="20"
+            android:layout_height="200dp"
             layout:content="@+id/content"
-            layout:handle="@+id/handle">
-
+            layout:handle="@+id/handle"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="?actionBarSize">
             <Button
                 android:id="@+id/handle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="▲" />
-
-
             <LinearLayout
                 android:id="@+id/content"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#ffffffff">
-
-
+                android:layout_height="wrap_content">
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1.0"
-                    android:orientation="vertical">
-
+                    android:background="#44444444"
+                    android:orientation="vertical"
+                    android:layout_margin="30dp">
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="Km"
                         android:textSize="24.0dip" />
-
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="0.00"
                         android:textSize="24.0dip" />
-
                 </LinearLayout>
-
-
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1.0"
-                    android:orientation="vertical">
-
+                    android:background="#44444444"
+                    android:orientation="vertical"
+                    android:layout_margin="30dp">
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="시간"
                         android:textSize="24dp" />
-
                     <TextView
                         android:id="@+id/timer_tv"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:textSize="24dp" />
-
                 </LinearLayout>
-
             </LinearLayout>
-
         </hollowsoft.slidingdrawer.SlidingDrawer>
-
-
     </RelativeLayout>
 
     <LinearLayout
+        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:layout_gravity="bottom"
-        android:background="#FFFFFF">
-
-
-
+        android:layout_gravity="bottom">
         <Button
             android:id="@+id/btn_stop"
             android:background="@drawable/circle_button"
@@ -131,7 +113,5 @@
             android:onClick="onClick"
             android:visibility="invisible"
             />
-
-
     </LinearLayout>
-</LinearLayout>
+</RelativeLayout>

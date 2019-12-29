@@ -1,97 +1,59 @@
-package com.korea50k.RunShare.Activities
+package com.korea50k.RunShare.Activities.Running
 
 
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
-import com.korea50k.RunShare.DataClass.Route
+import com.korea50k.RunShare.Activities.SaveActivity
 import com.korea50k.RunShare.R
 import hollowsoft.slidingdrawer.OnDrawerCloseListener
 import hollowsoft.slidingdrawer.OnDrawerOpenListener
 import hollowsoft.slidingdrawer.OnDrawerScrollListener
 import hollowsoft.slidingdrawer.SlidingDrawer
-import java.io.File
-import java.io.FileNotFoundException
-import java.io.IOException
-import kotlin.concurrent.thread
 import com.korea50k.RunShare.DataClass.Map
 import kotlinx.android.synthetic.main.activity_running.*
 
 class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpenListener, OnDrawerCloseListener {
     var TAG = "what u wanna say?~~!~!"       //로그용 태그
-    lateinit var map: Map
-    var sec = 0
-    var route_t = ArrayList<LatLng>()
-
-    var time = 0
-    var second = 0
-    var minute = 0
-    var hour = 0
-
-    //   lateinit var tiemThread : Thread
-    lateinit var timeFormat: String
-    var flag = true
+    lateinit var manageRunning: ManageRunning
 
     var route_save = ""
 
     lateinit var drawer: SlidingDrawer
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_running)
 
         init()
-
-        thread(start = true) {
-            while (flag) {
-                second += 1
-                if (second % 60 == 0)
-                    minute++
-                if (minute > 0 && minute % 60 == 0)
-                    hour++
-
-                timeFormat = String.format(" %02d : %02d : %02d", hour, minute, second)
-                runOnUiThread {
-                    timer_tv.text = timeFormat
-                }
-
-                Thread.sleep(1000)
-            }
-        }
-
+        manageRunning.startRunning()
         btn_stop.setOnLongClickListener {
-            /*var route_data = Route()
+            /*var route_data = RunningData()
             route_data.route = route_save
             route_data.distance = map.getDistance(map.route)
             route_data.time = timeFormat
             map.CaptureMapScreen(route_data)*/
+            var runningData = manageRunning.stopRunning()
             var newIntent = Intent(this, SaveActivity::class.java)
+            newIntent.putExtra("Running Data",runningData)
             startActivity(newIntent)
             true
-
         }
     }
 
     fun init() {
-
         val smf = supportFragmentManager.findFragmentById(R.id.map_viewer) as SupportMapFragment
-        map = Map(smf, this)
-        timer_tv.bringToFront()
+        manageRunning = ManageRunning(smf, this)
 
         drawer = findViewById(R.id.drawer)
         drawer.setOnDrawerScrollListener(this)
         drawer.setOnDrawerOpenListener(this)
         drawer.setOnDrawerCloseListener(this)
-
-        // map.startTracking()
     }
 
     fun onClick(view: View) {
@@ -138,10 +100,7 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
         btn_pause.visibility    = View.GONE
         btn_restart.visibility   = View.VISIBLE
         btn_stop.visibility     = View.VISIBLE
-
-        flag = false
-
-        //route_save = map.stop_Tracking()
+        manageRunning.pauseRunning()
     }
 
     fun stop() {    //타이머 멈추는거 만들어야함
@@ -153,26 +112,7 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
         btn_restart.visibility = View.GONE
         btn_stop.visibility    = View.GONE
 
-        flag = true
-        second--
-
-        thread(start = true) {
-            while (flag) {
-                second += 1
-                if (second % 60 == 0)
-                    minute++
-                if (minute > 0 && minute % 60 == 0)
-                    hour++
-
-                timeFormat = String.format(" %02d : %02d : %02d", hour, minute, second)
-                runOnUiThread {
-                    timer_tv.text = timeFormat
-                }
-                Thread.sleep(1000)
-            }
-        }
-
-        map.startTracking()
+        manageRunning.restartRunning()
     }
 
     override fun onScrollStarted() {

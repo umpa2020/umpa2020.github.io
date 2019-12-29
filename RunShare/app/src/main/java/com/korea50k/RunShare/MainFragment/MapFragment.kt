@@ -9,7 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.google.android.gms.maps.SupportMapFragment
-import com.korea50k.RunShare.Activities.RunningActivity
+import com.korea50k.RunShare.Activities.Running.RunningActivity
 import com.korea50k.RunShare.R
 import com.korea50k.RunShare.DataClass.Map
 import kotlinx.android.synthetic.main.fragment_map.view.*

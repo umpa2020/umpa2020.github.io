@@ -1,41 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:layout="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainFragment.MapFragment"
     android:orientation="vertical"
-    android:weightSum="100">
+    android:weightSum="100"
+    tools:context=".MainFragment.MapFragment">
 
-    <RelativeLayout
+    <fragment
+        android:id="@+id/map_viewer"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="100"
-        >
-        <fragment
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/map_viewer"
-            tools:context=".fragment.MapFragment"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
-            android:layout_centerInParent="true"/>
-    </RelativeLayout>
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        tools:context=".fragment.MapFragment" />
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
         android:gravity="center"
-        android:layout_gravity="bottom">
+        android:layout_alignParentBottom="true">
+
         <Button
             android:id="@+id/btn_start"
-            android:background="@drawable/circle_button"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:text="start"
+            android:background="@drawable/circle_button"
             android:onClick="onClick"
-            />
+            android:text="start" />
 
     </LinearLayout>
-</LinearLayout>
+</RelativeLayout>
