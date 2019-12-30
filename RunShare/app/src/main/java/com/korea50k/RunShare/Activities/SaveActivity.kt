@@ -5,6 +5,7 @@ import android.content.Intent.*
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import com.google.gson.Gson
 import com.korea50k.RunShare.DataClass.RunningData
 import com.korea50k.RunShare.R
 import kotlinx.android.synthetic.main.activity_save.*
@@ -24,12 +25,15 @@ class SaveActivity : AppCompatActivity() {
         when (view.id) {
             R.id.save_btn -> {
                 //send runningData to server by json
+                runningData.map_title=save_title_edit.text.toString()
+                var gson=Gson()
+                save_text_edit.text=gson.toJson(runningData)
 
-                var newIntent = Intent(this, MainActivity::class.java)
+                /*var newIntent = Intent(this, MainActivity::class.java)
                 newIntent.flags= FLAG_ACTIVITY_CLEAR_TOP
                 newIntent.addFlags(FLAG_ACTIVITY_SINGLE_TOP)
                // newIntent.putExtra("MAP", route_data)
-                startActivity(newIntent)
+                startActivity(newIntent)*/
             }
         }
     }

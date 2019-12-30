@@ -27,7 +27,7 @@ class Map : OnMapReadyCallback {
     var prev_loc: LatLng = LatLng(0.0, 0.0)          //이전위치
     lateinit var cur_loc: LatLng            //현재위치
     var latlngs: Vector<LatLng> = Vector<LatLng>()   //움직인 점들의 집합 나중에 저장될 점들 집합
-    var Arr_latlng = ArrayList<LatLng>()     //로드할 점들의 집합
+    var arr_latlng = ArrayList<LatLng>()     //로드할 점들의 집합
     lateinit var context: Context
 
     constructor(smf: SupportMapFragment, context: Context) {
@@ -87,13 +87,16 @@ class Map : OnMapReadyCallback {
         )        //위에서 설정한 Request와 Callback을 Looper단위로 실행
     }
 
-    fun stopTracking(): String {
+    fun stopTracking(): Pair<DoubleArray,DoubleArray> {
         print_log("Stop")
-        var S: String = ""
-        for (i in latlngs.indices) {             //위도 , 경도 \n 문자열 저장
-            S += latlngs[i].latitude.toString() + "," + latlngs[i].longitude.toString() + "\n"
+        var lats:DoubleArray= DoubleArray(latlngs.size)
+        var lngs:DoubleArray= DoubleArray(latlngs.size)
+        for(index in latlngs.indices){
+            lats[index]=latlngs.get(index).latitude
+            lngs[index]=latlngs.get(index).longitude
         }
-        return S
+
+        return Pair(lats,lngs)
     }
 
     fun pauseTracking() {
@@ -111,10 +114,10 @@ class Map : OnMapReadyCallback {
 
     fun drawRoute() {                                                              //로드 된 경로 그리기
         var polyline =
-            mMap.addPolyline(PolylineOptions().addAll(Arr_latlng))        //경로를 그릴 폴리라인 집합
+            mMap.addPolyline(PolylineOptions().addAll(arr_latlng))        //경로를 그릴 폴리라인 집합
         mMap.moveCamera(
             CameraUpdateFactory.newLatLngZoom(
-                Arr_latlng[0],
+                arr_latlng[0],
                 16F
             )
         )                   //맵 줌

@@ -24,8 +24,11 @@ class ManageRunning{
     }
     fun stopRunning(): RunningData {
         var runningData = RunningData()
-        runningData.route=  map.stopTracking()
-        runningData.distance = map.getDistance(map.Arr_latlng)
+        var pair=map.stopTracking()
+
+        runningData.lats=pair.first
+        runningData.lngs=pair.second
+        runningData.distance = map.getDistance(map.arr_latlng)
         runningData.time="00:12:15" //TODO : Make time thread by chronometer
         runningData.cal=100 //TODO : Calc cal
         runningData.speed=5.3 //TODO : Calc Speed
