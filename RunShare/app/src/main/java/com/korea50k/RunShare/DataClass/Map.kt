@@ -1,9 +1,12 @@
 package com.korea50k.RunShare.DataClass
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Looper
 import android.util.Log
+import androidx.core.content.ContextCompat.startActivity
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -13,6 +16,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.PolylineOptions
 import com.google.maps.android.SphericalUtil
+import com.korea50k.RunShare.Activities.SaveActivity
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
@@ -22,11 +26,12 @@ class Map : OnMapReadyCallback {
     lateinit var mMap: GoogleMap    //map 인스턴스
     lateinit var fusedLocationClient: FusedLocationProviderClient   //위치정보 가져오는 인스턴스
     lateinit var locationCallback: LocationCallback
-    lateinit var locationRequest:LocationRequest
+    lateinit var locationRequest: LocationRequest
     var TAG = "what u wanna say?~~!~!"       //로그용 태그
     var prev_loc: LatLng = LatLng(0.0, 0.0)          //이전위치
     lateinit var cur_loc: LatLng            //현재위치
     var latlngs: Vector<LatLng> = Vector<LatLng>()   //움직인 점들의 집합 나중에 저장될 점들 집합
+    var alts = Vector<Double>()
     var arr_latlng = ArrayList<LatLng>()     //로드할 점들의 집합
     lateinit var context: Context
 
@@ -53,12 +58,15 @@ class Map : OnMapReadyCallback {
                     for ((i, location) in it.locations.withIndex()) {
                         var lat = location.latitude
                         var lng = location.longitude
+                        var alt = location.altitude
+                        var speed = location.speed
                         cur_loc = LatLng(lat, lng)
                         if (prev_loc.latitude == cur_loc.latitude && prev_loc.longitude == cur_loc.longitude) {
                             return  //움직임이 없다면 추가안함
                         } else if (false) { //비정상적인 움직임일 경우
                         } else {
                             latlngs.add(cur_loc)    //위 조건들을 통과하면 점 추가
+                            alts.add(alt)
                             mMap.addPolyline(
                                 PolylineOptions().add(
                                     prev_loc,
@@ -84,19 +92,20 @@ class Map : OnMapReadyCallback {
             locationRequest,
             locationCallback,
             Looper.myLooper()
-        )        //위에서 설정한 Request와 Callback을 Looper단위로 실행
+        )        //위에서 설정한 Request와 Callback을 Looper단위로 실행\\
+
     }
 
-    fun stopTracking(): Pair<DoubleArray,DoubleArray> {
+    fun stopTracking(): Triple<DoubleArray, DoubleArray, DoubleArray> {
         print_log("Stop")
-        var lats:DoubleArray= DoubleArray(latlngs.size)
-        var lngs:DoubleArray= DoubleArray(latlngs.size)
-        for(index in latlngs.indices){
-            lats[index]=latlngs.get(index).latitude
-            lngs[index]=latlngs.get(index).longitude
+        var lats: DoubleArray = DoubleArray(latlngs.size)
+        var lngs: DoubleArray = DoubleArray(latlngs.size)
+        for (index in latlngs.indices) {
+            lats[index] = latlngs.get(index).latitude
+            lngs[index] = latlngs.get(index).longitude
         }
 
-        return Pair(lats,lngs)
+        return Triple(lats, lngs, alts.toDoubleArray())
     }
 
     fun pauseTracking() {
@@ -111,7 +120,7 @@ class Map : OnMapReadyCallback {
             Looper.myLooper()
         )
     }
-
+/*
     fun drawRoute() {                                                              //로드 된 경로 그리기
         var polyline =
             mMap.addPolyline(PolylineOptions().addAll(arr_latlng))        //경로를 그릴 폴리라인 집합
@@ -122,7 +131,7 @@ class Map : OnMapReadyCallback {
             )
         )                   //맵 줌
         polyline.tag = "A"
-    }
+    }*/
 
     fun initLocation() {            //첫 위치 설정하고, prev_loc 설정
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
@@ -142,7 +151,7 @@ class Map : OnMapReadyCallback {
             }
     }
 
-    fun getDistance(locations: ArrayList<LatLng>): Double {  //점들의 집합에서 거리구하기
+    fun getDistance(locations: Vector<LatLng>): Double {  //점들의 집합에서 거리구하기
         var distance = 0.0
         var i = 0
         while (i < locations.size - 1) {
@@ -152,7 +161,8 @@ class Map : OnMapReadyCallback {
         return distance
     }
 
-    fun CaptureMapScreen(runningData_data: RunningData) {
+    fun CaptureMapScreen(runningData: RunningData) {
+        //TODO: must to change capture way
         lateinit var bitmap: Bitmap
         var callback = SnapshotReadyCallback {
             try {
@@ -165,11 +175,11 @@ class Map : OnMapReadyCallback {
                 var myfile = File(saveFolder, path)                //로컬에 파일저장
                 var out = FileOutputStream(myfile)
                 it.compress(Bitmap.CompressFormat.PNG, 90, out)
-                runningData_data.bitmap = myfile.path
+                runningData.bitmap = myfile.path
 
-                /*var newIntent = Intent((context as Activity), StopActivity::class.java)
-                newIntent.putExtra("MAP", runningData_data)
-                context.startActivity(newIntent)*/
+                var newIntent = Intent((context as Activity), SaveActivity::class.java)
+                newIntent.putExtra("Running Data",runningData)
+                context.startActivity(newIntent)
 
             } catch (e: Exception) {
                 print_log(e.toString())
@@ -177,9 +187,6 @@ class Map : OnMapReadyCallback {
         }
 
         mMap.snapshot(callback)
-        // myMap is object of GoogleMap +> GoogleMap myMap;
-        // which is initialized in onCreate() =>
-        // myMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map_pass_home_call)).getMap();
     }
 
     fun print_log(text: String) {

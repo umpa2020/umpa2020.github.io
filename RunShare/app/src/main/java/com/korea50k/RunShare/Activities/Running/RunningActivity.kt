@@ -31,7 +31,7 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
         setContentView(R.layout.activity_running)
 
         init()
-        manageRunning.startRunning()
+        manageRunning.startRunning(this)
         btn_stop.setOnLongClickListener {
             /*var route_data = RunningData()
             route_data.route = route_save
@@ -39,9 +39,10 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
             route_data.time = timeFormat
             map.CaptureMapScreen(route_data)*/
             var runningData = manageRunning.stopRunning()
-            var newIntent = Intent(this, SaveActivity::class.java)
+            /*var newIntent = Intent(this, SaveActivity::class.java)
             newIntent.putExtra("Running Data",runningData)
-            startActivity(newIntent)
+            startActivity(newIntent)*/
+
             true
         }
     }

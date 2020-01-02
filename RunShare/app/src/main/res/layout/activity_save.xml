@@ -101,13 +101,19 @@
                     android:textSize="24dp" />
             </LinearLayout>
 
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/chart"
+                android:layout_below="@+id/calorie_layout"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                />
 
             <EditText
                 android:id="@+id/save_title_edit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Title"
-                android:layout_below="@+id/calorie_layout"/>
+                android:layout_below="@+id/chart"/>
 
             <TextView
                 android:id="@+id/save_text_edit"
@@ -119,7 +125,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/save_text_edit">
+                android:layout_below="@id/save_text_edit"
+                android:layout_marginBottom="?actionBarSize">
 
                 <RadioGroup
                     android:layout_width="match_parent"

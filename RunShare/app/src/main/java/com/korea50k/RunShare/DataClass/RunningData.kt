@@ -9,11 +9,13 @@ import java.io.Serializable
 class RunningData() : Serializable{
     lateinit var lats:DoubleArray
     lateinit var lngs:DoubleArray
-    var distance = 0.0
-    var time = ""
-    var map_title = ""
-    var cal=0
-    var speed=0.0
+    lateinit var alts:DoubleArray
+    lateinit var speed: String
+    lateinit var distance: String
+    lateinit var time: String
+    lateinit var map_title: String
+    lateinit var cal: String
+
     lateinit var bitmap: String   //루트 썸네일
 
 }
