@@ -1,32 +1,38 @@
-package com.korea50k.RunShare.Activities.Running
+package com.korea50k.RunShare.Activities.Racing
 
-import android.app.Activity
 import android.content.Context
-import android.os.Handler
 import android.os.SystemClock
-import android.util.Log
 import android.widget.Chronometer
-import androidx.annotation.UiThread
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
 import com.korea50k.RunShare.DataClass.Map
 import com.korea50k.RunShare.DataClass.RunningData
-import com.korea50k.RunShare.R
 import kotlinx.android.synthetic.main.activity_running.*
-import kotlin.reflect.typeOf
 
-class ManageRunning {
+class ManageRacing {
     lateinit var map: Map
     lateinit var mContext:Context
     lateinit var chronometer: Chronometer
     lateinit var distanceThread : Thread
+
+    lateinit var makerData: RunningData
     var timeWhenStopped:Long=0
 
-    constructor(smf: SupportMapFragment, context: Context) {
-        mContext=context
-        map = Map(smf, mContext)
+    constructor(smf: SupportMapFragment, context: Context,makerData: RunningData) {
+        this.mContext=context
+        this.makerData=makerData
+        this.map = Map(smf, mContext,loadRoute())
     }
 
-    fun startRunning(activity:RunningActivity) {
+    fun loadRoute():ArrayList<LatLng>{
+        var load_latlngs=ArrayList<LatLng>()
+        for(index in makerData.lats.indices){
+            load_latlngs.add(LatLng(makerData.lats[index],makerData.lngs[index]))
+        }
+        return load_latlngs
+    }
+
+    fun startRunning(activity: RacingActivity) {
         map.startTracking()
         distanceThread = Thread(Runnable {
             while(true) {
@@ -43,22 +49,13 @@ class ManageRunning {
         chronometer.start()
     }
 
-    fun restartRunning() {
-        map.restartTracking()
-
-        chronometer.base=SystemClock.elapsedRealtime()+timeWhenStopped
-        chronometer.start()
-    }
-
-    fun pauseRunning() {
+    fun stopRunning(): RunningData {
         map.pauseTracking()
+
         timeWhenStopped=chronometer.base-SystemClock.elapsedRealtime()
         chronometer.stop()
-
-    }
-
-    fun stopRunning(): RunningData {
         var runningData = RunningData()
+
         var triple = map.stopTracking()
 
         runningData.lats = triple.first

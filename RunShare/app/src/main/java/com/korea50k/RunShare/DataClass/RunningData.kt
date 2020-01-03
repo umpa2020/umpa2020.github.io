@@ -10,11 +10,11 @@ class RunningData() : Serializable{
     lateinit var lats:DoubleArray
     lateinit var lngs:DoubleArray
     lateinit var alts:DoubleArray
-    lateinit var speed: String
-    lateinit var distance: String
-    lateinit var time: String
-    lateinit var map_title: String
-    lateinit var cal: String
+    var speed: String =""
+    var distance: String =""
+    var time: String =""
+    var map_title: String =""
+    var cal: String =""
 
     lateinit var bitmap: String   //루트 썸네일
 

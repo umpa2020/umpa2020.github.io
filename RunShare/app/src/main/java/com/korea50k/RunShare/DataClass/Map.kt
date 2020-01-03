@@ -4,8 +4,10 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.os.Looper
 import android.util.Log
+import android.widget.Toast
 import androidx.core.content.ContextCompat.startActivity
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -13,14 +15,18 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMap.SnapshotReadyCallback
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.Cap
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.PolylineOptions
+import com.google.android.gms.maps.model.RoundCap
+import com.google.maps.android.PolyUtil
 import com.google.maps.android.SphericalUtil
 import com.korea50k.RunShare.Activities.SaveActivity
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
 import kotlin.collections.ArrayList
+import com.google.android.gms.maps.model.Polyline as Polyline
 
 class Map : OnMapReadyCallback {
     lateinit var mMap: GoogleMap    //map 인스턴스
@@ -32,18 +38,34 @@ class Map : OnMapReadyCallback {
     lateinit var cur_loc: LatLng            //현재위치
     var latlngs: Vector<LatLng> = Vector<LatLng>()   //움직인 점들의 집합 나중에 저장될 점들 집합
     var alts = Vector<Double>()
-    var arr_latlng = ArrayList<LatLng>()     //로드할 점들의 집합
+    var load_route = ArrayList<LatLng>()     //로드할 점들의 집합
     lateinit var context: Context
+    lateinit var userState: UserState
 
+    //Running
     constructor(smf: SupportMapFragment, context: Context) {
         this.context = context
         smf.getMapAsync(this)
         initLocation()
+        userState = UserState.RUNNING
+    }
+
+    //Racing
+    constructor(smf: SupportMapFragment, context: Context, load_route: ArrayList<LatLng>) {
+        this.context = context
+        smf.getMapAsync(this)
+        this.load_route = load_route
+        initLocation()
+        userState = UserState.RACING
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(prev_loc, 16F))
+
+        if (load_route.size > 0)
+            drawRoute(load_route)
+        else
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(prev_loc, 17F))
     }
 
     fun startTracking() {
@@ -74,16 +96,24 @@ class Map : OnMapReadyCallback {
                                 )
                             )   //맵에 폴리라인 추가
                         }
-
                         prev_loc = cur_loc                              //현재위치를 이전위치로 변경
                         mMap.moveCamera(
                             CameraUpdateFactory.newLatLngZoom(
                                 cur_loc,
-                                16F
+                                17F
                             )
                         )        //현재위치 따라서 카메라 이동
-                        print_log("위도 : " + lat.toString() + "경도 : " + lng.toString())
 
+                        when (userState) {
+                            UserState.RACING -> {
+                                if(PolyUtil.isLocationOnPath(LatLng(lat, lng), load_route, false, 10.0)){
+                                    print_log("위도 : " + lat.toString() + "경도 : " + lng.toString())
+                                }else{
+                                    print_log("경로이탈")
+                                    Toast.makeText(context,"경로를 이탈하셨습니다",Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -120,18 +150,25 @@ class Map : OnMapReadyCallback {
             Looper.myLooper()
         )
     }
-/*
-    fun drawRoute() {                                                              //로드 된 경로 그리기
+
+    fun drawRoute(route: ArrayList<LatLng>) { //로드 된 경로 그리기
         var polyline =
-            mMap.addPolyline(PolylineOptions().addAll(arr_latlng))        //경로를 그릴 폴리라인 집합
-        mMap.moveCamera(
+            mMap.addPolyline(
+                PolylineOptions()
+                    .addAll(route)
+                    .color(Color.RED)
+                    .startCap(RoundCap())
+                    .endCap(RoundCap())
+            )        //경로를 그릴 폴리라인 집합
+        mMap.animateCamera(
             CameraUpdateFactory.newLatLngZoom(
-                arr_latlng[0],
-                16F
+                route[0],
+                17F
             )
         )                   //맵 줌
+        print_log(route[0].toString())
         polyline.tag = "A"
-    }*/
+    }
 
     fun initLocation() {            //첫 위치 설정하고, prev_loc 설정
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
@@ -142,7 +179,7 @@ class Map : OnMapReadyCallback {
                 } else {
                     print_log("Success to get Init Location : " + location.toString())
                     prev_loc = LatLng(location.latitude, location.longitude)
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(prev_loc, 16F))
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(prev_loc, 17F))
                 }
             }
             .addOnFailureListener {
@@ -170,7 +207,7 @@ class Map : OnMapReadyCallback {
                 if (!saveFolder.exists()) {       //폴더 없으면 생성
                     saveFolder.mkdir()
                 }
-                val path = "map" + saveFolder.list().size + ".txt"        //파일명 생성하는건데 수정필요
+                val path = "map" + saveFolder.list().size + ".bmp"        //파일명 생성하는건데 수정필요
 
                 var myfile = File(saveFolder, path)                //로컬에 파일저장
                 var out = FileOutputStream(myfile)
@@ -178,7 +215,7 @@ class Map : OnMapReadyCallback {
                 runningData.bitmap = myfile.path
 
                 var newIntent = Intent((context as Activity), SaveActivity::class.java)
-                newIntent.putExtra("Running Data",runningData)
+                newIntent.putExtra("Running Data", runningData)
                 context.startActivity(newIntent)
 
             } catch (e: Exception) {

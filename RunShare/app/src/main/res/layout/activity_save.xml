@@ -158,10 +158,12 @@
 
     <Button
         android:id="@+id/save_btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:onClick="onClick"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/base_button_selector"
+        android:textColor="#FF0000"
         android:text="활동 저장" />
 
 

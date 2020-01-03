@@ -24,11 +24,20 @@
         android:layout_alignParentBottom="true">
 
         <Button
-            android:id="@+id/btn_start"
+            android:id="@+id/start_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/ic_start"
-            android:onClick="onClick" />
-
+            android:background="@drawable/base_button_selector"
+            android:drawableLeft="@drawable/ic_play_pressed"
+            android:text="START"
+            android:textColor="#FF0000"
+            android:onClick="onClick"
+            android:layout_margin="10dp"/>
+        <Button
+            android:id="@+id/race_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Race"
+            android:onClick="onClick"/>
     </LinearLayout>
 </RelativeLayout>

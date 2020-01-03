@@ -1,36 +1,37 @@
-package com.korea50k.RunShare.Activities.Running
+package com.korea50k.RunShare.Activities.Racing
 
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
-import com.korea50k.RunShare.Activities.SaveActivity
+import com.korea50k.RunShare.DataClass.RunningData
 import com.korea50k.RunShare.R
 import hollowsoft.slidingdrawer.OnDrawerCloseListener
 import hollowsoft.slidingdrawer.OnDrawerOpenListener
 import hollowsoft.slidingdrawer.OnDrawerScrollListener
 import hollowsoft.slidingdrawer.SlidingDrawer
-import com.korea50k.RunShare.DataClass.Map
 import kotlinx.android.synthetic.main.activity_running.*
 
-class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpenListener, OnDrawerCloseListener {
+class RacingActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpenListener,
+    OnDrawerCloseListener {
     var TAG = "what u wanna say?~~!~!"       //로그용 태그
-    lateinit var manageRunning: ManageRunning
+    lateinit var manageRacing: ManageRacing
+    lateinit var makerData:RunningData
     lateinit var drawer: SlidingDrawer
-    var B_RUNNIG=true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_running)
+        makerData = intent.getSerializableExtra("Running data") as RunningData
+
 
         init()
-        manageRunning.startRunning(this)
+        manageRacing.startRunning(this)
         btn_stop.setOnLongClickListener {
-            var runningData = manageRunning.stopRunning()
+            var runningData = manageRacing.stopRunning()
             /*var newIntent = Intent(this, SaveActivity::class.java)
             newIntent.putExtra("Running Data",runningData)
             startActivity(newIntent)*/
@@ -41,7 +42,7 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
 
     fun init() {
         val smf = supportFragmentManager.findFragmentById(R.id.map_viewer) as SupportMapFragment
-        manageRunning = ManageRunning(smf, this)
+        manageRacing = ManageRacing(smf, this, makerData)
 
         drawer = findViewById(R.id.drawer)
         drawer.setOnDrawerScrollListener(this)
@@ -51,31 +52,12 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
 
     fun onClick(view: View) {
         when (view.id) {
-
-            R.id.btn_pause -> {
-                if(B_RUNNIG)
-                    pause()
-                else
-                    restart()
-            }
             R.id.btn_stop -> stop()
         }
     }
 
-    fun pause() {
-        btn_pause.text="RESTART"
-        B_RUNNIG=false
-        manageRunning.pauseRunning()
-    }
-
     fun stop() {    //타이머 멈추는거 만들어야함
         Toast.makeText(this, "종료를 원하시면, 길게 눌러주세요", Toast.LENGTH_LONG).show()
-    }
-
-    fun restart() { //TODO:Start with new polyline
-        btn_pause.text="PAUSE"
-        B_RUNNIG=true
-        manageRunning.restartRunning()
     }
 
     override fun onScrollStarted() {

@@ -5,7 +5,7 @@
     xmlns:layout="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.Running.RunningActivity"
+    tools:context=".Activities.Racing.RacingActivity"
     android:orientation="vertical"
     android:weightSum="100">
 
@@ -96,16 +96,9 @@
             android:layout_height="wrap_content"
             android:background="@drawable/base_button_selector"
             android:textColor="#FF0000"
-            android:text="STOP"
+            android:text="Stop"
             android:onClick="onClick"
+            android:visibility="invisible"
             />
-        <Button
-            android:id="@+id/btn_pause"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/base_button_selector"
-            android:textColor="#FF0000"
-            android:text="PAUSE"
-            android:onClick="onClick"/>
     </LinearLayout>
 </RelativeLayout>
