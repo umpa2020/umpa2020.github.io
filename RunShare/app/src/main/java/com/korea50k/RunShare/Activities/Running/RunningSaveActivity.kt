@@ -1,37 +1,33 @@
-package com.korea50k.RunShare.Activities
+package com.korea50k.RunShare.Activities.Running
 
 import android.content.Intent
-import android.content.Intent.*
-import android.graphics.Bitmap
+import android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP
+import android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import com.google.gson.Gson
 import com.korea50k.RunShare.DataClass.ConvertJson
 import com.korea50k.RunShare.DataClass.RunningData
 import com.korea50k.RunShare.R
-import kotlinx.android.synthetic.main.activity_save.*
+import kotlinx.android.synthetic.main.activity_running_save.*
 import com.github.mikephil.charting.animation.Easing
-import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.charts.LineChart
 import android.graphics.Color
-import android.net.Uri
 import androidx.core.net.toUri
 import com.github.mikephil.charting.components.Description
 import com.github.mikephil.charting.data.Entry
-import kotlinx.android.synthetic.main.activity_save.view.*
-import java.net.URI
+import com.korea50k.RunShare.Activities.MainActivity
 
 
-class SaveActivity : AppCompatActivity() {
+class RunningSaveActivity : AppCompatActivity() {
     lateinit var runningData:RunningData
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_save)
+        setContentView(R.layout.activity_running_save)
 
         runningData=intent.getSerializableExtra("Running Data") as RunningData
         map_img.setImageURI(runningData.bitmap.toUri())
@@ -42,7 +38,7 @@ class SaveActivity : AppCompatActivity() {
         setChart()
     }
 
-    private fun setChart() {
+    private fun setChart() {    //클래스로 따로 빼야할듯
         var lineChart = chart as LineChart
 
         val entries = ArrayList<Entry>()
@@ -90,15 +86,15 @@ class SaveActivity : AppCompatActivity() {
                 runningData.map_title=save_title_edit.text.toString()
 
                 var json = ConvertJson.RunningDataToJson(runningData)
-                //send to server!!
+                //send to server
 
                 Log.wtf("wtf",json)
-                /*
+
                 var newIntent = Intent(this, MainActivity::class.java)
                 newIntent.flags= FLAG_ACTIVITY_CLEAR_TOP
                 newIntent.addFlags(FLAG_ACTIVITY_SINGLE_TOP)
 
-                startActivity(newIntent)*/
+                startActivity(newIntent)
             }
         }
     }

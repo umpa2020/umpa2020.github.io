@@ -6,8 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activities.Racing.RacingActivity"
-    android:orientation="vertical"
-    android:weightSum="100">
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -23,7 +22,7 @@
         <hollowsoft.slidingdrawer.SlidingDrawer
             android:id="@+id/drawer"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="wrap_content"
             layout:content="@+id/content"
             layout:handle="@+id/handle"
             android:layout_alignParentBottom="true"
@@ -43,8 +42,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1.0"
                     android:background="#44444444"
-                    android:orientation="vertical"
-                    android:layout_margin="30dp">
+                    android:orientation="vertical">
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -64,8 +62,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1.0"
                     android:background="#44444444"
-                    android:orientation="vertical"
-                    android:layout_margin="30dp">
+                    android:orientation="vertical">
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -78,7 +75,6 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:textSize="24dp" />
-
                 </LinearLayout>
             </LinearLayout>
         </hollowsoft.slidingdrawer.SlidingDrawer>
@@ -99,6 +95,10 @@
             android:text="Stop"
             android:onClick="onClick"
             android:visibility="invisible"
+            android:drawableLeft="@drawable/ic_stop_icon_pressed"
+            android:paddingLeft="37dp"
+            android:gravity="center_vertical|left"
+            android:layout_margin="10dp"
             />
     </LinearLayout>
 </RelativeLayout>

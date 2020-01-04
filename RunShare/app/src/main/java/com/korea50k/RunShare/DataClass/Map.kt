@@ -8,25 +8,22 @@ import android.graphics.Color
 import android.os.Looper
 import android.util.Log
 import android.widget.Toast
-import androidx.core.content.ContextCompat.startActivity
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMap.SnapshotReadyCallback
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.Cap
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.PolylineOptions
 import com.google.android.gms.maps.model.RoundCap
 import com.google.maps.android.PolyUtil
 import com.google.maps.android.SphericalUtil
-import com.korea50k.RunShare.Activities.SaveActivity
+import com.korea50k.RunShare.Activities.Running.RunningSaveActivity
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
 import kotlin.collections.ArrayList
-import com.google.android.gms.maps.model.Polyline as Polyline
 
 class Map : OnMapReadyCallback {
     lateinit var mMap: GoogleMap    //map 인스턴스
@@ -41,7 +38,7 @@ class Map : OnMapReadyCallback {
     var load_route = ArrayList<LatLng>()     //로드할 점들의 집합
     lateinit var context: Context
     lateinit var userState: UserState
-
+    var countDeviation=0
     //Running
     constructor(smf: SupportMapFragment, context: Context) {
         this.context = context
@@ -108,9 +105,15 @@ class Map : OnMapReadyCallback {
                             UserState.RACING -> {
                                 if(PolyUtil.isLocationOnPath(LatLng(lat, lng), load_route, false, 10.0)){
                                     print_log("위도 : " + lat.toString() + "경도 : " + lng.toString())
+                                    countDeviation=0
                                 }else{
+                                    countDeviation++
                                     print_log("경로이탈")
-                                    Toast.makeText(context,"경로를 이탈하셨습니다",Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(context,"경로를 이탈하셨습니다"+countDeviation,Toast.LENGTH_SHORT).show()
+                                    if(countDeviation>10){
+                                        //finish
+                                    }
+
                                 }
                             }
                         }
@@ -128,11 +131,13 @@ class Map : OnMapReadyCallback {
 
     fun stopTracking(): Triple<DoubleArray, DoubleArray, DoubleArray> {
         print_log("Stop")
-        var lats: DoubleArray = DoubleArray(latlngs.size)
-        var lngs: DoubleArray = DoubleArray(latlngs.size)
-        for (index in latlngs.indices) {
-            lats[index] = latlngs.get(index).latitude
-            lngs[index] = latlngs.get(index).longitude
+        var simplipoly =PolyUtil.simplify(latlngs,10.0) //tolerance 조절해야함
+
+        var lats: DoubleArray = DoubleArray(simplipoly.size)
+        var lngs: DoubleArray = DoubleArray(simplipoly.size)
+        for (index in simplipoly.indices) {
+            lats[index] = simplipoly[index].latitude
+            lngs[index] = simplipoly[index].longitude
         }
 
         return Triple(lats, lngs, alts.toDoubleArray())
@@ -141,14 +146,11 @@ class Map : OnMapReadyCallback {
     fun pauseTracking() {
         print_log("pause")
         fusedLocationClient.removeLocationUpdates(locationCallback)
+        userState=UserState.PAUSED
     }
 
     fun restartTracking() {
-        fusedLocationClient.requestLocationUpdates(
-            locationRequest,
-            locationCallback,
-            Looper.myLooper()
-        )
+        initLocation()
     }
 
     fun drawRoute(route: ArrayList<LatLng>) { //로드 된 경로 그리기
@@ -180,6 +182,10 @@ class Map : OnMapReadyCallback {
                     print_log("Success to get Init Location : " + location.toString())
                     prev_loc = LatLng(location.latitude, location.longitude)
                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(prev_loc, 17F))
+                    if(userState==UserState.PAUSED) {
+                        startTracking()
+                        userState=UserState.RUNNING
+                    }
                 }
             }
             .addOnFailureListener {
@@ -214,7 +220,9 @@ class Map : OnMapReadyCallback {
                 it.compress(Bitmap.CompressFormat.PNG, 90, out)
                 runningData.bitmap = myfile.path
 
-                var newIntent = Intent((context as Activity), SaveActivity::class.java)
+
+
+                var newIntent = Intent((context as Activity), RunningSaveActivity::class.java)
                 newIntent.putExtra("Running Data", runningData)
                 context.startActivity(newIntent)
 

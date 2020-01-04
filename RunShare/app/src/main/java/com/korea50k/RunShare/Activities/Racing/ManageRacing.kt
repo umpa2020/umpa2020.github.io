@@ -1,10 +1,13 @@
 package com.korea50k.RunShare.Activities.Racing
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.SystemClock
 import android.widget.Chronometer
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.korea50k.RunShare.Activities.Running.RunningSaveActivity
 import com.korea50k.RunShare.DataClass.Map
 import com.korea50k.RunShare.DataClass.RunningData
 import kotlinx.android.synthetic.main.activity_running.*
@@ -49,23 +52,20 @@ class ManageRacing {
         chronometer.start()
     }
 
-    fun stopRunning(): RunningData {
+    fun stopRunning() {
         map.pauseTracking()
 
         timeWhenStopped=chronometer.base-SystemClock.elapsedRealtime()
         chronometer.stop()
         var runningData = RunningData()
+        map.stopTracking()
 
-        var triple = map.stopTracking()
-
-        runningData.lats = triple.first
-        runningData.lngs = triple.second
-        runningData.alts = triple.third
-        runningData.distance = String.format("%.3f",(map.getDistance(map.latlngs)/1000))
         runningData.time = chronometer.text.toString()
-        runningData.cal = "0" //TODO : Calc cal
         runningData.speed = "0" //TODO : Calc Speed
-        map.CaptureMapScreen(runningData)
-        return runningData
+
+        var newIntent = Intent(mContext, RacingFinishActivity::class.java)
+        newIntent.putExtra("Running Data", runningData)
+        newIntent.putExtra("Maker Data",makerData)
+        mContext.startActivity(newIntent)
     }
 }

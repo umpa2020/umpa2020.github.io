@@ -1,19 +1,25 @@
 package com.korea50k.RunShare.Activities.Racing
 
 
+import android.content.Intent
+import android.graphics.ColorFilter
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.SupportMapFragment
+import com.korea50k.RunShare.Activities.Running.RunningSaveActivity
 import com.korea50k.RunShare.DataClass.RunningData
 import com.korea50k.RunShare.R
 import hollowsoft.slidingdrawer.OnDrawerCloseListener
 import hollowsoft.slidingdrawer.OnDrawerOpenListener
 import hollowsoft.slidingdrawer.OnDrawerScrollListener
 import hollowsoft.slidingdrawer.SlidingDrawer
+import kotlinx.android.synthetic.main.activity_racing.*
 import kotlinx.android.synthetic.main.activity_running.*
+import kotlinx.android.synthetic.main.activity_running.btn_stop
+import kotlinx.android.synthetic.main.activity_running.map_viewer
 
 class RacingActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpenListener,
     OnDrawerCloseListener {
@@ -27,14 +33,11 @@ class RacingActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpen
         setContentView(R.layout.activity_running)
         makerData = intent.getSerializableExtra("Running data") as RunningData
 
-
         init()
         manageRacing.startRunning(this)
         btn_stop.setOnLongClickListener {
             var runningData = manageRacing.stopRunning()
-            /*var newIntent = Intent(this, SaveActivity::class.java)
-            newIntent.putExtra("Running Data",runningData)
-            startActivity(newIntent)*/
+
 
             true
         }

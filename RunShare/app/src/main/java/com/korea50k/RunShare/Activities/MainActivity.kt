@@ -19,7 +19,8 @@ class MainActivity : AppCompatActivity() {
     private val multiplePermissionsCode = 100          //권한
     private val requiredPermissions = arrayOf(
         Manifest.permission.ACCESS_FINE_LOCATION,
-        Manifest.permission.ACCESS_COARSE_LOCATION
+        Manifest.permission.ACCESS_COARSE_LOCATION,
+        Manifest.permission.READ_EXTERNAL_STORAGE
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {

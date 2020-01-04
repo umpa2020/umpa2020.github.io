@@ -25,14 +25,16 @@
 
         <Button
             android:id="@+id/start_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="150dp"
+            android:layout_height="40dp"
             android:background="@drawable/base_button_selector"
             android:drawableLeft="@drawable/ic_play_pressed"
-            android:text="START"
+            android:text="  START"
             android:textColor="#FF0000"
             android:onClick="onClick"
-            android:layout_margin="10dp"/>
+            android:layout_margin="10dp"
+            android:paddingLeft="37dp"
+            android:gravity="center_vertical|left"/>
         <Button
             android:id="@+id/race_btn"
             android:layout_width="wrap_content"

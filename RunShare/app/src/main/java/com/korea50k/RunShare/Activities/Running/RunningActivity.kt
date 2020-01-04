@@ -1,21 +1,17 @@
 package com.korea50k.RunShare.Activities.Running
 
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
-import com.korea50k.RunShare.Activities.SaveActivity
 import com.korea50k.RunShare.R
 import hollowsoft.slidingdrawer.OnDrawerCloseListener
 import hollowsoft.slidingdrawer.OnDrawerOpenListener
 import hollowsoft.slidingdrawer.OnDrawerScrollListener
 import hollowsoft.slidingdrawer.SlidingDrawer
-import com.korea50k.RunShare.DataClass.Map
 import kotlinx.android.synthetic.main.activity_running.*
 
 class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpenListener, OnDrawerCloseListener {
@@ -31,7 +27,7 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
         manageRunning.startRunning(this)
         btn_stop.setOnLongClickListener {
             var runningData = manageRunning.stopRunning()
-            /*var newIntent = Intent(this, SaveActivity::class.java)
+            /*var newIntent = Intent(this, RunningSaveActivity::class.java)
             newIntent.putExtra("Running Data",runningData)
             startActivity(newIntent)*/
 
@@ -63,7 +59,8 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
     }
 
     fun pause() {
-        btn_pause.text="RESTART"
+        btn_pause.text="  RESTART"
+        btn_pause.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_play_pressed,0,0,0)
         B_RUNNIG=false
         manageRunning.pauseRunning()
     }
@@ -73,7 +70,8 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
     }
 
     fun restart() { //TODO:Start with new polyline
-        btn_pause.text="PAUSE"
+        btn_pause.text="  PAUSE"
+        btn_pause.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_pause_icon_pressed,0,0,0)
         B_RUNNIG=true
         manageRunning.restartRunning()
     }
@@ -87,10 +85,12 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
     }
 
     override fun onDrawerOpened() {
+        handle.background=getDrawable(R.drawable.ic_slidedown_button_unpressed)
         Log.d(TAG, "onDrawerOpened()")
     }
 
     override fun onDrawerClosed() {
+        handle.background=getDrawable(R.drawable.ic_slideup_button_unpressed)
         Log.d(TAG, "onDrawerClosed()")
     }
 

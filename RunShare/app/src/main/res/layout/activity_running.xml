@@ -33,7 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="▲" />
+                android:background="@drawable/ic_slideup_button_unpressed"/>
             <LinearLayout
                 android:id="@+id/content"
                 android:layout_width="match_parent"
@@ -42,14 +42,17 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1.0"
-                    android:background="#44444444"
+                    android:background="@drawable/rounded_gray_box"
                     android:orientation="vertical"
-                    android:layout_margin="30dp">
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="5dp">
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="Km"
+                        android:textColor="#FFFFFF"
                         android:textSize="24.0dip" />
                     <TextView
                         android:id="@+id/running_distance_tv"
@@ -57,26 +60,31 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="0.00"
+                        android:textColor="#FFFFFF"
                         android:textSize="24.0dip" />
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1.0"
-                    android:background="#44444444"
+                    android:background="@drawable/rounded_gray_box"
                     android:orientation="vertical"
-                    android:layout_margin="30dp">
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginLeft="5dp">
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="시간"
+                        android:textColor="#FFFFFF"
                         android:textSize="24dp" />
                     <Chronometer
                         android:id="@+id/timer_tv"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
+                        android:textColor="#FFFFFF"
                         android:textSize="24dp" />
 
                 </LinearLayout>
@@ -89,23 +97,32 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:layout_gravity="bottom">
+        android:layout_gravity="bottom"
+        android:layout_margin="10dp">
         <Button
             android:id="@+id/btn_stop"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="150dp"
+            android:layout_height="40dp"
             android:background="@drawable/base_button_selector"
             android:textColor="#FF0000"
-            android:text="STOP"
+            android:text="  STOP"
             android:onClick="onClick"
+            android:drawableLeft="@drawable/ic_stop_icon_pressed"
+            android:paddingLeft="45dp"
+            android:gravity="center_vertical|left"
+            android:layout_marginRight="5dp"
             />
         <Button
             android:id="@+id/btn_pause"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="150dp"
+            android:layout_height="40dp"
             android:background="@drawable/base_button_selector"
             android:textColor="#FF0000"
-            android:text="PAUSE"
-            android:onClick="onClick"/>
+            android:text="  PAUSE"
+            android:onClick="onClick"
+            android:drawableLeft="@drawable/ic_pause_icon_pressed"
+            android:paddingLeft="37dp"
+            android:gravity="center_vertical|left"
+            android:layout_marginLeft="5dp"/>
     </LinearLayout>
 </RelativeLayout>
