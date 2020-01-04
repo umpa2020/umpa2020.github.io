@@ -1,8 +1,5 @@
-package com.korea50k.RunShare.DataClass
+package com.korea50k.RunShare.dataClass
 
-import android.os.Parcel
-import android.os.Parcelable
-import com.google.android.gms.maps.model.LatLng
 import java.io.Serializable
 
 //경로, 시간, 거리

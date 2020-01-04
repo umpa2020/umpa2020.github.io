@@ -1,8 +1,6 @@
-package com.korea50k.RunShare.DataClass
+package com.korea50k.RunShare.dataClass
 
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import com.google.gson.stream.JsonReader
 
 class ConvertJson{
     companion object{

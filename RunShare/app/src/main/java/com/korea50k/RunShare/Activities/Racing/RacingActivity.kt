@@ -1,25 +1,19 @@
 package com.korea50k.RunShare.Activities.Racing
 
 
-import android.content.Intent
-import android.graphics.ColorFilter
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.SupportMapFragment
-import com.korea50k.RunShare.Activities.Running.RunningSaveActivity
-import com.korea50k.RunShare.DataClass.RunningData
+import com.korea50k.RunShare.dataClass.RunningData
 import com.korea50k.RunShare.R
 import hollowsoft.slidingdrawer.OnDrawerCloseListener
 import hollowsoft.slidingdrawer.OnDrawerOpenListener
 import hollowsoft.slidingdrawer.OnDrawerScrollListener
 import hollowsoft.slidingdrawer.SlidingDrawer
-import kotlinx.android.synthetic.main.activity_racing.*
-import kotlinx.android.synthetic.main.activity_running.*
 import kotlinx.android.synthetic.main.activity_running.btn_stop
-import kotlinx.android.synthetic.main.activity_running.map_viewer
 
 class RacingActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpenListener,
     OnDrawerCloseListener {

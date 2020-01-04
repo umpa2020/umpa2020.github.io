@@ -7,8 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import com.korea50k.RunShare.DataClass.ConvertJson
-import com.korea50k.RunShare.DataClass.RunningData
+import com.korea50k.RunShare.dataClass.ConvertJson
+import com.korea50k.RunShare.dataClass.RunningData
 import com.korea50k.RunShare.R
 import kotlinx.android.synthetic.main.activity_running_save.*
 import com.github.mikephil.charting.animation.Easing

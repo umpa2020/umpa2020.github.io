@@ -7,19 +7,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import com.korea50k.RunShare.DataClass.ConvertJson
-import com.korea50k.RunShare.DataClass.RunningData
+import com.korea50k.RunShare.dataClass.ConvertJson
+import com.korea50k.RunShare.dataClass.RunningData
 import com.korea50k.RunShare.R
 import kotlinx.android.synthetic.main.activity_running_save.*
-import com.github.mikephil.charting.animation.Easing
-import com.github.mikephil.charting.components.XAxis
-import com.github.mikephil.charting.data.LineData
-import com.github.mikephil.charting.data.LineDataSet
-import com.github.mikephil.charting.charts.LineChart
-import android.graphics.Color
-import androidx.core.net.toUri
-import com.github.mikephil.charting.components.Description
-import com.github.mikephil.charting.data.Entry
 import com.korea50k.RunShare.Activities.MainActivity
 
 
