@@ -22,7 +22,7 @@
                 android:textStyle="bold"
                 android:textColor="#FF0000"
                 android:id="@+id/rankTextView"
-                android:text="You Are 3rd!!"/>
+                android:text="You Are 4rd!!"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
