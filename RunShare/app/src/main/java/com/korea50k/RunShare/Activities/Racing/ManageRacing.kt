@@ -5,13 +5,12 @@ import android.content.Intent
 import android.os.SystemClock
 import android.widget.Chronometer
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
-import com.korea50k.RunShare.dataClass.Map
+import com.korea50k.RunShare.map.RacingMap
 import com.korea50k.RunShare.dataClass.RunningData
 import kotlinx.android.synthetic.main.activity_running.*
 
 class ManageRacing {
-    lateinit var map: Map
+    lateinit var racingMap: RacingMap
     lateinit var mContext:Context
     lateinit var chronometer: Chronometer
     lateinit var distanceThread : Thread
@@ -22,7 +21,7 @@ class ManageRacing {
     constructor(smf: SupportMapFragment, context: Context,makerData: RunningData) {
         this.mContext=context
         this.makerData=makerData
-        this.map = Map(smf, mContext,makerData,this)
+        this.racingMap = RacingMap(smf, mContext, makerData, this)
     }
 
     fun startRunning(activity: RacingActivity) {
@@ -30,7 +29,7 @@ class ManageRacing {
             while(true) {
                 Thread.sleep(3000)
                 activity.runOnUiThread(Runnable {
-                    activity.running_distance_tv.text=String.format("%.3f",(map.getDistance(map.latlngs)/1000))
+                    activity.running_distance_tv.text=String.format("%.3f",(racingMap.getDistance(racingMap.latlngs)/1000))
                 })
             }
         })
@@ -42,7 +41,7 @@ class ManageRacing {
     }
 
     fun stopRunning() {
-        map.pauseTracking()
+        racingMap.stopTracking()
 
         timeWhenStopped=chronometer.base-SystemClock.elapsedRealtime()
         chronometer.stop()

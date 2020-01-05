@@ -11,13 +11,13 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.korea50k.RunShare.Activities.Racing.RacingActivity
 import com.korea50k.RunShare.Activities.Running.RunningActivity
 import com.korea50k.RunShare.dataClass.ConvertJson
-import com.korea50k.RunShare.dataClass.Map
 import com.korea50k.RunShare.R
+import com.korea50k.RunShare.map.BasicMap
 import kotlinx.android.synthetic.main.fragment_map.view.*
 
 
 class MapFragment : Fragment(),View.OnClickListener{
-    lateinit var map: Map
+    lateinit var map: BasicMap
 
     override fun onClick(v: View) {
         when(v.id){
@@ -54,7 +54,7 @@ class MapFragment : Fragment(),View.OnClickListener{
         var view = inflater.inflate(R.layout.fragment_map, container, false)
 
         val smf = childFragmentManager.findFragmentById(R.id.map_viewer) as SupportMapFragment
-        map = Map(smf, context as Context)
+        map = BasicMap(smf, context as Context)
         view.start_btn.setOnClickListener(this)
         view.race_btn.setOnClickListener(this)
 
