@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.res.TypedArrayUtils.*
 import androidx.recyclerview.widget.RecyclerView
-import com.korea50k.RunShare.DataClass.Rank_MapData
 import com.korea50k.RunShare.R
+import com.korea50k.RunShare.dataClass.Rank_MapData
 
 class RankRecyclerViewAdapter_Map(val context: Context, val rankdata: ArrayList<Rank_MapData>) :
         RecyclerView.Adapter<RankRecyclerViewAdapter_Map.Holder>() {

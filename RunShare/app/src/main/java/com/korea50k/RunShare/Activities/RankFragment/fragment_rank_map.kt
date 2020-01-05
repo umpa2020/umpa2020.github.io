@@ -10,16 +10,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.korea50k.RunShare.DataClass.Rank_MapData
 
 import com.korea50k.RunShare.R
+import com.korea50k.RunShare.dataClass.Rank_MapData
 import kotlinx.android.synthetic.main.fragment_rank_map.*
 import kotlinx.android.synthetic.main.fragment_rank_map.view.*
 import org.json.JSONObject
 
 class fragment_rank_map : Fragment() {
 
-    /*
+
     var rankmapDataList = arrayListOf<Rank_MapData>(
             Rank_MapData(1, "jsj", 100, 150)  ,
             Rank_MapData(2, "ㅁㅁㄴ", 100, 150),
@@ -28,14 +28,14 @@ class fragment_rank_map : Fragment() {
             Rank_MapData(2, "ㅁㅁㄴ", 100, 150),
             Rank_MapData(3, "ㄹㅇㄴ", 100, 150)
     )
-    */
-    var rankmapDataList = arrayListOf<Rank_MapData>()
-    val assetManager: AssetManager = context?.resources!!.assets
-    val inputStream= assetManager.open("datajson.json")
-    val jsonString = inputStream.bufferedReader().use { it.readText()}
 
-    val jObject = JSONObject(jsonString)
-    val jArray = jObject.getJSONArray("sampleData")
+   // var rankmapDataList = arrayListOf<Rank_MapData>()
+//    val assetManager: AssetManager = context?.resources!!.assets
+   // val inputStream= assetManager.open("datajson.json")
+   // val jsonString = inputStream.bufferedReader().use { it.readText()}
+
+  //  val jObject = JSONObject(jsonString)
+ //   val jArray = jObject.getJSONArray("sampleData")
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -51,11 +51,11 @@ class fragment_rank_map : Fragment() {
         view.rank_recycler_map.layoutManager = lm
         view.rank_recycler_map.setHasFixedSize(true)
 
-        jsonRead()
+       // jsonRead()
 
         return view
     }
-
+/*
     fun jsonRead(){
         for (i in 0 until jArray.length()) {
             val obj = jArray.getJSONObject(i)
@@ -64,6 +64,6 @@ class fragment_rank_map : Fragment() {
             val like = obj.getString("sampleLike")
         }
     }
-
+*/
 
 }
