@@ -29,9 +29,8 @@ class RacingFinishActivity : AppCompatActivity() {
 
     fun onClick(view: View) {
         when (view.id) {
-            com.korea50k.RunShare.R.id.save_btn -> {
+            R.id.save_btn -> {
                 //send runningData to server by json
-                runningData.map_title=save_title_edit.text.toString()
 
                 var json = ConvertJson.RunningDataToJson(runningData)
                 //send to server
