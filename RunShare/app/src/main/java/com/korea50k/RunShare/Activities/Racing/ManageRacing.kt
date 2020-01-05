@@ -25,8 +25,6 @@ class ManageRacing {
         this.map = Map(smf, mContext,makerData)
     }
 
-
-
     fun startRunning(activity: RacingActivity) {
         map.startTracking()
         distanceThread = Thread(Runnable {
