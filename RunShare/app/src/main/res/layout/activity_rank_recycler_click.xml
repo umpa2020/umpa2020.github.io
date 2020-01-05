@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
     <ImageView
         android:layout_marginTop="10dp"
@@ -14,6 +13,8 @@
         android:id="@+id/rank_root_preview"/>
 
     <LinearLayout
+        android:id="@+id/mapnamelinearlayout"
+        android:layout_below="@+id/rank_root_preview"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_width="match_parent"
@@ -61,12 +62,16 @@
     </LinearLayout>
 
     <TextView
+        android:id="@+id/gubun1"
+        android:layout_below="@+id/mapnamelinearlayout"
         android:layout_marginTop="5dp"
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:background="@color/rankBackgroudGray"/>
 
     <LinearLayout
+        android:layout_below="@+id/gubun1"
+        android:id="@+id/toplayerlayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -88,12 +93,16 @@
     </LinearLayout>
 
     <TextView
+        android:layout_below="@+id/toplayerlayout"
+        android:id="@+id/gubun2"
         android:layout_marginTop="3dp"
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:background="@color/rankBackgroudGray"/>
 
     <LinearLayout
+        android:id="@+id/infolayout"
+        android:layout_below="@+id/gubun2"
         android:layout_marginTop="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -131,10 +140,42 @@
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:layout_below="@+id/infolayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
     </androidx.recyclerview.widget.RecyclerView>
 
 
-</LinearLayout>
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:padding="10dp"
+        android:background="@drawable/option_bg"
+        android:layout_marginRight="60dp"
+        android:id="@+id/rank_TopplayerChoice_linearlayout"
+        android:layout_below="@+id/toplayerlayout"
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone">
+
+        <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <RadioButton
+                android:id="@+id/rank_timeOption_radioButton"
+                android:fontFamily="@font/godob"
+                android:text="주행 시간"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <RadioButton
+                android:id="@+id/rank_perfectOption_radioButton"
+                android:fontFamily="@font/godob"
+                android:text="맵 정확도"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </RadioGroup>
+
+    </LinearLayout>
+
+</RelativeLayout>
