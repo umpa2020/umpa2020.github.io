@@ -1,33 +1,33 @@
 { "sampleData" : [
   {
-    "sampleRank" : "1",
-    "sampleMapName" : "우이천",
-    "sampleExecute" : "100",
-    "sampleLike": "100"
+    "rank" : 1,
+    "name" : "우이천",
+    "execute" : 100,
+    "like": 100
   },
   {
-    "sampleRank" : "2",
-    "sampleMapName" : "중랑천",
-    "sampleExecute" : "200",
-    "sampleLike": "200"
+    "rank" :  2,
+    "name" : "중랑천",
+    "execute" : 200,
+    "like": 200
   },
   {
-    "sampleRank" : "3",
-    "sampleMapName" : "노천극장",
-    "sampleExecute" : "150",
-    "sampleLike": "150"
+    "rank" : 3,
+    "name" : "노천극장",
+    "execute" : 150,
+    "like": 150
   },
   {
-    "sampleRank" : "4",
-    "sampleMapName" : "한강",
-    "sampleExecute" : "456",
-    "sampleLike": "456"
+    "rank" : 4,
+    "name" : "한강",
+    "execute" : 456,
+    "like": 456
   },
   {
-    "sampleRank" : "5",
-    "sampleMapName" : "뚝섬",
-    "sampleExecute" : "789",
-    "sampleLike": "789"
+    "rank" : 5,
+    "name" : "뚝섬",
+    "execute" : 789,
+    "like": 789
   }
 ]
 }

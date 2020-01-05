@@ -57,78 +57,11 @@
         android:background="@color/rankBackgroudGray"
         android:layout_marginBottom="10dp"/>
 
-    <!-- 나중에 동적으로 뷰 높이 결정하는 코드로 수정하기 -->
     <androidx.recyclerview.widget.RecyclerView
         android:layout_below="@+id/gubunsun"
         android:layout_width="match_parent"
-        android:layout_height="330dp"
+        android:layout_height="match_parent"
         android:id="@+id/rank_recycler_map">
     </androidx.recyclerview.widget.RecyclerView>
-
-
-    <androidx.cardview.widget.CardView
-        android:layout_alignParentBottom="true"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/rank_cardView"
-        android:layout_marginStart="15dp"
-        android:layout_marginEnd="15dp"
-        android:layout_marginTop="15dp"
-        app:cardCornerRadius="25dp"
-        android:layout_margin="10dp">
-
-        <LinearLayout
-
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/darkRed">
-
-            <TextView
-                android:id="@+id/rank_cardView_rank"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="1"
-                android:textSize="15dp"
-                android:textColor="@color/white"
-                android:gravity="center"
-                android:background="@drawable/ic_1"/>
-
-            <TextView
-                android:id="@+id/rank_cardView_name"
-                android:textColor="@color/white"
-                android:layout_marginLeft="10dp"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:text="asdf"
-                android:textSize="15dp"
-                android:fontFamily="@font/godob"/>
-
-            <TextView
-
-                android:id="@+id/rank_cardView_execute"
-                android:textColor="@color/white"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:text="asdf"
-                android:textSize="15dp"
-                android:fontFamily="@font/godob"/>
-
-            <TextView
-                android:id="@+id/rank_cardView_like"
-                android:textColor="@color/white"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:text="asdf"
-                android:textSize="15dp"
-                android:fontFamily="@font/godob"/>
-
-        </LinearLayout>
-
-    </androidx.cardview.widget.CardView>
-
 
 </RelativeLayout>
