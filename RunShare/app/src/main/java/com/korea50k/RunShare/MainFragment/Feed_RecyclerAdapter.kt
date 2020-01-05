@@ -1,11 +1,11 @@
 package com.korea50k.RunShare.MainFragment
-
+/*
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.korea50k.RunShare.DataClass.Feed_Users
+import com.korea50k.RunShare.dataClass.Feed_Users
 import com.korea50k.RunShare.R
 import kotlinx.android.synthetic.main.recycler_rank_item.view.*
 
@@ -41,3 +41,5 @@ class Feed_RecyclerAdapter(val userList:ArrayList<Feed_Users>): RecyclerView.Ada
     }
 
 }
+
+ */
