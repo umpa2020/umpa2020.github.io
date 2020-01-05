@@ -1,0 +1,33 @@
+{ "sampleData" : [
+  {
+    "sampleRank" : "1",
+    "sampleMapName" : "우이천",
+    "sampleExecute" : "100",
+    "sampleLike": "100"
+  },
+  {
+    "sampleRank" : "2",
+    "sampleMapName" : "중랑천",
+    "sampleExecute" : "200",
+    "sampleLike": "200"
+  },
+  {
+    "sampleRank" : "3",
+    "sampleMapName" : "노천극장",
+    "sampleExecute" : "150",
+    "sampleLike": "150"
+  },
+  {
+    "sampleRank" : "4",
+    "sampleMapName" : "한강",
+    "sampleExecute" : "456",
+    "sampleLike": "456"
+  },
+  {
+    "sampleRank" : "5",
+    "sampleMapName" : "뚝섬",
+    "sampleExecute" : "789",
+    "sampleLike": "789"
+  }
+]
+}

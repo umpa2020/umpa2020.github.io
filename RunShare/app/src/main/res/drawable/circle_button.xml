@@ -3,8 +3,9 @@
     <item>
         <shape android:shape="oval">
             <stroke android:color="#1E90FF" android:width="1dp" />
-            <solid android:color="#87CEEB"/>
-            <size android:width="150dp" android:height="150dp"/>
+            <solid android:color="#87CEEB" />
+            <size android:width="150dp" android:height="150dp" />
+            <padding android:top="10dp"/>
         </shape>
     </item>
 </layer-list>

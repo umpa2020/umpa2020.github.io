@@ -1,4 +1,4 @@
-package com.korea50k.RunShare.DataClass
+package com.korea50k.RunShare.dataClass
 
 import android.app.Activity
 import android.content.Context
@@ -14,9 +14,6 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMap.SnapshotReadyCallback
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.PolylineOptions
-import com.google.android.gms.maps.model.RoundCap
 import com.google.maps.android.PolyUtil
 import com.google.maps.android.SphericalUtil
 import com.korea50k.RunShare.Activities.Running.RunningSaveActivity
@@ -24,6 +21,14 @@ import java.io.File
 import java.io.FileOutputStream
 import java.util.*
 import kotlin.collections.ArrayList
+import com.google.android.gms.maps.model.*
+import com.google.android.gms.maps.model.BitmapDescriptor
+import com.korea50k.RunShare.R
+import android.graphics.Canvas
+import kotlinx.android.synthetic.main.activity_running.*
+import kotlin.math.roundToInt
+import kotlin.math.roundToLong
+
 
 class Map : OnMapReadyCallback {
     lateinit var mMap: GoogleMap    //map 인스턴스
@@ -39,6 +44,10 @@ class Map : OnMapReadyCallback {
     lateinit var context: Context
     lateinit var userState: UserState
     var countDeviation=0
+    lateinit var currentMarker:Marker
+    lateinit var makerMarker: Marker
+    lateinit var racerIcon:BitmapDescriptor
+    lateinit var makerData:RunningData
     //Running
     constructor(smf: SupportMapFragment, context: Context) {
         this.context = context
@@ -48,23 +57,71 @@ class Map : OnMapReadyCallback {
     }
 
     //Racing
-    constructor(smf: SupportMapFragment, context: Context, load_route: ArrayList<LatLng>) {
+    constructor(smf: SupportMapFragment, context: Context, makerData: RunningData) {
         this.context = context
         smf.getMapAsync(this)
-        this.load_route = load_route
+        this.makerData=makerData
+        this.load_route = loadRoute()
         initLocation()
         userState = UserState.RACING
     }
-
+    fun loadRoute():ArrayList<LatLng>{
+        var load_latlngs=ArrayList<LatLng>()
+        for(index in makerData.lats.indices){
+            load_latlngs.add(LatLng(makerData.lats[index],makerData.lngs[index]))
+        }
+        return load_latlngs
+    }
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
         if (load_route.size > 0)
             drawRoute(load_route)
         else
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(prev_loc, 17F))
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(prev_loc, 17F))
+        if(userState==UserState.RACING){
+            makerRunning()
+        }
     }
+    fun makerRunning(){
+        val circleDrawable = context.getDrawable(R.drawable.maker_marker)
+        var canvas =  Canvas();
+        var bitmap = Bitmap.createBitmap(circleDrawable!!.intrinsicWidth, circleDrawable!!.intrinsicHeight, Bitmap.Config.ARGB_8888);
+        canvas.setBitmap(bitmap);
+        circleDrawable.setBounds(0, 0, circleDrawable.getIntrinsicWidth(), circleDrawable.getIntrinsicHeight());
+        circleDrawable.draw(canvas);
+        var makerIcon =BitmapDescriptorFactory.fromBitmap(bitmap);
 
+        val markerOptions = MarkerOptions()
+        markerOptions.position(load_route[0])
+        markerOptions.title("Maker")
+        markerOptions.icon(makerIcon)
+        makerMarker = mMap.addMarker(markerOptions)
+
+        var makerRunningThread = Thread(Runnable {
+            var time = makerData.time.toString()
+            var sec=(Integer.parseInt(time[0].toString())*10+Integer.parseInt(time[1].toString()))*60 + (Integer.parseInt(time[3].toString())*10+Integer.parseInt(time[4].toString()))
+            var milisec=((sec.toDouble()/load_route.size.toDouble())*1000).roundToLong()
+            print_log(sec.toString() + milisec.toString())
+
+            for(index in load_route.indices) {
+                Thread.sleep(milisec)
+                (context as Activity).runOnUiThread(Runnable {
+                    makerMarker.remove()
+
+                    val markerOptions = MarkerOptions()
+                    markerOptions.position(load_route[index])
+                    markerOptions.title("Maker")
+                    markerOptions.icon(makerIcon)
+
+                    makerMarker = mMap.addMarker(markerOptions)
+                })
+
+
+            }
+        })
+        makerRunningThread.start()
+    }
     fun startTracking() {
         locationRequest = LocationRequest.create()
         locationRequest.run {
@@ -94,7 +151,17 @@ class Map : OnMapReadyCallback {
                             )   //맵에 폴리라인 추가
                         }
                         prev_loc = cur_loc                              //현재위치를 이전위치로 변경
-                        mMap.moveCamera(
+
+                        currentMarker.remove()
+
+                        val markerOptions = MarkerOptions()
+                        markerOptions.position(cur_loc)
+                        markerOptions.title("Me")
+                        markerOptions.icon(racerIcon)
+
+                        currentMarker = mMap.addMarker(markerOptions)
+
+                        mMap.animateCamera(
                             CameraUpdateFactory.newLatLngZoom(
                                 cur_loc,
                                 17F
@@ -181,6 +248,20 @@ class Map : OnMapReadyCallback {
                 } else {
                     print_log("Success to get Init Location : " + location.toString())
                     prev_loc = LatLng(location.latitude, location.longitude)
+                    val markerOptions = MarkerOptions()
+                    markerOptions.position(prev_loc)
+                    markerOptions.title("Me")
+
+                    val circleDrawable = context.getDrawable(R.drawable.racer_marker)
+                    var canvas =  Canvas();
+                    var bitmap = Bitmap.createBitmap(circleDrawable!!.intrinsicWidth, circleDrawable!!.intrinsicHeight, Bitmap.Config.ARGB_8888);
+                    canvas.setBitmap(bitmap);
+                    circleDrawable.setBounds(0, 0, circleDrawable.getIntrinsicWidth(), circleDrawable.getIntrinsicHeight());
+                    circleDrawable.draw(canvas);
+                    racerIcon =BitmapDescriptorFactory.fromBitmap(bitmap);
+
+                    markerOptions.icon(racerIcon)
+                    currentMarker = mMap.addMarker(markerOptions)
                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(prev_loc, 17F))
                     if(userState==UserState.PAUSED) {
                         startTracking()

@@ -1,18 +1,12 @@
 package com.korea50k.RunShare.Activities.Running
 
-import android.app.Activity
 import android.content.Context
-import android.os.Handler
 import android.os.SystemClock
-import android.util.Log
 import android.widget.Chronometer
-import androidx.annotation.UiThread
 import com.google.android.gms.maps.SupportMapFragment
-import com.korea50k.RunShare.DataClass.Map
-import com.korea50k.RunShare.DataClass.RunningData
-import com.korea50k.RunShare.R
+import com.korea50k.RunShare.dataClass.Map
+import com.korea50k.RunShare.dataClass.RunningData
 import kotlinx.android.synthetic.main.activity_running.*
-import kotlin.reflect.typeOf
 
 class ManageRunning {
     lateinit var map: Map

@@ -2,9 +2,6 @@ package com.korea50k.RunShare.MainFragment
 
 import android.content.Context
 import android.content.Intent
-import android.content.res.AssetFileDescriptor
-import android.content.res.AssetManager
-import android.content.res.AssetManager.AssetInputStream
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -13,11 +10,10 @@ import android.view.ViewGroup
 import com.google.android.gms.maps.SupportMapFragment
 import com.korea50k.RunShare.Activities.Racing.RacingActivity
 import com.korea50k.RunShare.Activities.Running.RunningActivity
-import com.korea50k.RunShare.DataClass.ConvertJson
-import com.korea50k.RunShare.DataClass.Map
+import com.korea50k.RunShare.dataClass.ConvertJson
+import com.korea50k.RunShare.dataClass.Map
 import com.korea50k.RunShare.R
 import kotlinx.android.synthetic.main.fragment_map.view.*
-import java.io.IOException
 
 
 class MapFragment : Fragment(),View.OnClickListener{

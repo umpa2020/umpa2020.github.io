@@ -1,4 +1,4 @@
-/*package com.korea50k.RunShare.MainFragment
+package com.korea50k.RunShare.MainFragment/*
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.korea50k.RunShare.Activities.RankFragment.FeedPagerAdapter
-import com.korea50k.RunShare.DataClass.Rank_Users
+import com.korea50k.RunShare.dataClass.Rank_Users
 import kotlinx.android.synthetic.main.fragment_feed.*
 import android.R
 import android.widget.*
@@ -110,4 +110,5 @@ class FeedFragment : Fragment() {
         return view
     }
 
-}*/
+}
+        */
