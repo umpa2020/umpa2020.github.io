@@ -22,13 +22,10 @@ class ManageRacing {
     constructor(smf: SupportMapFragment, context: Context,makerData: RunningData) {
         this.mContext=context
         this.makerData=makerData
-        this.map = Map(smf, mContext,makerData)
+        this.map = Map(smf, mContext,makerData,this)
     }
 
-
-
     fun startRunning(activity: RacingActivity) {
-        map.startTracking()
         distanceThread = Thread(Runnable {
             while(true) {
                 Thread.sleep(3000)
@@ -50,7 +47,6 @@ class ManageRacing {
         timeWhenStopped=chronometer.base-SystemClock.elapsedRealtime()
         chronometer.stop()
         var runningData = RunningData()
-        map.stopTracking()
 
         runningData.time = chronometer.text.toString()
         runningData.speed = "0" //TODO : Calc Speed
