@@ -63,4 +63,34 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:padding="10dp"
+        android:background="@drawable/option_bg"
+        android:layout_marginRight="20dp"
+        android:id="@+id/rank_ExecuteLikeChoice_linearlaoyut"
+        android:layout_below="@+id/rank_choiceoption_button"
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone">
+
+        <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <RadioButton
+                android:id="@+id/rank_executeOption_radioButton"
+                android:fontFamily="@font/godob"
+                android:text="실행 순"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <RadioButton
+                android:id="@+id/rank_likeOption_radioButton"
+                android:fontFamily="@font/godob"
+                android:text="좋아요 순"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </RadioGroup>
+
+    </LinearLayout>
 </RelativeLayout>
