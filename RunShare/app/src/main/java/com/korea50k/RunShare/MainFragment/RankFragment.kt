@@ -29,28 +29,7 @@ class RankFragment : Fragment() {
             count++//누를때마다 증가
             Toast.makeText(context, "눌림", Toast.LENGTH_SHORT).show()
             Log.d("asdf", count.toString())
-            /*
-            val popupMenu: PopupMenu = PopupMenu(context,choice_btn)
-            popupMenu.menuInflater.inflate(com.korea50k.RunShare.R.menu.popup_menu,popupMenu.menu)
-            popupMenu.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { item ->
-                when(item.itemId) {
-                    com.korea50k.RunShare.R.id.popupmenu_execute -> {
-                        item.isChecked = !item.isChecked
-                        true
-                        Toast.makeText(context, "You Clicked : " + item.title, Toast.LENGTH_SHORT).show()
 
-                    }
-                    com.korea50k.RunShare.R.id.popupmenu_like ->{
-                        item.isChecked = !item.isChecked
-                        true
-                        Toast.makeText(context, "You Clicked : " + item.title, Toast.LENGTH_SHORT).show()
-                    }
-
-                }
-                true
-            })
-            popupMenu.show()
-             */
 
             if(count % 2 == 1){
                 view.rank_ExecuteLikeChoice_linearlaoyut.visibility = View.VISIBLE
