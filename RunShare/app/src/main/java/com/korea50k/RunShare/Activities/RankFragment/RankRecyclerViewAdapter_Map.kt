@@ -5,12 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.core.content.res.TypedArrayUtils.*
 import androidx.recyclerview.widget.RecyclerView
 import com.korea50k.RunShare.R
-import com.korea50k.RunShare.dataClass.Rank_MapData
+import com.korea50k.RunShare.dataClass.RankMapData
 
-class RankRecyclerViewAdapter_Map(val context: Context, val rankdata: ArrayList<Rank_MapData>) :
+class RankRecyclerViewAdapter_Map(val context: Context, val rankdata: ArrayList<RankMapData>) :
         RecyclerView.Adapter<RankRecyclerViewAdapter_Map.Holder>() {
 
     var i=0
@@ -33,7 +32,7 @@ class RankRecyclerViewAdapter_Map(val context: Context, val rankdata: ArrayList<
         val mapExecute = itemView?.findViewById<TextView>(R.id.rank_cardView_execute)
         val mapLike = itemView?.findViewById<TextView>(R.id.rank_cardView_like)
 
-        fun bind (rankmapdata : Rank_MapData, context: Context) {
+        fun bind (rankmapdata : RankMapData, context: Context) {
             mapRank?.text = (i + 1).toString()
             mapName?.text = rankmapdata.name
             mapExecute?.text = rankmapdata.execute.toString()
