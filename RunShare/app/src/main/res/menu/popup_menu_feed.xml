@@ -6,6 +6,6 @@
             android:title="map"
             android:checked="true"/>
         <item android:id="@+id/popupmenu_feed"
-            android:title="커뮤니티" />
+            android:title="커뮤니티"/>
     </group>
 </menu>

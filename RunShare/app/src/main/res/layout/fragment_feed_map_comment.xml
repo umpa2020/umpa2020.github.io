@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="420dp">
+    <LinearLayout
+        android:id="@+id/thatway"
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+        <ImageView
+            android:id="@+id/detailviewitem_profile_image"
+            android:src="@mipmap/ic_launcher"
+            android:layout_margin="7.5dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"/>
+        <TextView
+            android:text="User name"
+            android:id="@+id/detailviewitem_profile_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/map_name"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_below="@+id/thatway"
+        android:scaleType="fitXY" />
+
+    <LinearLayout
+        android:id="@+id/One"
+        android:layout_below="@id/map_name"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="map name"
+            android:textSize="30dp" />
+
+        <ImageView
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="160dp"
+            android:id="@+id/detailviewitem_favorite_imageview"
+            android:src="@drawable/ic_favorite_border"
+            android:layout_width="35dp"
+            android:layout_height="35dp"/>
+
+        <TextView
+            android:layout_marginLeft="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="000"
+            android:textSize="30dp" />
+
+    </LinearLayout>
+
+
+    <RelativeLayout
+
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/One"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/rank_title_textview"
+            android:id="@+id/rank_framelayout"
+            android:layout_marginTop="10dp">
+
+            <View
+                android:id="@+id/indicator"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:background="@drawable/gradient_bg_black"/>
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tab_rank"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/tab_bg_black"
+                app:tabGravity="fill"
+                app:tabMode="fixed"
+                app:tabSelectedTextColor="#ffffff"
+                app:tabIndicatorColor="@null"
+                app:tabRippleColor="@null"/>
+
+        </FrameLayout>
+        <EditText
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:text="댓 글"/>
+
+        <Button
+            android:layout_marginTop="7dp"
+            android:layout_marginRight="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            />
+
+
+
+    </RelativeLayout>
+</RelativeLayout>
