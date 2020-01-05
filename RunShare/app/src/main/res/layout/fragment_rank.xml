@@ -1,13 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".MainFragment.RankFragment">
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="하고싶은대로해..." />
+        android:layout_marginTop="50dp"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="RANK"
+        android:textColor="@color/black"
+        android:fontFamily="@font/godob"
+        android:textStyle="bold"
+        android:textSize="50dp"
+        android:id="@+id/rank_title_textview"/>
 
-</FrameLayout>
+    <Button
+        android:layout_marginTop="50dp"
+        android:layout_toRightOf="@+id/rank_title_textview"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@drawable/ic_down_button"
+        android:layout_alignBaseline="@+id/rank_title_textview"
+        android:id="@+id/rank_choiceoption_button"/>
+
+
+    <FrameLayout
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/rank_title_textview"
+        android:id="@+id/rank_framelayout"
+        android:layout_marginTop="10dp">
+
+        <View
+            android:id="@+id/indicator"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:background="@drawable/gradient_bg"/>
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tab_rank"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/tab_bg"
+            app:tabGravity="fill"
+            app:tabMode="fixed"
+            app:tabSelectedTextColor="#ffffff"
+            app:tabIndicatorColor="@null"
+            app:tabRippleColor="@null"/>
+
+    </FrameLayout>
+
+
+    <androidx.viewpager.widget.ViewPager
+        android:layout_below="@+id/rank_framelayout"
+        android:id="@+id/rank_pager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</RelativeLayout>

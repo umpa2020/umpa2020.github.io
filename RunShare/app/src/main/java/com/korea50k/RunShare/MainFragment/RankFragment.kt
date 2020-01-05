@@ -5,7 +5,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.korea50k.RunShare.R
+import com.korea50k.RunShare.Activities.RankFragment.RankPagerAdapter
+import android.widget.*
+import kotlinx.android.synthetic.main.fragment_rank.view.*
+import android.widget.FrameLayout
+import androidx.viewpager.widget.ViewPager
 
 
 class RankFragment : Fragment() {
@@ -14,6 +18,73 @@ class RankFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_rank, container, false)
+        val view: View = inflater!!.inflate(com.korea50k.RunShare.R.layout.fragment_rank, container, false)
+
+        val choice_btn = view.findViewById<View>(com.korea50k.RunShare.R.id.rank_choiceoption_button) as Button
+        choice_btn.setOnClickListener{
+            Toast.makeText(context, "눌림", Toast.LENGTH_SHORT).show()
+            val popupMenu: PopupMenu = PopupMenu(context,choice_btn)
+            popupMenu.menuInflater.inflate(com.korea50k.RunShare.R.menu.popup_menu,popupMenu.menu)
+            popupMenu.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { item ->
+                when(item.itemId) {
+                    com.korea50k.RunShare.R.id.popupmenu_execute -> {
+                        item.isChecked = !item.isChecked
+                        true
+                        Toast.makeText(context, "You Clicked : " + item.title, Toast.LENGTH_SHORT).show()
+
+                    }
+                    com.korea50k.RunShare.R.id.popupmenu_like ->{
+                        item.isChecked = !item.isChecked
+                        true
+                        Toast.makeText(context, "You Clicked : " + item.title, Toast.LENGTH_SHORT).show()
+                    }
+
+                }
+                true
+            })
+            popupMenu.show()
+
+
+        }
+
+        var indicatorWidth = 0 //indicator너비 초기화
+
+        val fragmentAdapter = RankPagerAdapter(activity!!.supportFragmentManager, 2) //프래그먼트 붙임
+        view.rank_pager.adapter = fragmentAdapter
+        view.tab_rank.setupWithViewPager(view.rank_pager)
+
+        //동적으로 indicator 가로 너비 정함
+        view.tab_rank.post(Runnable {
+
+            indicatorWidth =  view.tab_rank.getWidth() /  2 //TabLayout 너비의 절반 만큼 크기 정함
+
+            //새로운 너비를 indicator에 할당
+            val indicatorParams = view.indicator.getLayoutParams() as FrameLayout.LayoutParams
+            indicatorParams.width = indicatorWidth
+            view.indicator.setLayoutParams(indicatorParams)
+        })
+
+        view.rank_pager?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener { //뷰페이저 안의 페이저가 변화되었을 때 호출
+
+            override fun onPageScrolled(i: Int, positionOffset: Float, positionOffsetPx: Int) {
+                val params = view.indicator.getLayoutParams() as FrameLayout.LayoutParams
+
+                //Multiply positionOffset with indicatorWidth to get translation
+                val translationOffset = (positionOffset + i) * indicatorWidth //indicator 너비 만큼 위치 슬라이드 이동
+                params.leftMargin = translationOffset.toInt()
+                view.indicator.setLayoutParams(params)
+            }
+
+            override fun onPageSelected(i: Int) {
+
+            }
+
+            override fun onPageScrollStateChanged(i: Int) {
+
+            }
+        })
+
+        return view
     }
+
 }

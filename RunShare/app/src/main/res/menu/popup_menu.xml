@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:id="@+id/single_group"
+        android:checkableBehavior="single">
+        <item android:id="@+id/popupmenu_execute"
+            android:title="실행 순"
+            android:checked="true"/>
+        <item android:id="@+id/popupmenu_like"
+            android:title="좋아요 순" />
+    </group>
+</menu>
