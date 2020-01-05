@@ -156,6 +156,18 @@
         </RelativeLayout>
     </ScrollView>
 
+    <ImageView android:id="@+id/testImage"
+        android:layout_width="300dp"
+        android:layout_height="100dp"
+        android:src="@drawable/ic_launcher_foreground"
+        android:layout_centerHorizontal="true"
+        android:onClick="onClick"
+        android:scaleType="centerCrop"
+        android:layout_above="@+id/save_btn">
+
+    </ImageView>
+
+
     <Button
         android:id="@+id/save_btn"
         android:layout_alignParentBottom="true"
