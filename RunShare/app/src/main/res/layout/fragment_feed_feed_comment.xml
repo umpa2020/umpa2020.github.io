@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="420dp">
+    android:layout_height="match_parent">
     <LinearLayout
         android:id="@+id/thatway"
         android:gravity="center_vertical"
@@ -69,6 +69,7 @@
         android:orientation="horizontal">
 
         <FrameLayout
+            android:layout_alignParentBottom="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
@@ -80,13 +81,13 @@
                 android:id="@+id/indicator"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
-                android:background="@drawable/gradient_bg_black"/>
+                android:background="@drawable/gradient_bg"/>
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tab_rank"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:background="@drawable/tab_bg_black"
+                android:background="@drawable/tab_bg"
                 app:tabGravity="fill"
                 app:tabMode="fixed"
                 app:tabSelectedTextColor="#ffffff"
@@ -95,19 +96,20 @@
 
         </FrameLayout>
         <EditText
+            android:layout_alignParentBottom="true"
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="15dp"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="@null"
             android:text="댓 글"/>
 
         <Button
-            android:layout_marginTop="7dp"
-            android:layout_marginRight="20dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/ic_comment_icon_unpressed_1"
             android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
             />
 
 
