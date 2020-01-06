@@ -17,6 +17,7 @@
         android:layout_below="@+id/rank_root_preview"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
+        android:layout_marginBottom="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -25,6 +26,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <TextView
+                android:id="@+id/mapName_TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="map name"
@@ -55,7 +57,6 @@
             android:fontFamily="@font/godob"
             android:textColor="@color/darkRed"
             android:onClick="onClick"
-            android:layout_margin="10dp"
             android:paddingLeft="20dp"
             android:gravity="center_vertical|left"
             />
@@ -143,8 +144,8 @@
     <androidx.recyclerview.widget.RecyclerView
         android:layout_below="@+id/infolayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
+        android:layout_height="match_parent"
+        android:id="@+id/rank_detailRecyclerView">
     </androidx.recyclerview.widget.RecyclerView>
 
 
