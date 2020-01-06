@@ -6,5 +6,8 @@
         android:width="1dp"
         android:color="@color/rankBackgroudGray" />
 
+
+    <solid android:color="#fff"/>
+
     <corners android:radius="25dp" />
 </shape>

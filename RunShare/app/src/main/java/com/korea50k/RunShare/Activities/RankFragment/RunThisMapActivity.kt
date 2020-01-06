@@ -1,4 +1,4 @@
-package com.korea50k.RunShare.Activities
+package com.korea50k.RunShare.Activities.RankFragment
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -8,12 +8,13 @@ import com.korea50k.RunShare.Activities.Racing.RacingActivity
 import com.korea50k.RunShare.R
 import com.korea50k.RunShare.dataClass.ConvertJson
 
-class MapDetailActivity : AppCompatActivity() {
+class RunThisMapActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_map_detail)
+        setContentView(R.layout.activity_run_this_map)
     }
+
     fun onClick(v: View){
         val assetManager = resources.assets
 
