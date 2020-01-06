@@ -46,7 +46,6 @@ class ManageRacing {
             }
         })
         chronometer = activity.timer_tv
-        chronometer.base = SystemClock.elapsedRealtime()
 
        var countDownThread = Thread(Runnable {
            activity.runOnUiThread(Runnable {
@@ -65,6 +64,7 @@ class ManageRacing {
                activity.countDownTextView.visibility=View.GONE
            })
            distanceThread.start()
+           chronometer.base = SystemClock.elapsedRealtime()
            chronometer.start()
            racingMap.startTracking()
         })

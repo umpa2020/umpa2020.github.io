@@ -153,12 +153,6 @@ class RunningSaveActivity : AppCompatActivity() {
 
                 var Start : SaveTask = SaveTask()
                 Start.execute()
-
-
-
-
-
-
             }
         }
     }
