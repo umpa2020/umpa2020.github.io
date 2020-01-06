@@ -24,7 +24,7 @@ class RankPagerAdapter(fm: FragmentManager, private val mPageCount: Int) :
 
     override fun getPageTitle(position: Int): CharSequence? { //타이틀 정하는 부분
         return when (position){
-            0 -> "map"
+            0 -> "racingMap"
             else -> {return "player"}
         }
     }

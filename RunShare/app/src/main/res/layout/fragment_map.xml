@@ -42,4 +42,5 @@
             android:text="Race"
             android:onClick="onClick"/>
     </LinearLayout>
+
 </RelativeLayout>

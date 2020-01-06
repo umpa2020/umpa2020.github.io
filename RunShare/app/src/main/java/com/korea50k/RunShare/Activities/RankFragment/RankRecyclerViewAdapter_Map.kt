@@ -10,7 +10,7 @@ import com.korea50k.RunShare.R
 import com.korea50k.RunShare.dataClass.RankMapData
 
 class RankRecyclerViewAdapter_Map(val context: Context, val rankdata: ArrayList<RankMapData>, val itemClick: (RankMapData) -> Unit) :
-        RecyclerView.Adapter<RankRecyclerViewAdapter_Map.Holder>() {
+    RecyclerView.Adapter<RankRecyclerViewAdapter_Map.Holder>() {
 
     var i=0
 
@@ -23,7 +23,7 @@ class RankRecyclerViewAdapter_Map(val context: Context, val rankdata: ArrayList<
     }
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
-        holder?.bind(rankdata[position], context)
+        holder.bind(rankdata[position], context)
     }
 
     inner class Holder(itemView: View?, itemClick: (RankMapData) -> Unit) : RecyclerView.ViewHolder(itemView!!) {
@@ -34,9 +34,9 @@ class RankRecyclerViewAdapter_Map(val context: Context, val rankdata: ArrayList<
 
         fun bind (rankmapdata : RankMapData, context: Context) {
             mapRank?.text = (i + 1).toString()
-            mapName?.text = rankmapdata.name
-            mapExecute?.text = rankmapdata.execute.toString()
-            mapLike?.text = rankmapdata.like.toString()
+            mapName?.text = rankmapdata.MapTitle
+            mapExecute?.text = rankmapdata.Excute.toString()
+            mapLike?.text = rankmapdata.Likes.toString()
             i++
             if(i==1){
                 mapRank?.setBackgroundResource(R.drawable.ic_1)

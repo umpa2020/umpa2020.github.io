@@ -30,7 +30,7 @@
 
 
     <FrameLayout
-        android:layout_width="160dp"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/feed_title_textview"
@@ -81,13 +81,13 @@
             <RadioButton
                 android:id="@+id/feed_executeOption_radioButton"
                 android:fontFamily="@font/godob"
-                android:text="실행 순"
+                android:text="전체공개"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
             <RadioButton
                 android:id="@+id/feed_likeOption_radioButton"
                 android:fontFamily="@font/godob"
-                android:text="좋아요 순"
+                android:text="팔로워"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
         </RadioGroup>

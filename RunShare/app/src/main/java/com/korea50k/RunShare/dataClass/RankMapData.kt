@@ -1,11 +1,21 @@
 package com.korea50k.RunShare.dataClass
 
+import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
 class RankMapData() : Serializable {
-    var rank: Int = 0
-    var name: String = ""
-    var execute: Int = 0
-    var like: Int = 0
+    //var rank: Int = 0
+    @SerializedName("MapTitle")
+    @Expose
+    var MapTitle: String = ""
+
+    @SerializedName("Excute")
+    @Expose
+    var Excute: String = "0"
+
+    @SerializedName("Likes")
+    @Expose
+    var Likes: String = "0"
 
 }

@@ -37,4 +37,8 @@ interface API {
     @POST ("dbDownloadtest.php")
     @FormUrlEncoded
     fun test(@Field("dynamicRequest") Fields : String ) : retrofit2.Call<ResponseBody>
+
+    @POST ("rankDownload.php")
+    @FormUrlEncoded
+    fun rankDownload(@Field("Id") Id : String) : retrofit2.Call<ResponseBody>
 }

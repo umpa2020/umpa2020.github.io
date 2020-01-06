@@ -1,8 +1,10 @@
-package com.korea50k.RunShare.Activities.RankFragment
+package com.korea50k.RunShare.Activities.FeedFragment
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
+import com.korea50k.RunShare.Activities.FeedFragment.fragment_feed_map
+import com.korea50k.RunShare.Activities.FeedFragment.fragment_feed_users
 import com.korea50k.RunShare.MainFragment.MapFragment
 
 class FeedPagerAdapter(fm: FragmentManager, private val mPageCount: Int) :
@@ -25,7 +27,7 @@ class FeedPagerAdapter(fm: FragmentManager, private val mPageCount: Int) :
     override fun getPageTitle(position: Int): CharSequence? { //타이틀 정하는 부분
         return when (position){
             0 -> "map"
-            else -> {return "commnuity"}
+            else -> {return "community"}
         }
     }
 

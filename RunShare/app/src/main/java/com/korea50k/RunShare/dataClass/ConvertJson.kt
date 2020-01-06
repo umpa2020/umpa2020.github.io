@@ -13,7 +13,7 @@ class ConvertJson{
             return jsonString
         }
         fun JsonToRunningData(json: String):RunningData{
-           // var gson = Gson()
+            // var gson = Gson()
             var runningData =Gson().fromJson(json,RunningData::class.java)
 
             return runningData
@@ -29,13 +29,13 @@ class ConvertJson{
             var rankMapDatas= ArrayList<RankMapData>()
 
             val jObject = JSONObject(json)
-            val jArray = jObject.getJSONArray("sampleData")
+            val jArray = jObject.getJSONArray("JsonData")
             var gson=Gson()
             var test = RankMapData()
-            test.execute=3
-            test.like=2
-            test.name="123"
-            test.rank=1
+            test.Excute="3"
+            test.Likes="2"
+            test.MapTitle="123"
+            //test.rank=1
             var tests = ArrayList<RankMapData>()
             tests.add(test)
             tests.add(test)
@@ -46,10 +46,10 @@ class ConvertJson{
             for (i in 0 until jArray.length()) {
                 //rankMapDatas.add(Gson().fromJson(gson.toJson(jArray.get(i)), RankMapData::class.java))
                 var rankMapData = RankMapData()
-                rankMapData.execute= jArray.getJSONObject(i).get("execute") as Int
-                rankMapData.like= jArray.getJSONObject(i).get("like") as Int
-                rankMapData.rank= jArray.getJSONObject(i).get("rank") as Int
-                rankMapData.name= jArray.getJSONObject(i).get("name") as String
+                rankMapData.Excute= jArray.getJSONObject(i).get("Excute") as String
+                rankMapData.Likes= jArray.getJSONObject(i).get("Likes") as String
+//                rankMapData.rank= jArray.getJSONObject(i).get("rank") as Int
+                rankMapData.MapTitle= jArray.getJSONObject(i).get("MapTitle") as String
 
                 rankMapDatas.add(rankMapData)
 

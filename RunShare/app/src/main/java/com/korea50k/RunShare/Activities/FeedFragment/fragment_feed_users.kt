@@ -1,4 +1,4 @@
-package com.korea50k.RunShare.Activities.RankFragment
+package com.korea50k.RunShare.Activities.FeedFragment
 
 
 import android.os.Bundle
@@ -17,7 +17,7 @@ class fragment_feed_users : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_rank_player, container, false)
+        return inflater.inflate(R.layout.fragment_feed_feed_nocomment, container, false)
     }
 
 

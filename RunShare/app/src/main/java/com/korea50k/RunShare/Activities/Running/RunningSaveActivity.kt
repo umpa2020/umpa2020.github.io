@@ -115,7 +115,7 @@ class RunningSaveActivity : AppCompatActivity() {
 
                     override fun doInBackground(vararg params: Void?): String? {
                         try {
-                            s3Upload("kjb", runningData.map_title, "map description", json, base64OfBitmap, "100kcal","100km",
+                            s3Upload("kjb", runningData.map_title, "racingMap description", json, base64OfBitmap, "100kcal","100km",
                                 "14km/h","00:12:11",0,0,1)
 
                             //JsonUpload("kjb", "test", 11)

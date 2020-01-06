@@ -1,4 +1,4 @@
-package com.korea50k.RunShare.dataClass
+package com.korea50k.RunShare.map
 
 import android.app.Activity
 import android.content.Context
@@ -25,14 +25,16 @@ import com.google.android.gms.maps.model.*
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.korea50k.RunShare.R
 import android.graphics.Canvas
+import android.view.View
 import com.korea50k.RunShare.Activities.Racing.ManageRacing
-import kotlinx.android.synthetic.main.activity_running.*
-import kotlin.math.roundToInt
+import com.korea50k.RunShare.dataClass.RunningData
+import com.korea50k.RunShare.dataClass.UserState
+import kotlinx.android.synthetic.main.activity_racing.*
 import kotlin.math.roundToLong
 
 
-class Map : OnMapReadyCallback {
-    lateinit var mMap: GoogleMap    //map 인스턴스
+class RacingMap : OnMapReadyCallback {
+    lateinit var mMap: GoogleMap    //racingMap 인스턴스
     lateinit var fusedLocationClient: FusedLocationProviderClient   //위치정보 가져오는 인스턴스
     lateinit var locationCallback: LocationCallback
     lateinit var locationRequest: LocationRequest
@@ -50,15 +52,7 @@ class Map : OnMapReadyCallback {
     lateinit var racerIcon: BitmapDescriptor
     lateinit var makerData: RunningData
     lateinit var manageRacing: ManageRacing
-
-    //Running
-    constructor(smf: SupportMapFragment, context: Context) {
-        this.context = context
-        smf.getMapAsync(this)
-        initLocation()
-        userState = UserState.RUNNING
-        print_log("Set UserState Running")
-    }
+    lateinit var makerRunningThread: Thread
 
     //Racing
     constructor(
@@ -72,7 +66,6 @@ class Map : OnMapReadyCallback {
         this.makerData = makerData
         this.manageRacing = manageRacing
         this.load_route = loadRoute()
-        initLocation()
         userState = UserState.BEFORERACING
         print_log("Set UserState BEFORERACING")
 
@@ -93,7 +86,7 @@ class Map : OnMapReadyCallback {
             drawRoute(load_route)
         else
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(prev_loc, 17F))
-
+        initLocation()
         fusedLocationClient.requestLocationUpdates(
             locationRequest,
             locationCallback,
@@ -139,7 +132,7 @@ class Map : OnMapReadyCallback {
         markerOptions.icon(makerIcon)
         makerMarker = mMap.addMarker(markerOptions)
 
-        var makerRunningThread = Thread(Runnable {
+        makerRunningThread = Thread(Runnable {
             var time = makerData.time.toString()
             var sec =
                 (Integer.parseInt(time[0].toString()) * 10 + Integer.parseInt(time[1].toString())) * 60 + (Integer.parseInt(
@@ -160,39 +153,26 @@ class Map : OnMapReadyCallback {
                     makerMarker = mMap.addMarker(markerOptions)
                 })
             }
+            (context as Activity).runOnUiThread(Runnable {
+                (context as Activity).countDownTextView.text = "Maker arrive at finish point"
+                (context as Activity).countDownTextView.visibility = View.VISIBLE
+                print_log("maker arrive")
+            })
+            Thread.sleep(1500)
+            (context as Activity).runOnUiThread(Runnable {
+                (context as Activity).countDownTextView.visibility = View.GONE
+            })
         })
-        makerRunningThread.start()
+
     }
 
     fun startTracking() {
-
-
+        makerRunningThread.start()
     }
 
-    fun stopTracking(): Triple<DoubleArray, DoubleArray, DoubleArray> {
+    fun stopTracking() {
         print_log("Stop")
-
-        var simplipoly = PolyUtil.simplify(latlngs, 10.0) //tolerance 조절해야함
-
-        var lats: DoubleArray = DoubleArray(simplipoly.size)
-        var lngs: DoubleArray = DoubleArray(simplipoly.size)
-        for (index in simplipoly.indices) {
-            lats[index] = simplipoly[index].latitude
-            lngs[index] = simplipoly[index].longitude
-        }
-
-        return Triple(lats, lngs, alts.toDoubleArray())
-    }
-
-    fun pauseTracking() {
-        print_log("pause")
         fusedLocationClient.removeLocationUpdates(locationCallback)
-        userState = UserState.PAUSED
-        print_log("Set UserState PAUSED")
-    }
-
-    fun restartTracking() {
-        initLocation()
     }
 
     fun drawRoute(route: ArrayList<LatLng>) { //로드 된 경로 그리기
@@ -247,11 +227,6 @@ class Map : OnMapReadyCallback {
                     markerOptions.icon(racerIcon)
                     currentMarker = mMap.addMarker(markerOptions)
                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(prev_loc, 17F))
-                    if (userState == UserState.PAUSED) {
-                        startTracking()
-                        userState = UserState.RUNNING
-                        print_log("Set UserState Running")
-                    }
                 }
             }
             .addOnFailureListener {
@@ -264,6 +239,7 @@ class Map : OnMapReadyCallback {
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
             interval = 1000
         }
+
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult?) {
                 locationResult?.let {
@@ -275,37 +251,43 @@ class Map : OnMapReadyCallback {
                         cur_loc = LatLng(lat, lng)
                         when (userState) {
                             UserState.BEFORERACING -> {
-                                print_log(
-                                    "start point와의 거리 : " + SphericalUtil.computeDistanceBetween(
-                                        cur_loc,
-                                        load_route[0]
-                                    )
-                                )
+                                (context as Activity).runOnUiThread(Runnable {
+                                    (context as Activity).notificationButton.text =("시작 포인트로 이동하십시오.\n시작포인트까지 남은거리 : "
+                                    + (SphericalUtil.computeDistanceBetween(cur_loc, load_route[0])).roundToLong().toString() + "m")
+                                })
                                 if (SphericalUtil.computeDistanceBetween(
                                         cur_loc,
                                         load_route[0]
                                     ) < 10
                                 ) {
-                                    print_log("Start Racing")
-                                    makerRunning()
-                                    startTracking()
-                                    userState = UserState.RACING
-                                    print_log("Set UserState Racing")
+                                    userState=UserState.READYTORACING
+                                    (context as Activity).runOnUiThread(Runnable {
+                                        (context as Activity).notificationButton.text = "시작"
+                                        (context as Activity).notificationButton.isClickable = true
+                                        (context as Activity).notificationButton.setOnClickListener {
+                                            print_log("Start Racing")
+                                            makerRunning()
+                                            userState = UserState.RACING
+                                            manageRacing.startRunning()
+                                            (context as Activity).notificationButton.visibility=View.GONE
+                                        }
+                                    })
                                 }
                             }
-                            UserState.RACING, UserState.RUNNING -> {
+                            UserState.READYTORACING->{
+                                //wait to start
+                            }
+                            UserState.RACING -> {
                                 print_log("R U Here?" + userState)
                                 if (prev_loc.latitude == cur_loc.latitude && prev_loc.longitude == cur_loc.longitude) {
                                     return  //움직임이 없다면 추가안함
                                 } else if (false) { //비정상적인 움직임일 경우 + finish에 도착한 경우
-                                } else if (userState==UserState.RACING) {
-                                    if (SphericalUtil.computeDistanceBetween(
-                                            cur_loc,
-                                            load_route[load_route.size - 1]
-                                        ) < 10
-                                    ) {
-                                        manageRacing.stopRunning()
-                                    }
+                                } else if (SphericalUtil.computeDistanceBetween(
+                                        cur_loc,
+                                        load_route[load_route.size - 1]
+                                    ) < 10
+                                ) {
+                                    manageRacing.stopRunning()
                                 } else {
                                     latlngs.add(cur_loc)    //위 조건들을 통과하면 점 추가
                                     alts.add(alt)
@@ -375,35 +357,6 @@ class Map : OnMapReadyCallback {
             i++
         }
         return distance
-    }
-
-    fun CaptureMapScreen(runningData: RunningData) {
-        //TODO: must to change capture way
-        lateinit var bitmap: Bitmap
-        var callback = SnapshotReadyCallback {
-            try {
-                var saveFolder = File(context.filesDir, "mapdata") // 저장 경로
-                if (!saveFolder.exists()) {       //폴더 없으면 생성
-                    saveFolder.mkdir()
-                }
-                val path = "map" + saveFolder.list().size + ".bmp"        //파일명 생성하는건데 수정필요
-
-                var myfile = File(saveFolder, path)                //로컬에 파일저장
-                var out = FileOutputStream(myfile)
-                it.compress(Bitmap.CompressFormat.PNG, 90, out)
-                runningData.bitmap = myfile.path
-
-
-                var newIntent = Intent((context as Activity), RunningSaveActivity::class.java)
-                newIntent.putExtra("Running Data", runningData)
-                context.startActivity(newIntent)
-
-            } catch (e: Exception) {
-                print_log(e.toString())
-            }
-        }
-
-        mMap.snapshot(callback)
     }
 
     fun print_log(text: String) {

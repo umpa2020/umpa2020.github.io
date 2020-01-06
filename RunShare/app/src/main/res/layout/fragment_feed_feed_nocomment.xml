@@ -41,7 +41,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="map name"
+            android:text="community"
             android:textSize="30dp" />
 
         <ImageView
