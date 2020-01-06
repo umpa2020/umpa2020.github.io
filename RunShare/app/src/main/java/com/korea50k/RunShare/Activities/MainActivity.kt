@@ -3,6 +3,7 @@ package com.korea50k.RunShare.Activities
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.view.Gravity
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -11,6 +12,9 @@ import com.google.android.material.tabs.TabLayout
 import com.korea50k.RunShare.MainFragment.MainPageAdapter
 import com.korea50k.RunShare.R
 import kotlinx.android.synthetic.main.activity_main.*
+import androidx.drawerlayout.widget.DrawerLayout
+import android.view.View
+import android.widget.Button
 
 
 class MainActivity : AppCompatActivity() {
@@ -25,7 +29,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(com.korea50k.RunShare.R.layout.activity_main)
         checkPermissions()          //모든 권한 확인
 
         val mTabLayout = tabDots
@@ -42,6 +46,19 @@ class MainActivity : AppCompatActivity() {
         mViewPager.adapter=mMainPageAdapter
         mViewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(mTabLayout))
         mViewPager.setCurrentItem(1)
+        //DrawerLayout.Lock
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+        //drawerLayout.closeDrawer(drawer)
+    }
+    fun onClick(v:View){
+        when(v.id){
+            R.id.openDrawerButton->{
+                drawerLayout.openDrawer(drawer)
+            }
+            R.id.closeDrawerButton->{
+                drawerLayout.closeDrawer(drawer)
+            }
+        }
     }
     private fun checkPermissions() {
         var rejectedPermissionList = ArrayList<String>()

@@ -83,7 +83,7 @@ class ManageRacing {
         runningData.speed = "0" //TODO : Calc Speed
 
         var newIntent = Intent(mContext, RacingFinishActivity::class.java)
-        newIntent.putExtra("Running Data", runningData)
+        newIntent.putExtra("Racer Data", runningData)
         newIntent.putExtra("Maker Data", makerData)
         mContext.startActivity(newIntent)
     }
