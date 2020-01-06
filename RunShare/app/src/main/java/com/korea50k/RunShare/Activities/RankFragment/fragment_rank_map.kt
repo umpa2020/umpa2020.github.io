@@ -35,31 +35,6 @@ class fragment_rank_map : Fragment() {
         val view: View =  inflater!!.inflate(R.layout.fragment_rank_map, container, false)
 
 
-
-        /*val assetManager = resources.assets
-
-        //TODO:서버에서 데이터 가져와서 해야함
-        val inputStream= assetManager.open("datajson")
-        val jsonString = inputStream.bufferedReader().use { it.readText() }
-        var rankMapDatas = ConvertJson.JsonToRankMapDatas(jsonString)
-
-        //리사이클러 뷰 클릭 리스너 부분
-        val mAdapter = RankRecyclerViewAdapter_Map(activity!!, rankMapDatas){ rankmapdata ->
-            //TODO Intent로 새로운 xml 열기
-            Toast.makeText(context, "맵 이름 :  ${rankmapdata.name}, 실행 수 : ${rankmapdata.execute}", Toast.LENGTH_SHORT).show()
-            val intent = Intent(context, RankRecyclerClickActivity::class.java)
-            intent.putExtra("mapName", rankmapdata.name)
-
-            startActivity(intent)
-        }
-        view.rank_recycler_map!!.adapter = mAdapter
-
-
-        val lm = LinearLayoutManager(context)
-        view.rank_recycler_map.layoutManager = lm
-        view.rank_recycler_map.setHasFixedSize(true)
-        */
-
         class SaveTask : AsyncTask<Void, Void, String>(){
             override fun onPreExecute() {
                 super.onPreExecute()
@@ -190,15 +165,5 @@ class fragment_rank_map : Fragment() {
         }
     }
 
-/*
-    fun jsonRead(){
-        for (i in 0 until jArray.length()) {
-            val obj = jArray.getJSONObject(i)
-            val name = obj.getString("sampleMapName")
-            val execute = obj.getString("sampleExecute")
-            val like = obj.getString("sampleLike")
-        }
-    }
-*/
 
 }

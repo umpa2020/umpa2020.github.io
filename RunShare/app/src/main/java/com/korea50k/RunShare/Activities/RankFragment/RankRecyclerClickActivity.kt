@@ -10,7 +10,6 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.korea50k.RunShare.R
 import kotlinx.android.synthetic.main.activity_rank_recycler_click.*
-import com.korea50k.RunShare.Activities.MapDetailActivity
 import com.korea50k.RunShare.RetrofitClient
 import com.korea50k.RunShare.dataClass.ConvertJson
 import okhttp3.ResponseBody
@@ -51,27 +50,6 @@ class RankRecyclerClickActivity : AppCompatActivity() {
             Toast.makeText(this, "전달된 이름이 없습니다", Toast.LENGTH_SHORT).show()
         }
 
-
-       /* //TODO:서버에서 데이터 가져와서 해야함
-
-        val assetManager = resources.assets
-        val inputStream= assetManager.open("datajson")
-        val jsonString = inputStream.bufferedReader().use { it.readText() }
-        var rankMapDatas = ConvertJson.JsonToRankMapDatas(jsonString)
-
-
-        //리사이클러 뷰 클릭 리스너 부분
-        val mAdapter = RankRecyclerViewAdapter_Map(this, rankMapDatas){ rankmapdata ->
-            //TODO Intent로 새로운 xml 열기, 플레이어 프로필로
-            Toast.makeText(this, "맵 이름 :  ${rankmapdata.MapTitle}, 실행 수 : ${rankmapdata.Excute}", Toast.LENGTH_SHORT).show()
-        }
-
-        rank_detailRecyclerView.adapter = mAdapter
-
-
-        val lm = LinearLayoutManager(this)
-        rank_detailRecyclerView.layoutManager = lm
-        rank_detailRecyclerView.setHasFixedSize(true)*/
 
         class SaveTask : AsyncTask<Void, Void, String>(){
             override fun onPreExecute() {
@@ -114,7 +92,7 @@ class RankRecyclerClickActivity : AppCompatActivity() {
 
 
     fun onClick(v: View){
-        var nextIntent= Intent(this,MapDetailActivity::class.java)
+        var nextIntent= Intent(this, RunThisMapActivity::class.java)
         startActivity(nextIntent)
     }
 
