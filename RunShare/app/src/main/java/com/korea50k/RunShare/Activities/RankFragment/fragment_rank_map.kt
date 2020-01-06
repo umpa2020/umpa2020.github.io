@@ -1,49 +1,42 @@
 package com.korea50k.RunShare.Activities.RankFragment
 
 
+import android.content.Intent
 import android.content.res.AssetManager
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 
 import com.korea50k.RunShare.R
-import com.korea50k.RunShare.dataClass.Rank_MapData
-import kotlinx.android.synthetic.main.fragment_rank_map.*
+import com.korea50k.RunShare.dataClass.ConvertJson
+import com.korea50k.RunShare.dataClass.RankMapData
 import kotlinx.android.synthetic.main.fragment_rank_map.view.*
-import org.json.JSONObject
 
 class fragment_rank_map : Fragment() {
-
-
-    var rankmapDataList = arrayListOf<Rank_MapData>(
-            Rank_MapData(1, "jsj", 100, 150)  ,
-            Rank_MapData(2, "ㅁㅁㄴ", 100, 150),
-            Rank_MapData(3, "ㄹㅇㄴ", 100, 150),
-            Rank_MapData(1, "jsj", 100, 150)  ,
-            Rank_MapData(2, "ㅁㅁㄴ", 100, 150),
-            Rank_MapData(3, "ㄹㅇㄴ", 100, 150)
-    )
-
-   // var rankmapDataList = arrayListOf<Rank_MapData>()
-//    val assetManager: AssetManager = context?.resources!!.assets
-   // val inputStream= assetManager.open("datajson.json")
-   // val jsonString = inputStream.bufferedReader().use { it.readText()}
-
-  //  val jObject = JSONObject(jsonString)
- //   val jArray = jObject.getJSONArray("sampleData")
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         val view: View =  inflater!!.inflate(R.layout.fragment_rank_map, container, false)
 
-        val mAdapter = RankRecyclerViewAdapter_Map(activity!!, rankmapDataList)
+
+        val assetManager = resources.assets
+
+        //TODO:서버에서 데이터 가져와서 해야함
+        val inputStream= assetManager.open("datajson")
+        val jsonString = inputStream.bufferedReader().use { it.readText() }
+        var rankMapDatas = ConvertJson.JsonToRankMapDatas(jsonString)
+
+        //리사이클러 뷰 클릭 리스너 부분
+        val mAdapter = RankRecyclerViewAdapter_Map(activity!!, rankMapDatas){ rankmapdata ->
+            //TODO Intent로 새로운 xml 열기
+            val intent = Intent(context, RankRecyclerClickActivity::class.java)
+            startActivity(intent)
+        }
         view.rank_recycler_map!!.adapter = mAdapter
 
 
@@ -51,7 +44,6 @@ class fragment_rank_map : Fragment() {
         view.rank_recycler_map.layoutManager = lm
         view.rank_recycler_map.setHasFixedSize(true)
 
-       // jsonRead()
 
         return view
     }

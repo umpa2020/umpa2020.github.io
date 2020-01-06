@@ -1,6 +1,7 @@
 package com.korea50k.RunShare.MainFragment
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,9 +11,12 @@ import android.widget.*
 import kotlinx.android.synthetic.main.fragment_rank.view.*
 import android.widget.FrameLayout
 import androidx.viewpager.widget.ViewPager
+import com.korea50k.RunShare.R
+import kotlinx.android.synthetic.main.fragment_rank.*
 
 
 class RankFragment : Fragment() {
+    var count = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -22,29 +26,19 @@ class RankFragment : Fragment() {
 
         val choice_btn = view.findViewById<View>(com.korea50k.RunShare.R.id.rank_choiceoption_button) as Button
         choice_btn.setOnClickListener{
+            count++//누를때마다 증가
             Toast.makeText(context, "눌림", Toast.LENGTH_SHORT).show()
-            val popupMenu: PopupMenu = PopupMenu(context,choice_btn)
-            popupMenu.menuInflater.inflate(com.korea50k.RunShare.R.menu.popup_menu,popupMenu.menu)
-            popupMenu.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { item ->
-                when(item.itemId) {
-                    com.korea50k.RunShare.R.id.popupmenu_execute -> {
-                        item.isChecked = !item.isChecked
-                        true
-                        Toast.makeText(context, "You Clicked : " + item.title, Toast.LENGTH_SHORT).show()
-
-                    }
-                    com.korea50k.RunShare.R.id.popupmenu_like ->{
-                        item.isChecked = !item.isChecked
-                        true
-                        Toast.makeText(context, "You Clicked : " + item.title, Toast.LENGTH_SHORT).show()
-                    }
-
-                }
-                true
-            })
-            popupMenu.show()
+            Log.d("asdf", count.toString())
 
 
+            if(count % 2 == 1){
+                view.rank_ExecuteLikeChoice_linearlaoyut.visibility = View.VISIBLE
+                choice_btn.setBackgroundResource(R.drawable.ic_up_button)
+            }
+            if(count % 2 == 0){
+                view.rank_ExecuteLikeChoice_linearlaoyut.visibility = View.GONE
+                choice_btn.setBackgroundResource(R.drawable.ic_down_button)
+            }
         }
 
         var indicatorWidth = 0 //indicator너비 초기화

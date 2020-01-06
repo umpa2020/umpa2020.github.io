@@ -5,19 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.core.content.res.TypedArrayUtils.*
 import androidx.recyclerview.widget.RecyclerView
 import com.korea50k.RunShare.R
-import com.korea50k.RunShare.dataClass.Rank_MapData
+import com.korea50k.RunShare.dataClass.RankMapData
 
-class RankRecyclerViewAdapter_Map(val context: Context, val rankdata: ArrayList<Rank_MapData>) :
+class RankRecyclerViewAdapter_Map(val context: Context, val rankdata: ArrayList<RankMapData>, val itemClick: (RankMapData) -> Unit) :
         RecyclerView.Adapter<RankRecyclerViewAdapter_Map.Holder>() {
 
     var i=0
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val view = LayoutInflater.from(context).inflate(R.layout.recycler_rank_item, parent, false)
-        return Holder(view)
+        return Holder(view, itemClick)
     }
     override fun getItemCount(): Int {
         return rankdata.size
@@ -27,13 +26,13 @@ class RankRecyclerViewAdapter_Map(val context: Context, val rankdata: ArrayList<
         holder?.bind(rankdata[position], context)
     }
 
-    inner class Holder(itemView: View?) : RecyclerView.ViewHolder(itemView!!) {
+    inner class Holder(itemView: View?, itemClick: (RankMapData) -> Unit) : RecyclerView.ViewHolder(itemView!!) {
         val mapRank = itemView?.findViewById<TextView>(R.id.rank_cardView_rank)
         val mapName = itemView?.findViewById<TextView>(R.id.rank_cardView_name)
         val mapExecute = itemView?.findViewById<TextView>(R.id.rank_cardView_execute)
         val mapLike = itemView?.findViewById<TextView>(R.id.rank_cardView_like)
 
-        fun bind (rankmapdata : Rank_MapData, context: Context) {
+        fun bind (rankmapdata : RankMapData, context: Context) {
             mapRank?.text = (i + 1).toString()
             mapName?.text = rankmapdata.name
             mapExecute?.text = rankmapdata.execute.toString()
@@ -51,6 +50,8 @@ class RankRecyclerViewAdapter_Map(val context: Context, val rankdata: ArrayList<
             else{
                 mapRank?.setBackgroundResource(R.drawable.ic_4)
             }
+
+            itemView.setOnClickListener { itemClick(rankmapdata) }
         }
     }
 }
