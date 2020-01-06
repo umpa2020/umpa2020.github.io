@@ -1,92 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Activities.RankFragment.fragment_rank_map">
 
     <LinearLayout
-        android:layout_width="200dp"
-        android:layout_height="100dp"
-        android:background="@drawable/ic_feed_check_box">
+        android:id="@+id/textlinearlayout"
+        android:layout_margin="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-        <LinearLayout
-            android:id="@+id/group1"
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:gravity="center"
+            android:background="@drawable/ic_1"
+            android:backgroundTint="#00000000"/>
 
-            <RadioGroup
-                android:layout_marginTop="15dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-
-                <CheckBox
-                    android:layout_marginLeft="5dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="map"
-                    android:fontFamily="@font/godob"
-                    android:textSize="15dp"
-                    android:button="@null"
-                    android:checked="false"
-                    android:drawableLeft="@drawable/ic_check_button_pressed"
-                    />
-
-                <CheckBox
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginTop="15dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="커뮤니티"
-                    android:fontFamily="@font/godob"
-                    android:textSize="15dp"
-                    android:button="@null"
-                    android:checked="false"
-                    android:drawableLeft="@drawable/ic_check_button_pressed"/>
-            </RadioGroup>
-        </LinearLayout>
-
-        <View
-            android:layout_width="3dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="7dp"
-            android:background="#666666" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <TextView
+            android:textColor="@color/black"
+            android:layout_marginLeft="10dp"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/group1"
-            android:orientation="vertical">
+            android:text="MAP"
+            android:textSize="15dp"
+            android:fontFamily="@font/godob"/>
 
-            <RadioGroup
-                android:layout_marginTop="15dp"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+        <TextView
+            android:textColor="@color/black"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="실행"
+            android:textSize="15dp"
+            android:fontFamily="@font/godob"/>
 
-                <CheckBox
-                    android:layout_marginLeft="5dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="전체공개"
-                    android:fontFamily="@font/godob"
-                    android:textSize="15dp"
-                    android:button="@null"
-                    android:checked="false"
-                    android:drawableLeft="@drawable/ic_check_button_pressed"/>
+        <TextView
+            android:textColor="@color/black"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="좋아요"
+            android:textSize="15dp"
+            android:fontFamily="@font/godob"/>
 
-                <CheckBox
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginTop="15dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="팔로워"
-                    android:fontFamily="@font/godob"
-                    android:textSize="15dp"
-                    android:button="@null"
-                    android:checked="false"
-                    android:drawableLeft="@drawable/ic_check_button_pressed"/>
-            </RadioGroup>
-        </LinearLayout>
     </LinearLayout>
+
+    <TextView
+        android:layout_below="@+id/textlinearlayout"
+        android:id="@+id/gubunsun"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/rankBackgroudGray"
+        android:layout_marginBottom="10dp"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_below="@+id/gubunsun"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/rank_recycler_map">
+    </androidx.recyclerview.widget.RecyclerView>
+
 </RelativeLayout>

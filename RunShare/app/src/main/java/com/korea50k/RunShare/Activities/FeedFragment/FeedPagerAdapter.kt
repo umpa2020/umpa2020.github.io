@@ -6,11 +6,11 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 import com.korea50k.RunShare.MainFragment.MapFragment
 
 class FeedPagerAdapter(fm: FragmentManager, private val mPageCount: Int) :
-    FragmentStatePagerAdapter(fm) {
+    FragmentStatePagerAdapter(fm) { //TODO: change Deprecated fun
     override fun getItem(position: Int): Fragment {
         return  when (position) { //position에 따른 fragment 부르기
             0 -> {
-                fragment_feed_users()
+                fragment_feed_map()
             }
             else -> {
                 fragment_feed_users()
@@ -25,7 +25,7 @@ class FeedPagerAdapter(fm: FragmentManager, private val mPageCount: Int) :
     override fun getPageTitle(position: Int): CharSequence? { //타이틀 정하는 부분
         return when (position){
             0 -> "map"
-            else -> {return "player"}
+            else -> {return "commnuity"}
         }
     }
 
