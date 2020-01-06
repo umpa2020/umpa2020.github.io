@@ -19,7 +19,7 @@
     <hollowsoft.slidingdrawer.SlidingDrawer
         android:id="@+id/drawer"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="200dp"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="?actionBarSize"
         layout:content="@+id/content"
@@ -41,22 +41,26 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1.0"
-                android:background="#44444444"
-                android:orientation="vertical">
+                android:background="@drawable/rounded_gray_box"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="5dp">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="Km"
+                    android:textColor="#FFFFFF"
                     android:textSize="24.0dip" />
-
                 <TextView
                     android:id="@+id/running_distance_tv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="0.00"
+                    android:textColor="#FFFFFF"
                     android:textSize="24.0dip" />
             </LinearLayout>
 
@@ -64,21 +68,25 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1.0"
-                android:background="#44444444"
-                android:orientation="vertical">
+                android:background="@drawable/rounded_gray_box"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginLeft="5dp">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="시간"
+                    android:textColor="#FFFFFF"
                     android:textSize="24dp" />
-
                 <Chronometer
                     android:id="@+id/timer_tv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
+                    android:textColor="#FFFFFF"
                     android:textSize="24dp" />
             </LinearLayout>
         </LinearLayout>

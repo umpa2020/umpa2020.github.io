@@ -109,31 +109,33 @@
                 />
 
             <EditText
-                android:id="@+id/save_title_edit"
+                android:id="@+id/mapTitleEdit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Title"
                 android:layout_below="@+id/chart"/>
 
-            <TextView
-                android:id="@+id/save_text_edit"
+            <EditText
+                android:id="@+id/mapExplanationEdit"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:hint="Text"
-                android:layout_below="@id/save_title_edit"/>
+                android:layout_below="@id/mapTitleEdit"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/save_text_edit"
+                android:layout_below="@id/mapExplanationEdit"
                 android:layout_marginBottom="?actionBarSize">
 
                 <RadioGroup
+                    android:id="@+id/privacyRadioGroup"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
                     <RadioButton
+                        android:id="@+id/racingRadio"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -141,12 +143,14 @@
                         android:text="경쟁" />
 
                     <RadioButton
+                        android:id="@+id/publicRadio"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="공개" />
 
                     <RadioButton
+                        android:id="@+id/privateRadio"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -156,23 +160,12 @@
         </RelativeLayout>
     </ScrollView>
 
-    <ImageView android:id="@+id/testImage"
-        android:layout_width="300dp"
-        android:layout_height="100dp"
-        android:src="@drawable/ic_launcher_foreground"
-        android:layout_centerHorizontal="true"
-        android:onClick="onClick"
-        android:scaleType="centerCrop"
-        android:layout_above="@+id/save_btn">
-
-    </ImageView>
-
-
     <Button
         android:id="@+id/save_btn"
         android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
         android:onClick="onClick"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/base_button_selector"
         android:textColor="#FF0000"
