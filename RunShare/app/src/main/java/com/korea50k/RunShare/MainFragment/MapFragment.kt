@@ -3,15 +3,15 @@ package com.korea50k.RunShare.MainFragment
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.google.android.gms.maps.SupportMapFragment
 import com.korea50k.RunShare.Activities.Racing.RacingActivity
 import com.korea50k.RunShare.Activities.Running.RunningActivity
-import com.korea50k.RunShare.dataClass.ConvertJson
 import com.korea50k.RunShare.R
+import com.korea50k.RunShare.dataClass.ConvertJson
 import com.korea50k.RunShare.map.BasicMap
 import kotlinx.android.synthetic.main.fragment_map.view.*
 
@@ -59,5 +59,15 @@ class MapFragment : Fragment(),View.OnClickListener{
         view.race_btn.setOnClickListener(this)
 
         return view
+    }
+
+    override fun onPause() {
+        super.onPause()
+        map.pauseTracking()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        map.restartTracking()
     }
 }

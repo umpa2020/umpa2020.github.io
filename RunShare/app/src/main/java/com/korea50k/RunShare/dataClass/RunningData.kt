@@ -13,4 +13,5 @@ class RunningData() : Serializable {
     var map_title: String = ""
     var cal: String = ""
     var bitmap: String=""
+    var privacy:Privacy=Privacy.PUBLIC
 }

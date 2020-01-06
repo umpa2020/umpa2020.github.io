@@ -64,6 +64,12 @@ class BasicMap : OnMapReadyCallback {
     }
 
     fun restartTracking() {
+        fusedLocationClient.requestLocationUpdates(
+            locationRequest,
+            locationCallback,
+            Looper.myLooper()
+        )
+        userState=UserState.NORMAL
     }
 
     fun initLocation() {            //첫 위치 설정하고, prev_loc 설정
@@ -119,7 +125,7 @@ class BasicMap : OnMapReadyCallback {
                         var alt = location.altitude
                         var speed = location.speed
                         cur_loc = LatLng(lat, lng)
-
+                        print_log("Basic Map Log")
                         currentMarker.remove()
                         val markerOptions = MarkerOptions()
                         markerOptions.position(cur_loc)

@@ -24,11 +24,10 @@ class RacingActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpen
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_running)
+        setContentView(R.layout.activity_racing)
         makerData = intent.getSerializableExtra("Running data") as RunningData
 
         init()
-        manageRacing.startRunning(this)
         btn_stop.setOnLongClickListener {
             var runningData = manageRacing.stopRunning()
 
@@ -39,7 +38,7 @@ class RacingActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpen
 
     fun init() {
         val smf = supportFragmentManager.findFragmentById(R.id.map_viewer) as SupportMapFragment
-        manageRacing = ManageRacing(smf, this, makerData)
+        manageRacing = ManageRacing(smf, this,this, makerData)
 
         drawer = findViewById(R.id.drawer)
         drawer.setOnDrawerScrollListener(this)

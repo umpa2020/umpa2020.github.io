@@ -25,9 +25,11 @@ import com.google.android.gms.maps.model.*
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.korea50k.RunShare.R
 import android.graphics.Canvas
+import android.view.View
 import com.korea50k.RunShare.Activities.Racing.ManageRacing
 import com.korea50k.RunShare.dataClass.RunningData
 import com.korea50k.RunShare.dataClass.UserState
+import kotlinx.android.synthetic.main.activity_racing.*
 import kotlin.math.roundToLong
 
 
@@ -50,6 +52,7 @@ class RacingMap : OnMapReadyCallback {
     lateinit var racerIcon: BitmapDescriptor
     lateinit var makerData: RunningData
     lateinit var manageRacing: ManageRacing
+    lateinit var makerRunningThread: Thread
 
     //Racing
     constructor(
@@ -63,7 +66,6 @@ class RacingMap : OnMapReadyCallback {
         this.makerData = makerData
         this.manageRacing = manageRacing
         this.load_route = loadRoute()
-        initLocation()
         userState = UserState.BEFORERACING
         print_log("Set UserState BEFORERACING")
 
@@ -84,7 +86,7 @@ class RacingMap : OnMapReadyCallback {
             drawRoute(load_route)
         else
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(prev_loc, 17F))
-
+        initLocation()
         fusedLocationClient.requestLocationUpdates(
             locationRequest,
             locationCallback,
@@ -130,7 +132,7 @@ class RacingMap : OnMapReadyCallback {
         markerOptions.icon(makerIcon)
         makerMarker = mMap.addMarker(markerOptions)
 
-        var makerRunningThread = Thread(Runnable {
+        makerRunningThread = Thread(Runnable {
             var time = makerData.time.toString()
             var sec =
                 (Integer.parseInt(time[0].toString()) * 10 + Integer.parseInt(time[1].toString())) * 60 + (Integer.parseInt(
@@ -151,13 +153,21 @@ class RacingMap : OnMapReadyCallback {
                     makerMarker = mMap.addMarker(markerOptions)
                 })
             }
+            (context as Activity).runOnUiThread(Runnable {
+                (context as Activity).countDownTextView.text = "Maker arrive at finish point"
+                (context as Activity).countDownTextView.visibility = View.VISIBLE
+                print_log("maker arrive")
+            })
+            Thread.sleep(1500)
+            (context as Activity).runOnUiThread(Runnable {
+                (context as Activity).countDownTextView.visibility = View.GONE
+            })
         })
-        makerRunningThread.start()
+
     }
 
     fun startTracking() {
-
-
+        makerRunningThread.start()
     }
 
     fun stopTracking() {
@@ -241,23 +251,31 @@ class RacingMap : OnMapReadyCallback {
                         cur_loc = LatLng(lat, lng)
                         when (userState) {
                             UserState.BEFORERACING -> {
-                                print_log(
-                                    "start point와의 거리 : " + SphericalUtil.computeDistanceBetween(
-                                        cur_loc,
-                                        load_route[0]
-                                    )
-                                )
+                                (context as Activity).runOnUiThread(Runnable {
+                                    (context as Activity).notificationButton.text =("시작 포인트로 이동하십시오.\n시작포인트까지 남은거리 : "
+                                    + (SphericalUtil.computeDistanceBetween(cur_loc, load_route[0])).roundToLong().toString() + "m")
+                                })
                                 if (SphericalUtil.computeDistanceBetween(
                                         cur_loc,
                                         load_route[0]
                                     ) < 10
                                 ) {
-                                    print_log("Start Racing")
-                                    makerRunning()
-                                    startTracking()
-                                    userState = UserState.RACING
-                                    print_log("Set UserState Racing")
+                                    userState=UserState.READYTORACING
+                                    (context as Activity).runOnUiThread(Runnable {
+                                        (context as Activity).notificationButton.text = "시작"
+                                        (context as Activity).notificationButton.isClickable = true
+                                        (context as Activity).notificationButton.setOnClickListener {
+                                            print_log("Start Racing")
+                                            makerRunning()
+                                            userState = UserState.RACING
+                                            manageRacing.startRunning()
+                                            (context as Activity).notificationButton.visibility=View.GONE
+                                        }
+                                    })
                                 }
+                            }
+                            UserState.READYTORACING->{
+                                //wait to start
                             }
                             UserState.RACING -> {
                                 print_log("R U Here?" + userState)
