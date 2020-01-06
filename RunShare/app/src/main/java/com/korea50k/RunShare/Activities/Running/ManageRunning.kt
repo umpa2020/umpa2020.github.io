@@ -4,12 +4,12 @@ import android.content.Context
 import android.os.SystemClock
 import android.widget.Chronometer
 import com.google.android.gms.maps.SupportMapFragment
-import com.korea50k.RunShare.dataClass.Map
 import com.korea50k.RunShare.dataClass.RunningData
+import com.korea50k.RunShare.map.RunningMap
 import kotlinx.android.synthetic.main.activity_running.*
 
 class ManageRunning {
-    lateinit var map: Map
+    lateinit var map: RunningMap
     lateinit var mContext:Context
     lateinit var chronometer: Chronometer
     lateinit var distanceThread : Thread
@@ -17,7 +17,7 @@ class ManageRunning {
 
     constructor(smf: SupportMapFragment, context: Context) {
         mContext=context
-        map = Map(smf, mContext)
+        map = RunningMap(smf, mContext)
     }
 
     fun startRunning(activity:RunningActivity) {
