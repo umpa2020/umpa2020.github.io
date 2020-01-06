@@ -11,35 +11,19 @@ import android.widget.*
 import kotlinx.android.synthetic.main.fragment_rank.view.*
 import android.widget.FrameLayout
 import androidx.viewpager.widget.ViewPager
+import com.korea50k.RunShare.Activities.RankFragment.RankRecyclerViewAdapter_Map
 import com.korea50k.RunShare.R
 import kotlinx.android.synthetic.main.fragment_rank.*
 
 
 class RankFragment : Fragment() {
-    var count = 0
+    var count = false //화살표 눌렀는지 안눌렀는지 검사하는 변수
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view: View = inflater!!.inflate(com.korea50k.RunShare.R.layout.fragment_rank, container, false)
-
-        val choice_btn = view.findViewById<View>(com.korea50k.RunShare.R.id.rank_choiceoption_button) as Button
-        choice_btn.setOnClickListener{
-            count++//누를때마다 증가
-            Toast.makeText(context, "눌림", Toast.LENGTH_SHORT).show()
-            Log.d("asdf", count.toString())
-
-
-            if(count % 2 == 1){
-                view.rank_ExecuteLikeChoice_linearlaoyut.visibility = View.VISIBLE
-                choice_btn.setBackgroundResource(R.drawable.ic_up_button)
-            }
-            if(count % 2 == 0){
-                view.rank_ExecuteLikeChoice_linearlaoyut.visibility = View.GONE
-                choice_btn.setBackgroundResource(R.drawable.ic_down_button)
-            }
-        }
 
         var indicatorWidth = 0 //indicator너비 초기화
 
@@ -59,8 +43,8 @@ class RankFragment : Fragment() {
         })
 
         view.rank_pager?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener { //뷰페이저 안의 페이저가 변화되었을 때 호출
-
             override fun onPageScrolled(i: Int, positionOffset: Float, positionOffsetPx: Int) {
+
                 val params = view.indicator.getLayoutParams() as FrameLayout.LayoutParams
 
                 //Multiply positionOffset with indicatorWidth to get translation
@@ -77,6 +61,34 @@ class RankFragment : Fragment() {
 
             }
         })
+
+
+        val choice_btn = view.findViewById<View>(com.korea50k.RunShare.R.id.rank_choiceoption_button) as Button
+        choice_btn.setOnClickListener{
+            if(count)
+                count = false
+            else
+                count = true
+            var pagername = view.rank_pager.currentItem //현재 뷰페이저 뭐 선택되어 있는지 알려주는 변수
+
+            if((count == true) && pagername == 0){ // 각 조건에 따른 옵션 선택 레이아웃 다르게 뜸
+                view.rank_ExecuteLikeChoice_linearlaoyut.visibility = View.VISIBLE
+                choice_btn.setBackgroundResource(R.drawable.ic_up_button)
+            }
+            if(count == false &&  pagername == 0){
+                view.rank_ExecuteLikeChoice_linearlaoyut.visibility = View.GONE
+                choice_btn.setBackgroundResource(R.drawable.ic_down_button)
+            }
+
+            if(count == true && pagername == 1){
+                view.rank_TimeDistanceChoice_linearlaoyut.visibility = View.VISIBLE
+                choice_btn.setBackgroundResource(R.drawable.ic_up_button)
+            }
+            if(count == false &&  pagername == 1){
+                view.rank_TimeDistanceChoice_linearlaoyut.visibility = View.GONE
+                choice_btn.setBackgroundResource(R.drawable.ic_down_button)
+            }
+        }
 
         return view
     }

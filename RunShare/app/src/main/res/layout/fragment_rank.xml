@@ -93,4 +93,37 @@
         </RadioGroup>
 
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:padding="10dp"
+        android:background="@drawable/option_bg"
+        android:layout_marginRight="20dp"
+        android:id="@+id/rank_TimeDistanceChoice_linearlaoyut"
+        android:layout_below="@+id/rank_choiceoption_button"
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone">
+
+        <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <RadioButton
+                android:id="@+id/rank_distanceOption_radioButton"
+                android:fontFamily="@font/godob"
+                android:text="주행거리"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <RadioButton
+                android:id="@+id/rank_timeOption_radioButton"
+                android:fontFamily="@font/godob"
+                android:text="주행시간"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </RadioGroup>
+
+    </LinearLayout>
+
+
 </RelativeLayout>
