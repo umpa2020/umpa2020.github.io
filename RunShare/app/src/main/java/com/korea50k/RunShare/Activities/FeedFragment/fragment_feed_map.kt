@@ -37,24 +37,41 @@ class fragment_feed_map : Fragment() {
         // Inflate the layout for this fragment
         val view: View =  inflater!!.inflate(R.layout.recycler_feed_map, container, false)
 
-        var Test = FeedMapData()
-        var Test1 = FeedMapData()
-        var Test2 = FeedMapData()
-        var Test3 = FeedMapData()
-        var Test4 = FeedMapData()
+        var UnameTest = FeedMapData()
+        var UnameTest1 = FeedMapData()
+        var UnameTest2 = FeedMapData()
+        var UnameTest3 = FeedMapData()
+        var UnameTest4 = FeedMapData()
 
 
-        Test.Uname = "tester1"
+        UnameTest.Uname = "tester1"
+        list.add(UnameTest) //서버에서 데이터 받아오게 되면 지워야할것 일시적으로 만들어준거기떄문에
+        UnameTest1.Uname = "tester2"
+        list.add(UnameTest1) // 생성자 만들어주어야 함  이유 : 서버에서 받아온 데이터 바로받아주려고
+        UnameTest2.Uname = "tester3"
+        list.add(UnameTest2)
+        UnameTest3.Uname = "tester4"
+        list.add(UnameTest3)
+        UnameTest4.Uname = "tester5"
+        list.add(UnameTest4)
 
-        list.add(Test) //서버에서 데이터 받아오게 되면 지워야할것 일시적으로 만들어준거기떄문에
-        Test1.Uname = "tester2"
-        list.add(Test1) // 생성자 만들어주어야 함  이유 : 서버에서 받아온 데이터 바로받아주려고
-        Test2.Uname = "tester3"
-        list.add(Test2)
-        Test3.Uname = "tester4"
-        list.add(Test3)
-        Test4.Uname = "tester5"
-        list.add(Test4)
+        var McommentTest = FeedMapData()
+        var McommentTest1 = FeedMapData()
+        var McommentTest2 = FeedMapData()
+        var McommentTest3 = FeedMapData()
+        var McommentTest4 = FeedMapData()
+
+        McommentTest.Mcomment = "첫번째 맵"
+        list.add(McommentTest)
+        McommentTest1.Mcomment = "두번째 맵"
+        list.add(McommentTest1)
+        McommentTest2.Mcomment = "세번째 맵"
+        list.add(McommentTest2)
+        McommentTest3.Mcomment = "네번째 맵"
+        list.add(McommentTest3)
+        McommentTest4.Mcomment = "다섯번째 맵"
+        list.add(McommentTest4)
+
 
 
 
