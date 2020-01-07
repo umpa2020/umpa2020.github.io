@@ -111,6 +111,8 @@ class fragment_rank_map : Fragment() {
                 val mAdapter = RankRecyclerViewAdapter_Map(activity!!, rankMapDatas){ rankmapdata ->
                     //TODO Intent로 새로운 xml 열기
                     val intent = Intent(context, RankRecyclerClickActivity::class.java)
+                    intent.putExtra("MapTitle", rankmapdata.MapTitle)
+                    intent.putExtra("MapImage", rankmapdata.MapImage)
                     startActivity(intent)
                 }
                 view?.rank_recycler_map!!.adapter = mAdapter
