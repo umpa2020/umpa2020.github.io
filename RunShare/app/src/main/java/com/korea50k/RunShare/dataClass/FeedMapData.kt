@@ -6,28 +6,24 @@ import java.io.Serializable
 
 class FeedMapData() : Serializable {
     //var rank: Int = 0
-    @SerializedName("Image") // 이미지
+    @SerializedName("MapImage") // 이미지
     @Expose
-    var Uimage: String = ""
+    var MapImage: String = ""
 
-    @SerializedName("User")
+    @SerializedName("Id")
     @Expose
-    var Uname: String = "김정현"
+    var Id: String = "김정현"
 
-    @SerializedName("Map") // 이미지
+    @SerializedName("MapTitle")
     @Expose
-    var Mimage: String = "0"
-
-    @SerializedName("MapComment")
-    @Expose
-    var Mcomment: String = "안녕하세요"
+    var MapTitle: String = "안녕하세요"
 
     @SerializedName("Heart") // 이미지
     @Expose
     var Heart: String = "0"
 
-    @SerializedName("Count")
+    @SerializedName("Likes")
     @Expose
-    var HCount: String = "0"
+    var Likes: String = "0"
 
 }

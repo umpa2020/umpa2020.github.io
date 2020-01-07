@@ -23,7 +23,6 @@ class RankRecyclerClickActivity : AppCompatActivity() {
         val MapImage = intent.extras?.getString("MapImage")
         mapName_TextView.setText(MapTitle)
 
-        Log.d("ssmm11", "맵 이미지 = " + MapImage)
         class SetImageTask : AsyncTask<Void, Void, String>(){
             override fun onPreExecute() {
                 super.onPreExecute()
@@ -49,7 +48,6 @@ class RankRecyclerClickActivity : AppCompatActivity() {
                 super.onPostExecute(result)
                 //TODO:피드에서 이미지 적용해볼 소스코드
                 rank_root_preview.setImageBitmap(bm)
-                //imageTest.setImageBitmap(bm)
             }
         }
         var Start = SetImageTask()

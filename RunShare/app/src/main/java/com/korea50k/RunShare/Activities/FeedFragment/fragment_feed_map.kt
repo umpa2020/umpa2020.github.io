@@ -12,12 +12,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.korea50k.RunShare.Activities.RankFragment.RankRecyclerClickActivity
+import com.korea50k.RunShare.Activities.RankFragment.RankRecyclerViewAdapter_Map
 
 import com.korea50k.RunShare.R
 import com.korea50k.RunShare.RetrofitClient
+import com.korea50k.RunShare.Util.ConvertJson
 import com.korea50k.RunShare.dataClass.FeedMapData
 import com.korea50k.RunShare.dataClass.RankMapData
 import kotlinx.android.synthetic.main.fragment_feed_map_nocomment.view.*
+import kotlinx.android.synthetic.main.fragment_rank_map.view.*
 import kotlinx.android.synthetic.main.recycler_feed_map.view.*
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -36,69 +40,6 @@ class fragment_feed_map : Fragment() {
         // Inflate the layout for this fragment
         val view: View =  inflater!!.inflate(R.layout.recycler_feed_map, container, false)
 
-        var UnameTest = FeedMapData()
-        var UnameTest1 = FeedMapData()
-        var UnameTest2 = FeedMapData()
-        var UnameTest3 = FeedMapData()
-        var UnameTest4 = FeedMapData()
-
-
-        UnameTest.Uname = "tester1"
-        list.add(UnameTest) //서버에서 데이터 받아오게 되면 지워야할것 일시적으로 만들어준거기떄문에
-        UnameTest1.Uname = "tester2"
-        list.add(UnameTest1) // 생성자 만들어주어야 함  이유 : 서버에서 받아온 데이터 바로받아주려고
-        UnameTest2.Uname = "tester3"
-        list.add(UnameTest2)
-        UnameTest3.Uname = "tester4"
-        list.add(UnameTest3)
-        UnameTest4.Uname = "tester5"
-        list.add(UnameTest4)
-
-        var McommentTest = FeedMapData()
-        var McommentTest1 = FeedMapData()
-        var McommentTest2 = FeedMapData()
-        var McommentTest3 = FeedMapData()
-        var McommentTest4 = FeedMapData()
-
-        McommentTest.Mcomment = "첫번째 맵"
-        list.add(McommentTest)
-        McommentTest1.Mcomment = "두번째 맵"
-        list.add(McommentTest1)
-        McommentTest2.Mcomment = "세번째 맵"
-        list.add(McommentTest2)
-        McommentTest3.Mcomment = "네번째 맵"
-        list.add(McommentTest3)
-        McommentTest4.Mcomment = "다섯번째 맵"
-        list.add(McommentTest4)
-
-
-
-
-        /*val assetManager = resources.assets
-
-        //TODO:서버에서 데이터 가져와서 해야함
-        val inputStream= assetManager.open("datajson")
-        val jsonString = inputStream.bufferedReader().use { it.readText() }
-        var rankMapDatas = ConvertJson.JsonToRankMapDatas(jsonString)
-
-        //리사이클러 뷰 클릭 리스너 부분
-        val mAdapter = RankRecyclerViewAdapter_Map(activity!!, rankMapDatas){ rankmapdata ->
-            //TODO Intent로 새로운 xml 열기
-            Toast.makeText(context, "맵 이름 :  ${rankmapdata.name}, 실행 수 : ${rankmapdata.execute}", Toast.LENGTH_SHORT).show()
-            val intent = Intent(context, RankRecyclerClickActivity::class.java)
-            intent.putExtra("mapName", rankmapdata.name)
-
-            startActivity(intent)
-        }
-        view.rank_recycler_map!!.adapter = mAdapter*/
-
-        val mAdapter = FeedRecyclerViewAdapter_Map(view.context, list)
-        view.feed_recycler_map!!.adapter = mAdapter
-        val lm = LinearLayoutManager(context)
-        view.feed_recycler_map.layoutManager = lm
-        view.feed_recycler_map.setHasFixedSize(true)
-
-
         class SaveTask : AsyncTask<Void, Void, String>(){
             override fun onPreExecute() {
                 super.onPreExecute()
@@ -106,16 +47,7 @@ class fragment_feed_map : Fragment() {
 
             override fun doInBackground(vararg params: Void?): String? {
                 try {
-                    rankDownload("kjb")
-                    //TODO:피드에서 이미지 적용해볼 소스코드
-
-                    /* val url =
-                         URL("https://runsharetest.s3.ap-northeast-2.amazonaws.com/kjb/ImageTitle.png")
-                     val conn = url.openConnection()
-                     conn.connect()
-                     val bis = BufferedInputStream(conn.getInputStream())
-                     val bm = BitmapFactory.decodeStream(bis)
-                     bis.close()*/
+                    feedDownload("kjb")
                 } catch (e : java.lang.Exception) {
                     Log.d("ssmm11", "이미지 다운로드 실패 " +e.toString())
                 }
@@ -124,8 +56,6 @@ class fragment_feed_map : Fragment() {
 
             override fun onPostExecute(result: String?) {
                 super.onPostExecute(result)
-                //TODO:피드에서 이미지 적용해볼 소스코드
-                //imageTest.setImageBitmap(bm)
             }
         }
 
@@ -133,26 +63,25 @@ class fragment_feed_map : Fragment() {
         Start.execute()
 
         val task = GetData()
-        task.execute("http://15.164.50.86/rankDownload.php")
-
+        task.execute("http://15.164.50.86/feedDownload.php")
 
         return view
     }
 
-    private fun rankDownload(Id: String) {
-        RetrofitClient.retrofitService.rankDownload(Id).enqueue(object :
+    private fun feedDownload(Id: String) {
+        RetrofitClient.retrofitService.feedDownload(Id).enqueue(object :
             retrofit2.Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: retrofit2.Response<ResponseBody>) {
                 try {
                     val result: String? = response.body().toString()
-                    Toast.makeText(context, "DB 다운로드 성공" + result,Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(context, "DB 다운로드 성공" + result,Toast.LENGTH_SHORT).show()
                 } catch (e: Exception) {
 
                 }
             }
 
             override fun onFailure( call: Call<ResponseBody>,t: Throwable) {
-                Toast.makeText(context, "서버 작업 실패", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(context, "서버 작업 실패", Toast.LENGTH_SHORT).show()
                 Log.d("ssmm11", t.message);
                 t.printStackTrace()
             }
@@ -166,25 +95,27 @@ class fragment_feed_map : Fragment() {
             super.onPreExecute()
         }
 
-       /* override fun onPostExecute(result: String?) {
+        override fun onPostExecute(result: String?) {
             super.onPostExecute(result)
 
             if (result == null) {
             } else {
                 mJsonString = result
-                var rankMapDatas = ConvertJson.JsonToRankMapDatas(mJsonString)
+                var feedMapDatas = ConvertJson.JsonToFeedMapDatas(mJsonString)
 
-                val mAdapter = RankRecyclerViewAdapter_Map(activity!!, rankMapDatas){ rankmapdata ->
+                val mAdapter = FeedRecyclerViewAdapter_Map(activity!!, feedMapDatas){ feedmapdata ->
                     //TODO Intent로 새로운 xml 열기
-                    val intent = Intent(context, RankRecyclerClickActivity::class.java)
-                    startActivity(intent)
+                    /*val intent = Intent(context, RankRecyclerClickActivity::class.java)
+                    intent.putExtra("MapTitle", rankmapdata.MapTitle)
+                    intent.putExtra("MapImage", rankmapdata.MapImage)
+                    startActivity(intent)*/
                 }
-                view?.rank_recycler_map!!.adapter = mAdapter
+                view?.feed_recycler_map!!.adapter = mAdapter
                 val lm = LinearLayoutManager(context)
-                view?.rank_recycler_map!!.layoutManager = lm
-                view?.rank_recycler_map!!.setHasFixedSize(true)
+                view?.feed_recycler_map!!.layoutManager = lm
+                view?.feed_recycler_map!!.setHasFixedSize(true)
             }
-        }*/
+        }
 
         override fun doInBackground(vararg params: String): String? {
             val serverURL = params[0]
@@ -229,15 +160,5 @@ class fragment_feed_map : Fragment() {
         }
     }
 
-/*
-    fun jsonRead(){
-        for (i in 0 until jArray.length()) {
-            val obj = jArray.getJSONObject(i)
-            val name = obj.getString("sampleMapName")
-            val execute = obj.getString("sampleExecute")
-            val like = obj.getString("sampleLike")
-        }
-    }
-*/
 
 }
