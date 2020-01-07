@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import androidx.drawerlayout.widget.DrawerLayout
 import android.view.View
 import android.widget.Button
+import com.korea50k.RunShare.dataClass.TTS
 
 
 class MainActivity : AppCompatActivity() {
@@ -31,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(com.korea50k.RunShare.R.layout.activity_main)
         checkPermissions()          //모든 권한 확인
-
+        TTS.set(applicationContext)
         val mTabLayout = tabDots
         mTabLayout.addTab(mTabLayout.newTab())
         mTabLayout.addTab(mTabLayout.newTab())
