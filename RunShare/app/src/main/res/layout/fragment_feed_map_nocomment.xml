@@ -39,6 +39,7 @@
         android:layout_height="50dp">
 
         <TextView
+            android:id="@+id/map_comment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="map name"
@@ -53,6 +54,7 @@
             android:layout_height="35dp"/>
 
         <TextView
+            android:id="@+id/heart_count"
             android:layout_marginLeft="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

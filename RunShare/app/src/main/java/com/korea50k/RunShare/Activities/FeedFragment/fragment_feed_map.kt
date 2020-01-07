@@ -16,8 +16,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.korea50k.RunShare.R
 import com.korea50k.RunShare.RetrofitClient
 import com.korea50k.RunShare.dataClass.ConvertJson
+import com.korea50k.RunShare.dataClass.FeedMapData
 import com.korea50k.RunShare.dataClass.RankMapData
 import kotlinx.android.synthetic.main.fragment_feed_map_nocomment.view.*
+import kotlinx.android.synthetic.main.recycler_feed_map.view.*
 import okhttp3.ResponseBody
 import retrofit2.Call
 import java.io.BufferedReader
@@ -28,11 +30,31 @@ import java.net.URL
 
 class fragment_feed_map : Fragment() {
     var mJsonString = "";
+    var list = arrayListOf<FeedMapData>() // 그대로 냅둬야 할것
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        val view: View =  inflater!!.inflate(R.layout.fragment_feed_map_nocomment, container, false)
+        val view: View =  inflater!!.inflate(R.layout.recycler_feed_map, container, false)
+
+        var Test = FeedMapData()
+        var Test1 = FeedMapData()
+        var Test2 = FeedMapData()
+        var Test3 = FeedMapData()
+        var Test4 = FeedMapData()
+
+
+        Test.Uname = "tester1"
+
+        list.add(Test) //서버에서 데이터 받아오게 되면 지워야할것 일시적으로 만들어준거기떄문에
+        Test1.Uname = "tester2"
+        list.add(Test1) // 생성자 만들어주어야 함  이유 : 서버에서 받아온 데이터 바로받아주려고
+        Test2.Uname = "tester3"
+        list.add(Test2)
+        Test3.Uname = "tester4"
+        list.add(Test3)
+        Test4.Uname = "tester5"
+        list.add(Test4)
 
 
 
@@ -52,13 +74,14 @@ class fragment_feed_map : Fragment() {
 
             startActivity(intent)
         }
-        view.rank_recycler_map!!.adapter = mAdapter
+        view.rank_recycler_map!!.adapter = mAdapter*/
 
-
+        val mAdapter = FeedRecyclerViewAdapter_Map(view.context, list)
+        view.feed_recycler_map!!.adapter = mAdapter
         val lm = LinearLayoutManager(context)
-        view.rank_recycler_map.layoutManager = lm
-        view.rank_recycler_map.setHasFixedSize(true)
-        */
+        view.feed_recycler_map.layoutManager = lm
+        view.feed_recycler_map.setHasFixedSize(true)
+
 
         class SaveTask : AsyncTask<Void, Void, String>(){
             override fun onPreExecute() {
