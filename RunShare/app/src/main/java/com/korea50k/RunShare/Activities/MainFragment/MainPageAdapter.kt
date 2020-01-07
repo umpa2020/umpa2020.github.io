@@ -16,7 +16,7 @@ class MainPageAdapter(fm: FragmentManager, private val mPageCount: Int) :
                 return MapFragment()
             }
             2 -> {
-               // return FeedFragment()
+                return FeedFragment()
             }
         }
         return MapFragment()

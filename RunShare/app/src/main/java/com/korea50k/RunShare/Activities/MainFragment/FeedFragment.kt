@@ -1,28 +1,22 @@
-package com.korea50k.RunShare.Activities.MainFragment/*
+package com.korea50k.RunShare.Activities.MainFragment
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.korea50k.RunShare.Activities.RankFragment.FeedPagerAdapter
-import com.korea50k.RunShare.dataClass.Rank_Users
-import kotlinx.android.synthetic.main.fragment_feed.*
-import android.R
+import com.korea50k.RunShare.Activities.FeedFragment.FeedPagerAdapter
 import android.widget.*
 import kotlinx.android.synthetic.main.fragment_feed.view.*
 import android.widget.FrameLayout
 import androidx.viewpager.widget.ViewPager
-import android.opengl.ETC1.getWidth
-
-
-
-
+import com.korea50k.RunShare.R
+import kotlinx.android.synthetic.main.fragment_rank.*
 
 
 class FeedFragment : Fragment() {
+    var count = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,63 +26,38 @@ class FeedFragment : Fragment() {
 
         val choice_btn = view.findViewById<View>(com.korea50k.RunShare.R.id.feed_choiceoption_button) as Button
         choice_btn.setOnClickListener{
+            count++//누를때마다 증가
             Toast.makeText(context, "눌림", Toast.LENGTH_SHORT).show()
-            val popupMenu: PopupMenu = PopupMenu(context,choice_btn)
-            popupMenu.menuInflater.inflate(com.korea50k.RunShare.R.menu.popup_menu_feed,popupMenu.menu)
-            popupMenu.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { item ->
-                when(item.itemId) {
-                    com.korea50k.RunShare.R.id.popupmenu_map -> {
-                        item.isChecked = !item.isChecked
-                        true
-                        Toast.makeText(context, "You Clicked : " + item.title, Toast.LENGTH_SHORT).show()
-
-                    }
-                    com.korea50k.RunShare.R.id.popupmenu_feed ->{
-                        item.isChecked = !item.isChecked
-                        true
-                        Toast.makeText(context, "You Clicked : " + item.title, Toast.LENGTH_SHORT).show()
-                    }
-
-                }
-                true
-            })
-            popupMenu.show()
 
 
-        }
-/*
-        val player_btn = view.findViewById<View>(R.id.rank_player_button) as Button
-        player_btn.setOnClickListener{
-
+            if(count % 2 == 1){
+                view.feed_ExecuteLikeChoice_linearlaoyut.visibility = View.VISIBLE
+                choice_btn.setBackgroundResource(R.drawable.ic_up_button)
+            }
+            if(count % 2 == 0){
+                view.feed_ExecuteLikeChoice_linearlaoyut.visibility = View.GONE
+                choice_btn.setBackgroundResource(R.drawable.ic_down_button)
+            }
         }
 
-*/
-        /*var indicatorWidth = 0 //indicator너비 초기화
+        var indicatorWidth = 0 //indicator너비 초기화
 
         val fragmentAdapter = FeedPagerAdapter(activity!!.supportFragmentManager, 2) //프래그먼트 붙임
-        view.rank_pager.adapter = fragmentAdapter
-
-        /////////수정해야할 부분
-
-        /*view.tab_rank.setupWithViewPager(view.rank_pager)
+        view.feed_pager.adapter = fragmentAdapter
+        view.tab_feed.setupWithViewPager(view.feed_pager)
 
         //동적으로 indicator 가로 너비 정함
-        view.tab_rank.post(Runnable {
+        view.tab_feed.post(Runnable {
 
-            indicatorWidth =  view.tab_rank.getWidth() /  2 //TabLayout 너비의 절반 만큼 크기 정함
+            indicatorWidth =  view.tab_feed.getWidth() /  2 //TabLayout 너비의 절반 만큼 크기 정함
 
             //새로운 너비를 indicator에 할당
             val indicatorParams = view.indicator.getLayoutParams() as FrameLayout.LayoutParams
             indicatorParams.width = indicatorWidth
             view.indicator.setLayoutParams(indicatorParams)
+        })
 
-
-
-
-        })*/
-
-        /*view.rank_pager?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener { //뷰페이저 안의 페이저가 변화되었을 때 호출
-
+        view.feed_pager?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener { //뷰페이저 안의 페이저가 변화되었을 때 호출
             override fun onPageScrolled(i: Int, positionOffset: Float, positionOffsetPx: Int) {
                 val params = view.indicator.getLayoutParams() as FrameLayout.LayoutParams
 
@@ -105,10 +74,9 @@ class FeedFragment : Fragment() {
             override fun onPageScrollStateChanged(i: Int) {
 
             }
-        })*/
+        })
 
         return view
     }
 
 }
-        */
