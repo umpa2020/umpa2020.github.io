@@ -50,7 +50,7 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
 
             R.id.btn_pause -> {
                 if(B_RUNNIG)
-                    pause()
+                    manageRunning.pauseRunning()
                 else
                     restart()
             }
@@ -62,7 +62,6 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
         btn_pause.text="  RESTART"
         btn_pause.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_play_pressed,0,0,0)
         B_RUNNIG=false
-        manageRunning.pauseRunning()
     }
 
     fun stop() {    //타이머 멈추는거 만들어야함

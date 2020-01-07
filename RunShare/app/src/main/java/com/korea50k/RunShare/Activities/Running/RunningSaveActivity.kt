@@ -27,6 +27,7 @@ import com.github.mikephil.charting.components.Description
 import com.github.mikephil.charting.data.Entry
 import com.korea50k.RunShare.Activities.MainActivity
 import com.korea50k.RunShare.RetrofitClient
+import com.korea50k.RunShare.dataClass.Privacy
 import okhttp3.ResponseBody
 import retrofit2.Call
 import java.io.BufferedInputStream
@@ -46,6 +47,11 @@ class RunningSaveActivity : AppCompatActivity() {
         time_tv.text=runningData.time
         speed_tv.text=runningData.speed.toString()
         calorie_tv.text=runningData.cal.toString()
+        if(runningData.privacy==Privacy.PUBLIC){
+            racingRadio.isChecked=false
+            racingRadio.isEnabled=false
+            publicRadio.isChecked=true
+        }
         setChart()
     }
 
@@ -94,7 +100,13 @@ class RunningSaveActivity : AppCompatActivity() {
         when (view.id) {
             com.korea50k.RunShare.R.id.save_btn -> {
                 //send runningData to server by json
-                runningData.map_title=save_title_edit.text.toString()
+                runningData.map_title=mapTitleEdit.text.toString()
+                runningData.map_explanation=mapExplanationEdit.text.toString()
+                when(privacyRadioGroup.checkedRadioButtonId){
+                    R.id.racingRadio->runningData.privacy=Privacy.RACING
+                    R.id.publicRadio->runningData.privacy=Privacy.PUBLIC
+                    R.id.privateRadio->runningData.privacy=Privacy.PRIVATE
+                }
 
                 var json = ConvertJson.RunningDataToJson(runningData)
                 //send to server
@@ -106,7 +118,7 @@ class RunningSaveActivity : AppCompatActivity() {
                 var byteArray = byteArrayOutputStream.toByteArray()
                 var base64OfBitmap = Base64.encodeToString(byteArray, Base64.DEFAULT)
 
-                var imageTest = testImage
+                //var imageTest = testImage
 
                 class SaveTask : AsyncTask<Void, Void, String>(){
                     override fun onPreExecute() {
@@ -135,25 +147,22 @@ class RunningSaveActivity : AppCompatActivity() {
 
                     override fun onPostExecute(result: String?) {
                         super.onPostExecute(result)
-                        imageTest.setImageBitmap(bm)
+                        //imageTest.setImageBitmap(bm)
                     }
                 }
 
                 var Start : SaveTask = SaveTask()
                 Start.execute()
-
-                /*
-                var newIntent = Intent(this, MainActivity::class.java)
-                newIntent.flags= FLAG_ACTIVITY_CLEAR_TOP
-                newIntent.addFlags(FLAG_ACTIVITY_SINGLE_TOP)
-
-                startActivity(newIntent)
-
-                 */
             }
         }
     }
-
+    fun goToHome(){
+        //업로드 로딩 하는거 넣어줘야함
+        var newIntent = Intent(this, MainActivity::class.java)
+        newIntent.flags= FLAG_ACTIVITY_CLEAR_TOP
+        newIntent.addFlags(FLAG_ACTIVITY_SINGLE_TOP)
+        startActivity(newIntent)
+    }
     private fun s3Upload(Id : String, MapTitle : String, MapDescription : String, MapJson : String, MapImage : String, Kcal : String, Distance : String,
                          Velocity : String, Time : String, Excute : Int, Likes : Int, Status: Int) {
         RetrofitClient.retrofitService.s3Upload(Id, MapTitle, MapDescription, MapJson, MapImage, Kcal, Distance, Velocity, Time, Excute, Likes, Status).enqueue(object :
@@ -161,6 +170,7 @@ class RunningSaveActivity : AppCompatActivity() {
             override fun onResponse(call: Call<ResponseBody>, response: retrofit2.Response<ResponseBody>) {
                 try {
                     val result: String? = response.body().toString()
+                    goToHome()
                     Toast.makeText(this@RunningSaveActivity, "json 업로드 성공" + result, Toast.LENGTH_SHORT).show()
                 } catch (e: Exception) {
 

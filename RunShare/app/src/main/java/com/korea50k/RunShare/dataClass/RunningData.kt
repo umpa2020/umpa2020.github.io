@@ -11,6 +11,7 @@ class RunningData() : Serializable {
     var distance: String = ""
     var time: String = ""
     var map_title: String = ""
+    var map_explanation:String=""
     var cal: String = ""
     var bitmap: String=""
     var privacy:Privacy=Privacy.PUBLIC
