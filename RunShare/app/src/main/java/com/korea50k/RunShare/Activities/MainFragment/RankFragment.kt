@@ -1,7 +1,6 @@
-package com.korea50k.RunShare.MainFragment
+package com.korea50k.RunShare.Activities.MainFragment
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,9 +10,7 @@ import android.widget.*
 import kotlinx.android.synthetic.main.fragment_rank.view.*
 import android.widget.FrameLayout
 import androidx.viewpager.widget.ViewPager
-import com.korea50k.RunShare.Activities.RankFragment.RankRecyclerViewAdapter_Map
 import com.korea50k.RunShare.R
-import kotlinx.android.synthetic.main.fragment_rank.*
 
 
 class RankFragment : Fragment() {

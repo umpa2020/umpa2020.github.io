@@ -1,21 +1,18 @@
-package com.korea50k.RunShare.Activities
+package com.korea50k.RunShare.Activities.MainFragment
 
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.view.Gravity
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
-import com.korea50k.RunShare.MainFragment.MainPageAdapter
 import com.korea50k.RunShare.R
 import kotlinx.android.synthetic.main.activity_main.*
 import androidx.drawerlayout.widget.DrawerLayout
 import android.view.View
-import android.widget.Button
-import com.korea50k.RunShare.dataClass.TTS
+import com.korea50k.RunShare.Util.TTS
 
 
 class MainActivity : AppCompatActivity() {

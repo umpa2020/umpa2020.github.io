@@ -5,12 +5,11 @@ import android.os.SystemClock
 import android.widget.Chronometer
 import com.google.android.gms.maps.SupportMapFragment
 import com.korea50k.RunShare.dataClass.RunningData
-import com.korea50k.RunShare.map.RunningMap
+import com.korea50k.RunShare.Util.map.RunningMap
 import kotlinx.android.synthetic.main.activity_running.*
 import android.widget.Toast
 import android.content.DialogInterface
 import androidx.appcompat.app.AlertDialog
-import com.korea50k.RunShare.Activities.Racing.RacingActivity
 import com.korea50k.RunShare.dataClass.Privacy
 
 

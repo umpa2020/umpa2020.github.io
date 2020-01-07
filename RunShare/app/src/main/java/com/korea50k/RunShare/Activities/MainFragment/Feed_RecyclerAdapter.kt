@@ -1,4 +1,4 @@
-package com.korea50k.RunShare.MainFragment
+package com.korea50k.RunShare.Activities.MainFragment
 /*
 import android.view.LayoutInflater
 import android.view.View

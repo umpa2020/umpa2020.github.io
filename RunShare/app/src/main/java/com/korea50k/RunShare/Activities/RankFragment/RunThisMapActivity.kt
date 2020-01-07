@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.view.View
 import com.korea50k.RunShare.Activities.Racing.RacingActivity
 import com.korea50k.RunShare.R
-import com.korea50k.RunShare.dataClass.ConvertJson
+import com.korea50k.RunShare.Util.ConvertJson
 
 class RunThisMapActivity : AppCompatActivity() {
 

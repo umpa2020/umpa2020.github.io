@@ -5,13 +5,10 @@ import android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP
 import android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import com.korea50k.RunShare.dataClass.ConvertJson
 import com.korea50k.RunShare.dataClass.RunningData
 import com.korea50k.RunShare.R
-import kotlinx.android.synthetic.main.activity_running_save.*
-import com.korea50k.RunShare.Activities.MainActivity
+import com.korea50k.RunShare.Activities.MainFragment.MainActivity
 import kotlinx.android.synthetic.main.activity_racing_finish.*
 
 

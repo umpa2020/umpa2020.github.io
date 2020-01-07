@@ -1,24 +1,15 @@
-package com.korea50k.RunShare.map
+package com.korea50k.RunShare.Util.map
 
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Looper
 import android.util.Log
 import android.widget.Toast
 import com.google.android.gms.location.*
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.GoogleMap.SnapshotReadyCallback
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
 import com.google.maps.android.PolyUtil
 import com.google.maps.android.SphericalUtil
-import com.korea50k.RunShare.Activities.Running.RunningSaveActivity
-import java.io.File
-import java.io.FileOutputStream
 import java.util.*
 import kotlin.collections.ArrayList
 import com.google.android.gms.maps.model.*
@@ -26,9 +17,10 @@ import com.google.android.gms.maps.model.BitmapDescriptor
 import com.korea50k.RunShare.R
 import android.graphics.Canvas
 import android.view.View
+import com.google.android.gms.maps.*
 import com.korea50k.RunShare.Activities.Racing.ManageRacing
 import com.korea50k.RunShare.dataClass.RunningData
-import com.korea50k.RunShare.dataClass.TTS
+import com.korea50k.RunShare.Util.TTS
 import com.korea50k.RunShare.dataClass.UserState
 import kotlinx.android.synthetic.main.activity_racing.*
 import kotlin.math.roundToLong
@@ -108,7 +100,6 @@ class RacingMap : OnMapReadyCallback {
                 TTS.speech("시작 포인트로 이동하세요")
             })
         }
-
     }
 
     fun makerRunning() {
@@ -230,7 +221,7 @@ class RacingMap : OnMapReadyCallback {
 
                     markerOptions.icon(racerIcon)
                     currentMarker = mMap.addMarker(markerOptions)
-                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(prev_loc, 17F))
+                    //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(prev_loc, 17F))
                 }
             }
             .addOnFailureListener {

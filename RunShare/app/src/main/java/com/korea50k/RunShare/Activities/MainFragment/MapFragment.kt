@@ -1,4 +1,4 @@
-package com.korea50k.RunShare.MainFragment
+package com.korea50k.RunShare.Activities.MainFragment
 
 import android.content.Context
 import android.content.Intent
@@ -11,8 +11,8 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.korea50k.RunShare.Activities.Racing.RacingActivity
 import com.korea50k.RunShare.Activities.Running.RunningActivity
 import com.korea50k.RunShare.R
-import com.korea50k.RunShare.dataClass.ConvertJson
-import com.korea50k.RunShare.map.BasicMap
+import com.korea50k.RunShare.Util.ConvertJson
+import com.korea50k.RunShare.Util.map.BasicMap
 import kotlinx.android.synthetic.main.fragment_map.view.*
 
 
@@ -36,7 +36,7 @@ class MapFragment : Fragment(),View.OnClickListener{
 
 
                 var newIntent = Intent(activity, RacingActivity::class.java)
-                newIntent.putExtra("Running data",ConvertJson.JsonToRunningData(jsonString))
+                newIntent.putExtra("Running data", ConvertJson.JsonToRunningData(jsonString))
                 startActivity(newIntent)
             }
         }

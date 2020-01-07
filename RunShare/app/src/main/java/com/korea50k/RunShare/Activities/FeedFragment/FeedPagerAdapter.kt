@@ -3,7 +3,6 @@ package com.korea50k.RunShare.Activities.RankFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
-import com.korea50k.RunShare.MainFragment.MapFragment
 
 class FeedPagerAdapter(fm: FragmentManager, private val mPageCount: Int) :
     FragmentStatePagerAdapter(fm) {
