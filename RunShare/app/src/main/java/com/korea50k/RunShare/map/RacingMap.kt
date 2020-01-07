@@ -28,6 +28,7 @@ import android.graphics.Canvas
 import android.view.View
 import com.korea50k.RunShare.Activities.Racing.ManageRacing
 import com.korea50k.RunShare.dataClass.RunningData
+import com.korea50k.RunShare.dataClass.TTS
 import com.korea50k.RunShare.dataClass.UserState
 import kotlinx.android.synthetic.main.activity_racing.*
 import kotlin.math.roundToLong
@@ -53,7 +54,6 @@ class RacingMap : OnMapReadyCallback {
     lateinit var makerData: RunningData
     lateinit var manageRacing: ManageRacing
     lateinit var makerRunningThread: Thread
-
     //Racing
     constructor(
         smf: SupportMapFragment,
@@ -104,6 +104,9 @@ class RacingMap : OnMapReadyCallback {
             finishMarkerOptions.title("Maker")
             finishMarkerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.finish_point))
             mMap.addMarker(finishMarkerOptions)
+            (context as Activity).runOnUiThread(Runnable {
+                TTS.speech("시작 포인트로 이동하세요")
+            })
         }
 
     }
@@ -154,6 +157,7 @@ class RacingMap : OnMapReadyCallback {
                 })
             }
             (context as Activity).runOnUiThread(Runnable {
+                TTS.speech("맵 제작자가 도착했습니다.")
                 (context as Activity).countDownTextView.text = "Maker arrive at finish point"
                 (context as Activity).countDownTextView.visibility = View.VISIBLE
                 print_log("maker arrive")
