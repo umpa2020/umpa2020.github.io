@@ -1,4 +1,4 @@
-package com.korea50k.RunShare.MainFragment
+package com.korea50k.RunShare.Activities.MainFragment
 
 import android.os.Bundle
 import android.util.Log

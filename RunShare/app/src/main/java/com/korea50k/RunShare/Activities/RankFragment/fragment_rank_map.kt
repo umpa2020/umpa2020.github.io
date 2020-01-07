@@ -2,7 +2,6 @@ package com.korea50k.RunShare.Activities.RankFragment
 
 
 import android.content.Intent
-import android.content.res.AssetManager
 import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
@@ -15,8 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.korea50k.RunShare.R
 import com.korea50k.RunShare.RetrofitClient
-import com.korea50k.RunShare.dataClass.ConvertJson
-import com.korea50k.RunShare.dataClass.RankMapData
+import com.korea50k.RunShare.Util.ConvertJson
 import kotlinx.android.synthetic.main.fragment_rank_map.view.*
 import okhttp3.ResponseBody
 import retrofit2.Call

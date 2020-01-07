@@ -1,17 +1,15 @@
 package com.korea50k.RunShare.Activities.Racing
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.SystemClock
 import android.view.View
 import android.widget.Chronometer
 import com.google.android.gms.maps.SupportMapFragment
-import com.korea50k.RunShare.map.RacingMap
+import com.korea50k.RunShare.Util.map.RacingMap
 import com.korea50k.RunShare.dataClass.RunningData
-import com.korea50k.RunShare.dataClass.TTS
+import com.korea50k.RunShare.Util.TTS
 import kotlinx.android.synthetic.main.activity_racing.*
-import kotlinx.android.synthetic.main.activity_running.*
 import kotlinx.android.synthetic.main.activity_running.running_distance_tv
 import kotlinx.android.synthetic.main.activity_running.timer_tv
 

@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import com.korea50k.RunShare.dataClass.ConvertJson
+import com.korea50k.RunShare.Util.ConvertJson
 import com.korea50k.RunShare.dataClass.RunningData
 import com.korea50k.RunShare.R
 import kotlinx.android.synthetic.main.activity_running_save.*
@@ -25,7 +25,7 @@ import android.widget.Toast
 import androidx.core.net.toUri
 import com.github.mikephil.charting.components.Description
 import com.github.mikephil.charting.data.Entry
-import com.korea50k.RunShare.Activities.MainActivity
+import com.korea50k.RunShare.Activities.MainFragment.MainActivity
 import com.korea50k.RunShare.RetrofitClient
 import com.korea50k.RunShare.dataClass.Privacy
 import okhttp3.ResponseBody

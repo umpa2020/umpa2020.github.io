@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.korea50k.RunShare.R
 import com.korea50k.RunShare.RetrofitClient
-import com.korea50k.RunShare.dataClass.ConvertJson
 import com.korea50k.RunShare.dataClass.FeedMapData
 import com.korea50k.RunShare.dataClass.RankMapData
 import kotlinx.android.synthetic.main.fragment_feed_map_nocomment.view.*

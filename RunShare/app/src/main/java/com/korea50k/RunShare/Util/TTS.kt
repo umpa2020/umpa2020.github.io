@@ -1,10 +1,9 @@
-package com.korea50k.RunShare.dataClass
+package com.korea50k.RunShare.Util
 
 import android.content.Context
 import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.widget.Toast
-import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
 class TTS {

@@ -18,8 +18,8 @@
             <ImageView
                 android:id="@+id/map_img"
                 android:layout_width="match_parent"
-                android:layout_height="250dp"
-                android:scaleType="centerCrop" />
+                android:layout_height="300dp"
+                android:scaleType="fitXY" />
 
 
             <LinearLayout

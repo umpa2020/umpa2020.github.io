@@ -5,7 +5,6 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import com.korea50k.RunShare.Activities.FeedFragment.fragment_feed_map
 import com.korea50k.RunShare.Activities.FeedFragment.fragment_feed_users
-import com.korea50k.RunShare.MainFragment.MapFragment
 
 class FeedPagerAdapter(fm: FragmentManager, private val mPageCount: Int) :
     FragmentStatePagerAdapter(fm) { //TODO: change Deprecated fun
