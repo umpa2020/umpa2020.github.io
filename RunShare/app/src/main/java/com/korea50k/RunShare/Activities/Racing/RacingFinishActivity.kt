@@ -23,6 +23,7 @@ class RacingFinishActivity : AppCompatActivity() {
         makerData=intent.getSerializableExtra("Maker Data") as RunningData
         racerLapTimeTextView.text=racerData.time
         makerLapTimeTextView.text=makerData.time
+        //TODO:서버에서 해당 맵 랭크 받아오기
     }
 
     fun onClick(view: View) {

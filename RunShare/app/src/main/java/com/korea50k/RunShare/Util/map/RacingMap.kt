@@ -74,10 +74,14 @@ class RacingMap : OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
-        if (load_route.size > 0)
-            drawRoute(load_route)
-        else
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(prev_loc, 17F))
+
+        drawRoute(load_route)
+        mMap.moveCamera(
+            CameraUpdateFactory.newLatLngZoom(
+                load_route[0],
+                17F
+            )
+        )
         initLocation()
         fusedLocationClient.requestLocationUpdates(
             locationRequest,
@@ -179,12 +183,7 @@ class RacingMap : OnMapReadyCallback {
                     .startCap(RoundCap())
                     .endCap(RoundCap())
             )        //경로를 그릴 폴리라인 집합
-        mMap.animateCamera(
-            CameraUpdateFactory.newLatLngZoom(
-                route[0],
-                17F
-            )
-        )                   //맵 줌
+
         print_log(route[0].toString())
         polyline.tag = "A"
     }
@@ -221,7 +220,6 @@ class RacingMap : OnMapReadyCallback {
 
                     markerOptions.icon(racerIcon)
                     currentMarker = mMap.addMarker(markerOptions)
-                    //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(prev_loc, 17F))
                 }
             }
             .addOnFailureListener {
@@ -257,15 +255,7 @@ class RacingMap : OnMapReadyCallback {
                                 ) {
                                     userState=UserState.READYTORACING
                                     (context as Activity).runOnUiThread(Runnable {
-                                        (context as Activity).notificationButton.text = "시작"
-                                        (context as Activity).notificationButton.isClickable = true
-                                        (context as Activity).notificationButton.setOnClickListener {
-                                            print_log("Start Racing")
-                                            makerRunning()
-                                            userState = UserState.RACING
-                                            manageRacing.startRunning()
-                                            (context as Activity).notificationButton.visibility=View.GONE
-                                        }
+                                        (context as Activity).notificationButton.text = "시작을 원하시면 START를 누르세요"
                                     })
                                 }
                             }
@@ -305,15 +295,16 @@ class RacingMap : OnMapReadyCallback {
                         markerOptions.icon(racerIcon)
                         currentMarker = mMap.addMarker(markerOptions)
 
-                        mMap.animateCamera(
-                            CameraUpdateFactory.newLatLngZoom(
-                                cur_loc,
-                                17F
-                            )
-                        )        //현재위치 따라서 카메라 이동
+
 
                         when (userState) {
                             UserState.RACING -> {
+                                mMap.animateCamera(
+                                    CameraUpdateFactory.newLatLngZoom(
+                                        cur_loc,
+                                        20F
+                                    )
+                                )
                                 if (PolyUtil.isLocationOnPath(
                                         LatLng(lat, lng),
                                         load_route,
@@ -337,13 +328,32 @@ class RacingMap : OnMapReadyCallback {
 
                                 }
                             }
+                            else->{
+                                mMap.animateCamera(
+                                    CameraUpdateFactory.newLatLngZoom(
+                                        cur_loc,
+                                        17F
+                                    )
+                                )
+                            }
                         }
                     }
                 }
             }
         }
     }
-
+    fun startRacing(){
+        print_log("Start Racing")
+        makerRunning()
+        userState = UserState.RACING
+        manageRacing.startRunning()
+        mMap.animateCamera(
+            CameraUpdateFactory.newLatLngZoom(
+                cur_loc,
+                20F
+            )
+        )
+    }
     fun getDistance(locations: Vector<LatLng>): Double {  //점들의 집합에서 거리구하기
         var distance = 0.0
         var i = 0

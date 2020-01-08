@@ -32,7 +32,9 @@ class ManageRacing {
         this.makerData = makerData
         this.racingMap = RacingMap(smf, context, makerData, this)
     }
-
+    fun startRacing(){
+        racingMap.startRacing()
+    }
     fun startRunning() {
         distanceThread = Thread(Runnable {
             while (true) {
@@ -84,7 +86,7 @@ class ManageRacing {
 
         runningData.time = chronometer.text.toString()
         runningData.speed = "0" //TODO : Calc Speed
-
+        //TODO: 여기서 서버로 경기결과 보내기(기록)
         var newIntent = Intent(context, RacingFinishActivity::class.java)
         newIntent.putExtra("Racer Data", runningData)
         newIntent.putExtra("Maker Data", makerData)
