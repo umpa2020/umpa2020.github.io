@@ -2,6 +2,7 @@ package com.korea50k.RunShare.Util
 
 import android.util.Log
 import com.google.gson.Gson
+import com.korea50k.RunShare.dataClass.FeedMapData
 import com.korea50k.RunShare.dataClass.RankMapData
 import com.korea50k.RunShare.dataClass.RunningData
 import org.json.JSONObject
@@ -51,11 +52,33 @@ class ConvertJson{
                 rankMapData.Likes= jArray.getJSONObject(i).get("Likes") as String
 //                rankMapData.rank= jArray.getJSONObject(i).get("rank") as Int
                 rankMapData.MapTitle= jArray.getJSONObject(i).get("MapTitle") as String
+                rankMapData.MapImage= jArray.getJSONObject(i).get("MapImage") as String
 
                 rankMapDatas.add(rankMapData)
 
             }
             return rankMapDatas
+        }
+
+        fun JsonToFeedMapDatas(json: String):ArrayList<FeedMapData>{
+            var feedMapDatas= ArrayList<FeedMapData>()
+
+            val jObject = JSONObject(json)
+            val jArray = jObject.getJSONArray("JsonData")
+
+            Log.d("asdf", jArray.toString())
+
+            for (i in 0 until jArray.length()) {
+                var feedMapData = FeedMapData()
+                feedMapData.Likes= jArray.getJSONObject(i).get("Likes") as String
+                feedMapData.MapTitle= jArray.getJSONObject(i).get("MapTitle") as String
+                feedMapData.MapImage= jArray.getJSONObject(i).get("MapImage") as String
+                feedMapData.Id= jArray.getJSONObject(i).get("Id") as String
+
+                feedMapDatas.add(feedMapData)
+
+            }
+            return feedMapDatas
         }
     }
 }

@@ -18,4 +18,8 @@ class RankMapData() : Serializable {
     @Expose
     var Likes: String = "0"
 
+    @SerializedName("MapImage")
+    @Expose
+    var MapImage: String = ""
+
 }

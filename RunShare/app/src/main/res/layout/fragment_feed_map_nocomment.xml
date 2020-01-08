@@ -26,14 +26,14 @@
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/map_name"
+        android:id="@+id/map_Image"
         android:layout_width="match_parent"
         android:layout_height="250dp"
         android:layout_below="@+id/thatway"
         android:scaleType="fitXY" />
 
     <LinearLayout
-        android:layout_below="@id/map_name"
+        android:layout_below="@id/map_Image"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="50dp">
