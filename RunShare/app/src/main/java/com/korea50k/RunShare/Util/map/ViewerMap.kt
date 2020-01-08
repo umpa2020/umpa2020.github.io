@@ -1,6 +1,8 @@
 package com.korea50k.RunShare.Util.map
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Looper
 import android.util.Log
@@ -13,136 +15,57 @@ import com.google.android.gms.maps.model.*
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.korea50k.RunShare.R
 import android.graphics.Canvas
+import com.korea50k.RunShare.Activities.Running.RunningSaveActivity
+import com.korea50k.RunShare.dataClass.RunningData
 import com.korea50k.RunShare.dataClass.UserState
+import java.io.File
+import java.io.FileOutputStream
+import java.util.*
 
 
-class BasicMap : OnMapReadyCallback {
+class ViewerMap : OnMapReadyCallback {
     lateinit var mMap: GoogleMap    //racingMap 인스턴스
-    lateinit var fusedLocationClient: FusedLocationProviderClient   //위치정보 가져오는 인스턴스
-    lateinit var locationCallback: LocationCallback
-    lateinit var locationRequest: LocationRequest
     var TAG = "what u wanna say?~~!~!"       //로그용 태그
     var prev_loc: LatLng = LatLng(0.0, 0.0)          //이전위치
-    lateinit var cur_loc: LatLng            //현재위치
     lateinit var context: Context
-    lateinit var userState: UserState
-    lateinit var currentMarker: Marker
-    lateinit var racerIcon: BitmapDescriptor
-
+    var latlngs: Vector<LatLng> = Vector<LatLng>()
     //Running
     constructor(smf: SupportMapFragment, context: Context) {
         this.context = context
         smf.getMapAsync(this)
-        initLocation()
-        userState = UserState.NORMAL
         print_log("Set UserState NORMAL")
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(prev_loc, 17F))
-        fusedLocationClient.requestLocationUpdates(
-            locationRequest,
-            locationCallback,
-            Looper.myLooper()
-        )
     }
-
-    fun startTracking() {
-
-    }
-
-    fun stopTracking() {
-
-    }
-
-    fun pauseTracking() {
-        print_log("pause")
-        fusedLocationClient.removeLocationUpdates(locationCallback)
-        userState = UserState.PAUSED
-        print_log("Set UserState PAUSED")
-    }
-
-    fun restartTracking() {
-        fusedLocationClient.requestLocationUpdates(
-            locationRequest,
-            locationCallback,
-            Looper.myLooper()
-        )
-        userState=UserState.NORMAL
-    }
-
-    fun initLocation() {            //첫 위치 설정하고, prev_loc 설정
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
-        fusedLocationClient.lastLocation
-            .addOnSuccessListener { location ->
-                if (location == null) {
-                    print_log("Location is null")
-                } else {
-                    print_log("Success to get Init Location : " + location.toString())
-                    prev_loc = LatLng(location.latitude, location.longitude)
-                    val markerOptions = MarkerOptions()
-                    markerOptions.position(prev_loc)
-                    markerOptions.title("Me")
-
-                    val circleDrawable = context.getDrawable(R.drawable.racer_marker)
-                    var canvas = Canvas();
-                    var bitmap = Bitmap.createBitmap(
-                        circleDrawable!!.intrinsicWidth,
-                        circleDrawable!!.intrinsicHeight,
-                        Bitmap.Config.ARGB_8888
-                    );
-                    canvas.setBitmap(bitmap);
-                    circleDrawable.setBounds(
-                        0,
-                        0,
-                        circleDrawable.getIntrinsicWidth(),
-                        circleDrawable.getIntrinsicHeight()
-                    );
-                    circleDrawable.draw(canvas);
-                    racerIcon = BitmapDescriptorFactory.fromBitmap(bitmap);
-
-                    markerOptions.icon(racerIcon)
-                    currentMarker = mMap.addMarker(markerOptions)
+    fun CaptureMapScreen(runningData: RunningData) {
+        mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(LatLngBounds(latlngs[0],latlngs[latlngs.size-1]),50))
+        lateinit var bitmap:Bitmap
+        var callback = GoogleMap.SnapshotReadyCallback {
+            try {
+                var saveFolder = File(context.filesDir, "mapdata") // 저장 경로
+                if (!saveFolder.exists()) {       //폴더 없으면 생성
+                    saveFolder.mkdir()
                 }
-            }
-            .addOnFailureListener {
-                //TODO:GPS 상태를 확인하세요!
-                print_log("Error is " + it.message.toString())
-                it.printStackTrace()
-            }
-        locationRequest = LocationRequest.create()
-        locationRequest.run {
-            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-            interval = 1000
-        }
-        locationCallback = object : LocationCallback() {
-            override fun onLocationResult(locationResult: LocationResult?) {
-                locationResult?.let {
-                    for ((i, location) in it.locations.withIndex()) {
-                        var lat = location.latitude
-                        var lng = location.longitude
-                        var alt = location.altitude
-                        var speed = location.speed
-                        cur_loc = LatLng(lat, lng)
-                        print_log("Basic Map Log")
-                        currentMarker.remove()
-                        val markerOptions = MarkerOptions()
-                        markerOptions.position(cur_loc)
-                        markerOptions.title("Me")
-                        markerOptions.icon(racerIcon)
-                        currentMarker = mMap.addMarker(markerOptions)
+                val path = "racingMap" + saveFolder.list().size + ".bmp"        //파일명 생성하는건데 수정필요
+                //비트맵 크기에 맞게 잘라야함
+                var myfile = File(saveFolder, path)                //로컬에 파일저장
+                var out = FileOutputStream(myfile)
+                print_log(it.width.toString() + "높이 " + it.height.toString())
+                var cutBitmap = Bitmap.createBitmap(it, 0, it.height / 2 - 150, it.width, 300)
+                cutBitmap.compress(Bitmap.CompressFormat.PNG, 90, out)
+                runningData.bitmap = myfile.path
 
-                        mMap.animateCamera(
-                            CameraUpdateFactory.newLatLngZoom(
-                                cur_loc,
-                                17F
-                            )
-                        )        //현재위치 따라서 카메라 이동
-                    }
-                }
+
+
+            } catch (e: Exception) {
+                print_log(e.toString())
             }
         }
+
+        mMap.snapshot(callback)
     }
     fun print_log(text: String) {
         Log.d(TAG, text.toString())

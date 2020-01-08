@@ -25,8 +25,12 @@ import android.widget.Toast
 import androidx.core.net.toUri
 import com.github.mikephil.charting.components.Description
 import com.github.mikephil.charting.data.Entry
+import com.google.android.gms.maps.SupportMapFragment
 import com.korea50k.RunShare.Activities.MainFragment.MainActivity
 import com.korea50k.RunShare.RetrofitClient
+import com.korea50k.RunShare.Util.map.BasicMap
+import com.korea50k.RunShare.Util.map.RunningMap
+import com.korea50k.RunShare.Util.map.ViewerMap
 import com.korea50k.RunShare.dataClass.Privacy
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -37,12 +41,16 @@ import java.net.URL
 
 class RunningSaveActivity : AppCompatActivity() {
     lateinit var runningData:RunningData
+    lateinit var map:ViewerMap
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_running_save)
 
         runningData=intent.getSerializableExtra("Running Data") as RunningData
-        map_img.setImageURI(runningData.bitmap.toUri())
+
+        val smf = supportFragmentManager.findFragmentById(R.id.map_viewer) as SupportMapFragment
+        map = ViewerMap(smf, this)
+
         distance_tv.text=runningData.distance.toString()
         time_tv.text=runningData.time
         speed_tv.text=runningData.speed.toString()

@@ -222,36 +222,7 @@ class RunningMap : OnMapReadyCallback {
         return distance
     }
 
-    fun CaptureMapScreen(runningData: RunningData) {
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(LatLngBounds(latlngs[0],latlngs[latlngs.size-1]),1080,300,100))
-        lateinit var bitmap: Bitmap
-        var callback = SnapshotReadyCallback {
-            try {
-                var saveFolder = File(context.filesDir, "mapdata") // 저장 경로
-                if (!saveFolder.exists()) {       //폴더 없으면 생성
-                    saveFolder.mkdir()
-                }
-                val path = "racingMap" + saveFolder.list().size + ".bmp"        //파일명 생성하는건데 수정필요
-                //비트맵 크기에 맞게 잘라야함
-                var myfile = File(saveFolder, path)                //로컬에 파일저장
-                var out = FileOutputStream(myfile)
-                print_log(it.width.toString() + "높이 "+it.height.toString())
-                var cutBitmap=Bitmap.createBitmap(it,0,it.height/2-150,it.width,300)
-                cutBitmap.compress(Bitmap.CompressFormat.PNG, 90, out)
-                runningData.bitmap = myfile.path
-
-                var newIntent = Intent((context as Activity), RunningSaveActivity::class.java)
-                newIntent.putExtra("Running Data", runningData)
-                context.startActivity(newIntent)
-
-            } catch (e: Exception) {
-                print_log(e.toString())
-            }
-        }
-
-        mMap.snapshot(callback)
-    }
 
     fun print_log(text: String) {
         Log.d(TAG, text.toString())
