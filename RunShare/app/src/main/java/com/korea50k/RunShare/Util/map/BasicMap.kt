@@ -40,7 +40,7 @@ class BasicMap : OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(prev_loc, 17F))
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(prev_loc, 17F))
         fusedLocationClient.requestLocationUpdates(
             locationRequest,
             locationCallback,
@@ -116,6 +116,7 @@ class BasicMap : OnMapReadyCallback {
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
             interval = 1000
         }
+
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult?) {
                 locationResult?.let {
@@ -133,7 +134,7 @@ class BasicMap : OnMapReadyCallback {
                         markerOptions.icon(racerIcon)
                         currentMarker = mMap.addMarker(markerOptions)
 
-                        mMap.animateCamera(
+                        mMap.moveCamera(
                             CameraUpdateFactory.newLatLngZoom(
                                 cur_loc,
                                 17F

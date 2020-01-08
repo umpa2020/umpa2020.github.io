@@ -1,5 +1,6 @@
 package com.korea50k.RunShare.Activities.Running
 
+import android.app.Activity
 import android.content.Context
 import android.os.SystemClock
 import android.widget.Chronometer
@@ -9,6 +10,7 @@ import com.korea50k.RunShare.Util.map.RunningMap
 import kotlinx.android.synthetic.main.activity_running.*
 import android.widget.Toast
 import android.content.DialogInterface
+import android.content.Intent
 import androidx.appcompat.app.AlertDialog
 import com.korea50k.RunShare.dataClass.Privacy
 
@@ -90,7 +92,11 @@ class ManageRunning {
         runningData.cal = "0" //TODO : Calc cal
         runningData.speed = "0" //TODO : Calc Speed
         runningData.privacy=privacy
-        map.CaptureMapScreen(runningData)
+
+        var newIntent = Intent((context as Activity), RunningSaveActivity::class.java)
+        newIntent.putExtra("Running Data", runningData)
+        context.startActivity(newIntent)
+
         return runningData
     }
 }
