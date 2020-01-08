@@ -66,15 +66,11 @@ class ManageRunning {
 
     fun stopRunning(): RunningData {
         var runningData = RunningData()
-        var triple = map.stopTracking()
+        map.stopTracking(runningData)
 
-        runningData.lats = triple.first
-        runningData.lngs = triple.second
-        runningData.alts = triple.third
         runningData.distance = String.format("%.3f",(map.getDistance(map.latlngs)/1000))
         runningData.time = chronometer.text.toString()
         runningData.cal = "0" //TODO : Calc cal
-        runningData.speed = "0" //TODO : Calc Speed
         runningData.privacy=privacy
 
         var newIntent = Intent((context as Activity), RunningSaveActivity::class.java)

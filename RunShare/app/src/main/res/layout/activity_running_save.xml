@@ -22,89 +22,83 @@
                 tools:context=".fragment.MapFragment"
                 android:name="com.google.android.gms.maps.SupportMapFragment"
                 />
-
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:id="@+id/dataTableLayout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_below="@+id/map_viewer"
-                android:id="@+id/distance_Layout">
-
-                <TextView
-                    android:layout_width="match_parent"
+                android:layout_below="@+id/map_viewer">
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="Distance" />
 
-                <TextView
-                    android:id="@+id/distance_tv"
-                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:id="@+id/distance_Layout">
+
+                    <TextView
+                        android:gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Distance" />
+
+                    <TextView
+                        android:gravity="center"
+                        android:id="@+id/distance_tv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="0.0"
+                        android:textSize="24dp" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="0.0"
-                    android:textSize="24dp" />
+                    android:orientation="vertical"
+                    android:layout_below="@+id/map_viewer"
+                    android:layout_alignParentRight="true"
+                    android:id="@+id/time_layout">
+
+                    <TextView
+                        android:gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Time" />
+
+                    <TextView
+                        android:gravity="center"
+                        android:id="@+id/time_tv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="0.0"
+                        android:textSize="24dp" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_below="@+id/distance_Layout">
+
+                    <TextView
+                        android:gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Speed" />
+
+                    <TextView
+                        android:gravity="center"
+                        android:id="@+id/speed_tv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="0.0"
+                        android:textSize="24dp" />
+                </LinearLayout>
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_below="@+id/distance_Layout">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Speed" />
-
-                <TextView
-                    android:id="@+id/speed_tv"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="0.0"
-                    android:textSize="24dp" />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_below="@+id/map_viewer"
-                android:layout_alignParentRight="true"
-                android:id="@+id/time_layout">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Time" />
-
-                <TextView
-                    android:id="@+id/time_tv"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="0.0"
-                    android:textSize="24dp" />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_below="@+id/time_layout"
-                android:layout_alignParentRight="true"
-                android:id="@+id/calorie_layout">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Calorie" />
-
-                <TextView
-                    android:id="@+id/calorie_tv"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="0.0"
-                    android:textSize="24dp" />
-            </LinearLayout>
 
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/chart"
-                android:layout_below="@+id/calorie_layout"
+                android:layout_below="@+id/dataTableLayout"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 />

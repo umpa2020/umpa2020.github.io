@@ -7,7 +7,7 @@ class RunningData() : Serializable {
     var lats: DoubleArray= DoubleArray(0)
     var lngs: DoubleArray= DoubleArray(0)
     var alts: DoubleArray=DoubleArray(0)
-    var speed: String = ""
+    var speed: DoubleArray=DoubleArray(0)
     var distance: String = ""
     var time: String = ""
     var map_title: String = ""

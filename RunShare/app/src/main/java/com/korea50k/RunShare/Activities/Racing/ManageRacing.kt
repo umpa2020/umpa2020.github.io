@@ -83,9 +83,7 @@ class ManageRacing {
         timeWhenStopped = chronometer.base - SystemClock.elapsedRealtime()
         chronometer.stop()
         var runningData = RunningData()
-
         runningData.time = chronometer.text.toString()
-        runningData.speed = "0" //TODO : Calc Speed
         //TODO: 여기서 서버로 경기결과 보내기(기록)
         var newIntent = Intent(context, RacingFinishActivity::class.java)
         newIntent.putExtra("Racer Data", runningData)

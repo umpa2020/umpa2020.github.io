@@ -24,8 +24,10 @@ import com.google.android.gms.maps.model.*
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.korea50k.RunShare.R
 import android.graphics.Canvas
+import com.korea50k.RunShare.Activities.Running.RunningActivity
 import com.korea50k.RunShare.dataClass.RunningData
 import com.korea50k.RunShare.dataClass.UserState
+import kotlinx.android.synthetic.main.activity_running.*
 
 
 class RunningMap : OnMapReadyCallback {
@@ -38,6 +40,7 @@ class RunningMap : OnMapReadyCallback {
     lateinit var cur_loc: LatLng            //현재위치
     var latlngs: Vector<LatLng> = Vector<LatLng>()   //움직인 점들의 집합 나중에 저장될 점들 집합
     var alts = Vector<Double>()
+    var speeds = Vector<Double>()
     var load_route = ArrayList<LatLng>()     //로드할 점들의 집합
     lateinit var context: Context
     lateinit var userState: UserState
@@ -69,7 +72,7 @@ class RunningMap : OnMapReadyCallback {
     fun startTracking() {
     }
 
-    fun stopTracking(): Triple<DoubleArray, DoubleArray, DoubleArray> {
+    fun stopTracking(runningData:RunningData) {
         print_log("Stop")
         var simplipoly = PolyUtil.simplify(latlngs, 10.0) //tolerance 조절해야함
         var lats: DoubleArray = DoubleArray(simplipoly.size)
@@ -78,7 +81,10 @@ class RunningMap : OnMapReadyCallback {
             lats[index] = simplipoly[index].latitude
             lngs[index] = simplipoly[index].longitude
         }
-        return Triple(lats, lngs, alts.toDoubleArray())
+        runningData.lats=lats
+        runningData.lngs=lngs
+        runningData.alts=alts.toDoubleArray()
+        runningData.speed=speeds.toDoubleArray()
     }
 
     fun pauseTracking() {
@@ -183,6 +189,11 @@ class RunningMap : OnMapReadyCallback {
                         } else {
                             latlngs.add(cur_loc)    //위 조건들을 통과하면 점 추가
                             alts.add(alt)
+                            speeds.add(speed.toDouble())
+                            (context as Activity).runOnUiThread(Runnable {
+                                print_log(speed.toString())
+                                (context as RunningActivity).speedTextView.text=speed.toString()
+                            })
                             mMap.addPolyline(
                                 PolylineOptions().add(
                                     prev_loc,
