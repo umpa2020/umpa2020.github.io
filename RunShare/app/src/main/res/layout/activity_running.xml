@@ -23,7 +23,7 @@
         <hollowsoft.slidingdrawer.SlidingDrawer
             android:id="@+id/drawer"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="130dp"
             layout:content="@+id/content"
             layout:handle="@+id/handle"
             android:layout_alignParentBottom="true"
@@ -44,9 +44,7 @@
                     android:layout_weight="1.0"
                     android:background="@drawable/rounded_gray_box"
                     android:orientation="vertical"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginLeft="30dp"
-                    android:layout_marginRight="5dp">
+                    android:layout_margin="5dp">
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -69,9 +67,7 @@
                     android:layout_weight="1.0"
                     android:background="@drawable/rounded_gray_box"
                     android:orientation="vertical"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginRight="30dp"
-                    android:layout_marginLeft="5dp">
+                    android:layout_margin="5dp">
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -88,10 +84,75 @@
                         android:textSize="24dp" />
 
                 </LinearLayout>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.0"
+                    android:background="@drawable/rounded_gray_box"
+                    android:orientation="vertical"
+                    android:layout_margin="5dp">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="속력"
+                        android:textColor="#FFFFFF"
+                        android:textSize="24dp" />
+                    <TextView
+                        android:id="@+id/speedTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textColor="#FFFFFF"
+                        android:textSize="24dp" />
+
+                </LinearLayout>
             </LinearLayout>
         </hollowsoft.slidingdrawer.SlidingDrawer>
     </RelativeLayout>
+    <LinearLayout
+        android:id="@+id/runningNotificationLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:background="#440044FF">
+        <TextView
+            android:id="@+id/runningNotificationTextView"
+            android:layout_width="0dp"
+            android:layout_weight="8"
+            android:gravity="center"
+            android:layout_height="match_parent"
+            />
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+            <Button
+                android:id="@+id/runningNotificationYes"
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:gravity="center"
+                android:text="Yes"
+                android:clickable="false"
+                android:onClick="onClick"
+                android:background="#44FFFFFF"
+                android:layout_margin="2dp"
+                />
+            <Button
+                android:id="@+id/runningNotificationNo"
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:gravity="center"
+                android:text="No"
+                android:clickable="false"
+                android:onClick="onClick"
+                android:background="#44FFFFFF"
+                android:layout_margin="2dp"/>
+        </LinearLayout>
 
+    </LinearLayout>
     <LinearLayout
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="420dp">
+    android:layout_height="match_parent">
     <LinearLayout
         android:id="@+id/thatway"
         android:gravity="center_vertical"
@@ -42,6 +42,17 @@
             android:text="map name"
             android:textSize="30dp" />
 
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+    <LinearLayout
+        android:layout_marginRight="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
         <ImageView
             android:layout_marginTop="5dp"
             android:layout_marginLeft="160dp"
@@ -56,61 +67,73 @@
             android:layout_height="wrap_content"
             android:text="000"
             android:textSize="30dp" />
+    </LinearLayout>
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/Comment"
+        android:layout_below="@id/One"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"/>
 
-    <RelativeLayout
-
-        android:layout_alignParentBottom="true"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/feed_recycler_comment"
         android:layout_below="@+id/One"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="match_parent">
+    </androidx.recyclerview.widget.RecyclerView>
+
+
+    <RelativeLayout
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/Comment"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
         android:orientation="horizontal">
 
         <FrameLayout
+
+            android:layout_alignParentBottom="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_below="@+id/rank_title_textview"
-            android:id="@+id/rank_framelayout"
-            android:layout_marginTop="10dp">
+            android:layout_below="@+id/feed_title_textview"
+            android:id="@+id/feed_framelayout"
+            android:layout_marginBottom="10dp"
+            >
 
-            <View
-                android:id="@+id/indicator"
-                android:layout_width="0dp"
-                android:layout_height="40dp"/>
-                //android:background="@drawable/gradient_bg_black"/>
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tab_rank"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"/>
-                //android:background="@drawable/tab_bg_black"
+                android:layout_height="40dp"
+                android:background="@drawable/tab_bg_black"
                 app:tabGravity="fill"
                 app:tabMode="fixed"
-                app:tabSelectedTextColor="#ffffff"
+                app:tabSelectedTextColor="#000000"
                 app:tabIndicatorColor="@null"
                 app:tabRippleColor="@null"/>
 
-        </FrameLayout>
+
         <EditText
-            android:layout_marginBottom="10dp"
+            android:layout_marginTop="7dp"
             android:layout_marginLeft="15dp"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="@null"
-            android:text="댓 글"/>
+            android:hint="댓 글"/>
 
         <Button
-            android:layout_marginTop="7dp"
-            android:layout_marginRight="20dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
+            android:layout_gravity="right"
+            android:layout_marginTop="3dp"
+            android:layout_marginRight="10dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:background="@drawable/ic_comment_icon_unpressed_1"
             />
 
-
+        </FrameLayout>
 
     </RelativeLayout>
 </RelativeLayout>

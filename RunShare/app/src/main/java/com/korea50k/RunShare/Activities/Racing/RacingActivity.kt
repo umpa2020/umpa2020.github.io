@@ -1,19 +1,23 @@
 package com.korea50k.RunShare.Activities.Racing
 
 
+import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.common.internal.Objects
 import com.google.android.gms.maps.SupportMapFragment
 import com.korea50k.RunShare.dataClass.RunningData
 import com.korea50k.RunShare.R
+import com.korea50k.RunShare.dataClass.UserState
 import hollowsoft.slidingdrawer.OnDrawerCloseListener
 import hollowsoft.slidingdrawer.OnDrawerOpenListener
 import hollowsoft.slidingdrawer.OnDrawerScrollListener
 import hollowsoft.slidingdrawer.SlidingDrawer
-import kotlinx.android.synthetic.main.activity_running.btn_stop
+import kotlinx.android.synthetic.main.activity_racing.*
+import kotlinx.android.synthetic.main.activity_running.*
 
 class RacingActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpenListener,
     OnDrawerCloseListener {
@@ -26,12 +30,11 @@ class RacingActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpen
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_racing)
         makerData = intent.getSerializableExtra("Running data") as RunningData
-
         init()
-        btn_stop.setOnLongClickListener {
-            var runningData = manageRacing.stopRunning()
-
-
+        racingControlButton.setOnLongClickListener {
+            if(manageRacing.racingMap.userState==UserState.RACING) {
+                var runningData = manageRacing.stopRunning()
+            }
             true
         }
     }
@@ -48,7 +51,24 @@ class RacingActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpen
 
     fun onClick(view: View) {
         when (view.id) {
-            R.id.btn_stop -> stop()
+            R.id.racingControlButton -> {
+                when(manageRacing.racingMap.userState){
+                    UserState.BEFORERACING->{
+                        Toast.makeText(this,"시작 포인트로 이동하세요",Toast.LENGTH_SHORT).show()
+                    }
+                    UserState.READYTORACING->{
+                        manageRacing.startRacing()
+                        notificationButton.visibility=View.GONE
+                        racingControlButton.text="  Stop"
+                        racingControlButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_stop_icon_pressed,0,0,0)
+                    }
+                    UserState.RACING->{
+                        stop()
+                    }
+
+                }
+
+            }
         }
     }
 

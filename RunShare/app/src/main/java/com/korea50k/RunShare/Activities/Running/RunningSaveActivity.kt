@@ -50,11 +50,10 @@ class RunningSaveActivity : AppCompatActivity() {
 
         val smf = supportFragmentManager.findFragmentById(R.id.map_viewer) as SupportMapFragment
         map = ViewerMap(smf, this,runningData)
-
         distance_tv.text=runningData.distance.toString()
         time_tv.text=runningData.time
-        speed_tv.text=runningData.speed.toString()
-        calorie_tv.text=runningData.cal.toString()
+
+        speed_tv.text=String.format("%.3f",runningData.speed.average())
         if(runningData.privacy==Privacy.PUBLIC){
             racingRadio.isChecked=false
             racingRadio.isEnabled=false
@@ -66,40 +65,51 @@ class RunningSaveActivity : AppCompatActivity() {
     private fun setChart() {    //클래스로 따로 빼야할듯
         var lineChart = chart as LineChart
 
-        val entries = ArrayList<Entry>()
-        for(alts in runningData.alts.indices){
-            entries.add(Entry(alts.toFloat(), runningData.alts[alts].toFloat()))
+        val alts = ArrayList<Entry>()
+        val speeds=ArrayList<Entry>()
+        for(index in runningData.alts.indices){
+            alts.add(Entry(index.toFloat(), runningData.alts[index].toFloat()))
+            speeds.add(Entry(index.toFloat(), runningData.speed[index].toFloat()))
         }
 
-        val lineDataSet = LineDataSet(entries, "속성명1")
+        val lineDataSet = LineDataSet(alts, "고도")
         lineDataSet.lineWidth = 2f
-        lineDataSet.color = Color.parseColor("#FFA1B4DC")
+        lineDataSet.color = Color.parseColor("#FF0000FF")
         lineDataSet.setDrawHorizontalHighlightIndicator(false)
         lineDataSet.setDrawHighlightIndicators(false)
         lineDataSet.setDrawValues(false)
+        lineDataSet.setCircleColor(Color.parseColor("#FFFFFFFF"))
+
+        val lineDataSet2 = LineDataSet(speeds, "속력")
+        lineDataSet2.lineWidth = 2f
+        lineDataSet2.color = Color.parseColor("#FFFF0000")
+        lineDataSet2.setDrawHorizontalHighlightIndicator(false)
+        lineDataSet2.setDrawHighlightIndicators(false)
+        lineDataSet2.setDrawValues(false)
+        lineDataSet2.setCircleColor(Color.parseColor("#FFFFFFFF"))
 
         val lineData = LineData(lineDataSet)
         lineChart.data = lineData
+        lineChart.data.addDataSet(lineDataSet2)
 
         val xAxis = lineChart.getXAxis()
         xAxis.position = XAxis.XAxisPosition.BOTTOM
         xAxis.textColor = Color.BLACK
         xAxis.enableGridDashedLine(8f, 24f, 0f)
 
-        val yLAxis = lineChart.getAxisLeft()
-        yLAxis.textColor = Color.BLACK
+        val yLAxis = lineChart.axisLeft
+        yLAxis.textColor = Color.RED
 
-        val yRAxis = lineChart.getAxisRight()
-        yRAxis.setDrawLabels(false)
-        yRAxis.setDrawAxisLine(false)
-        yRAxis.setDrawGridLines(false)
-
-        val description = Description()
-        description.text = ""
+        val yRAxis = lineChart.axisRight
+        yRAxis.textColor=Color.BLUE
+        yRAxis.axisMaximum= runningData.alts.max()!!.toFloat()+5
+        yRAxis.axisMinimum =runningData.alts.min()!!.toFloat()-5
+        //val description = Description()
+        //description.text = ""
 
         lineChart.isDoubleTapToZoomEnabled = false;
         lineChart.setDrawGridBackground(false)
-        lineChart.description = description
+        //lineChart.description = description
         lineChart.animateY(2000, Easing.EasingOption.EaseInCubic)
         lineChart.invalidate()
     }
