@@ -8,11 +8,15 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.SupportMapFragment
 import com.korea50k.RunShare.R
+import com.korea50k.RunShare.dataClass.Privacy
 import hollowsoft.slidingdrawer.OnDrawerCloseListener
 import hollowsoft.slidingdrawer.OnDrawerOpenListener
 import hollowsoft.slidingdrawer.OnDrawerScrollListener
 import hollowsoft.slidingdrawer.SlidingDrawer
+import kotlinx.android.synthetic.main.activity_racing.*
 import kotlinx.android.synthetic.main.activity_running.*
+import kotlinx.android.synthetic.main.activity_running.btn_stop
+import kotlinx.android.synthetic.main.activity_running.handle
 
 class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpenListener, OnDrawerCloseListener {
     var TAG = "what u wanna say?~~!~!"       //로그용 태그
@@ -49,15 +53,28 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
         when (view.id) {
 
             R.id.btn_pause -> {
-                if(B_RUNNIG)
-                    manageRunning.pauseRunning()
-                else
-                    restart()
+                if(manageRunning.privacy==Privacy.RACING){
+                    runningNotificationLayout.visibility= View.VISIBLE
+                    runningNotificationTextView.text="일시정지를 하게 되면 경쟁 모드 업로드가 불가합니다.\n일시정지를 원하시면 알림을 클릭하세요"
+                }else{
+                    if(B_RUNNIG)
+                        manageRunning.pauseRunning()
+                    else
+                        restart()
+
+                }
+
             }
             R.id.btn_stop -> stop()
+            R.id.runningNotificationYes->{
+                runningNotificationLayout.visibility=View.GONE
+                manageRunning.pauseRunning()
+            }
+            R.id.runningNotificationNo->{
+                runningNotificationLayout.visibility=View.GONE
+            }
         }
     }
-
     fun pause() {
         btn_pause.text="  RESTART"
         btn_pause.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_play_pressed,0,0,0)

@@ -11,19 +11,25 @@ import kotlinx.android.synthetic.main.activity_running.*
 import android.widget.Toast
 import android.content.DialogInterface
 import android.content.Intent
+import android.view.View
 import androidx.appcompat.app.AlertDialog
 import com.korea50k.RunShare.dataClass.Privacy
+import kotlinx.android.synthetic.main.activity_racing.*
+import kotlinx.android.synthetic.main.activity_running.running_distance_tv
+import kotlinx.android.synthetic.main.activity_running.timer_tv
 
 
 class ManageRunning {
     lateinit var map: RunningMap
     lateinit var context:Context
+    lateinit var activity:RunningActivity
     lateinit var chronometer: Chronometer
     lateinit var distanceThread : Thread
     var timeWhenStopped:Long=0
     var privacy=Privacy.RACING
     constructor(smf: SupportMapFragment, context: Context) {
         this.context=context
+        activity=context as RunningActivity
         map = RunningMap(smf, context)
     }
 
@@ -50,34 +56,12 @@ class ManageRunning {
         chronometer.base=SystemClock.elapsedRealtime()+timeWhenStopped
         chronometer.start()
     }
-
     fun pauseRunning() {
-        val builder = AlertDialog.Builder(context)
-        builder.setTitle("일시정지 하시겠습니까?")
-        builder.setMessage("일시정지를 하게 되면 경쟁 모드 업로드가 불가합니다.")
-        builder.setPositiveButton("예",
-            DialogInterface.OnClickListener { dialog, which ->
-                Toast.makeText(
-                    context,
-                    "예를 선택했습니다.",
-                    Toast.LENGTH_LONG
-                ).show()
-                map.pauseTracking()
-                timeWhenStopped=chronometer.base-SystemClock.elapsedRealtime()
-                chronometer.stop()
-                (context as RunningActivity).pause()
-                privacy=Privacy.PUBLIC
-            })
-        builder.setNegativeButton("아니오",
-            DialogInterface.OnClickListener { dialog, which ->
-                Toast.makeText(
-                    context,
-                    "아니오를 선택했습니다.",
-                    Toast.LENGTH_LONG
-                ).show()
-            })
-
-        builder.show()
+        map.pauseTracking()
+        timeWhenStopped=chronometer.base-SystemClock.elapsedRealtime()
+        chronometer.stop()
+        activity.pause()
+        privacy=Privacy.PUBLIC
     }
 
     fun stopRunning(): RunningData {

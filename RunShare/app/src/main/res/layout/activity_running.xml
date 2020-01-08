@@ -91,7 +91,49 @@
             </LinearLayout>
         </hollowsoft.slidingdrawer.SlidingDrawer>
     </RelativeLayout>
+    <LinearLayout
+        android:id="@+id/runningNotificationLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:background="#440044FF">
+        <TextView
+            android:id="@+id/runningNotificationTextView"
+            android:layout_width="0dp"
+            android:layout_weight="8"
+            android:gravity="center"
+            android:layout_height="match_parent"
+            />
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+            <Button
+                android:id="@+id/runningNotificationYes"
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:gravity="center"
+                android:text="Yes"
+                android:clickable="false"
+                android:onClick="onClick"
+                android:background="#44FFFFFF"
+                android:layout_margin="2dp"
+                />
+            <Button
+                android:id="@+id/runningNotificationNo"
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:gravity="center"
+                android:text="No"
+                android:clickable="false"
+                android:onClick="onClick"
+                android:background="#44FFFFFF"
+                android:layout_margin="2dp"/>
+        </LinearLayout>
 
+    </LinearLayout>
     <LinearLayout
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
