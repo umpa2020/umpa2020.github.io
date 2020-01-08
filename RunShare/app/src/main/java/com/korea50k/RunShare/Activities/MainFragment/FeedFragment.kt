@@ -18,6 +18,7 @@ import kotlinx.android.synthetic.main.fragment_rank.*
 class FeedFragment : Fragment() {
     var count = 0
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -39,6 +40,20 @@ class FeedFragment : Fragment() {
                 choice_btn.setBackgroundResource(R.drawable.ic_down_button)
             }
         }
+
+/*        val view2: View = inflater!!.inflate(com.korea50k.RunShare.R.layout.fragment_feed_map_nocomment, container, false)
+        val heart_image = view2.findViewById<View>(com.korea50k.RunShare.R.id.detailviewitem_favorite_imageview) as ImageView
+        heart_image.setOnClickListener{
+            count++//누를때마다 증가
+
+            if(count % 2 == 1){
+                heart_image.setBackgroundResource(R.drawable.ic_favorite)
+            }
+            if(count % 2 == 0){
+                heart_image.setBackgroundResource(R.drawable.ic_favorite_border)
+            }
+        }*/
+
 
         var indicatorWidth = 0 //indicator너비 초기화
 
