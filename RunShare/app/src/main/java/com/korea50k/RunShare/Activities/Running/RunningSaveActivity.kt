@@ -49,7 +49,7 @@ class RunningSaveActivity : AppCompatActivity() {
         runningData=intent.getSerializableExtra("Running Data") as RunningData
 
         val smf = supportFragmentManager.findFragmentById(R.id.map_viewer) as SupportMapFragment
-        map = ViewerMap(smf, this)
+        map = ViewerMap(smf, this,runningData)
 
         distance_tv.text=runningData.distance.toString()
         time_tv.text=runningData.time
@@ -107,63 +107,65 @@ class RunningSaveActivity : AppCompatActivity() {
     fun onClick(view: View) {
         when (view.id) {
             com.korea50k.RunShare.R.id.save_btn -> {
-                //send runningData to server by json
-                runningData.map_title=mapTitleEdit.text.toString()
-                runningData.map_explanation=mapExplanationEdit.text.toString()
-                when(privacyRadioGroup.checkedRadioButtonId){
-                    R.id.racingRadio->runningData.privacy=Privacy.RACING
-                    R.id.publicRadio->runningData.privacy=Privacy.PUBLIC
-                    R.id.privateRadio->runningData.privacy=Privacy.PRIVATE
-                }
+                map.CaptureMapScreen()
 
-                var json = ConvertJson.RunningDataToJson(runningData)
-                //send to server
-
-                var bm = BitmapFactory.decodeFile(runningData.bitmap)
-
-                var byteArrayOutputStream = ByteArrayOutputStream()
-                bm.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-                var byteArray = byteArrayOutputStream.toByteArray()
-                var base64OfBitmap = Base64.encodeToString(byteArray, Base64.DEFAULT)
-
-                //var imageTest = testImage
-
-                class SaveTask : AsyncTask<Void, Void, String>(){
-                    override fun onPreExecute() {
-                        super.onPreExecute()
-                    }
-
-                    override fun doInBackground(vararg params: Void?): String? {
-                        try {
-                            s3Upload("kjb", runningData.map_title, "racingMap description", json, base64OfBitmap, "100kcal","100km",
-                                "14km/h","00:12:11",0,0,1)
-
-                            //JsonUpload("kjb", "test", 11)
-
-                            val url =
-                                URL("https://runsharetest.s3.ap-northeast-2.amazonaws.com/kjb/ImageTitle.png")
-                            val conn = url.openConnection()
-                            conn.connect()
-                            val bis = BufferedInputStream(conn.getInputStream())
-                            val bm = BitmapFactory.decodeStream(bis)
-                            bis.close()
-                        } catch (e : java.lang.Exception) {
-                            Log.d("ssmm11", "이미지 다운로드 실패 " +e.toString())
-                        }
-                        return null
-                    }
-
-                    override fun onPostExecute(result: String?) {
-                        super.onPostExecute(result)
-                        //imageTest.setImageBitmap(bm)
-                    }
-                }
-
-                var Start : SaveTask = SaveTask()
-                Start.execute()
             }
         }
     }
+    fun save(imgPath:String){
+        //send runningData to server by json
+        runningData.bitmap=imgPath
+        runningData.map_title=mapTitleEdit.text.toString()
+        runningData.map_explanation=mapExplanationEdit.text.toString()
+        when(privacyRadioGroup.checkedRadioButtonId){
+            R.id.racingRadio->runningData.privacy=Privacy.RACING
+            R.id.publicRadio->runningData.privacy=Privacy.PUBLIC
+            R.id.privateRadio->runningData.privacy=Privacy.PRIVATE
+        }
+
+        var json = ConvertJson.RunningDataToJson(runningData)
+        var bm = BitmapFactory.decodeFile(runningData.bitmap)
+        var byteArrayOutputStream = ByteArrayOutputStream()
+        bm.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        var byteArray = byteArrayOutputStream.toByteArray()
+        var base64OfBitmap = Base64.encodeToString(byteArray, Base64.DEFAULT)
+
+        class SaveTask : AsyncTask<Void, Void, String>(){
+            override fun onPreExecute() {
+                super.onPreExecute()
+            }
+
+            override fun doInBackground(vararg params: Void?): String? {
+                try {
+                    s3Upload("kjb", runningData.map_title, "racingMap description", json, base64OfBitmap, "100kcal","100km",
+                        "14km/h","00:12:11",0,0,1)
+
+                    //JsonUpload("kjb", "test", 11)
+
+                    val url =
+                        URL("https://runsharetest.s3.ap-northeast-2.amazonaws.com/kjb/ImageTitle.png")
+                    val conn = url.openConnection()
+                    conn.connect()
+                    val bis = BufferedInputStream(conn.getInputStream())
+                    val bm = BitmapFactory.decodeStream(bis)
+                    bis.close()
+                } catch (e : java.lang.Exception) {
+                    Log.d("ssmm11", "이미지 다운로드 실패 " +e.toString())
+                }
+                return null
+            }
+
+            override fun onPostExecute(result: String?) {
+                super.onPostExecute(result)
+                //imageTest.setImageBitmap(bm)
+            }
+        }
+
+        var start : SaveTask = SaveTask()
+        start.execute()
+
+    }
+
     fun goToHome(){
         //업로드 로딩 하는거 넣어줘야함
         var newIntent = Intent(this, MainActivity::class.java)
