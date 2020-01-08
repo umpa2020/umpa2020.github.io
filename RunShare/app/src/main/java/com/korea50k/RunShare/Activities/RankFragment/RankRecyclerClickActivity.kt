@@ -7,8 +7,10 @@ import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
+import android.view.View
+import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.korea50k.RunShare.Activities.MainFragment.MainActivity
 import com.korea50k.RunShare.R
 import com.korea50k.RunShare.RetrofitClient
 import com.korea50k.RunShare.Util.ConvertJson
@@ -16,22 +18,21 @@ import kotlinx.android.synthetic.main.activity_rank_recycler_click.*
 import kotlinx.android.synthetic.main.fragment_rank_map.view.*
 import okhttp3.ResponseBody
 import retrofit2.Call
-import java.io.BufferedInputStream
-import java.io.BufferedReader
-import java.io.InputStream
-import java.io.InputStreamReader
+import java.io.*
 import java.net.HttpURLConnection
+import java.net.MalformedURLException
 import java.net.URL
 
 class RankRecyclerClickActivity : AppCompatActivity() {
-    var mJsonString = "";
+    var mJsonString = ""
+    var MapTitle = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_rank_recycler_click)
 
         val intent =  getIntent()
-        val MapTitle = intent.extras?.getString("MapTitle")
+        MapTitle = intent.extras?.getString("MapTitle").toString()
         val MapImage = intent.extras?.getString("MapImage")
         val Id = intent.extras?.getString("Id")
         mapName_TextView.setText(MapTitle)
@@ -54,7 +55,7 @@ class RankRecyclerClickActivity : AppCompatActivity() {
                     bm = BitmapFactory.decodeStream(bis)
                     bis.close()
 
-                    rankingMapDownload("kjb")
+                    rankingMapDownload(MapTitle!!)
                 } catch (e : java.lang.Exception) {
                     Log.d("ssmm11", "이미지 다운로드 실패 " +e.toString())
                 }
@@ -73,8 +74,8 @@ class RankRecyclerClickActivity : AppCompatActivity() {
         val task = GetData()
         task.execute("http://15.164.50.86/rankingMapDownload.php")
     }
-    private fun rankingMapDownload(Id: String) {
-        RetrofitClient.retrofitService.rankingMapDownload(Id).enqueue(object :
+    private fun rankingMapDownload(MapTitle: String) {
+        RetrofitClient.retrofitService.rankingMapDownload(MapTitle).enqueue(object :
             retrofit2.Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: retrofit2.Response<ResponseBody>) {
                 try {
@@ -120,44 +121,38 @@ class RankRecyclerClickActivity : AppCompatActivity() {
 
         override fun doInBackground(vararg params: String): String? {
             val serverURL = params[0]
-            Log.d("ssmm11", "받아온 url = " +serverURL)
+            Log.d("ssmm11", "받아온 url = " + serverURL)
+
             try {
-                val url = URL(serverURL)
-                val httpURLConnection = url.openConnection() as HttpURLConnection
+                val url = URL(params[0])
+                val http = url.openConnection() as HttpURLConnection
+                http.defaultUseCaches = false
+                http.doInput = true
+                http.doOutput = true
+                http.requestMethod = "POST"
 
-                httpURLConnection.setReadTimeout(5000)
-                httpURLConnection.setConnectTimeout(5000)
-                httpURLConnection.connect()
+                http.setRequestProperty("content-type", "application/x-www-form-urlencoded")
+                val buffer = StringBuffer()
+                buffer.append("MapTitle").append("=").append(MapTitle)
 
-                val responseStatusCode = httpURLConnection.getResponseCode()
-                Log.d("ssmm11", "response code - $responseStatusCode")
 
-                val inputStream: InputStream
-                if (responseStatusCode == HttpURLConnection.HTTP_OK) {
-                    inputStream = httpURLConnection.getInputStream()
-                } else {
-                    inputStream = httpURLConnection.getErrorStream()
-                }
-
-                val inputStreamReader = InputStreamReader(inputStream, "UTF-8")
-                val bufferedReader = BufferedReader(inputStreamReader)
-
-                val sb = StringBuilder()
-
-                var line : String? = ""
+                val outStream = OutputStreamWriter(http.outputStream, "EUC-KR")
+                val writer = PrintWriter(outStream)
+                writer.write(buffer.toString())
+                writer.flush()
+                val tmp = InputStreamReader(http.inputStream, "EUC-KR")
+                val reader = BufferedReader(tmp)
+                val builder = StringBuilder()
+                var line: String? = ""
                 while (line != null) {
-                    line = bufferedReader.readLine()
-                    sb.append(line)
+                    line = reader.readLine()
+                    builder.append(line)
                 }
-
-                bufferedReader.close()
-                return sb.toString().trim { it <= ' ' }
-
-            } catch (e: Exception) {
-                Log.d("ssmm11", "InsertData: Error ", e)
-                errorString = e.toString()
-                return null
+                return builder.toString()
+            } catch (e: MalformedURLException) {
+                return ""
             }
+
         }
     }
 }

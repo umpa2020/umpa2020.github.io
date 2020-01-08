@@ -29,15 +29,15 @@ class RankDetailRecyclerViewAdapter_Map(val context: Context, val rankDetaildata
 
     inner class Holder(itemView: View?, itemClick: (RankMapData) -> Unit) : RecyclerView.ViewHolder(itemView!!) {
         val mapRank = itemView?.findViewById<TextView>(R.id.rank_cardView_rank)
-        val mapName = itemView?.findViewById<TextView>(R.id.rank_cardView_name)
-        val mapExecute = itemView?.findViewById<TextView>(R.id.rank_cardView_execute)
-        val mapLike = itemView?.findViewById<TextView>(R.id.rank_cardView_like)
+        val mapMapTitle = itemView?.findViewById<TextView>(R.id.rank_cardView_name)
+        val mapTime = itemView?.findViewById<TextView>(R.id.rank_cardView_execute)
+        val mapTemp = itemView?.findViewById<TextView>(R.id.rank_cardView_like)
 
         fun bind (rankmapdata : RankDetailMapData, context: Context) {
             mapRank?.text = (i + 1).toString()
-            mapName?.text = rankmapdata.ChallengerId.toString()
-            mapExecute?.text = rankmapdata.ChallengerTime.toString()
-            mapLike?.text = rankmapdata.TempData
+            mapMapTitle?.text = rankmapdata.ChallengerId.toString()
+            mapTime?.text = rankmapdata.ChallengerTime.toString()
+            mapTemp?.text = rankmapdata.TempData
             i++
             if(i==1){
                 mapRank?.setBackgroundResource(R.drawable.ic_1)
