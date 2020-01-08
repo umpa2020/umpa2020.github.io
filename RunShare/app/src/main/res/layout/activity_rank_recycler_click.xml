@@ -33,7 +33,7 @@
                 android:textSize="20dp"
                 android:fontFamily="@font/godob"/>
 
-            <TextView
+            <TextView android:id="@+id/ID_TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="player"

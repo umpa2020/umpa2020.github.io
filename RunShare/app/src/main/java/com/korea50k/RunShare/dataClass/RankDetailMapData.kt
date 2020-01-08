@@ -4,23 +4,23 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
-class RankMapData() : Serializable {
+class RankDetailMapData() : Serializable {
     //var rank: Int = 0
     @SerializedName("MapTitle")
     @Expose
     var MapTitle: String = ""
 
-    @SerializedName("Excute")
+    @SerializedName("ChallengerId")
     @Expose
-    var Excute: String = "0"
+    var ChallengerId: String = "0"
 
-    @SerializedName("Likes")
+    @SerializedName("ChallengerIdTime")
     @Expose
-    var Likes: String = "0"
+    var ChallengerTime: String = "0"
 
-    @SerializedName("MapImage")
+    @SerializedName("TempData")
     @Expose
-    var MapImage: String = ""
+    var TempData: String = ""
 
     @SerializedName("Id")
     @Expose
