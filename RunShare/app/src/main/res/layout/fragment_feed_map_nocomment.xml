@@ -8,6 +8,7 @@
 
 
     <LinearLayout
+        android:layout_marginLeft="3dp"
         android:id="@+id/thatway"
         android:gravity="center_vertical"
         android:layout_width="match_parent"
@@ -39,15 +40,23 @@
         android:layout_height="50dp">
 
         <TextView
+            android:layout_marginLeft="10dp"
             android:id="@+id/map_comment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="map name"
-            android:textSize="30dp" />
+            android:textSize="25dp" />
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
 
+        <LinearLayout
+            android:layout_marginRight="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
         <ImageView
-            android:layout_marginTop="5dp"
-            android:layout_marginLeft="160dp"
             android:id="@+id/detailviewitem_favorite_imageview"
             android:src="@drawable/ic_favorite_border"
             android:layout_width="35dp"
@@ -59,7 +68,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="000"
-            android:textSize="30dp" />
+            android:textSize="25dp" />
+        </LinearLayout>
 
     </LinearLayout>
 </RelativeLayout>

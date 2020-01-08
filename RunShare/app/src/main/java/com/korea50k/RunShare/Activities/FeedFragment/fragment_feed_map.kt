@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.korea50k.RunShare.Activities.RankFragment.RankRecyclerClickActivity
@@ -34,11 +35,25 @@ import java.net.URL
 class fragment_feed_map : Fragment() {
     var mJsonString = "";
     var list = arrayListOf<FeedMapData>() // 그대로 냅둬야 할것
+    var count = 0
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         val view: View =  inflater!!.inflate(R.layout.recycler_feed_map, container, false)
+        val view2: View = inflater!!.inflate(R.layout.fragment_feed_map_nocomment, container, false)
+
+        val heartchange = view2.findViewById<View>(com.korea50k.RunShare.R.id.detailviewitem_favorite_imageview) as ImageView
+        heartchange.setOnClickListener{
+            count++//누를때마다 증가
+
+            if(count % 2 == 1){
+                heartchange.setBackgroundResource(R.drawable.ic_favorite)
+            }
+            if(count % 2 == 0){
+                heartchange.setBackgroundResource(R.drawable.ic_favorite_border)
+            }
+        }
 
         class SaveTask : AsyncTask<Void, Void, String>(){
             override fun onPreExecute() {
@@ -159,6 +174,8 @@ class fragment_feed_map : Fragment() {
             }
         }
     }
+
+
 
 
 }
