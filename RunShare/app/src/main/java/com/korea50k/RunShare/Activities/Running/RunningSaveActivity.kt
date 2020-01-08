@@ -50,11 +50,10 @@ class RunningSaveActivity : AppCompatActivity() {
 
         val smf = supportFragmentManager.findFragmentById(R.id.map_viewer) as SupportMapFragment
         map = ViewerMap(smf, this,runningData)
-
         distance_tv.text=runningData.distance.toString()
         time_tv.text=runningData.time
 
-        speed_tv.text=runningData.speed.average().toString()
+        speed_tv.text=String.format("%.3f",runningData.speed.average())
         if(runningData.privacy==Privacy.PUBLIC){
             racingRadio.isChecked=false
             racingRadio.isEnabled=false
@@ -95,11 +94,11 @@ class RunningSaveActivity : AppCompatActivity() {
 
         val xAxis = lineChart.getXAxis()
         xAxis.position = XAxis.XAxisPosition.BOTTOM
-        xAxis.textColor = Color.RED
+        xAxis.textColor = Color.BLACK
         xAxis.enableGridDashedLine(8f, 24f, 0f)
 
         val yLAxis = lineChart.axisLeft
-        yLAxis.textColor = Color.BLACK
+        yLAxis.textColor = Color.RED
 
         val yRAxis = lineChart.axisRight
         yRAxis.textColor=Color.BLUE

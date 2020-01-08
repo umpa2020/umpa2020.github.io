@@ -19,6 +19,7 @@ import android.graphics.Color
 import com.korea50k.RunShare.Activities.Running.RunningSaveActivity
 import com.korea50k.RunShare.dataClass.RunningData
 import com.korea50k.RunShare.dataClass.UserState
+import kotlinx.android.synthetic.main.activity_running_save.*
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
@@ -27,11 +28,13 @@ import java.util.*
 class ViewerMap : OnMapReadyCallback {
     lateinit var mMap: GoogleMap    //racingMap 인스턴스
     var TAG = "what u wanna say?~~!~!"       //로그용 태그
-    lateinit var context: Context
-    lateinit var runningData:RunningData
-    lateinit var loadLatLngs:ArrayList<LatLng>
+    var context: Context
+    var runningData:RunningData
+    var loadLatLngs:ArrayList<LatLng>
+    var smf: SupportMapFragment
     //Running
     constructor(smf: SupportMapFragment, context: Context, runningData:RunningData) {
+        this.smf=smf
         this.context = context
         this.runningData=runningData
         loadLatLngs=loadRoute()
@@ -81,9 +84,12 @@ class ViewerMap : OnMapReadyCallback {
                     .startCap(RoundCap())
                     .endCap(RoundCap())
             )        //경로를 그릴 폴리라인 집합
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(route[0],17F))
+       // mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(route[0],17F))
         //TODO:최대 최소로 값 넣어서 해야함
-        //mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(LatLngBounds(route[0],route[route.size-1]),50))
+        print_log(runningData.lats.min().toString()+runningData.lngs.min().toString())
+        var min= LatLng(runningData.lats.min()!!,runningData.lngs.min()!!)
+        var max = LatLng(runningData.lats.max()!!,runningData.lngs.max()!!)
+         mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(LatLngBounds(min,max),1080,300,50))
         print_log(route[0].toString())
         polyline.tag = "A"
     }

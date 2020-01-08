@@ -58,10 +58,6 @@ class RunningMap : OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-        if (load_route.size > 0)
-            drawRoute(load_route)
-        else
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(prev_loc, 17F))
         fusedLocationClient.requestLocationUpdates(
             locationRequest,
             locationCallback,
@@ -103,24 +99,6 @@ class RunningMap : OnMapReadyCallback {
         )
     }
 
-    fun drawRoute(route: ArrayList<LatLng>) { //로드 된 경로 그리기
-        var polyline =
-            mMap.addPolyline(
-                PolylineOptions()
-                    .addAll(route)
-                    .color(Color.RED)
-                    .startCap(RoundCap())
-                    .endCap(RoundCap())
-            )        //경로를 그릴 폴리라인 집합
-        mMap.animateCamera(
-            CameraUpdateFactory.newLatLngZoom(
-                route[0],
-                17F
-            )
-        )                   //맵 줌
-        print_log(route[0].toString())
-        polyline.tag = "A"
-    }
 
     fun initLocation() {            //첫 위치 설정하고, prev_loc 설정
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
@@ -155,7 +133,7 @@ class RunningMap : OnMapReadyCallback {
 
                     markerOptions.icon(racerIcon)
                     currentMarker = mMap.addMarker(markerOptions)
-                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(prev_loc, 17F))
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(prev_loc, 17F))
                     if (userState == UserState.PAUSED) {
                         startTracking()
                         userState = UserState.RUNNING
@@ -192,7 +170,8 @@ class RunningMap : OnMapReadyCallback {
                             speeds.add(speed.toDouble())
                             (context as Activity).runOnUiThread(Runnable {
                                 print_log(speed.toString())
-                                (context as RunningActivity).speedTextView.text=speed.toString()
+                                (context as RunningActivity).speedTextView.text=
+                                    String.format("%.3f",speed)
                             })
                             mMap.addPolyline(
                                 PolylineOptions().add(
@@ -209,8 +188,6 @@ class RunningMap : OnMapReadyCallback {
                         markerOptions.title("Me")
                         markerOptions.icon(racerIcon)
                         currentMarker = mMap.addMarker(markerOptions)
-                       // mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(LatLngBounds(latlngs[0],latlngs[latlngs.size-1]),1080,300,50))
-
                         mMap.animateCamera(
                             CameraUpdateFactory.newLatLngZoom(
                                 cur_loc,
