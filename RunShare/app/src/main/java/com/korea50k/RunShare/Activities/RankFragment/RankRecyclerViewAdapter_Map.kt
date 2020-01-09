@@ -35,7 +35,7 @@ class RankRecyclerViewAdapter_Map(val context: Context, val rankdata: ArrayList<
         fun bind (rankmapdata : RankMapData, context: Context) {
             mapRank?.text = (i + 1).toString()
             mapName?.text = rankmapdata.mapTitle
-            mapExecute?.text = rankmapdata.excute.toString()
+            mapExecute?.text = rankmapdata.execute.toString()
             mapLike?.text = rankmapdata.likes.toString()
             i++
             if(i==1){

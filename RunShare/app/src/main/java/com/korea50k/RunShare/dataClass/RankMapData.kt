@@ -12,7 +12,7 @@ class RankMapData() : Serializable {
 
     @SerializedName("Excute")
     @Expose
-    var excute: String = "0"
+    var execute: String = "0"
 
     @SerializedName("Likes")
     @Expose

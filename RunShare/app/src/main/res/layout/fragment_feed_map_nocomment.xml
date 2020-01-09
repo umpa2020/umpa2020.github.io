@@ -59,6 +59,7 @@
         <ImageView
             android:id="@+id/detailviewitem_favorite_imageview"
             android:src="@drawable/ic_favorite_border"
+            android:tag="0"
             android:layout_width="35dp"
             android:layout_height="35dp"/>
 

@@ -41,7 +41,7 @@ class ConvertJson{
                 rankMapData.id= jArray.getJSONObject(i).get("Id") as String
                 rankMapData.mapTitle= jArray.getJSONObject(i).get("MapTitle") as String
                 rankMapData.mapImage= jArray.getJSONObject(i).get("MapImage") as String
-
+                rankMapData.execute= jArray.getJSONObject(i).get("Execute") as String
                 rankMapDatas.add(rankMapData)
 
             }
