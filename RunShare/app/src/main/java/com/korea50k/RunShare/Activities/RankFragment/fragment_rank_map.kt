@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.korea50k.RunShare.Activities.Profile.UserActivity
 
 import com.korea50k.RunShare.R
 import com.korea50k.RunShare.RetrofitClient
@@ -100,12 +101,15 @@ class fragment_rank_map : Fragment() {
 
                 val mAdapter = RankRecyclerViewAdapter_Map(activity!!, rankMapDatas){ rankmapdata ->
 
+
                     //TODO Intent로 새로운 xml 열기
+
                     val intent = Intent(context, RankRecyclerClickActivity::class.java)
                     intent.putExtra("MapTitle", rankmapdata.mapTitle)
                     intent.putExtra("MapImage", rankmapdata.mapImage)
                     intent.putExtra("Id", rankmapdata.id)
                     startActivity(intent)
+                    
                 }
 
                 view?.rank_recycler_map!!.adapter = mAdapter

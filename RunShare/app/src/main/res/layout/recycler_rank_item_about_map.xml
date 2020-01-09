@@ -40,14 +40,14 @@
                 android:layout_marginLeft="10dp"
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:gravity="left"
+                android:gravity="center"
                 android:layout_height="wrap_content"
                 android:text="asdf"
                 android:textSize="13dp"
                 android:fontFamily="@font/godob"/>
 
             <TextView
-                android:id="@+id/rank_cardView_like"
+                android:id="@+id/rank_cardView_time"
                 android:textColor="@color/black"
                 android:layout_width="0dp"
                 android:layout_weight="1"

@@ -8,15 +8,14 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.korea50k.RunShare.R
 import com.korea50k.RunShare.dataClass.RankDetailMapData
-import com.korea50k.RunShare.dataClass.RankMapData
 
-class RankDetailRecyclerViewAdapter_Map(val context: Context, val rankDetaildata: ArrayList<RankDetailMapData>, val itemClick: (RankDetailMapData) -> Unit) :
-    RecyclerView.Adapter<RankDetailRecyclerViewAdapter_Map.Holder>() {
+class RankDetailRecyclerViewAdapterMap(val context: Context, val rankDetaildata: ArrayList<RankDetailMapData>, val itemClick: (RankDetailMapData) -> Unit) :
+    RecyclerView.Adapter<RankDetailRecyclerViewAdapterMap.Holder>() {
 
     var i=0
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
-        val view = LayoutInflater.from(context).inflate(R.layout.recycler_rank_item, parent, false)
+        val view = LayoutInflater.from(context).inflate(R.layout.recycler_rank_item_about_map, parent, false)
         return Holder(view, itemClick)
     }
     override fun getItemCount(): Int {
@@ -30,11 +29,12 @@ class RankDetailRecyclerViewAdapter_Map(val context: Context, val rankDetaildata
     inner class Holder(itemView: View?, itemClick: (RankDetailMapData) -> Unit) : RecyclerView.ViewHolder(itemView!!) {
         val mapRank = itemView?.findViewById<TextView>(R.id.rank_cardView_rank)
         var id=itemView?.findViewById<TextView>(R.id.rank_cardView_name)
-        val mapTime = itemView?.findViewById<TextView>(R.id.rank_cardView_execute)
+        val mapTime = itemView?.findViewById<TextView>(R.id.rank_cardView_time)
 
-        fun bind (rankmapdata : RankDetailMapData, context: Context) {
+        fun bind (rankDetailMapData: RankDetailMapData, context: Context) {
             mapRank?.text = (i + 1).toString()
-            mapTime?.text = rankmapdata.ChallengerTime.toString()
+            id?.text=rankDetailMapData.ChallengerId
+            mapTime?.text = rankDetailMapData.ChallengerTime
             i++
             if(i==1){
                 mapRank?.setBackgroundResource(R.drawable.ic_1)
@@ -50,7 +50,7 @@ class RankDetailRecyclerViewAdapter_Map(val context: Context, val rankDetaildata
             }
 
             //TODO 리사이클러뷰 클릭시 상대방 프로필로 넘어가게
-            //itemView.setOnClickListener { itemClick(rankDetaildata) }
+            itemView.setOnClickListener { itemClick(rankDetailMapData) }
         }
     }
 }
