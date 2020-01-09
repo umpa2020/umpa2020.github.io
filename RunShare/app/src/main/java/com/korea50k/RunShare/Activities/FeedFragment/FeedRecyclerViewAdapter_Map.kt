@@ -47,7 +47,7 @@ class FeedRecyclerViewAdapter_Map(val context: Context, val feeddata: ArrayList<
             holder?.itemView?.setOnClickListener { v ->
                 itemClick?.onClick(v, position)
                 Log.d("ssmm11", "click + "+ position)
-                
+
             }
         }
         holder.bind(feeddata[position], context)

@@ -2,7 +2,6 @@ package com.korea50k.RunShare.Activities.FeedFragment
 
 
 import android.content.Intent
-import android.content.res.AssetManager
 import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
@@ -11,18 +10,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.korea50k.RunShare.Activities.RankFragment.RankRecyclerClickActivity
-import com.korea50k.RunShare.Activities.RankFragment.RankRecyclerViewAdapter_Map
 
 import com.korea50k.RunShare.R
 import com.korea50k.RunShare.RetrofitClient
 import com.korea50k.RunShare.Util.ConvertJson
 import com.korea50k.RunShare.dataClass.FeedMapData
-import com.korea50k.RunShare.dataClass.RankMapData
-import kotlinx.android.synthetic.main.fragment_feed_map_nocomment.view.*
-import kotlinx.android.synthetic.main.fragment_rank_map.view.*
 import kotlinx.android.synthetic.main.recycler_feed_map.view.*
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -42,6 +35,7 @@ class fragment_feed_map : Fragment() {
         // Inflate the layout for this fragment
         val view: View =  inflater!!.inflate(R.layout.recycler_feed_map, container, false)
         val view2: View = inflater!!.inflate(R.layout.fragment_feed_map_nocomment, container, false)
+        val view3: View = inflater!!.inflate(R.layout.activity_feed_map_comment, container, false)
 
         val heartchange = view2.findViewById<View>(com.korea50k.RunShare.R.id.detailviewitem_favorite_imageview) as ImageView
         heartchange.setOnClickListener{
@@ -119,7 +113,9 @@ class fragment_feed_map : Fragment() {
                 val mAdapter = FeedRecyclerViewAdapter_Map(activity!!, feedMapDatas)
                 mAdapter.itemClick = object: FeedRecyclerViewAdapter_Map.ItemClick {
                     override fun onClick(view: View, position: Int) {
-                        Log.d("ssmm11", position.toString()   )
+                        Log.d("ssmm11", position.toString())
+                        val intent = Intent(context, FeedRecyclerClickActivity_Map::class.java)
+                        startActivity(intent)
                     }
                 }
                 view?.feed_recycler_map!!.adapter = mAdapter
@@ -171,5 +167,4 @@ class fragment_feed_map : Fragment() {
             }
         }
     }
-
 }
