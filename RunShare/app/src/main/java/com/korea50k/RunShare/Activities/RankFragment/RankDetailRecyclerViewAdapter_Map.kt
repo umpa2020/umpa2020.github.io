@@ -10,7 +10,7 @@ import com.korea50k.RunShare.R
 import com.korea50k.RunShare.dataClass.RankDetailMapData
 import com.korea50k.RunShare.dataClass.RankMapData
 
-class RankDetailRecyclerViewAdapter_Map(val context: Context, val rankDetaildata: ArrayList<RankDetailMapData>, val itemClick: (RankMapData) -> Unit) :
+class RankDetailRecyclerViewAdapter_Map(val context: Context, val rankDetaildata: ArrayList<RankDetailMapData>, val itemClick: (RankDetailMapData) -> Unit) :
     RecyclerView.Adapter<RankDetailRecyclerViewAdapter_Map.Holder>() {
 
     var i=0
@@ -27,17 +27,14 @@ class RankDetailRecyclerViewAdapter_Map(val context: Context, val rankDetaildata
         holder.bind(rankDetaildata[position], context)
     }
 
-    inner class Holder(itemView: View?, itemClick: (RankMapData) -> Unit) : RecyclerView.ViewHolder(itemView!!) {
+    inner class Holder(itemView: View?, itemClick: (RankDetailMapData) -> Unit) : RecyclerView.ViewHolder(itemView!!) {
         val mapRank = itemView?.findViewById<TextView>(R.id.rank_cardView_rank)
-        val mapMapTitle = itemView?.findViewById<TextView>(R.id.rank_cardView_name)
+        var id=itemView?.findViewById<TextView>(R.id.rank_cardView_name)
         val mapTime = itemView?.findViewById<TextView>(R.id.rank_cardView_execute)
-        val mapTemp = itemView?.findViewById<TextView>(R.id.rank_cardView_like)
 
         fun bind (rankmapdata : RankDetailMapData, context: Context) {
             mapRank?.text = (i + 1).toString()
-            mapMapTitle?.text = rankmapdata.ChallengerId.toString()
             mapTime?.text = rankmapdata.ChallengerTime.toString()
-            mapTemp?.text = rankmapdata.TempData
             i++
             if(i==1){
                 mapRank?.setBackgroundResource(R.drawable.ic_1)

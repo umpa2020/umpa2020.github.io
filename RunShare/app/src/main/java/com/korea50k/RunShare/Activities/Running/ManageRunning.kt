@@ -64,7 +64,7 @@ class ManageRunning {
         privacy=Privacy.PUBLIC
     }
 
-    fun stopRunning(): RunningData {
+    fun stopRunning() {
         var runningData = RunningData()
         map.stopTracking(runningData)
 
@@ -75,7 +75,6 @@ class ManageRunning {
         var newIntent = Intent((context as Activity), RunningSaveActivity::class.java)
         newIntent.putExtra("Running Data", runningData)
         context.startActivity(newIntent)
-
-        return runningData
+        activity.finish()
     }
 }

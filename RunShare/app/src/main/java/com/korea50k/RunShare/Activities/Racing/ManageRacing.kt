@@ -3,15 +3,20 @@ package com.korea50k.RunShare.Activities.Racing
 import android.content.Context
 import android.content.Intent
 import android.os.SystemClock
+import android.util.Log
 import android.view.View
 import android.widget.Chronometer
+import android.widget.Toast
 import com.google.android.gms.maps.SupportMapFragment
+import com.korea50k.RunShare.RetrofitClient
 import com.korea50k.RunShare.Util.map.RacingMap
 import com.korea50k.RunShare.dataClass.RunningData
 import com.korea50k.RunShare.Util.TTS
 import kotlinx.android.synthetic.main.activity_racing.*
 import kotlinx.android.synthetic.main.activity_running.running_distance_tv
 import kotlinx.android.synthetic.main.activity_running.timer_tv
+import okhttp3.ResponseBody
+import retrofit2.Call
 
 class ManageRacing {
      var racingMap: RacingMap
@@ -30,7 +35,7 @@ class ManageRacing {
         this.activity = activity
         this.context = context
         this.makerData = makerData
-        this.racingMap = RacingMap(smf, context, makerData, this)
+        this.racingMap = RacingMap(smf, context, this)
     }
     fun startRacing(){
         racingMap.startRacing()
@@ -84,17 +89,45 @@ class ManageRacing {
         chronometer.stop()
         var runningData = RunningData()
         runningData.time = chronometer.text.toString()
+
         if(result){
             //TODO: 여기서 서버로 경기결과 보내기(기록)
+            Thread(
+                Runnable {
+                    RetrofitClient.retrofitService.racingResult(
+                        "KJB",
+                        runningData.time
+                    ).enqueue(object :
+                        retrofit2.Callback<ResponseBody> {
+                        override fun onResponse(
+                            call: Call<ResponseBody>,
+                            response: retrofit2.Response<ResponseBody>
+                        ) {
+                            try {
+                                val result: String? = response.body().toString()
+                                Log.d("response",result)
+                                var newIntent = Intent(context, RacingFinishActivity::class.java)
+                                newIntent.putExtra("Result",result)
+                                newIntent.putExtra("Racer Data", runningData)
+                                newIntent.putExtra("Maker Data", makerData)
+                                context.startActivity(newIntent)
+                                activity.finish()
+                            } catch (e: Exception) {
+
+                            }
+                        }
+                        override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                            Log.d("response", t.message);
+                            t.printStackTrace()
+                        }
+                    })
+                }).start()
+
         }else{
             //실패하면 안보내도될듯?
         }
 
-        var newIntent = Intent(context, RacingFinishActivity::class.java)
-        newIntent.putExtra("Result",result)
-        newIntent.putExtra("Racer Data", runningData)
-        newIntent.putExtra("Maker Data", makerData)
-        context.startActivity(newIntent)
+
     }
     fun deviation(countDeviation:Int){
         if (countDeviation<=10) {

@@ -44,8 +44,8 @@ class RacingMap : OnMapReadyCallback {
     lateinit var context: Context
     lateinit var userState: UserState
     var countDeviation = 0
-    lateinit var currentMarker: Marker
-    lateinit var makerMarker: Marker
+    var currentMarker: Marker?=null
+    var makerMarker: Marker?=null
     lateinit var racerIcon: BitmapDescriptor
     lateinit var makerData: RunningData
     lateinit var manageRacing: ManageRacing
@@ -54,14 +54,12 @@ class RacingMap : OnMapReadyCallback {
     constructor(
         smf: SupportMapFragment,
         context: Context,
-        makerData: RunningData,
         manageRacing: ManageRacing
     ) {
         this.context = context
-        smf.getMapAsync(this)
-        this.makerData = makerData
         this.manageRacing = manageRacing
-        this.load_route = loadRoute()
+        this.makerData = manageRacing.makerData
+        smf.getMapAsync(this)
         userState = UserState.BEFORERACING
         print_log("Set UserState BEFORERACING")
 
@@ -78,7 +76,7 @@ class RacingMap : OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
-
+        load_route = loadRoute()
         drawRoute(load_route)
         mMap.moveCamera(
             CameraUpdateFactory.newLatLngZoom(
@@ -146,7 +144,7 @@ class RacingMap : OnMapReadyCallback {
             for (index in load_route.indices) {
                 Thread.sleep(milisec)
                 (context as Activity).runOnUiThread(Runnable {
-                    makerMarker.remove()
+                    if(makerMarker!=null)makerMarker!!.remove()
                     val markerOptions = MarkerOptions()
                     markerOptions.position(load_route[index])
                     markerOptions.title("Maker")
@@ -298,7 +296,7 @@ class RacingMap : OnMapReadyCallback {
 
                         prev_loc = cur_loc                              //현재위치를 이전위치로 변경
 
-                        currentMarker.remove()
+                        if(currentMarker!=null)currentMarker!!.remove()
                         val markerOptions = MarkerOptions()
                         markerOptions.position(cur_loc)
                         markerOptions.title("Me")

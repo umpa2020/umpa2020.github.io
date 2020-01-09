@@ -44,15 +44,15 @@ class RunningMap : OnMapReadyCallback {
     var load_route = ArrayList<LatLng>()     //로드할 점들의 집합
     lateinit var context: Context
     lateinit var userState: UserState
-     var currentMarker: Marker? = null
+    var currentMarker:Marker?=null
     lateinit var racerIcon: BitmapDescriptor
 
     //Running
     constructor(smf: SupportMapFragment, context: Context) {
         this.context = context
-        smf.getMapAsync(this)
-        initLocation()
         userState = UserState.RUNNING
+        initLocation()
+        smf.getMapAsync(this)
         print_log("Set UserState Running")
     }
 
@@ -182,7 +182,7 @@ class RunningMap : OnMapReadyCallback {
                         }
                         prev_loc = cur_loc                              //현재위치를 이전위치로 변경
 
-                        currentMarker!!.remove()
+                        if(currentMarker!=null)currentMarker!!.remove()
                         val markerOptions = MarkerOptions()
                         markerOptions.position(cur_loc)
                         markerOptions.title("Me")

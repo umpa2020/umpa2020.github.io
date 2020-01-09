@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
             )
         mViewPager.adapter=mMainPageAdapter
         mViewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(mTabLayout))
-        mViewPager.setCurrentItem(1)
+        mViewPager.currentItem=1
         //DrawerLayout.Lock
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
         //drawerLayout.closeDrawer(drawer)
