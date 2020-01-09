@@ -31,6 +31,11 @@ interface API {
         @Field("Privacy") Privacy: Privacy
     ): retrofit2.Call<ResponseBody>
 
+    @POST("imageUpload.php")
+    @FormUrlEncoded
+    fun uploadImage(
+        @Field("Image") Image:String, @Field("Path") Path:String
+    ):retrofit2.Call<ResponseBody>
 
     @POST("dbDownloadtest.php")
     @FormUrlEncoded
