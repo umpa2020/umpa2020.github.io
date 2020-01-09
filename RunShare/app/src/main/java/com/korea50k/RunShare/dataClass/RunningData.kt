@@ -49,4 +49,9 @@ class RunningData() : Serializable {
     @SerializedName("Privacy")
     @Expose
     var privacy:Privacy=Privacy.PUBLIC
+
+    @SerializedName("Id")
+    @Expose
+    var id:String=""
+
 }

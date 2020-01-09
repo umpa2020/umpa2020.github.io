@@ -23,6 +23,10 @@ interface API {
     @FormUrlEncoded
     fun login(@Field("Id") Id : String, @Field("Password") Password: String) : retrofit2.Call<ResponseBody>
 
+    @POST("runningDataDownload.php")
+    @FormUrlEncoded
+    fun runningDataDownload(@Field("MapTitle") MapTitle: String): retrofit2.Call<ResponseBody>
+
     @POST("JsonUpload.php")
     @FormUrlEncoded
     fun JsonUpload(@Field("Id") Id: String, @Field("Json") Json: String, @Field("Status") Status: Int): retrofit2.Call<ResponseBody>
