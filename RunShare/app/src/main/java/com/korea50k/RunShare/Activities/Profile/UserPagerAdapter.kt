@@ -12,7 +12,8 @@ class UserPagerAdapter(fm: FragmentManager) :
 
     fun addFragment(iconOnResID:Int, iconOffResID:Int, title: String, fragment:Fragment){
         val info = FragmentInfo(iconOnResID, iconOffResID, title,fragment)
-        mFragmentInfoList.add(info) }
+        mFragmentInfoList.add(info)
+    }
 
     override fun getItem(position: Int): Fragment {
         return mFragmentInfoList[position].fragment
@@ -20,7 +21,7 @@ class UserPagerAdapter(fm: FragmentManager) :
 
     override fun getCount(): Int {
         return mFragmentInfoList.size
-    } // return 3
+    } // return 2
 
     override fun getPageTitle(position: Int): CharSequence {
         return mFragmentInfoList[position].titleText

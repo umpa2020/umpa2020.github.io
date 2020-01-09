@@ -88,4 +88,7 @@ dependencies {
 
     // recyclerview-selection
     implementation 'androidx.recyclerview:recyclerview-selection:1.0.0'
+
+    //circleimageview
+    implementation 'de.hdodenhof:circleimageview:3.0.0'
 }
