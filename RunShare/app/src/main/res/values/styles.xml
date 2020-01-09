@@ -25,4 +25,10 @@
         <item name="android:textSize">25dp</item>
     </style>
 
+
+    <!-- 하울스타그램 참고-->
+    <style name="ButtonStyle" parent="Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">@color/white</item>
+    </style>
+
 </resources>

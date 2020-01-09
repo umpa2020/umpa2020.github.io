@@ -17,7 +17,7 @@
             android:orientation="vertical">
 
             <LinearLayout
-                android:id="@+id/linearlayout"
+                android:id="@+id/runThisMapTitleLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -52,6 +52,7 @@
             </LinearLayout>
 //TODO:mapview로 바꾸기
             <fragment
+                android:layout_below="@+id/runThisMapTitleLayout"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
                 android:id="@+id/runThisMapViewer"
@@ -258,6 +259,7 @@
 
 
     <LinearLayout
+        android:id="@+id/run_this_map_race_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -277,9 +279,9 @@
             android:drawableLeft="@drawable/ic_play_pressed"
             android:text="   RACE"
             android:textSize="18dp"
+            android:onClick="onClick"
             android:fontFamily="@font/godob"
             android:textColor="@color/darkRed"
-            android:onClick="onClick"
             android:gravity="center_vertical|left"
             />
         <View

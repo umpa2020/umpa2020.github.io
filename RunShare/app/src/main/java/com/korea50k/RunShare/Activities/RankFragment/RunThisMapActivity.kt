@@ -36,7 +36,6 @@ import java.io.PrintWriter
 import java.net.HttpURLConnection
 import java.net.MalformedURLException
 import java.net.URL
-
 class RunThisMapActivity : AppCompatActivity() {
     lateinit var mapTitle: String
     lateinit var jsonString: String
@@ -89,7 +88,6 @@ class RunThisMapActivity : AppCompatActivity() {
                             }
                             Log.d("server", builder.toString())
                             makerData = ConvertJson.JsonToRunningData(builder.toString())
-
                             activity.runOnUiThread(Runnable {
                                 map = ViewerMap(smf, activity, makerData)
                                 activity.runThisMapTitle.text = makerData.mapTitle
@@ -174,3 +172,4 @@ class RunThisMapActivity : AppCompatActivity() {
         lineChart.invalidate()
     }
 }
+
