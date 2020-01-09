@@ -120,15 +120,6 @@ class RankRecyclerClickActivity : AppCompatActivity() {
                     intent.putExtra("Id", rankDetailMapData.ChallengerId)
                     startActivity(intent)
 
-                    /*
-                    val intent = Intent()
-                    intent.setClassName("Profile", "UserActivity::class.java")
-                    intent.putExtra("Id", rankDetailMapData.ChallengerId)
-                    startActivity(intent)
-
-                     */
-
-
                 }
                 rank_detailRecyclerView!!.adapter = mAdapter
                 val lm = LinearLayoutManager(baseContext)

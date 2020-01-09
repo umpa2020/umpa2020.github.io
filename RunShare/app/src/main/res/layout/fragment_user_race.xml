@@ -6,9 +6,11 @@
     tools:context=".Activities.Profile.FragmentUserRace">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="first_fragment" />
+        android:id="@+id/account_race_recyclerview">
+
+    </androidx.recyclerview.widget.RecyclerView>
 
 </FrameLayout>

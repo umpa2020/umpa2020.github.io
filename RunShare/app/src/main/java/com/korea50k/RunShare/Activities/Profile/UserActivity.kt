@@ -2,9 +2,17 @@ package com.korea50k.RunShare.Activities.Profile
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.ViewGroup
+import android.widget.ImageView
+import androidx.appcompat.widget.LinearLayoutCompat
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.tabs.TabLayout
 import com.korea50k.RunShare.R
+import com.korea50k.RunShare.dataClass.ContentDTO
 import kotlinx.android.synthetic.main.activity_user.*
+import java.util.ArrayList
 
 class UserActivity : AppCompatActivity() {
 
@@ -36,6 +44,11 @@ class UserActivity : AppCompatActivity() {
         })
         user_tabs.setupWithViewPager(user_viewpager)
         tabIconSelect()
+
+
+
+
+
     }
     fun tabIconSelect(){
         //TOdo 탭뷰 아이콘 클릭했을 떄랑 아닐때 이미지 추가하는 부분
@@ -52,5 +65,8 @@ class UserActivity : AppCompatActivity() {
             }
         }
     }
+
+
+
 
 }

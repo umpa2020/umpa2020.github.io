@@ -1,4 +1,4 @@
-package com.company.howl.howlstagram.model
+package com.korea50k.RunShare.dataClass
 
 import java.util.HashMap
 
