@@ -18,7 +18,6 @@ class ConvertJson{
         fun JsonToRunningData(json: String): RunningData {
             // var gson = Gson()
             var runningData =Gson().fromJson(json, RunningData::class.java)
-
             return runningData
         }
         fun RankMapDataToJson(rankmapdata : RankMapData):String{

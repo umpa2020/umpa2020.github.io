@@ -29,7 +29,7 @@ class RacingActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpen
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_racing)
-        makerData = intent.getSerializableExtra("Running data") as RunningData
+        makerData = intent.getSerializableExtra("MakerData") as RunningData
         init()
         racingControlButton.setOnLongClickListener {
             if(manageRacing.racingMap.userState==UserState.RACING) {

@@ -36,7 +36,7 @@ class MapFragment : Fragment(),View.OnClickListener{
 
 
                 var newIntent = Intent(activity, RacingActivity::class.java)
-                newIntent.putExtra("Running data", ConvertJson.JsonToRunningData(jsonString))
+                newIntent.putExtra("MakerData", ConvertJson.JsonToRunningData(jsonString))
                 startActivity(newIntent)
             }
         }

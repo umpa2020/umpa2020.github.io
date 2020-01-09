@@ -166,6 +166,7 @@ class RankRecyclerClickActivity : AppCompatActivity() {
     }
     fun onClick(v: View){
         var newIntent = Intent(this, RunThisMapActivity::class.java)
+        newIntent.putExtra("MapTitle",MapTitle)
         startActivity(newIntent)
     }
 }
