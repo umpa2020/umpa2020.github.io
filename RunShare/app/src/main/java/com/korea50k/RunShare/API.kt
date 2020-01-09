@@ -42,6 +42,12 @@ interface API {
         @Field("Image") Image:String, @Field("Path") Path:String
     ):retrofit2.Call<ResponseBody>
 
+    @POST("racingResult.php")
+    @FormUrlEncoded
+    fun racingResult(
+        @Field("Id") Id:String, @Field("Time") Time:String
+    ):retrofit2.Call<ResponseBody>
+
     @POST("dbDownloadtest.php")
     @FormUrlEncoded
     fun dbDownloadtest(@Field("Id") Id: String): retrofit2.Call<ResponseBody>

@@ -10,13 +10,10 @@ import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.korea50k.RunShare.Activities.MainFragment.MainActivity
-import com.korea50k.RunShare.Activities.Racing.RacingActivity
 import com.korea50k.RunShare.R
 import com.korea50k.RunShare.RetrofitClient
 import com.korea50k.RunShare.Util.ConvertJson
 import kotlinx.android.synthetic.main.activity_rank_recycler_click.*
-import kotlinx.android.synthetic.main.fragment_rank_map.view.*
 import okhttp3.ResponseBody
 import retrofit2.Call
 import java.io.*
@@ -110,8 +107,12 @@ class RankRecyclerClickActivity : AppCompatActivity() {
                 mJsonString = result
                 var rankDetailMapDatas = ConvertJson.JsonToRankDetailMapDatas(mJsonString)
 
-                val mAdapter = RankDetailRecyclerViewAdapter_Map(baseContext, rankDetailMapDatas){ rankmapdata ->
-
+                val mAdapter = RankDetailRecyclerViewAdapterMap(baseContext, rankDetailMapDatas){ rankDetailMapData ->
+/*
+                    //TODO Intent로 새로운 xml 열기
+                    val intent = Intent(this@RankRecyclerClickActivity, RankRecyclerClickActivity::class.java)
+                    intent.putExtra("Id", rankDetailMapData.id)
+                    startActivity(intent)*/
                 }
                 rank_detailRecyclerView!!.adapter = mAdapter
                 val lm = LinearLayoutManager(baseContext)

@@ -26,15 +26,15 @@ class BasicMap : OnMapReadyCallback {
     lateinit var cur_loc: LatLng            //현재위치
     lateinit var context: Context
     lateinit var userState: UserState
-    lateinit var currentMarker: Marker
+    var currentMarker: Marker? =null
     lateinit var racerIcon: BitmapDescriptor
 
     //Running
     constructor(smf: SupportMapFragment, context: Context) {
         this.context = context
-        smf.getMapAsync(this)
         initLocation()
         userState = UserState.NORMAL
+        smf.getMapAsync(this)
         print_log("Set UserState NORMAL")
     }
 
@@ -119,7 +119,7 @@ class BasicMap : OnMapReadyCallback {
                         var speed = location.speed
                         cur_loc = LatLng(lat, lng)
                         print_log("Basic Map Log")
-                    if(currentMarker==null)currentMarker.remove()
+                    if(currentMarker!=null)currentMarker!!.remove()
                         val markerOptions = MarkerOptions()
                         markerOptions.position(cur_loc)
                         markerOptions.title("Me")
