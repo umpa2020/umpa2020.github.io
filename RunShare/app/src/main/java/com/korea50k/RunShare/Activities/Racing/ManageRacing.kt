@@ -89,12 +89,15 @@ class ManageRacing {
         chronometer.stop()
         var runningData = RunningData()
         runningData.time = chronometer.text.toString()
+        Log.d("ssmm11", "맵타이틀 = " + runningData.mapTitle)
 
         if(result){
             //TODO: 여기서 서버로 경기결과 보내기(기록)
             Thread(
                 Runnable {
                     RetrofitClient.retrofitService.racingResult(
+                        //makerData.mapTitle, 널임!
+                        "Map2",
                         "KJB",
                         runningData.time
                     ).enqueue(object :

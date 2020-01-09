@@ -45,7 +45,7 @@ interface API {
     @POST("racingResult.php")
     @FormUrlEncoded
     fun racingResult(
-        @Field("Id") Id:String, @Field("Time") Time:String
+        @Field("MapTitle") MapTitle: String, @Field("Id") Id:String, @Field("Time") Time:String
     ):retrofit2.Call<ResponseBody>
 
     @POST("dbDownloadtest.php")
