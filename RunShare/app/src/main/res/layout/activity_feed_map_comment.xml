@@ -16,7 +16,7 @@
             android:layout_width="35dp"
             android:layout_height="35dp"/>
         <TextView
-            android:text="User name"
+            android:text="User_name"
             android:id="@+id/detailviewitem_profile_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
@@ -37,6 +37,7 @@
         android:layout_height="50dp">
 
         <TextView
+            android:id="@+id/map_comment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="map name"
@@ -75,18 +76,17 @@
         android:id="@+id/Comment"
         android:layout_below="@id/One"
         android:layout_width="match_parent"
-        android:layout_height="300dp"/>
+        android:layout_height="260dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/feed_recycler_comment"
         android:layout_below="@+id/One"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
     </androidx.recyclerview.widget.RecyclerView>
 
 
     <RelativeLayout
-        android:layout_alignParentBottom="true"
         android:layout_below="@+id/Comment"
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -94,7 +94,6 @@
 
         <FrameLayout
 
-            android:layout_alignParentBottom="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"

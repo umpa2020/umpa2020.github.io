@@ -16,6 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".Activities.RankFragment.RunThisMapActivity"></activity>
+        <activity android:name=".Activities.FeedFragment.FeedRecyclerClickActivity" />
         <activity android:name=".Activities.RankFragment.RankRecyclerClickActivity" />
         <activity android:name=".Activities.Racing.RacingActivity" />
         <activity android:name=".Activities.Racing.RacingFinishActivity" />

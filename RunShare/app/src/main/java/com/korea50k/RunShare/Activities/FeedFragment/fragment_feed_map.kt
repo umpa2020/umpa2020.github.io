@@ -106,10 +106,6 @@ class fragment_feed_map : Fragment() {
     private inner class GetData : AsyncTask<String, Void, String>() {
         internal var errorString: String? = null
 
-        override fun onPreExecute() {
-            super.onPreExecute()
-        }
-
         override fun onPostExecute(result: String?) {
             super.onPostExecute(result)
 
@@ -120,10 +116,10 @@ class fragment_feed_map : Fragment() {
 
                 val mAdapter = FeedRecyclerViewAdapter_Map(activity!!, feedMapDatas){ feedmapdata ->
                     //TODO Intent로 새로운 xml 열기
-                  /*  val intent = Intent(context, RankRecyclerClickActivity::class.java)
-                    intent.putExtra("MapTitle", rankmapdata.MapTitle)
-                    intent.putExtra("MapImage", rankmapdata.MapImage)
-                    startActivity(intent)*/
+                  val intent = Intent(context, FeedRecyclerClickActivity::class.java)
+                    intent.putExtra("MapTitle", feedmapdata.MapTitle)
+                    intent.putExtra("MapImage", feedmapdata.MapImage)
+                    startActivity(intent)
                 }
                 view?.feed_recycler_map!!.adapter = mAdapter
                 val lm = LinearLayoutManager(context)
