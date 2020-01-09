@@ -31,9 +31,10 @@ class RankDetailRecyclerViewAdapterMap(val context: Context, val rankDetaildata:
         var id=itemView?.findViewById<TextView>(R.id.rank_cardView_name)
         val mapTime = itemView?.findViewById<TextView>(R.id.rank_cardView_time)
 
-        fun bind (rankmapdata : RankDetailMapData, context: Context) {
+        fun bind (rankDetailMapData: RankDetailMapData, context: Context) {
             mapRank?.text = (i + 1).toString()
-            mapTime?.text = rankmapdata.ChallengerTime.toString()
+            id?.text=rankDetailMapData.ChallengerId
+            mapTime?.text = rankDetailMapData.ChallengerTime
             i++
             if(i==1){
                 mapRank?.setBackgroundResource(R.drawable.ic_1)
@@ -49,7 +50,7 @@ class RankDetailRecyclerViewAdapterMap(val context: Context, val rankDetaildata:
             }
 
             //TODO 리사이클러뷰 클릭시 상대방 프로필로 넘어가게
-            //itemView.setOnClickListener { itemClick(rankDetaildata) }
+            itemView.setOnClickListener { itemClick(rankDetailMapData) }
         }
     }
 }

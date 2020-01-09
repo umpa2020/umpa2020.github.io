@@ -107,8 +107,12 @@ class RankRecyclerClickActivity : AppCompatActivity() {
                 mJsonString = result
                 var rankDetailMapDatas = ConvertJson.JsonToRankDetailMapDatas(mJsonString)
 
-                val mAdapter = RankDetailRecyclerViewAdapterMap(baseContext, rankDetailMapDatas){ rankmapdata ->
-
+                val mAdapter = RankDetailRecyclerViewAdapterMap(baseContext, rankDetailMapDatas){ rankDetailMapData ->
+/*
+                    //TODO Intent로 새로운 xml 열기
+                    val intent = Intent(this@RankRecyclerClickActivity, RankRecyclerClickActivity::class.java)
+                    intent.putExtra("Id", rankDetailMapData.id)
+                    startActivity(intent)*/
                 }
                 rank_detailRecyclerView!!.adapter = mAdapter
                 val lm = LinearLayoutManager(baseContext)
