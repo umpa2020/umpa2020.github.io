@@ -53,19 +53,13 @@ class ConvertJson{
 
             val jObject = JSONObject(json)
             val jArray = jObject.getJSONArray("JsonData")
-/*
+
             for (i in 0 until jArray.length()) {
                 var rankDetailMapData = RankDetailMapData()
                 rankDetailMapData.ChallengerId= jArray.getJSONObject(i).get("ChallengerId") as String
                 rankDetailMapData.ChallengerTime= jArray.getJSONObject(i).get("ChallengerTime") as String
-                rankDetailMapData.Id= jArray.getJSONObject(i).get("Id") as String
-                // 맵 게시자의
-                rankDetailMapData.MapTitle= jArray.getJSONObject(i).get("MapTitle") as String
-                rankDetailMapData.TempData= jArray.getJSONObject(i).get("TempData") as String
-
                 rankDetailMapDatas.add(rankDetailMapData)
-
-            }*/
+            }
             return rankDetailMapDatas
         }
 
