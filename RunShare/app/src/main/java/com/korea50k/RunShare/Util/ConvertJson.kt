@@ -53,7 +53,7 @@ class ConvertJson{
 
             val jObject = JSONObject(json)
             val jArray = jObject.getJSONArray("JsonData")
-
+/*
             for (i in 0 until jArray.length()) {
                 var rankDetailMapData = RankDetailMapData()
                 rankDetailMapData.ChallengerId= jArray.getJSONObject(i).get("ChallengerId") as String
@@ -65,7 +65,7 @@ class ConvertJson{
 
                 rankDetailMapDatas.add(rankDetailMapData)
 
-            }
+            }*/
             return rankDetailMapDatas
         }
 

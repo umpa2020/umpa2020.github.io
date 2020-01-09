@@ -33,7 +33,8 @@ class RacingActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpen
         init()
         racingControlButton.setOnLongClickListener {
             if(manageRacing.racingMap.userState==UserState.RACING) {
-                var runningData = manageRacing.stopRacing(false)
+                manageRacing.stopRacing(false)
+
             }
             true
         }
