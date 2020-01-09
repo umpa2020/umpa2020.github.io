@@ -36,12 +36,12 @@ class ConvertJson{
             for (i in 0 until jArray.length()) {
                 //rankMapDatas.add(Gson().fromJson(gson.toJson(jArray.get(i)), RankMapData::class.java))
                 var rankMapData = RankMapData()
-                rankMapData.Excute= jArray.getJSONObject(i).get("Excute") as String
-                rankMapData.Likes= jArray.getJSONObject(i).get("Likes") as String
-                rankMapData.Id= jArray.getJSONObject(i).get("Id") as String
-                rankMapData.MapTitle= jArray.getJSONObject(i).get("MapTitle") as String
-                rankMapData.MapImage= jArray.getJSONObject(i).get("MapImage") as String
-
+                //rankMapData.excute= jArray.getJSONObject(i).get("Execute") as String
+                rankMapData.likes= jArray.getJSONObject(i).get("Likes") as String
+                rankMapData.id= jArray.getJSONObject(i).get("Id") as String
+                rankMapData.mapTitle= jArray.getJSONObject(i).get("MapTitle") as String
+                rankMapData.mapImage= jArray.getJSONObject(i).get("MapImage") as String
+                rankMapData.execute= jArray.getJSONObject(i).get("Execute") as String
                 rankMapDatas.add(rankMapData)
 
             }

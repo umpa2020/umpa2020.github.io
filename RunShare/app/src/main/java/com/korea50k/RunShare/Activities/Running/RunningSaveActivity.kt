@@ -40,24 +40,24 @@ import java.net.URL
 
 
 class RunningSaveActivity : AppCompatActivity() {
-    lateinit var runningData:RunningData
-    lateinit var map:ViewerMap
+    lateinit var runningData: RunningData
+    lateinit var map: ViewerMap
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_running_save)
 
-        runningData=intent.getSerializableExtra("Running Data") as RunningData
+        runningData = intent.getSerializableExtra("Running Data") as RunningData
 
         val smf = supportFragmentManager.findFragmentById(R.id.map_viewer) as SupportMapFragment
-        map = ViewerMap(smf, this,runningData)
-        distance_tv.text=runningData.distance.toString()
-        time_tv.text=runningData.time
+        map = ViewerMap(smf, this, runningData)
+        distance_tv.text = runningData.distance.toString()
+        time_tv.text = runningData.time
 
-        speed_tv.text=String.format("%.3f",runningData.speed.average())
-        if(runningData.privacy==Privacy.PUBLIC){
-            racingRadio.isChecked=false
-            racingRadio.isEnabled=false
-            publicRadio.isChecked=true
+        speed_tv.text = String.format("%.3f", runningData.speed.average())
+        if (runningData.privacy == Privacy.PUBLIC) {
+            racingRadio.isChecked = false
+            racingRadio.isEnabled = false
+            publicRadio.isChecked = true
         }
         setChart()
     }
@@ -116,7 +116,7 @@ class RunningSaveActivity : AppCompatActivity() {
 
     fun onClick(view: View) {
         when (view.id) {
-            com.korea50k.RunShare.R.id.save_btn -> {
+            R.id.save_btn -> {
                 map.CaptureMapScreen()
 
             }
@@ -125,7 +125,7 @@ class RunningSaveActivity : AppCompatActivity() {
 
     fun save(imgPath: String) {
         //send runningData to server by json
-        runningData.thumbnail = imgPath
+        runningData.mapImage = imgPath
         runningData.mapTitle = mapTitleEdit.text.toString()
         runningData.mapExplanation = mapExplanationEdit.text.toString()
         when (privacyRadioGroup.checkedRadioButtonId) {
@@ -135,16 +135,17 @@ class RunningSaveActivity : AppCompatActivity() {
         }
 
         var json = ConvertJson.RunningDataToJson(runningData)
-        var bm = BitmapFactory.decodeFile(runningData.thumbnail)
+        var bm = BitmapFactory.decodeFile(runningData.mapImage)
         var byteArrayOutputStream = ByteArrayOutputStream()
         bm.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
         var byteArray = byteArrayOutputStream.toByteArray()
         var base64OfBitmap = Base64.encodeToString(byteArray, Base64.DEFAULT)
 
-        Log.wtf("WTF",json)
+        Log.wtf("WTF", json)
         class SaveTask : AsyncTask<Void, Void, String>() {
             override fun onPreExecute() {
                 super.onPreExecute()
+                //로딩화면띄우기
             }
 
             override fun doInBackground(vararg params: Void?): String? {
@@ -152,44 +153,30 @@ class RunningSaveActivity : AppCompatActivity() {
                     runningData(
                         "kjb",
                         runningData.mapTitle,
-                        "racingMap description",
+                        runningData.mapExplanation,
                         json,
                         base64OfBitmap,
-                        "100kcal",
-                        "100km",
-                        "14km/h",
-                        "00:12:11",
-                        0,
-                        0,
-                        1
+                        runningData.distance,
+                        runningData.time,
+                        0, 0, runningData.privacy
                     )
-
-                    //JsonUpload("kjb", "test", 11)
-
-                    val url =
-                        URL("https://runsharetest.s3.ap-northeast-2.amazonaws.com/kjb/ImageTitle.png")
-                    val conn = url.openConnection()
-                    conn.connect()
-                    val bis = BufferedInputStream(conn.getInputStream())
-                    val bm = BitmapFactory.decodeStream(bis)
-                    bis.close()
                 } catch (e: java.lang.Exception) {
-                    Log.d("ssmm11", "이미지 다운로드 실패 " + e.toString())
                 }
                 return null
             }
 
             override fun onPostExecute(result: String?) {
                 super.onPostExecute(result)
+                goToHome()
+                //로딩화면 끄고 인텐트
             }
         }
 
-        var Start: SaveTask = SaveTask()
-        Start.execute()
+        var saveTask = SaveTask()
+        saveTask.execute()
     }
 
     fun goToHome() {
-        //업로드 로딩 하는거 넣어줘야함
         var newIntent = Intent(this, MainActivity::class.java)
         newIntent.flags = FLAG_ACTIVITY_CLEAR_TOP
         newIntent.addFlags(FLAG_ACTIVITY_SINGLE_TOP)
@@ -199,30 +186,26 @@ class RunningSaveActivity : AppCompatActivity() {
     private fun runningData(
         Id: String,
         MapTitle: String,
-        MapDescription: String,
+        MapExplanation: String,
         MapJson: String,
         MapImage: String,
-        Kcal: String,
-        Distance: String,
-        Velocity: String,
+        Distance: Double,
         Time: String,
-        Excute: Int,
+        Execute: Int,
         Likes: Int,
-        Status: Int
+        Privacy: Privacy
     ) {
-        RetrofitClient.retrofitService.s3Upload(
+        RetrofitClient.retrofitService.runningDataUpoload(
             Id,
             MapTitle,
-            MapDescription,
+            MapExplanation,
             MapJson,
             MapImage,
-            Kcal,
             Distance,
-            Velocity,
             Time,
-            Excute,
+            Execute,
             Likes,
-            Status
+            Privacy
         ).enqueue(object :
             retrofit2.Callback<ResponseBody> {
             override fun onResponse(
@@ -231,7 +214,6 @@ class RunningSaveActivity : AppCompatActivity() {
             ) {
                 try {
                     val result: String? = response.body().toString()
-                    goToHome()
                     Toast.makeText(
                         this@RunningSaveActivity,
                         "json 업로드 성공" + result,
@@ -249,35 +231,5 @@ class RunningSaveActivity : AppCompatActivity() {
                 t.printStackTrace()
             }
         })
-    }
-
-    private fun dbDownloadtest(Id: String) {
-        RetrofitClient.retrofitService.dbDownloadtest(Id).enqueue(object :
-            retrofit2.Callback<ResponseBody> {
-            override fun onResponse(
-                call: Call<ResponseBody>,
-                response: retrofit2.Response<ResponseBody>
-            ) {
-                try {
-                    val result: String? = response.body().toString()
-                    Log.d("ssmm11", "DB DOWNLOAD 성공 result = " + response.body())
-
-                    Toast.makeText(
-                        this@RunningSaveActivity,
-                        "DB DOWNLOAD 성공" + result,
-                        Toast.LENGTH_SHORT
-                    ).show()
-                } catch (e: Exception) {
-
-                }
-            }
-
-            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                Toast.makeText(this@RunningSaveActivity, "서버 작업 실패", Toast.LENGTH_SHORT).show()
-                Log.d("ssmm11", t.message);
-                t.printStackTrace()
-            }
-        })
-
     }
 }

@@ -172,7 +172,4 @@ class fragment_feed_map : Fragment() {
         }
     }
 
-
-
-
 }

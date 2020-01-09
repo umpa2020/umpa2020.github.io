@@ -68,7 +68,7 @@ class ManageRunning {
         var runningData = RunningData()
         map.stopTracking(runningData)
 
-        runningData.distance = String.format("%.3f",(map.getDistance(map.latlngs)/1000))
+        runningData.distance = map.getDistance(map.latlngs)
         runningData.time = chronometer.text.toString()
         runningData.privacy=privacy
 

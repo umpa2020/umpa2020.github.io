@@ -8,22 +8,22 @@ class RankMapData() : Serializable {
     //var rank: Int = 0
     @SerializedName("MapTitle")
     @Expose
-    var MapTitle: String = ""
+    var mapTitle: String = ""
 
     @SerializedName("Excute")
     @Expose
-    var Excute: String = "0"
+    var execute: String = "0"
 
     @SerializedName("Likes")
     @Expose
-    var Likes: String = "0"
+    var likes: String = "0"
 
     @SerializedName("MapImage")
     @Expose
-    var MapImage: String = ""
+    var mapImage: String = ""
 
     @SerializedName("Id")
     @Expose
-    var Id: String = ""
+    var id: String = ""
 
 }
