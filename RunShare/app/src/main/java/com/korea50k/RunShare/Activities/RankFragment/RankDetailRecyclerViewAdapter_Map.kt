@@ -52,7 +52,8 @@ class RankDetailRecyclerViewAdapter_Map(val context: Context, val rankDetaildata
                 mapRank?.setBackgroundResource(R.drawable.ic_4)
             }
 
-            //itemView.setOnClickListener { itemClick(rankmapdata) }
+            //TODO 리사이클러뷰 클릭시 상대방 프로필로 넘어가게
+            //itemView.setOnClickListener { itemClick(rankDetaildata) }
         }
     }
 }

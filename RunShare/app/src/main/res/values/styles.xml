@@ -20,4 +20,9 @@
         <item name="android:background">@color/black_overlay</item>
     </style>
 
+    <style name="tab_text" parent="@android:style/TextAppearance.Widget.TabWidget">
+        <item name="android:fontFamily">@font/godoroundedl</item>
+        <item name="android:textSize">25dp</item>
+    </style>
+
 </resources>

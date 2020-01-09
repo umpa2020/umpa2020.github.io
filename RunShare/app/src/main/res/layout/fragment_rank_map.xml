@@ -28,7 +28,7 @@
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:text="MAP"
-            android:textSize="15dp"
+            android:textSize="18dp"
             android:fontFamily="@font/godob"/>
 
         <TextView
@@ -36,7 +36,7 @@
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:text="실행"
-            android:textSize="15dp"
+            android:textSize="18dp"
             android:fontFamily="@font/godob"/>
 
         <TextView
@@ -44,12 +44,14 @@
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:text="좋아요"
-            android:textSize="15dp"
+            android:textSize="18dp"
             android:fontFamily="@font/godob"/>
 
     </LinearLayout>
 
     <TextView
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:layout_below="@+id/textlinearlayout"
         android:id="@+id/gubunsun"
         android:layout_width="match_parent"

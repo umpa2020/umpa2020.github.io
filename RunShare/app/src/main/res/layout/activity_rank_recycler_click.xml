@@ -3,49 +3,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:src="@drawable/maptest"
-        android:id="@+id/rank_root_preview"/>
-
-    <LinearLayout
-        android:id="@+id/mapnamelinearlayout"
-        android:layout_below="@+id/rank_root_preview"
+        android:id="@+id/RelativeLayout"
+        android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="5dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/mapName_TextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="map name"
-                android:textSize="20dp"
-                android:fontFamily="@font/godob"/>
+        android:layout_marginRight="10dp">
 
-            <TextView android:id="@+id/ID_TextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="player"
-                android:textSize="15dp"
-                android:fontFamily="@font/godob"/>
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:src="@drawable/maptest"
+            android:scaleType="fitXY"
+            android:id="@+id/rank_root_preview"/>
 
         <Button
             android:layout_width="160dp"
@@ -59,44 +30,73 @@
             android:onClick="onClick"
             android:paddingLeft="20dp"
             android:gravity="center_vertical|left"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="5dp"
             />
+
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/mapnamehorizontallayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@+id/RelativeLayout"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="5dp">
+
+        <TextView
+            android:id="@+id/mapName_TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="map name"
+            android:textSize="20dp"
+            android:fontFamily="@font/godob"/>
+
+        <TextView android:id="@+id/ID_TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="player"
+            android:textSize="15dp"
+            android:fontFamily="@font/godob"/>
 
     </LinearLayout>
 
+
     <TextView
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:id="@+id/gubun1"
-        android:layout_below="@+id/mapnamelinearlayout"
+        android:layout_below="@+id/mapnamehorizontallayout"
         android:layout_marginTop="5dp"
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:background="@color/rankBackgroudGray"/>
 
-    <LinearLayout
-        android:layout_below="@+id/gubun1"
-        android:id="@+id/toplayerlayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="top player"
-            android:textSize="30dp"
-            android:fontFamily="@font/godoroundedl"
-            />
-
-        <Button
-            android:layout_marginLeft="10dp"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:background="@drawable/ic_down_button"
-            android:id="@+id/rank_topplayer_optionButton"/>
-    </LinearLayout>
 
     <TextView
-        android:layout_below="@+id/toplayerlayout"
+        android:gravity="center"
+        android:id="@+id/topplayertextview"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_below="@+id/gubun1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="top player"
+        android:textSize="30dp"
+        android:fontFamily="@font/godoroundedl"
+        />
+
+    <TextView
+        android:layout_below="@+id/topplayertextview"
         android:id="@+id/gubun2"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:layout_marginTop="3dp"
         android:layout_width="match_parent"
         android:layout_height="2dp"
@@ -105,7 +105,7 @@
     <LinearLayout
         android:id="@+id/infolayout"
         android:layout_below="@+id/gubun2"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="20dp"
@@ -128,16 +128,17 @@
         <TextView
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:text="주행시간"
+            android:text="랩타임"
             android:textSize="18dp"
             android:fontFamily="@font/godob"/>
 
         <TextView
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:text="맵 정확도"
+            android:text=""
             android:textSize="18dp"
             android:fontFamily="@font/godob"/>
+
 
     </LinearLayout>
 
@@ -148,7 +149,7 @@
         android:id="@+id/rank_detailRecyclerView">
     </androidx.recyclerview.widget.RecyclerView>
 
-
+<!--
     <LinearLayout
         android:layout_marginTop="10dp"
         android:padding="10dp"
@@ -179,5 +180,6 @@
         </RadioGroup>
 
     </LinearLayout>
+    -->
 
 </RelativeLayout>

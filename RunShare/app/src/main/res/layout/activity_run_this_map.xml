@@ -7,43 +7,7 @@
     android:orientation="vertical"
     tools:context=".Activities.RankFragment.RunThisMapActivity">
 
-    <LinearLayout
-        android:id="@+id/linearlayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_alignParentTop="true"
-        android:gravity="center">
-
-        <TextView
-            android:id="@+id/RunMap_Mapname_TextView"
-            android:layout_marginTop="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Map name"
-            android:fontFamily="@font/godob"
-            android:textSize="25dp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="player"
-            android:gravity="center"
-            android:fontFamily="@font/godoroundedl"
-            android:textSize="20dp"
-            android:layout_below="@+id/RunMap_Mapname_TextView"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="3dp"
-            android:paddingBottom="3dp"
-            android:layout_marginTop="7dp"
-            android:background="@drawable/rounded_gray_box"
-            android:id="@+id/RunMap_playerName_TextView"/>
-    </LinearLayout>
-
-
     <ScrollView
-        android:layout_below="@+id/linearlayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -52,14 +16,53 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <LinearLayout
+                android:id="@+id/linearlayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_alignParentTop="true"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/RunMap_Mapname_TextView"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Map name"
+                    android:fontFamily="@font/godob"
+                    android:textSize="25dp"/>
+
+                <TextView
+                    android:layout_marginBottom="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="player"
+                    android:gravity="center"
+                    android:fontFamily="@font/godoroundedl"
+                    android:textSize="20dp"
+                    android:layout_below="@+id/RunMap_Mapname_TextView"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="3dp"
+                    android:paddingBottom="3dp"
+                    android:layout_marginTop="7dp"
+                    android:background="@drawable/rounded_gray_box"
+                    android:id="@+id/RunMap_playerName_TextView"/>
+            </LinearLayout>
+
             <ImageView
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_below="@+id/linearlayout"
                 android:id="@+id/RumMap_mappreview_Image"
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
-                android:src="@drawable/maptest"
-                android:scaleType="centerCrop" />
+                android:scaleType="fitXY"
+                android:src="@drawable/maptest"/>
 
             <LinearLayout
+                android:layout_marginTop="10dp"
                 android:layout_below="@+id/RumMap_mappreview_Image"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -67,8 +70,10 @@
                 android:id="@+id/mapdetaillayout">
 
                 <TextView
+                    android:layout_marginRight="20dp"
+                    android:layout_marginLeft="20dp"
                     android:layout_width="match_parent"
-                    android:layout_height="3dp"
+                    android:layout_height="2dp"
                     android:background="@color/rankBackgroudGray"/>
                 <TextView
                     android:layout_margin="3dp"
@@ -80,14 +85,18 @@
                     android:textSize="15dp"/>
 
                 <TextView
+                    android:layout_marginRight="20dp"
+                    android:layout_marginLeft="20dp"
                     android:layout_width="match_parent"
-                    android:layout_height="3dp"
+                    android:layout_height="2dp"
                     android:background="@color/rankBackgroudGray"/>
 
                 <TextView
+                    android:layout_marginRight="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
-                    android:layout_margin="5dp"
                     android:background="@drawable/mapdetail_bg"
                     android:scrollbars="vertical" />
 
@@ -103,8 +112,10 @@
                 android:id="@+id/mapAnalysislayout">
 
                 <TextView
+                    android:layout_marginRight="20dp"
+                    android:layout_marginLeft="20dp"
                     android:layout_width="match_parent"
-                    android:layout_height="3dp"
+                    android:layout_height="2dp"
                     android:background="@color/rankBackgroudGray"/>
                 <TextView
                     android:layout_margin="3dp"
@@ -115,11 +126,16 @@
                     android:fontFamily="@font/godob"
                     android:textSize="15dp"/>
                 <TextView
+                    android:layout_marginRight="20dp"
+                    android:layout_marginLeft="20dp"
                     android:layout_width="match_parent"
-                    android:layout_height="3dp"
+                    android:layout_height="2dp"
                     android:background="@color/rankBackgroudGray"/>
 
                 <LinearLayout
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
                     android:layout_below="@+id/mapAnalysislayout"
                     android:id="@+id/horizonlayout"
                     android:layout_width="match_parent"
@@ -128,11 +144,8 @@
                     android:gravity="center">
 
                     <LinearLayout
-                        android:layout_marginTop="10dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:background="@drawable/rounded_gray_box"
-                        android:layout_width="150dp"
+                        android:background="@drawable/option_bg"
+                        android:layout_width="100dp"
                         android:layout_height="100dp"
                         android:orientation="vertical"
                         android:id="@+id/RumMap_distance_Layout"
@@ -143,7 +156,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Distance"
-                            android:fontFamily="@font/godob"/>
+                            android:fontFamily="@font/godob"
+                            android:textColor="@color/white"/>
 
                         <TextView
                             android:layout_marginTop="10dp"
@@ -153,19 +167,17 @@
                             android:layout_height="wrap_content"
                             android:text="0.0"
                             android:textSize="24dp"
-                            android:fontFamily="@font/godob" />
+                            android:fontFamily="@font/godob"
+                            android:textColor="@color/white" />
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_marginTop="10dp"
-                        android:layout_marginRight="10dp"
                         android:layout_marginLeft="10dp"
-                        android:background="@drawable/rounded_gray_box"
-                        android:layout_width="150dp"
+                        android:background="@drawable/option_bg"
+                        android:layout_width="100dp"
                         android:layout_height="100dp"
                         android:orientation="vertical"
                         android:layout_below="@+id/RumMap_mappreview_Image"
-                        android:layout_alignParentRight="true"
                         android:gravity="center"
                         android:id="@+id/RumMap_time_layout">
 
@@ -174,7 +186,8 @@
                             android:layout_height="wrap_content"
                             android:text="Time"
                             android:gravity="center"
-                            android:fontFamily="@font/godob"/>
+                            android:fontFamily="@font/godob"
+                            android:textColor="@color/white"/>
 
                         <TextView
                             android:id="@+id/RumMap_time_tv"
@@ -184,78 +197,37 @@
                             android:layout_height="wrap_content"
                             android:text="0.0"
                             android:textSize="24dp"
-                            android:fontFamily="@font/godob" />
+                            android:fontFamily="@font/godob"
+                            android:textColor="@color/white" />
                     </LinearLayout>
 
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:layout_below="@+id/horizonlayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center">
-
                     <LinearLayout
-                        android:layout_marginTop="10dp"
                         android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:background="@drawable/rounded_gray_box"
-                        android:layout_width="150dp"
+                        android:background="@drawable/option_bg"
+                        android:layout_width="100dp"
                         android:layout_height="100dp"
                         android:orientation="vertical"
-                        android:layout_below="@+id/RumMap_mappreview_Image"
-                        android:id="@+id/RumMap_speed_Layout"
-                        android:gravity="center">
+                        android:gravity="center"
+                        android:id="@+id/RumMap_speed_layout">
 
                         <TextView
-                            android:gravity="center"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Speed"
-                            android:fontFamily="@font/godob"/>
+                            android:gravity="center"
+                            android:fontFamily="@font/godob"
+                            android:textColor="@color/white"/>
 
                         <TextView
-                            android:layout_marginTop="10dp"
-                            android:gravity="center"
                             android:id="@+id/RumMap_speed_tv"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="0.0"
-                            android:textSize="24dp"
-                            android:fontFamily="@font/godob" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_marginTop="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginLeft="10dp"
-                        android:background="@drawable/rounded_gray_box"
-                        android:layout_width="150dp"
-                        android:layout_height="100dp"
-                        android:orientation="vertical"
-                        android:layout_below="@+id/RumMap_mappreview_Image"
-                        android:layout_alignParentRight="true"
-                        android:gravity="center"
-                        android:id="@+id/RumMap_cal_layout">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Calorie"
-                            android:gravity="center"
-                            android:fontFamily="@font/godob"/>
-
-                        <TextView
-                            android:id="@+id/RumMap_cal_tv"
                             android:layout_marginTop="10dp"
                             android:gravity="center"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="0.0"
                             android:textSize="24dp"
-                            android:fontFamily="@font/godob" />
+                            android:fontFamily="@font/godob"
+                            android:textColor="@color/white" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -275,6 +247,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
                     android:layout_marginBottom="50dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginLeft="20dp"
                     >
                 </com.github.mikephil.charting.charts.LineChart>
 
@@ -284,21 +258,38 @@
     </ScrollView>
 
 
-    <Button
-        android:layout_margin="10dp"
-        android:layout_alignParentBottom="true"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
         android:background="@drawable/ic_rank_more_button"
-        android:drawableLeft="@drawable/ic_play_pressed"
-        android:text="   이 맵 달리기"
-        android:textSize="18dp"
-        android:fontFamily="@font/godob"
-        android:textColor="@color/darkRed"
-        android:onClick="onClick"
-        android:paddingLeft="150dp"
-        android:gravity="center_vertical|left"
-        />
+        android:layout_margin="10dp">
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <Button
+            android:background="#00000000"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_play_pressed"
+            android:text="   RACE"
+            android:textSize="18dp"
+            android:fontFamily="@font/godob"
+            android:textColor="@color/darkRed"
+            android:onClick="onClick"
+            android:gravity="center_vertical|left"
+            />
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+
 
 
 

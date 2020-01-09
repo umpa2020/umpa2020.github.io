@@ -7,7 +7,7 @@ import com.korea50k.RunShare.Activities.FeedFragment.fragment_feed_map
 import com.korea50k.RunShare.Activities.FeedFragment.fragment_feed_users
 
 class FeedPagerAdapter(fm: FragmentManager, private val mPageCount: Int) :
-    FragmentStatePagerAdapter(fm) { //TODO: change Deprecated fun
+    FragmentStatePagerAdapter(fm,BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) { //TODO: Deprecated 바꿨음 / 옵션 추가
     override fun getItem(position: Int): Fragment {
         return  when (position) { //position에 따른 fragment 부르기
             0 -> {

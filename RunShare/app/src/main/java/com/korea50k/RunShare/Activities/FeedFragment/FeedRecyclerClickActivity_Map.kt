@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.activity_feed_map_comment.*
 import java.io.BufferedInputStream
 import java.net.URL
 
-class FeedRecyclerClickActivity : AppCompatActivity() {
+class FeedRecyclerClickActivity_Map : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
