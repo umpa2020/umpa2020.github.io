@@ -18,7 +18,11 @@ class RacingFinishActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_racing_finish)
-
+        if(intent.getBooleanExtra("Result",false)){
+            resultRankTextView.text="등수"
+        }else{
+            resultRankTextView.text="실패"
+        }
         racerData=intent.getSerializableExtra("Racer Data") as RunningData
         makerData=intent.getSerializableExtra("Maker Data") as RunningData
         racerLapTimeTextView.text=racerData.time

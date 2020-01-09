@@ -33,7 +33,7 @@ class RacingActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpen
         init()
         racingControlButton.setOnLongClickListener {
             if(manageRacing.racingMap.userState==UserState.RACING) {
-                var runningData = manageRacing.stopRunning()
+                var runningData = manageRacing.stopRacing(false)
             }
             true
         }
@@ -58,16 +58,17 @@ class RacingActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpen
                     }
                     UserState.READYTORACING->{
                         manageRacing.startRacing()
-                        notificationButton.visibility=View.GONE
+                        racingNotificationButton.visibility=View.GONE
                         racingControlButton.text="  Stop"
                         racingControlButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_stop_icon_pressed,0,0,0)
                     }
                     UserState.RACING->{
                         stop()
                     }
-
                 }
-
+            }
+            R.id.racingNotificationButton->{
+                racingNotificationLayout.visibility=View.GONE
             }
         }
     }
@@ -75,7 +76,10 @@ class RacingActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpen
     fun stop() {    //타이머 멈추는거 만들어야함
         Toast.makeText(this, "종료를 원하시면, 길게 눌러주세요", Toast.LENGTH_LONG).show()
     }
-
+    fun noticeMessage(text:String){
+        racingNotificationButton.visibility=View.VISIBLE
+        racingNotificationButton.text=text
+    }
     override fun onScrollStarted() {
         Log.d(TAG, "onScrollStarted()")
     }
