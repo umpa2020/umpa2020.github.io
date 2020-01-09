@@ -48,14 +48,6 @@ class BasicMap : OnMapReadyCallback {
         )
     }
 
-    fun startTracking() {
-
-    }
-
-    fun stopTracking() {
-
-    }
-
     fun pauseTracking() {
         print_log("pause")
         fusedLocationClient.removeLocationUpdates(locationCallback)

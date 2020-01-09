@@ -102,9 +102,9 @@ class fragment_rank_map : Fragment() {
 
                     //TODO Intent로 새로운 xml 열기
                     val intent = Intent(context, RankRecyclerClickActivity::class.java)
-                    intent.putExtra("MapTitle", rankmapdata.MapTitle)
-                    intent.putExtra("MapImage", rankmapdata.MapImage)
-                    intent.putExtra("Id", rankmapdata.Id)
+                    intent.putExtra("MapTitle", rankmapdata.mapTitle)
+                    intent.putExtra("MapImage", rankmapdata.mapImage)
+                    intent.putExtra("Id", rankmapdata.id)
                     startActivity(intent)
                 }
 
