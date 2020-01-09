@@ -70,7 +70,6 @@ class ManageRunning {
 
         runningData.distance = String.format("%.3f",(map.getDistance(map.latlngs)/1000))
         runningData.time = chronometer.text.toString()
-        runningData.cal = "0" //TODO : Calc cal
         runningData.privacy=privacy
 
         var newIntent = Intent((context as Activity), RunningSaveActivity::class.java)
