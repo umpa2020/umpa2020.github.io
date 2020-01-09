@@ -8,20 +8,25 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import com.korea50k.RunShare.R
-import kotlinx.android.synthetic.main.activity_rank_recycler_click.*
+import kotlinx.android.synthetic.main.activity_feed_map_comment.*
 import java.io.BufferedInputStream
 import java.net.URL
 
-class FeedRecyclerClickActivity : AppCompatActivity() {
+class FeedRecyclerClickActivity_Map : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_feed_map_comment)
 
         val intent =  getIntent()
+        val Id = intent.extras?.getString("Id")
         val MapTitle = intent.extras?.getString("MapTitle")
+        val Heart = intent.extras?.getString("Heart")
+        val Likes = intent.extras?.getString("Likes")
         val MapImage = intent.extras?.getString("MapImage")
-        mapName_TextView.setText(MapTitle) /////////////// 이부분 변수 부분 바꾸어줘야 함
+
+        //mapName_TextView.setText(MapTitle) /////////////// 이부분 변수 부분 바꾸어줘야 함
+        //mapName_TextView.setText(MapImage)
 
         /*class SetImageTask : AsyncTask<Void, Void, String>(){
             override fun onPreExecute() {
