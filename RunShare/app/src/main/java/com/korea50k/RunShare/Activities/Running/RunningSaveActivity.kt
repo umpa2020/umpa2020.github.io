@@ -181,7 +181,6 @@ class RunningSaveActivity : AppCompatActivity() {
 
             override fun onPostExecute(result: String?) {
                 super.onPostExecute(result)
-                //imageTest.setImageBitmap(bm)
             }
         }
 
