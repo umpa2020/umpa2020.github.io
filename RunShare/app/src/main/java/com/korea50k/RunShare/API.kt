@@ -10,13 +10,18 @@ import retrofit2.http.POST
 
 // 이거는 바탕화면에 옮겨놓은거
 interface API {
-    @POST("signUp.php")
     @FormUrlEncoded
-    fun signUp(@Field("Id") Id: String, @Field("Password") Password: String, @Field("Name") Name: String): retrofit2.Call<ResponseBody>
+    @POST ("idCheck.php") //아이디 중복 검사
+    fun get_IdCheck(@Field("Id") Id: String): retrofit2.Call<ResponseBody>
 
-    @POST("logIn.php")
+    @POST ("signUp.php") // 회원가입
     @FormUrlEncoded
-    fun logIn(@Field("Id") Id: String, @Field("Password") Password: String): retrofit2.Call<ResponseBody>
+    fun signUp(@Field("Id") Id : String, @Field("Password") Password : String,
+               @Field("Nickname") Nickname : String, @Field("Age") Age : String, @Field("Gender") Gender : String) : retrofit2.Call<ResponseBody>
+
+    @POST("logIn.php") // 로그인
+    @FormUrlEncoded
+    fun login(@Field("Id") Id : String, @Field("Password") Password: String) : retrofit2.Call<ResponseBody>
 
     @POST("JsonUpload.php")
     @FormUrlEncoded

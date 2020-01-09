@@ -119,7 +119,7 @@ class BasicMap : OnMapReadyCallback {
                         var speed = location.speed
                         cur_loc = LatLng(lat, lng)
                         print_log("Basic Map Log")
-                        currentMarker.remove()
+                    if(currentMarker==null)currentMarker.remove()
                         val markerOptions = MarkerOptions()
                         markerOptions.position(cur_loc)
                         markerOptions.title("Me")
