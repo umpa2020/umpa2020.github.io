@@ -109,16 +109,16 @@
     <com.google.android.material.tabs.TabLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/user_tab_layout">
+        android:id="@+id/user_tabs">
 
     </com.google.android.material.tabs.TabLayout>
+   <androidx.viewpager.widget.ViewPager
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:id="@+id/user_viewpager">
 
-    <androidx.viewpager.widget.ViewPager
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:id="@+id/user_pager">
+   </androidx.viewpager.widget.ViewPager>
 
-    </androidx.viewpager.widget.ViewPager>
 
 
 
