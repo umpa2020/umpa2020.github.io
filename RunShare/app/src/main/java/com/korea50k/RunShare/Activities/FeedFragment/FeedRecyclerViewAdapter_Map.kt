@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.korea50k.RunShare.R
 import com.korea50k.RunShare.dataClass.FeedMapData
@@ -18,10 +19,16 @@ import java.io.BufferedInputStream
 import java.net.URL
 
 
-class FeedRecyclerViewAdapter_Map(val context: Context, val feeddata: ArrayList<FeedMapData>, val itemClick: (FeedMapData) -> Unit) :
+class FeedRecyclerViewAdapter_Map(val context: Context, val feeddata: ArrayList<FeedMapData>/*, val itemClick: (FeedMapData) -> Unit*/) :
     RecyclerView.Adapter<FeedRecyclerViewAdapter_Map.Holder>() {
 
     var i=0
+    interface ItemClick
+    {
+        fun onClick(view: View, position: Int)
+    }
+    var itemClick: ItemClick? = null
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val view = LayoutInflater.from(context).inflate(R.layout.fragment_feed_map_nocomment, parent, false)
@@ -32,7 +39,14 @@ class FeedRecyclerViewAdapter_Map(val context: Context, val feeddata: ArrayList<
     }
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
+        if(itemClick != null)
+        {
+            holder?.itemView?.setOnClickListener { v ->
+                itemClick?.onClick(v, position)
+            }
+        }
         holder.bind(feeddata[position], context)
+
     }
 
     inner class Holder(itemView: View?/*, itemClick: (FeedMapData) -> Unit*/) : RecyclerView.ViewHolder(itemView!!) {
@@ -47,6 +61,32 @@ class FeedRecyclerViewAdapter_Map(val context: Context, val feeddata: ArrayList<
         fun bind (feedmapdata : FeedMapData, context: Context) {
             //feedImage?.setImageURI() = feedmapdata.MapTitle 나중에 이미지
             feedUsername?.text = feedmapdata.Id
+
+            feedHeart?.setOnClickListener(View.OnClickListener {
+                var before = feedHeartcount?.text.toString().toInt()
+
+                if (feedHeart.tag.toString().equals("0")) {
+                    before++
+                    feedHeartcount?.text = before.toString()
+                    feedHeart.setImageResource(R.drawable.ic_favorite)
+                    feedHeart.setColorFilter(
+                        ContextCompat.getColor(context, R.color.colorAccent),
+                        android.graphics.PorterDuff.Mode.SRC_IN)
+                    feedHeart.tag = "1"
+                }
+
+                else {
+                    before--
+                    feedHeartcount?.text = before.toString()
+                    feedHeart.setImageResource(R.drawable.ic_favorite_border)
+                    feedHeart.setColorFilter(
+                        ContextCompat.getColor(context, R.color.black),
+                        android.graphics.PorterDuff.Mode.SRC_IN)
+                    feedHeart.tag = "0"
+                }
+
+
+            })
             //feedMapname?.setImageURI() = feedmapdata.MapTitle
             feedMapcomment?.text = feedmapdata.MapTitle
             //feedHeart?.setImageURI() = feedmapdata.MapTitle
