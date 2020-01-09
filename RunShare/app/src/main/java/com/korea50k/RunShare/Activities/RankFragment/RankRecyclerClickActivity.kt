@@ -11,6 +11,7 @@ import android.view.View
 import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.korea50k.RunShare.Activities.MainFragment.MainActivity
+import com.korea50k.RunShare.Activities.Racing.RacingActivity
 import com.korea50k.RunShare.R
 import com.korea50k.RunShare.RetrofitClient
 import com.korea50k.RunShare.Util.ConvertJson
@@ -154,5 +155,9 @@ class RankRecyclerClickActivity : AppCompatActivity() {
             }
 
         }
+    }
+    fun onClick(v: View){
+        var newIntent = Intent(this, RunThisMapActivity::class.java)
+        startActivity(newIntent)
     }
 }
