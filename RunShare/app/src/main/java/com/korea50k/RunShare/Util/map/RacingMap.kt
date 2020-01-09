@@ -249,7 +249,7 @@ class RacingMap : OnMapReadyCallback {
                         when (userState) {
                             UserState.BEFORERACING -> {
                                 (context as Activity).runOnUiThread(Runnable {
-                                    (context as Activity).notificationButton.text =("시작 포인트로 이동하십시오.\n시작포인트까지 남은거리 : "
+                                    (context as Activity).racingNotificationButton.text =("시작 포인트로 이동하십시오.\n시작포인트까지 남은거리 : "
                                     + (SphericalUtil.computeDistanceBetween(cur_loc, load_route[0])).roundToLong().toString() + "m")
                                 })
                                 if (SphericalUtil.computeDistanceBetween(
@@ -259,7 +259,7 @@ class RacingMap : OnMapReadyCallback {
                                 ) {
                                     userState=UserState.READYTORACING
                                     (context as Activity).runOnUiThread(Runnable {
-                                        (context as Activity).notificationButton.text = "시작을 원하시면 START를 누르세요"
+                                        (context as Activity).racingNotificationButton.text = "시작을 원하시면 START를 누르세요"
                                     })
                                 }
                             }
@@ -275,7 +275,7 @@ class RacingMap : OnMapReadyCallback {
                                         cur_loc,
                                         load_route[load_route.size - 1]
                                     ) < 10){
-                                    manageRacing.stopRunning()
+                                    manageRacing.stopRacing(true)
                                 } else {
                                     speeds.add(speed.toDouble())
                                     (context as Activity).runOnUiThread(Runnable {
@@ -325,13 +325,10 @@ class RacingMap : OnMapReadyCallback {
                                     print_log("위도 : " + lat.toString() + "경도 : " + lng.toString())
                                     countDeviation = 0
                                 } else {
-                                    countDeviation++
-                                    print_log("경로이탈")
-                                    Toast.makeText(
-                                        context,
-                                        "경로를 이탈하셨습니다" + countDeviation,
-                                        Toast.LENGTH_SHORT
-                                    ).show()
+                                    manageRacing.deviation(++countDeviation)
+
+
+
                                     if (countDeviation > 10) {
                                         //finish
                                     }

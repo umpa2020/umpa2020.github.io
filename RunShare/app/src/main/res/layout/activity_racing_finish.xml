@@ -8,14 +8,25 @@
 
     <TextView
         android:id="@+id/resultTitleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:text="경기 결과"
+        android:textColor="#000000"
+        android:textSize="30dp"
+        android:textStyle="bold" />
+    <TextView
+        android:id="@+id/resultRankTextView"
+        android:layout_toRightOf="@+id/resultTitleTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="경기 결과"
+        android:text="1등"
         android:textColor="#FF0000"
         android:textSize="30dp"
+        android:layout_marginLeft="10dp"
         android:textStyle="bold" />
-
     <LinearLayout
         android:id="@+id/raceResultLayout"
         android:layout_width="match_parent"

@@ -141,7 +141,7 @@ class RunningSaveActivity : AppCompatActivity() {
         var byteArray = byteArrayOutputStream.toByteArray()
         var base64OfBitmap = Base64.encodeToString(byteArray, Base64.DEFAULT)
 
-
+        Log.wtf("WTF",json)
         class SaveTask : AsyncTask<Void, Void, String>() {
             override fun onPreExecute() {
                 super.onPreExecute()
