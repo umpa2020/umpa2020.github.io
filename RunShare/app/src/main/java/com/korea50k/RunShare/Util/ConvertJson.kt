@@ -3,6 +3,7 @@ package com.korea50k.RunShare.Util
 import android.util.Log
 import com.google.gson.Gson
 import com.korea50k.RunShare.dataClass.FeedMapData
+import com.korea50k.RunShare.dataClass.RankDetailMapData
 import com.korea50k.RunShare.dataClass.RankMapData
 import com.korea50k.RunShare.dataClass.RunningData
 import org.json.JSONObject
@@ -27,30 +28,17 @@ class ConvertJson{
         }
 
         fun JsonToRankMapDatas(json: String):ArrayList<RankMapData>{
-            // var gson = Gson()
             var rankMapDatas= ArrayList<RankMapData>()
 
             val jObject = JSONObject(json)
             val jArray = jObject.getJSONArray("JsonData")
-            var gson=Gson()
-            var test = RankMapData()
-            test.Excute="3"
-            test.Likes="2"
-            test.MapTitle="123"
-            //test.rank=1
-            var tests = ArrayList<RankMapData>()
-            tests.add(test)
-            tests.add(test)
-            tests.add(test)
-            Log.d("gsontest", gson.toJson(tests))
-            Log.d("asdf", jArray.toString())
 
             for (i in 0 until jArray.length()) {
                 //rankMapDatas.add(Gson().fromJson(gson.toJson(jArray.get(i)), RankMapData::class.java))
                 var rankMapData = RankMapData()
-                rankMapData.Excute= jArray.getJSONObject(i).get("Excute") as String
+                rankMapData.Excute= jArray.getJSONObject(i).get("Execute") as String
                 rankMapData.Likes= jArray.getJSONObject(i).get("Likes") as String
-//                rankMapData.rank= jArray.getJSONObject(i).get("rank") as Int
+                rankMapData.Id= jArray.getJSONObject(i).get("Id") as String
                 rankMapData.MapTitle= jArray.getJSONObject(i).get("MapTitle") as String
                 rankMapData.MapImage= jArray.getJSONObject(i).get("MapImage") as String
 
@@ -60,13 +48,32 @@ class ConvertJson{
             return rankMapDatas
         }
 
+        fun JsonToRankDetailMapDatas(json: String):ArrayList<RankDetailMapData>{
+            var rankDetailMapDatas= ArrayList<RankDetailMapData>()
+
+            val jObject = JSONObject(json)
+            val jArray = jObject.getJSONArray("JsonData")
+
+            for (i in 0 until jArray.length()) {
+                var rankDetailMapData = RankDetailMapData()
+                rankDetailMapData.ChallengerId= jArray.getJSONObject(i).get("ChallengerId") as String
+                rankDetailMapData.ChallengerTime= jArray.getJSONObject(i).get("ChallengerTime") as String
+                rankDetailMapData.Id= jArray.getJSONObject(i).get("Id") as String
+                // 맵 게시자의
+                rankDetailMapData.MapTitle= jArray.getJSONObject(i).get("MapTitle") as String
+                rankDetailMapData.TempData= jArray.getJSONObject(i).get("TempData") as String
+
+                rankDetailMapDatas.add(rankDetailMapData)
+
+            }
+            return rankDetailMapDatas
+        }
+
         fun JsonToFeedMapDatas(json: String):ArrayList<FeedMapData>{
             var feedMapDatas= ArrayList<FeedMapData>()
 
             val jObject = JSONObject(json)
             val jArray = jObject.getJSONArray("JsonData")
-
-            Log.d("asdf", jArray.toString())
 
             for (i in 0 until jArray.length()) {
                 var feedMapData = FeedMapData()

@@ -14,12 +14,12 @@ import kotlinx.android.synthetic.main.activity_running.running_distance_tv
 import kotlinx.android.synthetic.main.activity_running.timer_tv
 
 class ManageRacing {
-    lateinit var racingMap: RacingMap
-    lateinit var context: Context
+     var racingMap: RacingMap
+     var context: Context
     lateinit var chronometer: Chronometer
     lateinit var distanceThread: Thread
-    lateinit var activity: RacingActivity
-    lateinit var makerData: RunningData
+     var activity: RacingActivity
+     var makerData: RunningData
     var timeWhenStopped: Long = 0
     constructor(
         smf: SupportMapFragment,
@@ -77,19 +77,30 @@ class ManageRacing {
         countDownThread.start()
     }
 
-    fun stopRunning() {
+    fun stopRacing(result:Boolean) {
         racingMap.stopTracking()
 
         timeWhenStopped = chronometer.base - SystemClock.elapsedRealtime()
         chronometer.stop()
         var runningData = RunningData()
-
         runningData.time = chronometer.text.toString()
-        runningData.speed = "0" //TODO : Calc Speed
-        //TODO: 여기서 서버로 경기결과 보내기(기록)
+        if(result){
+            //TODO: 여기서 서버로 경기결과 보내기(기록)
+        }else{
+            //실패하면 안보내도될듯?
+        }
+
         var newIntent = Intent(context, RacingFinishActivity::class.java)
+        newIntent.putExtra("Result",result)
         newIntent.putExtra("Racer Data", runningData)
         newIntent.putExtra("Maker Data", makerData)
         context.startActivity(newIntent)
+    }
+    fun deviation(countDeviation:Int){
+        if (countDeviation<=10) {
+            activity.noticeMessage("경로를 10초이상 이탈하면 경기가 자동 종료됩니다." + countDeviation + "초")
+        }else{
+            stopRacing(false)
+        }
     }
 }

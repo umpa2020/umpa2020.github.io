@@ -32,7 +32,6 @@ class fragment_rank_map : Fragment() {
         // Inflate the layout for this fragment
         val view: View =  inflater!!.inflate(R.layout.fragment_rank_map, container, false)
 
-
         class SaveTask : AsyncTask<Void, Void, String>(){
             override fun onPreExecute() {
                 super.onPreExecute()
@@ -41,17 +40,9 @@ class fragment_rank_map : Fragment() {
             override fun doInBackground(vararg params: Void?): String? {
                 try {
                     rankDownload("kjb")
-                    //TODO:피드에서 이미지 적용해볼 소스코드
 
-                    /* val url =
-                         URL("https://runsharetest.s3.ap-northeast-2.amazonaws.com/kjb/ImageTitle.png")
-                     val conn = url.openConnection()
-                     conn.connect()
-                     val bis = BufferedInputStream(conn.getInputStream())
-                     val bm = BitmapFactory.decodeStream(bis)
-                     bis.close()*/
                 } catch (e : java.lang.Exception) {
-                    Log.d("ssmm11", "이미지 다운로드 실패 " +e.toString())
+                    Log.d("ssmm11", "랭크 다운로드 실패 " +e.toString())
                 }
                 return null
             }
@@ -59,7 +50,6 @@ class fragment_rank_map : Fragment() {
             override fun onPostExecute(result: String?) {
                 super.onPostExecute(result)
                 //TODO:피드에서 이미지 적용해볼 소스코드
-                //imageTest.setImageBitmap(bm)
             }
         }
 
@@ -68,7 +58,6 @@ class fragment_rank_map : Fragment() {
 
         val task = GetData()
         task.execute("http://15.164.50.86/rankDownload.php")
-
 
         return view
     }
@@ -93,6 +82,7 @@ class fragment_rank_map : Fragment() {
         })
     }
 
+
     private inner class GetData : AsyncTask<String, Void, String>() {
         internal var errorString: String? = null
 
@@ -109,12 +99,15 @@ class fragment_rank_map : Fragment() {
                 var rankMapDatas = ConvertJson.JsonToRankMapDatas(mJsonString)
 
                 val mAdapter = RankRecyclerViewAdapter_Map(activity!!, rankMapDatas){ rankmapdata ->
+
                     //TODO Intent로 새로운 xml 열기
                     val intent = Intent(context, RankRecyclerClickActivity::class.java)
                     intent.putExtra("MapTitle", rankmapdata.MapTitle)
                     intent.putExtra("MapImage", rankmapdata.MapImage)
+                    intent.putExtra("Id", rankmapdata.Id)
                     startActivity(intent)
                 }
+
                 view?.rank_recycler_map!!.adapter = mAdapter
                 val lm = LinearLayoutManager(context)
                 view?.rank_recycler_map!!.layoutManager = lm
@@ -164,6 +157,4 @@ class fragment_rank_map : Fragment() {
             }
         }
     }
-
-
 }

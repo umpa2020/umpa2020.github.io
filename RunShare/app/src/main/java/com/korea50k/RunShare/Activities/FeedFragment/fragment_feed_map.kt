@@ -89,14 +89,12 @@ class fragment_feed_map : Fragment() {
             override fun onResponse(call: Call<ResponseBody>, response: retrofit2.Response<ResponseBody>) {
                 try {
                     val result: String? = response.body().toString()
-                    //Toast.makeText(context, "DB 다운로드 성공" + result,Toast.LENGTH_SHORT).show()
                 } catch (e: Exception) {
 
                 }
             }
 
             override fun onFailure( call: Call<ResponseBody>,t: Throwable) {
-                //Toast.makeText(context, "서버 작업 실패", Toast.LENGTH_SHORT).show()
                 Log.d("ssmm11", t.message);
                 t.printStackTrace()
             }
@@ -106,6 +104,10 @@ class fragment_feed_map : Fragment() {
     private inner class GetData : AsyncTask<String, Void, String>() {
         internal var errorString: String? = null
 
+        override fun onPreExecute() {
+            super.onPreExecute()
+        }
+
         override fun onPostExecute(result: String?) {
             super.onPostExecute(result)
 
@@ -114,12 +116,11 @@ class fragment_feed_map : Fragment() {
                 mJsonString = result
                 var feedMapDatas = ConvertJson.JsonToFeedMapDatas(mJsonString)
 
-                val mAdapter = FeedRecyclerViewAdapter_Map(activity!!, feedMapDatas){ feedmapdata ->
-                    //TODO Intent로 새로운 xml 열기
-                  val intent = Intent(context, FeedRecyclerClickActivity::class.java)
-                    intent.putExtra("MapTitle", feedmapdata.MapTitle)
-                    intent.putExtra("MapImage", feedmapdata.MapImage)
-                    startActivity(intent)
+                val mAdapter = FeedRecyclerViewAdapter_Map(activity!!, feedMapDatas)
+                mAdapter.itemClick = object: FeedRecyclerViewAdapter_Map.ItemClick {
+                    override fun onClick(view: View, position: Int) {
+                        Log.d("ssmm11", position.toString()   )
+                    }
                 }
                 view?.feed_recycler_map!!.adapter = mAdapter
                 val lm = LinearLayoutManager(context)
@@ -170,8 +171,5 @@ class fragment_feed_map : Fragment() {
             }
         }
     }
-
-
-
 
 }
