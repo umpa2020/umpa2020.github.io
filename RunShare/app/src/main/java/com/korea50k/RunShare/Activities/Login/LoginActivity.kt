@@ -63,7 +63,9 @@ class LoginActivity : AppCompatActivity() {
 
                             var userData = JSONObject(resultValue)
 
-                            Log.i(WSY,userData.getString("Id") + ", " + userData.getString("Nickname"))
+                            Log.i(WSY,userData.getString("Id") + ", " + userData.getString("Nickname") + userData.getString("Nickname")
+                            + ", " + userData.getString("Age") + ", " + userData.getString("Gender"))
+
                             SharedPreValue.setEMAILData(this@LoginActivity,userData.getString("Id"))
                             SharedPreValue.setPWDData(this@LoginActivity,userData.getString("Password"))
                             SharedPreValue.setNicknameData(this@LoginActivity,userData.getString("Nickname"))

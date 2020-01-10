@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -18,6 +19,7 @@ import com.korea50k.RunShare.Activities.Profile.MyInformationActivity
 import com.korea50k.RunShare.Activities.Profile.SettingActivity
 import com.korea50k.RunShare.Activities.Profile.UserActivity
 import com.korea50k.RunShare.Activities.RankFragment.RankRecyclerClickActivity
+import com.korea50k.RunShare.Util.SharedPreValue
 import com.korea50k.RunShare.Util.TTS
 
 
@@ -34,6 +36,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(com.korea50k.RunShare.R.layout.activity_main)
+        Log.d("WSY","Shared 저장 이메일 : " + SharedPreValue.getEMAILData(this))
+        Log.d("WSY","Shared 저장 비번 : " + SharedPreValue.getPWDData(this))
+        Log.d("WSY","Shared 저장 닉네임 : " + SharedPreValue.getNicknameData(this))
+        Log.d("WSY","Shared 저장 나이 : " + SharedPreValue.getAgeData(this))
+        Log.d("WSY","Shared 저장 성별 : " + SharedPreValue.getGenderData(this))
         checkPermissions()          //모든 권한 확인
         TTS.set(applicationContext)
         val mTabLayout = tabDots

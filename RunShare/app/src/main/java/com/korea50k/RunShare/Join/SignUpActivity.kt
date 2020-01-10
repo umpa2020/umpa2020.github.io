@@ -6,6 +6,7 @@ import android.content.Intent
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.drawable.Drawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
@@ -121,13 +122,6 @@ class SignUpActivity : AppCompatActivity() {
             .check()
     }
 
-    private fun setImage() {
-        var imageView = profileImage
-        var options = BitmapFactory.Options()
-        var originalBm = BitmapFactory.decodeFile(pofileImageFile?.absolutePath, options)
-
-        imageView.setImageBitmap(originalBm)
-    }
 
     private fun init() {
         inputDataField = arrayOf(editEmail, editPassword, editNickname, editAge, editGender)
@@ -237,36 +231,7 @@ class SignUpActivity : AppCompatActivity() {
 
         // 앨범
         if (requestCode == PICK_FROM_ALBUM) {
-//            val photoUri = intentData?.getData()
-//            Log.d(WSY,photoUri.toString())
 //
-//            var cursor: Cursor? = null
-//
-//            try {
-//
-//                /*
-//             *  Uri 스키마를
-//             *  content:/// 에서 file:/// 로  변경한다.
-//             */
-//                val proj = arrayOf(MediaStore.Images.Media.DATA)
-//
-//                assert(photoUri != null)
-//                cursor = contentResolver.query(photoUri!!, proj, null, null, null)
-//
-//                assert(cursor != null)
-//                val column_index = cursor!!.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-//
-//                cursor!!.moveToFirst()
-//
-//                pofileImageFile = File(cursor!!.getString(column_index))
-//                Log.d(WSY,profileImage.toString())
-//            } finally {
-//                if (cursor != null) {
-//                    cursor!!.close()
-//                }
-//            }
-//
-//            setImage()
              if(resultCode == RESULT_OK)
             {
                 try{
@@ -277,22 +242,6 @@ class SignUpActivity : AppCompatActivity() {
                     inputStream!!.close()
                     Log.d(WSY, bitmapImg.toString())
                     profileImage.setImageBitmap(bitmapImg)
-
-//                    var saveFolder = File(this.filesDir, "profile") // 저장 경로
-//                    if (!saveFolder.exists()) {       //폴더 없으면 생성
-//                        saveFolder.mkdir()
-//                    }
-//                    val path = "profile" + saveFolder.list().size + ".bmp"        //파일명 생성하는건데 수정필요
-//                    //비트맵 크기에 맞게 잘라야함
-//                    var myfile = File(saveFolder, path)                //로컬에 파일저장
-//                    var out = FileOutputStream(myfile)
-//
-//                    img.compress(Bitmap.CompressFormat.PNG, 90, out)
-//                   // (context as RunningSaveActivity).save(myfile.path)
-//
-//                    Log.d(WSY,myfile.path)
-//                    (this as RunningSaveActivity).save(myfile.path)
-
 
                 }catch(e : java.lang.Exception)
                 {
@@ -488,9 +437,9 @@ class SignUpActivity : AppCompatActivity() {
             }
             R.id.profileImage -> {
                 tedPermission()
-
             }
             R.id.sign_up_button -> {
+
                 // if(isInputCorrectData[0] && isInputCorrectData[1] && isInputCorrectData[2] )
                 email = editEmail.text.toString()
                 password = editPassword.text.toString()
