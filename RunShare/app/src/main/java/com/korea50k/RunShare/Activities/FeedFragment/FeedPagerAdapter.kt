@@ -3,8 +3,6 @@ package com.korea50k.RunShare.Activities.FeedFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
-import com.korea50k.RunShare.Activities.FeedFragment.fragment_feed_map
-import com.korea50k.RunShare.Activities.FeedFragment.fragment_feed_users
 
 class FeedPagerAdapter(fm: FragmentManager, private val mPageCount: Int) :
     FragmentStatePagerAdapter(fm,BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) { //TODO: Deprecated 바꿨음 / 옵션 추가
@@ -14,7 +12,7 @@ class FeedPagerAdapter(fm: FragmentManager, private val mPageCount: Int) :
                 fragment_feed_map()
             }
             else -> {
-                fragment_feed_users()
+                fragment_feed_community()
             }
         }
     }

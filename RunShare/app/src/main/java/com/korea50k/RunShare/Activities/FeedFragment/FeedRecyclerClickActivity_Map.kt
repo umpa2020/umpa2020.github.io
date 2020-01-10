@@ -1,18 +1,21 @@
 package com.korea50k.RunShare.Activities.FeedFragment
 
-import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.os.AsyncTask
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Context
 import android.os.Bundle
-import android.util.Log
+import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.korea50k.RunShare.R
+import com.korea50k.RunShare.dataClass.FeedMapCommentData
 import kotlinx.android.synthetic.main.activity_feed_map_comment.*
-import java.io.BufferedInputStream
-import java.net.URL
+import kotlinx.android.synthetic.main.comment_feed_item.*
+
 
 class FeedRecyclerClickActivity_Map : AppCompatActivity() {
+
+    var Comment = ArrayList<FeedMapCommentData>()
+    var mAdapter_Map = FeedRecyclerMapComment(this, Comment)
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,37 +28,20 @@ class FeedRecyclerClickActivity_Map : AppCompatActivity() {
         val Likes = intent.extras?.getString("Likes")
         val MapImage = intent.extras?.getString("MapImage")
 
-        //mapName_TextView.setText(MapTitle) /////////////// 이부분 변수 부분 바꾸어줘야 함
-        //mapName_TextView.setText(MapImage)
+        feed_map_recycler_comment!!.adapter = mAdapter_Map
+        val lm = LinearLayoutManager(this)
+        feed_map_recycler_comment!!.layoutManager = lm
+        feed_map_recycler_comment!!.setHasFixedSize(true)
 
-        /*class SetImageTask : AsyncTask<Void, Void, String>(){
-            override fun onPreExecute() {
-                super.onPreExecute()
-            }
-            lateinit var bm: Bitmap
+        feed_map_comment_button.setOnClickListener(View.OnClickListener {
 
-            override fun doInBackground(vararg params: Void?): String? {
-                try {
-                    val url =
-                        URL(MapImage)
-                    val conn = url.openConnection()
-                    conn.connect()
-                    val bis = BufferedInputStream(conn.getInputStream())
-                    bm = BitmapFactory.decodeStream(bis)
-                    bis.close()
-                } catch (e : java.lang.Exception) {
-                    Log.d("ssmm11", "이미지 다운로드 실패 " +e.toString())
-                }
-                return null
-            }
+            feed_map_comment_editmessage.text.toString()
+            Comment.add(FeedMapCommentData())
 
-            override fun onPostExecute(result: String?) {
-                super.onPostExecute(result)
-                //TODO:피드에서 이미지 적용해볼 소스코드
-                rank_root_preview.setImageBitmap(bm)
+            mAdapter_Map.notifyDataSetChanged()
+
+            feed_map_comment_editmessage.setText("")
             }
-        }
-        var Start = SetImageTask()
-        Start.execute()*/
+        )
     }
 }

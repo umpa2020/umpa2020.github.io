@@ -76,7 +76,7 @@ class RankRecyclerClickActivity : AppCompatActivity() {
         var Start = SetImageTask()
         Start.execute()
 
-        Thread(Runnable {
+      /*  Thread(Runnable {
             RetrofitClient.retrofitService.playerRankingAboutMapDownload(MapTitle)
                 .enqueue(object :
                     retrofit2.Callback<ResponseBody> {
@@ -143,7 +143,7 @@ class RankRecyclerClickActivity : AppCompatActivity() {
                         t.printStackTrace()
                     }
                 })
-        }).start()
+        }).start()*/
     }
     private fun rankingMapDownload(MapTitle: String) {
         RetrofitClient.retrofitService.rankingMapDownload(MapTitle).enqueue(object :
