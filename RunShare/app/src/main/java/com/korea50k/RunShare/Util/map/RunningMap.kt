@@ -24,6 +24,7 @@ import com.google.android.gms.maps.model.*
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.korea50k.RunShare.R
 import android.graphics.Canvas
+import android.graphics.Rect
 import com.korea50k.RunShare.Activities.Running.RunningActivity
 import com.korea50k.RunShare.dataClass.RunningData
 import com.korea50k.RunShare.dataClass.UserState
@@ -39,11 +40,15 @@ class RunningMap : OnMapReadyCallback {
     var prev_loc: LatLng = LatLng(0.0, 0.0)          //이전위치
     lateinit var cur_loc: LatLng            //현재위치
     var latlngs: Vector<LatLng> = Vector<LatLng>()   //움직인 점들의 집합 나중에 저장될 점들 집합
+    var routes=ArrayList<Array<LatLng>>()
     var alts = Vector<Double>()
     var speeds = Vector<Double>()
-    var load_route = ArrayList<LatLng>()     //로드할 점들의 집합
-    lateinit var context: Context
-    lateinit var userState: UserState
+    var distance = 0.0
+    var context: Context
+    var userState: UserState
+    var markers=Vector<LatLng>()
+    var markerCount=0
+    lateinit var cpOption:MarkerOptions
     var currentMarker:Marker?=null
     lateinit var racerIcon: BitmapDescriptor
 
@@ -51,7 +56,7 @@ class RunningMap : OnMapReadyCallback {
     constructor(smf: SupportMapFragment, context: Context) {
         this.context = context
         userState = UserState.RUNNING
-        initLocation()
+        init()
         smf.getMapAsync(this)
         print_log("Set UserState Running")
     }
@@ -64,23 +69,58 @@ class RunningMap : OnMapReadyCallback {
             Looper.myLooper()
         )
     }
+    fun init(){
+        val cpMarkerImg = context.getDrawable(R.drawable.checkpoint_marker)
+        var cpCanvas = Canvas()
+        var cpBitmap = Bitmap.createBitmap(
+            cpMarkerImg!!.intrinsicWidth,
+            cpMarkerImg!!.intrinsicHeight,
+            Bitmap.Config.ARGB_8888
+        )
+        cpCanvas.setBitmap(cpBitmap);
+        cpMarkerImg!!.bounds= Rect(
+            0,
+            0,
+            cpMarkerImg!!.getIntrinsicWidth(),
+            cpMarkerImg!!.getIntrinsicHeight()
+        )
+        cpMarkerImg.draw(cpCanvas)
+        val cpIcon = BitmapDescriptorFactory.fromBitmap(cpBitmap);
+        //cp 초기화
+        cpOption = MarkerOptions()
+        cpOption.icon(cpIcon)
 
+        initLocation()
+
+    }
     fun startTracking() {
     }
 
     fun stopTracking(runningData:RunningData) {
         print_log("Stop")
-        var simplipoly = PolyUtil.simplify(latlngs, 10.0) //tolerance 조절해야함
-        var lats: DoubleArray = DoubleArray(simplipoly.size)
-        var lngs: DoubleArray = DoubleArray(simplipoly.size)
-        for (index in simplipoly.indices) {
-            lats[index] = simplipoly[index].latitude
-            lngs[index] = simplipoly[index].longitude
+        markers.add(cur_loc)
+        var arrLats=Array<Vector<Double>>(routes.size) { Vector() }
+        var arrLngs=Array<Vector<Double>>(routes.size) { Vector() }
+        var cpLats=Vector<Double>()
+        var cpLngs=Vector<Double>()
+        for(i in routes.indices) {
+            var lats = Vector<Double>()
+            var lngs = Vector<Double>()
+            for (j in routes[i].indices) {
+                lats.add(routes[i][j].latitude)
+                lngs.add(routes[i][j].longitude)
+            }
+            arrLats[i]=lats
+            arrLngs[i]=lngs
+            cpLats.add(markers[i].latitude)
+            cpLngs.add(markers[i].longitude)
         }
-        runningData.lats=lats
-        runningData.lngs=lngs
+        runningData.lats=arrLats
+        runningData.lngs=arrLngs
         runningData.alts=alts.toDoubleArray()
         runningData.speed=speeds.toDoubleArray()
+        runningData.markerLats=cpLats
+        runningData.markerLngs=cpLngs
     }
 
     fun pauseTracking() {
@@ -128,11 +168,19 @@ class RunningMap : OnMapReadyCallback {
                         circleDrawable.getIntrinsicWidth(),
                         circleDrawable.getIntrinsicHeight()
                     );
-                    circleDrawable.draw(canvas);
+                    circleDrawable.draw(canvas)
                     racerIcon = BitmapDescriptorFactory.fromBitmap(bitmap);
 
                     markerOptions.icon(racerIcon)
                     currentMarker = mMap.addMarker(markerOptions)
+
+                    //startPoint 추가
+                    cpOption.title("StartPoint")
+                    cpOption.position(prev_loc)
+                    mMap.addMarker(cpOption)
+                    markerCount++
+                    markers.add(prev_loc)
+
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(prev_loc, 17F))
                     if (userState == UserState.PAUSED) {
                         startTracking()
@@ -168,6 +216,7 @@ class RunningMap : OnMapReadyCallback {
                             latlngs.add(cur_loc)    //위 조건들을 통과하면 점 추가
                             alts.add(alt)
                             speeds.add(speed.toDouble())
+                            distance+=SphericalUtil.computeDistanceBetween(prev_loc, cur_loc)
                             (context as Activity).runOnUiThread(Runnable {
                                 print_log(speed.toString())
                                 (context as RunningActivity).speedTextView.text=
@@ -179,6 +228,18 @@ class RunningMap : OnMapReadyCallback {
                                     cur_loc
                                 )
                             )   //맵에 폴리라인 추가
+
+                            if(distance.toInt()/100>=markerCount){    //100m마다
+                                cpOption.position(cur_loc)
+                                markerCount=distance.toInt()/100
+                                cpOption.title(markerCount.toString())
+                                mMap.addMarker(cpOption)
+                                markers.add(cur_loc)
+                                markerCount++
+                                routes.add(PolyUtil.simplify(latlngs, 10.0).toTypedArray())
+                                print_log(routes[routes.size-1].toString())
+                                latlngs= Vector()
+                            }
                         }
                         prev_loc = cur_loc                              //현재위치를 이전위치로 변경
 
