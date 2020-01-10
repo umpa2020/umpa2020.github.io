@@ -118,7 +118,6 @@ class RunningSaveActivity : AppCompatActivity() {
         when (view.id) {
             R.id.save_btn -> {
                 map.CaptureMapScreen()
-
             }
         }
     }
