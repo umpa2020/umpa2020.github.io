@@ -4,11 +4,11 @@ import android.content.Context
 
 class SharedPreValue {
     companion object {
-        val INTENT_NICKNAME_DATA = "utils.nickname"
-        val INTENT_PWD_DATA = "utils.pwd"
         val INTENT_EMAIL_DATA = "utils.email"
+        val INTENT_PWD_DATA = "utils.pwd"
+        val INTENT_NICKNAME_DATA = "utils.nickname"
         val INTENT_AGE_DATA = "utils.age"
-        val INTENT_GENDER_DATA = "utils.age"
+        val INTENT_GENDER_DATA = "utils.gender"
         val INTENT_AUTO_LOGIN_DATA = "utils.auto.login"
 
         fun setGenderData(ctx: Context, value : String){
