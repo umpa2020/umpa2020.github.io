@@ -16,11 +16,13 @@ import com.google.android.gms.maps.model.*
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.korea50k.RunShare.R
 import android.graphics.Canvas
+import android.graphics.Rect
 import android.view.View
 import com.google.android.gms.maps.*
 import com.korea50k.RunShare.Activities.Racing.ManageRacing
 import com.korea50k.RunShare.Activities.Racing.RacingActivity
 import com.korea50k.RunShare.Activities.Running.RunningActivity
+import com.korea50k.RunShare.Util.Calc
 import com.korea50k.RunShare.dataClass.RunningData
 import com.korea50k.RunShare.Util.TTS
 import com.korea50k.RunShare.dataClass.UserState
@@ -30,6 +32,8 @@ import kotlin.math.roundToLong
 
 
 class RacingMap : OnMapReadyCallback {
+    var markerCount = 0
+    lateinit var cpOption: MarkerOptions
     lateinit var mMap: GoogleMap    //racingMap 인스턴스
     lateinit var fusedLocationClient: FusedLocationProviderClient   //위치정보 가져오는 인스턴스
     lateinit var locationCallback: LocationCallback
@@ -39,17 +43,20 @@ class RacingMap : OnMapReadyCallback {
     lateinit var cur_loc: LatLng            //현재위치
     var latlngs: Vector<LatLng> = Vector<LatLng>()   //움직인 점들의 집합 나중에 저장될 점들 집합
     var alts = Vector<Double>()
-    var speeds=Vector<Double>()
-    var load_route = ArrayList<LatLng>()     //로드할 점들의 집합
-    lateinit var context: Context
-    lateinit var userState: UserState
+    var speeds = Vector<Double>()
+    var loadRoute = ArrayList<Vector<LatLng>>()   //로드된 점들의 집합
+    var context: Context
+    var userState: UserState
     var countDeviation = 0
-    var currentMarker: Marker?=null
-    var makerMarker: Marker?=null
+    var currentMarker: Marker? = null
+    var makerMarker: Marker? = null
     lateinit var racerIcon: BitmapDescriptor
-    lateinit var makerData: RunningData
-    lateinit var manageRacing: ManageRacing
+    var makerData: RunningData
+    var manageRacing: ManageRacing
     lateinit var makerRunningThread: Thread
+    var passedLine = Vector<Polyline>()
+    var markers = Vector<LatLng>()
+
     //Racing
     constructor(
         smf: SupportMapFragment,
@@ -59,31 +66,35 @@ class RacingMap : OnMapReadyCallback {
         this.context = context
         this.manageRacing = manageRacing
         this.makerData = manageRacing.makerData
+        init()
         smf.getMapAsync(this)
         userState = UserState.BEFORERACING
         print_log("Set UserState BEFORERACING")
 
     }
 
-    fun loadRoute(): ArrayList<LatLng> {
-        var load_latlngs = ArrayList<LatLng>()
-        for (index in makerData.lats.indices) {
-            load_latlngs.add(LatLng(makerData.lats[index], makerData.lngs[index]))
+    fun loadRoute() {
+        for (i in makerData.lats.indices) {
+            var latlngs = Vector<LatLng>()
+            for (j in makerData.lats[i].indices) {
+                latlngs.add(LatLng(makerData.lats[i][j], makerData.lngs[i][j]))
+            }
+            loadRoute.add(latlngs)
+            markers.add(LatLng(makerData.markerLats[i], makerData.markerLngs[i]))
         }
-        return load_latlngs
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-
-        load_route = loadRoute()
-        drawRoute(load_route)
+        loadRoute()
+        drawRoute()
         mMap.moveCamera(
             CameraUpdateFactory.newLatLngZoom(
-                load_route[0],
+                loadRoute[0][0],
                 17F
             )
         )
+
         initLocation()
         fusedLocationClient.requestLocationUpdates(
             locationRequest,
@@ -91,21 +102,33 @@ class RacingMap : OnMapReadyCallback {
             Looper.myLooper()
         )
         if (userState == UserState.BEFORERACING) {
-            val startMarkerOptions = MarkerOptions()
-            startMarkerOptions.position(load_route[0])
-            startMarkerOptions.title("Maker")
-            startMarkerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.start_point))
-            mMap.addMarker(startMarkerOptions)
-
-            val finishMarkerOptions = MarkerOptions()
-            finishMarkerOptions.position(load_route[load_route.size - 1])
-            finishMarkerOptions.title("Maker")
-            finishMarkerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.finish_point))
-            mMap.addMarker(finishMarkerOptions)
             (context as Activity).runOnUiThread(Runnable {
                 TTS.speech("시작 포인트로 이동하세요")
             })
         }
+    }
+
+    fun init() {
+        val cpMarkerImg = context.getDrawable(R.drawable.checkpoint_marker)
+        var cpCanvas = Canvas()
+        var cpBitmap = Bitmap.createBitmap(
+            cpMarkerImg!!.intrinsicWidth,
+            cpMarkerImg!!.intrinsicHeight,
+            Bitmap.Config.ARGB_8888
+        )
+        cpCanvas.setBitmap(cpBitmap);
+        cpMarkerImg!!.bounds = Rect(
+            0,
+            0,
+            cpMarkerImg!!.getIntrinsicWidth(),
+            cpMarkerImg!!.getIntrinsicHeight()
+        )
+        cpMarkerImg.draw(cpCanvas)
+        val cpIcon = BitmapDescriptorFactory.fromBitmap(cpBitmap);
+        //cp 초기화
+        cpOption = MarkerOptions()
+        cpOption.icon(cpIcon)
+
     }
 
     fun makerRunning() {
@@ -127,7 +150,7 @@ class RacingMap : OnMapReadyCallback {
         var makerIcon = BitmapDescriptorFactory.fromBitmap(bitmap);
 
         val markerOptions = MarkerOptions()
-        markerOptions.position(load_route[0])
+        markerOptions.position(markers[0])
         markerOptions.title("Maker")
         markerOptions.icon(makerIcon)
         makerMarker = mMap.addMarker(markerOptions)
@@ -138,15 +161,15 @@ class RacingMap : OnMapReadyCallback {
                 (Integer.parseInt(time[0].toString()) * 10 + Integer.parseInt(time[1].toString())) * 60 + (Integer.parseInt(
                     time[3].toString()
                 ) * 10 + Integer.parseInt(time[4].toString()))
-            var milisec = ((sec.toDouble() / load_route.size.toDouble()) * 1000).roundToLong()
+            var milisec = ((sec.toDouble() / markers.size.toDouble()) * 1000).roundToLong()
             print_log(sec.toString() + milisec.toString())
 
-            for (index in load_route.indices) {
+            for (index in markers.indices) {
                 Thread.sleep(milisec)
                 (context as Activity).runOnUiThread(Runnable {
-                    if(makerMarker!=null)makerMarker!!.remove()
+                    if (makerMarker != null) makerMarker!!.remove()
                     val markerOptions = MarkerOptions()
-                    markerOptions.position(load_route[index])
+                    markerOptions.position(markers[index])
                     markerOptions.title("Maker")
                     markerOptions.icon(makerIcon)
 
@@ -154,7 +177,7 @@ class RacingMap : OnMapReadyCallback {
                 })
             }
             (context as Activity).runOnUiThread(Runnable {
-               // TTS.speech("맵 제작자가 도착했습니다.")
+                // TTS.speech("맵 제작자가 도착했습니다.")
                 (context as Activity).countDownTextView.text = "Maker arrive at finish point"
                 (context as Activity).countDownTextView.visibility = View.VISIBLE
                 print_log("maker arrive")
@@ -176,18 +199,42 @@ class RacingMap : OnMapReadyCallback {
         fusedLocationClient.removeLocationUpdates(locationCallback)
     }
 
-    fun drawRoute(route: ArrayList<LatLng>) { //로드 된 경로 그리기
-        var polyline =
-            mMap.addPolyline(
-                PolylineOptions()
-                    .addAll(route)
-                    .color(Color.RED)
-                    .startCap(RoundCap())
-                    .endCap(RoundCap())
-            )        //경로를 그릴 폴리라인 집합
+    fun drawRoute() { //로드 된 경로 그리기
 
-        print_log(route[0].toString())
-        polyline.tag = "A"
+        for (i in loadRoute.indices) {
+            var polyline =
+                mMap.addPolyline(
+                    PolylineOptions()
+                        .addAll(loadRoute[i])
+                        .color(Color.RED)
+                        .startCap(RoundCap())
+                        .endCap(RoundCap())
+                )        //경로를 그릴 폴리라인 집합
+
+            if (i == 0) {
+                val startMarkerOptions = MarkerOptions()
+                startMarkerOptions.position(markers[0])
+                startMarkerOptions.title("Start")
+                startMarkerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.start_point))
+                mMap.addMarker(startMarkerOptions)
+            } else if (i == markers.size - 1) {
+                val finishMarkerOptions = MarkerOptions()
+                finishMarkerOptions.position(markers[markers.size - 1])
+                finishMarkerOptions.title("Maker")
+                finishMarkerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.finish_point))
+                mMap.addMarker(finishMarkerOptions)
+
+            } else {
+                cpOption.position(markers[i])
+                cpOption.title(i.toString())
+                mMap.addMarker(cpOption)
+            }
+        }
+
+        var min = LatLng(Calc.minDouble(makerData.lats), Calc.minDouble(makerData.lngs))
+        var max = LatLng(Calc.maxDouble(makerData.lats), Calc.maxDouble(makerData.lngs))
+        print_log(min.toString() + max.toString())
+        mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(LatLngBounds(min, max), 1080, 300, 50))
     }
 
     fun initLocation() {            //첫 위치 설정하고, prev_loc 설정
@@ -222,6 +269,12 @@ class RacingMap : OnMapReadyCallback {
 
                     markerOptions.icon(racerIcon)
                     currentMarker = mMap.addMarker(markerOptions)
+
+                    cpOption.title("StartPoint")
+                    cpOption.position(prev_loc)
+                    mMap.addMarker(cpOption)
+                    markerCount++
+                    markers.add(prev_loc)
                 }
             }
             .addOnFailureListener {
@@ -247,21 +300,26 @@ class RacingMap : OnMapReadyCallback {
                         when (userState) {
                             UserState.BEFORERACING -> {
                                 (context as Activity).runOnUiThread(Runnable {
-                                    (context as Activity).racingNotificationButton.text =("시작 포인트로 이동하십시오.\n시작포인트까지 남은거리 : "
-                                    + (SphericalUtil.computeDistanceBetween(cur_loc, load_route[0])).roundToLong().toString() + "m")
+                                    (context as Activity).racingNotificationButton.text =
+                                        ("시작 포인트로 이동하십시오.\n시작포인트까지 남은거리 : "
+                                                + (SphericalUtil.computeDistanceBetween(
+                                            cur_loc,
+                                            markers[0]
+                                        )).roundToLong().toString() + "m")
                                 })
                                 if (SphericalUtil.computeDistanceBetween(
                                         cur_loc,
-                                        load_route[0]
+                                        markers[0]
                                     ) < 10
                                 ) {
-                                    userState=UserState.READYTORACING
+                                    userState = UserState.READYTORACING
                                     (context as Activity).runOnUiThread(Runnable {
-                                        (context as Activity).racingNotificationButton.text = "시작을 원하시면 START를 누르세요"
+                                        (context as Activity).racingNotificationButton.text =
+                                            "시작을 원하시면 START를 누르세요"
                                     })
                                 }
                             }
-                            UserState.READYTORACING->{
+                            UserState.READYTORACING -> {
                                 //wait to start
                             }
                             UserState.RACING -> {
@@ -271,32 +329,51 @@ class RacingMap : OnMapReadyCallback {
                                 } else if (false) { //비정상적인 움직임일 경우 + finish에 도착한 경우
                                 } else if (SphericalUtil.computeDistanceBetween(
                                         cur_loc,
-                                        load_route[load_route.size - 1]
-                                    ) < 10){
+                                        markers[markers.size - 1]
+                                    ) < 10
+                                ) {
                                     manageRacing.stopRacing(true)
                                 } else {
                                     speeds.add(speed.toDouble())
                                     (context as Activity).runOnUiThread(Runnable {
                                         print_log(speed.toString())
-                                        (context as RacingActivity).racingSpeedTextView.text=
-                                            String.format("%.3f",speed)
+                                        (context as RacingActivity).racingSpeedTextView.text =
+                                            String.format("%.3f", speed)
                                     })
 
                                     latlngs.add(cur_loc)    //위 조건들을 통과하면 점 추가
                                     alts.add(alt)
-                                    mMap.addPolyline(
-                                        PolylineOptions().add(
-                                            prev_loc,
-                                            cur_loc
+                                    passedLine.add(
+                                        mMap.addPolyline(
+                                            PolylineOptions().add(
+                                                prev_loc,
+                                                cur_loc
+                                            )
                                         )
-                                    )   //맵에 폴리라인 추가
+                                    )
+                                    if (SphericalUtil.computeDistanceBetween(
+                                            cur_loc,
+                                            markers[markerCount]
+                                        ) < 10
+                                    ) {
+                                        for (i in passedLine.indices)
+                                            passedLine[i].remove()
+                                        mMap.addPolyline(
+                                            PolylineOptions()
+                                                .addAll(loadRoute[markerCount - 1])
+                                                .color(Color.BLUE)
+                                                .startCap(RoundCap())
+                                                .endCap(RoundCap())
+                                        )        //지나간길
+                                        markerCount++
+                                    }
                                 }
                             }
                         }
 
                         prev_loc = cur_loc                              //현재위치를 이전위치로 변경
 
-                        if(currentMarker!=null)currentMarker!!.remove()
+                        if (currentMarker != null) currentMarker!!.remove()
                         val markerOptions = MarkerOptions()
                         markerOptions.position(cur_loc)
                         markerOptions.title("Me")
@@ -315,7 +392,7 @@ class RacingMap : OnMapReadyCallback {
                                 )
                                 if (PolyUtil.isLocationOnPath(
                                         LatLng(lat, lng),
-                                        load_route,
+                                        loadRoute[markerCount - 1],
                                         false,
                                         10.0
                                     )
@@ -325,15 +402,13 @@ class RacingMap : OnMapReadyCallback {
                                 } else {
                                     manageRacing.deviation(++countDeviation)
 
-
-
                                     if (countDeviation > 10) {
                                         //finish
                                     }
 
                                 }
                             }
-                            else->{
+                            else -> {
                                 mMap.animateCamera(
                                     CameraUpdateFactory.newLatLngZoom(
                                         cur_loc,
@@ -347,7 +422,8 @@ class RacingMap : OnMapReadyCallback {
             }
         }
     }
-    fun startRacing(){
+
+    fun startRacing() {
         print_log("Start Racing")
         makerRunning()
         userState = UserState.RACING
@@ -359,15 +435,12 @@ class RacingMap : OnMapReadyCallback {
             )
         )
     }
-    fun getDistance(locations: Vector<LatLng>): Double {  //점들의 집합에서 거리구하기
-        var distance = 0.0
-        var i = 0
-        while (i < locations.size - 1) {
-            distance += SphericalUtil.computeDistanceBetween(locations[i], locations[i + 1])
-            i++
-        }
-        return distance
+
+    fun calcLeftDistance() {
+        var i = markerCount
+
     }
+
 
     fun print_log(text: String) {
         Log.d(TAG, text.toString())

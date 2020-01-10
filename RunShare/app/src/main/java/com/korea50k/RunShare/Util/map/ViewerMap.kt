@@ -17,9 +17,11 @@ import com.korea50k.RunShare.R
 import android.graphics.Canvas
 import android.graphics.Color
 import com.korea50k.RunShare.Activities.Running.RunningSaveActivity
+import com.korea50k.RunShare.Util.Calc
 import com.korea50k.RunShare.dataClass.RunningData
 import com.korea50k.RunShare.dataClass.UserState
 import kotlinx.android.synthetic.main.activity_running_save.*
+import kotlinx.coroutines.coroutineScope
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
@@ -30,21 +32,21 @@ class ViewerMap : OnMapReadyCallback {
     var TAG = "what u wanna say?~~!~!"       //로그용 태그
     var context: Context
     var runningData:RunningData
-    var loadLatLngs:ArrayList<LatLng>
+    var loadRoute= ArrayList<Vector<LatLng>>()
     var smf: SupportMapFragment
     //Running
     constructor(smf: SupportMapFragment, context: Context, runningData:RunningData) {
         this.smf=smf
         this.context = context
         this.runningData=runningData
-        loadLatLngs=loadRoute()
         smf.getMapAsync(this)
         print_log("Set UserState NORMAL")
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-        drawRoute(loadLatLngs)
+        loadRoute=loadRoute()
+        drawRoute(loadRoute)
     }
     fun CaptureMapScreen() {
         var callback = GoogleMap.SnapshotReadyCallback {
@@ -67,31 +69,33 @@ class ViewerMap : OnMapReadyCallback {
 
         mMap.snapshot(callback)
     }
-    fun loadRoute(): ArrayList<LatLng> {
-        var load_latlngs = ArrayList<LatLng>()
-        for (index in runningData.lats.indices) {
-            load_latlngs.add(LatLng(runningData.lats[index], runningData.lngs[index]))
+    fun loadRoute(): ArrayList<Vector<LatLng>> {
+        var routes=ArrayList<Vector<LatLng>>()
+        for (i in runningData.lats.indices) {
+            var latlngs=Vector<LatLng>()
+            for(j in runningData.lats[i].indices){
+                latlngs.add(LatLng(runningData.lats[i][j],runningData.lngs[i][j]))
+            }
+            routes.add(latlngs)
         }
-        return load_latlngs
+        return routes
     }
-    fun drawRoute(route: ArrayList<LatLng>) { //로드 된 경로 그리기
-        print_log(route.toString())
-        var polyline =
-            mMap.addPolyline(
-                PolylineOptions()
-                    .addAll(route)
-                    .color(Color.RED)
-                    .startCap(RoundCap())
-                    .endCap(RoundCap())
-            )        //경로를 그릴 폴리라인 집합
-       // mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(route[0],17F))
-        //TODO:최대 최소로 값 넣어서 해야함
-        print_log(runningData.lats.min().toString()+runningData.lngs.min().toString())
-        var min= LatLng(runningData.lats.min()!!,runningData.lngs.min()!!)
-        var max = LatLng(runningData.lats.max()!!,runningData.lngs.max()!!)
-         mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(LatLngBounds(min,max),1080,300,50))
-        print_log(route[0].toString())
-        polyline.tag = "A"
+    fun drawRoute(routes: ArrayList<Vector<LatLng>>) { //로드 된 경로 그리기
+        for(i in routes.indices) {
+            var polyline =
+                mMap.addPolyline(
+                    PolylineOptions()
+                        .addAll(routes[i])
+                        .color(Color.RED)
+                        .startCap(RoundCap())
+                        .endCap(RoundCap())
+                )        //경로를 그릴 폴리라인 집합
+        }
+
+        var min= LatLng(Calc.minDouble(runningData.lats),Calc.minDouble(runningData.lngs))
+        var max = LatLng(Calc.maxDouble(runningData.lats),Calc.maxDouble(runningData.lngs))
+        print_log(min.toString()+max.toString())
+        mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(LatLngBounds(min,max),1080,300,50))
     }
     fun print_log(text: String) {
         Log.d(TAG, text.toString())
