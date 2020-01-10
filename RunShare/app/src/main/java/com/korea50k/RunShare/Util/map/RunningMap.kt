@@ -239,6 +239,7 @@ class RunningMap : OnMapReadyCallback {
                                 routes.add(PolyUtil.simplify(latlngs, 10.0).toTypedArray())
                                 print_log(routes[routes.size-1].toString())
                                 latlngs= Vector()
+                                latlngs.add(cur_loc)
                             }
                         }
                         prev_loc = cur_loc                              //현재위치를 이전위치로 변경
