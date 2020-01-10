@@ -17,12 +17,6 @@ import retrofit2.Response
 class SplashActivity : AppCompatActivity() {
     val WSY = "WSY"
 
-    val userID : String? by lazy {
-        SharedPreValue.getIDData(this)
-    }
-    val userEmail : String? by lazy {
-        SharedPreValue.getEMAILData(this)
-    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
