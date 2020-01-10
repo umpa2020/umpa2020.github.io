@@ -6,6 +6,7 @@
     android:background="@color/white"
     android:minHeight="?attr/actionBarSize"
     android:theme="?attr/actionBarTheme">
+
     <ImageView
         android:id="@+id/backImageBtn"
         android:layout_width="wrap_content"
@@ -15,7 +16,7 @@
         android:background="@drawable/ic_arrow_back_black_34dp"/>
     <TextView
         android:id="@+id/titleText"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="18dp"
         android:textColor="@color/black"/>

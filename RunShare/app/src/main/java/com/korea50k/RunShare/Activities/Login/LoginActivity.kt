@@ -66,7 +66,9 @@ class LoginActivity : AppCompatActivity() {
                             Log.i(WSY,userData.getString("Id") + ", " + userData.getString("Nickname"))
                             SharedPreValue.setEMAILData(this@LoginActivity,userData.getString("Id"))
                             SharedPreValue.setPWDData(this@LoginActivity,userData.getString("Password"))
-                            SharedPreValue.setIDData(this@LoginActivity,userData.getString("Nickname"))
+                            SharedPreValue.setNicknameData(this@LoginActivity,userData.getString("Nickname"))
+                            SharedPreValue.setAgeData(this@LoginActivity, userData.getString("Age"))
+                            SharedPreValue.setGenderData(this@LoginActivity, userData.getString("Gender"))
                             SharedPreValue.setAutoLogin(this@LoginActivity,true)
 
                             var nextIntent = Intent(this@LoginActivity, MainActivity::class.java)

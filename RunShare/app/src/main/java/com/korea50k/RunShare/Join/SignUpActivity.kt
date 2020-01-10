@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Base64
 import android.util.Log
+import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -25,7 +26,10 @@ import com.korea50k.RunShare.R
 import com.korea50k.RunShare.RetrofitClient
 import com.korea50k.RunShare.Util.Constants
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.android.synthetic.main.activity_gender_select.*
 import kotlinx.android.synthetic.main.activity_sign_up.*
+import kotlinx.android.synthetic.main.activity_sign_up.app_toolbar
+import kotlinx.android.synthetic.main.signup_toolbar.view.*
 import okhttp3.ResponseBody
 import org.jetbrains.anko.toast
 import retrofit2.Call
@@ -67,6 +71,7 @@ class SignUpActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
 
+        editEmail.requestFocus()
         init()
 
         editEmail.setOnFocusChangeListener(object : View.OnFocusChangeListener {
@@ -83,6 +88,7 @@ class SignUpActivity : AppCompatActivity() {
                 }
             }
         })
+
     }
 
     /**
@@ -349,7 +355,7 @@ class SignUpActivity : AppCompatActivity() {
                     // 응답오는게 꼭 정상적인 결과가 아닐 수도 있기 때문에 20x, 40x로 구분.
                     // 웹에서 결과 값? 끌어오기
                     try {
-                        Log.d(WSY, response.body()?.string())
+//                        Log.d(WSY, response.body()?.string())
                         val intent = Intent()
                         intent.putExtra("ID", email)
                         intent.putExtra("PW", password)
@@ -462,6 +468,9 @@ class SignUpActivity : AppCompatActivity() {
 
     fun onClick(v: View) {
         when (v.id) {
+            R.id.backImageBtn->{
+                finish()
+            }
             R.id.editAge -> {
 //                var intent = Intent(this, AgeSelectActivity::class.java)
 //                startActivityForResult(intent,101)
@@ -481,7 +490,7 @@ class SignUpActivity : AppCompatActivity() {
                 tedPermission()
 
             }
-            R.id.sign_up_button_signup -> {
+            R.id.sign_up_button -> {
                 // if(isInputCorrectData[0] && isInputCorrectData[1] && isInputCorrectData[2] )
                 email = editEmail.text.toString()
                 password = editPassword.text.toString()
@@ -489,13 +498,11 @@ class SignUpActivity : AppCompatActivity() {
                 age = editAge.text.toString()
                 gender = editGender.text.toString()
 
-                Log.d(
-                    WSY,
-                    "" + isInputCorrectData[0] + ", " + isInputCorrectData[1] + ", " + isInputCorrectData[2] + ", " + isInputCorrectData[3] + ", " + isInputCorrectData[4]
-                )
+                Log.d(WSY,"" + isInputCorrectData[0] + ", " + isInputCorrectData[1] + ", " + isInputCorrectData[2] + ", " + isInputCorrectData[3] + ", " + isInputCorrectData[4]         )
                 Log.d(WSY, email + ", " + password + ", " + nickname + ", " + age + ", " + gender)
 
                 if (isInputCorrectData[0] && isInputCorrectData[1] && isInputCorrectData[2] && age!!.isNotEmpty() && gender!!.isNotEmpty()) {
+                    // AsyncTask로 로딩(시간이 걸리는 것을) 보여주기
                     signUp(bitmapImg!!,email!!, password!!, nickname!!, age!!, gender!!)
                     Log.d(WSY, "가입~")
                 }
