@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:text="E-mail"
             android:fontFamily="@font/godob"
-            android:textSize="20dp"
+            android:textSize="15dp"
             android:id="@+id/my_information_email_textview"
             android:gravity="center"/>
 
@@ -68,7 +68,7 @@
             android:layout_height="wrap_content"
             android:text="asdf"
             android:fontFamily="@font/godob"
-            android:textSize="20dp"
+            android:textSize="15dp"
             android:id="@+id/my_information_nickname_textview"
             android:gravity="center"/>
 
@@ -103,7 +103,7 @@
             android:fontFamily="@font/godob"
             android:layout_gravity="center"
             android:text="18"
-            android:textSize="20dp" />
+            android:textSize="15dp" />
 
     </LinearLayout>
 
@@ -134,7 +134,7 @@
             android:layout_height="wrap_content"
             android:text="sex"
             android:fontFamily="@font/godob"
-            android:textSize="20dp"
+            android:textSize="15dp"
             android:id="@+id/my_information_sex_textview"/>
 
     </LinearLayout>
@@ -148,6 +148,7 @@
         android:background="@color/rankBackgroudGray"/>
 
     <Button
+        android:onClick="onClick"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -155,7 +156,8 @@
         android:textColor="@color/darkRed"
         android:fontFamily="@font/godob"
         android:textSize="15dp"
-        android:background="@drawable/base_button_selector">
+        android:background="@drawable/base_button_selector"
+        android:id="@+id/my_information_adjust_button">
 
     </Button>
 
