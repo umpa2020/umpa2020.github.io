@@ -24,7 +24,6 @@ class MyInformationActivity : AppCompatActivity() {
         my_information_nickname_textview.text = SharedPreValue.getNicknameData(this)
         my_information_age_textview.text = SharedPreValue.getAgeData(this)
         my_information_sex_textview.text = SharedPreValue.getGenderData(this)
-
         Log.d("info", "nickname" + SharedPreValue.getNicknameData(this))
         Log.d("info", "my_information_age_textview" + SharedPreValue.getAgeData(this))
         Log.d("info", "my_information_sex_textview" + SharedPreValue.getGenderData(this))
