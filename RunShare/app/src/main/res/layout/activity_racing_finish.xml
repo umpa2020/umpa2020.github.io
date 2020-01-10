@@ -181,7 +181,7 @@
                 android:text="랩 타임"/>
         </LinearLayout>
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/resultRecycler"
+            android:id="@+id/resultPlayerRankingRecycler"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
     </LinearLayout>
