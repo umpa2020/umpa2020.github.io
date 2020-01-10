@@ -93,7 +93,7 @@ class fragment_rank_map : Fragment() {
 
         override fun onPostExecute(result: String?) {
             super.onPostExecute(result)
-
+/*
             if (result == null) {
             } else {
                 mJsonString = result
@@ -116,7 +116,7 @@ class fragment_rank_map : Fragment() {
                 val lm = LinearLayoutManager(context)
                 view?.rank_recycler_map!!.layoutManager = lm
                 view?.rank_recycler_map!!.setHasFixedSize(true)
-            }
+            }*/
         }
 
         override fun doInBackground(vararg params: String): String? {

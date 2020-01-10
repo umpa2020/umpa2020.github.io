@@ -39,7 +39,7 @@ class ManageRunning {
             while(true) {
                 Thread.sleep(3000)
                 activity.runOnUiThread(Runnable {
-                    activity.running_distance_tv.text=String.format("%.3f",(map.getDistance(map.latlngs)/1000))
+                    activity.running_distance_tv.text=String.format("%.3f",(map.distance/1000))
                 })
             }
         })

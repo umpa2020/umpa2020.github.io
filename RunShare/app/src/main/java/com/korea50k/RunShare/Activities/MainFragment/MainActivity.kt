@@ -1,8 +1,10 @@
 package com.korea50k.RunShare.Activities.MainFragment
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -12,6 +14,12 @@ import com.korea50k.RunShare.R
 import kotlinx.android.synthetic.main.activity_main.*
 import androidx.drawerlayout.widget.DrawerLayout
 import android.view.View
+import android.widget.Toast
+import com.korea50k.RunShare.Activities.Profile.MyInformationActivity
+import com.korea50k.RunShare.Activities.Profile.SettingActivity
+import com.korea50k.RunShare.Activities.Profile.UserActivity
+import com.korea50k.RunShare.Activities.RankFragment.RankRecyclerClickActivity
+import com.korea50k.RunShare.Util.SharedPreValue
 import com.korea50k.RunShare.Util.TTS
 
 
@@ -28,6 +36,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(com.korea50k.RunShare.R.layout.activity_main)
+        Log.d("WSY","Shared 저장 이메일 : " + SharedPreValue.getEMAILData(this))
+        Log.d("WSY","Shared 저장 비번 : " + SharedPreValue.getPWDData(this))
+        Log.d("WSY","Shared 저장 닉네임 : " + SharedPreValue.getNicknameData(this))
+        Log.d("WSY","Shared 저장 나이 : " + SharedPreValue.getAgeData(this))
+        Log.d("WSY","Shared 저장 성별 : " + SharedPreValue.getGenderData(this))
         checkPermissions()          //모든 권한 확인
         TTS.set(applicationContext)
         val mTabLayout = tabDots
@@ -55,6 +68,19 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.closeDrawerButton->{
                 drawerLayout.closeDrawer(drawer)
+            }
+
+            R.id.slide_profileLayout->{
+                var intent = Intent(this, UserActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.slide_mydata_Button->{
+                var intent = Intent(this, MyInformationActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.slide_setting_Button->{
+                var intent = Intent(this, SettingActivity::class.java)
+                startActivity(intent)
             }
         }
     }
@@ -100,4 +126,5 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
 }

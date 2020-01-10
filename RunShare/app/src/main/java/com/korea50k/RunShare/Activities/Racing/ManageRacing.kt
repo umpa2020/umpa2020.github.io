@@ -8,7 +8,9 @@ import android.view.View
 import android.widget.Chronometer
 import android.widget.Toast
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.maps.android.SphericalUtil
 import com.korea50k.RunShare.RetrofitClient
+import com.korea50k.RunShare.Util.Calc
 import com.korea50k.RunShare.Util.map.RacingMap
 import com.korea50k.RunShare.dataClass.RunningData
 import com.korea50k.RunShare.Util.TTS
@@ -26,6 +28,7 @@ class ManageRacing {
      var activity: RacingActivity
      var makerData: RunningData
     var timeWhenStopped: Long = 0
+    lateinit var distances:DoubleArray
     constructor(
         smf: SupportMapFragment,
         activity: RacingActivity,
@@ -36,17 +39,22 @@ class ManageRacing {
         this.context = context
         this.makerData = makerData
         this.racingMap = RacingMap(smf, context, this)
+
     }
     fun startRacing(){
         racingMap.startRacing()
     }
     fun startRunning() {
+        distances=DoubleArray(makerData.markerLats.size)
+        for(i in distances.indices){
+            distances[i]=Calc.getDistance(racingMap.loadRoute[i])
+        }
         distanceThread = Thread(Runnable {
             while (true) {
                 Thread.sleep(3000)
                 activity.runOnUiThread(Runnable {
                     activity.running_distance_tv.text =
-                        String.format("%.3f", (racingMap.getDistance(racingMap.latlngs) / 1000))
+                        String.format("%.3f", ((calcLeftDistance()) / 1000))
                 })
             }
         })
@@ -80,6 +88,16 @@ class ManageRacing {
         })
 
         countDownThread.start()
+    }
+
+    private fun calcLeftDistance() :Double{
+        var distance=0.0
+        for(i in makerData.markerLats.size-1 downTo racingMap.markerCount)
+        {
+            distance+=distances[i]
+        }
+        distance+= SphericalUtil.computeDistanceBetween(racingMap.cur_loc, racingMap.markers[racingMap.markerCount])
+        return distance
     }
 
     fun stopRacing(result:Boolean) {

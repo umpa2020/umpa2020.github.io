@@ -3,16 +3,17 @@ package com.korea50k.RunShare.dataClass
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
+import java.util.*
 
 //경로, 시간, 거리
 class RunningData() : Serializable {
     @SerializedName("Lats")
     @Expose
-    var lats: DoubleArray= DoubleArray(0)
+    lateinit var lats: Array<Vector<Double>>
 
     @SerializedName("Lngs")
     @Expose
-    var lngs: DoubleArray= DoubleArray(0)
+    lateinit var lngs: Array<Vector<Double>>
 
     @SerializedName("Alts")
     @Expose
@@ -21,6 +22,14 @@ class RunningData() : Serializable {
     @SerializedName("Speeds")
     @Expose
     var speed: DoubleArray=DoubleArray(0)
+
+    @SerializedName("MarkerLats")
+    @Expose
+    lateinit var markerLats:Vector<Double>
+
+    @SerializedName("MarkerLngs")
+    @Expose
+    lateinit var markerLngs: Vector<Double>
 
     @SerializedName("Distance")
     @Expose
