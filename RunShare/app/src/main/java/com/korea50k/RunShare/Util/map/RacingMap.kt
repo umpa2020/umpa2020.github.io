@@ -45,14 +45,14 @@ class RacingMap : OnMapReadyCallback {
     var alts = Vector<Double>()
     var speeds = Vector<Double>()
     var loadRoute = ArrayList<Vector<LatLng>>()   //로드된 점들의 집합
-    lateinit var context: Context
-    lateinit var userState: UserState
+    var context: Context
+    var userState: UserState
     var countDeviation = 0
     var currentMarker: Marker? = null
     var makerMarker: Marker? = null
     lateinit var racerIcon: BitmapDescriptor
-    lateinit var makerData: RunningData
-    lateinit var manageRacing: ManageRacing
+    var makerData: RunningData
+    var manageRacing: ManageRacing
     lateinit var makerRunningThread: Thread
     var passedLine = Vector<Polyline>()
     var markers = Vector<LatLng>()
@@ -436,15 +436,11 @@ class RacingMap : OnMapReadyCallback {
         )
     }
 
-    fun getDistance(locations: Vector<LatLng>): Double {  //점들의 집합에서 거리구하기
-        var distance = 0.0
-        var i = 0
-        while (i < locations.size - 1) {
-            distance += SphericalUtil.computeDistanceBetween(locations[i], locations[i + 1])
-            i++
-        }
-        return distance
+    fun calcLeftDistance() {
+        var i = markerCount
+
     }
+
 
     fun print_log(text: String) {
         Log.d(TAG, text.toString())
