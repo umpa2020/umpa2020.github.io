@@ -26,23 +26,29 @@ class ConvertJson{
             return jsonString
         }
 
-        fun JsonToRankMapDatas(json: String):ArrayList<RankMapData>{
+        fun JsonToRankMapDatas(json: String, start : Int, end : Int):ArrayList<RankMapData>{
             var rankMapDatas= ArrayList<RankMapData>()
-
             val jObject = JSONObject(json)
             val jArray = jObject.getJSONArray("JsonData")
 
-            for (i in 0 until jArray.length()) {
+            var limit = 0;
+            if (jArray.length() < end)
+                limit = jArray.length()
+            else
+                limit = end
+
+
+            for (i in start until limit) {
                 //rankMapDatas.add(Gson().fromJson(gson.toJson(jArray.get(i)), RankMapData::class.java))
                 var rankMapData = RankMapData()
-
                 rankMapData.likes= jArray.getJSONObject(i).get("Likes") as String
                 rankMapData.id= jArray.getJSONObject(i).get("Id") as String
                 rankMapData.mapTitle= jArray.getJSONObject(i).get("MapTitle") as String
                 rankMapData.mapImage= jArray.getJSONObject(i).get("MapImage") as String
                 rankMapData.execute= jArray.getJSONObject(i).get("Execute") as String
-                rankMapDatas.add(rankMapData)
+                Log.d("convert json","conver json map title = "+rankMapData.mapTitle)
 
+                rankMapDatas.add(rankMapData)
             }
             return rankMapDatas
         }

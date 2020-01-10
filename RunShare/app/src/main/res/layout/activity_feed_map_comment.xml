@@ -80,7 +80,7 @@
         android:layout_height="260dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/feed_recycler_comment"
+        android:id="@+id/feed_map_recycler_comment"
         android:layout_below="@+id/One"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -117,14 +117,16 @@
 
 
         <EditText
+            android:id="@+id/feed_map_comment_editmessage"
             android:layout_marginTop="7dp"
             android:layout_marginLeft="15dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@null"
-            android:hint="댓 글"/>
+            android:hint="댓 글                                                                        "/>
 
         <Button
+            android:id="@+id/feed_map_comment_button"
             android:layout_gravity="right"
             android:layout_marginTop="3dp"
             android:layout_marginRight="10dp"

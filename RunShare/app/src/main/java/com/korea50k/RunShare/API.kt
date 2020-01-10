@@ -70,7 +70,7 @@ interface API {
 
     @POST("rankDownload.php")
     @FormUrlEncoded
-    fun rankDownload(@Field("Id") Id: String): retrofit2.Call<ResponseBody>
+    fun rankDownload(@Field("Id") Id: String, @Field("Start") Start : Int, @Field("End") End : Int): retrofit2.Call<ResponseBody>
 
     @POST("rankingMapDownload.php")
     @FormUrlEncoded
