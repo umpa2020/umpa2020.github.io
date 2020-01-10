@@ -11,6 +11,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.maps.android.SphericalUtil
 import com.korea50k.RunShare.RetrofitClient
 import com.korea50k.RunShare.Util.Calc
+import com.korea50k.RunShare.Util.SharedPreValue
 import com.korea50k.RunShare.Util.map.RacingMap
 import com.korea50k.RunShare.dataClass.RunningData
 import com.korea50k.RunShare.Util.TTS
@@ -107,16 +108,16 @@ class ManageRacing {
         chronometer.stop()
         var runningData = RunningData()
         runningData.time = chronometer.text.toString()
-        Log.d("ssmm11", "맵타이틀 = " + runningData.mapTitle)
+
+        Log.d("ssmm11", "맵id = " )
 
         if(result){
-            //TODO: 여기서 서버로 경기결과 보내기(기록)
             Thread(
                 Runnable {
                     RetrofitClient.retrofitService.racingResult(
                         //makerData.mapTitle, 널임!
-                        "Map2",
-                        "KJB",
+                        makerData.mapTitle,
+                        SharedPreValue.getEMAILData(context)!!,
                         runningData.time
                     ).enqueue(object :
                         retrofit2.Callback<ResponseBody> {

@@ -149,31 +149,31 @@ class RacingMap : OnMapReadyCallback {
         circleDrawable.draw(canvas);
         var makerIcon = BitmapDescriptorFactory.fromBitmap(bitmap);
 
-        val markerOptions = MarkerOptions()
-        markerOptions.position(markers[0])
-        markerOptions.title("Maker")
-        markerOptions.icon(makerIcon)
-        makerMarker = mMap.addMarker(markerOptions)
+        val makerOptions = MarkerOptions()
+        makerOptions.position(markers[0])
+        makerOptions.title("Maker")
+        makerOptions.icon(makerIcon)
+        makerMarker = mMap.addMarker(makerOptions)
 
         makerRunningThread = Thread(Runnable {
-            var time = makerData.time.toString()
+            var time = makerData.time
             var sec =
                 (Integer.parseInt(time[0].toString()) * 10 + Integer.parseInt(time[1].toString())) * 60 + (Integer.parseInt(
                     time[3].toString()
                 ) * 10 + Integer.parseInt(time[4].toString()))
             var milisec = ((sec.toDouble() / markers.size.toDouble()) * 1000).roundToLong()
-            print_log(sec.toString() + milisec.toString())
+            print_log("시간 : " + time + sec.toString() +", "+ milisec.toString())
 
             for (index in markers.indices) {
                 Thread.sleep(milisec)
                 (context as Activity).runOnUiThread(Runnable {
                     if (makerMarker != null) makerMarker!!.remove()
-                    val markerOptions = MarkerOptions()
-                    markerOptions.position(markers[index])
-                    markerOptions.title("Maker")
-                    markerOptions.icon(makerIcon)
+                    val makerOptions = MarkerOptions()
+                    makerOptions.position(markers[index])
+                    makerOptions.title("Maker")
+                    makerOptions.icon(makerIcon)
 
-                    makerMarker = mMap.addMarker(markerOptions)
+                    makerMarker = mMap.addMarker(makerOptions)
                 })
             }
             (context as Activity).runOnUiThread(Runnable {
