@@ -14,15 +14,16 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-9" />
-    <option name="width" value="1386" />
-    <option name="height" value="788" />
+    <option name="x" value="-10" />
+    <option name="width" value="1387" />
+    <option name="height" value="1038" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
       <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
@@ -40,7 +41,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -82,10 +82,14 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-9" y="0" width="1386" height="788" extended-state="0" />
+    <frame x="-8" y="0" width="1109" height="830" extended-state="0" />
     <layout>
       <window_info id="Captures" order="0" weight="0.25" />
+<<<<<<< HEAD
+      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.36567163" />
+=======
       <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.29376855" />
+>>>>>>> 8f7aa191eed30e4fa19856a51b2e5de325af2dff
       <window_info id="Structure" order="2" side_tool="true" />
       <window_info id="Image Layers" order="3" />
       <window_info id="Designer" order="4" />
@@ -93,7 +97,7 @@
       <window_info id="Capture Tool" order="6" />
       <window_info id="Favorites" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="0" weight="0.3295129" />
-      <window_info active="true" anchor="bottom" id="TODO" order="1" visible="true" weight="0.32721713" />
+      <window_info active="true" anchor="bottom" id="TODO" order="1" visible="true" weight="0.23385939" />
       <window_info anchor="bottom" id="Find" order="2" />
       <window_info anchor="bottom" id="Terminal" order="3" />
       <window_info anchor="bottom" id="Event Log" order="4" side_tool="true" />

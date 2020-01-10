@@ -1,6 +1,7 @@
 package com.korea50k.RunShare.Activities.MainFragment
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +13,11 @@ import com.korea50k.RunShare.R
 import kotlinx.android.synthetic.main.activity_main.*
 import androidx.drawerlayout.widget.DrawerLayout
 import android.view.View
+import android.widget.Toast
+import com.korea50k.RunShare.Activities.Profile.MyInformationActivity
+import com.korea50k.RunShare.Activities.Profile.SettingActivity
+import com.korea50k.RunShare.Activities.Profile.UserActivity
+import com.korea50k.RunShare.Activities.RankFragment.RankRecyclerClickActivity
 import com.korea50k.RunShare.Util.TTS
 
 
@@ -55,6 +61,19 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.closeDrawerButton->{
                 drawerLayout.closeDrawer(drawer)
+            }
+
+            R.id.slide_profileLayout->{
+                var intent = Intent(this, UserActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.slide_mydata_Button->{
+                var intent = Intent(this, MyInformationActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.slide_setting_Button->{
+                var intent = Intent(this, SettingActivity::class.java)
+                startActivity(intent)
             }
         }
     }
@@ -100,4 +119,5 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
 }
