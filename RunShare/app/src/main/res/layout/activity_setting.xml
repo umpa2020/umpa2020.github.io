@@ -36,6 +36,7 @@
 
 
     <TextView
+        android:id="@+id/seperateline2"
         android:layout_below="@+id/sound_textview"
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"
@@ -43,17 +44,53 @@
         android:background="@color/rankBackgroudGray"/>
 
     <Switch
+        android:id="@+id/setting_sound_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/sound_textview"
         android:layout_alignParentRight="true">
     </Switch>
 
+    <TextView
+        android:layout_below="@+id/seperateline2"
+        android:layout_marginTop="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="댓글 및 좋아요 알림"
+        android:fontFamily="@font/godob"
+        android:textSize="20dp"
+        android:id="@+id/likealarm_textview"/>
 
 
+    <TextView
+        android:layout_below="@+id/likealarm_textview"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/rankBackgroudGray"/>
 
+    <Switch
+        android:id="@+id/setting_like_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/likealarm_textview"
+        android:layout_alignParentRight="true">
+    </Switch>
 
+    <Button
+        android:layout_marginBottom="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="회원탈퇴"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/leaveAccount_button"/>
 
-
+    <Button
+        android:layout_marginBottom="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="로그아웃"
+        android:layout_above="@+id/leaveAccount_button"
+        android:id="@+id/logout_button"/>
 
 </RelativeLayout>
