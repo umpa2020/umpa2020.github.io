@@ -109,7 +109,7 @@ class ManageRacing {
         var runningData = RunningData()
         runningData.time = chronometer.text.toString()
 
-        Log.d("ssmm11", "맵id = " )
+        Log.d("ssmm11", "맵id = "+makerData.mapTitle )
 
         if(result){
             Thread(
@@ -117,7 +117,7 @@ class ManageRacing {
                     RetrofitClient.retrofitService.racingResult(
                         //makerData.mapTitle, 널임!
                         makerData.mapTitle,
-                        SharedPreValue.getEMAILData(context)!!,
+                        SharedPreValue.getNicknameData(context)!!,
                         runningData.time
                     ).enqueue(object :
                         retrofit2.Callback<ResponseBody> {
@@ -135,7 +135,7 @@ class ManageRacing {
                                 context.startActivity(newIntent)
                                 activity.finish()
                             } catch (e: Exception) {
-
+                                Log.d("response","hmm")
                             }
                         }
                         override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
@@ -146,7 +146,12 @@ class ManageRacing {
                 }).start()
 
         }else{
-            //실패하면 안보내도될듯?
+            var newIntent = Intent(context, RacingFinishActivity::class.java)
+            newIntent.putExtra("Result",result)
+            newIntent.putExtra("Racer Data", runningData)
+            newIntent.putExtra("Maker Data", makerData)
+            context.startActivity(newIntent)
+            activity.finish()
         }
 
 
