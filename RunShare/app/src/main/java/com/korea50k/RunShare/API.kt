@@ -31,6 +31,10 @@ interface API {
     @FormUrlEncoded
     fun runningDataDownload(@Field("MapTitle") MapTitle: String): retrofit2.Call<ResponseBody>
 
+    @POST("playerRankingAboutMapDownload.php")
+    @FormUrlEncoded
+    fun playerRankingAboutMapDownload(@Field("MapTitle") MapTitle: String): retrofit2.Call<ResponseBody>
+
     @POST("JsonUpload.php")
     @FormUrlEncoded
     fun JsonUpload(@Field("Id") Id: String, @Field("Json") Json: String, @Field("Status") Status: Int): retrofit2.Call<ResponseBody>
