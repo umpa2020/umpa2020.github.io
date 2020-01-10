@@ -14,8 +14,10 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:usesCleartextTraffic="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
+        <activity android:name=".Activities.Profile.SettingActivity"></activity>
+        <activity android:name=".Activities.Profile.MyInformationActivity" />
         <activity android:name=".Splash.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,10 +30,9 @@
         <activity android:name=".Join.SignUpActivity" />
         <activity android:name=".Activities.Login.LoginActivity" />
         <activity android:name=".Activities.Profile.UserActivity" />
-        <activity android:name=".Activities.RankFragment.RunThisMapActivity"></activity>
+        <activity android:name=".Activities.RankFragment.RunThisMapActivity" />
         <activity android:name=".Activities.FeedFragment.FeedRecyclerClickActivity_Map" />
         <activity android:name=".Activities.RankFragment.RankRecyclerClickActivity" />
-
         <activity android:name=".Activities.Racing.RacingActivity" />
         <activity android:name=".Activities.Racing.RacingFinishActivity" />
         <activity

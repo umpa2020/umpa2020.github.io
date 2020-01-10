@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.Profile.SettingActivity"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp">
+
+    <TextView
+        android:layout_marginTop="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="설정"
+        android:fontFamily="@font/godob"
+        android:textSize="30dp"
+        android:id="@+id/setting_textview"/>
+    <TextView
+        android:id="@+id/seperateline1"
+        android:layout_below="@+id/setting_textview"
+        android:layout_marginTop="10dp"
+        android:layout_width="200dp"
+        android:layout_height="2dp"
+        android:background="@color/rankBackgroudGray"/>
+
+    <TextView
+        android:layout_below="@+id/seperateline1"
+        android:layout_marginTop="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="사운드"
+        android:fontFamily="@font/godob"
+        android:textSize="20dp"
+        android:id="@+id/sound_textview"/>
+
+
+    <TextView
+        android:layout_below="@+id/sound_textview"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/rankBackgroudGray"/>
+
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/sound_textview"
+        android:layout_alignParentRight="true">
+    </Switch>
+
+
+
+
+
+
+
+
+</RelativeLayout>
