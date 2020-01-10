@@ -6,18 +6,24 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@drawable/splash"
-    tools:context=".Login.LoginActivity">
+    android:gravity="center"
+    tools:context=".Activities.Login.LoginActivity">
     <EditText android:id="@+id/login_id"
         android:layout_marginTop="30dp"
         android:layout_width="350dp"
         android:layout_height="40dp"
-        android:hint="ID"
+        android:layout_marginBottom="15dp"
+        android:hint="E-mail"
+        android:backgroundTint="@color/white"
+        android:textColorHint="@color/white"
         android:layout_gravity="center_horizontal"/>
 
     <EditText android:id="@+id/login_password"
         android:layout_width="350dp"
         android:layout_height="40dp"
-        android:hint="password"
+        android:hint="Password"
+        android:backgroundTint="@color/white"
+        android:textColorHint="@color/white"
         android:layout_gravity="center_horizontal"/>
 
 
@@ -26,8 +32,9 @@
         android:layout_marginTop="20dp"
         android:layout_width="350dp"
         android:layout_height="40dp"
+        android:background="@drawable/ic_save_button_pressed"
         android:text="Login"
-        android:backgroundTint="#FFFFFF"
+        android:backgroundTint="#BFFFFFFF"
         android:layout_gravity="center_horizontal"/>
 
     <Button android:id="@+id/button_signup"
@@ -35,8 +42,9 @@
         android:layout_marginTop="20dp"
         android:layout_width="350dp"
         android:layout_height="40dp"
+        android:background="@drawable/ic_save_button_pressed"
         android:text="Sign Up"
-        android:backgroundTint="#FFFFFF"
+        android:backgroundTint="#BFFFFFFF"
         android:layout_gravity="center_horizontal"/>
 
     <!--Button android:id="@+id/button_google_login"
