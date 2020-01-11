@@ -2,22 +2,16 @@ package com.korea50k.RunShare.Util.map
 
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.Color
 import android.os.Looper
 import android.util.Log
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.GoogleMap.SnapshotReadyCallback
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.maps.android.PolyUtil
 import com.google.maps.android.SphericalUtil
-import com.korea50k.RunShare.Activities.Running.RunningSaveActivity
-import java.io.File
-import java.io.FileOutputStream
 import java.util.*
 import kotlin.collections.ArrayList
 import com.google.android.gms.maps.model.*
@@ -70,7 +64,7 @@ class RunningMap : OnMapReadyCallback {
         )
     }
     fun init(){
-        val cpMarkerImg = context.getDrawable(R.drawable.checkpoint_marker)
+        val cpMarkerImg = context.getDrawable(R.drawable.ic_checkpoint_red)
         var cpCanvas = Canvas()
         var cpBitmap = Bitmap.createBitmap(
             cpMarkerImg!!.intrinsicWidth,
