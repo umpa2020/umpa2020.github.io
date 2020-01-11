@@ -26,4 +26,7 @@ class FeedMapData() : Serializable {
     @Expose
     var Likes: String = "0"
 
+    @SerializedName("Like")
+    @Expose
+    var Like:Boolean=false
 }

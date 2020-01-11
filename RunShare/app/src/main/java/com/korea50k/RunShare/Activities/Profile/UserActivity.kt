@@ -24,7 +24,7 @@ class UserActivity : AppCompatActivity() {
         //TODO 탭뷰 아이콘 바꾸고 싶으면 여기서 추가
         fragmentAdapter.addFragment(R.drawable.ic_launcher_background, R.drawable.ic_launcher_background,"Race",FragmentUserRace())
         fragmentAdapter.addFragment(R.drawable.ic_launcher_background, R.drawable.ic_launcher_background,"Community",FragmentUserCommunity())
-        user_viewpager.adapter = fragmentAdapter
+        /*user_viewpager.adapter = fragmentAdapter
 
         user_viewpager.addOnPageChangeListener(
             TabLayout.TabLayoutOnPageChangeListener(user_tabs))
@@ -44,12 +44,12 @@ class UserActivity : AppCompatActivity() {
         })
         user_tabs.setupWithViewPager(user_viewpager)
         tabIconSelect()
+*/
 
 
 
 
-
-    }
+    }/*
     fun tabIconSelect(){
         //TOdo 탭뷰 아이콘 클릭했을 떄랑 아닐때 이미지 추가하는 부분
         val tabBtnImgOff = intArrayOf(R.drawable.ic_launcher_background, R.drawable.ic_launcher_background)
@@ -64,7 +64,7 @@ class UserActivity : AppCompatActivity() {
                 tab.setIcon(tabBtnImgOff[i])
             }
         }
-    }
+    }*/
 
 
 

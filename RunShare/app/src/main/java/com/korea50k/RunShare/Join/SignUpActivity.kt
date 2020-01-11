@@ -263,7 +263,7 @@ class SignUpActivity : AppCompatActivity() {
                     inputStream!!.close()
                     Log.d(WSY, bitmapImg.toString())
                     profileImage.setImageBitmap(bitmapImg)
-
+                    //TODO:서버로 데이터 전송
                 }catch(e : java.lang.Exception)
                 {
 
@@ -271,6 +271,7 @@ class SignUpActivity : AppCompatActivity() {
             }
             else if(resultCode == RESULT_CANCELED)
             {
+                //사진 선택 취소
                 Toast.makeText(this, "사진 선택 취소", Toast.LENGTH_LONG).show();
             }
         }

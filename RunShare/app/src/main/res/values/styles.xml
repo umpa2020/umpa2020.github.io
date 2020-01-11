@@ -25,6 +25,14 @@
         <item name="android:textSize">25dp</item>
     </style>
 
+    <style name="info_text">
+        <item name="android:fontFamily">@font/godoroundedl</item>
+        <item name="android:textSize">24dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:height">0dp</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+
 
     <!-- 하울스타그램 참고-->
     <style name="ButtonStyle" parent="Widget.AppCompat.Button.Colored">
