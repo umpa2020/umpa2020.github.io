@@ -64,6 +64,7 @@ class RankRecyclerClickActivity : AppCompatActivity() , OnLoadMoreListener {
         //mcontext = baseContext
         val intent =  getIntent()
         MapTitle = intent.extras?.getString("MapTitle").toString()
+        Log.d("Ha..",MapTitle)
         mapName_TextView.text=MapTitle
 
         val task = GetData()
@@ -132,8 +133,8 @@ class RankRecyclerClickActivity : AppCompatActivity() , OnLoadMoreListener {
                 rankDetailMapDatas = ConvertJson.JsonToRankDetailMapDatas(mJsonString, start, end)
 
                 Log.d("ssmm11", "rankDetailMapDatas = "+ rankDetailMapDatas)
-                ID_TextView.text = rankDetailMapDatas.get(0).Id
-                MapImage = rankDetailMapDatas.get(0).MapImage
+                ID_TextView.text = rankDetailMapDatas[0].Id
+                MapImage = rankDetailMapDatas[0].MapImage
 
                 class SetImageTask : AsyncTask<Void, Void, String>(){
                     override fun onPreExecute() {
