@@ -316,7 +316,7 @@ class RacingMap : OnMapReadyCallback {
                                 } else if (SphericalUtil.computeDistanceBetween(
                                         cur_loc,
                                         markers[markers.size - 1]
-                                    ) < 10
+                                    ) < 10&&markerCount==markers.size
                                 ) {
                                     manageRacing.stopRacing(true)
                                 } else {

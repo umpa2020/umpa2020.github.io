@@ -53,12 +53,12 @@ class ManageRacing {
             while (true) {
                 Thread.sleep(3000)
                 activity.runOnUiThread(Runnable {
-                    activity.runningDistanceTextView.text =
+                    activity.racingDistanceTextView.text =
                         String.format("%.3f km", ((calcLeftDistance()) / 1000))
                 })
             }
         })
-        chronometer = activity.runningTimerTextView
+        chronometer = activity.racingTimerTextView
 
        var countDownThread = Thread(Runnable {
            activity.runOnUiThread(Runnable {
