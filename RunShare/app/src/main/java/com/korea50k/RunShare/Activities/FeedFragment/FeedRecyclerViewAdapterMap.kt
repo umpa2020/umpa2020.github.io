@@ -116,14 +116,14 @@ RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 if (holder.feedHeart.tag.toString().equals("0")) {
                     before++
                     holder.feedHeartcount?.text = before.toString()
-                    holder.feedHeart.setImageResource(R.drawable.ic_favorite)
+                    holder.feedHeart.setImageResource(R.drawable.ic_like_button_pressed)
                     holder.feedHeart.setColorFilter(
                         Color.parseColor("#ffff0000"), PorterDuff.Mode.SRC_IN)
                     holder.feedHeart.tag = "1"
                 } else {
                     before--
                     holder.feedHeartcount?.text = before.toString()
-                    holder.feedHeart.setImageResource(R.drawable.ic_favorite_border)
+                    holder.feedHeart.setImageResource(R.drawable.ic_like_buttin_unpressed)
                     holder.feedHeart.setColorFilter(null)
                     holder.feedHeart.tag = "0"
                 }
