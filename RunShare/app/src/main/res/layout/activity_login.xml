@@ -4,52 +4,65 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@drawable/splash"
+    android:background="@drawable/login_image"
     android:gravity="center"
+    android:orientation="vertical"
     tools:context=".Activities.Login.LoginActivity">
-    <EditText android:id="@+id/login_id"
-        android:layout_marginTop="30dp"
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_logo" />
+
+    <EditText
+        android:id="@+id/login_id"
         android:layout_width="350dp"
         android:layout_height="40dp"
-        android:layout_marginBottom="15dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:backgroundTint="@color/white"
+        android:fontFamily="@font/godob"
         android:hint="E-mail"
         android:singleLine="true"
         android:textColor="@color/white"
-        android:backgroundTint="@color/white"
         android:textColorHint="@color/white"
-        android:layout_gravity="center_horizontal"/>
+        android:inputType="textEmailAddress"/>
 
-    <EditText android:id="@+id/login_password"
+        <EditText
+            android:id="@+id/login_password"
+            android:layout_width="350dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal"
+            android:backgroundTint="@color/white"
+            android:fontFamily="@font/godob"
+            android:hint="Password"
+            android:singleLine="true"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
+            android:inputType="textPassword"/>
+
+    <TextView
+        android:id="@+id/errorMessage"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/red"/>
+    <Button
+        android:id="@+id/button_login"
         android:layout_width="350dp"
         android:layout_height="40dp"
-        android:hint="Password"
-        android:singleLine="true"
-        android:textColor="@color/white"
-        android:backgroundTint="@color/white"
-        android:textColorHint="@color/white"
-        android:layout_gravity="center_horizontal"/>
-
-
-    <Button android:id="@+id/button_login"
-        android:onClick="onClick"
+        android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"
-        android:layout_width="350dp"
-        android:layout_height="40dp"
-        android:background="@drawable/ic_save_button_pressed"
-        android:text="Login"
-        android:backgroundTint="#BFFFFFFF"
-        android:layout_gravity="center_horizontal"/>
+        android:background="@drawable/login_change_button"
+        android:onClick="onClick" />
 
-    <Button android:id="@+id/button_signup"
-        android:onClick="onClick"
-        android:layout_marginTop="20dp"
+    <Button
+        android:id="@+id/button_signup"
         android:layout_width="350dp"
         android:layout_height="40dp"
-        android:background="@drawable/ic_save_button_pressed"
-        android:text="Sign Up"
-        android:backgroundTint="#BFFFFFFF"
-        android:layout_gravity="center_horizontal"/>
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/loginpage_signup_change_button"
+        android:onClick="onClick" />
 
     <!--Button android:id="@+id/button_google_login"
         android:onClick="onClick"

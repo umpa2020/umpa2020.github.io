@@ -31,7 +31,6 @@ import org.jetbrains.anko.toast
 import retrofit2.Call
 import retrofit2.Response
 import java.io.ByteArrayOutputStream
-import java.io.File
 import java.util.regex.Pattern
 
 class SignUpActivity : AppCompatActivity() {
@@ -49,6 +48,7 @@ class SignUpActivity : AppCompatActivity() {
     private val PICK_FROM_ALBUM = 1
 
     private var bitmapImg : Bitmap? = null
+    private var basicBitmapImg : Bitmap? = null
     private var email: String? = null
     private var password: String? = null
     private var passwordCheck: String? = null
@@ -258,6 +258,7 @@ class SignUpActivity : AppCompatActivity() {
                     var inputStream =
                         intentData!!.data?.let { getContentResolver().openInputStream(it) }
 
+                    // 프로필 사진을 비트맵으로 변환
                     bitmapImg = BitmapFactory.decodeStream(inputStream)
                     inputStream!!.close()
                     Log.d(WSY, bitmapImg.toString())
@@ -312,7 +313,6 @@ class SignUpActivity : AppCompatActivity() {
         var byteArray = byteArrayOutputStream.toByteArray()
         var base64OfBitmap = Base64.encodeToString(byteArray, Base64.DEFAULT)
 
-        // Log.d(WSY,)
         // 이미지
         Log.d(WSY, email + ", " + password + ", " + nickname + ", " + age + ", " + gender)
         RetrofitClient.retrofitService.signUp(base64OfBitmap,email, password, nickname, age, gender)
@@ -472,24 +472,31 @@ class SignUpActivity : AppCompatActivity() {
                 Log.d(WSY,"" + isInputCorrectData[0] + ", " + isInputCorrectData[1] + ", " + isInputCorrectData[2] + ", " + isInputCorrectData[3] + ", " + isInputCorrectData[4]         )
                 Log.d(WSY, email + ", " + password + ", "  + passwordCheck +", " +  nickname + ", " + age + ", " + gender)
 
-//                if(gender.equals("")){
-//                    textInputLayoutArray[4].error = inputInfoMessage[4]
-//                    textInputLayoutArray[4].isErrorEnabled = true
-//                }
+                // 비밀번호 확인
                 if(!password.equals(passwordCheck)) {
                     editPasswordCheck.text = null
                     textInputLayoutArray[2].error = inputInfoMessage[2]
                     textInputLayoutArray[2].isErrorEnabled = true
-                }else {
-                    if(bitmapImg == null){
-                        toast("프로필을 등록해주세요.")
-                    }
-                    if (bitmapImg != null && isInputCorrectData[0] && isInputCorrectData[1] && isInputCorrectData[3] && age!!.isNotEmpty() && gender!!.isNotEmpty()) {
+                }
+                // 비밀 번호 확인이 되면...가입!
+                else {
+                    if (isInputCorrectData[0] && isInputCorrectData[1] && isInputCorrectData[3] && age!!.isNotEmpty() && gender!!.isNotEmpty()) {
                         // AsyncTask로 로딩(시간이 걸리는 것을) 보여주기
-                        signUp(bitmapImg!!,email!!, password!!, nickname!!, age!!, gender!!)
-                        Log.d(WSY, "가입~")
-                    }else{
+
+                        if(bitmapImg == null) {
+                            // 기본 프로필로 가입하기
+                            basicBitmapImg = BitmapFactory.decodeResource(resources, R.drawable.basic_profile)
+                            signUp(basicBitmapImg!!, email!!, password!!, nickname!!, age!!, gender!!)
+                        }
+                        else {
+                            // 등록한 프로필 사진으로 가입하기
+                            signUp(bitmapImg!!, email!!, password!!, nickname!!, age!!, gender!!)
+                        }
+                    }
+                    // 정보가 하나라도 입력 안되면 error 메시지 출력
+                    else{
                         for(a in 0..5) {
+                            // 에러 메시지 중에서도 정보가 입력되것 제외하고 출력.
                             if(!isInputCorrectData[a])
                                 reactiveInputTextViewData(a, false)
                         }
