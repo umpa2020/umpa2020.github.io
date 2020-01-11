@@ -34,7 +34,6 @@ class fragment_rank_map : Fragment(), RankRecyclerViewAdapter_Map.OnLoadMoreList
     lateinit var rankMapDatas : ArrayList<RankMapData>
     lateinit var rankrecyclerviewadapterMap: RankRecyclerViewAdapter_Map
 
-
     var mJsonString = ""
     lateinit var mAdapter : RankRecyclerViewAdapter_Map
     lateinit var itemList : ArrayList<RankMapData>
@@ -72,7 +71,6 @@ class fragment_rank_map : Fragment(), RankRecyclerViewAdapter_Map.OnLoadMoreList
 
         val task = GetData()
         task.execute("http://15.164.50.86/rankDownload.php")
-
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -95,14 +93,13 @@ class fragment_rank_map : Fragment(), RankRecyclerViewAdapter_Map.OnLoadMoreList
                     override fun onItemClick(view: View, position: Int) {
                         val intent = Intent(context, RankRecyclerClickActivity::class.java)
                         intent.putExtra("MapTitle", rankMapDatas.get(position).mapTitle)
-                        intent.putExtra("MapImage", rankMapDatas.get(position).mapImage)
-                        intent.putExtra("Id", rankMapDatas.get(position).id)
+                        /*intent.putExtra("MapImage", rankMapDatas.get(position).mapImage)
+                        intent.putExtra("Id", rankMapDatas.get(position).id)*/
                         startActivity(intent)
 
                     }
                 })
         )
-
         return view
     }
 
@@ -112,7 +109,6 @@ class fragment_rank_map : Fragment(), RankRecyclerViewAdapter_Map.OnLoadMoreList
             override fun onResponse(call: Call<ResponseBody>, response: retrofit2.Response<ResponseBody>) {
                 try {
                     val result: String? = response.body().toString()
-
                     Toast.makeText(context, "DB 다운로드 성공" + result,Toast.LENGTH_SHORT).show()
                 } catch (e: Exception) {
 
