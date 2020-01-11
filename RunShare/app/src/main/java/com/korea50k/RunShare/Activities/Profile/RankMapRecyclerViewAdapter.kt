@@ -1,29 +1,36 @@
-package com.korea50k.RunShare.Activities.RankFragment
+package com.korea50k.RunShare.Activities.Profile
 
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.GridLayout
+import android.widget.ImageView
 import android.widget.TextView
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.korea50k.RunShare.R
-import com.korea50k.RunShare.dataClass.RankDetailMapData
 import com.korea50k.RunShare.dataClass.RankMapData
-import kotlin.collections.ArrayList
+import java.util.ArrayList
+import androidx.appcompat.widget.LinearLayoutCompat
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import com.korea50k.RunShare.dataClass.UserMapImageData
 
+/*
 //  처음 부터 새로하는데
-class RankRecyclerViewAdapterMap(onLoadMoreListener: OnLoadMoreListener) :
+class RankMapRecyclerViewAdapter(onLoadMoreListener: OnLoadMoreListener) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
     override fun getItemCount(): Int {
         return itemList.size
     }
 
+
     private val VIEW_ITEM = 1
     private val VIEW_PROG = 0
-    var itemList=ArrayList<RankMapData>()
+    var itemList=ArrayList<UserMapImageData>()
     private var onLoadMoreListener = onLoadMoreListener
-    private var mLinearLayoutManager: LinearLayoutManager? = null
+    private var mGridLayoutManager: GridLayoutManager? = null
 
     private var isMoreLoading = false
     private val visibleThreshold = 1
@@ -38,8 +45,8 @@ class RankRecyclerViewAdapterMap(onLoadMoreListener: OnLoadMoreListener) :
         fun onLoadMore()
     }
     init {}
-    fun setLinearLayoutManager(linearLayoutManager: LinearLayoutManager) {
-        this.mLinearLayoutManager = linearLayoutManager
+    fun setGridLayoutManager(gridLayoutManager: GridLayoutManager) {
+        this.mGridLayoutManager = gridLayoutManager
     }
 
     fun setRecyclerView(mView: RecyclerView) {
@@ -47,9 +54,9 @@ class RankRecyclerViewAdapterMap(onLoadMoreListener: OnLoadMoreListener) :
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 visibleItemCount = recyclerView.childCount
-                totalItemCount = mLinearLayoutManager!!.itemCount
-                firstVisibleItem = mLinearLayoutManager!!.findFirstVisibleItemPosition()
-                lastVisibleItem = mLinearLayoutManager!!.findLastVisibleItemPosition()
+                totalItemCount = mGridLayoutManager!!.itemCount
+                firstVisibleItem = mGridLayoutManager!!.findFirstVisibleItemPosition()
+                lastVisibleItem = mGridLayoutManager!!.findLastVisibleItemPosition()
                 Log.d("total", totalItemCount.toString() + "")
                 Log.d("visible", visibleItemCount.toString() + "")
 
@@ -68,42 +75,44 @@ class RankRecyclerViewAdapterMap(onLoadMoreListener: OnLoadMoreListener) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        //현재 사이즈 뷰 화면 크기의 가로 크기의 1/3값을 가지고 오기
+        val width = parent.resources.displayMetrics.widthPixels / 3
+        val imageView = ImageView(parent.context)
+        imageView.layoutParams = LinearLayoutCompat.LayoutParams(width, width)
+
         return ViewHolder(
                 LayoutInflater.from(parent.context).inflate(
-                    R.layout.recycler_rank_item,
+                    com.korea50k.RunShare.R.layout.user_grid_image,
                     parent,
                     false
                 )
             )
     }
 
-    fun addAll(lst: ArrayList<RankMapData>) {
+    fun addAll(lst: List<UserMapImageData>) {
         //itemList.clear()
         itemList.addAll(lst)
         notifyDataSetChanged()
     }
 
-    fun addItemMore(lst: List<RankMapData>) {
+    fun addItemMore(lst: List<UserMapImageData>) {
         itemList.addAll(lst)
         notifyItemRangeChanged(0, itemList.size)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is ViewHolder) {
-            val singleItem = itemList[position]
-            var ranking = position+1
-            holder.rank.setText(ranking.toString())
-            holder.mapTitle.setText(singleItem.mapTitle)
-            holder.execute.setText(singleItem.execute)
-            holder.likes.setText(singleItem.likes)
-            if (ranking == 1)
-                holder.rank.setBackgroundResource(R.drawable.ic_1)
-            else if (ranking == 2)
-                holder.rank.setBackgroundResource(R.drawable.ic_2)
-            else if (ranking == 3)
-                holder.rank.setBackgroundResource(R.drawable.ic_3)
-            else
-                holder.rank.setBackgroundResource(R.drawable.ic_4)
+/*
+            Glide.with(holder.itemView.context)
+                .load(UserMapImageData[position].usermapimage)
+                .apply(RequestOptions().centerCrop())
+                .into(holder.gridImage)
+
+ */
+            Glide.with(holder.itemView.context)
+                .load(itemList[position].usermapimage)
+                .apply(RequestOptions().centerCrop())
+                .into(holder.gridImage)
 
         }
     }
@@ -113,17 +122,14 @@ class RankRecyclerViewAdapterMap(onLoadMoreListener: OnLoadMoreListener) :
     }
 
     internal class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
-        var rank: TextView
-        var mapTitle: TextView
-        var execute: TextView
-        var likes: TextView
-
+        var image: ImageView
         init {
-            rank = v.findViewById(R.id.rank_cardView_rank) as TextView
-            mapTitle = v.findViewById(R.id.rank_cardView_name) as TextView
-            execute = v.findViewById(R.id.rank_cardView_execute) as TextView
-            likes = v.findViewById(R.id.rank_cardView_like) as TextView
+            image = v.findViewById(com.korea50k.RunShare.R.id.gridImage) as ImageView
         }
     }
 
+
+
 }
+
+ */

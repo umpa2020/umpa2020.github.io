@@ -93,7 +93,8 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:3.0.0'
 
     //이미지 로더 라이브러리
-    implementation 'com.github.bumptech.glide:glide:4.0.0'
+    implementation 'com.github.bumptech.glide:glide:4.10.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.10.0'
 
     //스위치 버튼 라이브러리
     implementation 'com.kyleduo.switchbutton:library:2.0.0'

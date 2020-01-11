@@ -16,8 +16,7 @@ import com.korea50k.RunShare.Util.map.RacingMap
 import com.korea50k.RunShare.dataClass.RunningData
 import com.korea50k.RunShare.Util.TTS
 import kotlinx.android.synthetic.main.activity_racing.*
-import kotlinx.android.synthetic.main.activity_running.running_distance_tv
-import kotlinx.android.synthetic.main.activity_running.timer_tv
+import kotlinx.android.synthetic.main.activity_running.*
 import okhttp3.ResponseBody
 import retrofit2.Call
 
@@ -54,12 +53,12 @@ class ManageRacing {
             while (true) {
                 Thread.sleep(3000)
                 activity.runOnUiThread(Runnable {
-                    activity.running_distance_tv.text =
-                        String.format("%.3f", ((calcLeftDistance()) / 1000))
+                    activity.racingDistanceTextView.text =
+                        String.format("%.3f km", ((calcLeftDistance()) / 1000))
                 })
             }
         })
-        chronometer = activity.timer_tv
+        chronometer = activity.racingTimerTextView
 
        var countDownThread = Thread(Runnable {
            activity.runOnUiThread(Runnable {
@@ -108,7 +107,7 @@ class ManageRacing {
         chronometer.stop()
         var runningData = RunningData()
         runningData.time = chronometer.text.toString()
-
+        runningData.speed=racingMap.speeds.toDoubleArray()
         Log.d("ssmm11", "맵id = "+makerData.mapTitle )
 
         if(result){
