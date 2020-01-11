@@ -86,11 +86,13 @@
         android:id="@+id/leaveAccount_button"/>
 
     <Button
+
         android:layout_marginBottom="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="로그아웃"
         android:layout_above="@+id/leaveAccount_button"
-        android:id="@+id/logout_button"/>
+        android:id="@+id/logout_button"
+        android:onClick="onClick"/>
 
 </RelativeLayout>
