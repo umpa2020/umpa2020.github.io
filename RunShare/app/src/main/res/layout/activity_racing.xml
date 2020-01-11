@@ -23,99 +23,105 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="?actionBarSize"
         layout:content="@+id/content"
-        layout:handle="@+id/handle">
+        layout:handle="@+id/racingHandle">
 
         <Button
-            android:id="@+id/handle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/rounded_gray_box"
-            android:gravity="center"
-            android:text="▲"
-            android:textColor="#FF0000" />
+            android:id="@+id/racingHandle"
+            android:layout_width="70dp"
+            android:layout_height="25dp"
+            android:background="@drawable/extend_selector"
+            android:gravity="center" />
 
         <LinearLayout
-            android:id="@+id/content"
+            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <LinearLayout
-                android:layout_width="0dp"
+                android:id="@+id/content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:layout_weight="1.0"
-                android:background="@drawable/rounded_gray_box"
-                android:orientation="vertical">
+                android:background="@drawable/ic_main_infobar">
 
-                <TextView
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="Km"
-                    android:textColor="#FFFFFF"
-                    android:textSize="24.0dip" />
+                    android:layout_margin="5dp"
+                    android:layout_weight="1.0"
+                    android:background="#00000000"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/running_distance_tv"
-                    android:layout_width="match_parent"
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Km"
+                        android:textColor="#FFFFFF"
+                        android:textSize="24.0dip" />
+
+                    <TextView
+                        android:id="@+id/running_distance_tv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="0.00"
+                        android:textColor="#FFFFFF"
+                        android:textSize="24.0dip" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="0.00"
-                    android:textColor="#FFFFFF"
-                    android:textSize="24.0dip" />
-            </LinearLayout>
+                    android:layout_margin="5dp"
+                    android:layout_weight="1.0"
+                    android:background="#FFFFFFFF"
+                    android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:layout_weight="1.0"
-                android:background="@drawable/rounded_gray_box"
-                android:orientation="vertical">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="시간"
+                        android:textColor="#FFFFFF"
+                        android:textSize="24dp" />
 
-                <TextView
-                    android:layout_width="match_parent"
+                    <Chronometer
+                        android:id="@+id/timer_tv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textColor="#FFFFFF"
+                        android:textSize="24dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="시간"
-                    android:textColor="#FFFFFF"
-                    android:textSize="24dp" />
+                    android:layout_margin="5dp"
+                    android:layout_weight="1.0"
+                    android:background="#FFFFFFFF"
+                    android:orientation="vertical">
 
-                <Chronometer
-                    android:id="@+id/timer_tv"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textColor="#FFFFFF"
-                    android:textSize="24dp" />
-            </LinearLayout>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="속력(km/h)"
+                        android:textColor="#FFFFFF"
+                        android:textSize="24dp" />
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:layout_weight="1.0"
-                android:background="@drawable/rounded_gray_box"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="속력(km/h)"
-                    android:textColor="#FFFFFF"
-                    android:textSize="24dp" />
-
-                <TextView
-                    android:id="@+id/racingSpeedTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="0.0"
-                    android:textColor="#FFFFFF"
-                    android:textSize="24dp" />
+                    <TextView
+                        android:id="@+id/racingSpeedTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="0.0"
+                        android:textColor="#FFFFFF"
+                        android:textSize="24dp" />
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
+
     </hollowsoft.slidingdrawer.SlidingDrawer>
 
     <LinearLayout

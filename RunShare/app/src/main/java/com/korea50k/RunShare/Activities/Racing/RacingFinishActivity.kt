@@ -43,10 +43,16 @@ class RacingFinishActivity : AppCompatActivity() {
         }
         racerData = intent.getSerializableExtra("Racer Data") as RunningData
         makerData = intent.getSerializableExtra("Maker Data") as RunningData
-        racerLapTimeTextView.text = racerData.time
-        makerLapTimeTextView.text = makerData.time
+        makerDistanceTextView.text=String.format("%.3f km",makerData.distance)
+        makerLapTimeTextView.text=makerData.time
+        makerMaxSpeedTextView.text=String.format("%.3f km/h",makerData.speed.max())
+        makerAvgSpeedTextView.text=String.format("%.3f km/h",makerData.speed.min())
+
+        racerLapTimeTextView.text=racerData.time
+        racerMaxSpeedTextView.text=String.format("%.3f km/h",racerData.speed.max())
+        racerAvgSpeedTextView.text=String.format("%.3f km/h",racerData.speed.min())
         //TODO:서버에서 해당 맵 랭크 받아오기
-        Thread(Runnable {
+      /*  Thread(Runnable {
             RetrofitClient.retrofitService.playerRankingAboutMapDownload(makerData.mapTitle)
                 .enqueue(object :
                     retrofit2.Callback<ResponseBody> {
@@ -113,7 +119,7 @@ class RacingFinishActivity : AppCompatActivity() {
                         t.printStackTrace()
                     }
                 })
-        }).start()
+        }).start()*/
     }
 
     fun onClick(view: View) {

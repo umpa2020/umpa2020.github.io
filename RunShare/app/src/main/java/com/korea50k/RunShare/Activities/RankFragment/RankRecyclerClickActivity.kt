@@ -38,27 +38,23 @@ class RankRecyclerClickActivity : AppCompatActivity() {
         //mcontext = baseContext
         val intent =  getIntent()
         MapTitle = intent.extras?.getString("MapTitle").toString()
-        val MapImage = intent.extras?.getString("MapImage")
-        val Id = intent.extras?.getString("Id")
-        mapName_TextView.setText(MapTitle)
-        ID_TextView.setText(Id)
-
+        mapName_TextView.text=MapTitle
 
         class SetImageTask : AsyncTask<Void, Void, String>(){
             override fun onPreExecute() {
                 super.onPreExecute()
             }
-            lateinit var bm: Bitmap
+            var bm: Bitmap? = null
 
             override fun doInBackground(vararg params: Void?): String? {
                 try {
-                    val url =
+                    /*val url =
                         URL(MapImage)
                     val conn = url.openConnection()
                     conn.connect()
                     val bis = BufferedInputStream(conn.getInputStream())
                     bm = BitmapFactory.decodeStream(bis)
-                    bis.close()
+                    bis.close()*/
 
                     rankingMapDownload(MapTitle!!)
                 } catch (e : java.lang.Exception) {
@@ -70,7 +66,7 @@ class RankRecyclerClickActivity : AppCompatActivity() {
             override fun onPostExecute(result: String?) {
                 super.onPostExecute(result)
                 //TODO:피드에서 이미지 적용해볼 소스코드
-                rank_root_preview.setImageBitmap(bm)
+               // rank_root_preview.setImageBitmap(bm)
             }
         }
         var Start = SetImageTask()

@@ -15,8 +15,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.korea50k.RunShare.RetrofitClient
 import com.korea50k.RunShare.Util.ConvertJson
 import com.korea50k.RunShare.dataClass.RankMapData
-import kotlinx.android.synthetic.main.activity_sign_up.*
-import kotlinx.android.synthetic.main.fragment_rank_map.view.*
 import okhttp3.ResponseBody
 import retrofit2.Call
 import java.io.BufferedReader
@@ -26,19 +24,17 @@ import java.net.HttpURLConnection
 import java.net.URL
 import androidx.recyclerview.widget.RecyclerView
 import com.korea50k.RunShare.R
-import kotlinx.android.synthetic.main.fragment_rank_map.*
-import kotlinx.android.synthetic.main.fragment_rank_map.view.rank_recycler_map
+import kotlinx.android.synthetic.main.recycler_rank_item.view.*
 
 
-class fragment_rank_map : Fragment(), RankRecyclerViewAdapter_Map.OnLoadMoreListener {
+class fragment_rank_map : Fragment(), RankRecyclerViewAdapterMap.OnLoadMoreListener {
     lateinit var rankMapDatas : ArrayList<RankMapData>
-    lateinit var rankrecyclerviewadapterMap: RankRecyclerViewAdapter_Map
-
+    lateinit var rankrecyclerviewadapterMap: RankRecyclerViewAdapterMap
 
     var mJsonString = ""
-    lateinit var mAdapter : RankRecyclerViewAdapter_Map
+    lateinit var mAdapter : RankRecyclerViewAdapterMap
     lateinit var itemList : ArrayList<RankMapData>
-    lateinit var onLoadMoreListener : RankRecyclerViewAdapter_Map.OnLoadMoreListener
+    lateinit var onLoadMoreListener : RankRecyclerViewAdapterMap.OnLoadMoreListener
     var start = 0
     var end = 15
 
@@ -72,7 +68,6 @@ class fragment_rank_map : Fragment(), RankRecyclerViewAdapter_Map.OnLoadMoreList
 
         val task = GetData()
         task.execute("http://15.164.50.86/rankDownload.php")
-
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -84,7 +79,7 @@ class fragment_rank_map : Fragment(), RankRecyclerViewAdapter_Map.OnLoadMoreList
         var mRecyclerView = view.findViewById<RecyclerView>(R.id.rank_recycler_map)
         val mLayoutManager = LinearLayoutManager(context)
         mRecyclerView.layoutManager = mLayoutManager
-        mAdapter = RankRecyclerViewAdapter_Map(this)
+        mAdapter = RankRecyclerViewAdapterMap(this)
         mAdapter.setLinearLayoutManager(mLayoutManager)
         mAdapter.setRecyclerView(mRecyclerView)
 
@@ -93,16 +88,13 @@ class fragment_rank_map : Fragment(), RankRecyclerViewAdapter_Map.OnLoadMoreList
             RecyclerItemClickListener(context!!, mRecyclerView,
                 object : RecyclerItemClickListener.OnItemClickListener {
                     override fun onItemClick(view: View, position: Int) {
+                        Log.d("ranking","click listener")
                         val intent = Intent(context, RankRecyclerClickActivity::class.java)
-                        intent.putExtra("MapTitle", rankMapDatas.get(position).mapTitle)
-                        intent.putExtra("MapImage", rankMapDatas.get(position).mapImage)
-                        intent.putExtra("Id", rankMapDatas.get(position).id)
+                        intent.putExtra("MapTitle", view.rank_cardView_name.text)
                         startActivity(intent)
-
                     }
                 })
         )
-
         return view
     }
 
@@ -112,7 +104,6 @@ class fragment_rank_map : Fragment(), RankRecyclerViewAdapter_Map.OnLoadMoreList
             override fun onResponse(call: Call<ResponseBody>, response: retrofit2.Response<ResponseBody>) {
                 try {
                     val result: String? = response.body().toString()
-
                     Toast.makeText(context, "DB 다운로드 성공" + result,Toast.LENGTH_SHORT).show()
                 } catch (e: Exception) {
 

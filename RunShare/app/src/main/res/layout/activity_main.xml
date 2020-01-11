@@ -14,7 +14,16 @@
             android:id="@+id/pager"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-
+        <TextView
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:text="left"/>
+        <TextView
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:text="right"/>
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabDots"
             android:layout_width="match_parent"

@@ -1,0 +1,208 @@
+
+01/11 16:55:07: Launching 'app' on Nexus 5X API 26.
+$ adb shell am start -n "com.korea50k.RunShare/com.korea50k.RunShare.Splash.SplashActivity" -a android.intent.action.MAIN -c android.intent.category.LAUNCHER
+Waiting for process to come online...
+Connected to process 5092 on device 'Nexus_5X_API_26 [emulator-5554]'.
+Capturing and displaying logcat messages from application. This behavior can be disabled in the "Logcat output" section of the "Debugger" settings page.
+I/zygote: Not late-enabling -Xcheck:jni (already on)
+W/zygote: Unexpected CPU variant for X86 using defaults: x86
+I/zygote: Rejecting re-init on previously-failed class java.lang.Class<androidx.core.view.ViewCompat$2>: java.lang.NoClassDefFoundError: Failed resolution of: Landroid/view/View$OnUnhandledKeyEventListener;
+        at void androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(android.view.View, androidx.core.view.OnApplyWindowInsetsListener) (ViewCompat.java:2421)
+        at android.view.ViewGroup androidx.appcompat.app.AppCompatDelegateImpl.createSubDecor() (AppCompatDelegateImpl.java:779)
+        at void androidx.appcompat.app.AppCompatDelegateImpl.ensureSubDecor() (AppCompatDelegateImpl.java:659)
+        at void androidx.appcompat.app.AppCompatDelegateImpl.setContentView(int) (AppCompatDelegateImpl.java:552)
+        at void androidx.appcompat.app.AppCompatActivity.setContentView(int) (AppCompatActivity.java:161)
+        at void com.korea50k.RunShare.Splash.SplashActivity.onCreate(android.os.Bundle) (SplashActivity.kt:22)
+        at void android.app.Activity.performCreate(android.os.Bundle) (Activity.java:6975)
+        at void android.app.Instrumentation.callActivityOnCreate(android.app.Activity, android.os.Bundle) (Instrumentation.java:1213)
+        at android.app.Activity android.app.ActivityThread.performLaunchActivity(android.app.ActivityThread$ActivityClientRecord, android.content.Intent) (ActivityThread.java:2770)
+        at void android.app.ActivityThread.handleLaunchActivity(android.app.ActivityThread$ActivityClientRecord, android.content.Intent, java.lang.String) (ActivityThread.java:2892)
+        at void android.app.ActivityThread.-wrap11(android.app.ActivityThread, android.app.ActivityThread$ActivityClientRecord, android.content.Intent, java.lang.String) (ActivityThread.java:-1)
+        at void android.app.ActivityThread$H.handleMessage(android.os.Message) (ActivityThread.java:1593)
+        at void android.os.Handler.dispatchMessage(android.os.Message) (Handler.java:105)
+        at void android.os.Looper.loop() (Looper.java:164)
+        at void android.app.ActivityThread.main(java.lang.String[]) (ActivityThread.java:6541)
+        at java.lang.Object java.lang.reflect.Method.invoke(java.lang.Object, java.lang.Object[]) (Method.java:-2)
+        at void com.android.internal.os.Zygote$MethodAndArgsCaller.run() (Zygote.java:240)
+        at void com.android.internal.os.ZygoteInit.main(java.lang.String[]) (ZygoteInit.java:767)
+    Caused by: java.lang.ClassNotFoundException: Didn't find class "android.view.View$OnUnhandledKeyEventListener" on path: DexPathList[[zip file "/data/app/com.korea50k.RunShare-jxuSZK8NAIpiHM7LuYdlQQ==/base.apk"],nativeLibraryDirectories=[/data/app/com.korea50k.RunShare-jxuSZK8NAIpiHM7LuYdlQQ==/lib/x86, /system/lib, /vendor/lib]]
+        at java.lang.Class dalvik.system.BaseDexClassLoader.findClass(java.lang.String) (BaseDexClassLoader.java:93)
+        at java.lang.Class java.lang.ClassLoader.loadClass(java.lang.String, boolean) (ClassLoader.java:379)
+        at java.lang.Class java.lang.ClassLoader.loadClass(java.lang.String) (ClassLoader.java:312)
+I/zygote:     at void androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(android.view.View, androidx.core.view.OnApplyWindowInsetsListener) (ViewCompat.java:2421)
+        at android.view.ViewGroup androidx.appcompat.app.AppCompatDelegateImpl.createSubDecor() (AppCompatDelegateImpl.java:779)
+        at void androidx.appcompat.app.AppCompatDelegateImpl.ensureSubDecor() (AppCompatDelegateImpl.java:659)
+        at void androidx.appcompat.app.AppCompatDelegateImpl.setContentView(int) (AppCompatDelegateImpl.java:552)
+        at void androidx.appcompat.app.AppCompatActivity.setContentView(int) (AppCompatActivity.java:161)
+        at void com.korea50k.RunShare.Splash.SplashActivity.onCreate(android.os.Bundle) (SplashActivity.kt:22)
+        at void android.app.Activity.performCreate(android.os.Bundle) (Activity.java:6975)
+        at void android.app.Instrumentation.callActivityOnCreate(android.app.Activity, android.os.Bundle) (Instrumentation.java:1213)
+        at android.app.Activity android.app.ActivityThread.performLaunchActivity(android.app.ActivityThread$ActivityClientRecord, android.content.Intent) (ActivityThread.java:2770)
+        at void android.app.ActivityThread.handleLaunchActivity(android.app.ActivityThread$ActivityClientRecord, android.content.Intent, java.lang.String) (ActivityThread.java:2892)
+        at void android.app.ActivityThread.-wrap11(android.app.ActivityThread, android.app.ActivityThread$ActivityClientRecord, android.content.Intent, java.lang.String) (ActivityThread.java:-1)
+        at void android.app.ActivityThread$H.handleMessage(android.os.Message) (ActivityThread.java:1593)
+        at void android.os.Handler.dispatchMessage(android.os.Message) (Handler.java:105)
+        at void android.os.Looper.loop() (Looper.java:164)
+        at void android.app.ActivityThread.main(java.lang.String[]) (ActivityThread.java:6541)
+        at java.lang.Object java.lang.reflect.Method.invoke(java.lang.Object, java.lang.Object[]) (Method.java:-2)
+        at void com.android.internal.os.Zygote$MethodAndArgsCaller.run() (Zygote.java:240)
+I/zygote:     at void com.android.internal.os.ZygoteInit.main(java.lang.String[]) (ZygoteInit.java:767)
+I/zygote: Rejecting re-init on previously-failed class java.lang.Class<androidx.core.view.ViewCompat$2>: java.lang.NoClassDefFoundError: Failed resolution of: Landroid/view/View$OnUnhandledKeyEventListener;
+        at void androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(android.view.View, androidx.core.view.OnApplyWindowInsetsListener) (ViewCompat.java:2421)
+        at android.view.ViewGroup androidx.appcompat.app.AppCompatDelegateImpl.createSubDecor() (AppCompatDelegateImpl.java:779)
+        at void androidx.appcompat.app.AppCompatDelegateImpl.ensureSubDecor() (AppCompatDelegateImpl.java:659)
+        at void androidx.appcompat.app.AppCompatDelegateImpl.setContentView(int) (AppCompatDelegateImpl.java:552)
+        at void androidx.appcompat.app.AppCompatActivity.setContentView(int) (AppCompatActivity.java:161)
+        at void com.korea50k.RunShare.Splash.SplashActivity.onCreate(android.os.Bundle) (SplashActivity.kt:22)
+        at void android.app.Activity.performCreate(android.os.Bundle) (Activity.java:6975)
+        at void android.app.Instrumentation.callActivityOnCreate(android.app.Activity, android.os.Bundle) (Instrumentation.java:1213)
+        at android.app.Activity android.app.ActivityThread.performLaunchActivity(android.app.ActivityThread$ActivityClientRecord, android.content.Intent) (ActivityThread.java:2770)
+        at void android.app.ActivityThread.handleLaunchActivity(android.app.ActivityThread$ActivityClientRecord, android.content.Intent, java.lang.String) (ActivityThread.java:2892)
+        at void android.app.ActivityThread.-wrap11(android.app.ActivityThread, android.app.ActivityThread$ActivityClientRecord, android.content.Intent, java.lang.String) (ActivityThread.java:-1)
+        at void android.app.ActivityThread$H.handleMessage(android.os.Message) (ActivityThread.java:1593)
+        at void android.os.Handler.dispatchMessage(android.os.Message) (Handler.java:105)
+        at void android.os.Looper.loop() (Looper.java:164)
+        at void android.app.ActivityThread.main(java.lang.String[]) (ActivityThread.java:6541)
+        at java.lang.Object java.lang.reflect.Method.invoke(java.lang.Object, java.lang.Object[]) (Method.java:-2)
+        at void com.android.internal.os.Zygote$MethodAndArgsCaller.run() (Zygote.java:240)
+        at void com.android.internal.os.ZygoteInit.main(java.lang.String[]) (ZygoteInit.java:767)
+    Caused by: java.lang.ClassNotFoundException: Didn't find class "android.view.View$OnUnhandledKeyEventListener" on path: DexPathList[[zip file "/data/app/com.korea50k.RunShare-jxuSZK8NAIpiHM7LuYdlQQ==/base.apk"],nativeLibraryDirectories=[/data/app/com.korea50k.RunShare-jxuSZK8NAIpiHM7LuYdlQQ==/lib/x86, /system/lib, /vendor/lib]]
+        at java.lang.Class dalvik.system.BaseDexClassLoader.findClass(java.lang.String) (BaseDexClassLoader.java:93)
+        at java.lang.Class java.lang.ClassLoader.loadClass(java.lang.String, boolean) (ClassLoader.java:379)
+        at java.lang.Class java.lang.ClassLoader.loadClass(java.lang.String) (ClassLoader.java:312)
+        at void androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(android.view.View, androidx.core.view.OnApplyWindowInsetsListener) (ViewCompat.java:2421)
+        at android.view.ViewGroup androidx.appcompat.app.AppCompatDelegateImpl.createSubDecor() (AppCompatDelegateImpl.java:779)
+        at void androidx.appcompat.app.AppCompatDelegateImpl.ensureSubDecor() (AppCompatDelegateImpl.java:659)
+        at void androidx.appcompat.app.AppCompatDelegateImpl.setContentView(int) (AppCompatDelegateImpl.java:552)
+I/zygote:     at void androidx.appcompat.app.AppCompatActivity.setContentView(int) (AppCompatActivity.java:161)
+        at void com.korea50k.RunShare.Splash.SplashActivity.onCreate(android.os.Bundle) (SplashActivity.kt:22)
+        at void android.app.Activity.performCreate(android.os.Bundle) (Activity.java:6975)
+        at void android.app.Instrumentation.callActivityOnCreate(android.app.Activity, android.os.Bundle) (Instrumentation.java:1213)
+I/zygote:     at android.app.Activity android.app.ActivityThread.performLaunchActivity(android.app.ActivityThread$ActivityClientRecord, android.content.Intent) (ActivityThread.java:2770)
+        at void android.app.ActivityThread.handleLaunchActivity(android.app.ActivityThread$ActivityClientRecord, android.content.Intent, java.lang.String) (ActivityThread.java:2892)
+        at void android.app.ActivityThread.-wrap11(android.app.ActivityThread, android.app.ActivityThread$ActivityClientRecord, android.content.Intent, java.lang.String) (ActivityThread.java:-1)
+        at void android.app.ActivityThread$H.handleMessage(android.os.Message) (ActivityThread.java:1593)
+        at void android.os.Handler.dispatchMessage(android.os.Message) (Handler.java:105)
+        at void android.os.Looper.loop() (Looper.java:164)
+        at void android.app.ActivityThread.main(java.lang.String[]) (ActivityThread.java:6541)
+        at java.lang.Object java.lang.reflect.Method.invoke(java.lang.Object, java.lang.Object[]) (Method.java:-2)
+        at void com.android.internal.os.Zygote$MethodAndArgsCaller.run() (Zygote.java:240)
+        at void com.android.internal.os.ZygoteInit.main(java.lang.String[]) (ZygoteInit.java:767)
+I/zygote: Rejecting re-init on previously-failed class java.lang.Class<androidx.core.view.ViewCompat$2>: java.lang.NoClassDefFoundError: Failed resolution of: Landroid/view/View$OnUnhandledKeyEventListener;
+        at void androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(android.view.View, androidx.core.view.OnApplyWindowInsetsListener) (ViewCompat.java:2421)
+        at android.view.ViewGroup androidx.appcompat.app.AppCompatDelegateImpl.createSubDecor() (AppCompatDelegateImpl.java:779)
+        at void androidx.appcompat.app.AppCompatDelegateImpl.ensureSubDecor() (AppCompatDelegateImpl.java:659)
+        at void androidx.appcompat.app.AppCompatDelegateImpl.setContentView(int) (AppCompatDelegateImpl.java:552)
+        at void androidx.appcompat.app.AppCompatActivity.setContentView(int) (AppCompatActivity.java:161)
+        at void com.korea50k.RunShare.Splash.SplashActivity.onCreate(android.os.Bundle) (SplashActivity.kt:22)
+        at void android.app.Activity.performCreate(android.os.Bundle) (Activity.java:6975)
+        at void android.app.Instrumentation.callActivityOnCreate(android.app.Activity, android.os.Bundle) (Instrumentation.java:1213)
+        at android.app.Activity android.app.ActivityThread.performLaunchActivity(android.app.ActivityThread$ActivityClientRecord, android.content.Intent) (ActivityThread.java:2770)
+        at void android.app.ActivityThread.handleLaunchActivity(android.app.ActivityThread$ActivityClientRecord, android.content.Intent, java.lang.String) (ActivityThread.java:2892)
+I/zygote:     at void android.app.ActivityThread.-wrap11(android.app.ActivityThread, android.app.ActivityThread$ActivityClientRecord, android.content.Intent, java.lang.String) (ActivityThread.java:-1)
+        at void android.app.ActivityThread$H.handleMessage(android.os.Message) (ActivityThread.java:1593)
+        at void android.os.Handler.dispatchMessage(android.os.Message) (Handler.java:105)
+        at void android.os.Looper.loop() (Looper.java:164)
+        at void android.app.ActivityThread.main(java.lang.String[]) (ActivityThread.java:6541)
+        at java.lang.Object java.lang.reflect.Method.invoke(java.lang.Object, java.lang.Object[]) (Method.java:-2)
+        at void com.android.internal.os.Zygote$MethodAndArgsCaller.run() (Zygote.java:240)
+        at void com.android.internal.os.ZygoteInit.main(java.lang.String[]) (ZygoteInit.java:767)
+    Caused by: java.lang.ClassNotFoundException: Didn't find class "android.view.View$OnUnhandledKeyEventListener" on path: DexPathList[[zip file "/data/app/com.korea50k.RunShare-jxuSZK8NAIpiHM7LuYdlQQ==/base.apk"],nativeLibraryDirectories=[/data/app/com.korea50k.RunShare-jxuSZK8NAIpiHM7LuYdlQQ==/lib/x86, /system/lib, /vendor/lib]]
+        at java.lang.Class dalvik.system.BaseDexClassLoader.findClass(java.lang.String) (BaseDexClassLoader.java:93)
+        at java.lang.Class java.lang.ClassLoader.loadClass(java.lang.String, boolean) (ClassLoader.java:379)
+        at java.lang.Class java.lang.ClassLoader.loadClass(java.lang.String) (ClassLoader.java:312)
+        at void androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(android.view.View, androidx.core.view.OnApplyWindowInsetsListener) (ViewCompat.java:2421)
+        at android.view.ViewGroup androidx.appcompat.app.AppCompatDelegateImpl.createSubDecor() (AppCompatDelegateImpl.java:779)
+        at void androidx.appcompat.app.AppCompatDelegateImpl.ensureSubDecor() (AppCompatDelegateImpl.java:659)
+        at void androidx.appcompat.app.AppCompatDelegateImpl.setContentView(int) (AppCompatDelegateImpl.java:552)
+        at void androidx.appcompat.app.AppCompatActivity.setContentView(int) (AppCompatActivity.java:161)
+        at void com.korea50k.RunShare.Splash.SplashActivity.onCreate(android.os.Bundle) (SplashActivity.kt:22)
+        at void android.app.Activity.performCreate(android.os.Bundle) (Activity.java:6975)
+        at void android.app.Instrumentation.callActivityOnCreate(android.app.Activity, android.os.Bundle) (Instrumentation.java:1213)
+        at android.app.Activity android.app.ActivityThread.performLaunchActivity(android.app.ActivityThread$ActivityClientRecord, android.content.Intent) (ActivityThread.java:2770)
+        at void android.app.ActivityThread.handleLaunchActivity(android.app.ActivityThread$ActivityClientRecord, android.content.Intent, java.lang.String) (ActivityThread.java:2892)
+        at void android.app.ActivityThread.-wrap11(android.app.ActivityThread, android.app.ActivityThread$ActivityClientRecord, android.content.Intent, java.lang.String) (ActivityThread.java:-1)
+        at void android.app.ActivityThread$H.handleMessage(android.os.Message) (ActivityThread.java:1593)
+        at void android.os.Handler.dispatchMessage(android.os.Message) (Handler.java:105)
+        at void android.os.Looper.loop() (Looper.java:164)
+I/zygote:     at void android.app.ActivityThread.main(java.lang.String[]) (ActivityThread.java:6541)
+        at java.lang.Object java.lang.reflect.Method.invoke(java.lang.Object, java.lang.Object[]) (Method.java:-2)
+        at void com.android.internal.os.Zygote$MethodAndArgsCaller.run() (Zygote.java:240)
+        at void com.android.internal.os.ZygoteInit.main(java.lang.String[]) (ZygoteInit.java:767)
+D/OpenGLRenderer: HWUI GL Pipeline
+D/: HostConnection::get() New Host Connection established 0xa7598c80, tid 5116
+I/OpenGLRenderer: Initialized EGL, version 1.4
+D/OpenGLRenderer: Swap behavior 1
+W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+D/OpenGLRenderer: Swap behavior 0
+D/EGL_emulation: eglCreateContext: 0x9b18c9c0: maj 2 min 0 rcv 2
+D/EGL_emulation: eglMakeCurrent: 0x9b18c9c0: ver 2 0 (tinfo 0xa758b760)
+D/EGL_emulation: eglMakeCurrent: 0x9b18c9c0: ver 2 0 (tinfo 0xa758b760)
+I/WSY: 프리퍼런스에 저장된 자동 로그인 유무 :false
+D/WSY: false
+D/EGL_emulation: eglMakeCurrent: 0x9b18c9c0: ver 2 0 (tinfo 0xa758b760)
+D/EGL_emulation: eglMakeCurrent: 0x9b18c9c0: ver 2 0 (tinfo 0xa758b760)
+W/View: dispatchProvideAutofillStructure(): not laid out, ignoring
+I/AssistStructure: Flattened final assist data: 2080 bytes, containing 1 windows, 7 views
+I/TextInputLayout: EditText added is not a TextInputEditText. Please switch to using that class instead.
+I/chatty: uid=10085(u0_a85) com.korea50k.RunShare identical 3 lines
+I/TextInputLayout: EditText added is not a TextInputEditText. Please switch to using that class instead.
+I/zygote: Do partial code cache collection, code=22KB, data=30KB
+I/zygote: After code cache collection, code=22KB, data=30KB
+    Increasing code cache capacity to 128KB
+I/zygote: Do partial code cache collection, code=22KB, data=47KB
+I/zygote: After code cache collection, code=22KB, data=47KB
+    Increasing code cache capacity to 256KB
+I/zygote: JIT allocated 71KB for compiled code of void android.widget.TextView.<init>(android.content.Context, android.util.AttributeSet, int, int)
+    Compiler allocated 4MB to compile void android.widget.TextView.<init>(android.content.Context, android.util.AttributeSet, int, int)
+I/WSY: true
+D/WSY: 입력 상황 : false
+I/chatty: uid=10085(u0_a85) com.korea50k.RunShare identical 2 lines
+D/WSY: 입력 상황 : false
+D/WSY: 성별 : true
+I/zygote: NativeAllocBackground concurrent copying GC freed 3670(626KB) AllocSpace objects, 0(0B) LOS objects, 59% free, 1039KB/2MB, paused 1.214ms total 189.371ms
+D/WSY: 입력 상황 : false
+I/zygote: Do full code cache collection, code=103KB, data=65KB
+I/zygote: After code cache collection, code=100KB, data=48KB
+D/EGL_emulation: eglMakeCurrent: 0x9b18c9c0: ver 2 0 (tinfo 0xa758b760)
+W/View: dispatchProvideAutofillStructure(): not laid out, ignoring
+I/AssistStructure: Flattened final assist data: 4808 bytes, containing 1 windows, 19 views
+I/zygote: Do partial code cache collection, code=121KB, data=73KB
+    After code cache collection, code=121KB, data=73KB
+    Increasing code cache capacity to 512KB
+D/AutofillManager: notifyViewVisibilityChange(): id=1073741824 isVisible=true
+    notifyViewVisibilityChange(): id=1073741825 isVisible=true
+D/this: 로그 떠라 좀 시발
+D/AndroidRuntime: Shutting down VM
+E/AndroidRuntime: FATAL EXCEPTION: main
+    Process: com.korea50k.RunShare, PID: 5092
+    java.lang.RuntimeException: Unable to start activity ComponentInfo{com.korea50k.RunShare/com.gun0912.tedpermission.TedPermissionActivity}: java.lang.IllegalStateException: Only fullscreen opaque activities can request orientation
+        at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2817)
+        at android.app.ActivityThread.handleLaunchActivity(ActivityThread.java:2892)
+        at android.app.ActivityThread.-wrap11(Unknown Source:0)
+        at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1593)
+        at android.os.Handler.dispatchMessage(Handler.java:105)
+        at android.os.Looper.loop(Looper.java:164)
+        at android.app.ActivityThread.main(ActivityThread.java:6541)
+        at java.lang.reflect.Method.invoke(Native Method)
+        at com.android.internal.os.Zygote$MethodAndArgsCaller.run(Zygote.java:240)
+        at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:767)
+     Caused by: java.lang.IllegalStateException: Only fullscreen opaque activities can request orientation
+        at android.app.Activity.onCreate(Activity.java:986)
+        at androidx.core.app.ComponentActivity.onCreate(ComponentActivity.java:81)
+        at androidx.activity.ComponentActivity.onCreate(ComponentActivity.java:149)
+        at androidx.fragment.app.FragmentActivity.onCreate(FragmentActivity.java:313)
+        at androidx.appcompat.app.AppCompatActivity.onCreate(AppCompatActivity.java:106)
+        at com.gun0912.tedpermission.TedPermissionActivity.onCreate(TedPermissionActivity.java:69)
+        at android.app.Activity.performCreate(Activity.java:6975)
+        at android.app.Instrumentation.callActivityOnCreate(Instrumentation.java:1213)
+        at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2770)
+        at android.app.ActivityThread.handleLaunchActivity(ActivityThread.java:2892) 
+        at android.app.ActivityThread.-wrap11(Unknown Source:0) 
+        at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1593) 
+        at android.os.Handler.dispatchMessage(Handler.java:105) 
+        at android.os.Looper.loop(Looper.java:164) 
+        at android.app.ActivityThread.main(ActivityThread.java:6541) 
+        at java.lang.reflect.Method.invoke(Native Method) 
+        at com.android.internal.os.Zygote$MethodAndArgsCaller.run(Zygote.java:240) 
+        at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:767) 

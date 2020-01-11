@@ -68,13 +68,19 @@ class ConvertJson{
             return rankDetailMapDatas
         }
 
-        fun JsonToFeedMapDatas(json: String):ArrayList<FeedMapData>{
+        fun JsonToFeedMapDatas(json: String, start : Int, end : Int):ArrayList<FeedMapData>{
             var feedMapDatas= ArrayList<FeedMapData>()
 
             val jObject = JSONObject(json)
             val jArray = jObject.getJSONArray("JsonData")
+            var limit = 0;
+            if (jArray.length() < end)
+                limit = jArray.length()
+            else
+                limit = end
 
-            for (i in 0 until jArray.length()) {
+
+            for (i in start until limit) {
                 var feedMapData = FeedMapData()
                 feedMapData.Likes= jArray.getJSONObject(i).get("Likes") as String
                 feedMapData.MapTitle= jArray.getJSONObject(i).get("MapTitle") as String
