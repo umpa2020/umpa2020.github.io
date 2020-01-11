@@ -89,7 +89,6 @@ class SignUpActivity : AppCompatActivity() {
                 }
             }
         })
-
     }
 
     /**
@@ -177,7 +176,7 @@ class SignUpActivity : AppCompatActivity() {
             }
 
         val disposableAge = RxTextView.textChanges(inputDataField[3])
-            .map { t -> t.isEmpty() }
+            .map { t -> t.isEmpty() || Pattern.matches(Constants.AGE_RULS, t)}
             .subscribe({ it ->
                 //inputDataField[2].setText("")
                 reactiveInputTextViewData(3, it)
@@ -186,9 +185,10 @@ class SignUpActivity : AppCompatActivity() {
             }
 
         val disposableGender = RxTextView.textChanges(inputDataField[4])
-            .map { t -> t.isEmpty() }
+            .map { t -> t.isEmpty() || Pattern.matches(Constants.GENDER_RULS, t)}
             .subscribe({ it ->
                 //inputDataField[2].setText("")
+                Log.d(WSY,"성별 : " + it.toString())
                 reactiveInputTextViewData(4, it)
             }) {
                 //Error Block
@@ -442,7 +442,6 @@ class SignUpActivity : AppCompatActivity() {
             }
             R.id.sign_up_button -> {
 
-                // if(isInputCorrectData[0] && isInputCorrectData[1] && isInputCorrectData[2] )
                 email = editEmail.text.toString()
                 password = editPassword.text.toString()
                 nickname = editNickname.text.toString()
@@ -452,10 +451,22 @@ class SignUpActivity : AppCompatActivity() {
                 Log.d(WSY,"" + isInputCorrectData[0] + ", " + isInputCorrectData[1] + ", " + isInputCorrectData[2] + ", " + isInputCorrectData[3] + ", " + isInputCorrectData[4]         )
                 Log.d(WSY, email + ", " + password + ", " + nickname + ", " + age + ", " + gender)
 
-                if (isInputCorrectData[0] && isInputCorrectData[1] && isInputCorrectData[2] && age!!.isNotEmpty() && gender!!.isNotEmpty()) {
+//                if(gender.equals("")){
+//                    textInputLayoutArray[4].error = inputInfoMessage[4]
+//                    textInputLayoutArray[4].isErrorEnabled = true
+//                }
+                if(bitmapImg == null){
+                    toast("프로필을 등록해주세요.")
+                }
+                if (bitmapImg != null && isInputCorrectData[0] && isInputCorrectData[1] && isInputCorrectData[2] && age!!.isNotEmpty() && gender!!.isNotEmpty()) {
                     // AsyncTask로 로딩(시간이 걸리는 것을) 보여주기
                     signUp(bitmapImg!!,email!!, password!!, nickname!!, age!!, gender!!)
                     Log.d(WSY, "가입~")
+                }else{
+                    for(a in 0..4) {
+                        if(!isInputCorrectData[a])
+                            reactiveInputTextViewData(a, false)
+                    }
                 }
             }
         }
