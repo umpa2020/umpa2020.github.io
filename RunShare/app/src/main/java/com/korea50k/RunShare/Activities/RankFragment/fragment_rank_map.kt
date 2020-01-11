@@ -15,8 +15,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.korea50k.RunShare.RetrofitClient
 import com.korea50k.RunShare.Util.ConvertJson
 import com.korea50k.RunShare.dataClass.RankMapData
-import kotlinx.android.synthetic.main.activity_sign_up.*
-import kotlinx.android.synthetic.main.fragment_rank_map.view.*
 import okhttp3.ResponseBody
 import retrofit2.Call
 import java.io.BufferedReader
@@ -26,19 +24,17 @@ import java.net.HttpURLConnection
 import java.net.URL
 import androidx.recyclerview.widget.RecyclerView
 import com.korea50k.RunShare.R
-import kotlinx.android.synthetic.main.fragment_rank_map.*
-import kotlinx.android.synthetic.main.fragment_rank_map.view.rank_recycler_map
 
 
-class fragment_rank_map : Fragment(), RankRecyclerViewAdapter_Map.OnLoadMoreListener {
+class fragment_rank_map : Fragment(), RankRecyclerViewAdapterMap.OnLoadMoreListener {
     lateinit var rankMapDatas : ArrayList<RankMapData>
-    lateinit var rankrecyclerviewadapterMap: RankRecyclerViewAdapter_Map
+    lateinit var rankrecyclerviewadapterMap: RankRecyclerViewAdapterMap
 
 
     var mJsonString = ""
-    lateinit var mAdapter : RankRecyclerViewAdapter_Map
+    lateinit var mAdapter : RankRecyclerViewAdapterMap
     lateinit var itemList : ArrayList<RankMapData>
-    lateinit var onLoadMoreListener : RankRecyclerViewAdapter_Map.OnLoadMoreListener
+    lateinit var onLoadMoreListener : RankRecyclerViewAdapterMap.OnLoadMoreListener
     var start = 0
     var end = 15
 
@@ -84,7 +80,7 @@ class fragment_rank_map : Fragment(), RankRecyclerViewAdapter_Map.OnLoadMoreList
         var mRecyclerView = view.findViewById<RecyclerView>(R.id.rank_recycler_map)
         val mLayoutManager = LinearLayoutManager(context)
         mRecyclerView.layoutManager = mLayoutManager
-        mAdapter = RankRecyclerViewAdapter_Map(this)
+        mAdapter = RankRecyclerViewAdapterMap(this)
         mAdapter.setLinearLayoutManager(mLayoutManager)
         mAdapter.setRecyclerView(mRecyclerView)
 

@@ -98,6 +98,7 @@ class RunningMap : OnMapReadyCallback {
 
     fun stopTracking(runningData:RunningData) {
         print_log("Stop")
+        routes.add(PolyUtil.simplify(latlngs, 10.0).toTypedArray())
         markers.add(cur_loc)
         var arrLats=Array<Vector<Double>>(routes.size) { Vector() }
         var arrLngs=Array<Vector<Double>>(routes.size) { Vector() }
@@ -115,6 +116,8 @@ class RunningMap : OnMapReadyCallback {
             cpLats.add(markers[i].latitude)
             cpLngs.add(markers[i].longitude)
         }
+        cpLats.add(markers[markers.size-1].latitude)
+        cpLngs.add(markers[markers.size-1].longitude)
         runningData.lats=arrLats
         runningData.lngs=arrLngs
         runningData.alts=alts.toDoubleArray()

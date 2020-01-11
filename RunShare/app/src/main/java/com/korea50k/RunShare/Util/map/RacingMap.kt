@@ -32,7 +32,7 @@ import kotlin.math.roundToLong
 
 
 class RacingMap : OnMapReadyCallback {
-    var markerCount = 0
+    var markerCount = 1
     lateinit var cpOption: MarkerOptions
     lateinit var mMap: GoogleMap    //racingMap 인스턴스
     lateinit var fusedLocationClient: FusedLocationProviderClient   //위치정보 가져오는 인스턴스
@@ -55,6 +55,7 @@ class RacingMap : OnMapReadyCallback {
     var manageRacing: ManageRacing
     lateinit var makerRunningThread: Thread
     var passedLine = Vector<Polyline>()
+    var routeLine=Vector<Polyline>()
     var markers = Vector<LatLng>()
 
     //Racing
@@ -82,6 +83,7 @@ class RacingMap : OnMapReadyCallback {
             loadRoute.add(latlngs)
             markers.add(LatLng(makerData.markerLats[i], makerData.markerLngs[i]))
         }
+        markers.add(LatLng(makerData.markerLats[makerData.markerLats.size-1],makerData.markerLngs[makerData.markerLngs.size-1]))
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -202,7 +204,7 @@ class RacingMap : OnMapReadyCallback {
     fun drawRoute() { //로드 된 경로 그리기
 
         for (i in loadRoute.indices) {
-            var polyline =
+            routeLine.add(
                 mMap.addPolyline(
                     PolylineOptions()
                         .addAll(loadRoute[i])
@@ -210,26 +212,24 @@ class RacingMap : OnMapReadyCallback {
                         .startCap(RoundCap())
                         .endCap(RoundCap())
                 )        //경로를 그릴 폴리라인 집합
-
+            )
             if (i == 0) {
                 val startMarkerOptions = MarkerOptions()
                 startMarkerOptions.position(markers[0])
                 startMarkerOptions.title("Start")
                 startMarkerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.start_point))
                 mMap.addMarker(startMarkerOptions)
-            } else if (i == markers.size - 1) {
-                val finishMarkerOptions = MarkerOptions()
-                finishMarkerOptions.position(markers[markers.size - 1])
-                finishMarkerOptions.title("Maker")
-                finishMarkerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.finish_point))
-                mMap.addMarker(finishMarkerOptions)
-
             } else {
                 cpOption.position(markers[i])
                 cpOption.title(i.toString())
                 mMap.addMarker(cpOption)
             }
         }
+        val finishMarkerOptions = MarkerOptions()
+        finishMarkerOptions.position(markers[markers.size - 1])
+        finishMarkerOptions.title("Finish")
+        finishMarkerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.finish_point))
+        mMap.addMarker(finishMarkerOptions)
 
         var min = LatLng(Calc.minDouble(makerData.lats), Calc.minDouble(makerData.lngs))
         var max = LatLng(Calc.maxDouble(makerData.lats), Calc.maxDouble(makerData.lngs))
@@ -270,11 +270,11 @@ class RacingMap : OnMapReadyCallback {
                     markerOptions.icon(racerIcon)
                     currentMarker = mMap.addMarker(markerOptions)
 
-                    cpOption.title("StartPoint")
+                    /*cpOption.title("StartPoint")
                     cpOption.position(prev_loc)
                     mMap.addMarker(cpOption)
                     markerCount++
-                    markers.add(prev_loc)
+                    markers.add(prev_loc)*/
                 }
             }
             .addOnFailureListener {
@@ -358,9 +358,10 @@ class RacingMap : OnMapReadyCallback {
                                     ) {
                                         for (i in passedLine.indices)
                                             passedLine[i].remove()
+                                        routeLine.removeAt(0)
                                         mMap.addPolyline(
                                             PolylineOptions()
-                                                .addAll(loadRoute[markerCount - 1])
+                                                .addAll(loadRoute[markerCount-1])
                                                 .color(Color.BLUE)
                                                 .startCap(RoundCap())
                                                 .endCap(RoundCap())
@@ -401,9 +402,8 @@ class RacingMap : OnMapReadyCallback {
                                     countDeviation = 0
                                 } else {
                                     manageRacing.deviation(++countDeviation)
-
                                     if (countDeviation > 10) {
-                                        //finish
+                                        manageRacing.stopRacing(false)
                                     }
 
                                 }

@@ -46,7 +46,7 @@ class ManageRacing {
         racingMap.startRacing()
     }
     fun startRunning() {
-        distances=DoubleArray(makerData.markerLats.size)
+        distances=DoubleArray(makerData.markerLats.size-1)
         for(i in distances.indices){
             distances[i]=Calc.getDistance(racingMap.loadRoute[i])
         }
@@ -93,7 +93,7 @@ class ManageRacing {
 
     private fun calcLeftDistance() :Double{
         var distance=0.0
-        for(i in makerData.markerLats.size-1 downTo racingMap.markerCount)
+        for(i in makerData.markerLats.size-2 downTo racingMap.markerCount)
         {
             distance+=distances[i]
         }
@@ -126,8 +126,8 @@ class ManageRacing {
                             response: retrofit2.Response<ResponseBody>
                         ) {
                             try {
-                                val result: String? = response.body().toString()
-                                Log.d("response",result)
+                                val resPonseText: String? = response.body().toString()
+                                Log.d("response",resPonseText)
                                 var newIntent = Intent(context, RacingFinishActivity::class.java)
                                 newIntent.putExtra("Result",result)
                                 newIntent.putExtra("Racer Data", runningData)

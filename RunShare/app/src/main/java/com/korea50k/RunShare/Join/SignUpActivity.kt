@@ -114,6 +114,8 @@ class SignUpActivity : AppCompatActivity() {
             }
         }
 
+        Log.d("here","여기 로그 뜨나요?")
+
         TedPermission.with(this)
             .setPermissionListener(permissionListener)
             .setRationaleMessage(getResources().getString(R.string.permission_2))
