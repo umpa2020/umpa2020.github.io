@@ -28,6 +28,7 @@ import com.github.mikephil.charting.data.Entry
 import com.google.android.gms.maps.SupportMapFragment
 import com.korea50k.RunShare.Activities.MainFragment.MainActivity
 import com.korea50k.RunShare.RetrofitClient
+import com.korea50k.RunShare.Util.SharedPreValue
 import com.korea50k.RunShare.Util.map.BasicMap
 import com.korea50k.RunShare.Util.map.RunningMap
 import com.korea50k.RunShare.Util.map.ViewerMap
@@ -151,7 +152,7 @@ class RunningSaveActivity : AppCompatActivity() {
             override fun doInBackground(vararg params: Void?): String? {
                 try {
                     runningData(
-                        "kjb",
+                        SharedPreValue.getNicknameData(baseContext)!!,
                         runningData.mapTitle,
                         runningData.mapExplanation,
                         json,
