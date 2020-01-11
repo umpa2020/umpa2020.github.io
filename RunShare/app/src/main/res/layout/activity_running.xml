@@ -31,9 +31,12 @@
             <Button
                 android:id="@+id/handle"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:gravity="center"
-                android:background="@drawable/ic_slideup_button_unpressed"/>
+                android:text="▲"
+                android:textSize="30dp"
+                android:textColor="#FF0000"
+                android:background="@drawable/ic_down_button"/>
             <LinearLayout
                 android:id="@+id/content"
                 android:layout_width="match_parent"

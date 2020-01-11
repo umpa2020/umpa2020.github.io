@@ -24,12 +24,12 @@ import java.net.HttpURLConnection
 import java.net.URL
 import androidx.recyclerview.widget.RecyclerView
 import com.korea50k.RunShare.R
+import kotlinx.android.synthetic.main.recycler_rank_item.view.*
 
 
 class fragment_rank_map : Fragment(), RankRecyclerViewAdapterMap.OnLoadMoreListener {
     lateinit var rankMapDatas : ArrayList<RankMapData>
     lateinit var rankrecyclerviewadapterMap: RankRecyclerViewAdapterMap
-
 
     var mJsonString = ""
     lateinit var mAdapter : RankRecyclerViewAdapterMap
@@ -68,7 +68,6 @@ class fragment_rank_map : Fragment(), RankRecyclerViewAdapterMap.OnLoadMoreListe
 
         val task = GetData()
         task.execute("http://15.164.50.86/rankDownload.php")
-
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -89,16 +88,13 @@ class fragment_rank_map : Fragment(), RankRecyclerViewAdapterMap.OnLoadMoreListe
             RecyclerItemClickListener(context!!, mRecyclerView,
                 object : RecyclerItemClickListener.OnItemClickListener {
                     override fun onItemClick(view: View, position: Int) {
+                        Log.d("ranking","click listener")
                         val intent = Intent(context, RankRecyclerClickActivity::class.java)
-                        intent.putExtra("MapTitle", rankMapDatas.get(position).mapTitle)
-                        intent.putExtra("MapImage", rankMapDatas.get(position).mapImage)
-                        intent.putExtra("Id", rankMapDatas.get(position).id)
+                        intent.putExtra("MapTitle", view.rank_cardView_name.text)
                         startActivity(intent)
-
                     }
                 })
         )
-
         return view
     }
 
@@ -108,7 +104,6 @@ class fragment_rank_map : Fragment(), RankRecyclerViewAdapterMap.OnLoadMoreListe
             override fun onResponse(call: Call<ResponseBody>, response: retrofit2.Response<ResponseBody>) {
                 try {
                     val result: String? = response.body().toString()
-
                     Toast.makeText(context, "DB 다운로드 성공" + result,Toast.LENGTH_SHORT).show()
                 } catch (e: Exception) {
 
