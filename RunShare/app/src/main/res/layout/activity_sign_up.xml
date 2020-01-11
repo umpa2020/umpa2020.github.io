@@ -44,7 +44,6 @@
                 android:id="@+id/profileImage"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:scaleType="fitXY"
                 android:background="@drawable/ic_profile_logo"
                 android:onClick="onClick"/>
             <com.mikhaellopez.circularimageview.CircularImageView
