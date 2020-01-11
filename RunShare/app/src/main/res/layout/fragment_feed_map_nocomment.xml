@@ -21,7 +21,7 @@
             android:layout_height="35dp"/>
         <TextView
             android:text="User name"
-            android:id="@+id/detailviewitem_profile_textview"
+            android:id="@+id/user_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     </LinearLayout>
@@ -41,7 +41,7 @@
 
         <TextView
             android:layout_marginLeft="10dp"
-            android:id="@+id/map_comment"
+            android:id="@+id/map_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="map name"

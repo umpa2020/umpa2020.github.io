@@ -1,25 +1,19 @@
 package com.korea50k.RunShare.Activities.FeedFragment
 
-
-import android.content.Intent
+import android.content.Context
 import android.os.AsyncTask
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.korea50k.RunShare.Activities.RankFragment.RecyclerItemClickListener
-
 import com.korea50k.RunShare.R
 import com.korea50k.RunShare.RetrofitClient
 import com.korea50k.RunShare.Util.ConvertJson
+import com.korea50k.RunShare.dataClass.FeedMapCommentData
 import com.korea50k.RunShare.dataClass.FeedMapData
-import kotlinx.android.synthetic.main.fragment_feed_map_nocomment.view.*
+import kotlinx.android.synthetic.main.activity_feed_map_comment.*
+import kotlinx.android.synthetic.main.comment_feed_item.*
 import okhttp3.ResponseBody
 import retrofit2.Call
 import java.io.BufferedReader
@@ -28,21 +22,28 @@ import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 
-class fragment_feed_map : Fragment(), FeedRecyclerViewAdapterMap.OnLoadMoreListener {
-    lateinit var feedMapDatas : ArrayList<FeedMapData>
-    lateinit var feedrecyclerviewadapterMap: FeedRecyclerViewAdapterMap
 
-
+class FeedRecyclerClickActivityMap : AppCompatActivity() {
     var mJsonString = ""
-    lateinit var mAdapter : FeedRecyclerViewAdapterMap
-    lateinit var itemList : ArrayList<FeedMapData>
-    lateinit var onLoadMoreListener : FeedRecyclerViewAdapterMap.OnLoadMoreListener
-    var start = 0
-    var end = 15
+    lateinit var feedMapDatas : ArrayList<FeedMapData>
+
+    var Comment = ArrayList<FeedMapCommentData>()
+    var mAdapter_Map = FeedRecyclerMapComment(this, Comment)
+
+    var MapTitle = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_feed_map_comment)
 
+        val intent =  getIntent()
+        MapTitle = intent.extras?.getString("MapTitle").toString()
+        Log.d("ssmm11", "받은  맵타이틀 = " +MapTitle)
+
+        /*  val Id = intent.extras?.getString("Id")
+        val Heart = intent.extras?.getString("Heart")
+        val Likes = intent.extras?.getString("Likes")
+        val MapImage = intent.extras?.getString("MapImage")*/
 
         class SaveTask : AsyncTask<Void, Void, String>(){
             override fun onPreExecute() {
@@ -51,7 +52,7 @@ class fragment_feed_map : Fragment(), FeedRecyclerViewAdapterMap.OnLoadMoreListe
 
             override fun doInBackground(vararg params: Void?): String? {
                 try {
-                    feedDownload("kjb", 0,15)
+                    feedDownloadWithMapTitle(MapTitle!!)
 
                 } catch (e : java.lang.Exception) {
                     Log.d("ssmm11", "랭크 다운로드 실패 " +e.toString())
@@ -69,49 +70,30 @@ class fragment_feed_map : Fragment(), FeedRecyclerViewAdapterMap.OnLoadMoreListe
         Start.execute()
 
         val task = GetData()
-        task.execute("http://15.164.50.86/feedDownload.php")
+        task.execute("http://15.164.50.86/feedDownloadWithMapTitle.php")
 
+        feed_map_recycler_comment!!.adapter = mAdapter_Map
+        val lm = LinearLayoutManager(this)
+        feed_map_recycler_comment!!.layoutManager = lm
+        feed_map_recycler_comment!!.setHasFixedSize(true)
+
+        feed_map_comment_button.setOnClickListener(View.OnClickListener {
+
+            feed_map_comment_editmessage.text.toString()
+            var feedMapCommentData = FeedMapCommentData()
+            feedMapCommentData.MapComment = feed_map_comment_editmessage.text.toString()
+            feedMapCommentData.UserId = "kjb"
+            //feedMapCommentData.UserImage =
+
+            Comment.add(feedMapCommentData)
+            mAdapter_Map.notifyDataSetChanged()
+
+            feed_map_comment_editmessage.setText("")
+        })
     }
 
-
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        val view: View =  inflater!!.inflate(com.korea50k.RunShare.R.layout.recycler_feed_map, container, false)
-
-        itemList = java.util.ArrayList()
-        var mRecyclerView = view.findViewById<RecyclerView>(R.id.feed_recycler_map)
-        val mLayoutManager = LinearLayoutManager(context)
-        mRecyclerView.layoutManager = mLayoutManager
-        mAdapter = FeedRecyclerViewAdapterMap(this)
-        mAdapter.setLinearLayoutManager(mLayoutManager)
-        mAdapter.setRecyclerView(mRecyclerView)
-
-        mRecyclerView.adapter = mAdapter
-        mRecyclerView.addOnItemTouchListener(
-            RecyclerItemClickListener(context!!, mRecyclerView,
-                object : RecyclerItemClickListener.OnItemClickListener {
-                    override fun onItemClick(view: View, position: Int) {
-                        val intent = Intent(context, FeedRecyclerClickActivityMap::class.java)
-                        intent.putExtra("MapTitle",view.map_name.text)
-                        Log.d("ssmm11", "줄때 맵타이틀 = " +feedMapDatas.get(position).MapTitle)
-
-/*                        intent.putExtra("Id", feedMapDatas.get(position).Id)
-                        intent.putExtra("MapImage", feedMapDatas.get(position).MapImage)
-                        intent.putExtra("Heart", feedMapDatas.get(position).Heart)
-                        intent.putExtra("Likes", feedMapDatas.get(position).Likes)*/
-                        startActivity(intent)
-
-                    }
-                })
-        )
-
-        return view
-    }
-
-    private fun feedDownload(Id: String, start : Int, end : Int) {
-        RetrofitClient.retrofitService.feedDownload(Id).enqueue(object :
+    private fun feedDownloadWithMapTitle(MapTitle: String) {
+        RetrofitClient.retrofitService.feedDownloadWithMapTitle(MapTitle).enqueue(object :
             retrofit2.Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: retrofit2.Response<ResponseBody>) {
                 try {
@@ -120,33 +102,11 @@ class fragment_feed_map : Fragment(), FeedRecyclerViewAdapterMap.OnLoadMoreListe
 
                 }
             }
-            override fun onFailure( call: Call<ResponseBody>,t: Throwable) {
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 Log.d("ssmm11", t.message);
                 t.printStackTrace()
             }
         })
-    }
-
-    override fun onLoadMore() {
-        Log.d("ssmm11", "onLoadMore")
-        //mAdapter.setProgressMore(true)
-        Handler().postDelayed({
-            itemList.clear()
-
-            start = mAdapter.itemCount
-            end = start + 15
-            Toast.makeText(context, "more" , Toast.LENGTH_SHORT).show()
-            val task = GetData()
-            task.execute("http://15.164.50.86/feedDownload.php")
-
-            mAdapter.addItemMore(itemList)
-            mAdapter.setMoreLoading(false)
-        }, 100)
-    }
-
-    fun loadData() {
-        itemList.clear()
-        mAdapter.addAll(feedMapDatas)
     }
 
     private inner class GetData() : AsyncTask<String, Void, String>() {
@@ -162,8 +122,10 @@ class fragment_feed_map : Fragment(), FeedRecyclerViewAdapterMap.OnLoadMoreListe
             if (result == null) {
             } else {
                 mJsonString = result
-                feedMapDatas = ConvertJson.JsonToFeedMapDatas(mJsonString, start, end-1)
-                loadData()
+                feedMapDatas = ConvertJson.JsonToFeedMapDatas(mJsonString,0,1)
+                detailviewitem_profile_textview.text = feedMapDatas.get(0).Id
+                map_Title.text = MapTitle
+
             }
         }
 
