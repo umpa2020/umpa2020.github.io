@@ -91,7 +91,6 @@ class GenderSelectActivity : AppCompatActivity() {
         }
         if(isMan || isWoman) {
             nextButton.isEnabled = true
-            nextButton.setBackgroundColor(this.getColor(R.color.red))
         }
     }
 }

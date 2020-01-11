@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.korea50k.RunShare.R
 import com.korea50k.RunShare.RetrofitClient
 import com.korea50k.RunShare.Util.ConvertJson
+import com.korea50k.RunShare.Util.SharedPreValue
 import com.korea50k.RunShare.dataClass.FeedMapCommentData
 import com.korea50k.RunShare.dataClass.FeedMapData
 import kotlinx.android.synthetic.main.activity_feed_map_comment.*
@@ -44,10 +45,6 @@ class FeedRecyclerClickActivityMap : AppCompatActivity() {
         MapTitle = intent.extras?.getString("MapTitle").toString()
         Log.d("ssmm11", "받은  맵타이틀 = " +MapTitle)
 
-        /*  val Id = intent.extras?.getString("Id")
-        val Heart = intent.extras?.getString("Heart")
-        val Likes = intent.extras?.getString("Likes")
-        val MapImage = intent.extras?.getString("MapImage")*/
 
         class SaveTask : AsyncTask<Void, Void, String>(){
             override fun onPreExecute() {
@@ -57,7 +54,7 @@ class FeedRecyclerClickActivityMap : AppCompatActivity() {
             override fun doInBackground(vararg params: Void?): String? {
                 try {
                     feedDownloadWithMapTitle(MapTitle!!)
-
+                    feedCommentDownload(MapTitle!!)
                 } catch (e : java.lang.Exception) {
                     Log.d("ssmm11", "랭크 다운로드 실패 " +e.toString())
                 }
@@ -73,8 +70,11 @@ class FeedRecyclerClickActivityMap : AppCompatActivity() {
         var Start : SaveTask = SaveTask()
         Start.execute()
 
-        val task = GetData()
-        task.execute("http://15.164.50.86/feedDownloadWithMapTitle.php?MapTitle="+MapTitle)
+        val taskMapData = GetData("MapData")
+        taskMapData.execute("http://15.164.50.86/feedDownloadWithMapTitle.php?MapTitle="+MapTitle)
+
+        val taskCommentData = GetData("MapData")
+        taskCommentData.execute("http://15.164.50.86/feedDownloadWithMapTitle.php?MapTitle="+MapTitle)
 
         feed_map_recycler_comment!!.adapter = mAdapter_Map
         val lm = LinearLayoutManager(this)
@@ -86,14 +86,15 @@ class FeedRecyclerClickActivityMap : AppCompatActivity() {
             feed_map_comment_editmessage.text.toString()
             var feedMapCommentData = FeedMapCommentData()
             feedMapCommentData.MapComment = feed_map_comment_editmessage.text.toString()
-            feedMapCommentData.UserId = "kjb"
-            //feedMapCommentData.UserImage =
+            feedMapCommentData.UserId = SharedPreValue.getNicknameData(baseContext)!!
 
             Comment.add(feedMapCommentData)
             mAdapter_Map.notifyDataSetChanged()
 
             feed_map_comment_editmessage.setText("")
+            feedCommentUpload(intent.extras?.getString("MapTitle").toString(),feedMapCommentData.UserId, feedMapCommentData.MapComment)
         })
+
     }
 
     private fun feedDownloadWithMapTitle(MapTitle: String) {
@@ -103,7 +104,22 @@ class FeedRecyclerClickActivityMap : AppCompatActivity() {
                 try {
                     val result: String? = response.body().toString()
                 } catch (e: Exception) {
+                }
+            }
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Log.d("ssmm11", t.message)
+                t.printStackTrace()
+            }
+        })
+    }
 
+    private fun feedCommentUpload(MapTitle: String, CommenterId : String, Comment : String) {
+        RetrofitClient.retrofitService.feedCommentUpload(MapTitle, CommenterId, Comment).enqueue(object :
+            retrofit2.Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: retrofit2.Response<ResponseBody>) {
+                try {
+                    val result: String? = response.body().toString()
+                } catch (e: Exception) {
                 }
             }
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
@@ -113,7 +129,23 @@ class FeedRecyclerClickActivityMap : AppCompatActivity() {
         })
     }
 
-    private inner class GetData() : AsyncTask<String, Void, String>() {
+    private fun feedCommentDownload(MapTitle: String) {
+        RetrofitClient.retrofitService.feedCommentDownload(MapTitle).enqueue(object :
+            retrofit2.Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: retrofit2.Response<ResponseBody>) {
+                try {
+                    val result: String? = response.body().toString()
+                } catch (e: Exception) {
+                }
+            }
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Log.d("ssmm11", t.message);
+                t.printStackTrace()
+            }
+        })
+    }
+
+    private inner class GetData(Mode : String) : AsyncTask<String, Void, String>() {
         internal var errorString: String? = null
 
         override fun onPreExecute() {
@@ -128,7 +160,6 @@ class FeedRecyclerClickActivityMap : AppCompatActivity() {
                 mJsonString = result
                 feedMapDatas = ConvertJson.JsonToFeedMapDatas(mJsonString,0,1)
                 detailviewitem_profile_textview.text = feedMapDatas.get(0).Id
-                //map_Title.text = MapTitle
                 map_Title.text = feedMapDatas.get(0).MapTitle
 
                 class SetImageTask : AsyncTask<Void, Void, String>(){

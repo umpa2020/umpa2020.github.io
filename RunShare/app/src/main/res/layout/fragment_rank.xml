@@ -41,14 +41,14 @@
         <View
             android:id="@+id/indicator"
             android:layout_width="0dp"
-            android:layout_height="35dp"
+            android:layout_height="30dp"
             android:background="@drawable/gradient_bg"/>
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tab_rank"
             android:layout_gravity="center_vertical"
             android:layout_width="match_parent"
-            android:layout_height="35dp"
+            android:layout_height="30dp"
             android:background="@drawable/tab_bg"
             app:tabGravity="fill"
             app:tabMode="fixed"
@@ -56,6 +56,7 @@
             app:tabIndicatorColor="@null"
             app:tabRippleColor="@null"
             app:tabTextAppearance="@style/tab_text"
+            android:textAlignment="center"
             />
 
     </FrameLayout>
