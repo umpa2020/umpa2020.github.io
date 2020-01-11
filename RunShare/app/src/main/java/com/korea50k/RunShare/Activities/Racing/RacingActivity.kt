@@ -90,10 +90,12 @@ class RacingActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpen
     }
 
     override fun onDrawerOpened() {
+        racingHandle.background = getDrawable(R.drawable.close_selector)
         Log.d(TAG, "onDrawerOpened()")
     }
 
     override fun onDrawerClosed() {
+        racingHandle.background = getDrawable(R.drawable.extend_selector)
         Log.d(TAG, "onDrawerClosed()")
     }
 

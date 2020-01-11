@@ -127,12 +127,12 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
     }
 
     override fun onDrawerOpened() {
-        handle.background = getDrawable(R.drawable.ic_slidedown_button_unpressed)
+        handle.background = getDrawable(R.drawable.close_selector)
         Log.d(TAG, "onDrawerOpened()")
     }
 
     override fun onDrawerClosed() {
-        handle.background = getDrawable(R.drawable.ic_slideup_button_unpressed)
+        handle.background = getDrawable(R.drawable.extend_selector)
         Log.d(TAG, "onDrawerClosed()")
     }
 
