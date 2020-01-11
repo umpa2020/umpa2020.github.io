@@ -11,6 +11,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.maps.android.SphericalUtil
 import com.korea50k.RunShare.RetrofitClient
 import com.korea50k.RunShare.Util.Calc
+import com.korea50k.RunShare.Util.SharedPreValue
 import com.korea50k.RunShare.Util.map.RacingMap
 import com.korea50k.RunShare.dataClass.RunningData
 import com.korea50k.RunShare.Util.TTS
@@ -45,7 +46,7 @@ class ManageRacing {
         racingMap.startRacing()
     }
     fun startRunning() {
-        distances=DoubleArray(makerData.markerLats.size)
+        distances=DoubleArray(makerData.markerLats.size-1)
         for(i in distances.indices){
             distances[i]=Calc.getDistance(racingMap.loadRoute[i])
         }
@@ -92,7 +93,7 @@ class ManageRacing {
 
     private fun calcLeftDistance() :Double{
         var distance=0.0
-        for(i in makerData.markerLats.size-1 downTo racingMap.markerCount)
+        for(i in makerData.markerLats.size-2 downTo racingMap.markerCount)
         {
             distance+=distances[i]
         }
@@ -107,16 +108,16 @@ class ManageRacing {
         chronometer.stop()
         var runningData = RunningData()
         runningData.time = chronometer.text.toString()
-        Log.d("ssmm11", "맵타이틀 = " + runningData.mapTitle)
+
+        Log.d("ssmm11", "맵id = "+makerData.mapTitle )
 
         if(result){
-            //TODO: 여기서 서버로 경기결과 보내기(기록)
             Thread(
                 Runnable {
                     RetrofitClient.retrofitService.racingResult(
                         //makerData.mapTitle, 널임!
-                        "Map2",
-                        "KJB",
+                        makerData.mapTitle,
+                        SharedPreValue.getNicknameData(context)!!,
                         runningData.time
                     ).enqueue(object :
                         retrofit2.Callback<ResponseBody> {
@@ -125,8 +126,8 @@ class ManageRacing {
                             response: retrofit2.Response<ResponseBody>
                         ) {
                             try {
-                                val result: String? = response.body().toString()
-                                Log.d("response",result)
+                                val resPonseText: String? = response.body().toString()
+                                Log.d("response",resPonseText)
                                 var newIntent = Intent(context, RacingFinishActivity::class.java)
                                 newIntent.putExtra("Result",result)
                                 newIntent.putExtra("Racer Data", runningData)
@@ -134,7 +135,7 @@ class ManageRacing {
                                 context.startActivity(newIntent)
                                 activity.finish()
                             } catch (e: Exception) {
-
+                                Log.d("response","hmm")
                             }
                         }
                         override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
@@ -145,7 +146,12 @@ class ManageRacing {
                 }).start()
 
         }else{
-            //실패하면 안보내도될듯?
+            var newIntent = Intent(context, RacingFinishActivity::class.java)
+            newIntent.putExtra("Result",result)
+            newIntent.putExtra("Racer Data", runningData)
+            newIntent.putExtra("Maker Data", makerData)
+            context.startActivity(newIntent)
+            activity.finish()
         }
 
 

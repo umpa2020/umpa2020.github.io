@@ -1,24 +1,18 @@
 package com.korea50k.RunShare.Activities.RankFragment
 
-import android.content.Context
-import android.os.Handler
-import android.os.Parcel
-import android.os.Parcelable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.korea50k.RunShare.R
 import com.korea50k.RunShare.dataClass.RankMapData
 import java.util.ArrayList
-import com.korea50k.RunShare.Activities.RankFragment.RankRecyclerViewAdapter_Map.OnLoadMoreListener as OnLoadMoreListener
+
 //  처음 부터 새로하는데
-class RankRecyclerViewAdapter_Map( onLoadMoreListener: OnLoadMoreListener) :
+class RankRecyclerViewAdapterMap(onLoadMoreListener: OnLoadMoreListener) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun getItemCount(): Int {
         return itemList.size
@@ -42,11 +36,7 @@ class RankRecyclerViewAdapter_Map( onLoadMoreListener: OnLoadMoreListener) :
     interface OnLoadMoreListener {
         fun onLoadMore()
     }
-
     init {}
-
-
-
     fun setLinearLayoutManager(linearLayoutManager: LinearLayoutManager) {
         this.mLinearLayoutManager = linearLayoutManager
     }
@@ -72,7 +62,6 @@ class RankRecyclerViewAdapter_Map( onLoadMoreListener: OnLoadMoreListener) :
             }
         })
     }
-
     override fun getItemViewType(position: Int): Int {
         return if (itemList[position] != null) VIEW_ITEM else VIEW_PROG
     }

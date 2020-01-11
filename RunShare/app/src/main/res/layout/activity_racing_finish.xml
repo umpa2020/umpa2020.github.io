@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:gravity="center"
-        android:text="경기 결과"
+        android:text="Race Result"
         android:textColor="#000000"
         android:textSize="30dp"
         android:textStyle="bold" />
@@ -38,7 +38,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="경기 결과 비교" />
+            android:text="Record" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -48,15 +48,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="주행 거리" />
 
-            <TextView
-                android:id="@+id/racerDistanceTextView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="my record" />
+                android:text="Distance" />
 
             <TextView
                 android:id="@+id/makerDistanceTextView"
@@ -75,7 +68,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="랩 타임" />
+                android:text="Lap Time" />
 
             <TextView
                 android:id="@+id/racerLapTimeTextView"
@@ -103,7 +96,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="최고 속력" />
+                android:text="Highest Speed" />
 
             <TextView
                 android:id="@+id/racerMaxSpeedTextView"
@@ -123,31 +116,32 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="소모 칼로리? 네?" />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Average Speed" />
 
-            <TextView
-                android:id="@+id/racerCalTextView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="my record" />
+        <TextView
+            android:id="@+id/racerAvgSpeedTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="my record" />
 
-            <TextView
-                android:id="@+id/makerCalTextView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="maker record" />
-        </LinearLayout>
+        <TextView
+            android:id="@+id/makerAvgSpeedTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="maker record" />
+
+    </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -180,6 +174,8 @@
                 android:gravity="center"
                 android:text="랩 타임"/>
         </LinearLayout>
+
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/resultPlayerRankingRecycler"
             android:layout_width="match_parent"
