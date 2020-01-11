@@ -188,7 +188,7 @@ class RacingMap : OnMapReadyCallback {
             circleDrawable!!.intrinsicWidth,
             circleDrawable!!.intrinsicHeight,
             Bitmap.Config.ARGB_8888
-        );
+        )
         canvas.setBitmap(bitmap);
         circleDrawable.setBounds(
             0,

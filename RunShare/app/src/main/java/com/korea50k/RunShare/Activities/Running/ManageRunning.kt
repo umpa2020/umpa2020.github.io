@@ -13,10 +13,10 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.view.View
 import androidx.appcompat.app.AlertDialog
+import com.jakewharton.rxbinding2.view.clicks
 import com.korea50k.RunShare.dataClass.Privacy
+import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.activity_racing.*
-import kotlinx.android.synthetic.main.activity_running.running_distance_tv
-import kotlinx.android.synthetic.main.activity_running.timer_tv
 
 
 class ManageRunning {
@@ -39,13 +39,13 @@ class ManageRunning {
             while(true) {
                 Thread.sleep(3000)
                 activity.runOnUiThread(Runnable {
-                    activity.running_distance_tv.text=String.format("%.3f",(map.distance/1000))
+                    activity.runningDistanceTextView.text=String.format("%.3f km",(map.distance/1000))
                 })
             }
         })
         distanceThread.start()
 
-        chronometer=activity.timer_tv
+        chronometer=activity.runningTimerTextView
         chronometer.base=SystemClock.elapsedRealtime()
         chronometer.start()
     }
@@ -66,9 +66,9 @@ class ManageRunning {
 
     fun stopRunning() {
         var runningData = RunningData()
+        activity.runningHandle.clicks()
         map.stopTracking(runningData)
-
-        runningData.distance = map.getDistance(map.latlngs)
+        runningData.distance = map.distance
         runningData.time = chronometer.text.toString()
         runningData.privacy=privacy
 

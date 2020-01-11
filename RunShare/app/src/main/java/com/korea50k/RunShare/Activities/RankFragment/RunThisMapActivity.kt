@@ -46,6 +46,7 @@ class RunThisMapActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_run_this_map)
         mapTitle = intent.getStringExtra("MapTitle")
+        Log.d("mapTitle",mapTitle)
         activity = this
         val smf = supportFragmentManager.findFragmentById(R.id.runThisMapViewer) as SupportMapFragment
 
@@ -87,14 +88,16 @@ class RunThisMapActivity : AppCompatActivity() {
                                 line = reader.readLine()
                             }
                             Log.d("server", builder.toString())
+
                             makerData = ConvertJson.JsonToRunningData(builder.toString())
                             activity.runOnUiThread(Runnable {
                                 map = ViewerMap(smf, activity, makerData)
-                                activity.runThisMapTitle.text = makerData.mapTitle
+                                activity.runThisMapTitle.text = makerData.mapTitle.replace('|',' ')
                                 activity.runThisMapExplanation.text=makerData.mapExplanation
                                 activity.runThisMapId.text = makerData.id
-                                activity.runThisMapDistance.text=String.format("%.3f",makerData.distance)
-                                activity.runThisMapSpeed.text=makerData.time
+                                activity.runThisMapDistance.text=String.format("%.3f km",makerData.distance/1000)
+                                activity.runThisMapTime.text=makerData.time
+                                activity.runThisMapSpeed.text=String.format("%.3f km/h",makerData.speed.average())
                                 setChart()
 //TODO:Save할때 id도 json에 넣기
 
@@ -157,6 +160,8 @@ class RunThisMapActivity : AppCompatActivity() {
 
         val yLAxis = lineChart.axisLeft
         yLAxis.textColor = Color.RED
+        yLAxis.axisMaximum = makerData.speed.max()!!.toFloat() + 5
+        yLAxis.axisMinimum = 0F
 
         val yRAxis = lineChart.axisRight
         yRAxis.textColor = Color.BLUE

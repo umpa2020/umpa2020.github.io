@@ -17,6 +17,7 @@ class ConvertJson{
         }
         fun JsonToRunningData(json: String): RunningData {
             // var gson = Gson()
+            Log.wtf("json",json)
             var runningData =Gson().fromJson(json, RunningData::class.java)
             return runningData
         }
