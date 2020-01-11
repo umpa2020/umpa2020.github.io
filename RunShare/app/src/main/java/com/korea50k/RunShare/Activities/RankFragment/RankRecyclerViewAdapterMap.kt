@@ -8,8 +8,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.korea50k.RunShare.R
+import com.korea50k.RunShare.dataClass.RankDetailMapData
 import com.korea50k.RunShare.dataClass.RankMapData
-import java.util.ArrayList
+import kotlin.collections.ArrayList
 
 //  처음 부터 새로하는데
 class RankRecyclerViewAdapterMap(onLoadMoreListener: OnLoadMoreListener) :
@@ -76,7 +77,7 @@ class RankRecyclerViewAdapterMap(onLoadMoreListener: OnLoadMoreListener) :
             )
     }
 
-    fun addAll(lst: List<RankMapData>) {
+    fun addAll(lst: ArrayList<RankMapData>) {
         //itemList.clear()
         itemList.addAll(lst)
         notifyDataSetChanged()

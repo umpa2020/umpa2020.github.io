@@ -24,6 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/join_name"
+            android:fontFamily="@font/godob"
             android:textColor="@color/black"
             android:textSize="30dp" />
     </FrameLayout>
@@ -36,21 +37,31 @@
         android:paddingLeft="40dp"
         android:paddingRight="40dp">
 
-        <com.mikhaellopez.circularimageview.CircularImageView
-            android:id="@+id/profileImage"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:background="@drawable/ic_profile_basic"
-            android:onClick="onClick" />
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <com.mikhaellopez.circularimageview.CircularImageView
+                android:id="@+id/profileImage"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="@drawable/ic_profile_logo"
+                android:onClick="onClick"/>
+            <com.mikhaellopez.circularimageview.CircularImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="bottom|right"
+                android:background="@drawable/ic_profile_edit" />
 
+        </FrameLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:layout_marginBottom="10dp"
+            android:fontFamily="@font/godob"
             android:text="Profile Image Settings"
-            android:textSize="20dp" />
+            android:textSize="18dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -70,7 +81,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:hint="@string/email"
-                    android:inputType="text"
+                    android:fontFamily="@font/godob"
+                    android:inputType="textEmailAddress"
                     android:maxLines="1" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -85,6 +97,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:hint="@string/password"
+                    android:fontFamily="@font/godob"
                     android:inputType="textPassword"
                     android:maxLength="12"
                     android:maxLines="1" />
@@ -99,6 +112,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:hint="@string/passwordCheck"
+                    android:fontFamily="@font/godob"
                     android:inputType="textPassword"
                     android:maxLength="12"
                     android:maxLines="1" />
@@ -114,6 +128,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:hint="@string/nickname"
+                    android:fontFamily="@font/godob"
                     android:inputType="text"
                     android:maxLength="12"
                     android:maxLines="1" />
@@ -129,6 +144,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:hint="@string/age"
+                    android:fontFamily="@font/godob"
                     android:inputType="number"
                     android:maxLength="2"
                     android:onClick="onClick"
@@ -146,6 +162,7 @@
                     android:layout_height="match_parent"
                     android:focusableInTouchMode="false"
                     android:hint="@string/gender"
+                    android:fontFamily="@font/godob"
                     android:onClick="onClick"
                     android:singleLine="true" />
 

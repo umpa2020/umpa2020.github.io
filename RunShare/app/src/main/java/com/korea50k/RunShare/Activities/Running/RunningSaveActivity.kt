@@ -51,10 +51,10 @@ class RunningSaveActivity : AppCompatActivity() {
 
         val smf = supportFragmentManager.findFragmentById(R.id.map_viewer) as SupportMapFragment
         map = ViewerMap(smf, this, runningData)
-        distance_tv.text = runningData.distance.toString()
+        distance_tv.text = String.format("%.3f km",runningData.distance/1000)
         time_tv.text = runningData.time
 
-        speed_tv.text = String.format("%.3f", runningData.speed.average())
+        speed_tv.text = String.format("%.3f km/h", runningData.speed.average())
         if (runningData.privacy == Privacy.PUBLIC) {
             racingRadio.isChecked = false
             racingRadio.isEnabled = false
@@ -128,6 +128,8 @@ class RunningSaveActivity : AppCompatActivity() {
         runningData.mapImage = imgPath
         runningData.mapTitle = mapTitleEdit.text.toString()
         runningData.mapExplanation = mapExplanationEdit.text.toString()
+        runningData.id=SharedPreValue.getNicknameData(this)!!
+        //runningData.mapTitle=runningData.mapTitle.replace(' ','|')
         when (privacyRadioGroup.checkedRadioButtonId) {
             R.id.racingRadio -> runningData.privacy = Privacy.RACING
             R.id.publicRadio -> runningData.privacy = Privacy.PUBLIC
@@ -152,7 +154,7 @@ class RunningSaveActivity : AppCompatActivity() {
             override fun doInBackground(vararg params: Void?): String? {
                 try {
                     runningData(
-                        SharedPreValue.getNicknameData(baseContext)!!,
+                        runningData.id,
                         runningData.mapTitle,
                         runningData.mapExplanation,
                         json,

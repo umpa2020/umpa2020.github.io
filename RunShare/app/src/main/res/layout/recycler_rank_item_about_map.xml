@@ -11,6 +11,8 @@
         android:id="@+id/rank_cardView"
         android:layout_marginStart="15dp"
         android:layout_marginEnd="15dp"
+        android:layout_marginTop="15dp"
+
         app:cardCornerRadius="25dp">
 
         <LinearLayout
@@ -23,7 +25,7 @@
             android:background="@color/rankBackgroudGray">
 
             <TextView
-                android:id="@+id/rank_cardView_rank"
+                android:id="@+id/rank_detail_cardView_rank"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0"
@@ -34,7 +36,7 @@
                 android:background="@drawable/ic_1"/>
 
             <TextView
-                android:id="@+id/rank_cardView_name"
+                android:id="@+id/rank_detail_cardView_name"
                 android:textColor="@color/black"
                 android:layout_marginLeft="10dp"
                 android:layout_width="0dp"
@@ -46,7 +48,7 @@
                 android:fontFamily="@font/godob"/>
 
             <TextView
-                android:id="@+id/rank_cardView_time"
+                android:id="@+id/rank_detail_cardView_time"
                 android:textColor="@color/black"
                 android:layout_width="0dp"
                 android:layout_weight="1"

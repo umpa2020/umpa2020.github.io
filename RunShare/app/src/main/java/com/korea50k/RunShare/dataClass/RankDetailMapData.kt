@@ -5,6 +5,14 @@ import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
 class RankDetailMapData() : Serializable {
+    @SerializedName("Id")
+    @Expose
+    var Id: String = "0"
+
+    @SerializedName("MapImage")
+    @Expose
+    var MapImage: String = "0"
+
     @SerializedName("ChallengerId")
     @Expose
     var ChallengerId: String = "0"

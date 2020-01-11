@@ -7,6 +7,7 @@ import com.korea50k.RunShare.dataClass.RankDetailMapData
 import com.korea50k.RunShare.dataClass.RankMapData
 import com.korea50k.RunShare.dataClass.RunningData
 import org.json.JSONObject
+import java.lang.Exception
 
 class ConvertJson{
     companion object{
@@ -17,6 +18,7 @@ class ConvertJson{
         }
         fun JsonToRunningData(json: String): RunningData {
             // var gson = Gson()
+            Log.wtf("json",json)
             var runningData =Gson().fromJson(json, RunningData::class.java)
             return runningData
         }
@@ -53,21 +55,40 @@ class ConvertJson{
             return rankMapDatas
         }
 
-        fun JsonToRankDetailMapDatas(json: String):ArrayList<RankDetailMapData>{
+        fun JsonToRankDetailMapDatas(json: String, start : Int, end : Int):ArrayList<RankDetailMapData>{
             var rankDetailMapDatas= ArrayList<RankDetailMapData>()
 
             val jObject = JSONObject(json)
             val jArray = jObject.getJSONArray("JsonData")
+            Log.d("ssmm11", "jArray.length() = " +jArray.length())
 
-            for (i in 0 until jArray.length()) {
+            var limit = 0
+            if (jArray.length() < end)
+                limit = jArray.length()
+            else
+                limit = end
+
+            Log.d("ssmm11", "limit = " +limit)
+
+
+
+            for (i in start until limit) {
                 var rankDetailMapData = RankDetailMapData()
-                rankDetailMapData.ChallengerId= jArray.getJSONObject(i).get("ChallengerId") as String
-                rankDetailMapData.ChallengerTime= jArray.getJSONObject(i).get("ChallengerTime") as String
+                rankDetailMapData.Id= jArray.getJSONObject(i).get("Id") as String
+                rankDetailMapData.MapImage= jArray.getJSONObject(i).get("MapImage") as String
+                try {
+                    rankDetailMapData.ChallengerId =
+                        jArray.getJSONObject(i).get("ChallengerId") as String
+                    rankDetailMapData.ChallengerTime =
+                        jArray.getJSONObject(i).get("ChallengerTime") as String
+                }
+                catch (e:Exception) {
+
+                }
                 rankDetailMapDatas.add(rankDetailMapData)
             }
             return rankDetailMapDatas
         }
-
         fun JsonToFeedMapDatas(json: String, start : Int, end : Int):ArrayList<FeedMapData>{
             var feedMapDatas= ArrayList<FeedMapData>()
 
