@@ -23,8 +23,9 @@ import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 import androidx.recyclerview.widget.RecyclerView
-import com.korea50k.RunShare.R
 import kotlinx.android.synthetic.main.recycler_rank_item.view.*
+
+
 
 
 class fragment_rank_map : Fragment(), RankRecyclerViewAdapterMap.OnLoadMoreListener {
@@ -70,13 +71,19 @@ class fragment_rank_map : Fragment(), RankRecyclerViewAdapterMap.OnLoadMoreListe
         task.execute("http://15.164.50.86/rankDownload.php")
     }
 
+    //데이터 저장
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        // 데이터 저장
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         val view: View =  inflater!!.inflate(com.korea50k.RunShare.R.layout.fragment_rank_map, container, false)
 
         itemList = java.util.ArrayList()
-        var mRecyclerView = view.findViewById<RecyclerView>(R.id.rank_recycler_map)
+        var mRecyclerView = view.findViewById<RecyclerView>(com.korea50k.RunShare.R.id.rank_recycler_map)
         val mLayoutManager = LinearLayoutManager(context)
         mRecyclerView.layoutManager = mLayoutManager
         mAdapter = RankRecyclerViewAdapterMap(this)
