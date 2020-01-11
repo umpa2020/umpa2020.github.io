@@ -22,6 +22,23 @@
             android:layout_height="wrap_content"/>
     </LinearLayout>
 
+    <Button
+        android:layout_marginTop="200dp"
+        android:layout_alignRight="@+id/map_Image"
+        android:layout_below="@+id/thatway"
+        android:layout_width="160dp"
+        android:layout_height="40dp"
+        android:background="@drawable/ic_rank_more_button"
+        android:drawableLeft="@drawable/ic_play_pressed"
+        android:text="  더 알아보기"
+        android:textSize="18dp"
+        android:fontFamily="@font/godob"
+        android:textColor="@color/darkRed"
+        android:onClick="onClick"
+        android:paddingLeft="20dp"
+        android:gravity="center_vertical|left"
+        />
+
 
     <ImageView
         android:id="@+id/map_Image"
@@ -56,12 +73,11 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:layout_marginTop="5dp"
-            android:layout_marginLeft="160dp"
+            android:layout_marginTop="10dp"
             android:id="@+id/detailviewitem_favorite_imageview"
-            android:src="@drawable/ic_favorite_border"
-            android:layout_width="35dp"
-            android:layout_height="35dp"/>
+            android:src="@drawable/ic_like_buttin_unpressed"
+            android:layout_width="25dp"
+            android:layout_height="25dp"/>
 
         <TextView
             android:layout_marginLeft="5dp"
@@ -88,9 +104,11 @@
 
 
     <RelativeLayout
-        android:layout_below="@+id/Comment"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <FrameLayout
@@ -123,15 +141,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@null"
-            android:hint="댓 글                                                                        "/>
+            android:hint="댓글                                                                        "/>
 
         <Button
             android:id="@+id/feed_map_comment_button"
             android:layout_gravity="right"
-            android:layout_marginTop="3dp"
+            android:layout_marginTop="7dp"
             android:layout_marginRight="10dp"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:background="@drawable/ic_comment_icon_unpressed_1"
             />
 

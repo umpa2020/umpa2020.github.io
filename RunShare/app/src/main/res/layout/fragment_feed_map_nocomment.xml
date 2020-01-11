@@ -57,11 +57,12 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
         <ImageView
+            android:layout_marginTop="5dp"
             android:id="@+id/detailviewitem_favorite_imageview"
-            android:src="@drawable/ic_favorite_border"
+            android:src="@drawable/ic_like_buttin_unpressed"
             android:tag="0"
-            android:layout_width="35dp"
-            android:layout_height="35dp"/>
+            android:layout_width="25dp"
+            android:layout_height="25dp"/>
 
         <TextView
             android:id="@+id/heart_count"
