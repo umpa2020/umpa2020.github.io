@@ -14,10 +14,10 @@ class MainPageAdapter(fm: FragmentManager, private val mPageCount: Int) :
             }
             1 -> {
                 return MapFragment()
-            }
+            }/*
             2 -> {
                 return FeedFragment()
-            }
+            }*/
         }
         return MapFragment()
     }
