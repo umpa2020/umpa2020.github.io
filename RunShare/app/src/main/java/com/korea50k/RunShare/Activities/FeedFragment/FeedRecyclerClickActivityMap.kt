@@ -1,6 +1,8 @@
 package com.korea50k.RunShare.Activities.FeedFragment
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
@@ -13,9 +15,11 @@ import com.korea50k.RunShare.Util.ConvertJson
 import com.korea50k.RunShare.dataClass.FeedMapCommentData
 import com.korea50k.RunShare.dataClass.FeedMapData
 import kotlinx.android.synthetic.main.activity_feed_map_comment.*
+import kotlinx.android.synthetic.main.activity_rank_recycler_click.*
 import kotlinx.android.synthetic.main.comment_feed_item.*
 import okhttp3.ResponseBody
 import retrofit2.Call
+import java.io.BufferedInputStream
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
@@ -70,7 +74,7 @@ class FeedRecyclerClickActivityMap : AppCompatActivity() {
         Start.execute()
 
         val task = GetData()
-        task.execute("http://15.164.50.86/feedDownloadWithMapTitle.php")
+        task.execute("http://15.164.50.86/feedDownloadWithMapTitle.php?MapTitle="+MapTitle)
 
         feed_map_recycler_comment!!.adapter = mAdapter_Map
         val lm = LinearLayoutManager(this)
@@ -124,8 +128,38 @@ class FeedRecyclerClickActivityMap : AppCompatActivity() {
                 mJsonString = result
                 feedMapDatas = ConvertJson.JsonToFeedMapDatas(mJsonString,0,1)
                 detailviewitem_profile_textview.text = feedMapDatas.get(0).Id
-                map_Title.text = MapTitle
+                //map_Title.text = MapTitle
+                map_Title.text = feedMapDatas.get(0).MapTitle
 
+                class SetImageTask : AsyncTask<Void, Void, String>(){
+                    override fun onPreExecute() {
+                        super.onPreExecute()
+                    }
+                    var bm: Bitmap? = null
+
+                    override fun doInBackground(vararg params: Void?): String? {
+                        try {
+                            val url =
+                                URL(feedMapDatas.get(0).MapImage)
+                            val conn = url.openConnection()
+                            conn.connect()
+                            val bis = BufferedInputStream(conn.getInputStream())
+                            bm = BitmapFactory.decodeStream(bis)
+                            bis.close()
+                        } catch (e : java.lang.Exception) {
+                            Log.d("ssmm11", "이미지 다운로드 실패 " +e.toString())
+                        }
+                        return null
+                    }
+
+                    override fun onPostExecute(result: String?) {
+                        super.onPostExecute(result)
+                        //TODO:피드에서 이미지 적용해볼 소스코드
+                        map_Image.setImageBitmap(bm)
+                    }
+                }
+                var Start = SetImageTask()
+                Start.execute()
             }
         }
 

@@ -82,7 +82,6 @@ interface API {
 
     @POST("feedDownloadWithMapTitle.php")
     @FormUrlEncoded
-    fun feedDownloadWithMapTitle(@Field("Id") Id: String): retrofit2.Call<ResponseBody>
-
+    fun feedDownloadWithMapTitle(@Field("MapTitle") MapTitle: String): retrofit2.Call<ResponseBody>
 
 }

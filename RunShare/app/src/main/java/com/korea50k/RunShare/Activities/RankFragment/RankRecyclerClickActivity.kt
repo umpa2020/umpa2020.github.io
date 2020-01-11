@@ -44,7 +44,7 @@ class RankRecyclerClickActivity : AppCompatActivity() {
             override fun onPreExecute() {
                 super.onPreExecute()
             }
-            lateinit var bm: Bitmap
+            var bm: Bitmap? = null
 
             override fun doInBackground(vararg params: Void?): String? {
                 try {
