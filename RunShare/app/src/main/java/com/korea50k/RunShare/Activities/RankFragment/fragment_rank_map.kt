@@ -70,13 +70,13 @@ class fragment_rank_map : Fragment(), RankRecyclerViewAdapterMap.OnLoadMoreListe
         val task = GetData()
         task.execute("http://15.164.50.86/rankDownload.php")
     }
-
+/*
     //데이터 저장
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         // 데이터 저장
     }
-
+ */
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment

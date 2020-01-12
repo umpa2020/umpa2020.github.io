@@ -39,7 +39,8 @@
                     android:layout_weight="1"
                     android:paddingLeft="15dp"
                     android:text="Man"
-                    android:textSize="20dp"/>
+                    android:textSize="20dp"
+                    android:fontFamily="@font/godob"/>
                 <ImageView
                     android:id="@+id/manCheck"
                     android:layout_width="wrap_content"
@@ -75,7 +76,8 @@
                     android:layout_weight="1"
                     android:paddingLeft="15dp"
                     android:text="Woman"
-                    android:textSize="20dp"/>
+                    android:textSize="20dp"
+                    android:fontFamily="@font/godob"/>
                 <ImageView
                     android:id="@+id/womanCheck"
                     android:layout_width="wrap_content"

@@ -82,6 +82,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="회원탈퇴"
+        android:fontFamily="@font/godob"
         android:layout_alignParentBottom="true"
         android:id="@+id/leaveAccount_button"/>
 
@@ -91,6 +92,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="로그아웃"
+        android:fontFamily="@font/godob"
         android:layout_above="@+id/leaveAccount_button"
         android:id="@+id/logout_button"
         android:onClick="onClick"/>
