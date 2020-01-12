@@ -52,13 +52,13 @@ class RunningSaveActivity : AppCompatActivity() {
 
         val smf = supportFragmentManager.findFragmentById(R.id.map_viewer) as SupportMapFragment
         map = ViewerMap(smf, this, runningData)
-        distance_tv.text = String.format("%.3f km",runningData.distance/1000)
+        distance_tv.text = String.format("%.3f",runningData.distance/1000)
         val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
         formatter.setTimeZone(TimeZone.getTimeZone("UTC"))
 
         time_tv.text = formatter.format(Date(runningData.time))
 
-        speed_tv.text = String.format("%.3f km/h", runningData.speed.average())
+        speed_tv.text = String.format("%.3f", runningData.speed.average())
         if (runningData.privacy == Privacy.PUBLIC) {
             racingRadio.isChecked = false
             racingRadio.isEnabled = false
@@ -69,7 +69,7 @@ class RunningSaveActivity : AppCompatActivity() {
 
 
     private fun setChart() {    //클래스로 따로 빼야할듯
-        var lineChart = runThisMapChart as CombinedChart
+        var lineChart = chart as CombinedChart
         val alts = ArrayList<BarEntry>()
         val speeds = ArrayList<Entry>()
 
@@ -266,12 +266,12 @@ class RunningSaveActivity : AppCompatActivity() {
             ) {
                 try {
                     val result: String? = response.body().toString()
+                    /*
                     Toast.makeText(
                         this@RunningSaveActivity,
                         "json 업로드 성공" + result,
                         Toast.LENGTH_SHORT
-                    )
-                        .show()
+                    ).show()*/
                     goToHome()
 
                 } catch (e: Exception) {
