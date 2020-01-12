@@ -7,25 +7,26 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
+import android.view.Gravity
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Toast
+import android.widget.Toast.LENGTH_SHORT
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
-import com.korea50k.RunShare.R
-import kotlinx.android.synthetic.main.activity_main.*
-import androidx.drawerlayout.widget.DrawerLayout
-import android.view.View
-import android.widget.Toast
-import android.widget.Toast.LENGTH_LONG
-import android.widget.Toast.LENGTH_SHORT
 import com.korea50k.RunShare.Activities.Profile.MyInformationActivity
-import com.korea50k.RunShare.Activities.Profile.SettingActivity
 import com.korea50k.RunShare.Activities.Profile.UserActivity
-import com.korea50k.RunShare.Activities.RankFragment.RankRecyclerClickActivity
+import com.korea50k.RunShare.R
 import com.korea50k.RunShare.Util.S3
 import com.korea50k.RunShare.Util.SharedPreValue
 import com.korea50k.RunShare.Util.TTS
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.custom_toast.*
+import kotlinx.android.synthetic.main.custom_toast.view.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -38,7 +39,16 @@ class MainActivity : AppCompatActivity() {
         }
 
         this.doubleBackToExitPressedOnce = true
-        Toast.makeText(this, "'뒤로'버튼 한번 더 누르시면 종료합니다.", LENGTH_SHORT).show()
+        val li = layoutInflater
+        val layout: View =
+            li.inflate(R.layout.custom_toast, findViewById<ViewGroup>(R.id.custom_toast_layout))
+
+        val toast = Toast(applicationContext)
+        toast.duration = LENGTH_SHORT
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 850)
+        toast.view = layout //setting the view of custom toast layout
+
+        toast.show()
 
         Handler().postDelayed(Runnable { doubleBackToExitPressedOnce = false }, 2000)
     }
@@ -59,6 +69,9 @@ class MainActivity : AppCompatActivity() {
         Log.d("WSY","Shared 저장 닉네임 : " + SharedPreValue.getNicknameData(this))
         Log.d("WSY","Shared 저장 나이 : " + SharedPreValue.getAgeData(this))
         Log.d("WSY","Shared 저장 성별 : " + SharedPreValue.getGenderData(this))
+
+
+
         checkPermissions()          //모든 권한 확인
         TTS.set(applicationContext)
         val mTabLayout = tabDots
