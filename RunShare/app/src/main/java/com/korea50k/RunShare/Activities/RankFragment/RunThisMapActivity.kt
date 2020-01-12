@@ -119,6 +119,7 @@ class RunThisMapActivity : AppCompatActivity() {
     }
 
     fun onClick(v: View) {
+
         var newIntent = Intent(this, RacingActivity::class.java)
         newIntent.putExtra("MakerData", makerData)
         startActivity(newIntent)

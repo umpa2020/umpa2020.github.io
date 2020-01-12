@@ -68,6 +68,13 @@ interface API {
         @Field("Id") Id:String
     ):retrofit2.Call<ResponseBody>
 
+    @POST("executeMap.php")
+    @FormUrlEncoded
+    fun executeMap(
+        @Field("MapTitle") MapTitle: String
+    ):retrofit2.Call<ResponseBody>
+
+
     @POST("racingResult.php")
     @FormUrlEncoded
     fun racingResult(
