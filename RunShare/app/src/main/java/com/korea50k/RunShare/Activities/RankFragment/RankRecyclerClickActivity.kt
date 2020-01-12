@@ -133,6 +133,7 @@ class RankRecyclerClickActivity : AppCompatActivity() , OnLoadMoreListener {
                 rankDetailMapDatas = ConvertJson.JsonToRankDetailMapDatas(mJsonString, start, end)
 
                 Log.d("ssmm11", "rankDetailMapDatas = "+ rankDetailMapDatas)
+                MapImage = rankDetailMapDatas[0].MapImage
                 ID_TextView.text = rankDetailMapDatas[0].Id
 
                 class SetImageTask : AsyncTask<Void, Void, String>(){

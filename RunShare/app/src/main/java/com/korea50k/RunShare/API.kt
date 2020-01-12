@@ -102,7 +102,4 @@ interface API {
     @FormUrlEncoded
     fun feedCommentDownload(@Field("MapTitle") MapTitle: String): retrofit2.Call<ResponseBody>
 
-    @POST("myRankingByMap.php")
-    @FormUrlEncoded
-    fun myRankingByMap(@Field("Id") Id: String, @Field("MapTitle") MapTitle: String): retrofit2.Call<ResponseBody>
 }

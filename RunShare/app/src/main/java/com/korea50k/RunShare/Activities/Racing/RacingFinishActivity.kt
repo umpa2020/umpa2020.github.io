@@ -77,10 +77,10 @@ class RacingFinishActivity : AppCompatActivity() ,
 
 
         val task = GetData()
-        task.execute("http://15.164.50.86/playerRankingAboutMapDownload.php?MapTitle="+MapTitle)
+        task.execute("http://15.164.50.86/myRankingByMap.php?"+"Id="+SharedPreValue.getNicknameData(baseContext)+"&&MapTitle="+makerData.mapTitle)
 
         itemList = java.util.ArrayList()
-        var mRecyclerView = findViewById<RecyclerView>(R.id.rank_detailRecyclerView)
+        var mRecyclerView = findViewById<RecyclerView>(R.id.resultPlayerRankingRecycler)
         val mLayoutManager = LinearLayoutManager(this)
         mRecyclerView.layoutManager = mLayoutManager
         mAdapter = RankDetailRecyclerViewAdapterMap(this)
@@ -104,7 +104,7 @@ class RacingFinishActivity : AppCompatActivity() ,
 
         //TODO: resultPlayerRankingRecycler
 
-        //TODO:서버에서 해당 맵 랭크 받아오기
+        /*//TODO:서버에서 해당 맵 랭크 받아오기
 
         Thread(Runnable {
             RetrofitClient.retrofitService.myRankingByMap(SharedPreValue.getNicknameData(this)!!,makerData.mapTitle)
@@ -147,7 +147,7 @@ class RacingFinishActivity : AppCompatActivity() ,
                                 }
                                 Log.d("server", builder.toString())
 
-                                /*var rankDetailMapDatas =
+                                *//*var rankDetailMapDatas =
                                     ConvertJson.JsonToRankDetailMapDatas(builder.toString())
                                 val mAdapter = RankDetailRecyclerViewAdapterMap(
                                     baseContext,
@@ -163,7 +163,7 @@ class RacingFinishActivity : AppCompatActivity() ,
                                 val lm = LinearLayoutManager(baseContext)
                                 resultPlayerRankingRecycler!!.layoutManager = lm
                                 resultPlayerRankingRecycler!!.setHasFixedSize(true)
-*/
+*//*
                             } catch (e: MalformedURLException) {
                                 Log.e("server", e.toString())
                             }
@@ -175,7 +175,7 @@ class RacingFinishActivity : AppCompatActivity() ,
                         t.printStackTrace()
                     }
                 })
-        }).start()
+        }).start()*/
     }
     private fun myRankingByMap(Id : String, MapTitle: String) {
         RetrofitClient.retrofitService.myRankingByMap(Id, MapTitle).enqueue(object :
@@ -234,8 +234,8 @@ class RacingFinishActivity : AppCompatActivity() ,
                 mJsonString = result
                 rankDetailMapDatas = ConvertJson.JsonToRankDetailMapDatas(mJsonString, start, end)
 
-                Log.d("ssmm11", "rankDetailMapDatas = "+ rankDetailMapDatas)
-                ID_TextView.text = rankDetailMapDatas[0].Id
+                Log.d("ssmm11", "받아온 거  = "  + mJsonString)
+                //ID_TextView.text = rankDetailMapDatas[0].Id
                 //MapImage = rankDetailMapDatas[0].MapImage
 
                 class SetImageTask : AsyncTask<Void, Void, String>(){
@@ -255,7 +255,7 @@ class RacingFinishActivity : AppCompatActivity() ,
                             bm = BitmapFactory.decodeStream(bis)
                             bis.close()*/
 
-                            myRankingByMap(MapTitle)
+                            myRankingByMap(SharedPreValue.getNicknameData(baseContext)!!,MapTitle)
                         } catch (e : java.lang.Exception) {
                             Log.d("ssmm11", "이미지 다운로드 실패 " +e.toString())
                         }
