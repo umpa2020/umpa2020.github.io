@@ -39,6 +39,9 @@ import retrofit2.Call
 import java.io.BufferedInputStream
 import java.io.ByteArrayOutputStream
 import java.net.URL
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class RunningSaveActivity : AppCompatActivity() {
@@ -54,7 +57,10 @@ class RunningSaveActivity : AppCompatActivity() {
         val smf = supportFragmentManager.findFragmentById(R.id.map_viewer) as SupportMapFragment
         map = ViewerMap(smf, this, runningData)
         distance_tv.text = String.format("%.3f km",runningData.distance/1000)
-        time_tv.text = runningData.time
+        val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
+        formatter.setTimeZone(TimeZone.getTimeZone("UTC"))
+
+        time_tv.text = formatter.format(Date(runningData.time))
 
         speed_tv.text = String.format("%.3f km/h", runningData.speed.average())
         if (runningData.privacy == Privacy.PUBLIC) {
@@ -195,7 +201,7 @@ class RunningSaveActivity : AppCompatActivity() {
         MapJson: String,
         MapImage: String,
         Distance: Double,
-        Time: String,
+        Time: Long,
         Execute: Int,
         Likes: Int,
         Privacy: Privacy

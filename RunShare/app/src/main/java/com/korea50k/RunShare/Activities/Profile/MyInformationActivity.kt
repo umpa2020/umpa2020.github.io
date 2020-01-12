@@ -115,7 +115,7 @@ class MyInformationActivity : AppCompatActivity() {
             {
                 try{
                     var inputStream =
-                        intentData!!.data?.let { getContentResolver().openInputStream(it) }
+                            intentData!!.data?.let { getContentResolver().openInputStream(it) }
 
                     // 프로필 사진을 비트맵으로 변환
                     options = BitmapFactory.Options()
@@ -139,7 +139,7 @@ class MyInformationActivity : AppCompatActivity() {
                         class dowmloadImage : AsyncTask<Void, Void, String>(){
                             override fun onPreExecute() {
                                 super.onPreExecute()
-                               // my_information_adjust_button.isEnabled = false
+                                // my_information_adjust_button.isEnabled = false
                             }
 
                             override fun doInBackground(vararg params: Void?): String? {
@@ -157,8 +157,8 @@ class MyInformationActivity : AppCompatActivity() {
 
                                             // SharedProfile 재 저장
                                             SharedPreValue.setProfileData(
-                                                this@MyInformationActivity,
-                                                userData.getString("ProfilePath")
+                                                    this@MyInformationActivity,
+                                                    userData.getString("ProfilePath")
                                             )
                                             Log.d(WSY, SharedPreValue.getProfileData(applicationContext))
                                         }
@@ -176,7 +176,7 @@ class MyInformationActivity : AppCompatActivity() {
                             override fun onPostExecute(result: String?) {
                                 super.onPostExecute(result)
                                 //TODO:피드에서 이미지 적용해볼 소스코드
-                              //  my_information_adjust_button.isEnabled = true
+                                //  my_information_adjust_button.isEnabled = true
                             }
                         }
                         var Start = dowmloadImage ()
@@ -192,7 +192,7 @@ class MyInformationActivity : AppCompatActivity() {
             else if(resultCode == RESULT_CANCELED)
             {
                 //사진 선택 취소
-               // Toast.makeText(this, "사진 선택 취소", Toast.LENGTH_LONG).show();
+                // Toast.makeText(this, "사진 선택 취소", Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -203,7 +203,7 @@ class MyInformationActivity : AppCompatActivity() {
             R.id.profileImage -> {
 //                buttonText = my_information_adjust_button.text as String?
 //                if(buttonText.equals("확인"))
-                    goToAlbum()
+                goToAlbum()
             }
 //            R.id.my_information_adjust_button ->
 //            { // 수정 버튼 클릭 시
