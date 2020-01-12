@@ -9,34 +9,57 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.AsyncTask
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
+import android.view.Gravity
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Toast
+import android.widget.Toast.LENGTH_SHORT
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
-import com.korea50k.RunShare.R
-import kotlinx.android.synthetic.main.activity_main.*
-import androidx.drawerlayout.widget.DrawerLayout
-import android.view.View
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import com.korea50k.RunShare.Activities.Profile.MyInformationActivity
-import com.korea50k.RunShare.Activities.Profile.SettingActivity
 import com.korea50k.RunShare.Activities.Profile.UserActivity
-import com.korea50k.RunShare.Activities.RankFragment.RankRecyclerClickActivity
+import com.korea50k.RunShare.R
 import com.korea50k.RunShare.Splash.SplashActivity
 import com.korea50k.RunShare.Util.S3
 import com.korea50k.RunShare.Util.SharedPreValue
 import com.korea50k.RunShare.Util.TTS
-import kotlinx.android.synthetic.main.activity_my_information.*
-import org.jetbrains.anko.toast
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.custom_toast.*
+import kotlinx.android.synthetic.main.custom_toast.view.*
 
 
 class MainActivity : AppCompatActivity() {
-    val WSY = "WSY"
 
-    lateinit var mViewPager: ViewPager
+    lateinit var mViewPager:ViewPager
+    private var doubleBackToExitPressedOnce = false
+    var WSY = "WSY"
+    override fun onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed()
+            return
+        }
+
+        this.doubleBackToExitPressedOnce = true
+        val li = layoutInflater
+        val layout: View =
+            li.inflate(R.layout.custom_toast, findViewById<ViewGroup>(R.id.custom_toast_layout))
+
+        val toast = Toast(applicationContext)
+        toast.duration = LENGTH_SHORT
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 850)
+        toast.view = layout //setting the view of custom toast layout
+
+        toast.show()
+
+        Handler().postDelayed(Runnable { doubleBackToExitPressedOnce = false }, 2000)
+    }
     lateinit var mMainPageAdapter: MainPageAdapter
     private val multiplePermissionsCode = 100          //권한
     private val requiredPermissions = arrayOf(
@@ -49,11 +72,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setRequestedOrientation(SCREEN_ORIENTATION_PORTRAIT);
         setContentView(com.korea50k.RunShare.R.layout.activity_main)
-        Log.d("WSY", "Shared 저장 이메일 : " + SharedPreValue.getEMAILData(this))
-        Log.d("WSY", "Shared 저장 비번 : " + SharedPreValue.getPWDData(this))
-        Log.d("WSY", "Shared 저장 닉네임 : " + SharedPreValue.getNicknameData(this))
-        Log.d("WSY", "Shared 저장 나이 : " + SharedPreValue.getAgeData(this))
-        Log.d("WSY", "Shared 저장 성별 : " + SharedPreValue.getGenderData(this))
+
+
+        Log.d("WSY","Shared 저장 이메일 : " + SharedPreValue.getEMAILData(this))
+        Log.d("WSY","Shared 저장 비번 : " + SharedPreValue.getPWDData(this))
+        Log.d("WSY","Shared 저장 닉네임 : " + SharedPreValue.getNicknameData(this))
+        Log.d("WSY","Shared 저장 나이 : " + SharedPreValue.getAgeData(this))
+        Log.d("WSY","Shared 저장 성별 : " + SharedPreValue.getGenderData(this))
+
+
         checkPermissions()          //모든 권한 확인
         TTS.set(applicationContext)
         val mTabLayout = tabDots
@@ -75,6 +102,7 @@ class MainActivity : AppCompatActivity() {
         //drawerLayout.closeDrawer(drawer)
 
         slideProfileIdTextView.text = SharedPreValue.getNicknameData(this)
+
     }
     var imageUri : String? = null
 
@@ -149,6 +177,7 @@ class MainActivity : AppCompatActivity() {
 
              */
             R.id.slide_logout_Button -> {
+
                 var builder = AlertDialog.Builder(this)
                 builder.setTitle("안내").setMessage("로그아웃 하시겠습니까?")
 
@@ -174,6 +203,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
 
     // 로그아웃 시 앱 재실행 함수
     fun restartApp() {

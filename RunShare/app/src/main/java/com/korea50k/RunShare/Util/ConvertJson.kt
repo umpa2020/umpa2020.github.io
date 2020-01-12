@@ -2,10 +2,7 @@ package com.korea50k.RunShare.Util
 
 import android.util.Log
 import com.google.gson.Gson
-import com.korea50k.RunShare.dataClass.FeedMapData
-import com.korea50k.RunShare.dataClass.RankDetailMapData
-import com.korea50k.RunShare.dataClass.RankMapData
-import com.korea50k.RunShare.dataClass.RunningData
+import com.korea50k.RunShare.dataClass.*
 import org.json.JSONObject
 import java.lang.Exception
 
@@ -117,6 +114,29 @@ class ConvertJson{
         fun JsonToProfileImageUrl(json:String):String{
             val jObject=JSONObject(json)
             return jObject.get("Id") as String
+        }
+
+        fun JsonToUserMapImageData(json: String, start : Int, end : Int):ArrayList<UserMapImageData>{
+            var userMapImageDatas = ArrayList<UserMapImageData>()
+
+            val jObject = JSONObject(json)
+            val jArray = jObject.getJSONArray("JsonData")
+            var limit = 0
+            if (jArray.length() < end)
+                limit = jArray.length()
+            else
+                limit = end
+
+
+            for (i in start until limit) {
+                var userMapImageData = UserMapImageData()
+                userMapImageData.MapTitle= jArray.getJSONObject(i).get("MapTitle") as String
+                userMapImageData.MapImage= jArray.getJSONObject(i).get("MapImage") as String
+
+                userMapImageDatas.add(userMapImageData)
+
+            }
+            return userMapImageDatas
         }
     }
 }

@@ -28,7 +28,6 @@ class FeedFragment : Fragment() {
         val choice_btn = view.findViewById<View>(com.korea50k.RunShare.R.id.feed_choiceoption_button) as Button
         choice_btn.setOnClickListener{
             count++//누를때마다 증가
-            Toast.makeText(context, "눌림", Toast.LENGTH_SHORT).show()
 
 
             if(count % 2 == 1){

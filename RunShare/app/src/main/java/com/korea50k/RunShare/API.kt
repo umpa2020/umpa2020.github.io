@@ -117,4 +117,10 @@ interface API {
     @FormUrlEncoded
     fun feedCommentDownload(@Field("MapTitle") MapTitle: String): retrofit2.Call<ResponseBody>
 
+    @POST("profileMapImageDownload.php")
+    @FormUrlEncoded
+    fun profileMapImageDownload(@Field("Id") Id: String): retrofit2.Call<ResponseBody>
+
+
+
 }
