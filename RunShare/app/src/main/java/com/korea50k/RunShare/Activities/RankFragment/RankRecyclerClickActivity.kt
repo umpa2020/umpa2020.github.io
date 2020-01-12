@@ -200,7 +200,7 @@ class RankRecyclerClickActivity : AppCompatActivity() , OnLoadMoreListener {
                     inputStream = httpURLConnection.getErrorStream()
                 }
 
-                val inputStreamReader = InputStreamReader(inputStream, "UTF-8")
+                val inputStreamReader = InputStreamReader(inputStream, "UTF8")
                 val bufferedReader = BufferedReader(inputStreamReader)
 
                 val sb = StringBuilder()

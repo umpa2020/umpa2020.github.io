@@ -25,6 +25,8 @@ import com.korea50k.RunShare.Util.TTS
 
 
 class MainActivity : AppCompatActivity() {
+    var activity =this
+
     lateinit var mViewPager:ViewPager
     lateinit var mMainPageAdapter: MainPageAdapter
     private val multiplePermissionsCode = 100          //권한
@@ -37,11 +39,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(com.korea50k.RunShare.R.layout.activity_main)
-        Log.d("WSY","Shared 저장 이메일 : " + SharedPreValue.getEMAILData(this))
-        Log.d("WSY","Shared 저장 비번 : " + SharedPreValue.getPWDData(this))
-        Log.d("WSY","Shared 저장 닉네임 : " + SharedPreValue.getNicknameData(this))
-        Log.d("WSY","Shared 저장 나이 : " + SharedPreValue.getAgeData(this))
-        Log.d("WSY","Shared 저장 성별 : " + SharedPreValue.getGenderData(this))
+        Log.d("WSY", "Shared 저장 이메일 : " + SharedPreValue.getEMAILData(this))
+        Log.d("WSY", "Shared 저장 비번 : " + SharedPreValue.getPWDData(this))
+        Log.d("WSY", "Shared 저장 닉네임 : " + SharedPreValue.getNicknameData(this))
+        Log.d("WSY", "Shared 저장 나이 : " + SharedPreValue.getAgeData(this))
+        Log.d("WSY", "Shared 저장 성별 : " + SharedPreValue.getGenderData(this))
         checkPermissions()          //모든 권한 확인
         TTS.set(applicationContext)
         val mTabLayout = tabDots
@@ -49,22 +51,30 @@ class MainActivity : AppCompatActivity() {
         mTabLayout.addTab(mTabLayout.newTab())
         //mTabLayout.addTab(mTabLayout.newTab())
 
-        mViewPager =pager
+        mViewPager = pager
         mMainPageAdapter =
             MainPageAdapter(
                 supportFragmentManager,
                 mTabLayout.tabCount
             )
-        mViewPager.adapter=mMainPageAdapter
+        mViewPager.adapter = mMainPageAdapter
         mViewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(mTabLayout))
-        mViewPager.currentItem=1
+        mViewPager.currentItem = 1
         //DrawerLayout.Lock
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
         //drawerLayout.closeDrawer(drawer)
 
-        slideProfileIdTextView.text=SharedPreValue.getNicknameData(this)
-        Thread(Runnable { slideProfileImageView.setImageBitmap(S3.downloadBitmap(SharedPreValue.getProfileData(this)!!))}).start()
-            }
+        slideProfileIdTextView.text = SharedPreValue.getNicknameData(this)
+
+        Thread(Runnable {
+            var bm = S3.downloadBitmap(SharedPreValue.getProfileData(this)!!)
+            activity.runOnUiThread(Runnable {
+                slideProfileImageView.setImageBitmap(bm)
+            })
+        }).start()
+    }
+
+
     fun onClick(v:View){
         when(v.id){
             R.id.openDrawerButton->{
