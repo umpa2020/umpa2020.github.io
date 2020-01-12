@@ -19,6 +19,7 @@ import com.korea50k.RunShare.Activities.Profile.MyInformationActivity
 import com.korea50k.RunShare.Activities.Profile.SettingActivity
 import com.korea50k.RunShare.Activities.Profile.UserActivity
 import com.korea50k.RunShare.Activities.RankFragment.RankRecyclerClickActivity
+import com.korea50k.RunShare.Util.S3
 import com.korea50k.RunShare.Util.SharedPreValue
 import com.korea50k.RunShare.Util.TTS
 
@@ -60,7 +61,10 @@ class MainActivity : AppCompatActivity() {
         //DrawerLayout.Lock
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
         //drawerLayout.closeDrawer(drawer)
-    }
+
+        slideProfileIdTextView.text=SharedPreValue.getNicknameData(this)
+        Thread(Runnable { slideProfileImageView.setImageBitmap(S3.downloadBitmap(SharedPreValue.getProfileData(this)!!))}).start()
+            }
     fun onClick(v:View){
         when(v.id){
             R.id.openDrawerButton->{
@@ -71,16 +75,17 @@ class MainActivity : AppCompatActivity() {
             }
 
             R.id.slide_profileLayout->{
-                var intent = Intent(this, UserActivity::class.java)
-                startActivity(intent)
+                var nextIntent = Intent(this, UserActivity::class.java)
+                nextIntent.putExtra("ID",SharedPreValue.getNicknameData(this))
+                startActivity(nextIntent)
             }
             R.id.slide_mydata_Button->{
-                var intent = Intent(this, MyInformationActivity::class.java)
-                startActivity(intent)
+                var nextIntent = Intent(this, MyInformationActivity::class.java)
+                startActivity(nextIntent)
             }
             R.id.slide_setting_Button->{
-                var intent = Intent(this, SettingActivity::class.java)
-                startActivity(intent)
+                var nextIntent = Intent(this, SettingActivity::class.java)
+                startActivity(nextIntent)
             }
         }
     }

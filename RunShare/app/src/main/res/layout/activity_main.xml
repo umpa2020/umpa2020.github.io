@@ -80,13 +80,14 @@
                 android:layout_gravity="center_vertical">
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/rv_image_area"
+                    android:id="@+id/slideProfileImageView"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:src="@drawable/ic_launcher_background"
                     />
 
                 <TextView
+                    android:id="@+id/slideProfileIdTextView"
                     android:layout_marginLeft="15dp"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
