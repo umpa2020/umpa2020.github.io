@@ -28,7 +28,7 @@
         <Button
             android:id="@+id/racingHandle"
             android:layout_width="70dp"
-            android:layout_height="25dp"
+            android:layout_height="30dp"
             android:background="@drawable/extend_selector"
             android:gravity="center" />
 
@@ -62,7 +62,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="0.00"
-                        style="@style/info_text" />
+                        style="@style/info_text_1" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -82,7 +82,7 @@
                         android:id="@+id/racingTimerTextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        style="@style/info_text"/>
+                        style="@style/info_text_1"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -104,7 +104,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="0.0"
-                        style="@style/info_text"/>
+                        style="@style/info_text_1"/>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
@@ -128,23 +128,25 @@
             android:onClick="onClick"
             android:paddingLeft="45dp"
             android:text="  START"
-            android:textColor="#FF0000" />
+            android:textColor="@color/darkRed" />
 
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/racingNotificationLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="150dp"
+        android:layout_centerInParent="true"
+        android:background="#440044FF"
+        android:gravity="center">
 
         <Button
             android:id="@+id/racingNotificationButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#440044FF"
             android:clickable="false"
-            android:gravity="center"
-            android:text="시작 포인트로 이동하십시오.\n시작포인트까지 남은거리 : "
+            android:background="#00000000"
+            android:text="시작 포인트로 이동하십시오.\n\n시작포인트까지 남은거리 : "
             android:fontFamily="@font/godob"/>
     </LinearLayout>
 

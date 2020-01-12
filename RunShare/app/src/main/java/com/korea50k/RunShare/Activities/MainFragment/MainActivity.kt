@@ -75,7 +75,6 @@ class MainActivity : AppCompatActivity() {
         //drawerLayout.closeDrawer(drawer)
 
         slideProfileIdTextView.text = SharedPreValue.getNicknameData(this)
-
     }
     var imageUri : String? = null
 
@@ -83,15 +82,6 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         Log.d(WSY, "onResume()")
-//        Thread(Runnable {
-//            slideProfileImageView.setImageBitmap(
-//                S3.downloadBitmap(
-//                    SharedPreValue.getProfileData(
-//                        this
-//                    )!!
-//                )
-//            )
-//        }).start()
         imageUri = SharedPreValue.getProfileData(this)
         class SetImageTask : AsyncTask<Void, Void, String>(){
             override fun onPreExecute() {
