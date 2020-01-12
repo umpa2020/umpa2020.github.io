@@ -5,9 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+
     tools:context=".Activities.RankFragment.RunThisMapActivity">
 
     <ScrollView
+        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="30dp">
@@ -43,8 +45,8 @@
                     android:fontFamily="@font/godoroundedl"
                     android:textSize="20dp"
                     android:layout_below="@+id/runThisMapTitle"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
                     android:paddingTop="3dp"
                     android:paddingBottom="3dp"
                     android:layout_marginTop="7dp"
@@ -158,7 +160,7 @@
                             android:gravity="center"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Distance"
+                            android:text="Distance\n(km)"
                             android:fontFamily="@font/godob"
                             android:textColor="@color/white"/>
 
@@ -216,7 +218,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Speed"
+                            android:text="Speed\n(km/h)"
                             android:gravity="center"
                             android:fontFamily="@font/godob"
                             android:textColor="@color/white"/>

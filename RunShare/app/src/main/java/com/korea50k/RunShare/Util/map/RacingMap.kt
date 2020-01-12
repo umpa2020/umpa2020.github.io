@@ -304,17 +304,24 @@ class RacingMap : OnMapReadyCallback {
                                 if (SphericalUtil.computeDistanceBetween(
                                         cur_loc,
                                         markers[0]
-                                    ) < 10
+                                    ) <= 10
                                 ) {
                                     userState = UserState.READYTORACING
+                                }
+                            }
+                            UserState.READYTORACING -> {
+                                if (SphericalUtil.computeDistanceBetween(
+                                        cur_loc,
+                                        markers[0]
+                                    ) > 10
+                                ) {
+                                    userState = UserState.BEFORERACING
+                                }else{
                                     (context as Activity).runOnUiThread(Runnable {
                                         (context as Activity).racingNotificationButton.text =
                                             "시작을 원하시면 START를 누르세요"
                                     })
                                 }
-                            }
-                            UserState.READYTORACING -> {
-                                //wait to start
                             }
                             UserState.RACING -> {
                                 print_log("R U Here?" + userState)
@@ -352,7 +359,7 @@ class RacingMap : OnMapReadyCallback {
                                         mMap.addPolyline(
                                             PolylineOptions()
                                                 .addAll(loadRoute[markerCount - 1])
-                                                .color(Color.RED)
+                                                .color(Color.BLUE)
                                                 .startCap(RoundCap())
                                                 .endCap(RoundCap())
                                         )        //지나간길
@@ -387,21 +394,21 @@ class RacingMap : OnMapReadyCallback {
                                 mMap.animateCamera(
                                     CameraUpdateFactory.newLatLngZoom(
                                         cur_loc,
-                                        20F
+                                        18F
                                     )
                                 )
                                 if (PolyUtil.isLocationOnPath(
                                         LatLng(lat, lng),
                                         loadRoute[markerCount - 1],
                                         false,
-                                        10.0
+                                        20.0
                                     )
                                 ) {
                                     print_log("위도 : " + lat.toString() + "경도 : " + lng.toString())
                                     countDeviation = 0
                                 } else {
                                     manageRacing.deviation(++countDeviation)
-                                    if (countDeviation > 10) {
+                                    if (countDeviation > 30) {
                                         manageRacing.stopRacing(false)
                                     }
 

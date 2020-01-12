@@ -37,6 +37,8 @@ import java.io.PrintWriter
 import java.net.HttpURLConnection
 import java.net.MalformedURLException
 import java.net.URL
+import java.nio.charset.Charset
+
 class RunThisMapActivity : AppCompatActivity() {
     lateinit var mapTitle: String
     lateinit var jsonString: String
@@ -77,11 +79,11 @@ class RunThisMapActivity : AppCompatActivity() {
                             buffer.append("MapTitle").append("=").append(mapTitle)
 
 
-                            val outStream = OutputStreamWriter(http.outputStream, "EUC-KR")
+                            val outStream = OutputStreamWriter(http.outputStream, "UTF8")
                             val writer = PrintWriter(outStream)
                             writer.write(buffer.toString())
                             writer.flush()
-                            val tmp = InputStreamReader(http.inputStream, "EUC-KR")
+                            val tmp = InputStreamReader(http.inputStream, "UTF8")
                             val reader = BufferedReader(tmp)
                             val builder = StringBuilder()
                             var line: String? = reader.readLine()
@@ -89,17 +91,17 @@ class RunThisMapActivity : AppCompatActivity() {
                                 builder.append(line)
                                 line = reader.readLine()
                             }
-                            Log.d("server", builder.toString())
-
+                           // Log.d("server", String(builder.toString().toByteArray(),Charsets.UTF_8))
+                            Log.d("server",builder.toString())
                             makerData = ConvertJson.JsonToRunningData(builder.toString())
                             activity.runOnUiThread(Runnable {
                                 map = ViewerMap(smf, activity, makerData)
                                 activity.runThisMapTitle.text = makerData.mapTitle.replace('|',' ')
                                 activity.runThisMapExplanation.text=makerData.mapExplanation
                                 activity.runThisMapId.text = makerData.id
-                                activity.runThisMapDistance.text=String.format("%.3f km",makerData.distance/1000)
+                                activity.runThisMapDistance.text=String.format("%.3f",makerData.distance/1000)
                                 activity.runThisMapTime.text=makerData.time
-                                activity.runThisMapSpeed.text=String.format("%.3f km/h",makerData.speed.average())
+                                activity.runThisMapSpeed.text=String.format("%.3f",makerData.speed.average())
                                 setChart()
 //TODO:Save할때 id도 json에 넣기
 

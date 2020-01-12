@@ -42,7 +42,7 @@ class RunningMap : OnMapReadyCallback {
     var userState: UserState
     var markers=Vector<LatLng>()
     var markerCount=0
-    lateinit var cpOption:MarkerOptions
+    var cpOption= MarkerOptions()
     var currentMarker:Marker?=null
     lateinit var racerIcon: BitmapDescriptor
 
@@ -66,26 +66,27 @@ class RunningMap : OnMapReadyCallback {
 
     }
     fun init(){
-        val cpMarkerImg = context.getDrawable(R.drawable.ic_checkpoint_red)
-        var cpCanvas = Canvas()
-        var cpBitmap = Bitmap.createBitmap(
-            cpMarkerImg!!.intrinsicWidth,
-            cpMarkerImg!!.intrinsicHeight,
+        cpOption
+        cpOption.icon(makingIcon(R.drawable.ic_racing_startpoint))
+
+    }
+    fun makingIcon(drawable: Int): BitmapDescriptor {
+        val circleDrawable = context.getDrawable(drawable)
+        var canvas = Canvas()
+        var bitmap = Bitmap.createBitmap(
+            circleDrawable!!.intrinsicWidth,
+            circleDrawable!!.intrinsicHeight,
             Bitmap.Config.ARGB_8888
         )
-        cpCanvas.setBitmap(cpBitmap);
-        cpMarkerImg!!.bounds= Rect(
+        canvas.setBitmap(bitmap);
+        circleDrawable.setBounds(
             0,
             0,
-            cpMarkerImg!!.getIntrinsicWidth(),
-            cpMarkerImg!!.getIntrinsicHeight()
+            circleDrawable.intrinsicWidth,
+            circleDrawable.intrinsicHeight
         )
-        cpMarkerImg.draw(cpCanvas)
-        val cpIcon = BitmapDescriptorFactory.fromBitmap(cpBitmap);
-        //cp 초기화
-        cpOption = MarkerOptions()
-        cpOption.icon(cpIcon)
-
+        circleDrawable.draw(canvas)
+        return BitmapDescriptorFactory.fromBitmap(bitmap)
     }
     fun startTracking() {
     }
@@ -173,11 +174,12 @@ class RunningMap : OnMapReadyCallback {
 
                     //startPoint 추가
                     cpOption.title("StartPoint")
+
                     cpOption.position(prev_loc)
                     mMap.addMarker(cpOption)
                     markerCount++
                     markers.add(prev_loc)
-
+                    cpOption.icon(makingIcon(R.drawable.ic_checkpoint_red))
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(prev_loc, 17F))
                     if (userState == UserState.PAUSED) {
                         startTracking()

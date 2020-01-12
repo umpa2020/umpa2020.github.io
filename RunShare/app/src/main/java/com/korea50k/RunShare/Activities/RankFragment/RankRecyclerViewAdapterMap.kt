@@ -95,7 +95,7 @@ class RankRecyclerViewAdapterMap(onLoadMoreListener: OnLoadMoreListener) :
             holder.rank.setText(ranking.toString())
             holder.mapTitle.setText(singleItem.mapTitle)
             holder.execute.setText(singleItem.execute)
-            holder.likes.setText(singleItem.likes)
+            //holder.likes.setText(singleItem.likes)
             if (ranking == 1)
                 holder.rank.setBackgroundResource(R.drawable.ic_1)
             else if (ranking == 2)
@@ -116,13 +116,13 @@ class RankRecyclerViewAdapterMap(onLoadMoreListener: OnLoadMoreListener) :
         var rank: TextView
         var mapTitle: TextView
         var execute: TextView
-        var likes: TextView
+        //var likes: TextView
 
         init {
             rank = v.findViewById(R.id.rank_cardView_rank) as TextView
             mapTitle = v.findViewById(R.id.rank_cardView_name) as TextView
             execute = v.findViewById(R.id.rank_cardView_execute) as TextView
-            likes = v.findViewById(R.id.rank_cardView_like) as TextView
+            //likes = v.findViewById(R.id.rank_cardView_like) as TextView
         }
     }
 

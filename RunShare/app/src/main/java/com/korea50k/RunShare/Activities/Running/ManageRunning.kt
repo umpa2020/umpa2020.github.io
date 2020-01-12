@@ -39,7 +39,7 @@ class ManageRunning {
         map.startTracking()
         distanceThread = Thread(Runnable {
             while(true) {
-                Thread.sleep(3000)
+                Thread.sleep(1000)
                 activity.runOnUiThread(Runnable {
                     activity.runningDistanceTextView.text=String.format("%.3f km",(map.distance/1000))
                 })
