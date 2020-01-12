@@ -1,6 +1,7 @@
 package com.korea50k.RunShare.Activities.Profile
 
 
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Point
@@ -16,6 +17,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.korea50k.RunShare.Activities.RankFragment.RankRecyclerClickActivity
 import com.korea50k.RunShare.Activities.RankFragment.RankRecyclerViewAdapterMap
 import com.korea50k.RunShare.Activities.RankFragment.RecyclerItemClickListener
 import com.korea50k.RunShare.R
@@ -24,6 +26,9 @@ import com.korea50k.RunShare.Util.ConvertJson
 import com.korea50k.RunShare.Util.S3
 import com.korea50k.RunShare.Util.SharedPreValue
 import com.korea50k.RunShare.dataClass.UserMapImageData
+import kotlinx.android.synthetic.main.recycler_rank_item.view.*
+import kotlinx.android.synthetic.main.user_grid_image.*
+import kotlinx.android.synthetic.main.user_grid_image.view.*
 import okhttp3.ResponseBody
 import org.json.JSONArray
 import org.json.JSONObject
@@ -116,9 +121,10 @@ class FragmentUserRace : Fragment(), RankRecyclerViewAdapterMap.OnLoadMoreListen
                     override fun onItemClick(view: View, position: Int) {
                         Log.d("ranking","click listener")
                         //TODO:자 이제 여기서 넘기기로
-                      /*  val intent = Intent(context, RankRecyclerClickActivity::class.java)
-                        intent.putExtra("MapTitle", view.rank_cardView_name.text)
-                        startActivity(intent)*/
+                        val intent = Intent(context,RankRecyclerClickActivity::class.java)
+
+                        intent.putExtra("MapTitle", view.gridMapTitle.text.toString())
+                        startActivity(intent)
                     }
                 })
         )

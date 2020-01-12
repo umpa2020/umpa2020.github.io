@@ -110,6 +110,7 @@ class ProfileMapRecyclerViewAdapter(onLoadMoreListener: FragmentUserRace) :
         }
     }
 
+
     fun setMoreLoading(isMoreLoading: Boolean) {
         this.isMoreLoading = isMoreLoading
     }
@@ -122,6 +123,8 @@ class ProfileMapRecyclerViewAdapter(onLoadMoreListener: FragmentUserRace) :
             mapTitle = v.findViewById(R.id.gridMapTitle) as TextView
             mapImage = v.findViewById(R.id.gridImage) as ImageView
         }
+
+
     }
 }
 
