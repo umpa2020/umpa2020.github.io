@@ -37,7 +37,7 @@ class RunningData() : Serializable {
 
     @SerializedName("Time")
     @Expose
-    var time: String = ""
+    var time: Long = 0
 
     @SerializedName("MapTitle")
     @Expose

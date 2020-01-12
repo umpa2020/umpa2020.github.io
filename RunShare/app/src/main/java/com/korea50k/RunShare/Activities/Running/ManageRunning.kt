@@ -74,7 +74,7 @@ class ManageRunning {
         map.stopTracking(runningData)
 
         runningData.distance = map.distance
-        runningData.time = formatter.format(Date(SystemClock.elapsedRealtime() - chronometer.getBase()))
+        runningData.time = SystemClock.elapsedRealtime() - chronometer.base
         runningData.privacy=privacy
 
         var newIntent = Intent((context as Activity), RunningSaveActivity::class.java)

@@ -19,7 +19,7 @@ class RankDetailMapData() : Serializable {
 
     @SerializedName("ChallengerIdTime")
     @Expose
-    var ChallengerTime: String = "0"
+    var ChallengerTime: Long = 0
 
     @SerializedName("MapImage")
     @Expose
