@@ -46,7 +46,7 @@ class RacingFinishActivity : AppCompatActivity() ,
 
     var start = 0
     var end = 15
-
+    var activity=this
     lateinit var racerData: RunningData
     lateinit var makerData: RunningData
 
@@ -223,6 +223,7 @@ class RacingFinishActivity : AppCompatActivity() ,
 
     fun loadData() {
         itemList.clear()
+
         mAdapter.addAll(rankDetailMapDatas)
     }
 
@@ -240,7 +241,11 @@ class RacingFinishActivity : AppCompatActivity() ,
             } else {
                 mJsonString = result
                 rankDetailMapDatas = ConvertJson.JsonToRankDetailMapDatas(mJsonString, start, end)
-
+                for(i in rankDetailMapDatas.indices){
+                    if(rankDetailMapDatas[i].Id=="My"){
+                        rankDetailMapDatas[i].Rank
+                    }
+                }
                 Log.d("ssmm11", "받아온 거  = "  + mJsonString)
                 //ID_TextView.text = rankDetailMapDatas[0].Id
                 //MapImage = rankDetailMapDatas[0].MapImage
