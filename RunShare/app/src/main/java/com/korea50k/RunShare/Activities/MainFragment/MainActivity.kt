@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -16,6 +17,8 @@ import kotlinx.android.synthetic.main.activity_main.*
 import androidx.drawerlayout.widget.DrawerLayout
 import android.view.View
 import android.widget.Toast
+import android.widget.Toast.LENGTH_LONG
+import android.widget.Toast.LENGTH_SHORT
 import com.korea50k.RunShare.Activities.Profile.MyInformationActivity
 import com.korea50k.RunShare.Activities.Profile.SettingActivity
 import com.korea50k.RunShare.Activities.Profile.UserActivity
@@ -27,6 +30,18 @@ import com.korea50k.RunShare.Util.TTS
 
 class MainActivity : AppCompatActivity() {
     lateinit var mViewPager:ViewPager
+    private var doubleBackToExitPressedOnce = false
+    override fun onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed()
+            return
+        }
+
+        this.doubleBackToExitPressedOnce = true
+        Toast.makeText(this, "'뒤로'버튼 한번 더 누르시면 종료합니다.", LENGTH_SHORT).show()
+
+        Handler().postDelayed(Runnable { doubleBackToExitPressedOnce = false }, 2000)
+    }
     lateinit var mMainPageAdapter: MainPageAdapter
     private val multiplePermissionsCode = 100          //권한
     private val requiredPermissions = arrayOf(
