@@ -19,11 +19,12 @@
     <hollowsoft.slidingdrawer.SlidingDrawer
         android:id="@+id/drawer"
         android:layout_width="match_parent"
-        android:layout_height="130dp"
+        android:layout_height="150dp"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="70dp"
         android:layout_marginRight="10dp"
         android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
         layout:content="@+id/content"
         layout:handle="@+id/racingHandle">
 
@@ -37,8 +38,12 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:background="#00000000"/>
             <LinearLayout
                 android:id="@+id/content"
                 android:layout_width="match_parent"
@@ -57,8 +62,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         style="@style/info_text"
-                        android:text="DISTANCE"
-                        android:fontFamily="@font/godob"/>
+                        android:text="DISTANCE"/>
 
                     <TextView
                         android:id="@+id/racingDistanceTextView"
