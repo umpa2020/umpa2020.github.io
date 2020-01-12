@@ -2,6 +2,7 @@ package com.korea50k.RunShare.Activities.MainFragment
 
 import android.Manifest
 import android.content.Intent
+import android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
@@ -36,6 +37,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setRequestedOrientation(SCREEN_ORIENTATION_PORTRAIT);
         setContentView(com.korea50k.RunShare.R.layout.activity_main)
         Log.d("WSY","Shared 저장 이메일 : " + SharedPreValue.getEMAILData(this))
         Log.d("WSY","Shared 저장 비번 : " + SharedPreValue.getPWDData(this))

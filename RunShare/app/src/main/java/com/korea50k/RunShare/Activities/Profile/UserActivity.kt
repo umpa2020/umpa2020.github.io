@@ -1,6 +1,7 @@
 package com.korea50k.RunShare.Activities.Profile
 
 import android.app.Activity
+import android.content.pm.ActivityInfo
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -25,6 +26,7 @@ class UserActivity : AppCompatActivity() {
     var activity =this
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_user)
         var id = intent.getStringExtra("ID")
         //사용자 유저 이름 표시
