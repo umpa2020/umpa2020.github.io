@@ -138,7 +138,7 @@
                     android:textColor="@color/white"
                     android:fontFamily="@font/godob"
                     android:textSize="20dp"
-                    android:id="@+id/totalDistance_TextView"/>
+                    android:id="@+id/slideDistanceTextView"/>
             </LinearLayout>
 
             <LinearLayout
@@ -171,7 +171,7 @@
                     android:textColor="@color/white"
                     android:fontFamily="@font/godob"
                     android:textSize="20dp"
-                    android:id="@+id/totalTime_TextView"/>
+                    android:id="@+id/slideTimeTextView"/>
             </LinearLayout>
 
             <!--
