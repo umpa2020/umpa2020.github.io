@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Activities.Racing.RacingFinishActivity">
+    tools:context=".Activities.Racing.RacingFinishActivity"
+    android:layout_marginTop="20dp">
 
     <TextView
         android:id="@+id/resultTitleTextView"
@@ -207,7 +208,7 @@
         android:background="@drawable/base_button_selector"
         android:onClick="onClick"
         android:text="확인"
-        android:textColor="#FF0000"
+        android:textColor="@color/darkRed"
         android:fontFamily="@font/godob"/>
 
 

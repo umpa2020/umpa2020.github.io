@@ -31,7 +31,7 @@
             android:drawableLeft="@drawable/ic_play_pressed"
             android:text="  START"
             android:fontFamily="@font/godob"
-            android:textColor="#FF0000"
+            android:textColor="@color/darkRed"
             android:onClick="onClick"
             android:layout_margin="10dp"
             android:paddingLeft="37dp"

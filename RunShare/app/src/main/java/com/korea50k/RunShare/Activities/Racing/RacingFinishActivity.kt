@@ -91,7 +91,7 @@ class RacingFinishActivity : AppCompatActivity() ,
 
         mRecyclerView.adapter = mAdapter
         mRecyclerView.addOnItemTouchListener(
-            RecyclerItemClickListener(this!!, mRecyclerView,
+            RecyclerItemClickListener(this, mRecyclerView,
                 object : RecyclerItemClickListener.OnItemClickListener {
                     override fun onItemClick(view: View, position: Int) {
                         Log.d("ranking","click listener")

@@ -66,7 +66,7 @@
                             android:layout_height="wrap_content"
                             android:text="0.00"
                             android:fontFamily="@font/godob"
-                            style="@style/info_text" />
+                            style="@style/info_text_1" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -87,7 +87,7 @@
                             android:id="@+id/runningTimerTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            style="@style/info_text"/>
+                            style="@style/info_text_1"/>
                     </LinearLayout>
 
                     <LinearLayout
@@ -110,53 +110,60 @@
                             android:layout_height="wrap_content"
                             android:text="0.0"
                             android:fontFamily="@font/godob"
-                            style="@style/info_text"/>
+                            style="@style/info_text_1"/>
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
         </hollowsoft.slidingdrawer.SlidingDrawer>
     </RelativeLayout>
     <LinearLayout
+        android:layout_centerHorizontal="true"
         android:id="@+id/runningNotificationLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_height="150dp"
         android:visibility="gone"
-        android:background="#440044FF">
+        android:background="#990044FF"
+        android:layout_centerInParent="true">
         <TextView
             android:id="@+id/runningNotificationTextView"
             android:layout_width="0dp"
             android:layout_weight="8"
             android:gravity="center"
             android:layout_height="match_parent"
+            android:fontFamily="@font/godob"
+            android:textSize="15dp"
+            android:textColor="@color/white"
             />
         <LinearLayout
+            android:layout_marginRight="10dp"
             android:layout_width="0dp"
             android:layout_weight="2"
             android:layout_height="match_parent"
             android:orientation="vertical"
+            android:gravity="center"
             >
             <Button
                 android:id="@+id/runningNotificationYes"
                 android:layout_width="match_parent"
-                android:layout_height="25dp"
+                android:layout_height="50dp"
                 android:gravity="center"
                 android:text="Yes"
                 android:fontFamily="@font/godob"
                 android:clickable="false"
                 android:onClick="onClick"
-                android:background="#44FFFFFF"
+                android:background="#99FFFFFF"
                 android:layout_margin="2dp"
                 />
             <Button
                 android:id="@+id/runningNotificationNo"
                 android:layout_width="match_parent"
-                android:layout_height="25dp"
+                android:layout_height="50dp"
                 android:gravity="center"
                 android:text="No"
                 android:fontFamily="@font/godob"
                 android:clickable="false"
                 android:onClick="onClick"
-                android:background="#44FFFFFF"
+                android:background="#99FFFFFF"
                 android:layout_margin="2dp"/>
         </LinearLayout>
 
@@ -173,7 +180,7 @@
             android:layout_width="150dp"
             android:layout_height="40dp"
             android:background="@drawable/base_button_selector"
-            android:textColor="#FF0000"
+            android:textColor="@color/darkRed"
             android:text="  STOP"
             android:fontFamily="@font/godob"
             android:onClick="onClick"
@@ -187,7 +194,7 @@
             android:layout_width="150dp"
             android:layout_height="40dp"
             android:background="@drawable/base_button_selector"
-            android:textColor="#FF0000"
+            android:textColor="@color/darkRed"
             android:text="  PAUSE"
             android:fontFamily="@font/godob"
             android:onClick="onClick"
