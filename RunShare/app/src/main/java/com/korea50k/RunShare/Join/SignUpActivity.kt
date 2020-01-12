@@ -15,6 +15,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -263,6 +264,7 @@ class SignUpActivity : AppCompatActivity() {
                     inputStream!!.close()
                     Log.d(WSY, bitmapImg.toString())
                     profileImage.setImageBitmap(bitmapImg)
+                    profileImage.scaleType = ImageView.ScaleType.CENTER_CROP
                     //TODO:서버로 데이터 전송
                 }catch(e : java.lang.Exception)
                 {

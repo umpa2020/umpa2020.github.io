@@ -106,8 +106,10 @@ class LoginActivity : AppCompatActivity() {
                                 SharedPreValue.setAutoLogin(this@LoginActivity, true)
 
                                 Log.d(WSY,userData.getString("ProfilePath"))
+                                var temp =userData.getString("ProfilePath")
+                                //var imageUri = temp.c
                                // Log.d(WSY,S3.downloadBitmap(userData.getString("ProfilePath")).toString())
-                               // SharedPreValue.setProfileData(this@LoginActivity, )
+                                SharedPreValue.setProfileData(this@LoginActivity, userData.getString("ProfilePath"))
 
                                 var nextIntent =
                                     Intent(this@LoginActivity, MainActivity::class.java)
