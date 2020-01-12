@@ -91,5 +91,4 @@ interface API {
     @POST("feedCommentDownload.php")
     @FormUrlEncoded
     fun feedCommentDownload(@Field("MapTitle") MapTitle: String): retrofit2.Call<ResponseBody>
-
 }
