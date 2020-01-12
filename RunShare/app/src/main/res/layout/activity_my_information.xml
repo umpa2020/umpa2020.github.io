@@ -8,13 +8,23 @@
     android:orientation="vertical"
     android:gravity="center">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/ic_launcher_background">
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/profileImage"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="@drawable/ic_profile_logo"
+                android:onClick="onClick"/>
+            <com.mikhaellopez.circularimageview.CircularImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="bottom|right"
+                android:background="@drawable/ic_profile_edit" />
 
-    </de.hdodenhof.circleimageview.CircleImageView>
+        </FrameLayout>
+
 
     <LinearLayout
         android:layout_marginTop="30dp"

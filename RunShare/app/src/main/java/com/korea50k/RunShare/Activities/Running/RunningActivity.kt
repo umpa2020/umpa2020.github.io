@@ -16,10 +16,8 @@ import hollowsoft.slidingdrawer.OnDrawerCloseListener
 import hollowsoft.slidingdrawer.OnDrawerOpenListener
 import hollowsoft.slidingdrawer.OnDrawerScrollListener
 import hollowsoft.slidingdrawer.SlidingDrawer
-import kotlinx.android.synthetic.main.activity_racing.*
 import kotlinx.android.synthetic.main.activity_running.*
 import kotlinx.android.synthetic.main.activity_running.btn_stop
-import kotlinx.android.synthetic.main.activity_running.handle
 
 class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpenListener,
     OnDrawerCloseListener {
@@ -127,12 +125,12 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
     }
 
     override fun onDrawerOpened() {
-        handle.background = getDrawable(R.drawable.close_selector)
+        runningHandle.background = getDrawable(R.drawable.close_selector)
         Log.d(TAG, "onDrawerOpened()")
     }
 
     override fun onDrawerClosed() {
-        handle.background = getDrawable(R.drawable.extend_selector)
+        runningHandle.background = getDrawable(R.drawable.extend_selector)
         Log.d(TAG, "onDrawerClosed()")
     }
 

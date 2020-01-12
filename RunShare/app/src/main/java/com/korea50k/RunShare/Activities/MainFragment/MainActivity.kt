@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
         val mTabLayout = tabDots
         mTabLayout.addTab(mTabLayout.newTab())
         mTabLayout.addTab(mTabLayout.newTab())
-        mTabLayout.addTab(mTabLayout.newTab())
+        //mTabLayout.addTab(mTabLayout.newTab())
 
         mViewPager =pager
         mMainPageAdapter =

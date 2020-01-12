@@ -9,7 +9,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/account_race_recyclerview">
+        android:id="@+id/user_race_recyclerview">
 
     </androidx.recyclerview.widget.RecyclerView>
 

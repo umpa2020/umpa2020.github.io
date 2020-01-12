@@ -15,7 +15,9 @@ import com.korea50k.RunShare.Activities.MainFragment.MainActivity
 import com.korea50k.RunShare.Join.SignUpActivity
 import com.korea50k.RunShare.R
 import com.korea50k.RunShare.RetrofitClient
+import com.korea50k.RunShare.Util.S3
 import com.korea50k.RunShare.Util.SharedPreValue
+import kotlinx.android.synthetic.main.activity_login.*
 import okhttp3.ResponseBody
 import org.json.JSONObject
 import retrofit2.Call
@@ -31,6 +33,12 @@ class LoginActivity : AppCompatActivity() {
     private var password : String? = null
     private var loginChecked : Boolean? = null
     private var settings : SharedPreferences? = null
+
+    override fun onResume() {
+        super.onResume()
+        errorMessage.text = ""
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -59,23 +67,55 @@ class LoginActivity : AppCompatActivity() {
                             val result = response.body() as ResponseBody
                             val resultValue = result.string()
 
-                            Log.i(WSY,"결과 : " + resultValue)
+                            Log.i(WSY,"결과 : " + resultValue.length)
 
-                            var userData = JSONObject(resultValue)
+                            var re = resultValue.substring(0,1)
+                            Log.d(WSY,resultValue.toString())
 
-                            Log.i(WSY,userData.getString("Id") + ", " + userData.getString("Nickname") + userData.getString("Nickname")
-                            + ", " + userData.getString("Age") + ", " + userData.getString("Gender"))
+                            if(re.equals("0")){ // 로그인 실패 시
+                                Log.d(WSY,"로그인 실패")
+                                errorMessage.text = getString(R.string.loginError)
 
-                            SharedPreValue.setEMAILData(this@LoginActivity,userData.getString("Id"))
-                            SharedPreValue.setPWDData(this@LoginActivity,userData.getString("Password"))
-                            SharedPreValue.setNicknameData(this@LoginActivity,userData.getString("Nickname"))
-                            SharedPreValue.setAgeData(this@LoginActivity, userData.getString("Age"))
-                            SharedPreValue.setGenderData(this@LoginActivity, userData.getString("Gender"))
-                            SharedPreValue.setAutoLogin(this@LoginActivity,true)
+                            } else { // 로그인 성공
+                                errorMessage.text = ""
+                                var userData = JSONObject(resultValue)
 
-                            var nextIntent = Intent(this@LoginActivity, MainActivity::class.java)
-                            startActivity(nextIntent)
-                            finish()
+                                Log.d(WSY, userData.toString())
+
+
+                                SharedPreValue.setEMAILData(
+                                    this@LoginActivity,
+                                    userData.getString("Id")
+                                )
+                                SharedPreValue.setPWDData(
+                                    this@LoginActivity,
+                                    userData.getString("Password")
+                                )
+                                SharedPreValue.setNicknameData(
+                                    this@LoginActivity,
+                                    userData.getString("Nickname")
+                                )
+                                SharedPreValue.setAgeData(
+                                    this@LoginActivity,
+                                    userData.getString("Age")
+                                )
+                                SharedPreValue.setGenderData(
+                                    this@LoginActivity,
+                                    userData.getString("Gender")
+                                )
+                                SharedPreValue.setAutoLogin(this@LoginActivity, true)
+
+                                Log.d(WSY,userData.getString("ProfilePath"))
+                                var temp =userData.getString("ProfilePath")
+                                //var imageUri = temp.c
+                               // Log.d(WSY,S3.downloadBitmap(userData.getString("ProfilePath")).toString())
+                                SharedPreValue.setProfileData(this@LoginActivity, userData.getString("ProfilePath"))
+
+                                var nextIntent =
+                                    Intent(this@LoginActivity, MainActivity::class.java)
+                                startActivity(nextIntent)
+                                finish()
+                            }
                         }catch (e : Exception){
                             e.toString()
                         }
@@ -89,6 +129,7 @@ class LoginActivity : AppCompatActivity() {
             R.id.button_signup -> {
                 val intent = Intent(applicationContext, SignUpActivity::class.java)
                 startActivityForResult(intent,101)
+
             }
 //            R.id.button_google_login -> {
 //

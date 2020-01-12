@@ -9,7 +9,8 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -50,11 +51,11 @@
                     android:background="@drawable/rounded_gray_box"
                     android:id="@+id/runThisMapId"/>
             </LinearLayout>
-//TODO:mapview로 바꾸기
             <fragment
                 android:layout_below="@+id/runThisMapTitleLayout"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
+                android:layout_margin="20dp"
                 android:id="@+id/runThisMapViewer"
                 tools:context=".fragment.MapFragment"
                 android:name="com.google.android.gms.maps.SupportMapFragment"
@@ -91,6 +92,8 @@
                     android:background="@color/rankBackgroudGray"/>
 
                 <TextView
+                    android:textSize="20dp"
+                    android:padding="10dp"
                     android:id="@+id/runThisMapExplanation"
                     android:layout_marginRight="20dp"
                     android:layout_marginLeft="20dp"

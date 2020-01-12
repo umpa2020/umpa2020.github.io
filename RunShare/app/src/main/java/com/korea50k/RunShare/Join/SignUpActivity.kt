@@ -3,42 +3,35 @@ package com.korea50k.RunShare.Join
 import android.Manifest
 import android.content.Context
 import android.content.Intent
-import android.database.Cursor
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.drawable.Drawable
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.text.TextUtils
 import android.util.Base64
 import android.util.Log
-import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.google.android.material.textfield.TextInputLayout
-import com.gun0912.tedpermission.PermissionListener
-import com.gun0912.tedpermission.TedPermission
 import com.jakewharton.rxbinding2.widget.RxTextView
-import com.korea50k.RunShare.Activities.Running.RunningSaveActivity
 import com.korea50k.RunShare.R
 import com.korea50k.RunShare.RetrofitClient
 import com.korea50k.RunShare.Util.Constants
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.android.synthetic.main.activity_gender_select.*
 import kotlinx.android.synthetic.main.activity_sign_up.*
-import kotlinx.android.synthetic.main.activity_sign_up.app_toolbar
-import kotlinx.android.synthetic.main.signup_toolbar.view.*
 import okhttp3.ResponseBody
 import org.jetbrains.anko.toast
 import retrofit2.Call
 import retrofit2.Response
 import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.FileOutputStream
-import java.util.ArrayList
 import java.util.regex.Pattern
 
 class SignUpActivity : AppCompatActivity() {
@@ -50,16 +43,16 @@ class SignUpActivity : AppCompatActivity() {
     private lateinit var inputDataField: Array<EditText>
     private lateinit var textInputLayoutArray: Array<TextInputLayout>
     private lateinit var inputInfoMessage: Array<String>
-    private var isInputCorrectData: Array<Boolean> = arrayOf(false, false, false, false, false)
+    private var isInputCorrectData: Array<Boolean> = arrayOf(false, false, false, false, false, false)
 
     // 카메라 requestCode
     private val PICK_FROM_ALBUM = 1
-    private var pofileImageFile: File? = null
-
 
     private var bitmapImg : Bitmap? = null
+    private var basicBitmapImg : Bitmap? = null
     private var email: String? = null
     private var password: String? = null
+    private var passwordCheck: String? = null
     private var nickname: String? = null
     private var age: String? = null
     private var gender: String? = null
@@ -76,14 +69,14 @@ class SignUpActivity : AppCompatActivity() {
         init()
 
         editEmail.setOnFocusChangeListener(object : View.OnFocusChangeListener {
-            override fun onFocusChange(v: View?, hasFocus: Boolean) {
+            override fun onFocusChange(v : View?, hasFocus: Boolean) {
                 if (!hasFocus && isInputCorrectData[0]) {
                     idCheck(editEmail.text.toString())
                 }
             }
         })
         editNickname.setOnFocusChangeListener(object : View.OnFocusChangeListener {
-            override fun onFocusChange(v: View?, hasFocus: Boolean) {
+            override fun onFocusChange(v : View?, hasFocus: Boolean) {
                 if (!hasFocus && isInputCorrectData[0]) {
                     nicknameCheck(editNickname.text.toString())
                 }
@@ -101,37 +94,54 @@ class SignUpActivity : AppCompatActivity() {
         startActivityForResult(intent, PICK_FROM_ALBUM)
     }
 
-    private fun tedPermission() {
-        val permissionListener = object : PermissionListener {
-            override fun onPermissionDenied(deniedPermissions: ArrayList<String>?) {
-                Toast.makeText(this@SignUpActivity, "Permission Denied", Toast.LENGTH_SHORT).show()
-            }
-
-            override fun onPermissionGranted() {
-                Toast.makeText(this@SignUpActivity, "Permission Granted", Toast.LENGTH_SHORT).show()
-                goToAlbum()
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if(requestCode == 1){
+            var length = permissions.size
+            for(i in 0..length-1){
+                if(grantResults[i] == PackageManager.PERMISSION_GRANTED) {
+                    // 동의
+                    Log.d(WSY,"권한 허용 : " + permissions[i])
+                    goToAlbum()
+                }
             }
         }
+    }
 
-        Log.d("here","여기 로그 뜨나요?")
+    private fun checkSelfPermission(){
+        var temp = ""
 
-        TedPermission.with(this)
-            .setPermissionListener(permissionListener)
-            .setRationaleMessage(getResources().getString(R.string.permission_2))
-            .setDeniedMessage(getResources().getString(R.string.permission_1))
-            .setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
-            .check()
+        // 파일 읽기 권한 확인
+        if(ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+            temp += Manifest.permission.READ_EXTERNAL_STORAGE + " "
+        }
+
+        Log.d(WSY,temp)
+        if(TextUtils.isEmpty(temp) == false) {
+            // 권한 요청
+            ActivityCompat.requestPermissions(this, temp.trim().split(" ").toTypedArray(),1)
+        }else {
+            // 모든 허용 상태
+            //toast("권한을 모두 허용")
+            goToAlbum()
+        }
     }
 
 
+
     private fun init() {
-        inputDataField = arrayOf(editEmail, editPassword, editNickname, editAge, editGender)
+        inputDataField = arrayOf(editEmail, editPassword, editPasswordCheck, editNickname, editAge, editGender)
         textInputLayoutArray =
-            arrayOf(emailTextInput, pwTextInput, nicknameTextInput, ageTextInput, genderTextInput)
+            arrayOf(emailTextInput, pwTextInput, pwCkTextInput,  nicknameTextInput, ageTextInput, genderTextInput)
         inputInfoMessage = arrayOf(
             getString(R.string.error_discorrent_email), getString(
                 R.string.txtInputInfoPWD
-            ), getString(R.string.txtInputInfoNick), getString(R.string.txtInputInfoAge), getString(
+            ), getString(R.string.txtInputInfoPWCHECK),getString(R.string.txtInputInfoNick), getString(R.string.txtInputInfoAge), getString(
                 R.string.txtInputInfoGender
             )
         )
@@ -164,10 +174,9 @@ class SignUpActivity : AppCompatActivity() {
             }) {
                 //Error Block
             }
-
-        //Nickname
-        val disposableNick = RxTextView.textChanges(inputDataField[2])
-            .map { t -> t.isEmpty() || !Pattern.matches(Constants.NICKNAME_RULS, t) }
+        // Password
+        val disposablePwdCheck = RxTextView.textChanges(inputDataField[2])
+            .map { t -> t.isEmpty() || Pattern.matches(Constants.PASSWORD_RULS, t) }
             .subscribe({ it ->
                 //inputDataField[2].setText("")
                 reactiveInputTextViewData(2, it)
@@ -175,8 +184,9 @@ class SignUpActivity : AppCompatActivity() {
                 //Error Block
             }
 
-        val disposableAge = RxTextView.textChanges(inputDataField[3])
-            .map { t -> t.isEmpty() || Pattern.matches(Constants.AGE_RULS, t)}
+        //Nickname
+        val disposableNick = RxTextView.textChanges(inputDataField[3])
+            .map { t -> t.isEmpty() || !Pattern.matches(Constants.NICKNAME_RULS, t) }
             .subscribe({ it ->
                 //inputDataField[2].setText("")
                 reactiveInputTextViewData(3, it)
@@ -184,12 +194,21 @@ class SignUpActivity : AppCompatActivity() {
                 //Error Block
             }
 
-        val disposableGender = RxTextView.textChanges(inputDataField[4])
+        val disposableAge = RxTextView.textChanges(inputDataField[4])
+            .map { t -> t.isEmpty() || Pattern.matches(Constants.AGE_RULS, t)}
+            .subscribe({ it ->
+                //inputDataField[2].setText("")
+                reactiveInputTextViewData(4, it)
+            }) {
+                //Error Block
+            }
+
+        val disposableGender = RxTextView.textChanges(inputDataField[5])
             .map { t -> t.isEmpty() || Pattern.matches(Constants.GENDER_RULS, t)}
             .subscribe({ it ->
                 //inputDataField[2].setText("")
                 Log.d(WSY,"성별 : " + it.toString())
-                reactiveInputTextViewData(4, it)
+                reactiveInputTextViewData(5, it)
             }) {
                 //Error Block
             }
@@ -240,11 +259,13 @@ class SignUpActivity : AppCompatActivity() {
                     var inputStream =
                         intentData!!.data?.let { getContentResolver().openInputStream(it) }
 
+                    // 프로필 사진을 비트맵으로 변환
                     bitmapImg = BitmapFactory.decodeStream(inputStream)
                     inputStream!!.close()
                     Log.d(WSY, bitmapImg.toString())
                     profileImage.setImageBitmap(bitmapImg)
-
+                    profileImage.scaleType = ImageView.ScaleType.CENTER_CROP
+                    //TODO:서버로 데이터 전송
                 }catch(e : java.lang.Exception)
                 {
 
@@ -252,6 +273,7 @@ class SignUpActivity : AppCompatActivity() {
             }
             else if(resultCode == RESULT_CANCELED)
             {
+                //사진 선택 취소
                 Toast.makeText(this, "사진 선택 취소", Toast.LENGTH_LONG).show();
             }
         }
@@ -438,36 +460,52 @@ class SignUpActivity : AppCompatActivity() {
 
             }
             R.id.profileImage -> {
-                tedPermission()
+               // tedPermission()
+                checkSelfPermission()
             }
             R.id.sign_up_button -> {
 
                 email = editEmail.text.toString()
                 password = editPassword.text.toString()
+                passwordCheck = editPasswordCheck.text.toString()
                 nickname = editNickname.text.toString()
                 age = editAge.text.toString()
                 gender = editGender.text.toString()
 
                 Log.d(WSY,"" + isInputCorrectData[0] + ", " + isInputCorrectData[1] + ", " + isInputCorrectData[2] + ", " + isInputCorrectData[3] + ", " + isInputCorrectData[4]         )
-                Log.d(WSY, email + ", " + password + ", " + nickname + ", " + age + ", " + gender)
+                Log.d(WSY, email + ", " + password + ", "  + passwordCheck +", " +  nickname + ", " + age + ", " + gender)
 
-//                if(gender.equals("")){
-//                    textInputLayoutArray[4].error = inputInfoMessage[4]
-//                    textInputLayoutArray[4].isErrorEnabled = true
-//                }
-                if(bitmapImg == null){
-                    toast("프로필을 등록해주세요.")
+                // 비밀번호 확인
+                if(!password.equals(passwordCheck)) {
+                    editPasswordCheck.text = null
+                    textInputLayoutArray[2].error = inputInfoMessage[2]
+                    textInputLayoutArray[2].isErrorEnabled = true
                 }
-                if (bitmapImg != null && isInputCorrectData[0] && isInputCorrectData[1] && isInputCorrectData[2] && age!!.isNotEmpty() && gender!!.isNotEmpty()) {
-                    // AsyncTask로 로딩(시간이 걸리는 것을) 보여주기
-                    signUp(bitmapImg!!,email!!, password!!, nickname!!, age!!, gender!!)
-                    Log.d(WSY, "가입~")
-                }else{
-                    for(a in 0..4) {
-                        if(!isInputCorrectData[a])
-                            reactiveInputTextViewData(a, false)
+                // 비밀 번호 확인이 되면...가입!
+                else {
+                    if (isInputCorrectData[0] && isInputCorrectData[1] && isInputCorrectData[3] && age!!.isNotEmpty() && gender!!.isNotEmpty()) {
+                        // AsyncTask로 로딩(시간이 걸리는 것을) 보여주기
+
+                        if(bitmapImg == null) {
+                            // 기본 프로필로 가입하기
+                            basicBitmapImg = BitmapFactory.decodeResource(resources, R.drawable.basic_profile)
+                            signUp(basicBitmapImg!!, email!!, password!!, nickname!!, age!!, gender!!)
+                        }
+                        else {
+                            // 등록한 프로필 사진으로 가입하기
+                            signUp(bitmapImg!!, email!!, password!!, nickname!!, age!!, gender!!)
+                        }
+                    }
+                    // 정보가 하나라도 입력 안되면 error 메시지 출력
+                    else{
+                        for(a in 0..5) {
+                            // 에러 메시지 중에서도 정보가 입력되것 제외하고 출력.
+                            if(!isInputCorrectData[a])
+                                reactiveInputTextViewData(a, false)
+                        }
                     }
                 }
+
             }
         }
     }

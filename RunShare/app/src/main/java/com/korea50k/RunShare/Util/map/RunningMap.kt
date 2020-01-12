@@ -50,18 +50,20 @@ class RunningMap : OnMapReadyCallback {
     constructor(smf: SupportMapFragment, context: Context) {
         this.context = context
         userState = UserState.RUNNING
-        init()
         smf.getMapAsync(this)
         print_log("Set UserState Running")
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
+        init()
         mMap = googleMap
+        initLocation()
         fusedLocationClient.requestLocationUpdates(
             locationRequest,
             locationCallback,
             Looper.myLooper()
         )
+
     }
     fun init(){
         val cpMarkerImg = context.getDrawable(R.drawable.ic_checkpoint_red)
@@ -83,8 +85,6 @@ class RunningMap : OnMapReadyCallback {
         //cp 초기화
         cpOption = MarkerOptions()
         cpOption.icon(cpIcon)
-
-        initLocation()
 
     }
     fun startTracking() {
@@ -216,8 +216,8 @@ class RunningMap : OnMapReadyCallback {
                             distance+=SphericalUtil.computeDistanceBetween(prev_loc, cur_loc)
                             (context as Activity).runOnUiThread(Runnable {
                                 print_log(speed.toString())
-                                (context as RunningActivity).speedTextView.text=
-                                    String.format("%.3f",speed)
+                                (context as RunningActivity).runningSpeedTextView.text=
+                                    String.format("%.3f km/h",speed)
                             })
                             mMap.addPolyline(
                                 PolylineOptions().add(

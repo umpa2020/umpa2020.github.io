@@ -54,6 +54,12 @@ interface API {
         @Field("Image") Image:String, @Field("Path") Path:String
     ):retrofit2.Call<ResponseBody>
 
+    @POST("profileMapsDownload.php")
+    @FormUrlEncoded
+    fun profileMapsDownload(
+        @Field("Id") Id:String
+    ):retrofit2.Call<ResponseBody>
+
     @POST("racingResult.php")
     @FormUrlEncoded
     fun racingResult(
@@ -72,9 +78,9 @@ interface API {
     @FormUrlEncoded
     fun rankDownload(@Field("Id") Id: String, @Field("Start") Start : Int, @Field("End") End : Int): retrofit2.Call<ResponseBody>
 
-    @POST("rankingMapDownload.php")
+   /* @POST("rankingMapDownload.php")
     @FormUrlEncoded
-    fun rankingMapDownload(@Field("MapTitle") MapTitle: String): retrofit2.Call<ResponseBody>
+    fun rankingMapDownload(@Field("MapTitle") MapTitle: String): retrofit2.Call<ResponseBody>*/
 
     @POST("feedDownload.php")
     @FormUrlEncoded

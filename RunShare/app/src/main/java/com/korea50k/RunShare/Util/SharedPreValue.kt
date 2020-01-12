@@ -10,6 +10,19 @@ class SharedPreValue {
         val INTENT_AGE_DATA = "utils.age"
         val INTENT_GENDER_DATA = "utils.gender"
         val INTENT_AUTO_LOGIN_DATA = "utils.auto.login"
+        val INTENT_PROFILE_DATA = "utils.profile"
+
+        fun setProfileData(ctx: Context, value : String){
+            val preferences = ctx.getSharedPreferences("User", Context.MODE_PRIVATE)
+            val editor = preferences.edit()
+            editor.putString(INTENT_PROFILE_DATA, value)
+            editor.commit()
+        }
+
+        fun getProfileData(ctx: Context) : String?{
+            val preferences = ctx.getSharedPreferences("User", Context.MODE_PRIVATE)
+            return preferences.getString(INTENT_PROFILE_DATA, "")
+        }
 
         fun setGenderData(ctx: Context, value : String){
             val preferences = ctx.getSharedPreferences("User", Context.MODE_PRIVATE)
