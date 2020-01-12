@@ -30,8 +30,8 @@
     </style>
 
     <style name="info_text">
-        <item name="android:fontFamily">@font/godoroundedl</item>
-        <item name="android:textSize">18dp</item>
+        <item name="android:fontFamily">@font/godob</item>
+        <item name="android:textSize">17dp</item>
         <item name="android:gravity">center</item>
         <item name="android:height">0dp</item>
         <item name="android:layout_weight">1</item>
