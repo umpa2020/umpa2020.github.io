@@ -74,7 +74,7 @@ class UserActivity : AppCompatActivity() {
                 .enqueue(object :
                     retrofit2.Callback<ResponseBody> {
                     override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                        //뭔가 잘못됐구만
+                       Log.d("server","사용자의 프로필을 불러올수 없습니다")
                     }
 
                     override fun onResponse(

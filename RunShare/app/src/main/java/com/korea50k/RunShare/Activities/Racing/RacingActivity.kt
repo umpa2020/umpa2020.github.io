@@ -11,6 +11,7 @@ import com.google.android.gms.common.internal.Objects
 import com.google.android.gms.maps.SupportMapFragment
 import com.korea50k.RunShare.dataClass.RunningData
 import com.korea50k.RunShare.R
+import com.korea50k.RunShare.RetrofitClient
 import com.korea50k.RunShare.dataClass.UserState
 import hollowsoft.slidingdrawer.OnDrawerCloseListener
 import hollowsoft.slidingdrawer.OnDrawerOpenListener
@@ -18,6 +19,8 @@ import hollowsoft.slidingdrawer.OnDrawerScrollListener
 import hollowsoft.slidingdrawer.SlidingDrawer
 import kotlinx.android.synthetic.main.activity_racing.*
 import kotlinx.android.synthetic.main.activity_running.*
+import okhttp3.ResponseBody
+import retrofit2.Call
 
 class RacingActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpenListener,
     OnDrawerCloseListener {
@@ -40,6 +43,25 @@ class RacingActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpen
         }
     }
 
+    private fun increaseExecute(mapTitle: String) {
+        Thread(Runnable {
+            RetrofitClient.retrofitService.executeMap(mapTitle)
+                .enqueue(object :
+                    retrofit2.Callback<ResponseBody> {
+                    override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                        Log.d("server", "Can't execute this map")
+                    }
+
+                    override fun onResponse(
+                        call: Call<ResponseBody>,
+                        response: retrofit2.Response<ResponseBody>
+                    ) {
+                        Log.d("server","Success to load the map")
+                    }
+                })
+        }).start()
+    }
+
     fun init() {
         val smf = supportFragmentManager.findFragmentById(R.id.map_viewer) as SupportMapFragment
         manageRacing = ManageRacing(smf, this,this, makerData)
@@ -58,6 +80,7 @@ class RacingActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpen
                         Toast.makeText(this,"시작 포인트로 이동하세요",Toast.LENGTH_SHORT).show()
                     }
                     UserState.READYTORACING->{
+                        increaseExecute(makerData.mapTitle)
                         manageRacing.startRacing()
                         racingNotificationButton.visibility=View.GONE
                         racingControlButton.text="  Stop"
