@@ -32,8 +32,6 @@ class RankDetailRecyclerViewAdapterMap(onLoadMoreListener: OnLoadMoreListener) :
     internal var totalItemCount: Int = 0
     internal var lastVisibleItem: Int = 0
 
-    //val itemCount = itemList.size
-
     interface OnLoadMoreListener {
         fun onLoadMore()
     }

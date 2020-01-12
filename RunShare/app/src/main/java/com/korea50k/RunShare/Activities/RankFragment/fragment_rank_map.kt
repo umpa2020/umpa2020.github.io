@@ -111,13 +111,11 @@ class fragment_rank_map : Fragment(), RankRecyclerViewAdapterMap.OnLoadMoreListe
             override fun onResponse(call: Call<ResponseBody>, response: retrofit2.Response<ResponseBody>) {
                 try {
                     val result: String? = response.body().toString()
-                    Toast.makeText(context, "DB 다운로드 성공" + result,Toast.LENGTH_SHORT).show()
                 } catch (e: Exception) {
 
                 }
             }
             override fun onFailure( call: Call<ResponseBody>,t: Throwable) {
-                Toast.makeText(context, "서버 작업 실패", Toast.LENGTH_SHORT).show()
                 Log.d("ssmm11", t.message);
                 t.printStackTrace()
             }
@@ -133,7 +131,6 @@ class fragment_rank_map : Fragment(), RankRecyclerViewAdapterMap.OnLoadMoreListe
 
                 start = mAdapter.itemCount
                 end = start + 15
-                Toast.makeText(context, "more", Toast.LENGTH_SHORT).show()
                 val task = GetData()
                 task.execute("http://15.164.50.86/rankDownload.php")
 
@@ -168,7 +165,6 @@ class fragment_rank_map : Fragment(), RankRecyclerViewAdapterMap.OnLoadMoreListe
                 jArray = jObject.getJSONArray("JsonData")
 
                 rankMapDatas = ConvertJson.JsonToRankMapDatas(mJsonString, start, end-1)
-                Log.d("ssmm11", "rankMapDatas = "+ rankMapDatas)
 
                 loadData()
             }
@@ -176,7 +172,6 @@ class fragment_rank_map : Fragment(), RankRecyclerViewAdapterMap.OnLoadMoreListe
 
         override fun doInBackground(vararg params: String): String? {
             val serverURL = params[0]
-            Log.d("ssmm11", "받아온 url = " +serverURL)
             try {
                 val url = URL(serverURL)
                 val httpURLConnection = url.openConnection() as HttpURLConnection
@@ -186,7 +181,6 @@ class fragment_rank_map : Fragment(), RankRecyclerViewAdapterMap.OnLoadMoreListe
                 httpURLConnection.connect()
 
                 val responseStatusCode = httpURLConnection.getResponseCode()
-                Log.d("ssmm11", "response code - $responseStatusCode")
 
                 val inputStream: InputStream
                 if (responseStatusCode == HttpURLConnection.HTTP_OK) {
