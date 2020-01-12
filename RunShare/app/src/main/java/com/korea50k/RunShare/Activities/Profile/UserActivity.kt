@@ -5,6 +5,7 @@ import android.content.pm.ActivityInfo
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayout
 import com.korea50k.RunShare.R
 import com.korea50k.RunShare.RetrofitClient
@@ -121,9 +122,10 @@ class UserActivity : AppCompatActivity() {
                                 }
 
                                 Log.d("server", builder.toString())
-                                var bm= S3.downloadBitmap(builder.toString())
+
+                                //var bm= S3.downloadBitmap(builder.toString())
                                 activity.runOnUiThread(Runnable {
-                                    profileImageView.setImageBitmap(bm)
+                                    Glide.with(this@UserActivity).load(builder.toString()!!).into(profileImageView)
                                 })
                             } catch (e: MalformedURLException) {
                                 Log.e("server", e.toString())
