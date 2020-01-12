@@ -58,12 +58,13 @@
 
         <Button
             android:id="@+id/closeDrawerButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="30dp"
+            android:layout_height="25dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
             android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="20dp"
             android:background="@drawable/ic_menu_button_pressed"
             style="?android:attr/borderlessButtonStyle"
             android:onClick="onClick"/>
