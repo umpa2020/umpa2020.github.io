@@ -1,16 +1,20 @@
 package com.korea50k.RunShare.dataClass
 
+import android.graphics.Bitmap
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
 class UserMapImageData() : Serializable {
+    @SerializedName("MapTitle")
+    @Expose
+    var MapTitle: String = ""
 
     @SerializedName("MapImage")
     @Expose
-    var usermapimage: String = ""
+    var MapImage: String = ""
 
-    @SerializedName("MapTitle")
+    @SerializedName("MapImage")
     @Expose
-    var usermaptitle: String = ""
+    lateinit var bitmap: Bitmap
 }

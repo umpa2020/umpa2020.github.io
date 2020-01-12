@@ -26,7 +26,7 @@ import com.korea50k.RunShare.Util.TTS
 
 
 class MainActivity : AppCompatActivity() {
-    lateinit var mViewPager:ViewPager
+    lateinit var mViewPager: ViewPager
     lateinit var mMainPageAdapter: MainPageAdapter
     private val multiplePermissionsCode = 100          //권한
     private val requiredPermissions = arrayOf(
@@ -39,11 +39,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setRequestedOrientation(SCREEN_ORIENTATION_PORTRAIT);
         setContentView(com.korea50k.RunShare.R.layout.activity_main)
-        Log.d("WSY","Shared 저장 이메일 : " + SharedPreValue.getEMAILData(this))
-        Log.d("WSY","Shared 저장 비번 : " + SharedPreValue.getPWDData(this))
-        Log.d("WSY","Shared 저장 닉네임 : " + SharedPreValue.getNicknameData(this))
-        Log.d("WSY","Shared 저장 나이 : " + SharedPreValue.getAgeData(this))
-        Log.d("WSY","Shared 저장 성별 : " + SharedPreValue.getGenderData(this))
+        Log.d("WSY", "Shared 저장 이메일 : " + SharedPreValue.getEMAILData(this))
+        Log.d("WSY", "Shared 저장 비번 : " + SharedPreValue.getPWDData(this))
+        Log.d("WSY", "Shared 저장 닉네임 : " + SharedPreValue.getNicknameData(this))
+        Log.d("WSY", "Shared 저장 나이 : " + SharedPreValue.getAgeData(this))
+        Log.d("WSY", "Shared 저장 성별 : " + SharedPreValue.getGenderData(this))
         checkPermissions()          //모든 권한 확인
         TTS.set(applicationContext)
         val mTabLayout = tabDots
@@ -51,37 +51,38 @@ class MainActivity : AppCompatActivity() {
         mTabLayout.addTab(mTabLayout.newTab())
         //mTabLayout.addTab(mTabLayout.newTab())
 
-        mViewPager =pager
+        mViewPager = pager
         mMainPageAdapter =
             MainPageAdapter(
                 supportFragmentManager,
                 mTabLayout.tabCount
             )
-        mViewPager.adapter=mMainPageAdapter
+        mViewPager.adapter = mMainPageAdapter
         mViewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(mTabLayout))
-        mViewPager.currentItem=1
+        mViewPager.currentItem = 1
         //DrawerLayout.Lock
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
         //drawerLayout.closeDrawer(drawer)
 
-        slideProfileIdTextView.text=SharedPreValue.getNicknameData(this)
-        Thread(Runnable { slideProfileImageView.setImageBitmap(S3.downloadBitmap(SharedPreValue.getProfileData(this)!!))}).start()
-            }
-    fun onClick(v:View){
-        when(v.id){
-            R.id.openDrawerButton->{
+        slideProfileIdTextView.text = SharedPreValue.getNicknameData(this)
+//        Thread(Runnable { slideProfileImageView.setImageBitmap(S3.downloadBitmap(SharedPreValue.getProfileData(this)!!))}).start()
+    }
+
+    fun onClick(v: View) {
+        when (v.id) {
+            R.id.openDrawerButton -> {
                 drawerLayout.openDrawer(drawer)
             }
-            R.id.closeDrawerButton->{
+            R.id.closeDrawerButton -> {
                 drawerLayout.closeDrawer(drawer)
             }
 
-            R.id.slide_profileLayout->{
+            R.id.slide_profileLayout -> {
                 var nextIntent = Intent(this, UserActivity::class.java)
-                nextIntent.putExtra("ID",SharedPreValue.getNicknameData(this))
+                nextIntent.putExtra("ID", SharedPreValue.getNicknameData(this))
                 startActivity(nextIntent)
             }
-            R.id.slide_mydata_Button->{
+            R.id.slide_mydata_Button -> {
                 var nextIntent = Intent(this, MyInformationActivity::class.java)
                 startActivity(nextIntent)
             }
@@ -92,11 +93,12 @@ class MainActivity : AppCompatActivity() {
             }
 
              */
-            R.id.slide_logout_Button->{
+            R.id.slide_logout_Button -> {
                 Toast.makeText(this, "logout 액티비티로 이동", Toast.LENGTH_SHORT).show()
             }
         }
     }
+
     private fun checkPermissions() {
         var rejectedPermissionList = ArrayList<String>()
         //필요한 퍼미션들을 하나씩 끄집어내서 현재 권한을 받았는지 체크
