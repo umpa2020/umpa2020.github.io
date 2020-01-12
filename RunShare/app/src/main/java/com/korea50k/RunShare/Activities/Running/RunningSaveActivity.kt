@@ -3,6 +3,7 @@ package com.korea50k.RunShare.Activities.Running
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP
 import android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP
+import android.content.pm.ActivityInfo
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
@@ -45,6 +46,7 @@ class RunningSaveActivity : AppCompatActivity() {
     lateinit var map: ViewerMap
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_running_save)
 
         runningData = intent.getSerializableExtra("Running Data") as RunningData

@@ -17,6 +17,8 @@ import com.jakewharton.rxbinding2.view.clicks
 import com.korea50k.RunShare.dataClass.Privacy
 import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.activity_racing.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class ManageRunning {
@@ -65,11 +67,14 @@ class ManageRunning {
     }
 
     fun stopRunning() {
+        val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
+        formatter.setTimeZone(TimeZone.getTimeZone("UTC"))
         var runningData = RunningData()
         activity.runningHandle.clicks()
         map.stopTracking(runningData)
+
         runningData.distance = map.distance
-        runningData.time = chronometer.text.toString()
+        runningData.time = formatter.format(Date(SystemClock.elapsedRealtime() - chronometer.getBase()))
         runningData.privacy=privacy
 
         var newIntent = Intent((context as Activity), RunningSaveActivity::class.java)

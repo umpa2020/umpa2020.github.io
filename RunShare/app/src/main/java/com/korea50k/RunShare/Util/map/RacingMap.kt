@@ -51,9 +51,10 @@ class RacingMap : OnMapReadyCallback {
     var manageRacing: ManageRacing
     lateinit var makerRunningThread: Thread
     var passedLine = Vector<Polyline>()
-    var routeLine=Vector<Polyline>()
+    var routeLine = Vector<Polyline>()
     var markers = Vector<LatLng>()
-    var cpMarkers=Vector<Marker>()
+    var cpMarkers = Vector<Marker>()
+
     //Racing
     constructor(
         smf: SupportMapFragment,
@@ -79,7 +80,12 @@ class RacingMap : OnMapReadyCallback {
             loadRoute.add(latlngs)
             markers.add(LatLng(makerData.markerLats[i], makerData.markerLngs[i]))
         }
-        markers.add(LatLng(makerData.markerLats[makerData.markerLats.size-1],makerData.markerLngs[makerData.markerLngs.size-1]))
+        markers.add(
+            LatLng(
+                makerData.markerLats[makerData.markerLats.size - 1],
+                makerData.markerLngs[makerData.markerLngs.size - 1]
+            )
+        )
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -145,7 +151,7 @@ class RacingMap : OnMapReadyCallback {
                     time[3].toString()
                 ) * 10 + Integer.parseInt(time[4].toString()))
             var milisec = ((sec.toDouble() / markers.size.toDouble()) * 1000).roundToLong()
-            print_log("시간 : " + time + sec.toString() +", "+ milisec.toString())
+            print_log("시간 : " + time + sec.toString() + ", " + milisec.toString())
 
             for (index in markers.indices) {
                 Thread.sleep(milisec)
@@ -181,7 +187,8 @@ class RacingMap : OnMapReadyCallback {
         print_log("Stop")
         fusedLocationClient.removeLocationUpdates(locationCallback)
     }
-    fun makingIcon(drawable:Int):BitmapDescriptor{
+
+    fun makingIcon(drawable: Int): BitmapDescriptor {
         val circleDrawable = context.getDrawable(drawable)
         var canvas = Canvas()
         var bitmap = Bitmap.createBitmap(
@@ -197,8 +204,9 @@ class RacingMap : OnMapReadyCallback {
             circleDrawable.intrinsicHeight
         )
         circleDrawable.draw(canvas)
-        return  BitmapDescriptorFactory.fromBitmap(bitmap)
+        return BitmapDescriptorFactory.fromBitmap(bitmap)
     }
+
     fun drawRoute() { //로드 된 경로 그리기
 
         for (i in loadRoute.indices) {
@@ -212,7 +220,7 @@ class RacingMap : OnMapReadyCallback {
                 )        //경로를 그릴 폴리라인 집합
             )
             if (i == 0) {
-                var spIcon=makingIcon(R.drawable.ic_racing_startpoint)
+                var spIcon = makingIcon(R.drawable.ic_racing_startpoint)
                 val startMarkerOptions = MarkerOptions()
                 startMarkerOptions.position(markers[0])
                 startMarkerOptions.title("Start")
@@ -224,9 +232,9 @@ class RacingMap : OnMapReadyCallback {
                 cpMarkers.add(mMap.addMarker(cpOption))
             }
         }
-        val cpPassedIcon=makingIcon(R.drawable.ic_checkpoint_red)
+        val cpPassedIcon = makingIcon(R.drawable.ic_checkpoint_red)
         cpOption.icon(cpPassedIcon)
-        var fpIcon=makingIcon(R.drawable.ic_racing_finishpoint)
+        var fpIcon = makingIcon(R.drawable.ic_racing_finishpoint)
         val finishMarkerOptions = MarkerOptions()
         finishMarkerOptions.position(markers[markers.size - 1])
         finishMarkerOptions.title("Finish")
@@ -338,23 +346,26 @@ class RacingMap : OnMapReadyCallback {
                                     ) {
                                         for (i in passedLine.indices)
                                             passedLine[i].remove()
+                                        routeLine[0].remove()
                                         routeLine.removeAt(0)
+
                                         mMap.addPolyline(
                                             PolylineOptions()
-                                                .addAll(loadRoute[markerCount-1])
+                                                .addAll(loadRoute[markerCount - 1])
                                                 .color(Color.RED)
                                                 .startCap(RoundCap())
                                                 .endCap(RoundCap())
                                         )        //지나간길
 
-                                        cpOption.position(cpMarkers[markerCount-1].position)
-                                        cpMarkers[markerCount-1].remove()
-                                        cpMarkers[markerCount-1]=mMap.addMarker(cpOption)
-                                        markerCount++
-                                        if(markerCount==markers.size-1){
-                                            manageRacing.stopRacing(true)
-                                        }
 
+                                        if (markerCount == markers.size - 1) {
+                                            manageRacing.stopRacing(true)
+                                        } else {
+                                            cpOption.position(cpMarkers[markerCount - 1].position)
+                                            cpMarkers[markerCount - 1].remove()
+                                            cpMarkers[markerCount - 1] = mMap.addMarker(cpOption)
+                                            markerCount++
+                                        }
                                     }
                                 }
                             }
