@@ -18,9 +18,11 @@
                 android:background="@drawable/ic_profile_logo"
                 android:onClick="onClick"/>
             <com.mikhaellopez.circularimageview.CircularImageView
+                android:id="@+id/editProfile"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_gravity="bottom|right"
+                android:visibility="invisible"
                 android:background="@drawable/ic_profile_edit" />
 
         </FrameLayout>
@@ -158,6 +160,7 @@
         android:background="@color/rankBackgroudGray"/>
 
     <Button
+        android:id="@+id/my_information_adjust_button"
         android:onClick="onClick"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
@@ -166,8 +169,7 @@
         android:textColor="@color/darkRed"
         android:fontFamily="@font/godob"
         android:textSize="15dp"
-        android:background="@drawable/base_button_selector"
-        android:id="@+id/my_information_adjust_button">
+        android:background="@drawable/base_button_selector">
 
     </Button>
 

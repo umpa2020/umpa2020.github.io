@@ -19,6 +19,8 @@ import kotlinx.android.synthetic.main.activity_racing.*
 import kotlinx.android.synthetic.main.activity_running.*
 import okhttp3.ResponseBody
 import retrofit2.Call
+import java.text.SimpleDateFormat
+import java.util.*
 
 class ManageRacing {
      var racingMap: RacingMap
@@ -105,8 +107,10 @@ class ManageRacing {
 
         timeWhenStopped = chronometer.base - SystemClock.elapsedRealtime()
         chronometer.stop()
+        val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
+        formatter.setTimeZone(TimeZone.getTimeZone("UTC"))
         var runningData = RunningData()
-        runningData.time = chronometer.text.toString()
+        runningData.time = formatter.format(Date(SystemClock.elapsedRealtime() - chronometer.getBase()))
         runningData.speed=racingMap.speeds.toDoubleArray()
         Log.d("ssmm11", "맵id = "+makerData.mapTitle )
 

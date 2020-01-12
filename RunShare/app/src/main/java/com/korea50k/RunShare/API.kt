@@ -11,6 +11,10 @@ import retrofit2.http.POST
 // 이거는 바탕화면에 옮겨놓은거
 interface API {
     @FormUrlEncoded
+    @POST ("changeProfile.php") // email(Id)을 기반으로 프로필 이미지 변경 -> 추후 다른 정보 변경도 추가되면 이곳에서
+    fun changeProfile(@Field("Id") Id: String, @Field("Password") Password : String, @Field("ProfileBitmapArray") ProfileBitmapArray: String): retrofit2.Call<ResponseBody>
+
+    @FormUrlEncoded
     @POST ("idCheck.php") //이메일 중복 검사
     fun get_IdCheck(@Field("Id") Id: String): retrofit2.Call<ResponseBody>
 
