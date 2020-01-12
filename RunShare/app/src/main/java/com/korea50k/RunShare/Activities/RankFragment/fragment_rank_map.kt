@@ -39,10 +39,26 @@ class fragment_rank_map : Fragment(), RankRecyclerViewAdapterMap.OnLoadMoreListe
     var start = 0
     var end = 15
     lateinit var jArray : JSONArray
+
+    private var isVisibleToUser: Boolean = true
+    private var awaitingRunnable: Runnable? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
 
+    }
+    /*
+    //데이터 저장
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        // 데이터 저장
+    }
+    */
+
+    override fun onResume() {
+        super.onResume()
+        Log.d("ssmm11", "onResume()")
         class SaveTask : AsyncTask<Void, Void, String>(){
             override fun onPreExecute() {
                 super.onPreExecute()
@@ -70,13 +86,7 @@ class fragment_rank_map : Fragment(), RankRecyclerViewAdapterMap.OnLoadMoreListe
         val task = GetData()
         task.execute("http://15.164.50.86/rankDownload.php")
     }
-/*
-    //데이터 저장
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        // 데이터 저장
-    }
- */
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment

@@ -33,15 +33,21 @@ class UserActivity : AppCompatActivity() {
         profileIdTextView.text = id
         setProfileImage(id)
 
+        var bundle = Bundle()
+        bundle.putString("Id", profileIdTextView.text.toString() )
 
         val fragmentAdapter = UserPagerAdapter(supportFragmentManager)
+        var fragmentUserRace = FragmentUserRace()
         //TODO 탭뷰 아이콘 바꾸고 싶으면 여기서 추가
         fragmentAdapter.addFragment(
             R.drawable.ic_finish_flag,
             R.drawable.ic_finish_flag,
             "Race",
-            FragmentUserRace()
+            fragmentUserRace
         )
+
+        fragmentUserRace.setArguments(bundle)
+
         //fragmentAdapter.addFragment(R.drawable.ic_launcher_background, R.drawable.ic_launcher_background,"Community",FragmentUserCommunity())
         user_viewpager.adapter = fragmentAdapter
 

@@ -14,10 +14,13 @@ import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.rxbinding2.view.selected
+import com.korea50k.RunShare.Activities.MainFragment.MainActivity
+import com.korea50k.RunShare.Activities.Profile.UserActivity
 import com.korea50k.RunShare.Activities.RankFragment.RankDetailRecyclerViewAdapterMap.*
 import com.korea50k.RunShare.R
 import com.korea50k.RunShare.RetrofitClient
 import com.korea50k.RunShare.Util.ConvertJson
+import com.korea50k.RunShare.Util.SharedPreValue
 import com.korea50k.RunShare.dataClass.RankDetailMapData
 import kotlinx.android.synthetic.main.activity_rank_recycler_click.*
 import kotlinx.android.synthetic.main.recycler_rank_item.*
@@ -83,12 +86,14 @@ class RankRecyclerClickActivity : AppCompatActivity() , OnLoadMoreListener {
             RecyclerItemClickListener(this!!, mRecyclerView,
                 object : RecyclerItemClickListener.OnItemClickListener {
                     override fun onItemClick(view: View, position: Int) {
-                        Log.d("ranking","click listener")
+                        Log.d("ranking detail","click listener")
 
-                        //TODO:프로필 액티비티 해야한댔나
-                        //val intent = Intent(this, RankRecyclerClickActivity::class.java)
-                        intent.putExtra("MapTitle", view.rank_cardView_name.text)
-                        startActivity(intent)
+
+                        val newintent = Intent(baseContext, UserActivity::class.java)
+                        newintent.putExtra("ID", ID_TextView.text)
+                        startActivity(newintent)
+                        finish()
+
                     }
                 })
         )
