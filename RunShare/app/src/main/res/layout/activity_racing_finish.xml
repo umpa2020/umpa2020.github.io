@@ -19,22 +19,32 @@
         android:fontFamily="@font/godob"/>
     <TextView
         android:id="@+id/resultRankTextView"
-        android:layout_toRightOf="@+id/resultTitleTextView"
+        android:layout_below="@+id/resultTitleTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="1등"
         android:textColor="#FF0000"
         android:textSize="30dp"
-        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
         android:fontFamily="@font/godob"/>
+
     <LinearLayout
         android:id="@+id/raceResultLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_below="@+id/resultTitleTextView"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/resultRankTextView"
         android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/gray"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -43,9 +53,52 @@
             android:text="Record"
             android:fontFamily="@font/godob"/>
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/gray"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"/>
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/godob"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="MY"
+                android:fontFamily="@font/godob"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="MAKER"
+                android:fontFamily="@font/godob"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginBottom="8dp">
 
             <TextView
                 android:layout_width="0dp"
@@ -60,14 +113,18 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:gravity="right"
+                android:gravity="center"
                 android:layout_marginRight="20dp"
-                android:text="maker record" />
+                android:text="maker record"
+                android:fontFamily="@font/godob" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginBottom="8dp">
 
             <TextView
                 android:layout_width="0dp"
@@ -97,7 +154,10 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginBottom="8dp">
 
             <TextView
 
@@ -128,7 +188,10 @@
 
         <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginBottom="8dp">
 
         <TextView
             android:layout_width="0dp"
@@ -167,15 +230,37 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/raceResultLayout"
         android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/gray"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"/>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="ranking"
+            android:text="Ranking"
             android:gravity="center"
             android:fontFamily="@font/godob"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/gray"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"/>
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp">
             <TextView
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -194,15 +279,18 @@
 
 
         <androidx.recyclerview.widget.RecyclerView
+            android:layout_marginTop="10dp"
             android:id="@+id/resultPlayerRankingRecycler"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"/>
     </LinearLayout>
 
     <Button
         android:id="@+id/OKButton"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:background="@drawable/base_button_selector"

@@ -43,7 +43,8 @@
             android:id="@+id/indicator"
             android:layout_width="0dp"
             android:layout_height="30dp"
-            android:background="@drawable/gradient_bg"/>
+            android:background="@drawable/gradient_bg"
+            android:paddingBottom="8dp"/>
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tab_rank"
@@ -58,6 +59,7 @@
             app:tabRippleColor="@null"
             app:tabTextAppearance="@style/tab_text"
             android:textAlignment="center"
+            android:paddingBottom="8dp"
             />
 
     </FrameLayout>
