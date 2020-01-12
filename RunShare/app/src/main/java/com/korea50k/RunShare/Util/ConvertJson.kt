@@ -13,12 +13,14 @@ class ConvertJson{
     companion object{
         fun RunningDataToJson(runningData: RunningData):String{
             var gson=Gson()
+
             var jsonString=gson.toJson(runningData)
             return jsonString
         }
         fun JsonToRunningData(json: String): RunningData {
             // var gson = Gson()
             Log.wtf("json",json)
+
             var runningData =Gson().fromJson(json, RunningData::class.java)
             return runningData
         }
@@ -76,12 +78,10 @@ class ConvertJson{
                 catch (e : Exception) {
                 }
                 try {
-                    Log.d("ssmm11", "뭐지 = ")
                     rankDetailMapData.ChallengerId =
                         jArray.getJSONObject(i).get("ChallengerId") as String
                     rankDetailMapData.ChallengerTime =
                         jArray.getJSONObject(i).get("ChallengerTime") as String
-
                 }
                 catch (e:Exception) {
 

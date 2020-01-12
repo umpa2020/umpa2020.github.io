@@ -53,7 +53,7 @@ class ManageRacing {
         }
         distanceThread = Thread(Runnable {
             while (true) {
-                Thread.sleep(3000)
+                Thread.sleep(1000)
                 activity.runOnUiThread(Runnable {
                     activity.racingDistanceTextView.text =
                         String.format("%.3f km", ((calcLeftDistance()) / 1000))

@@ -11,28 +11,34 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2c3b18f1-74c0-4a5e-a7e7-02096074e912" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/korea50k/RunShare/dataClass/ProfileData.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/korea50k/RunShare/Activities/MainFragment/MainActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/korea50k/RunShare/Activities/MainFragment/MainActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/korea50k/RunShare/Activities/Profile/FragmentUserRace.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/korea50k/RunShare/Activities/Profile/FragmentUserRace.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/korea50k/RunShare/Activities/Profile/MyInformationActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/korea50k/RunShare/Activities/Profile/MyInformationActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/korea50k/RunShare/Activities/Profile/SettingActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/korea50k/RunShare/Activities/Profile/SettingActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/korea50k/RunShare/Activities/Profile/UserActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/korea50k/RunShare/Activities/Profile/UserActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/korea50k/RunShare/Activities/Racing/ManageRacing.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/korea50k/RunShare/Activities/Racing/ManageRacing.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/korea50k/RunShare/Activities/Racing/RacingActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/korea50k/RunShare/Activities/Racing/RacingActivity.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/korea50k/RunShare/Activities/Racing/RacingFinishActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/korea50k/RunShare/Activities/Racing/RacingFinishActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/korea50k/RunShare/Activities/RankFragment/RankDetailRecyclerViewAdapterMap.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/korea50k/RunShare/Activities/RankFragment/RankDetailRecyclerViewAdapterMap.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/korea50k/RunShare/Activities/RankFragment/RankRecyclerClickActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/korea50k/RunShare/Activities/RankFragment/RankRecyclerClickActivity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/korea50k/RunShare/Activities/RankFragment/RankRecyclerViewAdapterMap.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/korea50k/RunShare/Activities/RankFragment/RankRecyclerViewAdapterMap.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/korea50k/RunShare/Activities/RankFragment/RunThisMapActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/korea50k/RunShare/Activities/RankFragment/RunThisMapActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/korea50k/RunShare/Activities/RankFragment/fragment_rank_map.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/korea50k/RunShare/Activities/RankFragment/fragment_rank_map.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/korea50k/RunShare/Activities/Running/ManageRunning.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/korea50k/RunShare/Activities/Running/ManageRunning.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/korea50k/RunShare/Activities/Running/RunningActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/korea50k/RunShare/Activities/Running/RunningActivity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/res/drawable/ic_menu_button_unpressed.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable/ic_menu_button_unpressed.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/res/layout/activity_age_select.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_age_select.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/res/layout/activity_gender_select.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_gender_select.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/res/layout/activity_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_main.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/korea50k/RunShare/Activities/Running/RunningSaveActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/korea50k/RunShare/Activities/Running/RunningSaveActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/korea50k/RunShare/Join/AgeSelectActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/korea50k/RunShare/Join/AgeSelectActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/korea50k/RunShare/Join/GenderSelectActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/korea50k/RunShare/Join/GenderSelectActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/korea50k/RunShare/Join/SignUpActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/korea50k/RunShare/Join/SignUpActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/korea50k/RunShare/Splash/SplashActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/korea50k/RunShare/Splash/SplashActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/korea50k/RunShare/Util/ConvertJson.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/korea50k/RunShare/Util/ConvertJson.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/korea50k/RunShare/Util/S3.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/korea50k/RunShare/Util/S3.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/korea50k/RunShare/Util/map/RacingMap.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/korea50k/RunShare/Util/map/RacingMap.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/korea50k/RunShare/Util/map/RunningMap.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/korea50k/RunShare/Util/map/RunningMap.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/res/layout/activity_my_information.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_my_information.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/res/layout/activity_racing.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_racing.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/res/layout/activity_racing_finish.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_racing_finish.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/res/layout/activity_rank_recycler_click.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_rank_recycler_click.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/res/layout/activity_run_this_map.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_run_this_map.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/res/layout/activity_running.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_running.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/res/layout/activity_sign_up.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_sign_up.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/res/layout/activity_user.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_user.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/res/layout/fragment_map.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/fragment_map.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/res/layout/fragment_rank_map.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/fragment_rank_map.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/res/layout/recycler_rank_item.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/recycler_rank_item.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/res/layout/recycler_rank_item_about_map.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/recycler_rank_item_about_map.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/res/values/styles.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/values/styles.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/values/colors.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/values/colors.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -90,19 +96,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/korea50k/RunShare/Activities/RankFragment/RankRecyclerClickActivity.kt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="190">
-              <caret line="64" column="42" selection-start-line="64" selection-start-column="42" selection-end-line="64" selection-end-column="42" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/res/layout/recycler_rank_item.xml">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="283">
-              <caret line="58" column="48" lean-forward="true" selection-start-line="58" selection-start-column="48" selection-end-line="59" selection-end-column="40" />
+              <caret line="58" column="48" selection-start-line="58" selection-start-column="48" selection-end-line="59" selection-end-column="40" />
             </state>
           </provider>
           <provider editor-type-id="android-designer2" />
@@ -134,11 +131,21 @@
           <provider editor-type-id="android-designer2" />
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/res/layout/activity_run_this_map.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="253">
-              <caret line="204" column="32" selection-start-line="204" selection-start-column="32" selection-end-line="204" selection-end-column="32" />
+            <state relative-caret-position="234">
+              <caret line="203" column="51" selection-start-line="203" selection-start-column="51" selection-end-line="203" selection-end-column="51" />
+            </state>
+          </provider>
+          <provider editor-type-id="android-designer2" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/res/layout/activity_my_information.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="285">
+              <caret line="15" column="33" lean-forward="true" selection-start-line="15" selection-start-column="33" selection-end-line="15" selection-end-column="33" />
             </state>
           </provider>
           <provider editor-type-id="android-designer2" />
@@ -148,7 +155,7 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/com/korea50k/RunShare/Activities/RankFragment/RunThisMapActivity.kt">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="129">
-              <caret line="97" column="41" selection-start-line="97" selection-start-column="41" selection-end-line="97" selection-end-column="41" />
+              <caret line="101" column="41" selection-start-line="101" selection-start-column="41" selection-end-line="101" selection-end-column="41" />
             </state>
           </provider>
         </entry>
@@ -167,8 +174,8 @@
       <find>시작 포인트로</find>
       <find>white</find>
       <find>my_information_adjust_button</find>
-      <find>distance</find>
       <find>runThisMapDistance</find>
+      <find>distance</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -196,7 +203,6 @@
         <option value="$PROJECT_DIR$/src/main/res/values/styles.xml" />
         <option value="$PROJECT_DIR$/src/main/java/com/korea50k/RunShare/Activities/Running/RunningActivity.kt" />
         <option value="$PROJECT_DIR$/src/main/res/layout/activity_running.xml" />
-        <option value="$PROJECT_DIR$/src/main/res/layout/activity_my_information.xml" />
         <option value="$PROJECT_DIR$/src/main/java/com/korea50k/RunShare/Activities/Profile/MyInformationActivity.kt" />
         <option value="$PROJECT_DIR$/src/main/java/com/korea50k/RunShare/Activities/RankFragment/RankRecyclerClickActivity.kt" />
         <option value="$PROJECT_DIR$/src/main/java/com/korea50k/RunShare/Activities/Racing/RacingFinishActivity.kt" />
@@ -205,6 +211,7 @@
         <option value="$PROJECT_DIR$/src/main/res/layout/fragment_rank_map.xml" />
         <option value="$PROJECT_DIR$/src/main/java/com/korea50k/RunShare/Activities/RankFragment/RunThisMapActivity.kt" />
         <option value="$PROJECT_DIR$/src/main/res/layout/activity_run_this_map.xml" />
+        <option value="$PROJECT_DIR$/src/main/res/layout/activity_my_information.xml" />
       </list>
     </option>
   </component>
@@ -438,7 +445,7 @@
       <window_info id="Build Variants" order="4" side_tool="true" />
       <window_info id="Capture Tool" order="5" />
       <window_info id="Resources Explorer" order="6" weight="0.3295302" />
-      <window_info content_ui="combo" id="Project" order="7" visible="true" weight="0.21342282" />
+      <window_info active="true" content_ui="combo" id="Project" order="7" visible="true" weight="0.21342282" />
       <window_info id="Captures" order="8" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Logcat" order="0" weight="0.32907802" />
       <window_info anchor="bottom" id="TODO" order="1" />
@@ -452,7 +459,7 @@
       <window_info anchor="right" id="Capture Analysis" order="0" />
       <window_info anchor="right" id="Gradle" order="1" />
       <window_info anchor="right" id="Theme Preview" order="2" />
-      <window_info active="true" anchor="right" id="Preview" order="3" visible="true" weight="0.27651006" />
+      <window_info anchor="right" id="Preview" order="3" visible="true" weight="0.27651006" />
       <window_info anchor="right" id="Palette&#9;" order="4" />
       <window_info anchor="right" id="Device File Explorer" order="5" side_tool="true" />
     </layout>
@@ -620,14 +627,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/res/layout/activity_my_information.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
-          <caret line="9" column="42" selection-start-line="9" selection-start-column="21" selection-end-line="9" selection-end-column="42" />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer2" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/res/layout/activity_racing.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="264">
@@ -705,8 +704,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/korea50k/RunShare/Activities/RankFragment/RankRecyclerClickActivity.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="190">
-          <caret line="64" column="42" selection-start-line="64" selection-start-column="42" selection-end-line="64" selection-end-column="42" />
+        <state relative-caret-position="608">
+          <caret line="60" column="42" selection-start-line="60" selection-start-column="42" selection-end-line="60" selection-end-column="42" />
         </state>
       </provider>
     </entry>
@@ -745,7 +744,7 @@
     <entry file="file://$PROJECT_DIR$/src/main/res/layout/recycler_rank_item.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="283">
-          <caret line="58" column="48" lean-forward="true" selection-start-line="58" selection-start-column="48" selection-end-line="59" selection-end-column="40" />
+          <caret line="58" column="48" selection-start-line="58" selection-start-column="48" selection-end-line="59" selection-end-column="40" />
         </state>
       </provider>
       <provider editor-type-id="android-designer2" />
@@ -765,14 +764,22 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/com/korea50k/RunShare/Activities/RankFragment/RunThisMapActivity.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="129">
-          <caret line="97" column="41" selection-start-line="97" selection-start-column="41" selection-end-line="97" selection-end-column="41" />
+          <caret line="101" column="41" selection-start-line="101" selection-start-column="41" selection-end-line="101" selection-end-column="41" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/res/layout/activity_run_this_map.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="253">
-          <caret line="204" column="32" selection-start-line="204" selection-start-column="32" selection-end-line="204" selection-end-column="32" />
+        <state relative-caret-position="234">
+          <caret line="203" column="51" selection-start-line="203" selection-start-column="51" selection-end-line="203" selection-end-column="51" />
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer2" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/res/layout/activity_my_information.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="15" column="33" lean-forward="true" selection-start-line="15" selection-start-column="33" selection-end-line="15" selection-end-column="33" />
         </state>
       </provider>
       <provider editor-type-id="android-designer2" />

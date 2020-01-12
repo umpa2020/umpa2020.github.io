@@ -2,6 +2,7 @@ package com.korea50k.RunShare.Activities.Racing
 
 
 import android.app.Activity
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -31,6 +32,7 @@ class RacingActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpen
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_racing)
         makerData = intent.getSerializableExtra("MakerData") as RunningData
         init()
