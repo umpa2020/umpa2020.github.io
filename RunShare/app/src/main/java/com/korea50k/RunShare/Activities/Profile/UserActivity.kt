@@ -35,8 +35,8 @@ class UserActivity : AppCompatActivity() {
         val fragmentAdapter = UserPagerAdapter(supportFragmentManager)
         //TODO 탭뷰 아이콘 바꾸고 싶으면 여기서 추가
         fragmentAdapter.addFragment(
-            R.drawable.ic_launcher_background,
-            R.drawable.ic_launcher_background,
+            R.drawable.ic_finish_flag,
+            R.drawable.ic_finish_flag,
             "Race",
             FragmentUserRace()
         )
@@ -130,12 +130,12 @@ class UserActivity : AppCompatActivity() {
         //TOdo 탭뷰 아이콘 클릭했을 떄랑 아닐때 이미지 추가하는 부분
         val tabBtnImgOff =
             intArrayOf(
-                R.drawable.ic_launcher_background,
+                R.drawable.ic_finish_flag,
                 R.drawable.ic_launcher_background
             )
         val tabBtnImgOn =
             intArrayOf(
-                R.drawable.ic_launcher_background,
+                R.drawable.ic_finish_flag_1,
                 R.drawable.ic_launcher_background
             )
 /*

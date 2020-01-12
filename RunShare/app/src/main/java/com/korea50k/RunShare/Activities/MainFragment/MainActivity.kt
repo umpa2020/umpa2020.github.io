@@ -83,9 +83,15 @@ class MainActivity : AppCompatActivity() {
                 var nextIntent = Intent(this, MyInformationActivity::class.java)
                 startActivity(nextIntent)
             }
+            /*
             R.id.slide_setting_Button->{
                 var nextIntent = Intent(this, SettingActivity::class.java)
                 startActivity(nextIntent)
+            }
+
+             */
+            R.id.slide_logout_Button->{
+                Toast.makeText(this, "logout 액티비티로 이동", Toast.LENGTH_SHORT).show()
             }
         }
     }
