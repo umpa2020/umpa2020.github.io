@@ -6,42 +6,38 @@ import android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP
 import android.content.pm.ActivityInfo
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.util.Log
-import android.view.View
-import com.korea50k.RunShare.Util.ConvertJson
-import com.korea50k.RunShare.dataClass.RunningData
-import com.korea50k.RunShare.R
-import kotlinx.android.synthetic.main.activity_running_save.*
-import com.github.mikephil.charting.animation.Easing
-import com.github.mikephil.charting.components.XAxis
-import com.github.mikephil.charting.data.LineData
-import com.github.mikephil.charting.data.LineDataSet
-import com.github.mikephil.charting.charts.LineChart
 import android.graphics.Color
 import android.os.AsyncTask
+import android.os.Bundle
 import android.util.Base64
+import android.util.Log
+import android.view.View
 import android.widget.Toast
-import androidx.core.net.toUri
-import com.github.mikephil.charting.components.Description
-import com.github.mikephil.charting.data.Entry
+import androidx.appcompat.app.AppCompatActivity
+import com.github.mikephil.charting.animation.Easing
+import com.github.mikephil.charting.charts.CombinedChart
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.components.YAxis
+import com.github.mikephil.charting.data.*
 import com.google.android.gms.maps.SupportMapFragment
 import com.korea50k.RunShare.Activities.MainFragment.MainActivity
+import com.korea50k.RunShare.R
 import com.korea50k.RunShare.RetrofitClient
+import com.korea50k.RunShare.Util.ConvertJson
 import com.korea50k.RunShare.Util.SharedPreValue
-import com.korea50k.RunShare.Util.map.BasicMap
-import com.korea50k.RunShare.Util.map.RunningMap
 import com.korea50k.RunShare.Util.map.ViewerMap
 import com.korea50k.RunShare.dataClass.Privacy
+import com.korea50k.RunShare.dataClass.RunningData
+import kotlinx.android.synthetic.main.activity_run_this_map.*
+import kotlinx.android.synthetic.main.activity_running_save.*
 import okhttp3.ResponseBody
 import retrofit2.Call
-import java.io.BufferedInputStream
 import java.io.ByteArrayOutputStream
-import java.net.URL
 
 
 class RunningSaveActivity : AppCompatActivity() {
+    val WSY = "WSY"
+
     lateinit var runningData: RunningData
     lateinit var map: ViewerMap
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,35 +61,16 @@ class RunningSaveActivity : AppCompatActivity() {
         setChart()
     }
 
-    private fun setChart() {    //클래스로 따로 빼야할듯
-        var lineChart = chart as LineChart
 
-        val alts = ArrayList<Entry>()
+    private fun setChart() {    //클래스로 따로 빼야할듯
+        var lineChart = runThisMapChart as CombinedChart
+        val alts = ArrayList<BarEntry>()
         val speeds = ArrayList<Entry>()
+
         for (index in runningData.alts.indices) {
-            alts.add(Entry(index.toFloat(), runningData.alts[index].toFloat()))
+            alts.add(BarEntry(index.toFloat(), runningData.alts[index].toFloat()))
             speeds.add(Entry(index.toFloat(), runningData.speed[index].toFloat()))
         }
-
-        val lineDataSet = LineDataSet(alts, "고도")
-        lineDataSet.lineWidth = 2f
-        lineDataSet.color = Color.parseColor("#FF0000FF")
-        lineDataSet.setDrawHorizontalHighlightIndicator(false)
-        lineDataSet.setDrawHighlightIndicators(false)
-        lineDataSet.setDrawValues(false)
-        lineDataSet.setCircleColor(Color.parseColor("#FFFFFFFF"))
-
-        val lineDataSet2 = LineDataSet(speeds, "속력")
-        lineDataSet2.lineWidth = 2f
-        lineDataSet2.color = Color.parseColor("#FFFF0000")
-        lineDataSet2.setDrawHorizontalHighlightIndicator(false)
-        lineDataSet2.setDrawHighlightIndicators(false)
-        lineDataSet2.setDrawValues(false)
-        lineDataSet2.setCircleColor(Color.parseColor("#FFFFFFFF"))
-
-        val lineData = LineData(lineDataSet)
-        lineChart.data = lineData
-        lineChart.data.addDataSet(lineDataSet2)
 
         val xAxis = lineChart.getXAxis()
         xAxis.position = XAxis.XAxisPosition.BOTTOM
@@ -102,18 +79,77 @@ class RunningSaveActivity : AppCompatActivity() {
 
         val yLAxis = lineChart.axisLeft
         yLAxis.textColor = Color.RED
+        yLAxis.axisMaximum = runningData.speed.max()!!.toFloat() + 5
+        yLAxis.axisMinimum = 0F
 
         val yRAxis = lineChart.axisRight
         yRAxis.textColor = Color.BLUE
         yRAxis.axisMaximum = runningData.alts.max()!!.toFloat() + 5
         yRAxis.axisMinimum = runningData.alts.min()!!.toFloat() - 5
+
+        Log.d(WSY, "고도 : " + alts.size.toString())
+        Log.d(WSY, "속도 : " + speeds.size.toString())
+
+
+        // 고도 셋팅
+        var altsData = LineData()
+
+//        val lineDataSet = LineDataSet(alts, "고도")
+//        lineDataSet.lineWidth = 1.5f
+//        lineDataSet.color = Color.parseColor("#FF0000FF") // 파랑
+//        lineDataSet.setDrawHorizontalHighlightIndicator(false)
+//        lineDataSet.setDrawHighlightIndicators(false)
+//        lineDataSet.setDrawValues(false)
+//       // lineDataSet.setCircleColor(Color.parseColor("#FFFFFFFF"))
+//        lineDataSet.setDrawCircles(false)
+//        lineDataSet.setDrawCircleHole(false)
+//        lineDataSet.axisDependency = YAxis.AxisDependency.RIGHT
+        val set =  BarDataSet(alts, "고도")
+        set.color = Color.parseColor("#FF0000FF") // 파랑
+        set.barBorderColor = Color.parseColor("#FF0000FF") // 파랑
+        set.barBorderWidth =  3f
+        set.setDrawValues(false)
+        set.setDrawIcons(false)
+        set.isHighlightEnabled = false
+        set.axisDependency = YAxis.AxisDependency.RIGHT
+
+        //altsData.addDataSet(set)
+
+        // 스피드 셋팅
+        var speedsData = LineData()
+        val lineDataSet2 = LineDataSet(speeds, "속력")
+        lineDataSet2.lineWidth = 1.5f
+        lineDataSet2.color = Color.parseColor("#FFFF0000") // 빨강
+        lineDataSet2.setDrawHorizontalHighlightIndicator(false)
+        lineDataSet2.setDrawHighlightIndicators(false)
+        lineDataSet2.setDrawValues(false)
+//        lineDataSet2.setCircleColor(Color.parseColor("#FFFF0000"))
+//        lineDataSet2.setCircleColorHole(Color.parseColor("#FFFF0000"))
+        lineDataSet2.setDrawCircles(false)
+        lineDataSet2.setDrawCircleHole(false)
+        lineDataSet2.axisDependency = YAxis.AxisDependency.LEFT
+
+        speedsData.addDataSet(lineDataSet2)
+
+        var combinedData = CombinedData()
+
+        combinedData.setData(BarData(set))
+        combinedData.setData(speedsData)
+
+//        val lineData = LineData(lineDataSet)
+//        lineChart.data = lineData
+//        lineChart.data.addDataSet(lineDataSet2)
+
+
         //val description = Description()
         //description.text = ""
 
-        lineChart.isDoubleTapToZoomEnabled = false;
+        lineChart.isDoubleTapToZoomEnabled = false // 더블 클릭 막기
         lineChart.setDrawGridBackground(false)
         //lineChart.description = description
         lineChart.animateY(2000, Easing.EasingOption.EaseInCubic)
+
+        lineChart.data = combinedData
         lineChart.invalidate()
     }
 

@@ -82,7 +82,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="맵 설명"
+                    android:text="설명"
                     android:fontFamily="@font/godob"
                     android:textSize="15dp"/>
 
@@ -127,7 +127,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="맵 분석"
+                    android:text="기록"
                     android:fontFamily="@font/godob"
                     android:textSize="15dp"/>
                 <TextView
@@ -243,11 +243,11 @@
                     android:layout_marginTop="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="고도 분석"
+                    android:text="분석"
                     android:fontFamily="@font/godob"
                     android:textSize="15dp"/>
 
-                <com.github.mikephil.charting.charts.LineChart
+                <com.github.mikephil.charting.charts.CombinedChart
                     android:id="@+id/runThisMapChart"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
@@ -255,7 +255,7 @@
                     android:layout_marginRight="20dp"
                     android:layout_marginLeft="20dp"
                     >
-                </com.github.mikephil.charting.charts.LineChart>
+                </com.github.mikephil.charting.charts.CombinedChart>
 
             </LinearLayout>
 
