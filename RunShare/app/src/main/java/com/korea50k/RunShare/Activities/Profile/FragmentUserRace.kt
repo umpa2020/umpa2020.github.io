@@ -48,14 +48,8 @@ class FragmentUserRace : Fragment(), RankRecyclerViewAdapterMap.OnLoadMoreListen
     var end = 15
     lateinit var jArray : JSONArray
 
-    val display = activity!!.windowManager.defaultDisplay
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
-        Log.d("size", display.toString())
 
         class SaveTask : AsyncTask<Void, Void, String>(){
             override fun onPreExecute() {
