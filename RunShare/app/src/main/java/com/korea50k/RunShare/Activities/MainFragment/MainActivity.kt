@@ -36,6 +36,7 @@ import kotlinx.android.synthetic.main.custom_toast.view.*
 
 
 class MainActivity : AppCompatActivity() {
+
     lateinit var mViewPager:ViewPager
     private var doubleBackToExitPressedOnce = false
     var WSY = "WSY"
@@ -72,12 +73,12 @@ class MainActivity : AppCompatActivity() {
         setRequestedOrientation(SCREEN_ORIENTATION_PORTRAIT);
         setContentView(com.korea50k.RunShare.R.layout.activity_main)
 
+
         Log.d("WSY","Shared 저장 이메일 : " + SharedPreValue.getEMAILData(this))
         Log.d("WSY","Shared 저장 비번 : " + SharedPreValue.getPWDData(this))
         Log.d("WSY","Shared 저장 닉네임 : " + SharedPreValue.getNicknameData(this))
         Log.d("WSY","Shared 저장 나이 : " + SharedPreValue.getAgeData(this))
         Log.d("WSY","Shared 저장 성별 : " + SharedPreValue.getGenderData(this))
-
 
 
         checkPermissions()          //모든 권한 확인
@@ -101,6 +102,7 @@ class MainActivity : AppCompatActivity() {
         //drawerLayout.closeDrawer(drawer)
 
         slideProfileIdTextView.text = SharedPreValue.getNicknameData(this)
+
     }
     var imageUri : String? = null
 
@@ -175,6 +177,7 @@ class MainActivity : AppCompatActivity() {
 
              */
             R.id.slide_logout_Button -> {
+
                 var builder = AlertDialog.Builder(this)
                 builder.setTitle("안내").setMessage("로그아웃 하시겠습니까?")
 
@@ -200,6 +203,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
 
     // 로그아웃 시 앱 재실행 함수
     fun restartApp() {

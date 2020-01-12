@@ -1,30 +1,32 @@
 package com.korea50k.RunShare.Activities.Profile
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.os.AsyncTask
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.GridLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.korea50k.RunShare.dataClass.RankMapData
-import java.util.ArrayList
-import androidx.appcompat.widget.LinearLayoutCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import java.util.ArrayList
+import com.korea50k.RunShare.R
 import com.korea50k.RunShare.dataClass.UserMapImageData
+import kotlinx.android.synthetic.main.activity_rank_recycler_click.*
+import java.io.BufferedInputStream
+import java.net.URL
 
-/*
+
 //  처음 부터 새로하는데
-class RankMapRecyclerViewAdapter(onLoadMoreListener: OnLoadMoreListener) :
+class ProfileMapRecyclerViewAdapter(onLoadMoreListener: FragmentUserRace) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
     override fun getItemCount(): Int {
         return itemList.size
     }
-
 
     private val VIEW_ITEM = 1
     private val VIEW_PROG = 0
@@ -75,21 +77,16 @@ class RankMapRecyclerViewAdapter(onLoadMoreListener: OnLoadMoreListener) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        //현재 사이즈 뷰 화면 크기의 가로 크기의 1/3값을 가지고 오기
-        val width = parent.resources.displayMetrics.widthPixels / 3
-        val imageView = ImageView(parent.context)
-        imageView.layoutParams = LinearLayoutCompat.LayoutParams(width, width)
-
         return ViewHolder(
-                LayoutInflater.from(parent.context).inflate(
-                    com.korea50k.RunShare.R.layout.user_grid_image,
-                    parent,
-                    false
-                )
+            LayoutInflater.from(parent.context).inflate(
+                R.layout.user_grid_image,
+                parent,
+                false
             )
+        )
     }
 
-    fun addAll(lst: List<UserMapImageData>) {
+    fun addAll(lst: ArrayList<UserMapImageData>) {
         //itemList.clear()
         itemList.addAll(lst)
         notifyDataSetChanged()
@@ -102,18 +99,14 @@ class RankMapRecyclerViewAdapter(onLoadMoreListener: OnLoadMoreListener) :
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is ViewHolder) {
-/*
-            Glide.with(holder.itemView.context)
-                .load(UserMapImageData[position].usermapimage)
-                .apply(RequestOptions().centerCrop())
-                .into(holder.gridImage)
+            val singleItem = itemList[position]
+            var ranking = position+1
+            holder.mapTitle.text=singleItem.MapTitle
 
- */
-            Glide.with(holder.itemView.context)
-                .load(itemList[position].usermapimage)
-                .apply(RequestOptions().centerCrop())
-                .into(holder.gridImage)
+            //TODO:이미지 해봐야함
+            //holder.mapImage.setImageDrawable(singleItem.MapImage)
 
+            Glide.with(holder.mapImage.context).load(singleItem.MapImage).apply(RequestOptions().centerCrop()).into(holder.mapImage)
         }
     }
 
@@ -122,14 +115,13 @@ class RankMapRecyclerViewAdapter(onLoadMoreListener: OnLoadMoreListener) :
     }
 
     internal class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
-        var image: ImageView
+        var mapImage: ImageView
+        var mapTitle: TextView
+
         init {
-            image = v.findViewById(com.korea50k.RunShare.R.id.gridImage) as ImageView
+            mapTitle = v.findViewById(R.id.gridMapTitle) as TextView
+            mapImage = v.findViewById(R.id.gridImage) as ImageView
         }
     }
-
-
-
 }
 
- */

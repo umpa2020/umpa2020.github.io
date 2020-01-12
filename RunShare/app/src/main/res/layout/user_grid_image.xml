@@ -2,11 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     
     <ImageView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:id="@+id/gridImage"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
@@ -17,5 +18,14 @@
         >
 
     </ImageView>
+
+    <TextView
+        android:id="@+id/gridMapTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="월계동"
+        >
+
+    </TextView>
 
 </LinearLayout>
