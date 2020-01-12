@@ -35,11 +35,15 @@
             app:tabMaxWidth="10dp" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_margin="10dp"
             android:id="@+id/openDrawerButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerHorizontal="true"
+            app:backgroundTint="#00000000"
+            android:src="@drawable/ic_menu_button_unpressed"
+            app:elevation="0dp"
             android:onClick="onClick"/>
 
     </RelativeLayout>
@@ -60,7 +64,8 @@
             android:layout_alignParentRight="true"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp"
-            android:text="드로어 닫기"
+            android:background="@drawable/ic_menu_button_pressed"
+            style="?android:attr/borderlessButtonStyle"
             android:onClick="onClick"/>
 
         <LinearLayout

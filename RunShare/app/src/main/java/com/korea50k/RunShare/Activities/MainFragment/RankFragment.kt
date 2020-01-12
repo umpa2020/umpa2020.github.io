@@ -24,14 +24,17 @@ class RankFragment : Fragment() {
 
         var indicatorWidth = 0 //indicator너비 초기화
 
-        val fragmentAdapter = RankPagerAdapter(activity!!.supportFragmentManager, 2) //프래그먼트 붙임
+        //val fragmentAdapter = RankPagerAdapter(activity!!.supportFragmentManager, 2) //프래그먼트 붙임
+        //TODO player 없애서 mpageCount 숫자 1로 바꿈 -> 나중에 수정 반드시 필요
+        val fragmentAdapter = RankPagerAdapter(activity!!.supportFragmentManager, 1) //프래그먼트 붙임
         view.rank_pager.adapter = fragmentAdapter
         view.tab_rank.setupWithViewPager(view.rank_pager)
 
         //동적으로 indicator 가로 너비 정함
         view.tab_rank.post(Runnable {
 
-            indicatorWidth =  view.tab_rank.getWidth() /  2 //TabLayout 너비의 절반 만큼 크기 정함
+            //indicatorWidth =  view.tab_rank.getWidth() /  2 //TabLayout 너비의 절반 만큼 크기 정함
+            indicatorWidth =  view.tab_rank.getWidth() //TabLayout 너비의 절반 만큼 크기 정함
 
             //새로운 너비를 indicator에 할당
             val indicatorParams = view.indicator.getLayoutParams() as FrameLayout.LayoutParams
@@ -59,7 +62,7 @@ class RankFragment : Fragment() {
             }
         })
 
-
+/*
         val choice_btn = view.findViewById<View>(com.korea50k.RunShare.R.id.rank_choiceoption_button) as Button
         choice_btn.setOnClickListener{
             if(count)
@@ -86,8 +89,10 @@ class RankFragment : Fragment() {
                 choice_btn.setBackgroundResource(R.drawable.ic_down_button)
             }
         }
-
+*/
         return view
     }
+
+
 
 }

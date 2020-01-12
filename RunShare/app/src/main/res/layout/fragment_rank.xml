@@ -18,7 +18,7 @@
         android:textStyle="bold"
         android:textSize="40dp"
         android:id="@+id/rank_title_textview"/>
-
+<!--
     <Button
         android:layout_marginLeft="15dp"
         android:layout_marginTop="60dp"
@@ -28,6 +28,7 @@
         android:background="@drawable/ic_down_button"
         android:layout_alignBaseline="@+id/rank_title_textview"
         android:id="@+id/rank_choiceoption_button"/>
+        -->
 
 
     <FrameLayout
