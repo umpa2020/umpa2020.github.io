@@ -112,5 +112,9 @@ class ConvertJson{
             }
             return feedMapDatas
         }
+        fun JsonToProfileImageUrl(json:String):String{
+            val jObject=JSONObject(json)
+            return jObject.get("Id") as String
+        }
     }
 }
