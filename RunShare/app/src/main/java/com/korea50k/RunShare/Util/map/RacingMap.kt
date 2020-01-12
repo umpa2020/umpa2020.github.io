@@ -394,7 +394,7 @@ class RacingMap : OnMapReadyCallback {
                                 mMap.animateCamera(
                                     CameraUpdateFactory.newLatLngZoom(
                                         cur_loc,
-                                        20F
+                                        18F
                                     )
                                 )
                                 if (PolyUtil.isLocationOnPath(
