@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.korea50k.RunShare.R
 import com.korea50k.RunShare.dataClass.RankDetailMapData
+import java.lang.Exception
 import java.util.ArrayList
 
 class RankDetailRecyclerViewAdapterMap(onLoadMoreListener: OnLoadMoreListener) :
@@ -91,6 +92,7 @@ class RankDetailRecyclerViewAdapterMap(onLoadMoreListener: OnLoadMoreListener) :
         if (holder is ViewHolder) {
             val singleItem = itemList[position]
             var ranking = position+1
+
             holder.rank.setText(ranking.toString())
             holder.name.setText(singleItem.ChallengerId)
             holder.time.setText(singleItem.ChallengerTime)
@@ -102,7 +104,6 @@ class RankDetailRecyclerViewAdapterMap(onLoadMoreListener: OnLoadMoreListener) :
                 holder.rank.setBackgroundResource(R.drawable.ic_3)
             else
                 holder.rank.setBackgroundResource(R.drawable.ic_4)
-
         }
     }
 

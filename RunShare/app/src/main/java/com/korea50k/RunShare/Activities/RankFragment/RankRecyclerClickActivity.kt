@@ -42,7 +42,6 @@ class RankRecyclerClickActivity : AppCompatActivity() , OnLoadMoreListener {
                 start = mAdapter.itemCount
                 end = start + 15
                 Toast.makeText(this, "more", Toast.LENGTH_SHORT).show()
-
                 mAdapter.addItemMore(itemList)
                 mAdapter.setMoreLoading(false)
             }, 100)
@@ -139,7 +138,6 @@ class RankRecyclerClickActivity : AppCompatActivity() , OnLoadMoreListener {
 
                 rankDetailMapDatas = ConvertJson.JsonToRankDetailMapDatas(mJsonString, start, end)
 
-                Log.d("ssmm11", "rankDetailMapDatas = "+ rankDetailMapDatas)
                 MapImage = rankDetailMapDatas[0].MapImage
                 ID_TextView.text = rankDetailMapDatas[0].Id
 
