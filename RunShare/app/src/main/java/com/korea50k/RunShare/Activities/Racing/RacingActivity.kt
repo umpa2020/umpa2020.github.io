@@ -4,8 +4,11 @@ package com.korea50k.RunShare.Activities.Racing
 import android.app.Activity
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
+import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.common.internal.Objects
@@ -99,7 +102,7 @@ class RacingActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpen
     }
 
     fun stop() {    //타이머 멈추는거 만들어야함
-        Toast.makeText(this, "종료를 원하시면, 길게 눌러주세요", Toast.LENGTH_LONG).show()
+       // Toast.makeText(this, "종료를 원하시면, 길게 눌러주세요", Toast.LENGTH_LONG).show()
     }
     fun noticeMessage(text:String){
         if(text==""){

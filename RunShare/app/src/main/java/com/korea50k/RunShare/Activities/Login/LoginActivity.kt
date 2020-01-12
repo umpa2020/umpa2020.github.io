@@ -141,7 +141,7 @@ class LoginActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode==101 && resultCode == RESULT_OK){
-            Toast.makeText(this, "회원가입이 완료되었습니다.", Toast.LENGTH_SHORT).show();
+
             mEmailView?.setText(data?.getStringExtra("ID"))
             mPasswordView?.setText(data?.getStringExtra("PW"))
         }
