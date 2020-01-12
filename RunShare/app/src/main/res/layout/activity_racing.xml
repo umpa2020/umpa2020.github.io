@@ -144,7 +144,8 @@
             android:background="#440044FF"
             android:clickable="false"
             android:gravity="center"
-            android:text="시작 포인트로 이동하십시오.\n시작포인트까지 남은거리 : " />
+            android:text="시작 포인트로 이동하십시오.\n시작포인트까지 남은거리 : "
+            android:fontFamily="@font/godob"/>
     </LinearLayout>
 
     <TextView
