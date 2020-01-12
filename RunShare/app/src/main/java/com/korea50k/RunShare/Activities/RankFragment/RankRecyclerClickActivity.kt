@@ -135,6 +135,7 @@ class RankRecyclerClickActivity : AppCompatActivity() , OnLoadMoreListener {
             if (result == null) {
             } else {
                 mJsonString = result
+                Log.d("Json tlqkf",result)
                 // just size data , not use
                 // please don't remove that
                 val jObject = JSONObject(mJsonString)
