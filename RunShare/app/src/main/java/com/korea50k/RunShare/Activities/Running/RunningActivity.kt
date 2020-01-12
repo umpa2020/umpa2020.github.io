@@ -34,7 +34,7 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
         manageRunning.startRunning(this)
         btn_stop.setOnLongClickListener {
             if (manageRunning.map.distance < 200) {
-                noticeMessage("거리가 200m 미만일때 정지하시면 저장이 불가능합니다. 정지하시겠습니까?", NoticeState.SIOP)
+                noticeMessage("거리가 200m 미만일때\n\n정지하시면 저장이 불가능합니다. \n\n정지하시겠습니까?", NoticeState.SIOP)
             } else
                 manageRunning.stopRunning()
             true
@@ -63,7 +63,7 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
 
             R.id.btn_pause -> {
                 if (manageRunning.privacy == Privacy.RACING) {
-                    noticeMessage("일시정지를 하게 되면 경쟁 모드 업로드가 불가합니다.\n일시정지를 하시겠습니까?", NoticeState.PAUSE)
+                    noticeMessage("일시정지를 하게 되면\n\n경쟁 모드 업로드가 불가합니다.\n\n일시정지를 하시겠습니까?", NoticeState.PAUSE)
                 } else {
                     if (B_RUNNIG)
                         manageRunning.pauseRunning()

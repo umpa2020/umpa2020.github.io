@@ -95,9 +95,9 @@ class RunThisMapActivity : AppCompatActivity() {
                                 activity.runThisMapTitle.text = makerData.mapTitle.replace('|',' ')
                                 activity.runThisMapExplanation.text=makerData.mapExplanation
                                 activity.runThisMapId.text = makerData.id
-                                activity.runThisMapDistance.text=String.format("%.3f km",makerData.distance/1000)
+                                activity.runThisMapDistance.text=String.format("%.3f",makerData.distance/1000)
                                 activity.runThisMapTime.text=makerData.time
-                                activity.runThisMapSpeed.text=String.format("%.3f km/h",makerData.speed.average())
+                                activity.runThisMapSpeed.text=String.format("%.3f",makerData.speed.average())
                                 setChart()
 //TODO:Save할때 id도 json에 넣기
 
