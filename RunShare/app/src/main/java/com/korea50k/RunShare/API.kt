@@ -27,6 +27,10 @@ interface API {
     @FormUrlEncoded
     fun login(@Field("Id") Id : String, @Field("Password") Password: String) : retrofit2.Call<ResponseBody>
 
+    @POST("myRankingByMap.php") // 로그인
+    @FormUrlEncoded
+    fun myRankingByMap(@Field("Id") Id : String, @Field("MapTitle") MapTitle: String) : retrofit2.Call<ResponseBody>
+
     @POST("runningDataDownload.php")
     @FormUrlEncoded
     fun runningDataDownload(@Field("MapTitle") MapTitle: String): retrofit2.Call<ResponseBody>

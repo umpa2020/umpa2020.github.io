@@ -15,6 +15,7 @@ import com.korea50k.RunShare.Activities.Profile.UserActivity
 import com.korea50k.RunShare.Activities.RankFragment.RankDetailRecyclerViewAdapterMap
 import com.korea50k.RunShare.RetrofitClient
 import com.korea50k.RunShare.Util.ConvertJson
+import com.korea50k.RunShare.Util.SharedPreValue
 import com.korea50k.RunShare.Util.map.ViewerMap
 import kotlinx.android.synthetic.main.activity_racing_finish.*
 import kotlinx.android.synthetic.main.activity_rank_recycler_click.*
@@ -52,19 +53,22 @@ class RacingFinishActivity : AppCompatActivity() {
         racerMaxSpeedTextView.text=String.format("%.3f km/h",racerData.speed.max())
         racerAvgSpeedTextView.text=String.format("%.3f km/h",racerData.speed.average())
         //TODO:서버에서 해당 맵 랭크 받아오기
-      /*  Thread(Runnable {
-            RetrofitClient.retrofitService.playerRankingAboutMapDownload(makerData.mapTitle)
+
+        Thread(Runnable {
+            RetrofitClient.retrofitService.myRankingByMap(SharedPreValue.getNicknameData(this)!!,makerData.mapTitle)
                 .enqueue(object :
                     retrofit2.Callback<ResponseBody> {
                     override fun onResponse(
                         call: Call<ResponseBody>,
                         response: retrofit2.Response<ResponseBody>
                     ) {
-                        Log.d("server", "success to get makerData")
+                        Log.d("server", "success to get rank")
                         Thread(Runnable {
                             try {
                                 val url =
-                                    URL("http://15.164.50.86/playerRankingAboutMapDownload.php")
+                                    URL("http://15.164.50.86/myRankingByMap.php?"+"Id="+SharedPreValue.getNicknameData(baseContext)+"&&MapTitle="+makerData.mapTitle)
+
+
                                 val http = url.openConnection() as HttpURLConnection
                                 http.defaultUseCaches = false
                                 http.doInput = true
@@ -75,9 +79,8 @@ class RacingFinishActivity : AppCompatActivity() {
                                     "content-type",
                                     "application/x-www-form-urlencoded"
                                 )
-                                val buffer = StringBuffer()
-                                buffer.append("MapTitle").append("=").append(makerData.mapTitle)
 
+                                val buffer = StringBuffer()
                                 val outStream = OutputStreamWriter(http.outputStream, "EUC-KR")
                                 val writer = PrintWriter(outStream)
                                 writer.write(buffer.toString())
@@ -91,7 +94,8 @@ class RacingFinishActivity : AppCompatActivity() {
                                     line = reader.readLine()
                                 }
                                 Log.d("server", builder.toString())
-                                var rankDetailMapDatas =
+
+                                /*var rankDetailMapDatas =
                                     ConvertJson.JsonToRankDetailMapDatas(builder.toString())
                                 val mAdapter = RankDetailRecyclerViewAdapterMap(
                                     baseContext,
@@ -107,7 +111,7 @@ class RacingFinishActivity : AppCompatActivity() {
                                 val lm = LinearLayoutManager(baseContext)
                                 resultPlayerRankingRecycler!!.layoutManager = lm
                                 resultPlayerRankingRecycler!!.setHasFixedSize(true)
-
+*/
                             } catch (e: MalformedURLException) {
                                 Log.e("server", e.toString())
                             }
@@ -119,7 +123,7 @@ class RacingFinishActivity : AppCompatActivity() {
                         t.printStackTrace()
                     }
                 })
-        }).start()*/
+        }).start()
     }
 
     fun onClick(view: View) {

@@ -75,7 +75,6 @@ class ConvertJson{
             for (i in start until limit) {
                 var rankDetailMapData = RankDetailMapData()
                 rankDetailMapData.Id= jArray.getJSONObject(i).get("Id") as String
-                rankDetailMapData.MapImage= jArray.getJSONObject(i).get("MapImage") as String
                 try {
                     rankDetailMapData.ChallengerId =
                         jArray.getJSONObject(i).get("ChallengerId") as String
