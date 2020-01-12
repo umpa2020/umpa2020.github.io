@@ -313,12 +313,6 @@ class RacingMap : OnMapReadyCallback {
                                 if (prev_loc.latitude == cur_loc.latitude && prev_loc.longitude == cur_loc.longitude) {
                                     return  //움직임이 없다면 추가안함
                                 } else if (false) { //비정상적인 움직임일 경우 + finish에 도착한 경우
-                                } else if (SphericalUtil.computeDistanceBetween(
-                                        cur_loc,
-                                        markers[markers.size - 1]
-                                    ) < 10&&markerCount==markers.size
-                                ) {
-                                    manageRacing.stopRacing(true)
                                 } else {
                                     speeds.add(speed.toDouble())
                                     (context as Activity).runOnUiThread(Runnable {
@@ -357,6 +351,9 @@ class RacingMap : OnMapReadyCallback {
                                         cpMarkers[markerCount-1].remove()
                                         cpMarkers[markerCount-1]=mMap.addMarker(cpOption)
                                         markerCount++
+                                        if(markerCount==markers.size-1){
+                                            manageRacing.stopRacing(true)
+                                        }
 
                                     }
                                 }

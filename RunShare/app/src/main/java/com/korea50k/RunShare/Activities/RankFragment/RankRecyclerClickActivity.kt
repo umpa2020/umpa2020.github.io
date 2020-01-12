@@ -134,7 +134,6 @@ class RankRecyclerClickActivity : AppCompatActivity() , OnLoadMoreListener {
 
                 Log.d("ssmm11", "rankDetailMapDatas = "+ rankDetailMapDatas)
                 ID_TextView.text = rankDetailMapDatas[0].Id
-                MapImage = rankDetailMapDatas[0].MapImage
 
                 class SetImageTask : AsyncTask<Void, Void, String>(){
                     override fun onPreExecute() {
