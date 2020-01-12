@@ -20,6 +20,8 @@ import com.korea50k.RunShare.dataClass.RankDetailMapData
 import kotlinx.android.synthetic.main.activity_rank_recycler_click.*
 import kotlinx.android.synthetic.main.recycler_rank_item.view.*
 import okhttp3.ResponseBody
+import org.json.JSONArray
+import org.json.JSONObject
 import retrofit2.Call
 import java.io.*
 import java.net.HttpURLConnection
@@ -28,11 +30,11 @@ import java.net.URL
 class RankRecyclerClickActivity : AppCompatActivity() , OnLoadMoreListener {
     var start = 0
     var end = 15
-
+    lateinit var jArray : JSONArray
     override fun onLoadMore() {
         Log.d("ssmm11", "onLoadMore , rankDetailMapDatas.size = " + rankDetailMapDatas.size)
 
-        if (rankDetailMapDatas.size > 4) {
+        if (rankDetailMapDatas.size > 4 && mAdapter.itemCount < jArray.length()) {
             //mAdapter.setProgressMore(true)
             Handler().postDelayed({
                 itemList.clear()
@@ -130,6 +132,11 @@ class RankRecyclerClickActivity : AppCompatActivity() , OnLoadMoreListener {
             if (result == null) {
             } else {
                 mJsonString = result
+                // just size data , not use
+                // please don't remove that
+                val jObject = JSONObject(mJsonString)
+                jArray = jObject.getJSONArray("JsonData")
+
                 rankDetailMapDatas = ConvertJson.JsonToRankDetailMapDatas(mJsonString, start, end)
 
                 Log.d("ssmm11", "rankDetailMapDatas = "+ rankDetailMapDatas)

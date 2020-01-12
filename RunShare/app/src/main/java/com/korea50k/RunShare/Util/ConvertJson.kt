@@ -60,7 +60,6 @@ class ConvertJson{
 
             val jObject = JSONObject(json)
             val jArray = jObject.getJSONArray("JsonData")
-            Log.d("ssmm11", "jArray.length() = " +jArray.length())
 
             var limit = 0
             if (jArray.length() < end)
@@ -68,18 +67,21 @@ class ConvertJson{
             else
                 limit = end
 
-            Log.d("ssmm11", "limit = " +limit)
-
-
-
             for (i in start until limit) {
                 var rankDetailMapData = RankDetailMapData()
                 rankDetailMapData.Id= jArray.getJSONObject(i).get("Id") as String
                 try {
+                    rankDetailMapData.MapImage= jArray.getJSONObject(i).get("MapImage") as String
+                }
+                catch (e : Exception) {
+                }
+                try {
+                    Log.d("ssmm11", "뭐지 = ")
                     rankDetailMapData.ChallengerId =
                         jArray.getJSONObject(i).get("ChallengerId") as String
                     rankDetailMapData.ChallengerTime =
                         jArray.getJSONObject(i).get("ChallengerTime") as String
+
                 }
                 catch (e:Exception) {
 
