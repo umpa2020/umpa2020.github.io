@@ -83,7 +83,7 @@ class RacingActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpen
                     UserState.READYTORACING->{
                         increaseExecute(makerData.mapTitle)
                         manageRacing.startRacing()
-                        racingNotificationButton.visibility=View.GONE
+                        racingNotificationLayout.visibility=View.GONE
                         racingControlButton.text="  Stop"
                         racingControlButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_stop_icon_pressed,0,0,0)
                     }
@@ -102,8 +102,12 @@ class RacingActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpen
         Toast.makeText(this, "종료를 원하시면, 길게 눌러주세요", Toast.LENGTH_LONG).show()
     }
     fun noticeMessage(text:String){
-        racingNotificationButton.visibility=View.VISIBLE
-        racingNotificationButton.text=text
+        if(text==""){
+            racingNotificationLayout.visibility=View.GONE
+        }else {
+            racingNotificationLayout.visibility = View.VISIBLE
+            racingNotificationButton.text = text
+        }
     }
     override fun onScrollStarted() {
         Log.d(TAG, "onScrollStarted()")

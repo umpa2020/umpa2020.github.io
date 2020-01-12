@@ -2,6 +2,7 @@ package com.korea50k.RunShare.Util
 
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.SphericalUtil
+import java.text.SimpleDateFormat
 import java.util.*
 
 class Calc(){
@@ -34,6 +35,13 @@ class Calc(){
                 i++
             }
             return distance
+        }
+
+        fun milisecToString(milisec:Long):String{
+            val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
+            formatter.setTimeZone(TimeZone.getTimeZone("UTC"))
+
+            return formatter.format(Date(milisec))
         }
     }
 }
