@@ -22,6 +22,7 @@ import com.korea50k.RunShare.Activities.Racing.RacingActivity
 import com.korea50k.RunShare.Util.Calc
 import com.korea50k.RunShare.dataClass.RunningData
 import com.korea50k.RunShare.Util.TTS
+import com.korea50k.RunShare.dataClass.NoticeState
 import com.korea50k.RunShare.dataClass.UserState
 import kotlinx.android.synthetic.main.activity_racing.*
 import kotlin.math.roundToLong
@@ -146,15 +147,12 @@ class RacingMap : OnMapReadyCallback {
 
         makerRunningThread = Thread(Runnable {
             var time = makerData.time
-            var sec =
-                (Integer.parseInt(time[0].toString()) * 10 + Integer.parseInt(time[1].toString())) * 60 + (Integer.parseInt(
-                    time[3].toString()
-                ) * 10 + Integer.parseInt(time[4].toString()))
-            var milisec = ((sec.toDouble() / markers.size.toDouble()) * 1000).roundToLong()
-            print_log("시간 : " + time + sec.toString() + ", " + milisec.toString())
+
+            var sleepTime = ((time.toDouble() / markers.size.toDouble())).roundToLong()
+            print_log("시간 : " + time+", " + sleepTime.toString())
 
             for (index in markers.indices) {
-                Thread.sleep(milisec)
+                Thread.sleep(sleepTime)
                 (context as Activity).runOnUiThread(Runnable {
                     if (makerMarker != null) makerMarker!!.remove()
                     val makerOptions = MarkerOptions()
@@ -405,7 +403,11 @@ class RacingMap : OnMapReadyCallback {
                                     )
                                 ) {
                                     print_log("위도 : " + lat.toString() + "경도 : " + lng.toString())
-                                    countDeviation = 0
+                                    if(manageRacing.noticeState==NoticeState.DEVIATION) {
+                                        manageRacing.noticeState=NoticeState.NOTHING
+                                        countDeviation = 0
+                                        manageRacing.deviation(countDeviation)
+                                    }
                                 } else {
                                     manageRacing.deviation(++countDeviation)
                                     if (countDeviation > 30) {
