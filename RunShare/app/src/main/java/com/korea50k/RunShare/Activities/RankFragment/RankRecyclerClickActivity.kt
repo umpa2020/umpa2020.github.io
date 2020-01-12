@@ -1,6 +1,7 @@
 package com.korea50k.RunShare.Activities.RankFragment
 
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.AsyncTask
@@ -32,8 +33,6 @@ class RankRecyclerClickActivity : AppCompatActivity() , OnLoadMoreListener {
     var end = 15
     lateinit var jArray : JSONArray
     override fun onLoadMore() {
-        Log.d("ssmm11", "onLoadMore , rankDetailMapDatas.size = " + rankDetailMapDatas.size)
-
         if (rankDetailMapDatas.size > 4 && mAdapter.itemCount < jArray.length()) {
             //mAdapter.setProgressMore(true)
             Handler().postDelayed({
@@ -41,8 +40,6 @@ class RankRecyclerClickActivity : AppCompatActivity() , OnLoadMoreListener {
 
                 start = mAdapter.itemCount
                 end = start + 15
-                Toast.makeText(this, "more", Toast.LENGTH_SHORT).show()
-
                 mAdapter.addItemMore(itemList)
                 mAdapter.setMoreLoading(false)
             }, 100)
@@ -57,13 +54,12 @@ class RankRecyclerClickActivity : AppCompatActivity() , OnLoadMoreListener {
     lateinit var itemList : ArrayList<RankDetailMapData>
 
     lateinit var rankDetailMapDatas : ArrayList<RankDetailMapData>
-    //lateinit var mcontext: Context
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_rank_recycler_click)
 
-        //mcontext = baseContext
         val intent =  getIntent()
         MapTitle = intent.extras?.getString("MapTitle").toString()
         Log.d("Ha..",MapTitle)
@@ -139,7 +135,6 @@ class RankRecyclerClickActivity : AppCompatActivity() , OnLoadMoreListener {
 
                 rankDetailMapDatas = ConvertJson.JsonToRankDetailMapDatas(mJsonString, start, end)
 
-                Log.d("ssmm11", "rankDetailMapDatas = "+ rankDetailMapDatas)
                 MapImage = rankDetailMapDatas[0].MapImage
                 ID_TextView.text = rankDetailMapDatas[0].Id
 
@@ -153,7 +148,6 @@ class RankRecyclerClickActivity : AppCompatActivity() , OnLoadMoreListener {
                         try {
                             val url =
                                 URL(MapImage)
-                            Log.d("ssmm11", "urlll = "+url)
                             val conn = url.openConnection()
                             conn.connect()
                             val bis = BufferedInputStream(conn.getInputStream())
@@ -181,7 +175,6 @@ class RankRecyclerClickActivity : AppCompatActivity() , OnLoadMoreListener {
 
         override fun doInBackground(vararg params: String): String? {
             val serverURL = params[0]
-            Log.d("ssmm11", "받아온 url = " +serverURL)
             try {
                 val url = URL(serverURL)
                 val httpURLConnection = url.openConnection() as HttpURLConnection
@@ -191,7 +184,6 @@ class RankRecyclerClickActivity : AppCompatActivity() , OnLoadMoreListener {
                 httpURLConnection.connect()
 
                 val responseStatusCode = httpURLConnection.getResponseCode()
-                Log.d("ssmm11", "response code - $responseStatusCode")
 
                 val inputStream: InputStream
                 if (responseStatusCode == HttpURLConnection.HTTP_OK) {

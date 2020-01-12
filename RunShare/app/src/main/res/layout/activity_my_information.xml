@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.Profile.MyInformationActivity"
-    android:orientation="vertical"
-    android:gravity="center">
-
+    tools:context=".Activities.Profile.MyInformationActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:gravity="center">
         <FrameLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
@@ -22,155 +25,157 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_gravity="bottom|right"
-                android:visibility="invisible"
                 android:background="@drawable/ic_profile_edit" />
 
         </FrameLayout>
 
 
-    <LinearLayout
-        android:layout_marginTop="30dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_marginTop="30dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_marginLeft="50dp"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="E-mail"
+                android:fontFamily="@font/godob"
+                android:textSize="20dp"/>
+            =
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="E-mail"
+                android:fontFamily="@font/godob"
+                android:textSize="15dp"
+                android:id="@+id/my_information_email_textview"
+                android:gravity="center"/>
+
+        </LinearLayout>
 
         <TextView
             android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/rankBackgroudGray"/>
+
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_marginLeft="50dp"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="닉네임"
+                android:fontFamily="@font/godob"
+                android:textSize="20dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="asdf"
+                android:fontFamily="@font/godob"
+                android:textSize="15dp"
+                android:id="@+id/my_information_nickname_textview"
+                android:gravity="center"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/rankBackgroudGray"/>
+
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_marginLeft="50dp"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="나이"
+                android:fontFamily="@font/godob"
+                android:textSize="20dp"/>
+
+            <TextView
+                android:id="@+id/my_information_age_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/godob"
+                android:layout_gravity="center"
+                android:text="18"
+                android:textSize="15dp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/rankBackgroudGray"/>
+
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_marginLeft="50dp"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="성별"
+                android:fontFamily="@font/godob"
+                android:textSize="20dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="sex"
+                android:fontFamily="@font/godob"
+                android:textSize="15dp"
+                android:id="@+id/my_information_sex_textview"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/rankBackgroudGray"/>
+
+        <!--Button
+            android:id="@+id/my_information_adjust_button"
+            android:onClick="onClick"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:text="E-mail"
-            android:fontFamily="@font/godob"
-            android:textSize="20dp"/>
-=
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="E-mail"
+            android:layout_marginTop="20dp"
+            android:enabled="true"
+            android:text="수정"
+            android:textColor="@color/darkRed"
             android:fontFamily="@font/godob"
             android:textSize="15dp"
-            android:id="@+id/my_information_email_textview"
-            android:gravity="center"/>
+            android:background="@drawable/base_button_selector">
+
+        </Button-->
 
     </LinearLayout>
 
-    <TextView
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@color/rankBackgroudGray"/>
-
-    <LinearLayout
-        android:layout_marginTop="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_marginLeft="50dp"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:text="닉네임"
-            android:fontFamily="@font/godob"
-            android:textSize="20dp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="asdf"
-            android:fontFamily="@font/godob"
-            android:textSize="15dp"
-            android:id="@+id/my_information_nickname_textview"
-            android:gravity="center"/>
-
-    </LinearLayout>
-
-    <TextView
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@color/rankBackgroudGray"/>
-
-    <LinearLayout
-        android:layout_marginTop="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_marginLeft="50dp"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:text="나이"
-            android:fontFamily="@font/godob"
-            android:textSize="20dp"/>
-
-        <TextView
-            android:id="@+id/my_information_age_textview"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:fontFamily="@font/godob"
-            android:layout_gravity="center"
-            android:text="18"
-            android:textSize="15dp" />
-
-    </LinearLayout>
-
-    <TextView
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@color/rankBackgroudGray"/>
-
-    <LinearLayout
-        android:layout_marginTop="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_marginLeft="50dp"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:text="성별"
-            android:fontFamily="@font/godob"
-            android:textSize="20dp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="sex"
-            android:fontFamily="@font/godob"
-            android:textSize="15dp"
-            android:id="@+id/my_information_sex_textview"/>
-
-    </LinearLayout>
-
-    <TextView
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@color/rankBackgroudGray"/>
-
-    <Button
-        android:id="@+id/my_information_adjust_button"
-        android:onClick="onClick"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="수정"
-        android:textColor="@color/darkRed"
-        android:fontFamily="@font/godob"
-        android:textSize="15dp"
-        android:background="@drawable/base_button_selector">
-
-    </Button>
-
-</LinearLayout>
+</FrameLayout>

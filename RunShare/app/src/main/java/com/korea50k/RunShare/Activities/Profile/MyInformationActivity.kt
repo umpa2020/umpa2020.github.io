@@ -2,8 +2,10 @@ package com.korea50k.RunShare.Activities.Profile
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.opengl.Visibility
 import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
@@ -14,6 +16,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.Toast
 import com.korea50k.RunShare.R
 import com.korea50k.RunShare.RetrofitClient
@@ -26,6 +29,7 @@ import kotlinx.android.synthetic.main.activity_rank_recycler_click.*
 import kotlinx.android.synthetic.main.activity_sign_up.*
 import kotlinx.android.synthetic.main.fragment_rank.view.*
 import okhttp3.ResponseBody
+import org.jetbrains.anko.toast
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Response
@@ -47,6 +51,7 @@ class MyInformationActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_my_information)
         userEmail = SharedPreValue.getEMAILData(this)
         userPW = SharedPreValue.getPWDData(this)
@@ -97,6 +102,9 @@ class MyInformationActivity : AppCompatActivity() {
         startActivityForResult(intent, PICK_FROM_ALBUM)
     }
 
+    var options : BitmapFactory.Options? = null
+    var resized : Bitmap? = null
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, intentData: Intent?) {
         super.onActivityResult(requestCode, resultCode, intentData)
 
@@ -110,11 +118,71 @@ class MyInformationActivity : AppCompatActivity() {
                         intentData!!.data?.let { getContentResolver().openInputStream(it) }
 
                     // 프로필 사진을 비트맵으로 변환
-                    bitmapImg = BitmapFactory.decodeStream(inputStream)
+                    options = BitmapFactory.Options()
+                    options!!.inSampleSize = 2
+                    bitmapImg = BitmapFactory.decodeStream(inputStream,null, options)
                     inputStream!!.close()
                     Log.d(WSY, bitmapImg.toString())
-                    profileImage.setImageBitmap(bitmapImg)
+
+                    resized = Bitmap.createScaledBitmap(bitmapImg!!,bitmapImg!!.width, bitmapImg!!.height, true)
+                    profileImage.setImageBitmap(resized)
                     profileImage.scaleType = ImageView.ScaleType.CENTER_CROP
+
+                    // 이미지가 바뀌면 서버에 전송.
+                    if(bitmapImg != null) {
+                        // 바뀌 프로필 비트맵을 base640으로 변경.
+                        var byteArrayOutputStream = ByteArrayOutputStream()
+                        resized!!.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+                        var byteArray = byteArrayOutputStream.toByteArray()
+                        var base64OfBitmap = Base64.encodeToString(byteArray, Base64.DEFAULT)
+
+                        class dowmloadImage : AsyncTask<Void, Void, String>(){
+                            override fun onPreExecute() {
+                                super.onPreExecute()
+                               // my_information_adjust_button.isEnabled = false
+                            }
+
+                            override fun doInBackground(vararg params: Void?): String? {
+                                try {
+                                    RetrofitClient.retrofitService.changeProfile( userEmail!!, userPW!!, base64OfBitmap!!
+                                    ).enqueue(object : retrofit2.Callback<ResponseBody> {
+                                        override fun onResponse( call: Call<ResponseBody>, response: Response<ResponseBody>
+                                        ) {
+                                            val result = response.body() as ResponseBody
+                                            val resultValue = result.string()
+
+                                            Log.i(WSY, "결과 : " + resultValue)
+                                            var userData = JSONObject(resultValue)
+
+
+                                            // SharedProfile 재 저장
+                                            SharedPreValue.setProfileData(
+                                                this@MyInformationActivity,
+                                                userData.getString("ProfilePath")
+                                            )
+                                            Log.d(WSY, SharedPreValue.getProfileData(applicationContext))
+                                        }
+
+                                        override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+
+                                        }
+                                    })
+                                } catch (e : java.lang.Exception) {
+                                    Log.d(WSY, "이미지 다운로드 실패 " +e.toString())
+                                }
+                                return null
+                            }
+
+                            override fun onPostExecute(result: String?) {
+                                super.onPostExecute(result)
+                                //TODO:피드에서 이미지 적용해볼 소스코드
+                              //  my_information_adjust_button.isEnabled = true
+                            }
+                        }
+                        var Start = dowmloadImage ()
+                        Start.execute()
+
+                    }
                     //TODO:서버로 데이터 전송
                 }catch(e : java.lang.Exception)
                 {
@@ -124,7 +192,7 @@ class MyInformationActivity : AppCompatActivity() {
             else if(resultCode == RESULT_CANCELED)
             {
                 //사진 선택 취소
-                Toast.makeText(this, "사진 선택 취소", Toast.LENGTH_LONG).show();
+               // Toast.makeText(this, "사진 선택 취소", Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -133,57 +201,36 @@ class MyInformationActivity : AppCompatActivity() {
     fun onClick(v: View) {
         when (v.id) {
             R.id.profileImage -> {
-                buttonText = my_information_adjust_button.text as String?
-                if(buttonText.equals("확인"))
+//                buttonText = my_information_adjust_button.text as String?
+//                if(buttonText.equals("확인"))
                     goToAlbum()
             }
-            R.id.my_information_adjust_button ->{ // 수정 버튼 클릭 시
-                buttonText = my_information_adjust_button.text as String?
-                Log.d(WSY,buttonText)
-
-                if(buttonText.equals("수정")){
-                    my_information_adjust_button.text = "확인"
-                    editProfile.visibility = View.VISIBLE
-
-                }else if(buttonText.equals("확인")){
-                    my_information_adjust_button.text = "수정"
-                    editProfile.visibility = View.INVISIBLE
-                    // 서버에 바뀐 프로필 setting
-                    Log.d(WSY, userEmail!! + "\n" + userPW!! + "\n"+  imageUri!!)
-
-                    if(bitmapImg != null) {
-                        // 바뀌 프로필 비트맵을 base640으로 변경.
-                        var byteArrayOutputStream = ByteArrayOutputStream()
-                        bitmapImg!!.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-                        var byteArray = byteArrayOutputStream.toByteArray()
-                        var base64OfBitmap = Base64.encodeToString(byteArray, Base64.DEFAULT)
-
-                        RetrofitClient.retrofitService.changeProfile( userEmail!!, userPW!!, base64OfBitmap!!
-                        ).enqueue(object : retrofit2.Callback<ResponseBody> {
-                            override fun onResponse( call: Call<ResponseBody>, response: Response<ResponseBody>
-                            ) {
-                                val result = response.body() as ResponseBody
-                                val resultValue = result.string()
-
-                                Log.i(WSY, "결과 : " + resultValue)
-                                var userData = JSONObject(resultValue)
-                                SharedPreValue.setProfileData(
-                                    this@MyInformationActivity,
-                                    userData.getString("ProfilePath")
-                                )
-                                Log.d(WSY, SharedPreValue.getProfileData(applicationContext))
-                            }
-
-                            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-
-                            }
-                        })
-                    }
-                }
-
-            }
+//            R.id.my_information_adjust_button ->
+//            { // 수정 버튼 클릭 시
+//                buttonText = my_information_adjust_button.text as String?
+//                Log.d(WSY,buttonText)
+//
+//                if(buttonText.equals("수정")){
+//                    my_information_adjust_button.text = "확인"
+//                    editProfile.visibility = View.VISIBLE
+//
+//                }else if(buttonText.equals("확인")){
+//                    my_information_adjust_button.text = "수정"
+//                    editProfile.visibility = View.INVISIBLE
+//                    // 서버에 바뀐 프로필 setting
+//                    Log.d(WSY, userEmail!! + "\n" + userPW!! + "\n"+  imageUri!!)
+//            }
         }
     }
 
+    override fun onStop() {
+        super.onStop()
+        Log.d(WSY,"onStop()")
+    }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d(WSY, SharedPreValue.getProfileData(this))
+        Log.d(WSY, "onDestroy()")
+    }
 }

@@ -14,14 +14,23 @@ import java.net.URL
 
 class S3{
     companion object{
+        var options : BitmapFactory.Options? = null
+        var resized : Bitmap? = null
+
         fun downloadBitmap(link:String): Bitmap {
             val url = URL(link)
             val conn = url.openConnection()
             conn.connect()
             val bis = BufferedInputStream(conn.getInputStream())
-            var bm = BitmapFactory.decodeStream(bis)
+
+            options = BitmapFactory.Options()
+            options!!.inSampleSize = 2  // 이미지의 1/N 한큼 이미지를 줄여서 Decoding 하기위한 N의 값
+
+            var bm = BitmapFactory.decodeStream(bis,null, options)
             bis.close()
-            return bm
+
+            resized = Bitmap.createScaledBitmap(bm!!,bm!!.width, bm!!.height, true)
+            return resized!!
         }
 
         fun uploadBitmap(bitmap:Bitmap,link: String){

@@ -78,12 +78,10 @@ class ConvertJson{
                 catch (e : Exception) {
                 }
                 try {
-                    Log.d("ssmm11", "뭐지 = ")
                     rankDetailMapData.ChallengerId =
                         jArray.getJSONObject(i).get("ChallengerId") as String
                     rankDetailMapData.ChallengerTime =
                         jArray.getJSONObject(i).get("ChallengerTime") as String
-
                 }
                 catch (e:Exception) {
 
