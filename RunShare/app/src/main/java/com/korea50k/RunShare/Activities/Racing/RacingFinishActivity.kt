@@ -3,6 +3,7 @@ package com.korea50k.RunShare.Activities.Racing
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP
 import android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP
+import android.content.pm.ActivityInfo
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.AsyncTask
@@ -55,6 +56,7 @@ class RacingFinishActivity : AppCompatActivity() ,
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_racing_finish)
         if (intent.getBooleanExtra("Result", false)) {
             resultRankTextView.text = "등수"

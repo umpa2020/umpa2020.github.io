@@ -1,6 +1,7 @@
 package com.korea50k.RunShare.Activities.RankFragment
 
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.AsyncTask
@@ -61,6 +62,7 @@ class RankRecyclerClickActivity : AppCompatActivity() , OnLoadMoreListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_rank_recycler_click)
 
         //mcontext = baseContext
