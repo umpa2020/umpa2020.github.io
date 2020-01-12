@@ -4,16 +4,19 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.opengl.Visibility
 import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Base64
 import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import com.korea50k.RunShare.R
+import com.korea50k.RunShare.RetrofitClient
 import com.korea50k.RunShare.Util.S3
 import com.korea50k.RunShare.Util.SharedPreValue
 import kotlinx.android.synthetic.main.activity_main.*
@@ -22,7 +25,12 @@ import kotlinx.android.synthetic.main.activity_my_information.profileImage
 import kotlinx.android.synthetic.main.activity_rank_recycler_click.*
 import kotlinx.android.synthetic.main.activity_sign_up.*
 import kotlinx.android.synthetic.main.fragment_rank.view.*
+import okhttp3.ResponseBody
+import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Response
 import java.io.BufferedInputStream
+import java.io.ByteArrayOutputStream
 import java.net.URL
 
 class MyInformationActivity : AppCompatActivity() {
@@ -33,11 +41,17 @@ class MyInformationActivity : AppCompatActivity() {
     private val PICK_FROM_ALBUM = 1
     private var bitmapImg : Bitmap? = null
 
+    var userEmail : String? = null
+    var userPW : String? = null
+    var imageUri : String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_information)
+        userEmail = SharedPreValue.getEMAILData(this)
+        userPW = SharedPreValue.getPWDData(this)
 
-        my_information_email_textview.text = SharedPreValue.getEMAILData(this)
+        my_information_email_textview.text = userEmail
         my_information_nickname_textview.text = SharedPreValue.getNicknameData(this)
         my_information_age_textview.text = SharedPreValue.getAgeData(this)
         my_information_sex_textview.text = SharedPreValue.getGenderData(this)
@@ -45,12 +59,13 @@ class MyInformationActivity : AppCompatActivity() {
         Log.d("info", "my_information_age_textview" + SharedPreValue.getAgeData(this))
         Log.d("info", "my_information_sex_textview" + SharedPreValue.getGenderData(this))
 
-        var imageUri = SharedPreValue.getProfileData(this)
+        imageUri = SharedPreValue.getProfileData(this)
         Log.d(WSY,imageUri)
 
         class SetImageTask : AsyncTask<Void, Void, String>(){
             override fun onPreExecute() {
                 super.onPreExecute()
+
             }
             var bm: Bitmap? = null
 
@@ -73,22 +88,6 @@ class MyInformationActivity : AppCompatActivity() {
         }
         var Start = SetImageTask()
         Start.execute()
-
-        val adjustBtn = findViewById<View>(com.korea50k.RunShare.R.id.my_information_adjust_button) as Button
-        adjustBtn.setOnClickListener{
-            if(count)
-                count = false
-            else
-                count = true
-
-            if(count == true){ // 각 조건에 따라 버튼 텍스트 변경
-                my_information_adjust_button.text = "확인"
-                //TODO 프로필 사진 바꾸는 부분 코드 추가
-            }
-            else{
-                my_information_adjust_button.text = "수정"
-            }
-        }
     }
 
     private fun goToAlbum() {
@@ -130,12 +129,57 @@ class MyInformationActivity : AppCompatActivity() {
         }
     }
 
+    var buttonText : String? = null
     fun onClick(v: View) {
         when (v.id) {
             R.id.profileImage -> {
+                buttonText = my_information_adjust_button.text as String?
+                if(buttonText.equals("확인"))
                     goToAlbum()
             }
             R.id.my_information_adjust_button ->{ // 수정 버튼 클릭 시
+                buttonText = my_information_adjust_button.text as String?
+                Log.d(WSY,buttonText)
+
+                if(buttonText.equals("수정")){
+                    my_information_adjust_button.text = "확인"
+                    editProfile.visibility = View.VISIBLE
+
+                }else if(buttonText.equals("확인")){
+                    my_information_adjust_button.text = "수정"
+                    editProfile.visibility = View.INVISIBLE
+                    // 서버에 바뀐 프로필 setting
+                    Log.d(WSY, userEmail!! + "\n" + userPW!! + "\n"+  imageUri!!)
+
+                    if(bitmapImg != null) {
+                        // 바뀌 프로필 비트맵을 base640으로 변경.
+                        var byteArrayOutputStream = ByteArrayOutputStream()
+                        bitmapImg!!.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+                        var byteArray = byteArrayOutputStream.toByteArray()
+                        var base64OfBitmap = Base64.encodeToString(byteArray, Base64.DEFAULT)
+
+                        RetrofitClient.retrofitService.changeProfile( userEmail!!, userPW!!, base64OfBitmap!!
+                        ).enqueue(object : retrofit2.Callback<ResponseBody> {
+                            override fun onResponse( call: Call<ResponseBody>, response: Response<ResponseBody>
+                            ) {
+                                val result = response.body() as ResponseBody
+                                val resultValue = result.string()
+
+                                Log.i(WSY, "결과 : " + resultValue)
+                                var userData = JSONObject(resultValue)
+                                SharedPreValue.setProfileData(
+                                    this@MyInformationActivity,
+                                    userData.getString("ProfilePath")
+                                )
+                                Log.d(WSY, SharedPreValue.getProfileData(applicationContext))
+                            }
+
+                            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+
+                            }
+                        })
+                    }
+                }
 
             }
         }
