@@ -22,6 +22,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.viewpager.widget.ViewPager
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.tabs.TabLayout
 import com.korea50k.RunShare.Activities.Profile.MyInformationActivity
 import com.korea50k.RunShare.Activities.Profile.UserActivity
@@ -119,37 +121,7 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         Log.d(WSY, "onResume()")
         imageUri = SharedPreValue.getProfileData(this)
-        class SetSlideProfile : AsyncTask<Void, Void, String>(){
-            override fun onPreExecute() {
-                super.onPreExecute()
-            }
-            var bm: Bitmap? = null
-
-            override fun doInBackground(vararg params: Void?): String? {
-                try {
-
-                    Log.d(WSY, "Uri : " + imageUri)
-                    bm = S3.downloadBitmap(imageUri!!)
-                    Log.d(WSY, "비트맵 : " + bm.toString() )
-                    setRecord(SharedPreValue.getNicknameData(baseContext)!!)
-
-
-                } catch (e : java.lang.Exception) {
-                    Log.d(WSY, "이미지 다운로드 실패 " +e.toString())
-                }
-                return null
-            }
-
-
-            override fun onPostExecute(result: String?) {
-                super.onPostExecute(result)
-                //TODO:피드에서 이미지 적용해볼 소스코드
-                slideProfileImageView.setImageBitmap(bm)
-
-            }
-        }
-        var Start = SetSlideProfile()
-        Start.execute()
+        Glide.with(this@MainActivity).load(imageUri!!).into(slideProfileImageView)
     }
     fun setRecord(nicknameData: String) {
         RetrofitClient.retrofitService.recordDownload(nicknameData).enqueue(object :

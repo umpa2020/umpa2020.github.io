@@ -69,16 +69,16 @@ class RacingFinishActivity : AppCompatActivity() ,
         }
         racerData = intent.getSerializableExtra("Racer Data") as RunningData
         makerData = intent.getSerializableExtra("Maker Data") as RunningData
-        makerDistanceTextView.text=String.format("%.3f km",makerData.distance/1000)
+        makerDistanceTextView.text=String.format("%.3f",makerData.distance/1000)
         val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
         formatter.setTimeZone(TimeZone.getTimeZone("UTC"))
         makerLapTimeTextView.text=formatter.format(Date(makerData.time))
-        makerMaxSpeedTextView.text=String.format("%.3f km/h",makerData.speed.max())
-        makerAvgSpeedTextView.text=String.format("%.3f km/h",makerData.speed.average())
+        makerMaxSpeedTextView.text=String.format("%.3f",makerData.speed.max())
+        makerAvgSpeedTextView.text=String.format("%.3f",makerData.speed.average())
 
         racerLapTimeTextView.text=formatter.format(Date(racerData.time))
-        racerMaxSpeedTextView.text=String.format("%.3f km/h",racerData.speed.max())
-        racerAvgSpeedTextView.text=String.format("%.3f km/h",racerData.speed.average())
+        racerMaxSpeedTextView.text=String.format("%.3f",racerData.speed.max())
+        racerAvgSpeedTextView.text=String.format("%.3f",racerData.speed.average())
 
         //TODO:정빈 시작
         MapTitle = makerData.mapTitle
