@@ -3,6 +3,7 @@ package com.korea50k.RunShare.Activities.Profile
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Point
 import android.net.Uri
 import android.os.AsyncTask
 import android.os.Bundle
@@ -47,8 +48,14 @@ class FragmentUserRace : Fragment(), RankRecyclerViewAdapterMap.OnLoadMoreListen
     var end = 15
     lateinit var jArray : JSONArray
 
+    val display = activity!!.windowManager.defaultDisplay
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
+        Log.d("size", display.toString())
 
         class SaveTask : AsyncTask<Void, Void, String>(){
             override fun onPreExecute() {
