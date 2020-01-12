@@ -22,6 +22,10 @@ interface API {
     @POST ("NicknameCheck.php") //닉네임 중복 검사
     fun get_NicknameCheck(@Field("Nickname") Nickname: String): retrofit2.Call<ResponseBody>
 
+    @FormUrlEncoded
+    @POST("profileImageLinkDownload.php")
+    fun profileImageLinkDownload(@Field("Nickname") Nickname: String): retrofit2.Call<ResponseBody>
+
     @POST ("signUp.php") // 회원가입
     @FormUrlEncoded
     fun signUp(@Field("ProfileBitmapArray") ProfileBitmapArray : String, @Field("Id") Id : String, @Field("Password") Password : String,
@@ -67,6 +71,13 @@ interface API {
     fun profileMapsDownload(
         @Field("Id") Id:String
     ):retrofit2.Call<ResponseBody>
+
+    @POST("executeMap.php")
+    @FormUrlEncoded
+    fun executeMap(
+        @Field("MapTitle") MapTitle: String
+    ):retrofit2.Call<ResponseBody>
+
 
     @POST("racingResult.php")
     @FormUrlEncoded

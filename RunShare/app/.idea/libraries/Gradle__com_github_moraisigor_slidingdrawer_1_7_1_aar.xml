@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="Gradle: com.github.moraisigor:slidingdrawer:1.7.1@aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/a0e883918d6834e46499ed10430e6578/jetified-slidingdrawer-1.7.1/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/a0e883918d6834e46499ed10430e6578/jetified-slidingdrawer-1.7.1/res" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.moraisigor/slidingdrawer/1.7.1/efc6da6e6ce32f8ab84c31a680681b2d46fe75b3/slidingdrawer-1.7.1-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.moraisigor/slidingdrawer/1.7.1/d1e90b5bca40215d60a50d1bca5fd3876ff003fe/slidingdrawer-1.7.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
