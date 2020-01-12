@@ -30,6 +30,7 @@
             android:background="@drawable/base_button_selector"
             android:drawableLeft="@drawable/ic_play_pressed"
             android:text="  START"
+            android:fontFamily="@font/godob"
             android:textColor="#FF0000"
             android:onClick="onClick"
             android:layout_margin="10dp"
@@ -40,6 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Race"
+            android:fontFamily="@font/godob"
             android:onClick="onClick"/>
     </LinearLayout>
 

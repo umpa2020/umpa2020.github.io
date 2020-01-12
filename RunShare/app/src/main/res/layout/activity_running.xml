@@ -57,13 +57,15 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             style="@style/info_text"
-                            android:text="DISTANCE"/>
+                            android:text="DISTANCE"
+                            android:fontFamily="@font/godob"/>
 
                         <TextView
                             android:id="@+id/runningDistanceTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="0.00"
+                            android:fontFamily="@font/godob"
                             style="@style/info_text" />
                     </LinearLayout>
 
@@ -78,6 +80,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="TIME"
+                            android:fontFamily="@font/godob"
                             style="@style/info_text"/>
 
                         <Chronometer
@@ -98,6 +101,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="SPEED"
+                            android:fontFamily="@font/godob"
                             style="@style/info_text"/>
 
                         <TextView
@@ -105,6 +109,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="0.0"
+                            android:fontFamily="@font/godob"
                             style="@style/info_text"/>
                     </LinearLayout>
                 </LinearLayout>
@@ -136,6 +141,7 @@
                 android:layout_height="25dp"
                 android:gravity="center"
                 android:text="Yes"
+                android:fontFamily="@font/godob"
                 android:clickable="false"
                 android:onClick="onClick"
                 android:background="#44FFFFFF"
@@ -147,6 +153,7 @@
                 android:layout_height="25dp"
                 android:gravity="center"
                 android:text="No"
+                android:fontFamily="@font/godob"
                 android:clickable="false"
                 android:onClick="onClick"
                 android:background="#44FFFFFF"
@@ -168,6 +175,7 @@
             android:background="@drawable/base_button_selector"
             android:textColor="#FF0000"
             android:text="  STOP"
+            android:fontFamily="@font/godob"
             android:onClick="onClick"
             android:drawableLeft="@drawable/ic_stop_icon_pressed"
             android:paddingLeft="45dp"
@@ -181,6 +189,7 @@
             android:background="@drawable/base_button_selector"
             android:textColor="#FF0000"
             android:text="  PAUSE"
+            android:fontFamily="@font/godob"
             android:onClick="onClick"
             android:drawableLeft="@drawable/ic_pause_icon_pressed"
             android:paddingLeft="37dp"

@@ -58,6 +58,12 @@ interface API {
         @Field("Image") Image:String, @Field("Path") Path:String
     ):retrofit2.Call<ResponseBody>
 
+    @POST("profileMapsDownload.php")
+    @FormUrlEncoded
+    fun profileMapsDownload(
+        @Field("Id") Id:String
+    ):retrofit2.Call<ResponseBody>
+
     @POST("racingResult.php")
     @FormUrlEncoded
     fun racingResult(

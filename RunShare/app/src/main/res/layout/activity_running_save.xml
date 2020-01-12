@@ -39,7 +39,8 @@
                         android:gravity="center"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Distance" />
+                        android:text="Distance"
+                        android:fontFamily="@font/godob"/>
 
                     <TextView
                         android:gravity="center"
@@ -47,6 +48,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="0.0"
+                        android:fontFamily="@font/godob"
                         android:textSize="24dp" />
                 </LinearLayout>
                 <LinearLayout
@@ -62,7 +64,8 @@
                         android:gravity="center"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Time" />
+                        android:text="Time"
+                        android:fontFamily="@font/godob"/>
 
                     <TextView
                         android:gravity="center"
@@ -70,6 +73,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="0.0"
+                        android:fontFamily="@font/godob"
                         android:textSize="24dp" />
                 </LinearLayout>
                 <LinearLayout
@@ -83,7 +87,8 @@
                         android:gravity="center"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Speed" />
+                        android:text="Speed"
+                        android:fontFamily="@font/godob"/>
 
                     <TextView
                         android:gravity="center"
@@ -91,6 +96,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="0.0"
+                        android:fontFamily="@font/godob"
                         android:textSize="24dp" />
                 </LinearLayout>
             </LinearLayout>
@@ -108,6 +114,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Title"
+                android:fontFamily="@font/godob"
                 android:layout_below="@+id/chart"/>
 
             <EditText
@@ -115,6 +122,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:hint="Text"
+                android:fontFamily="@font/godob"
                 android:layout_below="@id/mapTitleEdit"/>
 
             <LinearLayout
@@ -135,21 +143,24 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:checked="true"
-                        android:text="경쟁" />
+                        android:text="경쟁"
+                        android:fontFamily="@font/godob"/>
 
                     <RadioButton
                         android:id="@+id/publicRadio"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="공개" />
+                        android:text="공개"
+                        android:fontFamily="@font/godob"/>
 
                     <RadioButton
                         android:id="@+id/privateRadio"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="비공개" />
+                        android:text="비공개"
+                        android:fontFamily="@font/godob"/>
                 </RadioGroup>
             </LinearLayout>
         </RelativeLayout>
@@ -164,7 +175,8 @@
         android:layout_height="wrap_content"
         android:background="@drawable/base_button_selector"
         android:textColor="#FF0000"
-        android:text="활동 저장" />
+        android:text="활동 저장"
+        android:fontFamily="@font/godob"/>
 
 
 </RelativeLayout>
