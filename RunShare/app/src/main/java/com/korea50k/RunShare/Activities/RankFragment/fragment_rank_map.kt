@@ -58,7 +58,7 @@ class fragment_rank_map : Fragment(), RankRecyclerViewAdapterMap.OnLoadMoreListe
 
     override fun onResume() {
         super.onResume()
-
+        Log.d("ssmm11", "onResume()")
         class SaveTask : AsyncTask<Void, Void, String>(){
             override fun onPreExecute() {
                 super.onPreExecute()

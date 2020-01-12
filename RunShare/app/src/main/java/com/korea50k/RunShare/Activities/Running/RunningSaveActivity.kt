@@ -21,6 +21,7 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.charts.LineChart
 import android.graphics.Color
 import android.os.AsyncTask
+import android.os.Handler
 import android.util.Base64
 import android.widget.Toast
 import androidx.core.net.toUri
@@ -47,6 +48,7 @@ import kotlin.collections.ArrayList
 class RunningSaveActivity : AppCompatActivity() {
     lateinit var runningData: RunningData
     lateinit var map: ViewerMap
+    var switch = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -124,9 +126,12 @@ class RunningSaveActivity : AppCompatActivity() {
     }
 
     fun onClick(view: View) {
-        when (view.id) {
-            R.id.save_btn -> {
-                map.CaptureMapScreen()
+        if (switch == 0) {
+            when (view.id) {
+                R.id.save_btn -> {
+                    map.CaptureMapScreen()
+                    switch++
+                }
             }
         }
     }
@@ -160,6 +165,7 @@ class RunningSaveActivity : AppCompatActivity() {
             }
 
             override fun doInBackground(vararg params: Void?): String? {
+
                 try {
                     runningData(
                         runningData.id,
@@ -178,7 +184,8 @@ class RunningSaveActivity : AppCompatActivity() {
 
             override fun onPostExecute(result: String?) {
                 super.onPostExecute(result)
-                goToHome()
+                //goToHome()
+
                 //로딩화면 끄고 인텐트
             }
         }
@@ -231,6 +238,7 @@ class RunningSaveActivity : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     )
                         .show()
+                    goToHome()
                 } catch (e: Exception) {
 
                 }

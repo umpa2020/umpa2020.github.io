@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.korea50k.RunShare.Activities.RankFragment.RankRecyclerViewAdapterMap
@@ -48,9 +49,29 @@ class FragmentUserRace : Fragment(), RankRecyclerViewAdapterMap.OnLoadMoreListen
     var end = 15
     lateinit var jArray : JSONArray
 
+    var Id = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+
+        val view: View =  inflater!!.inflate(R.layout.fragment_user_race, container, false)
+
+
+        var extra = this.arguments
+        if (extra != null) {
+            extra = arguments
+            Id = extra!!.getString("Id")!!
+
+        }
         class SaveTask : AsyncTask<Void, Void, String>(){
             override fun onPreExecute() {
                 super.onPreExecute()
@@ -58,7 +79,8 @@ class FragmentUserRace : Fragment(), RankRecyclerViewAdapterMap.OnLoadMoreListen
 
             override fun doInBackground(vararg params: Void?): String? {
                 try {
-                    profileMapImageDownload(SharedPreValue.getNicknameData(context!!)!!)
+                    //profileMapImageDownload(SharedPreValue.getNicknameData(context!!)!!)
+                    profileMapImageDownload(Id)
                 } catch (e : java.lang.Exception) {
                     Log.d("ssmm11", "랭크 다운로드 실패 " +e.toString())
                 }
@@ -75,16 +97,8 @@ class FragmentUserRace : Fragment(), RankRecyclerViewAdapterMap.OnLoadMoreListen
         Start.execute()
 
         val task = GetData()
-        task.execute("http://15.164.50.86/profileMapImageDownload.php?Id="+SharedPreValue.getNicknameData(context!!)!!)
-    }
+        task.execute("http://15.164.50.86/profileMapImageDownload.php?Id="+Id)
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-
-        val view: View =  inflater!!.inflate(R.layout.fragment_user_race, container, false)
 
         itemList = java.util.ArrayList()
         var mRecyclerView = view.findViewById<RecyclerView>(R.id.user_race_recyclerview)
@@ -137,7 +151,7 @@ class FragmentUserRace : Fragment(), RankRecyclerViewAdapterMap.OnLoadMoreListen
                 start = mAdapter.itemCount
                 end = start + 15
                 val task = GetData()
-                task.execute("http://15.164.50.86/profileMapImageDownload.php")
+                task.execute("http://15.164.50.86/profileMapImageDownload.php?Id="+Id)
 
                 mAdapter.addItemMore(itemList)
                 mAdapter.setMoreLoading(false)

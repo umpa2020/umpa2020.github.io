@@ -78,7 +78,8 @@ class RankRecyclerViewAdapterMap(onLoadMoreListener: OnLoadMoreListener) :
     }
 
     fun addAll(lst: ArrayList<RankMapData>) {
-        //itemList.clear()
+        itemList.clear()
+
         itemList.addAll(lst)
         notifyDataSetChanged()
     }
