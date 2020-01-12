@@ -214,7 +214,6 @@ class RacingFinishActivity : AppCompatActivity() ,
 
                 start = mAdapter.itemCount
                 end = start + 15
-                Toast.makeText(this, "more", Toast.LENGTH_SHORT).show()
 
                 mAdapter.addItemMore(itemList)
                 mAdapter.setMoreLoading(false)
