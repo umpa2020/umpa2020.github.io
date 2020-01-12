@@ -12,7 +12,6 @@ import android.os.Bundle
 import android.util.Base64
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.CombinedChart
@@ -33,7 +32,9 @@ import kotlinx.android.synthetic.main.activity_running_save.*
 import okhttp3.ResponseBody
 import retrofit2.Call
 import java.io.ByteArrayOutputStream
-
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class RunningSaveActivity : AppCompatActivity() {
     val WSY = "WSY"
@@ -50,7 +51,10 @@ class RunningSaveActivity : AppCompatActivity() {
         val smf = supportFragmentManager.findFragmentById(R.id.map_viewer) as SupportMapFragment
         map = ViewerMap(smf, this, runningData)
         distance_tv.text = String.format("%.3f km",runningData.distance/1000)
-        time_tv.text = runningData.time
+        val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
+        formatter.setTimeZone(TimeZone.getTimeZone("UTC"))
+
+        time_tv.text = formatter.format(Date(runningData.time))
 
         speed_tv.text = String.format("%.3f km/h", runningData.speed.average())
         if (runningData.privacy == Privacy.PUBLIC) {
@@ -231,7 +235,7 @@ class RunningSaveActivity : AppCompatActivity() {
         MapJson: String,
         MapImage: String,
         Distance: Double,
-        Time: String,
+        Time: Long,
         Execute: Int,
         Likes: Int,
         Privacy: Privacy
@@ -255,19 +259,14 @@ class RunningSaveActivity : AppCompatActivity() {
             ) {
                 try {
                     val result: String? = response.body().toString()
-                    Toast.makeText(
-                        this@RunningSaveActivity,
-                        "json 업로드 성공" + result,
-                        Toast.LENGTH_SHORT
-                    )
-                        .show()
+
                 } catch (e: Exception) {
 
                 }
             }
 
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                Toast.makeText(this@RunningSaveActivity, "서버 작업 실패", Toast.LENGTH_SHORT).show()
+
                 Log.d("ssmm11", t.message);
                 t.printStackTrace()
             }

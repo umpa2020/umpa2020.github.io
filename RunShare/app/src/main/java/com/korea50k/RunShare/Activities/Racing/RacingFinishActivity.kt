@@ -10,6 +10,7 @@ import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.os.SystemClock
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -35,6 +36,9 @@ import java.io.*
 import java.net.HttpURLConnection
 import java.net.MalformedURLException
 import java.net.URL
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class RacingFinishActivity : AppCompatActivity() ,
@@ -66,11 +70,13 @@ class RacingFinishActivity : AppCompatActivity() ,
         racerData = intent.getSerializableExtra("Racer Data") as RunningData
         makerData = intent.getSerializableExtra("Maker Data") as RunningData
         makerDistanceTextView.text=String.format("%.3f km",makerData.distance/1000)
-        makerLapTimeTextView.text=makerData.time
+        val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
+        formatter.setTimeZone(TimeZone.getTimeZone("UTC"))
+        makerLapTimeTextView.text=formatter.format(Date(makerData.time))
         makerMaxSpeedTextView.text=String.format("%.3f km/h",makerData.speed.max())
         makerAvgSpeedTextView.text=String.format("%.3f km/h",makerData.speed.average())
 
-        racerLapTimeTextView.text=racerData.time
+        racerLapTimeTextView.text=formatter.format(Date(racerData.time))
         racerMaxSpeedTextView.text=String.format("%.3f km/h",racerData.speed.max())
         racerAvgSpeedTextView.text=String.format("%.3f km/h",racerData.speed.average())
 
@@ -208,7 +214,6 @@ class RacingFinishActivity : AppCompatActivity() ,
 
                 start = mAdapter.itemCount
                 end = start + 15
-                Toast.makeText(this, "more", Toast.LENGTH_SHORT).show()
 
                 mAdapter.addItemMore(itemList)
                 mAdapter.setMoreLoading(false)

@@ -38,6 +38,9 @@ import java.net.HttpURLConnection
 import java.net.MalformedURLException
 import java.net.URL
 import java.nio.charset.Charset
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class RunThisMapActivity : AppCompatActivity() {
     val WSY = "WSY"
@@ -103,7 +106,9 @@ class RunThisMapActivity : AppCompatActivity() {
                                 activity.runThisMapExplanation.text=makerData.mapExplanation
                                 activity.runThisMapId.text = makerData.id
                                 activity.runThisMapDistance.text=String.format("%.3f",makerData.distance/1000)
-                                activity.runThisMapTime.text=makerData.time
+                                val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
+                                formatter.setTimeZone(TimeZone.getTimeZone("UTC"))
+                                activity.runThisMapTime.text=formatter.format(Date(makerData.time))
                                 activity.runThisMapSpeed.text=String.format("%.3f",makerData.speed.average())
                                 setChart()
 //TODO:Save할때 id도 json에 넣기

@@ -56,7 +56,7 @@ interface API {
     fun runningDataUpoload(
         @Field("Id") Id: String, @Field("MapTitle") MapTitle: String, @Field("MapExplanation") MapExplanation: String,
         @Field("MapJson") MapJson: String, @Field("MapImage") MapImage: String, @Field("Distance") Distance: Double,
-        @Field("Time") Time: String, @Field("Execute") Execute: Int, @Field("Likes") Likes: Int,
+        @Field("Time") Time: Long, @Field("Execute") Execute: Int, @Field("Likes") Likes: Int,
         @Field("Privacy") Privacy: Privacy
     ): retrofit2.Call<ResponseBody>
 
@@ -78,11 +78,10 @@ interface API {
         @Field("MapTitle") MapTitle: String
     ):retrofit2.Call<ResponseBody>
 
-
     @POST("racingResult.php")
     @FormUrlEncoded
     fun racingResult(
-        @Field("MapTitle") MapTitle: String, @Field("Id") Id:String, @Field("Time") Time:String
+        @Field("MapTitle") MapTitle: String, @Field("Id") Id:String, @Field("Time") Time:Long
     ):retrofit2.Call<ResponseBody>
 
     @POST("dbDownloadtest.php")
@@ -116,5 +115,11 @@ interface API {
     @POST("feedCommentDownload.php")
     @FormUrlEncoded
     fun feedCommentDownload(@Field("MapTitle") MapTitle: String): retrofit2.Call<ResponseBody>
+
+    @POST("profileMapImageDownload.php")
+    @FormUrlEncoded
+    fun profileMapImageDownload(@Field("Id") Id: String): retrofit2.Call<ResponseBody>
+
+
 
 }

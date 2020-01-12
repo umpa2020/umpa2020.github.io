@@ -4,8 +4,11 @@ package com.korea50k.RunShare.Activities.Running
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
+import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.SupportMapFragment
@@ -27,6 +30,27 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
     lateinit var drawer: SlidingDrawer
     var B_RUNNIG = true
     var ns = NoticeState.NOTHING
+    private var doubleBackToExitPressedOnce1 = false
+    override fun onBackPressed() {
+        if (doubleBackToExitPressedOnce1) {
+            super.onBackPressed()
+            return
+        }
+
+        this.doubleBackToExitPressedOnce1 = true
+        val li = layoutInflater
+        val layout: View =
+            li.inflate(R.layout.custom_toast_start, findViewById<ViewGroup>(R.id.custom_toast_layout_start))
+
+        val toast = Toast(applicationContext)
+        toast.duration = Toast.LENGTH_SHORT
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 850)
+        toast.view = layout //setting the view of custom toast layout
+
+        toast.show()
+
+        Handler().postDelayed(Runnable { doubleBackToExitPressedOnce1 = false }, 2000)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -108,7 +132,16 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
     }
 
     fun stop() {    //타이머 멈추는거 만들어야함
-        Toast.makeText(this, "종료를 원하시면, 길게 눌러주세요", Toast.LENGTH_LONG).show()
+        val li = layoutInflater
+        val layout: View =
+            li.inflate(R.layout.custom_toast_stop, findViewById<ViewGroup>(R.id.custom_toast_layout_stop))
+
+        val toast = Toast(applicationContext)
+        toast.duration = Toast.LENGTH_SHORT
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 850)
+        toast.view = layout //setting the view of custom toast layout
+
+        toast.show()
     }
 
     fun restart() { //TODO:Start with new polyline

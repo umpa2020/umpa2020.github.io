@@ -15,6 +15,7 @@ import com.korea50k.RunShare.Util.SharedPreValue
 import com.korea50k.RunShare.Util.map.RacingMap
 import com.korea50k.RunShare.dataClass.RunningData
 import com.korea50k.RunShare.Util.TTS
+import com.korea50k.RunShare.dataClass.NoticeState
 import kotlinx.android.synthetic.main.activity_racing.*
 import kotlinx.android.synthetic.main.activity_running.*
 import okhttp3.ResponseBody
@@ -25,6 +26,7 @@ import java.util.*
 class ManageRacing {
      var racingMap: RacingMap
      var context: Context
+    var noticeState=NoticeState.NOTHING
     lateinit var chronometer: Chronometer
     lateinit var distanceThread: Thread
      var activity: RacingActivity
@@ -107,10 +109,9 @@ class ManageRacing {
 
         timeWhenStopped = chronometer.base - SystemClock.elapsedRealtime()
         chronometer.stop()
-        val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
-        formatter.setTimeZone(TimeZone.getTimeZone("UTC"))
+
         var runningData = RunningData()
-        runningData.time = formatter.format(Date(SystemClock.elapsedRealtime() - chronometer.getBase()))
+        runningData.time = SystemClock.elapsedRealtime() - chronometer.base
         runningData.speed=racingMap.speeds.toDoubleArray()
         Log.d("ssmm11", "맵id = "+makerData.mapTitle )
 
@@ -160,8 +161,11 @@ class ManageRacing {
 
     }
     fun deviation(countDeviation:Int){
-        if (countDeviation<=10) {
-            activity.noticeMessage("경로를 10초이상 이탈하면 경기가 자동 종료됩니다." + countDeviation + "초")
+        if (countDeviation==0){
+            activity.noticeMessage("")
+        } else if(countDeviation<=20) {
+            noticeState=NoticeState.DEVIATION
+            activity.noticeMessage("경로를 20초이상 이탈하면 경기가 자동 종료됩니다." + countDeviation + "초")
         }else{
             stopRacing(false)
         }
