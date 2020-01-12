@@ -46,6 +46,8 @@
                 android:layout_height="wrap_content"
                 android:text="asdf"
                 android:textSize="13dp"
+                android:singleLine="true"
+                android:ellipsize="marquee"
                 android:fontFamily="@font/godob"/>
 
             <TextView

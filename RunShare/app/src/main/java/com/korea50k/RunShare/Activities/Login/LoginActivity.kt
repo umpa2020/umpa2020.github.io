@@ -74,7 +74,7 @@ class LoginActivity : AppCompatActivity() {
 
                             if(re.equals("0")){ // 로그인 실패 시
                                 Log.d(WSY,"로그인 실패")
-                                errorMessage.text = getString(R.string.loginError)
+
 
                             } else { // 로그인 성공
                                 errorMessage.text = ""

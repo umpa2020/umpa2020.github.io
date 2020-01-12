@@ -244,6 +244,8 @@ class SignUpActivity : AppCompatActivity() {
         reactiveCheckCorrectData()
     }
 
+    var options : BitmapFactory.Options? = null
+    var resized : Bitmap? = null
     // intent 결과 받기
     override fun onActivityResult(requestCode: Int, resultCode: Int, intentData: Intent?) {
         super.onActivityResult(requestCode, resultCode, intentData)
@@ -262,9 +264,14 @@ class SignUpActivity : AppCompatActivity() {
                         intentData!!.data?.let { getContentResolver().openInputStream(it) }
 
                     // 프로필 사진을 비트맵으로 변환
-                    bitmapImg = BitmapFactory.decodeStream(inputStream)
+                    options = BitmapFactory.Options()
+                    options!!.inSampleSize = 2
+                    bitmapImg = BitmapFactory.decodeStream(inputStream,null, options)
                     inputStream!!.close()
-                    Log.d(WSY, bitmapImg.toString())
+
+                    resized = Bitmap.createScaledBitmap(bitmapImg!!,bitmapImg!!.width, bitmapImg!!.height, true)
+
+
                     profileImage.setImageBitmap(bitmapImg)
                     profileImage.scaleType = ImageView.ScaleType.CENTER_CROP
                     //TODO:서버로 데이터 전송
@@ -314,7 +321,7 @@ class SignUpActivity : AppCompatActivity() {
         gender: String
     ) {
         var byteArrayOutputStream = ByteArrayOutputStream()
-        bitmapImg.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        resized!!.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
         var byteArray = byteArrayOutputStream.toByteArray()
         var base64OfBitmap = Base64.encodeToString(byteArray, Base64.DEFAULT)
 

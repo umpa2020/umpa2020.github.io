@@ -1,32 +1,65 @@
 package com.korea50k.RunShare.Activities.MainFragment
 
 import android.Manifest
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.os.AsyncTask
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
+import android.view.Gravity
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Toast
+import android.widget.Toast.LENGTH_SHORT
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
-import com.korea50k.RunShare.R
-import kotlinx.android.synthetic.main.activity_main.*
-import androidx.drawerlayout.widget.DrawerLayout
-import android.view.View
-import android.widget.Toast
 import com.korea50k.RunShare.Activities.Profile.MyInformationActivity
-import com.korea50k.RunShare.Activities.Profile.SettingActivity
 import com.korea50k.RunShare.Activities.Profile.UserActivity
-import com.korea50k.RunShare.Activities.RankFragment.RankRecyclerClickActivity
+import com.korea50k.RunShare.R
+import com.korea50k.RunShare.Splash.SplashActivity
 import com.korea50k.RunShare.Util.S3
 import com.korea50k.RunShare.Util.SharedPreValue
 import com.korea50k.RunShare.Util.TTS
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.custom_toast.*
+import kotlinx.android.synthetic.main.custom_toast.view.*
 
 
 class MainActivity : AppCompatActivity() {
-    lateinit var mViewPager: ViewPager
+
+    lateinit var mViewPager:ViewPager
+    private var doubleBackToExitPressedOnce = false
+    var WSY = "WSY"
+    override fun onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed()
+            return
+        }
+
+        this.doubleBackToExitPressedOnce = true
+        val li = layoutInflater
+        val layout: View =
+            li.inflate(R.layout.custom_toast, findViewById<ViewGroup>(R.id.custom_toast_layout))
+
+        val toast = Toast(applicationContext)
+        toast.duration = LENGTH_SHORT
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 850)
+        toast.view = layout //setting the view of custom toast layout
+
+        toast.show()
+
+        Handler().postDelayed(Runnable { doubleBackToExitPressedOnce = false }, 2000)
+    }
     lateinit var mMainPageAdapter: MainPageAdapter
     private val multiplePermissionsCode = 100          //권한
     private val requiredPermissions = arrayOf(
@@ -39,11 +72,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setRequestedOrientation(SCREEN_ORIENTATION_PORTRAIT);
         setContentView(com.korea50k.RunShare.R.layout.activity_main)
-        Log.d("WSY", "Shared 저장 이메일 : " + SharedPreValue.getEMAILData(this))
-        Log.d("WSY", "Shared 저장 비번 : " + SharedPreValue.getPWDData(this))
-        Log.d("WSY", "Shared 저장 닉네임 : " + SharedPreValue.getNicknameData(this))
-        Log.d("WSY", "Shared 저장 나이 : " + SharedPreValue.getAgeData(this))
-        Log.d("WSY", "Shared 저장 성별 : " + SharedPreValue.getGenderData(this))
+
+
+        Log.d("WSY","Shared 저장 이메일 : " + SharedPreValue.getEMAILData(this))
+        Log.d("WSY","Shared 저장 비번 : " + SharedPreValue.getPWDData(this))
+        Log.d("WSY","Shared 저장 닉네임 : " + SharedPreValue.getNicknameData(this))
+        Log.d("WSY","Shared 저장 나이 : " + SharedPreValue.getAgeData(this))
+        Log.d("WSY","Shared 저장 성별 : " + SharedPreValue.getGenderData(this))
+
+
         checkPermissions()          //모든 권한 확인
         TTS.set(applicationContext)
         val mTabLayout = tabDots
@@ -65,7 +102,53 @@ class MainActivity : AppCompatActivity() {
         //drawerLayout.closeDrawer(drawer)
 
         slideProfileIdTextView.text = SharedPreValue.getNicknameData(this)
-//        Thread(Runnable { slideProfileImageView.setImageBitmap(S3.downloadBitmap(SharedPreValue.getProfileData(this)!!))}).start()
+
+    }
+    var imageUri : String? = null
+
+
+    override fun onResume() {
+        super.onResume()
+        Log.d(WSY, "onResume()")
+        imageUri = SharedPreValue.getProfileData(this)
+        class SetImageTask : AsyncTask<Void, Void, String>(){
+            override fun onPreExecute() {
+                super.onPreExecute()
+            }
+            var bm: Bitmap? = null
+
+            override fun doInBackground(vararg params: Void?): String? {
+                try {
+
+                    Log.d(WSY, "Uri : " + imageUri)
+                    bm = S3.downloadBitmap(imageUri!!)
+                    Log.d(WSY, "비트맵 : " + bm.toString() )
+
+
+                } catch (e : java.lang.Exception) {
+                    Log.d(WSY, "이미지 다운로드 실패 " +e.toString())
+                }
+                return null
+            }
+
+            override fun onPostExecute(result: String?) {
+                super.onPostExecute(result)
+                //TODO:피드에서 이미지 적용해볼 소스코드
+                slideProfileImageView.setImageBitmap(bm)
+            }
+        }
+        var Start = SetImageTask()
+        Start.execute()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d(WSY, "onPause()")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d(WSY, "onStop()")
     }
 
     fun onClick(v: View) {
@@ -94,9 +177,40 @@ class MainActivity : AppCompatActivity() {
 
              */
             R.id.slide_logout_Button -> {
-                Toast.makeText(this, "logout 액티비티로 이동", Toast.LENGTH_SHORT).show()
+
+                var builder = AlertDialog.Builder(this)
+                builder.setTitle("안내").setMessage("로그아웃 하시겠습니까?")
+
+                builder.setPositiveButton("확인", object : DialogInterface.OnClickListener {
+                    override fun onClick(p0: DialogInterface?, p1: Int) {
+                        SharedPreValue.AllDataRemove(applicationContext)
+                        restartApp()
+                    }
+                })
+                builder.setNegativeButton("취소", object : DialogInterface.OnClickListener {
+                    override fun onClick(p0: DialogInterface?, p1: Int) {
+
+                    }
+                })
+
+                Log.d("WSY", "Shared 저장 이메일 : " + SharedPreValue.getEMAILData(this))
+                Log.d("WSY", "Shared 저장 비번 : " + SharedPreValue.getPWDData(this))
+                Log.d("WSY", "Shared 저장 닉네임 : " + SharedPreValue.getNicknameData(this))
+                Log.d("WSY", "Shared 저장 나이 : " + SharedPreValue.getAgeData(this))
+                Log.d("WSY", "Shared 저장 성별 : " + SharedPreValue.getGenderData(this))
+                var alertDialog = builder.create()
+                alertDialog.show()
             }
         }
+    }
+
+
+    // 로그아웃 시 앱 재실행 함수
+    fun restartApp() {
+        finishAffinity()
+        val intent = Intent(this, SplashActivity::class.java)
+        startActivity(intent)
+        System.exit(0)
     }
 
     private fun checkPermissions() {

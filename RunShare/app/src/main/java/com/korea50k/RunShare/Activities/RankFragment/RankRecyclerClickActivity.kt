@@ -13,12 +13,14 @@ import android.view.View
 import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.jakewharton.rxbinding2.view.selected
 import com.korea50k.RunShare.Activities.RankFragment.RankDetailRecyclerViewAdapterMap.*
 import com.korea50k.RunShare.R
 import com.korea50k.RunShare.RetrofitClient
 import com.korea50k.RunShare.Util.ConvertJson
 import com.korea50k.RunShare.dataClass.RankDetailMapData
 import kotlinx.android.synthetic.main.activity_rank_recycler_click.*
+import kotlinx.android.synthetic.main.recycler_rank_item.*
 import kotlinx.android.synthetic.main.recycler_rank_item.view.*
 import okhttp3.ResponseBody
 import org.json.JSONArray
@@ -192,7 +194,7 @@ class RankRecyclerClickActivity : AppCompatActivity() , OnLoadMoreListener {
                     inputStream = httpURLConnection.getErrorStream()
                 }
 
-                val inputStreamReader = InputStreamReader(inputStream, "UTF-8")
+                val inputStreamReader = InputStreamReader(inputStream, "UTF8")
                 val bufferedReader = BufferedReader(inputStreamReader)
 
                 val sb = StringBuilder()
