@@ -219,19 +219,14 @@ class RunningSaveActivity : AppCompatActivity() {
             ) {
                 try {
                     val result: String? = response.body().toString()
-                    Toast.makeText(
-                        this@RunningSaveActivity,
-                        "json 업로드 성공" + result,
-                        Toast.LENGTH_SHORT
-                    )
-                        .show()
+
                 } catch (e: Exception) {
 
                 }
             }
 
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                Toast.makeText(this@RunningSaveActivity, "서버 작업 실패", Toast.LENGTH_SHORT).show()
+
                 Log.d("ssmm11", t.message);
                 t.printStackTrace()
             }

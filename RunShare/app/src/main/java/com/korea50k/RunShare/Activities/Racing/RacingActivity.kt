@@ -79,7 +79,6 @@ class RacingActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpen
             R.id.racingControlButton -> {
                 when(manageRacing.racingMap.userState){
                     UserState.BEFORERACING->{
-                        Toast.makeText(this,"시작 포인트로 이동하세요",Toast.LENGTH_SHORT).show()
                     }
                     UserState.READYTORACING->{
                         increaseExecute(makerData.mapTitle)
