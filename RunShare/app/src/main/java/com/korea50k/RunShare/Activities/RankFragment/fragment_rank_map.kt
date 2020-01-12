@@ -24,8 +24,8 @@ import java.net.HttpURLConnection
 import java.net.URL
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.recycler_rank_item.view.*
-
-
+import org.json.JSONArray
+import org.json.JSONObject
 
 
 class fragment_rank_map : Fragment(), RankRecyclerViewAdapterMap.OnLoadMoreListener {
@@ -38,7 +38,7 @@ class fragment_rank_map : Fragment(), RankRecyclerViewAdapterMap.OnLoadMoreListe
     lateinit var onLoadMoreListener : RankRecyclerViewAdapterMap.OnLoadMoreListener
     var start = 0
     var end = 15
-
+    lateinit var jArray : JSONArray
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -127,18 +127,20 @@ class fragment_rank_map : Fragment(), RankRecyclerViewAdapterMap.OnLoadMoreListe
     override fun onLoadMore() {
         Log.d("ssmm11", "onLoadMore")
         //mAdapter.setProgressMore(true)
-        Handler().postDelayed({
-            itemList.clear()
+        if ( mAdapter.itemCount < jArray.length()) {
+            Handler().postDelayed({
+                itemList.clear()
 
-            start = mAdapter.itemCount
-            end = start + 15
-            Toast.makeText(context, "more" , Toast.LENGTH_SHORT).show()
-            val task = GetData()
-            task.execute("http://15.164.50.86/rankDownload.php")
+                start = mAdapter.itemCount
+                end = start + 15
+                Toast.makeText(context, "more", Toast.LENGTH_SHORT).show()
+                val task = GetData()
+                task.execute("http://15.164.50.86/rankDownload.php")
 
-            mAdapter.addItemMore(itemList)
-            mAdapter.setMoreLoading(false)
-        }, 100)
+                mAdapter.addItemMore(itemList)
+                mAdapter.setMoreLoading(false)
+            }, 100)
+        }
     }
 
     fun loadData() {
@@ -159,6 +161,12 @@ class fragment_rank_map : Fragment(), RankRecyclerViewAdapterMap.OnLoadMoreListe
             if (result == null) {
             } else {
                 mJsonString = result
+
+                // just size data , not use
+                // please don't remove that
+                val jObject = JSONObject(mJsonString)
+                jArray = jObject.getJSONArray("JsonData")
+
                 rankMapDatas = ConvertJson.JsonToRankMapDatas(mJsonString, start, end-1)
                 Log.d("ssmm11", "rankMapDatas = "+ rankMapDatas)
 
