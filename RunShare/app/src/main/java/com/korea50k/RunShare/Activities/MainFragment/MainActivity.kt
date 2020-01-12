@@ -28,13 +28,19 @@ import com.google.android.material.tabs.TabLayout
 import com.korea50k.RunShare.Activities.Profile.MyInformationActivity
 import com.korea50k.RunShare.Activities.Profile.UserActivity
 import com.korea50k.RunShare.R
+import com.korea50k.RunShare.RetrofitClient
 import com.korea50k.RunShare.Splash.SplashActivity
+import com.korea50k.RunShare.Util.Calc
 import com.korea50k.RunShare.Util.S3
 import com.korea50k.RunShare.Util.SharedPreValue
 import com.korea50k.RunShare.Util.TTS
+import com.korea50k.RunShare.dataClass.Record
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.custom_toast.*
 import kotlinx.android.synthetic.main.custom_toast.view.*
+import okhttp3.ResponseBody
+import org.json.JSONObject
+import retrofit2.Call
 
 
 class MainActivity : AppCompatActivity() {
@@ -42,6 +48,8 @@ class MainActivity : AppCompatActivity() {
     lateinit var mViewPager:ViewPager
     private var doubleBackToExitPressedOnce = false
     var WSY = "WSY"
+    var record= Record()
+    var activity= this
     override fun onBackPressed() {
         if (doubleBackToExitPressedOnce) {
             super.onBackPressed()
@@ -115,7 +123,34 @@ class MainActivity : AppCompatActivity() {
         imageUri = SharedPreValue.getProfileData(this)
         Glide.with(this@MainActivity).load(imageUri!!).into(slideProfileImageView)
     }
+    fun setRecord(nicknameData: String) {
+        RetrofitClient.retrofitService.recordDownload(nicknameData).enqueue(object :
+            retrofit2.Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: retrofit2.Response<ResponseBody>) {
+                try {
+                    Log.d("server","Success to get record"+nicknameData)
+                    val result = response.body() as ResponseBody
+                    val resultValue=result.string()
+                    var jsonObject=JSONObject(resultValue)
+                    Log.d("server",jsonObject.getString("SumTime"))
+                    record.sumDistance=jsonObject.getString("SumDistance").toInt()
+                    record.sumTime = jsonObject.getString("SumTime").toLong()
+                    activity.runOnUiThread(Runnable {
+                        slideDistanceTextView.text=String.format("%.3f km",(record.sumDistance/1000.0))
+                        slideTimeTextView.text= Calc.milisecToString(record.sumTime)
+                    })
+                } catch (e: Exception) {
 
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Log.d("ssmm11", t.message);
+                t.printStackTrace()
+            }
+        })
+
+    }
     override fun onPause() {
         super.onPause()
         Log.d(WSY, "onPause()")
