@@ -206,6 +206,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:hint="Text"
+                android:gravity="top"
                 android:fontFamily="@font/godob"
                 android:layout_below="@id/mapTitleEdit"/>
 

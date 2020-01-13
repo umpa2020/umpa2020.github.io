@@ -152,7 +152,7 @@ class RunningMap : OnMapReadyCallback {
                     markerOptions.position(prev_loc)
                     markerOptions.title("Me")
 
-                    val circleDrawable = context.getDrawable(R.drawable.racer_marker)
+                    val circleDrawable = context.getDrawable(R.drawable.ic_racer_marker)
                     var canvas = Canvas();
                     var bitmap = Bitmap.createBitmap(
                         circleDrawable!!.intrinsicWidth,

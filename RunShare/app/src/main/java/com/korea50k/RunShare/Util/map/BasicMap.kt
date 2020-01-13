@@ -39,7 +39,7 @@ class BasicMap : OnMapReadyCallback {
     }
 
     private fun init() {
-        racerIcon=makingIcon(R.drawable.racer_marker)
+        racerIcon=makingIcon(R.drawable.ic_racer_marker)
         initLocation()
     }
 

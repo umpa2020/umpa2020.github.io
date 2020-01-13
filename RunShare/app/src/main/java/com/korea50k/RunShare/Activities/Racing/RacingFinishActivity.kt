@@ -69,7 +69,6 @@ class RacingFinishActivity : AppCompatActivity() ,
         }
         racerData = intent.getSerializableExtra("Racer Data") as RunningData
         makerData = intent.getSerializableExtra("Maker Data") as RunningData
-        makerDistanceTextView.text=String.format("%.3f",makerData.distance/1000)
         val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
         formatter.setTimeZone(TimeZone.getTimeZone("UTC"))
         makerLapTimeTextView.text=formatter.format(Date(makerData.time))
@@ -241,9 +240,10 @@ class RacingFinishActivity : AppCompatActivity() ,
             } else {
                 mJsonString = result
                 rankDetailMapDatas = ConvertJson.JsonToRankDetailMapDatas(mJsonString, start, end)
+                Log.d("RRank : ",rankDetailMapDatas[0].ChallengerId + rankDetailMapDatas[0].Rank)
                 for(i in rankDetailMapDatas.indices){
                     if(rankDetailMapDatas[i].Id=="My"){
-                        rankDetailMapDatas[i].Rank
+                        resultRankTextView.text= rankDetailMapDatas[i].Rank.toString() + "등"
                     }
                 }
                 Log.d("ssmm11", "받아온 거  = "  + mJsonString)

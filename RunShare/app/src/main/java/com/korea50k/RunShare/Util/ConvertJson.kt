@@ -79,11 +79,15 @@ class ConvertJson{
                         jArray.getJSONObject(i).get("ChallengerId") as String
                     rankDetailMapData.ChallengerTime =
                         (jArray.getJSONObject(i).get("ChallengerTime") as String).toLong()
+                    rankDetailMapData.Rank=(jArray.getJSONObject(i).get("Rank") as Int)
+
                 }
                 catch (e:Exception) {
 
                 }
                 rankDetailMapDatas.add(rankDetailMapData)
+                Log.d("Rank:",rankDetailMapData.ChallengerId)
+                Log.d("Rank: ",rankDetailMapData.Rank.toString())
             }
             return rankDetailMapDatas
         }

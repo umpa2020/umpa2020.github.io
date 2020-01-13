@@ -163,8 +163,17 @@ class RunningSaveActivity : AppCompatActivity() {
         if (switch == 0) {
             when (view.id) {
                 R.id.save_btn -> {
-                    map.CaptureMapScreen()
-                    switch++
+                    if(mapTitleEdit.text.toString()==""){
+                        mapTitleEdit.hint="제목을 설정해주세요"
+                        mapTitleEdit.setHintTextColor(Color.RED)
+                    }else if(mapExplanationEdit.text.toString()==""){
+                        mapExplanationEdit.hint="맵 설명을 작성해주세요"
+                        mapExplanationEdit.setHintTextColor(Color.RED)
+                    }
+                    else{
+                        map.CaptureMapScreen()
+                        switch++
+                    }
                 }
             }
         }

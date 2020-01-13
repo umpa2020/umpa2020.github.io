@@ -27,6 +27,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.tabs.TabLayout
 import com.korea50k.RunShare.Activities.Profile.MyInformationActivity
 import com.korea50k.RunShare.Activities.Profile.UserActivity
+import com.korea50k.RunShare.Activities.RankFragment.fragment_rank_map
 import com.korea50k.RunShare.R
 import com.korea50k.RunShare.RetrofitClient
 import com.korea50k.RunShare.Splash.SplashActivity
@@ -122,6 +123,7 @@ class MainActivity : AppCompatActivity() {
         Log.d(WSY, "onResume()")
         imageUri = SharedPreValue.getProfileData(this)
         Glide.with(this@MainActivity).load(imageUri!!).into(slideProfileImageView)
+
     }
     fun setRecord(nicknameData: String) {
         RetrofitClient.retrofitService.recordDownload(nicknameData).enqueue(object :
