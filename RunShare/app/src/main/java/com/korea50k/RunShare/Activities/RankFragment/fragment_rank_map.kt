@@ -198,6 +198,7 @@ class fragment_rank_map : Fragment(), RankRecyclerViewAdapterMap.OnLoadMoreListe
                 }
                 else {
                     if (isSaved != jArray.length()) {
+                        isSaved = jArray.length()
                         rankMapDatas = ConvertJson.JsonToRankResumeMapDatas(mJsonString, mAdapter.itemCount, mAdapter.itemCount+1)
                     }
                 }

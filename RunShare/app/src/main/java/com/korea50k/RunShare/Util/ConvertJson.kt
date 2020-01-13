@@ -47,7 +47,7 @@ class ConvertJson{
                 rankMapData.mapTitle= jArray.getJSONObject(i).get("MapTitle") as String
                 rankMapData.mapImage= jArray.getJSONObject(i).get("MapImage") as String
                 rankMapData.execute= jArray.getJSONObject(i).get("Execute") as String
-                Log.d("convert json","conver json map title = "+rankMapData.mapTitle)
+                Log.d("convert json","convert json map title = "+rankMapData.mapTitle)
 
                 rankMapDatas.add(rankMapData)
             }
@@ -66,8 +66,8 @@ class ConvertJson{
                 rankMapData.id= jArray.getJSONObject(i).get("Id") as String
                 rankMapData.mapTitle= jArray.getJSONObject(i).get("MapTitle") as String
                 rankMapData.mapImage= jArray.getJSONObject(i).get("MapImage") as String
-                rankMapData.execute= jArray.getJSONObject(i).get("Execute") as String
-                Log.d("convert json","conver json map title = "+rankMapData.mapTitle)
+                rankMapData.execute= (jArray.getJSONObject(i).get("Execute") as Int).toString()
+                Log.d("convert json","convert json map title = "+rankMapData.mapTitle)
 
                 rankMapDatas.add(rankMapData)
             }
