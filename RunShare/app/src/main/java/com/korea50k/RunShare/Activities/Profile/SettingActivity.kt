@@ -8,7 +8,7 @@ import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.korea50k.RunShare.Splash.SplashActivity
+import com.korea50k.RunShare.Activities.Splash.SplashActivity
 import com.korea50k.RunShare.Util.SharedPreValue
 
 

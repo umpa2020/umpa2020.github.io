@@ -1,7 +1,9 @@
-package com.korea50k.RunShare.Splash
+package com.korea50k.RunShare.Activities.Splash
 
+import android.animation.ObjectAnimator
 import android.content.Intent
 import android.content.pm.ActivityInfo
+import android.graphics.Matrix
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -11,6 +13,7 @@ import com.korea50k.RunShare.Activities.MainFragment.MainActivity
 import com.korea50k.RunShare.R
 import com.korea50k.RunShare.RetrofitClient
 import com.korea50k.RunShare.Util.SharedPreValue
+import kotlinx.android.synthetic.main.activity_splash.*
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
@@ -22,6 +25,11 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_splash)
+        ObjectAnimator.ofFloat(redMovingView,"translationX",2000f).apply {
+            duration=1500
+            start()
+        }
+
         Handler().postDelayed({ // 앞의 과정이 약간의 시간이 필요하거나 한 경우 바로 어떤 명령을 실행하지 않고 잠시 딜레이를 갖고 실행
             Log.i(WSY,"프리퍼런스에 저장된 자동 로그인 유무 :" + SharedPreValue.getAutoLogin(this).toString())
             if(SharedPreValue.getAutoLogin(this)){ // 자동 로그인 체크되어있었으면

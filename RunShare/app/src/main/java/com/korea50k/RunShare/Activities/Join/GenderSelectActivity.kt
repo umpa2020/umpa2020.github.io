@@ -1,4 +1,4 @@
-package com.korea50k.RunShare.Join
+package com.korea50k.RunShare.Activities.Join
 
 import android.content.Intent
 import android.content.pm.ActivityInfo
