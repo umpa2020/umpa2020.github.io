@@ -6,22 +6,18 @@ import android.os.SystemClock
 import android.util.Log
 import android.view.View
 import android.widget.Chronometer
-import android.widget.Toast
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.maps.android.SphericalUtil
 import com.korea50k.RunShare.RetrofitClient
-import com.korea50k.RunShare.Util.Calc
+import com.korea50k.RunShare.Util.Wow
 import com.korea50k.RunShare.Util.SharedPreValue
 import com.korea50k.RunShare.Util.map.RacingMap
 import com.korea50k.RunShare.dataClass.RunningData
 import com.korea50k.RunShare.Util.TTS
 import com.korea50k.RunShare.dataClass.NoticeState
 import kotlinx.android.synthetic.main.activity_racing.*
-import kotlinx.android.synthetic.main.activity_running.*
 import okhttp3.ResponseBody
 import retrofit2.Call
-import java.text.SimpleDateFormat
-import java.util.*
 
 class ManageRacing {
      var racingMap: RacingMap
@@ -51,7 +47,7 @@ class ManageRacing {
     fun startRunning() {
         distances=DoubleArray(makerData.markerLats.size-1)
         for(i in distances.indices){
-            distances[i]=Calc.getDistance(racingMap.loadRoute[i])
+            distances[i]=Wow.getDistance(racingMap.loadRoute[i])
         }
         distanceThread = Thread(Runnable {
             while (true) {

@@ -1,27 +1,17 @@
 package com.korea50k.RunShare.Util.map
 
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.graphics.Bitmap
-import android.os.Looper
 import android.util.Log
-import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
-import com.google.android.gms.maps.model.BitmapDescriptor
-import com.korea50k.RunShare.R
-import android.graphics.Canvas
 import android.graphics.Color
 import com.korea50k.RunShare.Activities.Running.RunningSaveActivity
-import com.korea50k.RunShare.Util.Calc
+import com.korea50k.RunShare.Util.Wow
 import com.korea50k.RunShare.dataClass.RunningData
-import com.korea50k.RunShare.dataClass.UserState
-import kotlinx.android.synthetic.main.activity_running_save.*
-import kotlinx.coroutines.coroutineScope
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
@@ -92,8 +82,8 @@ class ViewerMap : OnMapReadyCallback {
                 )        //경로를 그릴 폴리라인 집합
         }
 
-        var min= LatLng(Calc.minDouble(runningData.lats),Calc.minDouble(runningData.lngs))
-        var max = LatLng(Calc.maxDouble(runningData.lats),Calc.maxDouble(runningData.lngs))
+        var min= LatLng(Wow.minDouble(runningData.lats),Wow.minDouble(runningData.lngs))
+        var max = LatLng(Wow.maxDouble(runningData.lats),Wow.maxDouble(runningData.lngs))
         print_log(min.toString()+max.toString())
         mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(LatLngBounds(min,max),1080,300,50))
     }

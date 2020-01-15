@@ -13,6 +13,7 @@ import com.google.android.gms.maps.model.*
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.korea50k.RunShare.R
 import android.graphics.Canvas
+import com.korea50k.RunShare.Util.Wow.Companion.makingIcon
 import com.korea50k.RunShare.dataClass.UserState
 
 
@@ -33,19 +34,19 @@ class BasicMap : OnMapReadyCallback {
     constructor(smf: SupportMapFragment, context: Context) {
         this.context = context
         userState = UserState.NORMAL
+        print_log("Set UserState NORMAL")
         init()
         smf.getMapAsync(this)
-        print_log("Set UserState NORMAL")
+
     }
 
-    private fun init() {
-        racerIcon=makingIcon(R.drawable.ic_racer_marker)
+    private fun init() { //before the map is loaded
+        racerIcon=makingIcon(R.drawable.ic_racer_marker,context)
         initLocation()
     }
 
-    override fun onMapReady(googleMap: GoogleMap) {
+    override fun onMapReady(googleMap: GoogleMap) { //after the map is loaded
         mMap = googleMap
-
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(prev_loc, 17F))
         fusedLocationClient.requestLocationUpdates(
             locationRequest,
@@ -69,24 +70,7 @@ class BasicMap : OnMapReadyCallback {
         )
         userState=UserState.NORMAL
     }
-    fun makingIcon(drawable: Int): BitmapDescriptor {
-        val circleDrawable = context.getDrawable(drawable)
-        var canvas = Canvas()
-        var bitmap = Bitmap.createBitmap(
-            circleDrawable!!.intrinsicWidth,
-            circleDrawable!!.intrinsicHeight,
-            Bitmap.Config.ARGB_8888
-        )
-        canvas.setBitmap(bitmap);
-        circleDrawable.setBounds(
-            0,
-            0,
-            circleDrawable.intrinsicWidth,
-            circleDrawable.intrinsicHeight
-        )
-        circleDrawable.draw(canvas)
-        return BitmapDescriptorFactory.fromBitmap(bitmap)
-    }
+
     fun initLocation() {            //첫 위치 설정하고, prev_loc 설정
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
         fusedLocationClient.lastLocation

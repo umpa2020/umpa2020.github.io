@@ -26,7 +26,7 @@ import com.korea50k.RunShare.Activities.Profile.UserActivity
 import com.korea50k.RunShare.R
 import com.korea50k.RunShare.RetrofitClient
 import com.korea50k.RunShare.Activities.Splash.SplashActivity
-import com.korea50k.RunShare.Util.Calc
+import com.korea50k.RunShare.Util.Wow
 import com.korea50k.RunShare.Util.SharedPreValue
 import com.korea50k.RunShare.Util.TTS
 import com.korea50k.RunShare.dataClass.Record
@@ -131,7 +131,7 @@ class MainActivity : AppCompatActivity() {
                     record.sumTime = jsonObject.getString("SumTime").toLong()
                     activity.runOnUiThread(Runnable {
                         slideDistanceTextView.text=String.format("%.3f km",(record.sumDistance/1000.0))
-                        slideTimeTextView.text= Calc.milisecToString(record.sumTime)
+                        slideTimeTextView.text= Wow.milisecToString(record.sumTime)
                     })
                 } catch (e: Exception) {
 

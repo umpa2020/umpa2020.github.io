@@ -20,6 +20,7 @@ import com.korea50k.RunShare.R
 import android.graphics.Canvas
 import android.graphics.Rect
 import com.korea50k.RunShare.Activities.Running.RunningActivity
+import com.korea50k.RunShare.Util.Wow.Companion.makingIcon
 import com.korea50k.RunShare.dataClass.RunningData
 import com.korea50k.RunShare.dataClass.UserState
 import kotlinx.android.synthetic.main.activity_running.*
@@ -67,26 +68,8 @@ class RunningMap : OnMapReadyCallback {
     }
     fun init(){
         cpOption
-        cpOption.icon(makingIcon(R.drawable.ic_racing_startpoint))
+        cpOption.icon(makingIcon(R.drawable.ic_racing_startpoint,context))
 
-    }
-    fun makingIcon(drawable: Int): BitmapDescriptor {
-        val circleDrawable = context.getDrawable(drawable)
-        var canvas = Canvas()
-        var bitmap = Bitmap.createBitmap(
-            circleDrawable!!.intrinsicWidth,
-            circleDrawable!!.intrinsicHeight,
-            Bitmap.Config.ARGB_8888
-        )
-        canvas.setBitmap(bitmap);
-        circleDrawable.setBounds(
-            0,
-            0,
-            circleDrawable.intrinsicWidth,
-            circleDrawable.intrinsicHeight
-        )
-        circleDrawable.draw(canvas)
-        return BitmapDescriptorFactory.fromBitmap(bitmap)
     }
     fun startTracking() {
     }
@@ -179,7 +162,7 @@ class RunningMap : OnMapReadyCallback {
                     mMap.addMarker(cpOption)
                     markerCount++
                     markers.add(prev_loc)
-                    cpOption.icon(makingIcon(R.drawable.ic_checkpoint_red))
+                    cpOption.icon(makingIcon(R.drawable.ic_checkpoint_red,context))
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(prev_loc, 17F))
                     if (userState == UserState.PAUSED) {
                         startTracking()

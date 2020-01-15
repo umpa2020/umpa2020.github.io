@@ -1,6 +1,5 @@
 package com.korea50k.RunShare.Activities.RankFragment
 
-import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -9,9 +8,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.korea50k.RunShare.R
-import com.korea50k.RunShare.Util.Calc
+import com.korea50k.RunShare.Util.Wow
 import com.korea50k.RunShare.dataClass.RankDetailMapData
-import java.lang.Exception
 import java.util.ArrayList
 
 class RankDetailRecyclerViewAdapterMap(onLoadMoreListener: OnLoadMoreListener) :
@@ -95,7 +93,7 @@ class RankDetailRecyclerViewAdapterMap(onLoadMoreListener: OnLoadMoreListener) :
             holder.rank.setText(ranking.toString())
             holder.name.setText(singleItem.ChallengerId)
             Log.d("Time check",singleItem.ChallengerTime.toString())
-            holder.time.text=Calc.milisecToString(singleItem.ChallengerTime)
+            holder.time.text=Wow.milisecToString(singleItem.ChallengerTime)
             if (ranking == 1)
                 holder.rank.setBackgroundResource(R.drawable.ic_1)
             else if (ranking == 2)

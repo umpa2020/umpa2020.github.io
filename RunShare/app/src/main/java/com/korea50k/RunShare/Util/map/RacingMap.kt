@@ -19,9 +19,10 @@ import android.view.View
 import com.google.android.gms.maps.*
 import com.korea50k.RunShare.Activities.Racing.ManageRacing
 import com.korea50k.RunShare.Activities.Racing.RacingActivity
-import com.korea50k.RunShare.Util.Calc
+import com.korea50k.RunShare.Util.Wow
 import com.korea50k.RunShare.dataClass.RunningData
 import com.korea50k.RunShare.Util.TTS
+import com.korea50k.RunShare.Util.Wow.Companion.makingIcon
 import com.korea50k.RunShare.dataClass.NoticeState
 import com.korea50k.RunShare.dataClass.UserState
 import kotlinx.android.synthetic.main.activity_racing.*
@@ -114,7 +115,7 @@ class RacingMap : OnMapReadyCallback {
     }
 
     fun init() {
-        val cpIcon = makingIcon(R.drawable.ic_checkpoint_gray)
+        val cpIcon = makingIcon(R.drawable.ic_checkpoint_gray,context)
         //cp 초기화
         cpOption = MarkerOptions()
         cpOption.icon(cpIcon)
@@ -186,25 +187,6 @@ class RacingMap : OnMapReadyCallback {
         fusedLocationClient.removeLocationUpdates(locationCallback)
     }
 
-    fun makingIcon(drawable: Int): BitmapDescriptor {
-        val circleDrawable = context.getDrawable(drawable)
-        var canvas = Canvas()
-        var bitmap = Bitmap.createBitmap(
-            circleDrawable!!.intrinsicWidth,
-            circleDrawable!!.intrinsicHeight,
-            Bitmap.Config.ARGB_8888
-        )
-        canvas.setBitmap(bitmap);
-        circleDrawable.setBounds(
-            0,
-            0,
-            circleDrawable.intrinsicWidth,
-            circleDrawable.intrinsicHeight
-        )
-        circleDrawable.draw(canvas)
-        return BitmapDescriptorFactory.fromBitmap(bitmap)
-    }
-
     fun drawRoute() { //로드 된 경로 그리기
 
         for (i in loadRoute.indices) {
@@ -218,7 +200,7 @@ class RacingMap : OnMapReadyCallback {
                 )        //경로를 그릴 폴리라인 집합
             )
             if (i == 0) {
-                var spIcon = makingIcon(R.drawable.ic_racing_startpoint)
+                var spIcon = makingIcon(R.drawable.ic_racing_startpoint,context)
                 val startMarkerOptions = MarkerOptions()
                 startMarkerOptions.position(markers[0])
                 startMarkerOptions.title("Start")
@@ -230,17 +212,17 @@ class RacingMap : OnMapReadyCallback {
                 cpMarkers.add(mMap.addMarker(cpOption))
             }
         }
-        val cpPassedIcon = makingIcon(R.drawable.ic_checkpoint_red)
+        val cpPassedIcon = makingIcon(R.drawable.ic_checkpoint_red,context)
         cpOption.icon(cpPassedIcon)
-        var fpIcon = makingIcon(R.drawable.ic_racing_finishpoint)
+        var fpIcon = makingIcon(R.drawable.ic_racing_finishpoint,context)
         val finishMarkerOptions = MarkerOptions()
         finishMarkerOptions.position(markers[markers.size - 1])
         finishMarkerOptions.title("Finish")
         finishMarkerOptions.icon(fpIcon)
         mMap.addMarker(finishMarkerOptions)
 
-        var min = LatLng(Calc.minDouble(makerData.lats), Calc.minDouble(makerData.lngs))
-        var max = LatLng(Calc.maxDouble(makerData.lats), Calc.maxDouble(makerData.lngs))
+        var min = LatLng(Wow.minDouble(makerData.lats), Wow.minDouble(makerData.lngs))
+        var max = LatLng(Wow.maxDouble(makerData.lats), Wow.maxDouble(makerData.lngs))
         print_log(min.toString() + max.toString())
         mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(LatLngBounds(min, max), 1080, 300, 50))
     }
@@ -257,7 +239,7 @@ class RacingMap : OnMapReadyCallback {
                     val markerOptions = MarkerOptions()
                     markerOptions.position(prev_loc)
                     markerOptions.title("Me")
-                    racerIcon = makingIcon(R.drawable.ic_racer_marker)
+                    racerIcon = makingIcon(R.drawable.ic_racer_marker,context)
 
                     markerOptions.icon(racerIcon)
                     currentMarker = mMap.addMarker(markerOptions)
