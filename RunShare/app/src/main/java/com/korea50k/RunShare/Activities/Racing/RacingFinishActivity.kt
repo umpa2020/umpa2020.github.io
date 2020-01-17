@@ -46,7 +46,7 @@ class RacingFinishActivity : AppCompatActivity() ,
 
     var start = 0
     var end = 15
-
+    var activity=this
     lateinit var racerData: RunningData
     lateinit var makerData: RunningData
 
@@ -69,16 +69,15 @@ class RacingFinishActivity : AppCompatActivity() ,
         }
         racerData = intent.getSerializableExtra("Racer Data") as RunningData
         makerData = intent.getSerializableExtra("Maker Data") as RunningData
-        makerDistanceTextView.text=String.format("%.3f km",makerData.distance/1000)
         val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
         formatter.setTimeZone(TimeZone.getTimeZone("UTC"))
         makerLapTimeTextView.text=formatter.format(Date(makerData.time))
-        makerMaxSpeedTextView.text=String.format("%.3f km/h",makerData.speed.max())
-        makerAvgSpeedTextView.text=String.format("%.3f km/h",makerData.speed.average())
+        makerMaxSpeedTextView.text=String.format("%.3f",makerData.speed.max())
+        makerAvgSpeedTextView.text=String.format("%.3f",makerData.speed.average())
 
         racerLapTimeTextView.text=formatter.format(Date(racerData.time))
-        racerMaxSpeedTextView.text=String.format("%.3f km/h",racerData.speed.max())
-        racerAvgSpeedTextView.text=String.format("%.3f km/h",racerData.speed.average())
+        racerMaxSpeedTextView.text=String.format("%.3f",racerData.speed.max())
+        racerAvgSpeedTextView.text=String.format("%.3f",racerData.speed.average())
 
         //TODO:정빈 시작
         MapTitle = makerData.mapTitle
@@ -223,6 +222,7 @@ class RacingFinishActivity : AppCompatActivity() ,
 
     fun loadData() {
         itemList.clear()
+
         mAdapter.addAll(rankDetailMapDatas)
     }
 
@@ -240,7 +240,12 @@ class RacingFinishActivity : AppCompatActivity() ,
             } else {
                 mJsonString = result
                 rankDetailMapDatas = ConvertJson.JsonToRankDetailMapDatas(mJsonString, start, end)
-
+                Log.d("RRank : ",rankDetailMapDatas[0].ChallengerId + rankDetailMapDatas[0].Rank)
+                for(i in rankDetailMapDatas.indices){
+                    if(rankDetailMapDatas[i].Id=="My"){
+                        resultRankTextView.text= rankDetailMapDatas[i].Rank.toString() + "등"
+                    }
+                }
                 Log.d("ssmm11", "받아온 거  = "  + mJsonString)
                 //ID_TextView.text = rankDetailMapDatas[0].Id
                 //MapImage = rankDetailMapDatas[0].MapImage

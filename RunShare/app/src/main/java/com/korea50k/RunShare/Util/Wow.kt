@@ -1,11 +1,16 @@
 package com.korea50k.RunShare.Util
 
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import com.google.android.gms.maps.model.BitmapDescriptor
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.SphericalUtil
 import java.text.SimpleDateFormat
 import java.util.*
 
-class Calc(){
+class Wow(){
     companion object {
         fun minDouble(list: Array<Vector<Double>>): Double {
             var min = list[0][0]
@@ -42,6 +47,24 @@ class Calc(){
             formatter.setTimeZone(TimeZone.getTimeZone("UTC"))
 
             return formatter.format(Date(milisec))
+        }
+        fun makingIcon(drawable: Int,context: Context): BitmapDescriptor {
+            val circleDrawable =  context.getDrawable(drawable)
+            var canvas = Canvas()
+            var bitmap = Bitmap.createBitmap(
+                circleDrawable!!.intrinsicWidth,
+                circleDrawable!!.intrinsicHeight,
+                Bitmap.Config.ARGB_8888
+            )
+            canvas.setBitmap(bitmap);
+            circleDrawable.setBounds(
+                0,
+                0,
+                circleDrawable.intrinsicWidth,
+                circleDrawable.intrinsicHeight
+            )
+            circleDrawable.draw(canvas)
+            return BitmapDescriptorFactory.fromBitmap(bitmap)
         }
     }
 }

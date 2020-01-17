@@ -23,7 +23,7 @@
             android:screenOrientation="portrait"></activity>
         <activity android:name=".Activities.Profile.MyInformationActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".Splash.SplashActivity"
+        <activity android:name="com.korea50k.RunShare.Activities.Splash.SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,11 +31,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Join.AgeSelectActivity"
+        <activity android:name="com.korea50k.RunShare.Activities.Join.AgeSelectActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".Join.GenderSelectActivity"
+        <activity android:name="com.korea50k.RunShare.Activities.Join.GenderSelectActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".Join.SignUpActivity"
+        <activity android:name="com.korea50k.RunShare.Activities.Join.SignUpActivity"
             android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait"/>
         <activity android:name=".Activities.Login.LoginActivity"

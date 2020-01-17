@@ -9,13 +9,11 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.EditText
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.korea50k.RunShare.Activities.MainFragment.MainActivity
-import com.korea50k.RunShare.Join.SignUpActivity
+import com.korea50k.RunShare.Activities.Join.SignUpActivity
 import com.korea50k.RunShare.R
 import com.korea50k.RunShare.RetrofitClient
-import com.korea50k.RunShare.Util.S3
 import com.korea50k.RunShare.Util.SharedPreValue
 import kotlinx.android.synthetic.main.activity_login.*
 import okhttp3.ResponseBody

@@ -1,303 +1,299 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".Activities.Racing.RacingFinishActivity"
-    android:layout_marginTop="20dp">
-
-    <TextView
-        android:id="@+id/resultTitleTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:gravity="center"
-        android:text="Race Result"
-        android:textColor="#000000"
-        android:textSize="30dp"
-        android:fontFamily="@font/godob"/>
-    <TextView
-        android:id="@+id/resultRankTextView"
-        android:layout_below="@+id/resultTitleTextView"
+    >
+    <RelativeLayout
+        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="1등"
-        android:textColor="#FF0000"
-        android:textSize="30dp"
-        android:layout_marginTop="10dp"
-        android:fontFamily="@font/godob"/>
-
-    <LinearLayout
-        android:id="@+id/raceResultLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_below="@+id/resultRankTextView"
-        android:orientation="vertical">
-
+        android:layout_height="match_parent"
+        android:paddingBottom="30dp">
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@color/gray"
-            android:layout_marginRight="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="5dp"/>
-
+            android:id="@+id/resultTitleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:text="Race Result"
+            android:textColor="#000000"
+            android:textSize="30dp"
+            android:fontFamily="@font/godob"/>
         <TextView
+            android:id="@+id/resultRankTextView"
+            android:layout_below="@+id/resultTitleTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Record"
+            android:text="1등"
+            android:textColor="#FF0000"
+            android:textSize="30dp"
+            android:layout_marginTop="10dp"
             android:fontFamily="@font/godob"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@color/gray"
-            android:layout_marginRight="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="10dp"/>
-
         <LinearLayout
+            android:id="@+id/raceResultLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginBottom="10dp">
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/resultRankTextView"
+            android:orientation="vertical">
 
             <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fontFamily="@font/godob"/>
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="MY"
-                android:fontFamily="@font/godob"/>
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="MAKER"
-                android:fontFamily="@font/godob"/>
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginBottom="8dp">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-
-                android:text="Distance"
-                android:fontFamily="@font/godob"/>
-
-            <TextView
-                android:id="@+id/makerDistanceTextView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/gray"
                 android:layout_marginRight="20dp"
-                android:text="maker record"
-                android:fontFamily="@font/godob" />
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="5dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Record"
+                android:textSize="20dp"
+                android:fontFamily="@font/godob"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/gray"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginBottom="10dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/godob"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="MY"
+                    android:textSize="18dp"
+                    android:fontFamily="@font/godob"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="MAKER"
+                    android:textSize="18dp"
+                    android:fontFamily="@font/godob"/>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Lap Time"
+                    android:textSize="16dp"
+                    android:fontFamily="@font/godob"/>
+
+                <TextView
+                    android:id="@+id/racerLapTimeTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="my record"
+                    android:textSize="18dp"
+                    android:fontFamily="@font/godob"/>
+
+                <TextView
+                    android:id="@+id/makerLapTimeTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="maker record"
+                    android:textSize="18dp"
+                    android:fontFamily="@font/godob"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginBottom="8dp"
+                android:baselineAligned="true">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Highest\nSpeed\n(km/h)"
+                    android:textSize="16dp"
+                    android:fontFamily="@font/godob"/>
+
+                <TextView
+                    android:id="@+id/racerMaxSpeedTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="my record"
+                    android:textSize="18dp"
+                    android:fontFamily="@font/godob"/>
+
+                <TextView
+                    android:id="@+id/makerMaxSpeedTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="maker record"
+                    android:textSize="18dp"
+                    android:fontFamily="@font/godob"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Average\nSpeed\n(km/h)"
+                    android:textSize="16dp"
+                    android:fontFamily="@font/godob"/>
+
+                <TextView
+                    android:id="@+id/racerAvgSpeedTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="my record"
+                    android:textSize="18dp"
+                    android:fontFamily="@font/godob"/>
+
+                <TextView
+                    android:id="@+id/makerAvgSpeedTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="maker record"
+                    android:textSize="18dp"
+                    android:fontFamily="@font/godob"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="10dp"></LinearLayout>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginBottom="8dp">
+            android:layout_below="@+id/raceResultLayout"
+            android:orientation="vertical">
 
             <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Lap Time"
-                android:fontFamily="@font/godob"/>
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/gray"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"/>
 
             <TextView
-                android:id="@+id/racerLapTimeTextView"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:text="Ranking"
+                android:textSize="20dp"
                 android:gravity="center"
-                android:text="my record"
                 android:fontFamily="@font/godob"/>
 
             <TextView
-                android:id="@+id/makerLapTimeTextView"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/gray"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="maker record"
-                android:fontFamily="@font/godob"/>
-        </LinearLayout>
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="player"
+                    android:textSize="18dp"
+                    android:fontFamily="@font/godob"/>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="랩 타임"
+                    android:textSize="18dp"
+                    android:fontFamily="@font/godob"/>
+            </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginBottom="8dp">
 
-            <TextView
-
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Highest Speed"
-                android:fontFamily="@font/godob"/>
-
-            <TextView
-                android:id="@+id/racerMaxSpeedTextView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="my record"
-                android:fontFamily="@font/godob"/>
-
-            <TextView
-                android:id="@+id/makerMaxSpeedTextView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="maker record"
-                android:fontFamily="@font/godob"/>
-        </LinearLayout>
-
-        <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginBottom="8dp">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Average Speed"
-            android:fontFamily="@font/godob"/>
-
-        <TextView
-            android:id="@+id/racerAvgSpeedTextView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="my record"
-            android:fontFamily="@font/godob"/>
-
-        <TextView
-            android:id="@+id/makerAvgSpeedTextView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="maker record"
-            android:fontFamily="@font/godob"/>
-
-    </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="10dp"></LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/raceResultLayout"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@color/gray"
-            android:layout_marginRight="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Ranking"
-            android:gravity="center"
-            android:fontFamily="@font/godob"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@color/gray"
-            android:layout_marginRight="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="10dp"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp">
-            <TextView
-                android:layout_width="0dp"
-                android:layout_weight="1"
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_marginTop="10dp"
+                android:id="@+id/resultPlayerRankingRecycler"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="player"
-                android:fontFamily="@font/godob"/>
-            <TextView
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="랩 타임"
-                android:fontFamily="@font/godob"/>
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginBottom="50dp"/>
         </LinearLayout>
 
+        <Button
+            android:id="@+id/OKButton"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/base_button_selector"
+            android:onClick="onClick"
+            android:text="확인"
+            android:textColor="@color/darkRed"
+            android:fontFamily="@font/godob"/>
+    </RelativeLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_marginTop="10dp"
-            android:id="@+id/resultPlayerRankingRecycler"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginRight="20dp"
-            android:layout_marginLeft="20dp"/>
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/OKButton"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:background="@drawable/base_button_selector"
-        android:onClick="onClick"
-        android:text="확인"
-        android:textColor="@color/darkRed"
-        android:fontFamily="@font/godob"/>
-
-
-</RelativeLayout>
+</ScrollView>

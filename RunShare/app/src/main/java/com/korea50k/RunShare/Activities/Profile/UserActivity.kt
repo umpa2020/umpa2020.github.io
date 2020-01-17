@@ -5,6 +5,7 @@ import android.content.pm.ActivityInfo
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayout
 import com.korea50k.RunShare.R
 import com.korea50k.RunShare.RetrofitClient
@@ -33,15 +34,21 @@ class UserActivity : AppCompatActivity() {
         profileIdTextView.text = id
         setProfileImage(id)
 
+        var bundle = Bundle()
+        bundle.putString("Id", profileIdTextView.text.toString() )
 
         val fragmentAdapter = UserPagerAdapter(supportFragmentManager)
+        var fragmentUserRace = FragmentUserRace()
         //TODO 탭뷰 아이콘 바꾸고 싶으면 여기서 추가
         fragmentAdapter.addFragment(
             R.drawable.ic_finish_flag,
             R.drawable.ic_finish_flag,
             "Race",
-            FragmentUserRace()
+            fragmentUserRace
         )
+
+        fragmentUserRace.setArguments(bundle)
+
         //fragmentAdapter.addFragment(R.drawable.ic_launcher_background, R.drawable.ic_launcher_background,"Community",FragmentUserCommunity())
         user_viewpager.adapter = fragmentAdapter
 
@@ -115,9 +122,10 @@ class UserActivity : AppCompatActivity() {
                                 }
 
                                 Log.d("server", builder.toString())
-                                var bm= S3.downloadBitmap(builder.toString())
+
+                                //var bm= S3.downloadBitmap(builder.toString())
                                 activity.runOnUiThread(Runnable {
-                                    profileImageView.setImageBitmap(bm)
+                                    Glide.with(this@UserActivity).load(builder.toString()!!).into(profileImageView)
                                 })
                             } catch (e: MalformedURLException) {
                                 Log.e("server", e.toString())

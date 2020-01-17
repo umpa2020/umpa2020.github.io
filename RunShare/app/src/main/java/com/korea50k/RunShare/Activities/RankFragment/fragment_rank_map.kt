@@ -32,6 +32,8 @@ class fragment_rank_map : Fragment(), RankRecyclerViewAdapterMap.OnLoadMoreListe
     lateinit var rankMapDatas : ArrayList<RankMapData>
     lateinit var rankrecyclerviewadapterMap: RankRecyclerViewAdapterMap
 
+    var isfirst = 0
+    var isSaved = 0
     var mJsonString = ""
     lateinit var mAdapter : RankRecyclerViewAdapterMap
     lateinit var itemList : ArrayList<RankMapData>
@@ -39,44 +41,70 @@ class fragment_rank_map : Fragment(), RankRecyclerViewAdapterMap.OnLoadMoreListe
     var start = 0
     var end = 15
     lateinit var jArray : JSONArray
+
+    private var isVisibleToUser: Boolean = true
+    private var awaitingRunnable: Runnable? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
 
-        class SaveTask : AsyncTask<Void, Void, String>(){
-            override fun onPreExecute() {
-                super.onPreExecute()
-            }
-
-            override fun doInBackground(vararg params: Void?): String? {
-                try {
-                    rankDownload("kjb", 0,15)
-
-                } catch (e : java.lang.Exception) {
-                    Log.d("ssmm11", "랭크 다운로드 실패 " +e.toString())
-                }
-                return null
-            }
-
-            override fun onPostExecute(result: String?) {
-                super.onPostExecute(result)
-
-                //TODO:피드에서 이미지 적용해볼 소스코드
-            }
-        }
-        var Start : SaveTask = SaveTask()
-        Start.execute()
-
-        val task = GetData()
-        task.execute("http://15.164.50.86/rankDownload.php")
     }
-/*
+    /*
     //데이터 저장
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         // 데이터 저장
     }
- */
+    */
+
+    override fun onResume() {
+        //TODO:리쥼 왔을때 다시 디비에 있는 값이 몇개인지 검색해서 늘어났으면 하나 더 다운
+        super.onResume()
+
+        if (isfirst > 0) {
+            start = mAdapter.itemCount-1
+            end = mAdapter.itemCount+1
+
+            rankDownload("kjb",start,end)
+            val task = GetData()
+            task.execute("http://15.164.50.86/rankDownload.php")
+        }
+        else {
+
+            Log.d("ssmm11", "onResume()")
+            class SaveTask : AsyncTask<Void, Void, String>() {
+                override fun onPreExecute() {
+                    super.onPreExecute()
+                }
+
+                override fun doInBackground(vararg params: Void?): String? {
+                    try {
+                        rankDownload("kjb", 0, 15)
+
+                    } catch (e: java.lang.Exception) {
+                        Log.d("ssmm11", "랭크 다운로드 실패 " + e.toString())
+                    }
+                    return null
+                }
+
+                override fun onPostExecute(result: String?) {
+                    super.onPostExecute(result)
+
+                    //TODO:피드에서 이미지 적용해볼 소스코드
+                }
+            }
+
+            var Start: SaveTask = SaveTask()
+            Start.execute()
+
+            val task = GetData()
+            task.execute("http://15.164.50.86/rankDownload.php")
+        }
+        isfirst++
+
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -110,7 +138,7 @@ class fragment_rank_map : Fragment(), RankRecyclerViewAdapterMap.OnLoadMoreListe
             retrofit2.Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: retrofit2.Response<ResponseBody>) {
                 try {
-                    val result: String? = response.body().toString()
+                    val result: String? = response.body()!!.string()
                 } catch (e: Exception) {
 
                 }
@@ -143,6 +171,7 @@ class fragment_rank_map : Fragment(), RankRecyclerViewAdapterMap.OnLoadMoreListe
     fun loadData() {
         itemList.clear()
         mAdapter.addAll(rankMapDatas)
+        rankMapDatas.clear()
     }
 
     private inner class GetData() : AsyncTask<String, Void, String>() {
@@ -163,8 +192,18 @@ class fragment_rank_map : Fragment(), RankRecyclerViewAdapterMap.OnLoadMoreListe
                 // please don't remove that
                 val jObject = JSONObject(mJsonString)
                 jArray = jObject.getJSONArray("JsonData")
+                if (isfirst < 2) {
+                    isSaved = jArray.length()
+                    rankMapDatas = ConvertJson.JsonToRankMapDatas(mJsonString, start, end)
+                }
+                else {
+                    if (isSaved != jArray.length()) {
+                        isSaved = jArray.length()
+                        rankMapDatas = ConvertJson.JsonToRankResumeMapDatas(mJsonString, mAdapter.itemCount, mAdapter.itemCount+1)
+                    }
+                }
 
-                rankMapDatas = ConvertJson.JsonToRankMapDatas(mJsonString, start, end-1)
+
 
                 loadData()
             }

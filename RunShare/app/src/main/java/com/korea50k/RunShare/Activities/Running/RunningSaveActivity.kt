@@ -12,6 +12,7 @@ import android.os.Bundle
 import android.util.Base64
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.CombinedChart
@@ -41,6 +42,7 @@ class RunningSaveActivity : AppCompatActivity() {
 
     lateinit var runningData: RunningData
     lateinit var map: ViewerMap
+    var switch = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -50,13 +52,13 @@ class RunningSaveActivity : AppCompatActivity() {
 
         val smf = supportFragmentManager.findFragmentById(R.id.map_viewer) as SupportMapFragment
         map = ViewerMap(smf, this, runningData)
-        distance_tv.text = String.format("%.3f km",runningData.distance/1000)
+        distance_tv.text = String.format("%.3f",runningData.distance/1000)
         val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
         formatter.setTimeZone(TimeZone.getTimeZone("UTC"))
 
         time_tv.text = formatter.format(Date(runningData.time))
 
-        speed_tv.text = String.format("%.3f km/h", runningData.speed.average())
+        speed_tv.text = String.format("%.3f", runningData.speed.average())
         if (runningData.privacy == Privacy.PUBLIC) {
             racingRadio.isChecked = false
             racingRadio.isEnabled = false
@@ -67,7 +69,7 @@ class RunningSaveActivity : AppCompatActivity() {
 
 
     private fun setChart() {    //클래스로 따로 빼야할듯
-        var lineChart = runThisMapChart as CombinedChart
+        var lineChart = chart as CombinedChart
         val alts = ArrayList<BarEntry>()
         val speeds = ArrayList<Entry>()
 
@@ -158,9 +160,21 @@ class RunningSaveActivity : AppCompatActivity() {
     }
 
     fun onClick(view: View) {
-        when (view.id) {
-            R.id.save_btn -> {
-                map.CaptureMapScreen()
+        if (switch == 0) {
+            when (view.id) {
+                R.id.save_btn -> {
+                    if(mapTitleEdit.text.toString()==""){
+                        mapTitleEdit.hint="제목을 설정해주세요"
+                        mapTitleEdit.setHintTextColor(Color.RED)
+                    }else if(mapExplanationEdit.text.toString()==""){
+                        mapExplanationEdit.hint="맵 설명을 작성해주세요"
+                        mapExplanationEdit.setHintTextColor(Color.RED)
+                    }
+                    else{
+                        map.CaptureMapScreen()
+                        switch++
+                    }
+                }
             }
         }
     }
@@ -194,6 +208,7 @@ class RunningSaveActivity : AppCompatActivity() {
             }
 
             override fun doInBackground(vararg params: Void?): String? {
+
                 try {
                     runningData(
                         runningData.id,
@@ -212,7 +227,8 @@ class RunningSaveActivity : AppCompatActivity() {
 
             override fun onPostExecute(result: String?) {
                 super.onPostExecute(result)
-                goToHome()
+                //goToHome()
+
                 //로딩화면 끄고 인텐트
             }
         }
@@ -259,6 +275,13 @@ class RunningSaveActivity : AppCompatActivity() {
             ) {
                 try {
                     val result: String? = response.body().toString()
+                    /*
+                    Toast.makeText(
+                        this@RunningSaveActivity,
+                        "json 업로드 성공" + result,
+                        Toast.LENGTH_SHORT
+                    ).show()*/
+                    goToHome()
 
                 } catch (e: Exception) {
 

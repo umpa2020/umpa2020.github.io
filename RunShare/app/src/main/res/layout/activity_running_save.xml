@@ -4,7 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Activities.Running.RunningSaveActivity">
+    tools:context=".Activities.Running.RunningSaveActivity"
+    android:layout_marginBottom="30dp"
+    android:layout_marginTop="10dp">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -22,16 +24,52 @@
                 tools:context=".fragment.MapFragment"
                 android:name="com.google.android.gms.maps.SupportMapFragment"
                 />
+
+            <TextView
+                android:layout_below="@+id/map_viewer"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/gray"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="5dp"
+                android:id="@+id/line1"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="맵 결과"
+                android:fontFamily="@font/godob"
+                android:layout_below="@+id/line1"
+                android:gravity="center"
+                android:layout_margin="5dp"
+                android:id="@+id/mapinformation"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/gray"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginBottom="10dp"
+                android:layout_below="@+id/mapinformation"
+                android:id="@+id/line2"/>
+
+
             <LinearLayout
                 android:id="@+id/dataTableLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/map_viewer">
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_below="@+id/line2"
+                android:orientation="horizontal">
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-
                     android:orientation="vertical"
                     android:id="@+id/distance_Layout">
 
@@ -39,17 +77,19 @@
                         android:gravity="center"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Distance"
+                        android:text="Distance(km)"
+                        android:textSize="17dp"
                         android:fontFamily="@font/godob"/>
 
                     <TextView
+                        android:layout_marginTop="5dp"
                         android:gravity="center"
                         android:id="@+id/distance_tv"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="0.0"
                         android:fontFamily="@font/godob"
-                        android:textSize="24dp" />
+                        android:textSize="20dp" />
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="0dp"
@@ -65,16 +105,18 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Time"
+                        android:textSize="17dp"
                         android:fontFamily="@font/godob"/>
 
                     <TextView
+                        android:layout_marginTop="5dp"
                         android:gravity="center"
                         android:id="@+id/time_tv"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="0.0"
                         android:fontFamily="@font/godob"
-                        android:textSize="24dp" />
+                        android:textSize="20dp" />
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="0dp"
@@ -87,49 +129,95 @@
                         android:gravity="center"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Speed"
+                        android:text="Speed(km/h)"
+                        android:textSize="17dp"
                         android:fontFamily="@font/godob"/>
 
                     <TextView
+                        android:layout_marginTop="5dp"
                         android:gravity="center"
                         android:id="@+id/speed_tv"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="0.0"
                         android:fontFamily="@font/godob"
-                        android:textSize="24dp" />
+                        android:textSize="20dp" />
                 </LinearLayout>
             </LinearLayout>
 
 
             <com.github.mikephil.charting.charts.CombinedChart
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 android:id="@+id/chart"
                 android:layout_below="@+id/dataTableLayout"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 />
 
+
+            <TextView
+                android:layout_below="@+id/chart"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/gray"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="5dp"
+                android:id="@+id/line3"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="맵 정보 기록"
+                android:fontFamily="@font/godob"
+                android:layout_below="@+id/line3"
+                android:gravity="center"
+                android:layout_margin="5dp"
+                android:id="@+id/mapinfo"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/gray"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginBottom="10dp"
+                android:layout_below="@+id/mapinfo"
+                android:id="@+id/line4"/>
+
+
             <EditText
                 android:id="@+id/mapTitleEdit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
                 android:hint="Title"
                 android:fontFamily="@font/godob"
-                android:layout_below="@+id/chart"/>
+                android:layout_below="@+id/line4"/>
 
             <EditText
                 android:id="@+id/mapExplanationEdit"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 android:hint="Text"
+                android:gravity="top"
                 android:fontFamily="@font/godob"
                 android:layout_below="@id/mapTitleEdit"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 android:layout_below="@id/mapExplanationEdit"
-                android:layout_marginBottom="?actionBarSize">
+                android:layout_marginBottom="?actionBarSize"
+                android:gravity="center">
 
                 <RadioGroup
                     android:id="@+id/privacyRadioGroup"
@@ -167,6 +255,7 @@
     </ScrollView>
 
     <Button
+        android:layout_marginBottom="20dp"
         android:id="@+id/save_btn"
         android:layout_alignParentBottom="true"
         android:layout_centerInParent="true"
@@ -174,7 +263,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/base_button_selector"
-        android:textColor="#FF0000"
+        android:textColor="@color/darkRed"
         android:text="활동 저장"
         android:fontFamily="@font/godob"/>
 

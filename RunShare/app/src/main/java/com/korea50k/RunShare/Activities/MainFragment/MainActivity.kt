@@ -5,9 +5,6 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.os.AsyncTask
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -22,17 +19,21 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.viewpager.widget.ViewPager
+import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayout
 import com.korea50k.RunShare.Activities.Profile.MyInformationActivity
 import com.korea50k.RunShare.Activities.Profile.UserActivity
 import com.korea50k.RunShare.R
-import com.korea50k.RunShare.Splash.SplashActivity
-import com.korea50k.RunShare.Util.S3
+import com.korea50k.RunShare.RetrofitClient
+import com.korea50k.RunShare.Activities.Splash.SplashActivity
+import com.korea50k.RunShare.Util.Wow
 import com.korea50k.RunShare.Util.SharedPreValue
 import com.korea50k.RunShare.Util.TTS
+import com.korea50k.RunShare.dataClass.Record
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.custom_toast.*
-import kotlinx.android.synthetic.main.custom_toast.view.*
+import okhttp3.ResponseBody
+import org.json.JSONObject
+import retrofit2.Call
 
 
 class MainActivity : AppCompatActivity() {
@@ -40,6 +41,8 @@ class MainActivity : AppCompatActivity() {
     lateinit var mViewPager:ViewPager
     private var doubleBackToExitPressedOnce = false
     var WSY = "WSY"
+    var record= Record()
+    var activity= this
     override fun onBackPressed() {
         if (doubleBackToExitPressedOnce) {
             super.onBackPressed()
@@ -111,36 +114,37 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         Log.d(WSY, "onResume()")
         imageUri = SharedPreValue.getProfileData(this)
-        class SetImageTask : AsyncTask<Void, Void, String>(){
-            override fun onPreExecute() {
-                super.onPreExecute()
-            }
-            var bm: Bitmap? = null
+        Glide.with(this@MainActivity).load(imageUri!!).into(slideProfileImageView)
 
-            override fun doInBackground(vararg params: Void?): String? {
-                try {
-
-                    Log.d(WSY, "Uri : " + imageUri)
-                    bm = S3.downloadBitmap(imageUri!!)
-                    Log.d(WSY, "비트맵 : " + bm.toString() )
-
-
-                } catch (e : java.lang.Exception) {
-                    Log.d(WSY, "이미지 다운로드 실패 " +e.toString())
-                }
-                return null
-            }
-
-            override fun onPostExecute(result: String?) {
-                super.onPostExecute(result)
-                //TODO:피드에서 이미지 적용해볼 소스코드
-                slideProfileImageView.setImageBitmap(bm)
-            }
-        }
-        var Start = SetImageTask()
-        Start.execute()
     }
+    fun setRecord(nicknameData: String) {
+        RetrofitClient.retrofitService.recordDownload(nicknameData).enqueue(object :
+            retrofit2.Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: retrofit2.Response<ResponseBody>) {
+                try {
+                    Log.d("server","Success to get record"+nicknameData)
+                    val result = response.body() as ResponseBody
+                    val resultValue=result.string()
+                    var jsonObject=JSONObject(resultValue)
+                    Log.d("server",jsonObject.getString("SumTime"))
+                    record.sumDistance=jsonObject.getString("SumDistance").toInt()
+                    record.sumTime = jsonObject.getString("SumTime").toLong()
+                    activity.runOnUiThread(Runnable {
+                        slideDistanceTextView.text=String.format("%.3f km",(record.sumDistance/1000.0))
+                        slideTimeTextView.text= Wow.milisecToString(record.sumTime)
+                    })
+                } catch (e: Exception) {
 
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Log.d("ssmm11", t.message);
+                t.printStackTrace()
+            }
+        })
+
+    }
     override fun onPause() {
         super.onPause()
         Log.d(WSY, "onPause()")

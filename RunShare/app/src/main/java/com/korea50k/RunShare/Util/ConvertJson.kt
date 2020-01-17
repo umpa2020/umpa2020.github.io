@@ -47,7 +47,27 @@ class ConvertJson{
                 rankMapData.mapTitle= jArray.getJSONObject(i).get("MapTitle") as String
                 rankMapData.mapImage= jArray.getJSONObject(i).get("MapImage") as String
                 rankMapData.execute= jArray.getJSONObject(i).get("Execute") as String
-                Log.d("convert json","conver json map title = "+rankMapData.mapTitle)
+                Log.d("convert json","convert json map title = "+rankMapData.mapTitle)
+
+                rankMapDatas.add(rankMapData)
+            }
+            return rankMapDatas
+        }
+
+        fun JsonToRankResumeMapDatas(json: String, start : Int, end : Int):ArrayList<RankMapData>{
+            var rankMapDatas= ArrayList<RankMapData>()
+            val jObject = JSONObject(json)
+            val jArray = jObject.getJSONArray("JsonData")
+
+            for (i in start until end) {
+                //rankMapDatas.add(Gson().fromJson(gson.toJson(jArray.get(i)), RankMapData::class.java))
+                var rankMapData = RankMapData()
+                rankMapData.likes= jArray.getJSONObject(i).get("Likes") as String
+                rankMapData.id= jArray.getJSONObject(i).get("Id") as String
+                rankMapData.mapTitle= jArray.getJSONObject(i).get("MapTitle") as String
+                rankMapData.mapImage= jArray.getJSONObject(i).get("MapImage") as String
+                rankMapData.execute= (jArray.getJSONObject(i).get("Execute") as Int).toString()
+                Log.d("convert json","convert json map title = "+rankMapData.mapTitle)
 
                 rankMapDatas.add(rankMapData)
             }
@@ -79,11 +99,15 @@ class ConvertJson{
                         jArray.getJSONObject(i).get("ChallengerId") as String
                     rankDetailMapData.ChallengerTime =
                         (jArray.getJSONObject(i).get("ChallengerTime") as String).toLong()
+                    rankDetailMapData.Rank=(jArray.getJSONObject(i).get("Rank") as Int)
+
                 }
                 catch (e:Exception) {
 
                 }
                 rankDetailMapDatas.add(rankDetailMapData)
+                Log.d("Rank:",rankDetailMapData.ChallengerId)
+                Log.d("Rank: ",rankDetailMapData.Rank.toString())
             }
             return rankDetailMapDatas
         }

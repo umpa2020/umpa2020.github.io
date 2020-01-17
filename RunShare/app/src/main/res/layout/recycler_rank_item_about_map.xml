@@ -26,8 +26,10 @@
 
             <TextView
                 android:id="@+id/rank_detail_cardView_rank"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="0.3"
                 android:layout_height="wrap_content"
+                android:padding="5dp"
                 android:text="0"
                 android:fontFamily="@font/godob"
                 android:textSize="15dp"
@@ -41,7 +43,7 @@
                 android:textColor="@color/black"
                 android:layout_marginLeft="10dp"
                 android:layout_width="0dp"
-                android:layout_weight="1"
+                android:layout_weight="1.1"
                 android:gravity="center"
                 android:layout_height="wrap_content"
                 android:text="asdf"
