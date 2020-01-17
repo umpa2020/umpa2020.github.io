@@ -18,6 +18,8 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.Toast
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.korea50k.RunShare.R
 import com.korea50k.RunShare.RetrofitClient
 import com.korea50k.RunShare.Util.S3
@@ -56,6 +58,9 @@ class MyInformationActivity : AppCompatActivity() {
         userEmail = SharedPreValue.getEMAILData(this)
         userPW = SharedPreValue.getPWDData(this)
 
+        Log.d(WSY, "zzz" + userEmail)
+        Log.d(WSY,userEmail!!.length.toString())
+
         my_information_email_textview.text = userEmail
         my_information_nickname_textview.text = SharedPreValue.getNicknameData(this)
         my_information_age_textview.text = SharedPreValue.getAgeData(this)
@@ -89,6 +94,10 @@ class MyInformationActivity : AppCompatActivity() {
                 super.onPostExecute(result)
                 //TODO:피드에서 이미지 적용해볼 소스코드
                 profileImage.setImageBitmap(bm)
+//                Glide.with(applicationContext)
+//                    .load(imageUri)
+//                    .apply(RequestOptions.centerCropTransform())
+//                    .into(profileImage)
             }
         }
         var Start = SetImageTask()
@@ -144,7 +153,7 @@ class MyInformationActivity : AppCompatActivity() {
 
                             override fun doInBackground(vararg params: Void?): String? {
                                 try {
-                                    RetrofitClient.retrofitService.changeProfile( userEmail!!, userPW!!, base64OfBitmap!!
+                                    RetrofitClient.retrofitService.changeProfile(userEmail!!, userPW!!, base64OfBitmap!!
                                     ).enqueue(object : retrofit2.Callback<ResponseBody> {
                                         override fun onResponse( call: Call<ResponseBody>, response: Response<ResponseBody>
                                         ) {
