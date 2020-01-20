@@ -66,7 +66,7 @@ class RunningMap : OnMapReadyCallback {
         )
 
     }
-    fun init(){
+    fun init(){     //check point 마커 세팅
         cpOption
         cpOption.icon(makingIcon(R.drawable.ic_racing_startpoint,context))
 
@@ -135,25 +135,9 @@ class RunningMap : OnMapReadyCallback {
                     markerOptions.position(prev_loc)
                     markerOptions.title("Me")
 
-                    val circleDrawable = context.getDrawable(R.drawable.ic_racer_marker)
-                    var canvas = Canvas();
-                    var bitmap = Bitmap.createBitmap(
-                        circleDrawable!!.intrinsicWidth,
-                        circleDrawable!!.intrinsicHeight,
-                        Bitmap.Config.ARGB_8888
-                    );
-                    canvas.setBitmap(bitmap);
-                    circleDrawable.setBounds(
-                        0,
-                        0,
-                        circleDrawable.getIntrinsicWidth(),
-                        circleDrawable.getIntrinsicHeight()
-                    );
-                    circleDrawable.draw(canvas)
-                    racerIcon = BitmapDescriptorFactory.fromBitmap(bitmap);
-
+                    racerIcon = makingIcon(R.drawable.ic_racer_marker,context)
                     markerOptions.icon(racerIcon)
-                    currentMarker = mMap.addMarker(markerOptions)
+                    currentMarker = mMap.addMarker(markerOptions) //내 처음 위치 그리기
 
                     //startPoint 추가
                     cpOption.title("StartPoint")
@@ -193,18 +177,18 @@ class RunningMap : OnMapReadyCallback {
                         cur_loc = LatLng(lat, lng)
                         if (prev_loc.latitude == cur_loc.latitude && prev_loc.longitude == cur_loc.longitude) {
                             return  //움직임이 없다면 추가안함
-                        } else if (false) { //비정상적인 움직임일 경우 + finish에 도착한 경우
+                        } else if (false) { //비정상적인 움직임일 경우
                         } else {
                             latlngs.add(cur_loc)    //위 조건들을 통과하면 점 추가
                             alts.add(alt)
                             speeds.add(speed.toDouble())
                             distance+=SphericalUtil.computeDistanceBetween(prev_loc, cur_loc)
                             (context as Activity).runOnUiThread(Runnable {
-                                print_log(speed.toString())
+                                print_log(speed.toString())     //속도 업데이트
                                 (context as RunningActivity).runningSpeedTextView.text=
                                     String.format("%.3f km/h",speed)
                             })
-                            mMap.addPolyline(
+                            mMap.addPolyline(           //이전 위치와 현재 위치 직선으로 그리기
                                 PolylineOptions().add(
                                     prev_loc,
                                     cur_loc
@@ -215,7 +199,7 @@ class RunningMap : OnMapReadyCallback {
                                 cpOption.position(cur_loc)
                                 markerCount=distance.toInt()/100
                                 cpOption.title(markerCount.toString())
-                                mMap.addMarker(cpOption)
+                                mMap.addMarker(cpOption)            //체크포인트 추가
                                 markers.add(cur_loc)
                                 markerCount++
                                 routes.add(PolyUtil.simplify(latlngs, 10.0).toTypedArray())
