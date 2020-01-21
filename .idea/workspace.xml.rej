@@ -1,9 +1,0 @@
-diff a/.idea/workspace.xml b/.idea/workspace.xml	(rejected hunks)
-@@ -86,6 +86,7 @@
- +    <frame x="-8" y="0" width="1109" height="830" extended-state="0" />
-      <layout>
-        <window_info id="Captures" order="0" weight="0.25" />
-++<<<<<<< HEAD
- +      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.36567163" />
- +=======
-        <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.29376855" />
