@@ -123,39 +123,23 @@ class RacingMap : OnMapReadyCallback {
     }
 
     fun makerRunning() {
-        val circleDrawable = context.getDrawable(R.drawable.ic_maker_marker)
-        var canvas = Canvas();
-        var bitmap = Bitmap.createBitmap(
-            circleDrawable!!.intrinsicWidth,
-            circleDrawable!!.intrinsicHeight,
-            Bitmap.Config.ARGB_8888
-        );
-        canvas.setBitmap(bitmap);
-        circleDrawable.setBounds(
-            0,
-            0,
-            circleDrawable.getIntrinsicWidth(),
-            circleDrawable.getIntrinsicHeight()
-        );
-        circleDrawable.draw(canvas);
-        var makerIcon = BitmapDescriptorFactory.fromBitmap(bitmap);
-
+        var makerIcon = makingIcon(R.drawable.ic_maker_marker,context)
         val makerOptions = MarkerOptions()
         makerOptions.position(markers[0])
         makerOptions.title("Maker")
         makerOptions.icon(makerIcon)
-        makerMarker = mMap.addMarker(makerOptions)
+        makerMarker = mMap.addMarker(makerOptions)//maker 마커 추가
 
         makerRunningThread = Thread(Runnable {
             var time = makerData.time
-
+            //전체 시간 / 체크포인트 개수 = 한체크포인트에서 머물 시간
             var sleepTime = ((time.toDouble() / markers.size.toDouble())).roundToLong()
             print_log("시간 : " + time+", " + sleepTime.toString())
 
             for (index in markers.indices) {
                 Thread.sleep(sleepTime)
                 (context as Activity).runOnUiThread(Runnable {
-                    if (makerMarker != null) makerMarker!!.remove()
+                    if (makerMarker != null) makerMarker!!.remove() //이전 마커 지우고 새로운 위치로 업데이트
                     val makerOptions = MarkerOptions()
                     makerOptions.position(markers[index])
                     makerOptions.title("Maker")
@@ -164,13 +148,13 @@ class RacingMap : OnMapReadyCallback {
                     makerMarker = mMap.addMarker(makerOptions)
                 })
             }
-            (context as Activity).runOnUiThread(Runnable {
+            (context as Activity).runOnUiThread(Runnable {          //마커가 끝까지 도착하면
                 // TTS.speech("맵 제작자가 도착했습니다.")
                 (context as Activity).countDownTextView.text = "Maker arrive at finish point"
                 (context as Activity).countDownTextView.visibility = View.VISIBLE
                 print_log("maker arrive")
             })
-            Thread.sleep(1500)
+            Thread.sleep(1500)      //1.5초후에 안내 끝
             (context as Activity).runOnUiThread(Runnable {
                 (context as Activity).countDownTextView.visibility = View.GONE
             })
@@ -199,14 +183,14 @@ class RacingMap : OnMapReadyCallback {
                         .endCap(RoundCap())
                 )        //경로를 그릴 폴리라인 집합
             )
-            if (i == 0) {
+            if (i == 0) {   //처음엔 스타트포인트
                 var spIcon = makingIcon(R.drawable.ic_racing_startpoint,context)
                 val startMarkerOptions = MarkerOptions()
                 startMarkerOptions.position(markers[0])
                 startMarkerOptions.title("Start")
                 startMarkerOptions.icon(spIcon)
                 mMap.addMarker(startMarkerOptions)
-            } else {
+            } else {        //나머진 다 체크포인트
                 cpOption.position(markers[i])
                 cpOption.title(i.toString())
                 cpMarkers.add(mMap.addMarker(cpOption))
@@ -219,7 +203,7 @@ class RacingMap : OnMapReadyCallback {
         finishMarkerOptions.position(markers[markers.size - 1])
         finishMarkerOptions.title("Finish")
         finishMarkerOptions.icon(fpIcon)
-        mMap.addMarker(finishMarkerOptions)
+        mMap.addMarker(finishMarkerOptions) //마지막엔 피니시 포인트
 
         var min = LatLng(Wow.minDouble(makerData.lats), Wow.minDouble(makerData.lngs))
         var max = LatLng(Wow.maxDouble(makerData.lats), Wow.maxDouble(makerData.lngs))
@@ -272,7 +256,7 @@ class RacingMap : OnMapReadyCallback {
                         var speed = location.speed
                         cur_loc = LatLng(lat, lng)
                         when (userState) {
-                            UserState.BEFORERACING -> {
+                            UserState.BEFORERACING -> { //경기 시작전
                                 (context as Activity).runOnUiThread(Runnable {
                                     (context as Activity).racingNotificationButton.text =
                                         ("시작 포인트로 이동하십시오.\n시작포인트까지 남은거리 : "
@@ -281,6 +265,7 @@ class RacingMap : OnMapReadyCallback {
                                             markers[0]
                                         )).roundToLong().toString() + "m")
                                 })
+                                //시작포인트에 10m이내로 들어오면 준비상태로 변경
                                 if (SphericalUtil.computeDistanceBetween(
                                         cur_loc,
                                         markers[0]
@@ -290,6 +275,7 @@ class RacingMap : OnMapReadyCallback {
                                 }
                             }
                             UserState.READYTORACING -> {
+                                //10m밖으로 나가면 상태변경
                                 if (SphericalUtil.computeDistanceBetween(
                                         cur_loc,
                                         markers[0]
@@ -326,17 +312,19 @@ class RacingMap : OnMapReadyCallback {
                                             ).color(Color.RED)
                                         )
                                     )
+                                    //다음 포인트랑 현재 위치랑 10m이내가 되면
                                     if (SphericalUtil.computeDistanceBetween(
                                             cur_loc,
                                             markers[markerCount]
                                         ) < 10
                                     ) {
+                                        //이전포인트에서 현재까지 달린 경로 지우고
                                         for (i in passedLine.indices)
                                             passedLine[i].remove()
                                         routeLine[0].remove()
                                         routeLine.removeAt(0)
 
-                                        mMap.addPolyline(
+                                        mMap.addPolyline( //깔끔하게 새로 직선 그리기
                                             PolylineOptions()
                                                 .addAll(loadRoute[markerCount - 1])
                                                 .color(Color.BLUE)
@@ -344,7 +332,7 @@ class RacingMap : OnMapReadyCallback {
                                                 .endCap(RoundCap())
                                         )        //지나간길
 
-
+                                        //
                                         if (markerCount == markers.size - 1) {
                                             manageRacing.stopRacing(true)
                                         } else {
@@ -377,20 +365,21 @@ class RacingMap : OnMapReadyCallback {
                                         18F
                                     )
                                 )
+                                //경로이탈검사
                                 if (PolyUtil.isLocationOnPath(
                                         LatLng(lat, lng),
                                         loadRoute[markerCount - 1],
                                         false,
                                         20.0
                                     )
-                                ) {
+                                ) {//경로 안에 있으면
                                     print_log("위도 : " + lat.toString() + "경도 : " + lng.toString())
                                     if(manageRacing.noticeState==NoticeState.DEVIATION) {
                                         manageRacing.noticeState=NoticeState.NOTHING
                                         countDeviation = 0
                                         manageRacing.deviation(countDeviation)
                                     }
-                                } else {
+                                } else {//경로 이탈이면
                                     manageRacing.deviation(++countDeviation)
                                     if (countDeviation > 30) {
                                         manageRacing.stopRacing(false)
