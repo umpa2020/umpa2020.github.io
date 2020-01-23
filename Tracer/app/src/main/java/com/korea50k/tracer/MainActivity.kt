@@ -21,10 +21,16 @@ class MainActivity : AppCompatActivity() {
 
         val db = FirebaseFirestore.getInstance()
 
+        // MapData class 참조
         val mapData = MapData("jung_beengle", "자기전_map", "겹쳐져 버리나",
             "스토리지에 있는 json 파일 경로", "스토리지에 있는 image 파일 경로", "10.32km","12:22",2,0,"RANKING")
         db.collection("mapData").document("firstt_map").set(mapData)
+        // db에 원하는 경로 및, 문서로 업로드
 
+
+        // db에 있는 모든 mapdata 받아오는 클래스
+        var getMapData = GetMapData()
+        getMapData.getMapData()
     }
 
 }
