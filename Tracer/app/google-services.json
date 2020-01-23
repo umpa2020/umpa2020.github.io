@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1000155468156",
+    "firebase_url": "https://tracer-9070d.firebaseio.com",
+    "project_id": "tracer-9070d",
+    "storage_bucket": "tracer-9070d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1000155468156:android:432dd5f870b0ec0b76d4f9",
+        "android_client_info": {
+          "package_name": "com.korea50k.tracer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1000155468156-k4i4vgdb2qtmdbfqnblvfn9e1uk6hqav.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.korea50k.tracer",
+            "certificate_hash": "a31bd37c0f0a702f8068295172653834a59e05c1"
+          }
+        },
+        {
+          "client_id": "1000155468156-l28tn9qs82tuaaookendiluorrgl8eb3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB_JSUJNSsY3BM8pxFVgA9RNnR_wSDcCsg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1000155468156-l28tn9qs82tuaaookendiluorrgl8eb3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
