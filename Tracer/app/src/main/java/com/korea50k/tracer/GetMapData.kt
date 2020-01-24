@@ -19,4 +19,17 @@ class GetMapData() {
                 Log.w(TAG, "Error getting documents.", exception)
             }
     }
+
+    /*fun getSpecificMapData(maptitle: String) {
+        db.collection("maps").document(maptitle)
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    Log.d(TAG, "${document.id} => ${document.data}")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.w(TAG, "Error getting documents.", exception)
+            }
+    }*/
 }
