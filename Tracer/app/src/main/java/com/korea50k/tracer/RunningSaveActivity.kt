@@ -20,6 +20,10 @@ import com.korea50k.tracer.dataClass.InfoData
 import com.korea50k.tracer.dataClass.RecordData
 import com.korea50k.tracer.dataClass.RouteData
 import kotlinx.android.synthetic.main.activity_running_save.*
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.util.*
+import kotlin.collections.ArrayList
 
 class RunningSaveActivity : AppCompatActivity() {
     private val multiplePermissionsCode = 100          //권한
@@ -61,7 +65,12 @@ class RunningSaveActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_running_save)
 
+        // 등록한 퍼미션 확인 과정
         checkPermissions()
+
+        // 맵 타이틀과, 랭킹 중복 방지를 위해서 시간 값을 넣어서 중복 방지
+        val dt = Date()
+        val full_sdf = SimpleDateFormat("yyyy-MM-dd, hh:mm:ss a")
 
         val db = FirebaseFirestore.getInstance()
         val speed: List<Double> = listOf(1.0, 2.3, 3.3) // 순간 속력
@@ -71,8 +80,7 @@ class RunningSaveActivity : AppCompatActivity() {
             "jung_beengle", "mapTitle_test", "맵 설명",
             "스토리지에 있는 image 파일 경로", "10.32km", "12:22", 2, 0, "RANKING", speed
         )
-        db.collection("maps").document("maptitle_1").collection("info").document("info")
-            .set(infoData)
+        db.collection("maps").document("map1||"+ full_sdf.format(dt).toString()).set(infoData)
 
 
         val altitude: List<Double> = listOf(1.0, 2.3, 3.3) // 고도
@@ -81,12 +89,13 @@ class RunningSaveActivity : AppCompatActivity() {
 
         // RouteData class 참조 - 루트 정보만 표기 (위도, 경도, 고도)
         val routeData = RouteData(altitude, latitude, longitude)
-        db.collection("maps").document("maptitle_1").collection("route").document("route")
+        db.collection("maps").document("map1||"+ full_sdf.format(dt).toString()).collection("route").document("route")
             .set(routeData)
 
-        val recordData = RecordData("sugine", "11:33")
-        db.collection("maps").document("maptitle_1").collection("record")
-            .document("challenger nickname").set(recordData)
+
+        val recordData = RecordData("jungbin", "13:33")
+        db.collection("maps").document("map1||"+ full_sdf.format(dt).toString()).collection("record")
+            .document("jungbin||"+ full_sdf.format(dt).toString()).set(recordData)
         // db에 원하는 경로 및, 문서로 업로드
 
 

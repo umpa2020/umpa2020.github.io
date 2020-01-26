@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/tracer.iml" filepath="$PROJECT_DIR$/tracer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/tracer.iml" filepath="$PROJECT_DIR$/tracer.iml" group="tracer" />
     </modules>
   </component>
 </project>
