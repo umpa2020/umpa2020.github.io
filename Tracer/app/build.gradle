@@ -56,9 +56,7 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.10.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.10.0'
 
-<<<<<<< HEAD
-
-    // for custom bottom navigation view - bottom 6 items
+   // for custom bottom navigation view - bottom 6 items
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta4'
     implementation 'com.google.android.material:material:1.2.0-alpha04'
@@ -66,9 +64,4 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
-
-=======
-    //bottomNavigationView 추가
-    implementation 'com.google.android.material:material:1.1.0-alpha10'
->>>>>>> b2bef3b6f3813bce691fd9b0087b65690f3d7459
 }
