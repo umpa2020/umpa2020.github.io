@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--bottom navigation에 들어가는 메뉴-->
+    <item
+        android:id="@+id/navigation_profile"
+        android:icon="@drawable/ic_launcher_background"
+        android:title="Profile" />
+    <item
+        android:id="@+id/navigation_start"
+        android:icon="@drawable/ic_launcher_background"
+        android:title="Start" />
+    <item
+        android:id="@+id/navigation_ranking"
+        android:icon="@drawable/ic_launcher_background"
+        android:title="Ranking" />
+</menu>
