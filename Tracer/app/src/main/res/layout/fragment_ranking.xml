@@ -2,18 +2,37 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:id="@+id/listTitleLinearLayout">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="map"
+            style="@style/ListTitle"/>
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="실행수"
+            style="@style/ListTitle"/>
+    </LinearLayout>
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Ranking Fragment"
-        android:textSize="30sp"
-        android:layout_centerInParent="true"/>
-    
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:text="text"
-        android:layout_alignParentBottom="true"/>
+        android:layout_below="@id/listTitleLinearLayout"
+        android:id="@+id/divisionTextView"
+        style="@style/divisionTextView">
+    </TextView>
+
+
 
 </RelativeLayout>
