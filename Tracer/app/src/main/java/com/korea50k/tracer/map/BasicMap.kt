@@ -41,9 +41,9 @@ class BasicMap : OnMapReadyCallback {
     }
 
     private fun init() { //before the map is loaded
-        //TODO:이거 주석 풀어봐야함 왜 오류나는지 몰라서 잠시
-        //racerIcon=makingIcon(R.drawable.ic_racer_marker,context)    //아이콘 생성 WOW 클래스 참고
+        racerIcon=makingIcon(R.drawable.ic_racer_marker,context)    //아이콘 생성 WOW 클래스 참고
         initLocation()                                             //위치 받는 쓰레드 초기화 받기
+        Log.d("ssmm11" , "start init")
     }
 
     override fun onMapReady(googleMap: GoogleMap) { //after the map is loaded
@@ -113,6 +113,7 @@ class BasicMap : OnMapReadyCallback {
                         if(currentMarker!=null)currentMarker!!.remove()     //이미 그려진 마커가 있으면 지우고 재생성
                         val markerOptions = MarkerOptions()
                         markerOptions.position(cur_loc)
+                        Log.d("ssmm11" , "현재 위치 "+ cur_loc)
                         markerOptions.title("Me")
                         markerOptions.icon(racerIcon)
                         currentMarker = mMap.addMarker(markerOptions)
