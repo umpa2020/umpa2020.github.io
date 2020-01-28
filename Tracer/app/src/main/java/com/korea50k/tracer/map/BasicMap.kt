@@ -15,7 +15,7 @@ import com.korea50k.tracer.dataClass.UserState
 import com.korea50k.tracer.R
 
 class BasicMap : OnMapReadyCallback {
-    lateinit var mMap: GoogleMap    //racingMap 인스턴스
+    var mMap: GoogleMap? = null    //racingMap 인스턴스
     lateinit var fusedLocationClient: FusedLocationProviderClient   //위치정보 가져오는 인스턴스
     lateinit var locationCallback: LocationCallback
     lateinit var locationRequest: LocationRequest
@@ -46,7 +46,7 @@ class BasicMap : OnMapReadyCallback {
         Log.d("ssmm11", "onMapReady")
 
         mMap = googleMap //구글맵
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(prev_loc, 17F))   //화면이동
+        mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(prev_loc, 17F))   //화면이동
         fusedLocationClient.requestLocationUpdates(                     //위치정보 요청
             locationRequest,
             locationCallback,
@@ -83,7 +83,7 @@ class BasicMap : OnMapReadyCallback {
                     markerOptions.position(prev_loc)
                     markerOptions.title("Me")
                     markerOptions.icon(racerIcon)
-                    currentMarker = mMap.addMarker(markerOptions)       //현재위치에 marker를 그림
+                    currentMarker = mMap?.addMarker(markerOptions)       //현재위치에 marker를 그림
                 }
             }
             .addOnFailureListener {
@@ -114,9 +114,9 @@ class BasicMap : OnMapReadyCallback {
                         Log.d("ssmm11" , "현재 위치 설정 " )
                         markerOptions.title("Me")
                         markerOptions.icon(racerIcon)
-                        currentMarker = mMap.addMarker(markerOptions)
+                        currentMarker = mMap?.addMarker(markerOptions)
 
-                        mMap.moveCamera(
+                        mMap?.moveCamera(
                             CameraUpdateFactory.newLatLngZoom(
                                 cur_loc,
                                 17F
