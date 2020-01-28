@@ -3,10 +3,15 @@
     <font
         android:fontStyle = "normal"
         android:fontWeight = "400"
-        android:font = "@font/godob"/>
+        android:font = "@font/notosansbold"/>
 
     <font
         android:fontStyle = "normal"
         android:fontWeight = "400"
-        android:font = "@font/godoroundedl"/>
+        android:font = "@font/notosansmedium"/>
+
+    <font
+        android:fontStyle = "normal"
+        android:fontWeight = "400"
+        android:font = "@font/notosanslight"/>
 </font-family>
