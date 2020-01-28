@@ -2,7 +2,25 @@
 <resources>
     <style name = "ListTitle">
         <item name = "android:textSize">20dp</item>
-        <item name = "android:textColor">#ff0000</item>
+        <item name = "android:textColor">#de2018</item>
         <item name = "android:fontFamily">@font/notosansmedium</item>
     </style>
+
+    <style name="ListDetail">
+        <item name = "android:textSize">13dp</item>
+        <item name = "android:textColor">#000000</item>
+        <item name = "android:fontFamily">@font/notosanslight</item>
+    </style>
+
+    <style name="ListDetail1" parent="ListDetail">
+        <item name = "android:textSize">20dp</item>
+    </style>
+
+    <style name="buttonText">
+        <item name = "android:textSize">15dp</item>
+        <item name = "android:textColor">#ffffff</item>
+        <item name = "android:fontFamily">@font/notosansmedium</item>
+    </style>
+
+
 </resources>

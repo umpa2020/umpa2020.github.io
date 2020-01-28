@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:id="@+id/RelativeLayout"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:background="#00000000"
+            android:scaleType="fitXY"
+            android:id="@+id/rank_root_preview"/>
+
+        <Button
+            android:layout_width="160dp"
+            android:layout_height="40dp"
+            android:background="@drawable/button_background"
+            android:text="MORE"
+            style="@style/buttonText"
+            android:onClick="onClick"
+            android:gravity="center"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="15dp"
+            />
+
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/mapnamehorizontallayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@+id/RelativeLayout"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="5dp">
+
+        <TextView
+            android:id="@+id/mapName_TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="map name"
+            style="@style/ListDetail1"/>
+
+        <TextView android:id="@+id/ID_TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="player"
+            style="@style/ListDetail1"
+            android:textSize="15dp"/>
+
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/gubun1"
+        android:layout_below="@+id/mapnamehorizontallayout"
+        android:layout_marginTop="5dp"
+        style="@style/divisionTextView"
+        />
+
+
+    <TextView
+        android:gravity="center"
+        android:id="@+id/topplayertextview"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_below="@+id/gubun1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="top player"
+        style="@style/ListDetail1"
+        />
+
+    <TextView
+        android:layout_below="@+id/topplayertextview"
+        android:id="@+id/gubun2"
+        android:layout_marginTop="3dp"
+        style="@style/divisionTextView"/>
+
+    <LinearLayout
+        android:id="@+id/infolayout"
+        android:layout_below="@+id/gubun2"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="player"
+            android:gravity="center"
+            style="@style/ListTitle"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="랩 타임"
+            android:gravity="center"
+            style="@style/ListTitle"/>
+
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_below="@+id/infolayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/rank_detailRecyclerView">
+    </androidx.recyclerview.widget.RecyclerView>
+
+
+</RelativeLayout>

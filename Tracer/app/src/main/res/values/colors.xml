@@ -9,7 +9,8 @@
     <color name="black">#000000</color>
     <color name="rankBackgroudGray">#acacae</color>
     <color name="white">#ffffff</color>
-    <color name="darkRed">#d02027</color>
-    <color name="red">#DF0101</color>
+
     <color name="gray">#BDBDBD</color>
+
+    <color name="red">#de2018</color>
 </resources>
