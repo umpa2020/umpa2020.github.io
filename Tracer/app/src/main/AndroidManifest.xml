@@ -17,14 +17,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-<<<<<<< HEAD
+
         <activity android:name=".Ranking.RankRecyclerItemClickActivity"></activity>
         <activity android:name=".Ranking.RankingMapDetailActivity" />
-        <activity android:name=".RunningSaveActivity" />
-=======
-        <activity android:name=".Start.RunningActivity"></activity>
         <activity android:name=".Start.RunningSaveActivity" />
->>>>>>> aea494829517ae5471301e2151e63624163e9cd5
+
+        <activity android:name=".Start.RunningActivity"></activity>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

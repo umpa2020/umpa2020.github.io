@@ -4,7 +4,7 @@
     <!--bottom navigation에 들어가는 메뉴-->
     <item
         android:id="@+id/navigation_profile"
-        android:icon="@drawable/ic_launcher_background"
+        android:icon="@drawable/profile_icon"
         android:title="Profile" />
     <item
         android:id="@+id/navigation_start"
@@ -12,6 +12,6 @@
         android:title="Start" />
     <item
         android:id="@+id/navigation_ranking"
-        android:icon="@drawable/ic_launcher_background"
+        android:icon="@drawable/ranking_icon"
         android:title="Ranking" />
 </menu>
