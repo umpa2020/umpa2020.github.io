@@ -3,7 +3,6 @@ package com.korea50k.tracer.map
 import android.content.Context
 import android.os.Looper
 import android.util.Log
-import com.bumptech.glide.Glide.init
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -14,8 +13,6 @@ import com.google.android.gms.maps.model.BitmapDescriptor
 import com.korea50k.tracer.Wow.Companion.makingIcon
 import com.korea50k.tracer.dataClass.UserState
 import com.korea50k.tracer.R
-
-
 
 class BasicMap : OnMapReadyCallback {
     lateinit var mMap: GoogleMap    //racingMap 인스턴스
@@ -43,11 +40,12 @@ class BasicMap : OnMapReadyCallback {
     private fun init() { //before the map is loaded
         racerIcon=makingIcon(R.drawable.ic_racer_marker,context)    //아이콘 생성 WOW 클래스 참고
         initLocation()                                             //위치 받는 쓰레드 초기화 받기
-        Log.d("ssmm11" , "start init")
     }
 
     override fun onMapReady(googleMap: GoogleMap) { //after the map is loaded
-        mMap = googleMap                                               //구글맵
+        Log.d("ssmm11", "onMapReady")
+
+        mMap = googleMap //구글맵
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(prev_loc, 17F))   //화면이동
         fusedLocationClient.requestLocationUpdates(                     //위치정보 요청
             locationRequest,
@@ -113,7 +111,7 @@ class BasicMap : OnMapReadyCallback {
                         if(currentMarker!=null)currentMarker!!.remove()     //이미 그려진 마커가 있으면 지우고 재생성
                         val markerOptions = MarkerOptions()
                         markerOptions.position(cur_loc)
-                        Log.d("ssmm11" , "현재 위치 "+ cur_loc)
+                        Log.d("ssmm11" , "현재 위치 설정 " )
                         markerOptions.title("Me")
                         markerOptions.icon(racerIcon)
                         currentMarker = mMap.addMarker(markerOptions)
