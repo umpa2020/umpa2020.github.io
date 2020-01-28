@@ -33,12 +33,23 @@
         style="@style/divisionTextView">
     </TextView>
 
+    <Button
+        android:id="@+id/nextButton"
+        android:onClick="onClick"
+        android:layout_marginTop="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="리사이클러뷰 클릭했을 때 액티비티로 넘어감"/>
+
+    <!--
+
     <androidx.recyclerview.widget.RecyclerView
         android:layout_below="@+id/divisionTextView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/rank_recycler_map">
     </androidx.recyclerview.widget.RecyclerView>
+    -->
 
 
 </RelativeLayout>

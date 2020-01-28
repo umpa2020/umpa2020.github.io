@@ -61,4 +61,12 @@ dependencies {
 
     //recyclerView 사용
     implementation "androidx.recyclerview:recyclerview:1.0.0"
+
+    //circleimageview
+    implementation 'de.hdodenhof:circleimageview:3.0.0'
+
+    //chart
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.2'
+
+
 }
