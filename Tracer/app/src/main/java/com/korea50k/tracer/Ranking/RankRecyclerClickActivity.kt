@@ -1,23 +1,5 @@
 package com.korea50k.tracer.Ranking
 
-import android.content.Intent
-import android.content.pm.ActivityInfo
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.os.AsyncTask
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.os.Handler
-import android.util.Log
-import android.view.View
-import android.widget.*
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import org.json.JSONArray
-import org.json.JSONObject
-import java.io.*
-import java.net.HttpURLConnection
-import java.net.URL
 /*
 class RankRecyclerClickActivity : AppCompatActivity() , OnLoadMoreListener {
     var start = 0

@@ -5,10 +5,10 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.korea50k.tracer.Profile.ProfileFragment
 import com.korea50k.tracer.Ranking.RankingFragment
 import com.korea50k.tracer.Start.StartFragment
 import kotlinx.android.synthetic.main.activity_main.*
+import com.korea50k.tracer.Profile.ProfileFragment
 
 class MainActivity : AppCompatActivity() {
 
