@@ -16,4 +16,18 @@
         <item name="android:background">@color/gray</item>
     </style>
 
+    <style name="info_text">
+        <item name="android:fontFamily">@font/notosansmedium</item>
+        <item name="android:textSize">17dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:height">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_margin">5dp</item>
+        <item name="android:textColor">#000000</item>
+    </style>
+
+    <style name="info_text_1" parent="info_text">
+        <item name="android:textSize">15dp</item>
+    </style>
+
 </resources>

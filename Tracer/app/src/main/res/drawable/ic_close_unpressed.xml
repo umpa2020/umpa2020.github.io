@@ -1,0 +1,40 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="70dp"
+    android:height="45dp"
+    android:viewportWidth="70"
+    android:viewportHeight="45">
+  <path
+      android:pathData="M15,9.49L55.06,9.49A13.01,13.01 0,0 1,68.07 22.5L68.07,22.51A13.01,13.01 0,0 1,55.06 35.52L15,35.52A13.01,13.01 0,0 1,1.99 22.51L1.99,22.5A13.01,13.01 0,0 1,15 9.49z"
+      android:strokeAlpha="0.51"
+      android:fillColor="#8e8e8e"
+      android:fillAlpha="0.51"/>
+  <path
+      android:pathData="M14.12,9.49L55.51,9.49A12.13,12.125 0,0 1,67.64 21.615L67.64,21.615A12.13,12.125 0,0 1,55.51 33.74L14.12,33.74A12.13,12.125 0,0 1,1.99 21.615L1.99,21.615A12.13,12.125 0,0 1,14.12 9.49z"
+      android:fillColor="#fff"/>
+  <path
+      android:pathData="M55,35.51L14.94,35.51A13.01,13.01 45,0 1,1.93 22.5L1.93,22.49A13.01,13.01 45,0 1,14.94 9.48L55,9.48A13.01,13.01 0,0 1,68.01 22.49L68.01,22.5A13.01,13.01 0,0 1,55 35.51z">
+    <aapt:attr name="android:fillColor">
+      <gradient 
+          android:startY="34.500023"
+          android:startX="34.969887"
+          android:endY="10.410025"
+          android:endX="34.969887"
+          android:type="linear">
+        <item android:offset="0" android:color="#19000000"/>
+        <item android:offset="0.04" android:color="#21525252"/>
+        <item android:offset="0.12" android:color="#2BB2B2B2"/>
+        <item android:offset="0.19" android:color="#30ECECEC"/>
+        <item android:offset="0.26" android:color="#33FFFFFF"/>
+        <item android:offset="0.67" android:color="#33F9F9F9"/>
+        <item android:offset="0.81" android:color="#2DE3E3E3"/>
+        <item android:offset="0.91" android:color="#26BDBCBD"/>
+        <item android:offset="1" android:color="#19878586"/>
+        <item android:offset="1" android:color="#19858384"/>
+      </gradient>
+    </aapt:attr>
+  </path>
+  <path
+      android:pathData="M34.58,29.57l7.59,-13.16l-15.19,0l7.6,13.16z"
+      android:fillColor="#d02027"/>
+</vector>
