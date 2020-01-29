@@ -292,7 +292,7 @@ class SignUpActivity : AppCompatActivity() {
          *  더 좋은 방법이 있을 지 모르지만 whereEqualTo는 db에 없는 것에 대한 검사는 안하는 듯
          *  그래서 flag로 억지로 유무 판단.
          */
-        mFirestoreDB!!.collection("UserInfo").whereEqualTo("nickname",nickname).get()
+        mFirestoreDB!!.collection("userinfo").whereEqualTo("nickname",nickname).get()
             .addOnSuccessListener { documents ->
                 for (document in documents) {
                     Log.d(WSY,document.id)

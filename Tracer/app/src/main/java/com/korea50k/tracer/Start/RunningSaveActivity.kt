@@ -1,27 +1,22 @@
-package com.korea50k.tracer
+package com.korea50k.tracer.Start
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.ImageView
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
-import com.firebase.ui.storage.images.FirebaseImageLoader
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import com.korea50k.tracer.GetMapData
+import com.korea50k.tracer.R
 import com.korea50k.tracer.dataClass.InfoData
 import com.korea50k.tracer.dataClass.RecordData
 import com.korea50k.tracer.dataClass.RouteData
 import kotlinx.android.synthetic.main.activity_running_save.*
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
 import java.util.*
 import kotlin.collections.ArrayList
 
