@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Ranking.RankingMapDetailActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp">
+
+            <LinearLayout
+                android:id="@+id/rankingDetailTitleLinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:id="@+id/rankingDetailProfileImage"
+                    android:src="@drawable/ic_launcher_background">
+
+                </de.hdodenhof.circleimageview.CircleImageView>
+
+
+                <LinearLayout
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="20dp">
+                    <TextView
+                        android:id="@+id/rankingDetailNickname"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/ListDetail"
+                        android:text="Nickname"
+                        android:textSize="15dp"
+                        />
+
+                    <TextView
+                        android:id="@+id/rankingDetailDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/ListDetail"
+                        android:text="Date" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+            <TextView
+                android:layout_marginTop="10dp"
+                android:id="@+id/rankingDetailMapTitle"
+                android:layout_below="@+id/rankingDetailTitleLinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="maptitle"
+                style="@style/ListTitle"
+                android:textColor="@android:color/black"/>
+
+            <TextView
+                android:id="@+id/rankingDetailMapDetail"
+                android:layout_below="@+id/rankingDetailMapTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="맵 설명"
+                style="@style/ListDetail"/>
+
+
+            <LinearLayout
+                android:id="@+id/rankingDetailInfoLinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_below="@+id/rankingDetailMapDetail"
+                android:layout_marginTop="10dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Distance"
+                        style="@style/ListDetail" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="test"
+                        style="@style/ListDetail"
+                        android:id="@+id/rankingDetailDistance"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Time"
+                        style="@style/ListDetail"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="test"
+                        android:id="@+id/rankingDetailTime"
+                        style="@style/ListDetail"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Speed"
+                        style="@style/ListDetail"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="test"
+                        style="@style/ListDetail"
+                        android:id="@+id/rankingDetailSpeed"/>
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <ImageView
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:layout_below="@+id/rankingDetailInfoLinearLayout"
+                android:src="@drawable/ic_launcher_foreground"
+                android:id="@+id/rankingDetailGoogleMap"
+                >
+            </ImageView>
+
+            <com.github.mikephil.charting.charts.CombinedChart
+                android:id="@+id/rankingDetailChart"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/rankingDetailGoogleMap"
+                android:layout_marginBottom="50dp"
+                >
+            </com.github.mikephil.charting.charts.CombinedChart>
+
+
+        </RelativeLayout>
+    </ScrollView>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="10dp"
+        android:text="Race"
+        style="@style/buttonText"
+        android:background="@drawable/button_background"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/rankingDetailRaceButton"/>
+
+</RelativeLayout>

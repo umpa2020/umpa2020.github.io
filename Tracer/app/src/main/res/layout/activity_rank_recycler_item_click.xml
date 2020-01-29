@@ -19,6 +19,7 @@
             android:id="@+id/rank_root_preview"/>
 
         <Button
+            android:id="@+id/rankRecyclerMoreButton"
             android:layout_width="160dp"
             android:layout_height="40dp"
             android:background="@drawable/button_background"
@@ -41,19 +42,18 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_below="@+id/RelativeLayout"
-        android:layout_marginTop="10dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="5dp">
 
         <TextView
-            android:id="@+id/mapName_TextView"
+            android:id="@+id/rankRecyclerMaptitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="map name"
             style="@style/ListDetail1"/>
 
-        <TextView android:id="@+id/ID_TextView"
+        <TextView android:id="@+id/rankRecyclerNickname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="player"
@@ -86,13 +86,11 @@
     <TextView
         android:layout_below="@+id/topplayertextview"
         android:id="@+id/gubun2"
-        android:layout_marginTop="3dp"
         style="@style/divisionTextView"/>
 
     <LinearLayout
         android:id="@+id/infolayout"
         android:layout_below="@+id/gubun2"
-        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="20dp"
