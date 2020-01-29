@@ -35,11 +35,6 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
-    // firebase auth - login tool
-    implementation 'com.google.firebase:firebase-auth:19.2.0'
-    implementation 'com.firebaseui:firebase-ui-auth:4.3.1'
-
-
     // firebase
     implementation 'com.google.firebase:firebase-analytics:17.2.2'
 
@@ -61,4 +56,30 @@ dependencies {
 
     //recyclerView 사용
     implementation "androidx.recyclerview:recyclerview:1.0.0"
+
+    implementation 'com.firebaseui:firebase-ui-auth:4.3.1' // firebaseUi google 로그인
+    implementation 'com.google.firebase:firebase-auth:19.2.0' // firebase auth 설정 - 로그인 시 필요
+    implementation 'com.google.android.gms:play-services-auth:17.0.0' // firebase google 로그인 설정
+
+
+    /**
+     *  Kotpref - Android SharedPreference delegation for Kotlin.
+     *  https://github.com/chibatching/Kotpref
+     */
+    implementation 'com.chibatching.kotpref:kotpref:2.10.0' // core
+    implementation 'com.chibatching.kotpref:initializer:2.10.0'   // optional, auto initialization module
+
+    // circleImageView
+    implementation 'com.mikhaellopez:circularimageview:4.1.1'
+
+    //RX
+    implementation "com.jakewharton.rxbinding2:rxbinding-kotlin:$rxKotlinVersion"
+
+    // Anko Commons
+    implementation "org.jetbrains.anko:anko-commons:$anko_version"
+    // Appcompat-v7 (only Anko Commons)
+    implementation "org.jetbrains.anko:anko-appcompat-v7-commons:$anko_version"
+    // Support-v4 (only Anko Commons)
+    implementation "org.jetbrains.anko:anko-support-v4-commons:$anko_version"
+    implementation 'com.android.support:design:29.0.0'
 }
