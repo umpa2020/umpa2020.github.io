@@ -36,7 +36,7 @@ class RunningMap : OnMapReadyCallback {
     var prev_loc: LatLng = LatLng(0.0, 0.0)          //이전위치
     lateinit var cur_loc: LatLng            //현재위치
     var latlngs: MutableList<LatLng> = mutableListOf()   //움직인 점들의 집합 나중에 저장될 점들 집합
-    var routes=ArrayList<MutableList<LatLng>>()
+    var routes: MutableList<LatLng> = mutableListOf()
     var altitude: MutableList<Double> = mutableListOf(.0)
     var speeds: MutableList<Double> = mutableListOf(.0)
     var distance = 0.0
@@ -77,13 +77,14 @@ class RunningMap : OnMapReadyCallback {
 
     fun stopTracking(routeData: RouteData, infoData: InfoData) {
         print_log("Stop")
-        routes.add(PolyUtil.simplify(latlngs, 10.0).toMutableList())
+        routes = PolyUtil.simplify(latlngs, 10.0)
         markers.add(cur_loc)
 
         routeData.latlngs = routes
         routeData.markerlatlngs = markers
         routeData.altitude = altitude
 
+        //TODO: speed
         infoData.speed = speeds
     }
 
@@ -201,9 +202,8 @@ class RunningMap : OnMapReadyCallback {
                                 mMap.addMarker(cpOption)
                                 markers.add(cur_loc)
                                 markerCount++
-                                routes.add(PolyUtil.simplify(latlngs, 10.0).toMutableList())
+                                routes = PolyUtil.simplify(latlngs, 10.0)
                                 print_log(routes[routes.size - 1].toString())
-                                latlngs = Vector()
                                 latlngs.add(cur_loc)
                             }
                         }
