@@ -15,10 +15,12 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.korea50k.tracer.util.GetMapData
 import com.korea50k.tracer.R
+import com.korea50k.tracer.UserInfo
 import com.korea50k.tracer.dataClass.InfoData
 import com.korea50k.tracer.dataClass.Privacy
 import com.korea50k.tracer.dataClass.RankingData
 import com.korea50k.tracer.dataClass.RouteData
+import com.korea50k.tracer.map.ViewerMap
 import com.korea50k.tracer.util.ConvertJson
 import kotlinx.android.synthetic.main.activity_running_save.*
 import java.text.SimpleDateFormat
@@ -30,6 +32,8 @@ class RunningSaveActivity : AppCompatActivity() {
     lateinit var infoData: InfoData
     lateinit var routeData: RouteData
 
+    lateinit var map: ViewerMap
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_running_save)
@@ -39,6 +43,8 @@ class RunningSaveActivity : AppCompatActivity() {
 
         //TODO: 액티비티에 그리는 거 먼저
 
+        val smf = supportFragmentManager.findFragmentById(R.id.map_viewer) as SupportMapFragment
+        map = ViewerMap(smf, this, routeData)
         distance_tv.text = String.format("%.3f", infoData.distance!! / 1000)
         val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
         formatter.setTimeZone(TimeZone.getTimeZone("UTC"))
@@ -52,33 +58,6 @@ class RunningSaveActivity : AppCompatActivity() {
             publicRadio.isChecked = true
         }
         setChart()
-        //TODO: DB에 올리는거
-
-
-        //TODO:맵 그리는 거 조금 나중에
-        /*val smf = supportFragmentManager.findFragmentById(R.id.map_viewer) as SupportMapFragment
-        map = ViewerMap(smf, this, runningData)*/
-
-        // 맵 타이틀과, 랭킹 중복 방지를 위해서 시간 값을 넣어서 중복 방지
-        val dt = Date()
-        val full_sdf = SimpleDateFormat("yyyy-MM-dd, hh:mm:ss a")
-
-        val db = FirebaseFirestore.getInstance()
-
-        // InfoData class 참조 - 루트를 제외한 맵 정보 기술
-        db.collection("maps").document(infoData.mapTitle+"||" + full_sdf.format(dt).toString()).set(infoData)
-
-        // RouteData class 참조 - 루트 정보만 표기 (위도경도, 고도, 마커의 위도경도)
-        db.collection("maps").document(infoData.mapTitle+"||" + full_sdf.format(dt).toString()).collection("route").document("route")
-            .set(routeData)
-
-
-        val recordData = RankingData("jungbin", "13:33")
-        db.collection("maps").document(infoData.mapTitle+"||" + full_sdf.format(dt).toString()).collection("record")
-            .document("jungbin||" + full_sdf.format(dt).toString()).set(recordData)
-        // db에 원하는 경로 및, 문서로 업로드
-
-
 
         //TODO:db에 있는 모든 mapdata 받아오는 클래스
 /*
@@ -129,7 +108,7 @@ class RunningSaveActivity : AppCompatActivity() {
                         mapExplanationEdit.hint = "맵 설명을 작성해주세요"
                         mapExplanationEdit.setHintTextColor(Color.RED)
                     } else {
-                        //map.CaptureMapScreen()
+                        map.CaptureMapScreen()
                         switch++
                     }
                 }
@@ -141,9 +120,34 @@ class RunningSaveActivity : AppCompatActivity() {
         infoData.mapImage = imgPath
         infoData.mapTitle = mapTitleEdit.text.toString()
         infoData.mapExplanation = mapExplanationEdit.text.toString()
-        infoData.makersNickname = "진짜 물어봐야되네요 ㅎㅎ"
+        infoData.makersNickname = UserInfo.email
+        infoData.execute = 0
+        infoData.likes = 0
 
+        when (privacyRadioGroup.checkedRadioButtonId) {
+            R.id.racingRadio -> infoData.privacy = Privacy.RACING
+            R.id.publicRadio -> infoData.privacy = Privacy.PUBLIC
+            R.id.privateRadio -> infoData.privacy = Privacy.PRIVATE
+        }
 
+        // 맵 타이틀과, 랭킹 중복 방지를 위해서 시간 값을 넣어서 중복 방지
+        val dt = Date()
+        val full_sdf = SimpleDateFormat("yyyy-MM-dd, hh:mm:ss a")
+
+        val db = FirebaseFirestore.getInstance()
+
+        // InfoData class upload to database 참조 - 루트를 제외한 맵 정보 기술
+        db.collection("maps").document(infoData.mapTitle+"||" + full_sdf.format(dt).toString()).set(infoData)
+
+        // RouteData class upload to database 참조 - 루트 정보만 표기 (위도경도, 고도, 마커의 위도경도)
+        db.collection("maps").document(infoData.mapTitle+"||" + full_sdf.format(dt).toString()).collection("route").document("route")
+            .set(routeData)
+
+        // RankingData class upload to database - db 구조 정립 필요
+        val recordData = RankingData("jungbin", "13:33")
+        db.collection("maps").document(infoData.mapTitle+"||" + full_sdf.format(dt).toString()).collection("record")
+            .document("jungbin||" + full_sdf.format(dt).toString()).set(recordData)
+        // db에 원하는 경로 및, 문서로 업로드
     }
 
     private fun setChart() {    //클래스로 따로 빼야할듯

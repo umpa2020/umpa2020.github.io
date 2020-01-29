@@ -111,7 +111,6 @@ class BasicMap : OnMapReadyCallback {
                         if(currentMarker!=null)currentMarker!!.remove()     //이미 그려진 마커가 있으면 지우고 재생성
                         val markerOptions = MarkerOptions()
                         markerOptions.position(cur_loc)
-                        Log.d("ssmm11" , "현재 위치 설정 " )
                         markerOptions.title("Me")
                         markerOptions.icon(racerIcon)
                         currentMarker = mMap?.addMarker(markerOptions)
