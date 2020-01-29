@@ -1,4 +1,4 @@
-package com.korea50k.tracer
+package com.korea50k.tracer.util
 
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore

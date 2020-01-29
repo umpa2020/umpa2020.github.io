@@ -10,7 +10,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.google.android.gms.maps.model.BitmapDescriptor
-import com.korea50k.tracer.Wow.Companion.makingIcon
+import com.korea50k.tracer.util.Wow.Companion.makingIcon
 import com.korea50k.tracer.dataClass.UserState
 import com.korea50k.tracer.R
 
