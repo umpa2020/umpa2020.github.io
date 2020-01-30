@@ -40,7 +40,8 @@ class RankingMapDetailActivity : AppCompatActivity() {
         textView.text = "어떤 유형으로 경기하시겠습니까?"
 
         val textView1 : TextView = view.findViewById(R.id.rankingMapDetailPopUpTextView1)
-        textView1.text = "연습용 : 루트 연습용(랭킹 등록 불가능)\n랭킹 등록용 : 랭킹 등록 가능"
+        textView1.text = "연습용 : 루트 연습용(랭킹 등록 불가능)" +
+                "\n랭킹 기록용 : 랭킹 등록 가능"
 
         val alertDialog = AlertDialog.Builder(this) //alertDialog 생성
             .setTitle("유형을 선택해주세요.")
