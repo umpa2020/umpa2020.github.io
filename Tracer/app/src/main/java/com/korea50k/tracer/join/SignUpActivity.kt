@@ -386,7 +386,9 @@ class SignUpActivity : AppCompatActivity() {
             "googleTokenId" to tokenId,
             "nickname" to nickname,
             "age" to age,
-            "gender" to gender
+            "gender" to gender,
+            "totalDistance" to 0,
+            "totalTime" to 0
         )
         mFirestoreDB!!.collection("userinfo").document(email!!).set(data)
             .addOnSuccessListener { Log.d(WSY, "DocumentSnapshot successfully written!") }
