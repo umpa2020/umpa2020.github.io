@@ -9,7 +9,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import android.graphics.Color
-import com.korea50k.tracer.Start.RunningSaveActivity
+import com.korea50k.tracer.start.RunningSaveActivity
 import com.korea50k.tracer.util.Wow
 import com.korea50k.tracer.dataClass.RouteData
 import java.io.File
