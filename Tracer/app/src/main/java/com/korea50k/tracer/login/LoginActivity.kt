@@ -118,8 +118,10 @@ class LoginActivity : AppCompatActivity() {
     private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
         Log.d(WSY, "firebaseAuthWithGoogle:" + acct.id!!) // firebaseAuthWithGoogle:117635384468060774340 => 계정 고유 번호 => 이것을 Shared에 저장하여 자동 로그인 구현
         Log.d(WSY, acct.email)
-        UserInfo.autoLoginKey =  acct.id!!.toString()
-        UserInfo.email = acct.email.toString()
+
+        val tokenId =  acct.id!!.toString()
+        val email = acct.email.toString()
+
         // Credentail 구글 로그인에 성공했다는 인증서
         val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
         Log.d(WSY, credential.toString())
@@ -130,13 +132,13 @@ class LoginActivity : AppCompatActivity() {
                 if (task.isSuccessful) { // 성공하면
                     // Sign in success, update UI with the signed-in user's information
                     Log.d(WSY, "signInWithCredential:success")
-                    Log.d(WSY, UserInfo.autoLoginKey) // 로그인에 성공해서 토큰id저장 후 불러오기 // 117635384468060774340
                     // 로그인 성공
-                    mFirestoreDB!!.collection("UserInfo").document(acct.email!!).get()
+                    mFirestoreDB!!.collection("userinfo").document(email).get()
                         .addOnCompleteListener{task ->
                             if (task.isSuccessful) {
                                 // Document found in the offline cache
                                 val document = task.result
+
                                 Log.d(WSY,document.toString()) // DocumentSnapshot{key=UserInfo/117635384468060774340, metadata=SnapshotMetadata{hasPendingWrites=false, isFromCache=false}, doc=null}
                                 Log.d(WSY,document!!.id)  // 117635384468060774340
                                 Log.d(WSY,document.exists().toString()) // false
@@ -148,10 +150,20 @@ class LoginActivity : AppCompatActivity() {
                                     // 최초 가입자
                                     Log.d(WSY, "초기 가입인가")
                                     var nextIntent = Intent(this@LoginActivity, SignUpActivity::class.java)
+                                    nextIntent.putExtra("tokenId",tokenId)
+                                    nextIntent.putExtra("email",email)
                                     startActivity(nextIntent)
                                     finish()
                                 } else { // data가 있으면 Main으로
-                                    Log.d(WSY, "기존 가입자 -> 메인으로")
+                                    Log.d(WSY, "기존 가입자 -> 메인으로") // 이 부분에 들어왔다는 것은 로그아웃 or 앱 삭제 후 재로그인일 테니깐 Shared에 다시 값 저장.
+
+                                    Log.d(WSY, document.data.toString()) // {gender=Man, nickname=gfyhv, googleTokenId=117635384468060774340, age=26}
+                                    Log.d(WSY,document.data!!.get("nickname").toString())
+
+                                    UserInfo.autoLoginKey = tokenId!!
+                                    UserInfo.email = email!!
+                                    UserInfo.nickname = document.data!!.get("nickname").toString() // Shared에 nickname저장.
+
                                     var nextIntent = Intent(this@LoginActivity, MainActivity::class.java)
                                     startActivity(nextIntent)
                                     finish()

@@ -10,11 +10,14 @@ import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.text.Editable
 import android.text.TextUtils
+import android.text.TextWatcher
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
@@ -28,6 +31,7 @@ import com.jakewharton.rxbinding2.widget.RxTextView
 import com.korea50k.tracer.MainActivity
 import com.korea50k.tracer.R
 import com.korea50k.tracer.UserInfo
+import com.korea50k.tracer.login.LoginActivity
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_sign_up.*
 import java.io.ByteArrayOutputStream
@@ -64,6 +68,13 @@ class SignUpActivity : AppCompatActivity() {
     private var mStorage : FirebaseStorage? = null
     private var mStorageReference : StorageReference? = null
 
+    // 중복 확인 버튼
+    private var redundantCheckButton : Button? = null
+
+    // 초기 가입자인 경우 LoginActivity에서 tokenId, email을 넘겨 받음
+    private var tokenId : String? = null
+    private var email : String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -71,6 +82,21 @@ class SignUpActivity : AppCompatActivity() {
 
         editNickname.requestFocus()
         init()
+
+        editNickname.addTextChangedListener(object : TextWatcher{
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                flag = 3
+                Log.d(WSY, flag.toString())
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+
+            }
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+            }
+        })
     }
 
     private fun init() {
@@ -96,23 +122,30 @@ class SignUpActivity : AppCompatActivity() {
         inputInfoMessage = arrayOf(getString(R.string.txtInputInfoNick), getString(R.string.txtInputInfoAge), getString(R.string.txtInputInfoGender))
 
         typingListener()
+
+        /**
+         *  중복 확인 버튼 초기화
+         */
+        redundantCheckButton = redundantCheckButton
+
+        /**
+         *   초기 가입자인 경우 LoginActivity에서 tokenId, email을 넘겨 받음
+         */
+        var intent = intent
+        tokenId = intent.getStringExtra("tokenId")
+        email = intent.getStringExtra("email")
     }
 
     /**
      * 카메라 접근 권한 and 앨범 접근
      */
     private fun goToAlbum() {
-
         val intent = Intent(Intent.ACTION_PICK)
         intent.type = MediaStore.Images.Media.CONTENT_TYPE
         startActivityForResult(intent, PICK_FROM_ALBUM)
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
+    override fun onRequestPermissionsResult( requestCode: Int, permissions: Array<out String>, grantResults: IntArray ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == 1) {
             var length = permissions.size
@@ -275,11 +308,17 @@ class SignUpActivity : AppCompatActivity() {
 
     // 서버로의 회원가입 진행
     private fun signUp( bitmapImg: Bitmap, nickname: String, age: String, gender: String ) {
-        uploadProfileImage(bitmapImg, nickname)
-        uploadUserInfo(nickname, age, gender)
+        if(flag == 1) {// false이면 닉네임 체크가 안된 것. 그러면 실행되면 안돼
+            uploadProfileImage(bitmapImg, nickname)
+            uploadUserInfo(nickname, age, gender)
+        }else if (flag == 3 ){
+            textInputLayoutArray[0].setErrorTextColor(resources.getColorStateList(R.color.red,null))
+            textInputLayoutArray[0].error = "중복 확인을 해주십시오."
+            flag = 3
+        }
     }
 
-    var flag  = true // 닉네임 체크를 위한 flag
+    var flag  = 3 // 닉네임 체크를 위한 flag
     private fun nicknameCheck(nickname: String) {
         // 서버랑 닉네임 체크
 
@@ -290,16 +329,13 @@ class SignUpActivity : AppCompatActivity() {
         mFirestoreDB!!.collection("userinfo").whereEqualTo("nickname",nickname).get()
             .addOnSuccessListener { documents ->
                 for (document in documents) {
-                    Log.d(WSY,document.id)
+                    Log.d(WSY, document.id)
                     Log.d(WSY, document.exists().toString())
                     if(document.exists()) {
                         Log.d(WSY, "${document.id} => ${document.data}")
                         textInputLayoutArray[0].setErrorTextColor(resources.getColorStateList(R.color.red,null))
                         textInputLayoutArray[0].error = "이미 사용중인 닉네임입니다."
-                        flag = false // flag = false로 하여 addOnCompleteListener의 if문이 실행 안되게 하기
-                    }else{
-                        Log.d(WSY,"사용 가능")
-//                        textInputLayoutArray[0].hint = "사용 가능합 닉네임입니다."
+                        flag = 2 // flag = false로 하여 addOnCompleteListener의 if문이 실행 안되게 하기
                     }
                 }
             }
@@ -307,14 +343,14 @@ class SignUpActivity : AppCompatActivity() {
                 Log.w(WSY, "Error getting documents: ", exception)
             }
             .addOnCompleteListener{
-                if(flag) {
-                    Log.d(WSY, "닉네임 사용 가능")
+                if(flag == 3) {
                     textInputLayoutArray[0].setErrorTextColor(resources.getColorStateList(R.color.yellowGreen,null))
                     textInputLayoutArray[0].error = "사용 가능한 닉네임입니다."
-                    flag = true
+
+                    flag = 1
                 }
             }
-        flag = true // 비동기라서 이건 무조건 실행. 하지만 firebase보단 항상 먼저 실행됨.
+        flag = 3 // 비동기라서 이건 무조건 실행. 하지만 firebase보단 항상 먼저 실행됨.
     }
 
     private fun uploadProfileImage( bitmapImg: Bitmap,nickname: String){
@@ -334,21 +370,25 @@ class SignUpActivity : AppCompatActivity() {
             // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
             // ...
             Log.d(WSY,"성공")
+            UserInfo.autoLoginKey = tokenId!!
+            UserInfo.email = email!!
+            UserInfo.nickname = nickname // Shared에 nickname저장.
             var nextIntent = Intent(this@SignUpActivity, MainActivity::class.java)
             startActivity(nextIntent)
             finish()
+
         }
     }
 
     private fun uploadUserInfo( nickname: String, age: String, gender: String){
         // 회원 정보
         val data = hashMapOf(
-            "googleTokenId" to UserInfo.autoLoginKey,
+            "googleTokenId" to tokenId,
             "nickname" to nickname,
             "age" to age,
             "gender" to gender
         )
-        mFirestoreDB!!.collection("UserInfo").document(UserInfo.email).set(data)
+        mFirestoreDB!!.collection("userinfo").document(email!!).set(data)
             .addOnSuccessListener { Log.d(WSY, "DocumentSnapshot successfully written!") }
             .addOnFailureListener { e -> Log.w(WSY, "Error writing document", e) }
 
@@ -387,7 +427,7 @@ class SignUpActivity : AppCompatActivity() {
                 age = editAge.text.toString()
                 gender = editGender.text.toString()
 
-                Log.d(WSY, nickname + ", " + age + ", " + gender)
+                Log.d(WSY, "가입 버튼 눌렀을 때" + nickname + ", " + age + ", " + gender)
 
                 if (isInputCorrectData[0] && age!!.isNotEmpty() && gender!!.isNotEmpty()) {
 
