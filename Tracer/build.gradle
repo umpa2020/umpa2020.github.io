@@ -24,9 +24,7 @@ allprojects {
     repositories {
         google()
         jcenter()
-        //chart
         maven { url "https://jitpack.io" }
-        
     }
 }
 

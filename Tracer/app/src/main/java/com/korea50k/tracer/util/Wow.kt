@@ -1,4 +1,4 @@
-package com.korea50k.tracer
+package com.korea50k.tracer.util
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -13,21 +13,41 @@ import java.util.*
 class Wow(){
     companion object {
         // array에서 max, min 받아와서 처리
-        fun minDouble(list: Array<Vector<Double>>): Double {
-            var min = list[0][0]
+        fun minDoubleLat(list:  MutableList<LatLng>): Double {
+            var min = list[0].latitude
             for (i in list.indices) {
-                if (list[i].min()!! < min) {
-                    min = list[i].min()!!
+                if (list[i].latitude < min) {
+                    min = list[i].latitude
                 }
             }
             return min
         }
 
-        fun maxDouble(list: Array<Vector<Double>>): Double {
-            var max = list[0][0]
+        fun minDoubleLng(list:  MutableList<LatLng>): Double {
+            var min = list[0].longitude
             for (i in list.indices) {
-                if (list[i].max()!! > max) {
-                    max = list[i].max()!!
+                if (list[i].longitude < min) {
+                    min = list[i].longitude
+                }
+            }
+            return min
+        }
+
+        fun maxDoubleLat(list:  MutableList<LatLng>): Double {
+            var max = list[0].latitude
+            for (i in list.indices) {
+                if (list[i].latitude > max) {
+                    max = list[i].latitude
+                }
+            }
+            return max
+        }
+
+        fun maxDoubleLng(list:  MutableList<LatLng>): Double {
+            var max = list[0].longitude
+            for (i in list.indices) {
+                if (list[i].longitude > max) {
+                    max = list[i].longitude
                 }
             }
             return max
