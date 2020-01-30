@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/rankingMapDetailPopUpTextView"
+        android:layout_weight="1"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:fontFamily="@font/notosansmedium"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/rankingMapDetailPopUpTextView1"
+        android:layout_weight="1"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="15dp"
+        android:gravity="left"
+        android:fontFamily="@font/notosanslight"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp">
+
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="연습용"
+            android:id="@+id/rankingMapDetailPracticeButton"
+            android:background="@drawable/button_empty_background"
+            style="@style/ListTitle"
+            android:textSize="15dp"/>
+
+        <Button
+            android:layout_marginLeft="50dp"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="랭킹 기록용"
+            android:id="@+id/rankingMapDetailRecordButton"
+            android:background="@drawable/button_background"
+            style="@style/ListTitle"
+            android:textSize="15dp"
+            android:textColor="@color/white"/>
+
+    </LinearLayout>
+
+</LinearLayout>

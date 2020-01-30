@@ -179,7 +179,7 @@
         android:layout_marginRight="20dp"
         android:layout_marginLeft="20dp"
         android:layout_marginBottom="10dp"
-        android:text="Race"
+        android:text="Race Start"
         style="@style/buttonText"
         android:background="@drawable/button_background"
         android:layout_alignParentBottom="true"

@@ -6,13 +6,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
         android:id="@+id/listTitleLinearLayout">
 
         <View
-            android:layout_width="42.08dp"
-            android:layout_height="32.12dp"/>
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="0.5"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -37,24 +36,17 @@
         style="@style/divisionTextView">
     </TextView>
 
-    <Button
-        android:id="@+id/nextButton"
-        android:onClick="onClick"
-        android:layout_marginTop="50dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="리사이클러뷰 클릭했을 때 액티비티로 넘어감"/>
-
-
-    <!--
     <androidx.recyclerview.widget.RecyclerView
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:layout_below="@+id/divisionTextView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/rank_recycler_map">
     </androidx.recyclerview.widget.RecyclerView>
 
--->
+
 
 
 </RelativeLayout>
