@@ -1,4 +1,4 @@
-package com.korea50k.tracer.Join
+package com.korea50k.tracer.join
 
 class Constants {
     companion object {

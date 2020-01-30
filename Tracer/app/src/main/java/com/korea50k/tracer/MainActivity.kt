@@ -9,10 +9,10 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.korea50k.tracer.Ranking.RankingFragment
-import com.korea50k.tracer.Start.StartFragment
+import com.korea50k.tracer.ranking.RankingFragment
+import com.korea50k.tracer.start.StartFragment
 import kotlinx.android.synthetic.main.activity_main.*
-import com.korea50k.tracer.Profile.ProfileFragment
+import com.korea50k.tracer.profile.ProfileFragment
 
 class MainActivity : AppCompatActivity() {
     private val multiplePermissionsCode = 100          //권한

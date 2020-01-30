@@ -1,4 +1,4 @@
-package com.korea50k.tracer.Start
+package com.korea50k.tracer.start
 
 import android.Manifest
 import android.content.pm.PackageManager

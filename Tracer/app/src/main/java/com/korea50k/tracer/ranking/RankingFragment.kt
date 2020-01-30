@@ -1,4 +1,4 @@
-package com.korea50k.tracer.Ranking
+package com.korea50k.tracer.ranking
 
 
 import android.content.Intent

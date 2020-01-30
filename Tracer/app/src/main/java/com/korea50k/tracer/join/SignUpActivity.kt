@@ -1,4 +1,4 @@
-package com.korea50k.tracer.Join
+package com.korea50k.tracer.join
 
 import android.Manifest
 import android.content.Context
@@ -7,13 +7,10 @@ import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Color
-import android.graphics.drawable.BitmapDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.text.TextUtils
-import android.util.Base64
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
@@ -33,8 +30,6 @@ import com.korea50k.tracer.R
 import com.korea50k.tracer.UserInfo
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_sign_up.*
-import kotlinx.android.synthetic.main.signup_toolbar.view.*
-import org.jetbrains.anko.colorAttr
 import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
 import java.util.*

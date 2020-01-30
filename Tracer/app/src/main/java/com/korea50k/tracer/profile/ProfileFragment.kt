@@ -1,4 +1,4 @@
-package com.korea50k.tracer.Profile
+package com.korea50k.tracer.profile
 
 
 import android.os.Bundle

@@ -1,4 +1,4 @@
-package com.korea50k.tracer.Splash
+package com.korea50k.tracer.splash
 
 import android.animation.ObjectAnimator
 import android.content.Intent
@@ -7,7 +7,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
-import com.korea50k.tracer.Login.LoginActivity
+import com.korea50k.tracer.login.LoginActivity
 import com.korea50k.tracer.MainActivity
 import com.korea50k.tracer.R
 import com.korea50k.tracer.UserInfo

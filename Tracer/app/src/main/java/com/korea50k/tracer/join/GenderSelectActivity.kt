@@ -1,4 +1,4 @@
-package com.korea50k.tracer.Join
+package com.korea50k.tracer.join
 
 import android.content.Intent
 import android.content.pm.ActivityInfo

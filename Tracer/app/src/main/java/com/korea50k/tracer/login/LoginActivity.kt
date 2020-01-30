@@ -1,4 +1,4 @@
-package com.korea50k.tracer.Login
+package com.korea50k.tracer.login
 
 import android.content.Intent
 import android.os.Bundle
@@ -12,10 +12,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.SignInButton
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
-import com.korea50k.tracer.Join.SignUpActivity
+import com.korea50k.tracer.join.SignUpActivity
 import com.korea50k.tracer.MainActivity
 import com.korea50k.tracer.R
 import com.korea50k.tracer.UserInfo

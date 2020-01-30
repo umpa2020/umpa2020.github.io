@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".Join.SignUpActivity">
+    tools:context=".join.SignUpActivity">
 
     <FrameLayout
         android:layout_width="match_parent"

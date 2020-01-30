@@ -1,4 +1,4 @@
-package com.korea50k.tracer.Ranking
+package com.korea50k.tracer.ranking
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

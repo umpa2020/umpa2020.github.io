@@ -21,7 +21,7 @@ import com.korea50k.tracer.Wow.Companion.makingIcon
 import com.korea50k.tracer.dataClass.RunningData
 import com.korea50k.tracer.dataClass.UserState
 import com.korea50k.tracer.R
-import com.korea50k.tracer.Start.RunningActivity
+import com.korea50k.tracer.start.RunningActivity
 import kotlinx.android.synthetic.main.activity_running.*
 
 

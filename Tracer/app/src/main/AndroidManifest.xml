@@ -22,9 +22,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".Join.GenderSelectActivity"/>
-        <activity android:name=".Join.SignUpActivity" />
-        <activity android:name=".Splash.SplashActivity">
+        <activity android:name=".join.GenderSelectActivity"/>
+        <activity android:name=".join.SignUpActivity" />
+        <activity android:name=".splash.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -33,14 +33,14 @@
         </activity>
 
 
-        <activity android:name=".Ranking.RankRecyclerItemClickActivity"/>
-        <activity android:name=".Ranking.RankingMapDetailActivity" />
-        <activity android:name=".Start.RunningSaveActivity" />
+        <activity android:name=".ranking.RankRecyclerItemClickActivity"/>
+        <activity android:name=".ranking.RankingMapDetailActivity" />
+        <activity android:name=".start.RunningSaveActivity" />
 
-        <activity android:name=".Start.RunningActivity"/>
+        <activity android:name=".start.RunningActivity"/>
         <activity android:name=".MainActivity"/>
 
-        <activity android:name=".Login.LoginActivity" />
+        <activity android:name=".login.LoginActivity" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
