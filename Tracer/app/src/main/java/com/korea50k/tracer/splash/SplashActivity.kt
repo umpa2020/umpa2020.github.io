@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.korea50k.tracer.login.LoginActivity
 import com.korea50k.tracer.MainActivity
 import com.korea50k.tracer.R
@@ -18,14 +19,24 @@ class SplashActivity : AppCompatActivity() {
     val WSY = "WSY"
     private var mAuth: FirebaseAuth? = null
 
+    // firebase DB
+    private var mFirestoreDB : FirebaseFirestore? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
+
+        /**
+         *  Firestore 초기화
+         */
+
+        mFirestoreDB = FirebaseFirestore.getInstance()
 
         ObjectAnimator.ofFloat(redMovingView,"translationX",2000f).apply {
             duration=1500
             start()
         }
+
 
         Log.i(WSY,"프리퍼런스에 저장된 자동 로그인 유무 : ${UserInfo.autoLoginKey}")
         Handler().postDelayed({ // 앞의 과정이 약간의 시간이 필요하거나 한 경우 바로 어떤 명령을 실행하지 않고 잠시 딜레이를 갖고 실행
@@ -41,7 +52,8 @@ class SplashActivity : AppCompatActivity() {
 
                 //  로그인 고유 값이 있는데 로그아웃으로 인한것이면 Db에서 개인 정보가 있는지 검사가 필요??
                 // 검사해서 데이터가 있으면...음....ㅠㅠ
-            }else { // 로그인 ID 고유값이 없으면 초기 가입자
+            }else { // shared에 로그인 ID 고유값이 없으면 초기 가입자 or (로그아웃 or 앱 삭제 후 재 로그인)
+//                mFirestoreDB!!.collection("userinfo").
                 var nextIntent = Intent(this@SplashActivity, LoginActivity::class.java)
                 startActivity(nextIntent)
                 finish()

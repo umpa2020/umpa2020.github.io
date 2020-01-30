@@ -39,12 +39,14 @@
         <FrameLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
+
             <com.mikhaellopez.circularimageview.CircularImageView
                 android:id="@+id/profileImage"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:background="@drawable/ic_profile_logo"
-                android:onClick="onClick"/>
+                android:onClick="onClick" />
+
             <com.mikhaellopez.circularimageview.CircularImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
@@ -69,11 +71,12 @@
             android:orientation="vertical"
             android:paddingTop="10dp">
 
-            <FrameLayout
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/nicknameTextInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/nicknameTextInput"
+
+                <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
@@ -85,16 +88,17 @@
                         android:inputType="text"
                         android:maxLength="12"
                         android:maxLines="1" />
-                </com.google.android.material.textfield.TextInputLayout>
 
-                <Button
-                    android:id="@+id/redundantCheckButton"
-                    android:onClick="onClick"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:text="중복체크"/>
-            </FrameLayout>
+                    <Button
+                        android:id="@+id/redundantCheckButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:layout_gravity="right|center"
+                        android:layout_marginBottom="5dp"
+                        android:background="@drawable/redundant_check_change_button"
+                        android:onClick="onClick" />
+                </FrameLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
 
             <com.google.android.material.textfield.TextInputLayout
