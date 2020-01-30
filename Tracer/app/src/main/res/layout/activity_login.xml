@@ -15,10 +15,19 @@
         android:src="@drawable/ic_logo"
         android:layout_marginBottom="30dp"/>
 
+    <TextView
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="구글 계정으로 로그인 하십시오."
+        style="@style/buttonText"/>
+
     <com.google.android.gms.common.SignInButton
         android:layout_height="wrap_content"
         android:layout_width="300dp"
         android:layout_centerHorizontal="true"
-        android:id="@+id/googleSignInButton"/>
+        android:id="@+id/googleSignInButton"
+        android:background="@drawable/button_empty_background"/>
 
 </LinearLayout>

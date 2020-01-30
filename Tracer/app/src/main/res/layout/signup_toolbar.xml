@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="10dp"
         android:onClick="onClick"
+        android:backgroundTint="@color/red"
         android:background="@drawable/ic_arrow_back_black_34dp"/>
     <TextView
         android:id="@+id/titleText"

@@ -18,8 +18,10 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:gravity="center"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp">
 
+        <!--
         <Button
             android:id="@+id/start_btn"
             android:layout_width="150dp"
@@ -33,9 +35,29 @@
             android:layout_margin="10dp"
             android:paddingLeft="37dp"
             android:gravity="center_vertical|left"/>
+            -->
+        <Button
+            android:id="@+id/start_btn"
+            android:layout_width="150dp"
+            android:layout_height="40dp"
+            android:background="@drawable/button_background"
+            style="@style/buttonText"
+            android:text="RUNNING"
+            android:onClick="onClick"
+            android:gravity="center"/>
+
+        <Button
+            android:layout_marginLeft="10dp"
+            android:id="@+id/racing_btn"
+            android:layout_width="150dp"
+            android:layout_height="40dp"
+            android:background="@drawable/button_empty_background"
+            style="@style/buttonTextRedText"
+            android:text="Racing"
+            android:onClick="onClick"
+            android:gravity="center"/>
 
     </LinearLayout>
-
 
 
 </RelativeLayout>

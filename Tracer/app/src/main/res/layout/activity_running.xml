@@ -181,6 +181,7 @@
         android:gravity="center"
         android:layout_gravity="bottom"
         android:layout_margin="10dp">
+        <!--
         <Button
             android:id="@+id/btn_stop"
             android:layout_width="150dp"
@@ -208,5 +209,27 @@
             android:paddingLeft="37dp"
             android:gravity="center_vertical|left"
             android:layout_marginLeft="5dp"/>
+            -->
+        <Button
+            android:id="@+id/btn_stop"
+            android:layout_width="130dp"
+            android:layout_height="40dp"
+            android:background="@drawable/button_background"
+            style="@style/buttonText"
+            android:text="STOP"
+            android:onClick="onClick"
+            android:gravity="center"
+            />
+        <Button
+            android:layout_marginLeft="20dp"
+            android:id="@+id/btn_pause"
+            android:layout_width="130dp"
+            android:layout_height="40dp"
+            android:background="@drawable/button_empty_background"
+            style="@style/buttonTextRedText"
+            android:text="PAUSE"
+            android:onClick="onClick"
+            android:gravity="center"/>
+
     </LinearLayout>
 </RelativeLayout>
