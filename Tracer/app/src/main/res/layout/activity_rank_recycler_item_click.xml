@@ -24,7 +24,7 @@
                 android:layout_height="300dp"
                 android:background="#000000"
                 android:scaleType="fitXY"
-                android:id="@+id/rank_root_preview"/>
+                android:id="@+id/rankRoutePriview"/>
 
             <Button
                 android:id="@+id/rankRecyclerMoreButton"

@@ -1,20 +1,15 @@
 package com.korea50k.tracer.ranking
 
 import android.content.Context
-import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.korea50k.tracer.R
 import com.korea50k.tracer.dataClass.RankRecyclerItemClickItem
-import com.korea50k.tracer.dataClass.RecyclerRankingDataItem
-import kotlinx.android.synthetic.main.recycler_rankfragment_item.view.*
 import kotlinx.android.synthetic.main.recycler_rankfragment_topplayer_item.view.*
-import java.security.AccessController.getContext
 
 class RankRecyclerViewAdapterTopPlayer (val mydata :ArrayList<RankRecyclerItemClickItem>) : RecyclerView.Adapter<RankRecyclerViewAdapterTopPlayer.myViewHolder>() {
     var context : Context? = null

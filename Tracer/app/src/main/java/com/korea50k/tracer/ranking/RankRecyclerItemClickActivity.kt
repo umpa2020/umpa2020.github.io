@@ -3,12 +3,13 @@ package com.korea50k.tracer.ranking
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
+import com.google.firebase.storage.FirebaseStorage
 import com.korea50k.tracer.R
 import com.korea50k.tracer.dataClass.RankRecyclerItemClickItem
-import com.korea50k.tracer.dataClass.RecyclerRankingDataItem
 import kotlinx.android.synthetic.main.activity_rank_recycler_item_click.*
-import kotlinx.android.synthetic.main.fragment_ranking.view.*
 
 class RankRecyclerItemClickActivity : AppCompatActivity() {
 
@@ -20,6 +21,27 @@ class RankRecyclerItemClickActivity : AppCompatActivity() {
         //전달 받은 값으로 Title 설정
         var mapTitle = intent.extras?.getString("MapTitle").toString()
         rankRecyclerMapTitle.text = mapTitle
+
+        //TODO:ImageView 에 이미지 박는 코드 (firebase)
+
+        val imageView = rankRoutePriview
+
+        val storage = FirebaseStorage.getInstance("gs://tracer-9070d.appspot.com/")
+        val mapImageRef = storage.reference.child("mapImage").child(mapTitle)
+
+        mapImageRef.downloadUrl.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                // Glide 이용하여 이미지뷰에 로딩
+                Log.d("ssmm11", "흐음"+mapImageRef.downloadUrl)
+                Glide.with(this@RankRecyclerItemClickActivity)
+                    .load(task.result)
+                    .override(1024, 980)
+                    .into(imageView)
+            } else {
+                Log.d("ssmm11", "실패")
+            }
+        }
+
 
         //TODO 데이터 서버에서 받아와야 함
         var mdata = arrayListOf<RankRecyclerItemClickItem>(

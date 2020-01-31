@@ -101,16 +101,6 @@ class NearRouteActivity : AppCompatActivity() {
                 for (document in result) {
                     var receiveInfoData = document.toObject(InfoData::class.java)
                     Log.d("ssmm11", receiveInfoData.toString())
-
-
-                    //Log.d("ssmm11", receiveRouteData.latlngs.toString())
-                    //var receive_loc = LatLng(receiveRouteData[0].latitude, receiveRouteData[0].longitude)
-                    //var distance = SphericalUtil.computeDistanceBetween(cur_loc, receive_loc)
-
-                    //TODO:클래스를 하나 만들어서 맵 타이틀, 거리 이렇게 놓고 정렬 해서 가지고 있으면 되겠다.
-                    /*distanceArray.add(distance)
-                    mapTitleArray.add(document.id)*/
-                    //Log.d("ssmm11", "첫번째 : ${document.data.getValue("latlngs")}")
                 }
             }
             .addOnFailureListener { exception ->
