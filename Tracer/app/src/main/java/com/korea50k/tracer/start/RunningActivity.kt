@@ -126,8 +126,8 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
     }
 
     fun pause() {
-        btn_pause.text = "  RESTART"
-        btn_pause.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_play_pressed, 0, 0, 0)
+        btn_pause.text = "RESTART"
+        //btn_pause.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_play_pressed, 0, 0, 0)
         B_RUNNIG = false
     }
 
@@ -145,8 +145,8 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
     }
 
     fun restart() { //TODO:Start with new polyline
-        btn_pause.text = "  PAUSE"
-        btn_pause.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_pause_icon_pressed, 0, 0, 0)
+        btn_pause.text = "PAUSE"
+        //btn_pause.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_pause_icon_pressed, 0, 0, 0)
         B_RUNNIG = true
         manageRunning.restartRunning()
     }

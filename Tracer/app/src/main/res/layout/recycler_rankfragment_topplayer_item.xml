@@ -5,7 +5,7 @@
     android:layout_margin="5dp">
 
     <TextView
-        android:id="@+id/rankingFragmentCountTextView"
+        android:id="@+id/rankRecyclerItemClickCountTextView"
         android:layout_width="0dp"
         android:layout_height="35dp"
         android:text="0"
@@ -15,10 +15,10 @@
         android:textColor="@color/black"
         android:gravity="center"
         android:background="@drawable/ic_1"
-        android:layout_weight="0.5" />
+        android:layout_weight="0.5"/>
 
     <TextView
-        android:id="@+id/rankingFragmentMapTitleTextView"
+        android:id="@+id/rankRecyclerItemClickMapTitleTextView"
         android:paddingLeft="25dp"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -30,7 +30,7 @@
         />
 
     <TextView
-        android:id="@+id/rankingFragmentExecuteTextView"
+        android:id="@+id/rankRecyclerItemClickTimeTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="2"

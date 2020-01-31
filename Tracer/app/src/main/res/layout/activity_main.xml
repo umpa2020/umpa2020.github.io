@@ -25,7 +25,7 @@
         android:layout_gravity="bottom"
         android:layout_marginBottom="0dp"
         android:background="?android:attr/windowBackground"
-        app:itemTextColor="@color/black"
+        app:itemTextColor="@drawable/bottom_navigation_select_color"
         app:itemIconTint="@drawable/bottom_navigation_select_color"
         app:menu="@menu/bottom_navigation_menu" />
 </RelativeLayout>

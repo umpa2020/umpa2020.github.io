@@ -262,6 +262,7 @@
         </RelativeLayout>
     </ScrollView>
 
+    <!--
     <Button
         android:layout_marginBottom="20dp"
         android:id="@+id/save_btn"
@@ -274,7 +275,18 @@
         android:textColor="@color/red"
         android:text="활동 저장"
         android:fontFamily="@font/notosansmedium"/>
->>>>>>> 0a620a2a43bade224e13422c863e885d4e176fad
-
+-->
+    <Button
+        android:layout_marginBottom="20dp"
+        android:id="@+id/save_btn"
+        android:layout_alignParentBottom="true"
+        android:onClick="onClick"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/button_background"
+        style="@style/buttonText"
+        android:text="활동 저장"/>
 
 </RelativeLayout>
