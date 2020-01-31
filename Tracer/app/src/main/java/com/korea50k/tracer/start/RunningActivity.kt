@@ -160,12 +160,14 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
     }
 
     override fun onDrawerOpened() {
-        runningHandle.background = getDrawable(R.drawable.close_selector)
+        //runningHandle.background = getDrawable(R.drawable.close_selector)
+        runningHandle.text = "▼"
         Log.d(TAG, "onDrawerOpened()")
     }
 
     override fun onDrawerClosed() {
-        runningHandle.background = getDrawable(R.drawable.extend_selector)
+        //runningHandle.background = getDrawable(R.drawable.extend_selector)
+        runningHandle.text = "▲"
         Log.d(TAG, "onDrawerClosed()")
     }
 

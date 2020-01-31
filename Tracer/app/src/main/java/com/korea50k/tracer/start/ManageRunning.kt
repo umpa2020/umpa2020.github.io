@@ -34,7 +34,7 @@ class ManageRunning {
             while(true) {
                 Thread.sleep(1000)
                 activity.runOnUiThread(Runnable {
-                    activity.runningDistanceTextView.text=String.format("%.3f km",(map.distance/1000))
+                    activity.runningDistanceTextView.text=String.format("%.3f",(map.distance/1000))
                 })
             }
         })

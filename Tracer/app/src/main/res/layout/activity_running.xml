@@ -22,19 +22,29 @@
         <hollowsoft.slidingdrawer.SlidingDrawer
             android:id="@+id/drawer"
             android:layout_width="match_parent"
-            android:layout_height="130dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp"
+            android:layout_height="160dp"
             layout:content="@+id/content"
             layout:handle="@+id/runningHandle"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="?actionBarSize">
+            android:layout_marginBottom="70dp">
+            <!--
             <Button
                 android:id="@+id/runningHandle"
                 android:layout_width="70dp"
                 android:layout_height="25dp"
                 android:background="@drawable/extend_selector"
                 android:gravity="center" />
+                -->
+            <Button
+                android:id="@+id/runningHandle"
+                android:layout_width="70dp"
+                android:layout_height="27dp"
+                android:background="@drawable/button_white_background"
+                android:text="▲"
+                android:textColor="@color/red"
+                android:textSize="15dp"
+                android:gravity="center" />
+
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
@@ -44,74 +54,79 @@
                     android:id="@+id/content"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/runninghandle_bg">
+                    android:background="@color/white">
 
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_margin="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_weight="1.0"
+                        android:orientation="vertical"
+                        android:gravity="center">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="@style/ListDetail"
+                            android:text="DISTANCE (km)"/>
+
+                        <TextView
+                            android:gravity="center"
+                            android:id="@+id/runningDistanceTextView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="0.00"
+                            style="@style/blackMediumText18" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginTop="5dp"
                         android:layout_weight="1.0"
                         android:gravity="center"
                         android:orientation="vertical">
 
                         <TextView
-                            android:layout_width="match_parent"
+                            style="@style/ListDetail"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            style="@style/info_text"
-                            android:text="DISTANCE"/>
-
-                        <TextView
-                            android:id="@+id/runningDistanceTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="0.00"
-                            android:fontFamily="@font/notosansmedium"
-                            style="@style/info_text_1" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_margin="5dp"
-                        android:layout_weight="1.0"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="TIME"
-                            android:fontFamily="@font/notosansmedium"
-                            style="@style/info_text"/>
+                            android:text="TIME" />
 
                         <Chronometer
                             android:id="@+id/runningTimerTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/notosansmedium"
-                            style="@style/info_text_1"/>
+                            style="@style/blackMediumText18"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_margin="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginTop="5dp"
                         android:layout_weight="1.0"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:gravity="center">
 
                         <TextView
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="SPEED"
-                            android:fontFamily="@font/notosansmedium"
-                            style="@style/info_text"/>
+                            android:text="SPEED (km/h)"
+                            style="@style/ListDetail"/>
 
                         <TextView
+                            android:gravity="center"
                             android:id="@+id/runningSpeedTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="0.0"
-                            android:fontFamily="@font/notosansmedium"
-                            style="@style/info_text_1"/>
+                            style="@style/blackMediumText18"/>
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
@@ -176,10 +191,12 @@
     <LinearLayout
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="70dp"
         android:gravity="center"
         android:layout_gravity="bottom"
-        android:layout_margin="10dp">
+        android:background="@color/white"
+        android:paddingBottom="15dp"
+        android:paddingTop="15dp">
         <!--
         <Button
             android:id="@+id/btn_stop"
