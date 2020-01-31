@@ -162,6 +162,7 @@
             android:orientation="vertical"
             android:gravity="center"
             >
+            <!--
             <Button
                 android:id="@+id/runningNotificationYes"
                 android:layout_width="match_parent"
@@ -185,6 +186,7 @@
                 android:onClick="onClick"
                 android:background="#99FFFFFF"
                 android:layout_margin="2dp"/>
+                -->
         </LinearLayout>
 
     </LinearLayout>
