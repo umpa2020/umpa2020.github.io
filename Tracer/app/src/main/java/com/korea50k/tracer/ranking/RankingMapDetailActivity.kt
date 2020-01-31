@@ -25,7 +25,7 @@ import java.util.ArrayList
 
 class RankingMapDetailActivity : AppCompatActivity() {
     var infoData = InfoData()
-    var altitude : List<Double> = listOf()
+    var altitude: List<Double> = listOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,45 +38,6 @@ class RankingMapDetailActivity : AppCompatActivity() {
 
         val db = FirebaseFirestore.getInstance()
 
-        db.collection("mapInfo").whereEqualTo("mapTitle", mapTitle)
-            .get()
-            .addOnSuccessListener { result ->
-                for (document in result) {
-                    infoData = document.toObject(InfoData::class.java)
-                    rankingDetailDate.text = document.id
-                }
-                //adpater 추가
-                rankingDetailNickname.text = infoData.makersNickname
-                rankingDetailMapDetail.text = infoData.mapExplanation
-                rankingDetailDistance.text = infoData.distance.toString()
-                rankingDetailTime.text = infoData.time.toString()
-                rankingDetailSpeed.text = infoData.speed.average().toString()
-
-                val imageView = rankingDetailGoogleMap
-
-                val storage = FirebaseStorage.getInstance("gs://tracer-9070d.appspot.com/")
-                val mapImageRef = storage.reference.child("mapImage").child(mapTitle)
-
-                mapImageRef.downloadUrl.addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        // Glide 이용하여 이미지뷰에 로딩
-                        Glide.with(this@RankingMapDetailActivity)
-                            .load(task.result)
-                            .override(1024, 980)
-                            .into(imageView)
-                    } else {
-                        Log.d("ssmm11", "실패")
-                    }
-                }
-            }
-            .addOnFailureListener { exception ->
-            }
-
-        //버튼 누르면 연습용, 랭킹 기록용 선택 팝업 띄우기
-        rankingDetailRaceButton.setOnClickListener{
-            showPopup()
-        }
-
         db.collection("mapRoute")
             .get()
             .addOnSuccessListener { result ->
@@ -86,23 +47,62 @@ class RankingMapDetailActivity : AppCompatActivity() {
                         altitude = document.get("altitude") as List<Double>
                     }
                 }
-                setChart()
+
+                db.collection("mapInfo").whereEqualTo("mapTitle", mapTitle)
+                    .get()
+                    .addOnSuccessListener { result ->
+                        for (document in result) {
+                            infoData = document.toObject(InfoData::class.java)
+                            rankingDetailDate.text = document.id
+                        }
+                        rankingDetailNickname.text = infoData.makersNickname
+                        rankingDetailMapDetail.text = infoData.mapExplanation
+                        rankingDetailDistance.text = infoData.distance.toString()
+                        rankingDetailTime.text = infoData.time.toString()
+                        rankingDetailSpeed.text = infoData.speed.average().toString()
+                        setChart(infoData.speed)
+
+                        //adpater 추가
+                    }
+                    .addOnFailureListener { exception ->
+                    }
             }
             .addOnFailureListener { exception ->
             }
 
+        val imageView = rankingDetailGoogleMap
+
+        val storage = FirebaseStorage.getInstance("gs://tracer-9070d.appspot.com/")
+        val mapImageRef = storage.reference.child("mapImage").child(mapTitle)
+
+        mapImageRef.downloadUrl.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                // Glide 이용하여 이미지뷰에 로딩
+                Glide.with(this@RankingMapDetailActivity)
+                    .load(task.result)
+                    .override(1024, 980)
+                    .into(imageView)
+            } else {
+                Log.d("ssmm11", "실패")
+            }
+        }
+
+        //버튼 누르면 연습용, 랭킹 기록용 선택 팝업 띄우기
+        rankingDetailRaceButton.setOnClickListener {
+            showPopup()
+        }
     }
 
     /**
-    * 팝업 띄우는 함수
+     * 팝업 띄우는 함수
      * */
-    private fun showPopup(){
+    private fun showPopup() {
         val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val view = inflater.inflate(R.layout.ranking_map_detail_popup, null)
-        val textView : TextView = view.findViewById(R.id.rankingMapDetailPopUpTextView)
+        val textView: TextView = view.findViewById(R.id.rankingMapDetailPopUpTextView)
         textView.text = "어떤 유형으로 경기하시겠습니까?"
 
-        val textView1 : TextView = view.findViewById(R.id.rankingMapDetailPopUpTextView1)
+        val textView1: TextView = view.findViewById(R.id.rankingMapDetailPopUpTextView1)
         textView1.text = "연습용 : 루트 연습용(랭킹 등록 불가능)" +
                 "\n랭킹 기록용 : 랭킹 등록 가능"
 
@@ -112,14 +112,14 @@ class RankingMapDetailActivity : AppCompatActivity() {
 
         //연습용 버튼 눌렀을 때
         val practiceButton = view.findViewById<Button>(R.id.rankingMapDetailPracticeButton)
-        practiceButton.setOnClickListener{
+        practiceButton.setOnClickListener {
             Toast.makeText(this, "PracticeButton 클릭", Toast.LENGTH_SHORT).show()
         }
 
 
         //랭킹 기록용 버튼 눌렀을 때
         val recordButton = view.findViewById<Button>(R.id.rankingMapDetailRecordButton)
-        recordButton.setOnClickListener{
+        recordButton.setOnClickListener {
             Toast.makeText(this, "RecordButton 클릭", Toast.LENGTH_SHORT).show()
         }
 
@@ -128,14 +128,14 @@ class RankingMapDetailActivity : AppCompatActivity() {
 
     }
 
-    private fun setChart() {    //클래스로 따로 빼야할듯
+    private fun setChart(speed: MutableList<Double> = mutableListOf(.0)) {    //클래스로 따로 빼야할듯
         var lineChart = rankingDetailChart as CombinedChart
         val alts = ArrayList<BarEntry>()
         val speeds = ArrayList<Entry>()
 
         for (index in altitude.indices) {
             alts.add(BarEntry(index.toFloat(), altitude[index].toFloat()))
-            speeds.add(Entry(index.toFloat(), infoData.speed[index].toFloat()))
+            speeds.add(Entry(index.toFloat(), speed[index].toFloat()))
         }
 
         val xAxis = lineChart.getXAxis()
@@ -145,7 +145,7 @@ class RankingMapDetailActivity : AppCompatActivity() {
 
         val yLAxis = lineChart.axisLeft
         yLAxis.textColor = Color.RED
-        yLAxis.axisMaximum = infoData.speed.max()!!.toFloat() + 5
+        yLAxis.axisMaximum = speed.max()!!.toFloat() + 5
         yLAxis.axisMinimum = 0F
 
         val yRAxis = lineChart.axisRight
