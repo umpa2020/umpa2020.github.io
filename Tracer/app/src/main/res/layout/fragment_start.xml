@@ -2,8 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".s\tart.StartFragment">
+    android:layout_height="match_parent">
 
     <fragment
         android:id="@+id/map_viewer_start"
@@ -18,16 +17,16 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:gravity="center"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp">
 
         <Button
             android:id="@+id/mainStartRunning"
             android:layout_width="100dp"
             android:layout_height="40dp"
-            android:text="START"
-            android:fontFamily="@font/notosansmedium"
-            style="@style/buttonText"
-            android:background="@drawable/button_background"
+            android:text="RUNNING"
+            style="@style/buttonTextRedText"
+            android:background="@drawable/button_empty_background"
             android:onClick="onClick"
             android:layout_margin="10dp"
             android:gravity="center"/>
@@ -37,7 +36,6 @@
             android:layout_width="100dp"
             android:layout_height="40dp"
             android:text="RACING"
-            android:fontFamily="@font/notosansmedium"
             style="@style/buttonText"
             android:background="@drawable/button_background"
             android:onClick="onClick"
