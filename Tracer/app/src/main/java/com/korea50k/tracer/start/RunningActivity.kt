@@ -1,15 +1,21 @@
 package com.korea50k.tracer.start
 
 
+import android.app.ProgressDialog.show
+import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.SupportMapFragment
 import com.korea50k.tracer.MainActivity
@@ -31,7 +37,9 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
     var B_RUNNIG = true
     var ns = NoticeState.NOTHING
     private var doubleBackToExitPressedOnce1 = false
+
     override fun onBackPressed() {
+        /*
         if (doubleBackToExitPressedOnce1) {
             super.onBackPressed()
             return
@@ -50,6 +58,14 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
         toast.show()
 
         Handler().postDelayed(Runnable { doubleBackToExitPressedOnce1 = false }, 2000)
+*/
+        //Toast.makeText(this, "'뒤로'버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_LONG).show()
+        val text = "뒤로 버튼을 한번 더 누르면 종료됩니다."
+        val duration = Toast.LENGTH_LONG
+
+        val toast = Toast.makeText(applicationContext, text, duration)
+        toast.show()
+
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,7 +76,8 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
         manageRunning.startRunning(this)
         btn_stop.setOnLongClickListener {
             if (manageRunning.map.distance < 200) {
-                noticeMessage("거리가 200m 미만일때\n\n정지하시면 저장이 불가능합니다. \n\n정지하시겠습니까?", NoticeState.SIOP)
+                //noticeMessage("거리가 200m 미만일때\n\n정지하시면 저장이 불가능합니다. \n\n정지하시겠습니까?", NoticeState.SIOP)
+                showChoicePopup("거리가 200m 미만일때\n정지하시면 저장이 불가능합니다. \n\n정지하시겠습니까?", NoticeState.SIOP)
             } else
                 manageRunning.stopRunning()
             true
@@ -77,6 +94,7 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
         drawer.setOnDrawerCloseListener(this)
     }
 
+    /*
     fun noticeMessage(text: String, ns: NoticeState) {
         runningNotificationLayout.visibility = View.VISIBLE
         runningNotificationTextView.text = text
@@ -84,12 +102,15 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
 
     }
 
+     */
+
     fun onClick(view: View) {
         when (view.id) {
 
             R.id.btn_pause -> {
                 if (manageRunning.privacy == Privacy.RACING) {
-                    noticeMessage("일시정지를 하게 되면\n\n경쟁 모드 업로드가 불가합니다.\n\n일시정지를 하시겠습니까?", NoticeState.PAUSE)
+                    //noticeMessage("일시정지를 하게 되면\n\n경쟁 모드 업로드가 불가합니다.\n\n일시정지를 하시겠습니까?", NoticeState.PAUSE)
+                    showChoicePopup("일시정지를 하게 되면\n경쟁 모드 업로드가 불가합니다.\n\n일시정지를 하시겠습니까?", NoticeState.PAUSE)
                 } else {
                     if (B_RUNNIG)
                         manageRunning.pauseRunning()
@@ -100,6 +121,8 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
 
             }
             R.id.btn_stop -> stop()
+
+            /*
             R.id.runningNotificationYes -> {
                 when (ns) {
                     NoticeState.NOTHING -> {
@@ -122,6 +145,7 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
                 ns = NoticeState.NOTHING
                 runningNotificationLayout.visibility = View.GONE
             }
+             */
         }
     }
 
@@ -132,6 +156,7 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
     }
 
     fun stop() {    //타이머 멈추는거 만들어야함
+        /*
         val li = layoutInflater
         val layout: View =
             li.inflate(R.layout.custom_toast_stop, findViewById<ViewGroup>(R.id.custom_toast_layout_stop))
@@ -141,6 +166,16 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
         toast.setGravity(Gravity.CENTER_VERTICAL, 0, 850)
         toast.view = layout //setting the view of custom toast layout
 
+        toast.show()
+
+         */
+
+        //Toast.makeText(this, "종료를 원하시면 길게 눌러주세요", Toast.LENGTH_SHORT).show()
+
+        val text = "종료를 원하시면 길게 눌러주세요"
+        val duration = Toast.LENGTH_LONG
+
+        val toast = Toast.makeText(applicationContext, text, duration)
         toast.show()
     }
 
@@ -160,16 +195,66 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
     }
 
     override fun onDrawerOpened() {
-        runningHandle.background = getDrawable(R.drawable.close_selector)
+        //runningHandle.background = getDrawable(R.drawable.close_selector)
+        runningHandle.text = "▼"
         Log.d(TAG, "onDrawerOpened()")
     }
 
     override fun onDrawerClosed() {
-        runningHandle.background = getDrawable(R.drawable.extend_selector)
+        //runningHandle.background = getDrawable(R.drawable.extend_selector)
+        runningHandle.text = "▲"
         Log.d(TAG, "onDrawerClosed()")
     }
 
     fun print_log(text: String) {
         Log.d(TAG, text.toString())
+    }
+
+    /**
+     * 팝업 띄우는 함수
+     * */
+    private fun showChoicePopup(text: String, ns: NoticeState){
+        val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val view = inflater.inflate(R.layout.running_activity_yesnopopup, null)
+        val textView : TextView = view.findViewById(R.id.runningActivityPopUpTextView)
+        textView.text = text
+
+        val alertDialog = AlertDialog.Builder(this) //alertDialog 생성
+            .setTitle("선택해주세요.")
+            .create()
+
+        //Yes 버튼 눌렀을 때
+        val yesButton = view.findViewById<Button>(R.id.runningActivityYesButton)
+        yesButton.setOnClickListener{
+            when (ns) {
+                NoticeState.NOTHING -> {
+                }
+                NoticeState.PAUSE -> {
+                    runningNotificationLayout.visibility = View.GONE
+                    manageRunning.pauseRunning()
+                }
+                NoticeState.SIOP -> {
+                    var newIntent = Intent(this, MainActivity::class.java)
+                    newIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    newIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                    startActivity(newIntent)
+                }
+            }
+            this.ns = NoticeState.NOTHING
+            alertDialog.dismiss()
+        }
+
+
+        //No 기록용 버튼 눌렀을 때
+        val recordButton = view.findViewById<Button>(R.id.runningActivityNoButton)
+        recordButton.setOnClickListener{
+            this.ns = NoticeState.NOTHING
+            alertDialog.dismiss()
+        }
+
+        alertDialog.setView(view)
+        alertDialog.show() //팝업 띄우기
+
+        this.ns = ns
     }
 }

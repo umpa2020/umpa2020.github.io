@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:layout_marginBottom="30dp"
     android:layout_marginTop="10dp"
-    tools:context=".s\tart.RunningSaveActivity">
+    tools:context=".start.RunningSaveActivity">
 
 
     <ScrollView
