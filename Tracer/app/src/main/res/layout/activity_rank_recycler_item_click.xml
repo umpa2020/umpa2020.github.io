@@ -99,11 +99,21 @@
             android:layout_below="@+id/gubun2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="순위"
+                android:gravity="center"
+                android:layout_weight="0.5"
+                style="@style/ListTitle"/>
 
             <TextView
                 android:layout_width="0dp"
-                android:layout_weight="1"
+                android:layout_weight="2"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:text="player"
@@ -112,7 +122,7 @@
 
             <TextView
                 android:layout_width="0dp"
-                android:layout_weight="1"
+                android:layout_weight="2"
                 android:layout_height="wrap_content"
                 android:text="랩 타임"
                 android:gravity="center"
