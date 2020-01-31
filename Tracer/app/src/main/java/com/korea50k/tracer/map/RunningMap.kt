@@ -13,12 +13,10 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.maps.android.PolyUtil
 import com.google.maps.android.SphericalUtil
 import java.util.*
-import kotlin.collections.ArrayList
 import com.google.android.gms.maps.model.*
 import com.google.android.gms.maps.model.BitmapDescriptor
 import android.graphics.Canvas
 import com.korea50k.tracer.util.Wow.Companion.makingIcon
-import com.korea50k.tracer.dataClass.RunningData
 import com.korea50k.tracer.dataClass.UserState
 import com.korea50k.tracer.R
 import com.korea50k.tracer.start.RunningActivity

@@ -1,5 +1,4 @@
 package com.korea50k.tracer.start
-
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -15,12 +14,15 @@ import kotlinx.android.synthetic.main.fragment_start.view.*
 
 class StartFragment : Fragment(), View.OnClickListener {
     lateinit var map: BasicMap
-    override fun onClick(v: View?) {
-        when (v?.id) {
-            R.id.start_btn -> {
-                var newIntent = Intent(activity, RunningActivity::class.java)
+    override fun onClick(v: View) {
+        when (v.id) {
+            R.id.mainStartRunning -> {
+                val newIntent = Intent(activity, RunningActivity::class.java)
                 startActivity(newIntent)
-
+            }
+            R.id.mainStartRacing -> {
+                val newIntent = Intent(activity, NearRouteActivity::class.java)
+                startActivity(newIntent)
             }
         }
     }
@@ -42,7 +44,8 @@ class StartFragment : Fragment(), View.OnClickListener {
         val smf =
             childFragmentManager.findFragmentById(R.id.map_viewer_start) as SupportMapFragment
         map = BasicMap(smf, context as Context)
-        view.start_btn.setOnClickListener(this)
+        view.mainStartRunning.setOnClickListener(this)
+        view.mainStartRacing.setOnClickListener(this)
     }
 
     override fun onPause() {

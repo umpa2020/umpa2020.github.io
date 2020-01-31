@@ -31,7 +31,6 @@ import com.jakewharton.rxbinding2.widget.RxTextView
 import com.korea50k.tracer.MainActivity
 import com.korea50k.tracer.R
 import com.korea50k.tracer.UserInfo
-import com.korea50k.tracer.login.LoginActivity
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_sign_up.*
 import java.io.ByteArrayOutputStream

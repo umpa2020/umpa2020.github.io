@@ -1,10 +1,12 @@
 package com.korea50k.tracer.start
 
 import android.graphics.Color
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import com.bumptech.glide.Glide
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.CombinedChart
 import com.github.mikephil.charting.components.XAxis
@@ -13,7 +15,6 @@ import com.github.mikephil.charting.data.*
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
-import com.korea50k.tracer.util.GetMapData
 import com.korea50k.tracer.R
 import com.korea50k.tracer.UserInfo
 import com.korea50k.tracer.dataClass.InfoData
@@ -21,8 +22,8 @@ import com.korea50k.tracer.dataClass.Privacy
 import com.korea50k.tracer.dataClass.RankingData
 import com.korea50k.tracer.dataClass.RouteData
 import com.korea50k.tracer.map.ViewerMap
-import com.korea50k.tracer.util.ConvertJson
 import kotlinx.android.synthetic.main.activity_running_save.*
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -67,34 +68,14 @@ class RunningSaveActivity : AppCompatActivity() {
 
         // Reference to an image file in Cloud Storage
         val storageReference = FirebaseStorage.getInstance().reference
-        val imageRef = storageReference.child("images/dog.jpg")
+        val mapImageRef = storageReference.child("images/dog.jpg")
 
         Log.d("ssmm11", "storage = " + storageReference)
 */
 
 
-        //TODO:ImageView 에 이미지 박는 코드 (firebase)
-        /*
-        val imageView = saveTestImageview
-
-        // Download directly from StorageReference using Glide
-        // (See MyAppGlideModule for Loader registration)
 
 
-
-        imageRef.downloadUrl.addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                // Glide 이용하여 이미지뷰에 로딩
-                Log.d("ssmm11", "흐음"+imageRef.downloadUrl)
-                Glide.with(this@RunningSaveActivity)
-                    .load(task.result)
-                    .override(1024, 980)
-                    .into(imageView)
-            } else {
-                Log.d("ssmm11", "실패")
-            }
-        }
-         */
     }
 
     fun onClick(view: View) {
@@ -137,17 +118,44 @@ class RunningSaveActivity : AppCompatActivity() {
         val db = FirebaseFirestore.getInstance()
 
         // InfoData class upload to database 참조 - 루트를 제외한 맵 정보 기술
-        db.collection("maps").document(infoData.mapTitle+"||" + full_sdf.format(dt).toString()).set(infoData)
+        db.collection("mapInfo").document(infoData.mapTitle+"||" + full_sdf.format(dt).toString()).set(infoData)
 
         // RouteData class upload to database 참조 - 루트 정보만 표기 (위도경도, 고도, 마커의 위도경도)
-        db.collection("maps").document(infoData.mapTitle+"||" + full_sdf.format(dt).toString()).collection("route").document("route")
-            .set(routeData)
+        db.collection("mapRoute").document(infoData.mapTitle+"||" + full_sdf.format(dt).toString()).set(routeData)
 
         // RankingData class upload to database - db 구조 정립 필요
         val recordData = RankingData("jungbin", "13:33")
         db.collection("maps").document(infoData.mapTitle+"||" + full_sdf.format(dt).toString()).collection("record")
             .document("jungbin||" + full_sdf.format(dt).toString()).set(recordData)
         // db에 원하는 경로 및, 문서로 업로드
+
+
+        // storage에 이미지 업로드
+        val storage = FirebaseStorage.getInstance("gs://tracer-9070d.appspot.com/")
+        val mapImageRef = storage.reference.child("mapImage").child(infoData.mapTitle!!)
+        var uploadTask = mapImageRef.putFile(Uri.fromFile(File(imgPath)))
+        uploadTask.addOnFailureListener {
+        }.addOnSuccessListener {
+            finish()
+        }
+
+
+        //TODO:ImageView 에 이미지 박는 코드 (firebase)
+
+        val imageView = saveTestImageview
+
+        mapImageRef.downloadUrl.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                // Glide 이용하여 이미지뷰에 로딩
+                Log.d("ssmm11", "흐음"+mapImageRef.downloadUrl)
+                Glide.with(this@RunningSaveActivity)
+                    .load(task.result)
+                    .override(1024, 980)
+                    .into(imageView)
+            } else {
+                Log.d("ssmm11", "실패")
+            }
+        }
     }
 
     private fun setChart() {    //클래스로 따로 빼야할듯
@@ -155,8 +163,8 @@ class RunningSaveActivity : AppCompatActivity() {
         val alts = ArrayList<BarEntry>()
         val speeds = ArrayList<Entry>()
 
-        for (index in routeData.altitude.indices) {
-            alts.add(BarEntry(index.toFloat(), routeData.altitude[index].toFloat()))
+        for (index in routeData.altitude?.indices!!) {
+            alts.add(BarEntry(index.toFloat(), routeData.altitude!![index]?.toFloat()))
             speeds.add(Entry(index.toFloat(), infoData.speed[index].toFloat()))
         }
 
@@ -172,8 +180,8 @@ class RunningSaveActivity : AppCompatActivity() {
 
         val yRAxis = lineChart.axisRight
         yRAxis.textColor = Color.BLUE
-        yRAxis.axisMaximum = routeData.altitude.max()!!.toFloat() + 5
-        yRAxis.axisMinimum = routeData.altitude.min()!!.toFloat() - 5
+        yRAxis.axisMaximum = routeData.altitude?.max()!!.toFloat() + 5
+        yRAxis.axisMinimum = routeData.altitude?.min()!!.toFloat() - 5
 
 
         // 고도 셋팅

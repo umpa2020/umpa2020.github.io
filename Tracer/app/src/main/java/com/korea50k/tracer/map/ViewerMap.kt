@@ -9,9 +9,9 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import android.graphics.Color
-import com.korea50k.tracer.start.RunningSaveActivity
 import com.korea50k.tracer.util.Wow
 import com.korea50k.tracer.dataClass.RouteData
+import com.korea50k.tracer.start.RunningSaveActivity
 import java.io.File
 import java.io.FileOutputStream
 
@@ -71,7 +71,7 @@ class ViewerMap : OnMapReadyCallback {
 
     fun loadRoute(): MutableList<LatLng> {
         var routes: MutableList<LatLng>
-        routes = routeData.latlngs
+        routes = routeData.latlngs!!
         return routes
     }
 
@@ -82,13 +82,13 @@ class ViewerMap : OnMapReadyCallback {
                     PolylineOptions()
                         .addAll(routes)
                         .color(Color.RED)
-                        .startCap(RoundCap())
+                        .startCap(RoundCap() as Cap)
                         .endCap(RoundCap())
                 )        //경로를 그릴 폴리라인 집합
         }
 
-        var min = LatLng(Wow.minDoubleLat(routeData.latlngs), Wow.minDoubleLng(routeData.latlngs)) // 이게 정빈
-        var max = LatLng(Wow.maxDoubleLat(routeData.latlngs), Wow.maxDoubleLng(routeData.latlngs)) // 이게 윤권
+        var min = LatLng(Wow.minDoubleLat(routeData.latlngs!!), Wow.minDoubleLng(routeData.latlngs!!))
+        var max = LatLng(Wow.maxDoubleLat(routeData.latlngs!!), Wow.maxDoubleLng(routeData.latlngs!!))
         print_log(min.toString() + max.toString())
         mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(LatLngBounds(min, max), 1080, 300, 50))
     }

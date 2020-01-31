@@ -7,6 +7,7 @@ import android.widget.Chronometer
 import com.google.android.gms.maps.SupportMapFragment
 import kotlinx.android.synthetic.main.activity_running.*
 import android.content.Intent
+import com.korea50k.tracer.start.RunningActivity
 import com.korea50k.tracer.dataClass.*
 import com.korea50k.tracer.map.RunningMap
 import java.text.SimpleDateFormat
