@@ -1,6 +1,7 @@
 package com.korea50k.tracer.start
 
 
+import android.app.ProgressDialog.show
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
@@ -38,6 +39,7 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
     private var doubleBackToExitPressedOnce1 = false
 
     override fun onBackPressed() {
+        /*
         if (doubleBackToExitPressedOnce1) {
             super.onBackPressed()
             return
@@ -56,6 +58,14 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
         toast.show()
 
         Handler().postDelayed(Runnable { doubleBackToExitPressedOnce1 = false }, 2000)
+*/
+        //Toast.makeText(this, "'뒤로'버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_LONG).show()
+        val text = "뒤로 버튼을 한번 더 누르면 종료됩니다."
+        val duration = Toast.LENGTH_LONG
+
+        val toast = Toast.makeText(applicationContext, text, duration)
+        toast.show()
+
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -146,6 +156,7 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
     }
 
     fun stop() {    //타이머 멈추는거 만들어야함
+        /*
         val li = layoutInflater
         val layout: View =
             li.inflate(R.layout.custom_toast_stop, findViewById<ViewGroup>(R.id.custom_toast_layout_stop))
@@ -155,6 +166,16 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
         toast.setGravity(Gravity.CENTER_VERTICAL, 0, 850)
         toast.view = layout //setting the view of custom toast layout
 
+        toast.show()
+
+         */
+
+        //Toast.makeText(this, "종료를 원하시면 길게 눌러주세요", Toast.LENGTH_SHORT).show()
+
+        val text = "종료를 원하시면 길게 눌러주세요"
+        val duration = Toast.LENGTH_LONG
+
+        val toast = Toast.makeText(applicationContext, text, duration)
         toast.show()
     }
 
@@ -205,7 +226,6 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
         //Yes 버튼 눌렀을 때
         val yesButton = view.findViewById<Button>(R.id.runningActivityYesButton)
         yesButton.setOnClickListener{
-            Toast.makeText(this, "Yes 클릭", Toast.LENGTH_SHORT).show()
             when (ns) {
                 NoticeState.NOTHING -> {
                 }
@@ -228,7 +248,6 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
         //No 기록용 버튼 눌렀을 때
         val recordButton = view.findViewById<Button>(R.id.runningActivityNoButton)
         recordButton.setOnClickListener{
-            Toast.makeText(this, "No 클릭", Toast.LENGTH_SHORT).show()
             this.ns = NoticeState.NOTHING
             alertDialog.dismiss()
         }
