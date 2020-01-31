@@ -91,7 +91,7 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
         this.ns = ns
 
     }
-    
+
      */
 
     fun onClick(view: View) {
