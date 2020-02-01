@@ -56,6 +56,15 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
         Handler().postDelayed(Runnable { doubleBackToExitPressedOnce1 = false }, 2000)
 */
         //Toast.makeText(this, "'뒤로'버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_LONG).show()
+
+        if (doubleBackToExitPressedOnce1) {
+            super.onBackPressed()
+            return
+        }
+
+        this.doubleBackToExitPressedOnce1 = true
+
+
         val text = "뒤로 버튼을 한번 더 누르면 종료됩니다."
         val duration = Toast.LENGTH_LONG
 
