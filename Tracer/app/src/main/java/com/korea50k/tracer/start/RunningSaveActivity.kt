@@ -4,9 +4,7 @@ import android.graphics.Color
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import com.bumptech.glide.Glide
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.CombinedChart
 import com.github.mikephil.charting.components.XAxis
@@ -139,23 +137,6 @@ class RunningSaveActivity : AppCompatActivity() {
             finish()
         }
 
-
-        //TODO:ImageView 에 이미지 박는 코드 (firebase)
-
-        val imageView = saveTestImageview
-
-        mapImageRef.downloadUrl.addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                // Glide 이용하여 이미지뷰에 로딩
-                Log.d("ssmm11", "흐음"+mapImageRef.downloadUrl)
-                Glide.with(this@RunningSaveActivity)
-                    .load(task.result)
-                    .override(1024, 980)
-                    .into(imageView)
-            } else {
-                Log.d("ssmm11", "실패")
-            }
-        }
     }
 
     private fun setChart() {    //클래스로 따로 빼야할듯

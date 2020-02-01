@@ -8,13 +8,6 @@
     android:layout_marginTop="10dp"
     tools:context=".start.RunningSaveActivity">
 
-    <ImageView
-        android:id="@+id/saveTestImageview"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:layout_centerInParent="true">
-    </ImageView>
-
 
     <ScrollView
         android:layout_width="match_parent"

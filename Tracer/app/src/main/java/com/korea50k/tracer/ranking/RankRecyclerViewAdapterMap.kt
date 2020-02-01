@@ -6,15 +6,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.korea50k.tracer.R
-import com.korea50k.tracer.dataClass.RecyclerRankingDataItem
+import com.korea50k.tracer.dataClass.InfoData
 import kotlinx.android.synthetic.main.recycler_rankfragment_item.view.*
-import java.security.AccessController.getContext
 
-class RankRecyclerViewAdapterMap (val mdata :ArrayList<RecyclerRankingDataItem>) : RecyclerView.Adapter<RankRecyclerViewAdapterMap.mViewHolder>() {
+class RankRecyclerViewAdapterMap (val mdata :ArrayList<InfoData>) : RecyclerView.Adapter<RankRecyclerViewAdapterMap.mViewHolder>() {
     var context : Context? = null
     //생성된 뷰 홀더에 데이터를 바인딩 해줌.
     override fun onBindViewHolder(holder: mViewHolder, position: Int) {
