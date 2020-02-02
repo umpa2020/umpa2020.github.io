@@ -2,12 +2,16 @@ package com.korea50k.tracer.start
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.maps.android.SphericalUtil
 import com.korea50k.tracer.R
+import com.korea50k.tracer.dataClass.InfoData
 import com.korea50k.tracer.dataClass.NearMap
+import com.korea50k.tracer.dataClass.RouteData
 
 
 class NearRouteActivity : AppCompatActivity() {
@@ -42,8 +46,8 @@ class NearRouteActivity : AppCompatActivity() {
                 }
             }
         }
-
-        /*db.collection("mapRoute")
+/*
+        db.collection("mapRoute")
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {
@@ -68,6 +72,9 @@ class NearRouteActivity : AppCompatActivity() {
                     Log.d("ssmm11" , routeData.toString())
 
                     Log.d("ssmm11", routeData.latlngs.toString())
+                    //Log.d("ssmm11", receiveRouteData.latlngs.toString())
+                    //var receive_loc = LatLng(receiveRouteData[0].latitude, receiveRouteData[0].longitude)
+                    //var distance = SphericalUtil.computeDistanceBetween(currentLocation, receive_loc)
 
                     var receive_loc = LatLng(routeData.latlngs[0].latitude, routeData.latlngs[0].longitude)
                     var temp = document.id.split("||")
@@ -89,6 +96,9 @@ class NearRouteActivity : AppCompatActivity() {
             }
             .addOnFailureListener { exception ->
                 Log.w("ssmm11", "Error getting documents.", exception)
-            }*/
+            }
+
+ */
     }
+
 }

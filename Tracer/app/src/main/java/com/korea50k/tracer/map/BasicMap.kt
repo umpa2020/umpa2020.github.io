@@ -70,7 +70,7 @@ class BasicMap : OnMapReadyCallback {
         userState=UserState.NORMAL
     }
 
-    fun initLocation() {            //첫 위치 설정하고, prev_loc 설정
+    fun initLocation() {            //첫 위치 설정하고, previousLocation 설정
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
         fusedLocationClient.lastLocation        //가기의 마지막위치 가져오기(초기위치설정)
             .addOnSuccessListener { location ->

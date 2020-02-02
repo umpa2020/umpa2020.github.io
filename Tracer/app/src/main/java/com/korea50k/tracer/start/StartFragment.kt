@@ -43,18 +43,18 @@ class StartFragment : Fragment(), View.OnClickListener {
 
         val smf =
             childFragmentManager.findFragmentById(R.id.map_viewer_start) as SupportMapFragment
-        map = BasicMap(smf, context as Context)
+        //map = BasicMap(smf, context as Context)
         view.mainStartRunning.setOnClickListener(this)
         view.mainStartRacing.setOnClickListener(this)
     }
 
     override fun onPause() {
         super.onPause()
-        map.pauseTracking()
+      //  map.pauseTracking()
     }
 
     override fun onResume() {
         super.onResume()
-        map.restartTracking()
+      //  map.restartTracking()
     }
 }

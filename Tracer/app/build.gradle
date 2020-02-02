@@ -59,6 +59,9 @@ dependencies {
     // bottomNavigationView 추가
     implementation 'com.google.android.material:material:1.2.0-alpha04'
 
+    // ExtendedFloatingActionButton 로 인해 추가
+    implementation 'com.google.android.material:material:1.1.0-alpha09'
+
     // recyclerView 사용
     implementation "androidx.recyclerview:recyclerview:1.1.0"
 
@@ -107,5 +110,8 @@ dependencies {
     // Support-v4 (only Anko Commons)
     implementation "org.jetbrains.anko:anko-support-v4-commons:$anko_version"
     implementation 'com.android.support:design:29.0.0'
+
+    // WorkManager에 종속성을 추가 - 백그라운드 작업에 사용
+    implementation "androidx.work:work-runtime-ktx:2.2.0"
 
 }
