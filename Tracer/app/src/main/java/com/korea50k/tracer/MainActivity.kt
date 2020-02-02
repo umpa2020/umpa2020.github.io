@@ -19,8 +19,10 @@ class MainActivity : AppCompatActivity() {
     private val requiredPermissions = arrayOf(
         Manifest.permission.ACCESS_FINE_LOCATION,
         Manifest.permission.ACCESS_COARSE_LOCATION,
+        Manifest.permission.ACCESS_BACKGROUND_LOCATION,
         Manifest.permission.READ_EXTERNAL_STORAGE
     )
+
     //bottomNavigation 아이템 선택 리스너
     private val navListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         var selectedFragment: Fragment? = null//선택된 프래그먼트 저장하는 변수
@@ -45,6 +47,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         checkPermissions()          //모든 권한 확인
+        TTS.set(applicationContext)
 
 
         //선택한 메뉴로 프래그먼트 바꿈
@@ -78,11 +81,7 @@ class MainActivity : AppCompatActivity() {
         var rejectedPermissionList = ArrayList<String>()
         //필요한 퍼미션들을 하나씩 끄집어내서 현재 권한을 받았는지 체크
         for (permission in requiredPermissions) {
-            if (ContextCompat.checkSelfPermission(
-                    this,
-                    permission
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
+            if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
                 //만약 권한이 없다면 rejectedPermissionList에 추가
                 rejectedPermissionList.add(permission)
             }

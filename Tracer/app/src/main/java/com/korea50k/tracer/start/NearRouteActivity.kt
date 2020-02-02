@@ -7,8 +7,10 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.maps.android.SphericalUtil
 import com.korea50k.tracer.R
 import com.korea50k.tracer.dataClass.InfoData
+import com.korea50k.tracer.dataClass.NearMap
 import com.korea50k.tracer.dataClass.RouteData
 
 
@@ -17,6 +19,8 @@ class NearRouteActivity : AppCompatActivity() {
     var cur_loc = LatLng(0.0,0.0)          //현재위치
     var latLngs : MutableList<LatLng> = mutableListOf(LatLng(0.0,0.0))
     var markerlatlngs: MutableList<LatLng> = mutableListOf(LatLng(0.0,0.0))
+    var nearMaps: ArrayList<NearMap> = arrayListOf()
+
     /*lateinit var distanceArray: ArrayList<Double>
     lateinit var mapTitleArray: ArrayList<String>*/
 
@@ -31,21 +35,6 @@ class NearRouteActivity : AppCompatActivity() {
         latLngs.removeAt(0)
         markerlatlngs.removeAt(0)
 
-
-        /*//TODO:db에 있는 모든 mapdata 받아오는 클래스
-        db.collection("maps")
-            .whereEqualTo("mapTitle","11")
-            .get()
-            .addOnSuccessListener { result ->
-                Log.d("ssmm11",  "안으로 들어오긴했는데")
-                for (document in result) {
-                    Log.d("ssmm11", "${document.id}")
-                }
-            }
-            .addOnFailureListener { exception ->
-                Log.w("ssmm11", "Error getting documents.", exception)
-            }
-*/
         locationCallback = object : LocationCallback() {        //위치요청 결과가 들어오면 실행되는 코드
             override fun onLocationResult(locationResult: LocationResult?) {
                 locationResult?.let {
@@ -57,6 +46,7 @@ class NearRouteActivity : AppCompatActivity() {
                 }
             }
         }
+/*
         db.collection("mapRoute")
             .get()
             .addOnSuccessListener { result ->
@@ -81,14 +71,15 @@ class NearRouteActivity : AppCompatActivity() {
                     var routeData = RouteData(altitude, latLngs,markerlatlngs)
                     Log.d("ssmm11" , routeData.toString())
 
+                    Log.d("ssmm11", routeData.latlngs.toString())
                     //Log.d("ssmm11", receiveRouteData.latlngs.toString())
                     //var receive_loc = LatLng(receiveRouteData[0].latitude, receiveRouteData[0].longitude)
-                    //var distance = SphericalUtil.computeDistanceBetween(cur_loc, receive_loc)
+                    //var distance = SphericalUtil.computeDistanceBetween(currentLocation, receive_loc)
 
-                    //TODO:클래스를 하나 만들어서 맵 타이틀, 거리 이렇게 놓고 정렬 해서 가지고 있으면 되겠다.
-                    /*distanceArray.add(distance)
-                    mapTitleArray.add(document.id)*/
-                    //Log.d("ssmm11", "첫번째 : ${document.data.getValue("latlngs")}")
+                    var receive_loc = LatLng(routeData.latlngs[0].latitude, routeData.latlngs[0].longitude)
+                    var temp = document.id.split("||")
+                    var nearMap = NearMap(temp[0], SphericalUtil.computeDistanceBetween(cur_loc, receive_loc))
+                    nearMaps.add(nearMap)
                 }
             }
             .addOnFailureListener { exception ->
@@ -106,5 +97,8 @@ class NearRouteActivity : AppCompatActivity() {
             .addOnFailureListener { exception ->
                 Log.w("ssmm11", "Error getting documents.", exception)
             }
+
+ */
     }
+
 }

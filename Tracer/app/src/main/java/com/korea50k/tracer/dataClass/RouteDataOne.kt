@@ -2,11 +2,12 @@ package com.korea50k.tracer.dataClass
 
 import android.os.Parcelable
 import com.google.android.gms.maps.model.LatLng
+import com.google.firebase.database.GenericTypeIndicator
 import kotlinx.android.parcel.Parcelize
+import java.io.Serializable
 
 @Parcelize
-data class RouteData(
+data class RouteDataOne(
     var altitude: List<Double> = listOf(.0), // 고도
-    var latlngs: MutableList<MutableList<LatLng>> = mutableListOf(),
     var markerlatlngs: MutableList<LatLng> = mutableListOf()
 ) : Parcelable
