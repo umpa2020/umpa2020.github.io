@@ -8,6 +8,8 @@ buildscript {
         jcenter()
         //chart
         maven { url 'https://jitpack.io' }
+        // ExtendedFloatingActionButton
+        maven { url "https://maven.google.com"}
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.5.3'
@@ -25,6 +27,7 @@ allprojects {
         google()
         jcenter()
         maven { url "https://jitpack.io" }
+        maven { url "https://maven.google.com"}
     }
 }
 

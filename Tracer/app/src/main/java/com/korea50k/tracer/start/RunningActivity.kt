@@ -8,6 +8,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
@@ -23,7 +25,7 @@ import hollowsoft.slidingdrawer.OnDrawerOpenListener
 import hollowsoft.slidingdrawer.OnDrawerScrollListener
 import hollowsoft.slidingdrawer.SlidingDrawer
 import kotlinx.android.synthetic.main.activity_running.*
-import kotlinx.android.synthetic.main.activity_running.btn_stop
+
 
 class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpenListener,
     OnDrawerCloseListener {
@@ -33,6 +35,12 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
     var B_RUNNIG = true
     var ns = NoticeState.NOTHING
     private var doubleBackToExitPressedOnce1 = false
+
+    // 버튼 애니메이션
+    private var fabOpen: Animation? = null // Floating Animation Button
+    private var startButton: Button? = null
+    private var stopButton: Button? = null
+    private var pauseButton: Button? = null
 
     override fun onBackPressed() {
         /*
@@ -72,15 +80,16 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
         toast.show()
 
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         setContentView(R.layout.activity_running)
 
         init()
-        manageRunning.startRunning(this)
-        btn_stop.setOnLongClickListener {
-            if (manageRunning.map.distance < 200) {
+
+        btn_stop!!.setOnLongClickListener {
+            if (manageRunning.runningMap.distance < 200) {
                 //noticeMessage("거리가 200m 미만일때\n\n정지하시면 저장이 불가능합니다. \n\n정지하시겠습니까?", NoticeState.SIOP)
                 showChoicePopup("거리가 200m 미만일때\n정지하시면 저장이 불가능합니다. \n\n정지하시겠습니까?", NoticeState.SIOP)
             } else
@@ -89,7 +98,7 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
         }
     }
 
-    fun init() {
+    private fun init() {
         val smf = supportFragmentManager.findFragmentById(R.id.map_viewer) as SupportMapFragment
         manageRunning = ManageRunning(smf, this)
 
@@ -97,6 +106,12 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
         drawer.setOnDrawerScrollListener(this)
         drawer.setOnDrawerOpenListener(this)
         drawer.setOnDrawerCloseListener(this)
+
+        fabOpen = AnimationUtils.loadAnimation(applicationContext, R.anim.running_btn_open) // 애니매이션 초기화
+
+        startButton = findViewById(R.id.btn_start)
+        stopButton = findViewById(R.id.btn_stop)
+        pauseButton = findViewById(R.id.btn_pause)
     }
 
     /*
@@ -108,10 +123,20 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
     }
 
      */
+    private fun anim() {
+        btn_start.visibility = View.INVISIBLE
+        btn_stop.startAnimation(fabOpen)
+        btn_pause.startAnimation(fabOpen)
+        btn_stop.isClickable = true
+        btn_pause.isClickable = true
+    }
 
     fun onClick(view: View) {
         when (view.id) {
-
+            R.id.btn_start -> {
+                anim()
+                manageRunning.startRunning(this)
+            }
             R.id.btn_pause -> {
                 if (manageRunning.privacy == Privacy.RACING) {
                     //noticeMessage("일시정지를 하게 되면\n\n경쟁 모드 업로드가 불가합니다.\n\n일시정지를 하시겠습니까?", NoticeState.PAUSE)
@@ -160,7 +185,7 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
         B_RUNNIG = false
     }
 
-    fun stop() {    //타이머 멈추는거 만들어야함
+    private fun stop() {    //타이머 멈추는거 만들어야함
         /*
         val li = layoutInflater
         val layout: View =
@@ -184,7 +209,7 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
         toast.show()
     }
 
-    fun restart() { //TODO:Start with new polyline
+    private fun restart() { //TODO:Start with new polyline
         btn_pause.text = "PAUSE"
         //btn_pause.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_pause_icon_pressed, 0, 0, 0)
         B_RUNNIG = true
@@ -218,10 +243,10 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
     /**
      * 팝업 띄우는 함수
      * */
-    private fun showChoicePopup(text: String, ns: NoticeState){
+    private fun showChoicePopup(text: String, ns: NoticeState) {
         val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val view = inflater.inflate(R.layout.running_activity_yesnopopup, null)
-        val textView : TextView = view.findViewById(R.id.runningActivityPopUpTextView)
+        val view = inflater.inflate(com.korea50k.tracer.R.layout.running_activity_yesnopopup, null)
+        val textView: TextView = view.findViewById(com.korea50k.tracer.R.id.runningActivityPopUpTextView)
         textView.text = text
 
         val alertDialog = AlertDialog.Builder(this) //alertDialog 생성
@@ -229,8 +254,8 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
             .create()
 
         //Yes 버튼 눌렀을 때
-        val yesButton = view.findViewById<Button>(R.id.runningActivityYesButton)
-        yesButton.setOnClickListener{
+        val yesButton = view.findViewById<Button>(com.korea50k.tracer.R.id.runningActivityYesButton)
+        yesButton.setOnClickListener {
             when (ns) {
                 NoticeState.NOTHING -> {
                 }
@@ -239,6 +264,7 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
                     manageRunning.pauseRunning()
                 }
                 NoticeState.SIOP -> {
+                    manageRunning.stopRunning()
                     var newIntent = Intent(this, MainActivity::class.java)
                     newIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                     newIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
@@ -251,8 +277,8 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
 
 
         //No 기록용 버튼 눌렀을 때
-        val recordButton = view.findViewById<Button>(R.id.runningActivityNoButton)
-        recordButton.setOnClickListener{
+        val recordButton = view.findViewById<Button>(com.korea50k.tracer.R.id.runningActivityNoButton)
+        recordButton.setOnClickListener {
             this.ns = NoticeState.NOTHING
             alertDialog.dismiss()
         }
