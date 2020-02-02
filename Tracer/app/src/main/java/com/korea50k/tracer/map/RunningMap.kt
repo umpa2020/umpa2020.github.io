@@ -34,7 +34,7 @@ class RunningMap : OnMapReadyCallback {
     var prev_loc: LatLng = LatLng(0.0, 0.0)          //이전위치
     lateinit var cur_loc: LatLng            //현재위치
     var latlngs: MutableList<LatLng> = mutableListOf()   //움직인 점들의 집합 나중에 저장될 점들 집합
-    var routes: MutableList<LatLng> = mutableListOf()
+    var routes: MutableList<MutableList<LatLng>> = mutableListOf()
     var altitude: MutableList<Double> = mutableListOf(.0)
     var speeds: MutableList<Double> = mutableListOf(.0)
     var distance = 0.0
@@ -75,11 +75,21 @@ class RunningMap : OnMapReadyCallback {
 
     fun stopTracking(routeData: RouteData, infoData: InfoData) {
         print_log("Stop")
-        routes = PolyUtil.simplify(latlngs, 10.0)
+        routes.add(PolyUtil.simplify(latlngs, 10.0).toMutableList())
         markers.add(cur_loc)
-
-        routeData.latlngs = routes
-        routeData.markerlatlngs = markers
+        var arrLatLng: MutableList<MutableList<LatLng>> = mutableListOf()
+        var cpLatLag: MutableList<LatLng> = mutableListOf()
+        for(i in routes.indices) {
+            var latlngs: MutableList<LatLng> = mutableListOf()
+            for (j in routes[i].indices) {
+                latlngs.add(LatLng(routes[i][j].latitude,routes[i][j].longitude))
+            }
+            arrLatLng.add(latlngs)
+            cpLatLag.add(LatLng(markers[i].latitude, markers[i].longitude))
+        }
+        cpLatLag.add(LatLng(markers[markers.size-1].latitude, markers[markers.size-1].longitude))
+        routeData.latlngs = arrLatLng
+        routeData.markerlatlngs = cpLatLag
         routeData.altitude = altitude
 
         //TODO: speed
@@ -121,7 +131,7 @@ class RunningMap : OnMapReadyCallback {
                     var canvas = Canvas();
                     var bitmap = Bitmap.createBitmap(
                         circleDrawable!!.intrinsicWidth,
-                        circleDrawable!!.intrinsicHeight,
+                        circleDrawable.intrinsicHeight,
                         Bitmap.Config.ARGB_8888
                     );
                     canvas.setBitmap(bitmap);
@@ -200,7 +210,7 @@ class RunningMap : OnMapReadyCallback {
                                 mMap.addMarker(cpOption)
                                 markers.add(cur_loc)
                                 markerCount++
-                                routes = PolyUtil.simplify(latlngs, 10.0)
+                                routes.add(PolyUtil.simplify(latlngs, 10.0).toMutableList())
                                 print_log(routes[routes.size - 1].toString())
                                 latlngs.add(cur_loc)
                             }

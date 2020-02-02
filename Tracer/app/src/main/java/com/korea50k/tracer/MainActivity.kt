@@ -45,6 +45,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         checkPermissions()          //모든 권한 확인
+        TTS.set(applicationContext)
 
 
         //선택한 메뉴로 프래그먼트 바꿈
