@@ -34,6 +34,7 @@ class RankingMapDetailActivity : AppCompatActivity() {
     var altitude: List<Double> = listOf()
     var latLngs: MutableList<MutableList<LatLng>> = mutableListOf()
     var markerlatlngs: MutableList<LatLng> = mutableListOf()
+    var dbMapTitle =""
 
     lateinit var rankingDetailThread: Thread
 
@@ -69,6 +70,9 @@ class RankingMapDetailActivity : AppCompatActivity() {
                                 )
                                 markerlatlngs.add(latLng)
                             }
+
+                            // 실행 수 및 db에 있는 맵타이틀을 알기위해서 (구분 시간 값 포함)
+                            dbMapTitle = document.id
 
                             // 2차원 배열은 새로 나누어 담아서 받음 1차원 배열 만들고 2차원 배열에 add
                             // 맵 위도경도 받아오기
@@ -165,7 +169,7 @@ class RankingMapDetailActivity : AppCompatActivity() {
         practiceButton.setOnClickListener {
             val nextIntent = Intent(this, PracticeRacingActivity::class.java)
             nextIntent.putExtra("makerRouteData", routeData)
-            nextIntent.putExtra("maptitle", rankingDetailMapTitle.text)
+            nextIntent.putExtra("maptitle", dbMapTitle)
             startActivity(nextIntent)
         }
 
@@ -175,7 +179,7 @@ class RankingMapDetailActivity : AppCompatActivity() {
         recordButton.setOnClickListener {
             val nextIntent = Intent(this, RankingRecodeRacingActivity::class.java)
             nextIntent.putExtra("makerRouteData", routeData)
-            nextIntent.putExtra("maptitle", rankingDetailMapTitle.text)
+            nextIntent.putExtra("maptitle", dbMapTitle)
             startActivity(nextIntent)
         }
 

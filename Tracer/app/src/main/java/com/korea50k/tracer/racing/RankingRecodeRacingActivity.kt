@@ -7,13 +7,17 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FirebaseFirestore
 import com.korea50k.tracer.R
+import com.korea50k.tracer.dataClass.InfoData
 import com.korea50k.tracer.dataClass.RouteData
 import com.korea50k.tracer.dataClass.UserState
 import hollowsoft.slidingdrawer.OnDrawerCloseListener
 import hollowsoft.slidingdrawer.OnDrawerOpenListener
 import hollowsoft.slidingdrawer.OnDrawerScrollListener
 import hollowsoft.slidingdrawer.SlidingDrawer
+import kotlinx.android.synthetic.main.activity_ranking_map_detail.*
 import kotlinx.android.synthetic.main.activity_ranking_recode_racing.*
 
 class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpenListener,
@@ -23,6 +27,7 @@ class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener,
     lateinit var makerRouteData: RouteData
     lateinit var drawer: SlidingDrawer
     lateinit var mapTitle: String
+    lateinit var increaseExecuteThread: Thread
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +46,17 @@ class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener,
     }
 
     private fun increaseExecute(mapTitle: String) {
-        //TODO: 실행 수 늘리는 거 구현해야함
+
+        increaseExecuteThread = Thread(Runnable {
+            val db = FirebaseFirestore.getInstance()
+
+            db.collection("mapInfo").document(mapTitle)
+                .update("execute", FieldValue.increment(1))
+                .addOnSuccessListener { Log.d("ssmm11", "DocumentSnapshot successfully updated!") }
+                .addOnFailureListener { e -> Log.w("ssmm11", "Error updating document", e) }
+        })
+
+        increaseExecuteThread.start()
     }
 
     fun init() {

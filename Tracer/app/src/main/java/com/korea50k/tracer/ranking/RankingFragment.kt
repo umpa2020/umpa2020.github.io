@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.korea50k.tracer.R
 import com.korea50k.tracer.dataClass.InfoData
 import kotlinx.android.synthetic.main.fragment_ranking.view.*
@@ -34,7 +35,7 @@ class RankingFragment : Fragment() {
         rankingDownloadThread = Thread( Runnable {
             val db = FirebaseFirestore.getInstance()
 
-            db.collection("mapInfo")
+            db.collection("mapInfo").orderBy("execute", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener { result ->
                     for (document in result) {
