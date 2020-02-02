@@ -215,6 +215,7 @@ class RunningMap (smf: SupportMapFragment, context: Context) : OnMapReadyCallbac
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult?) {
                 locationResult?.let {
+                    Log.d("RMAP","hmm")
                     for ((i, location) in it.locations.withIndex()) {
                         var lat = location.latitude
                         var lng = location.longitude
