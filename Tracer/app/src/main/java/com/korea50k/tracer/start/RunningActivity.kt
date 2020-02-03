@@ -25,7 +25,7 @@ import hollowsoft.slidingdrawer.OnDrawerScrollListener
 import hollowsoft.slidingdrawer.SlidingDrawer
 import kotlinx.android.synthetic.main.activity_running.*
 
-class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpenListener,
+class RunningActivity : AppCompatActivity(), OnDrawerScrollListener,OnDrawerOpenListener,
     OnDrawerCloseListener {
     var TAG = "what u wanna say?~~!~!"       //로그용 태그
     lateinit var manageRunning: ManageRunning

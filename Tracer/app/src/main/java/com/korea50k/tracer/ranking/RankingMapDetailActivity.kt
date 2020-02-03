@@ -24,7 +24,9 @@ import com.korea50k.tracer.dataClass.InfoData
 import com.korea50k.tracer.dataClass.RouteData
 import com.korea50k.tracer.racing.PracticeRacingActivity
 import com.korea50k.tracer.racing.RankingRecodeRacingActivity
+import com.korea50k.tracer.util.Chart
 import kotlinx.android.synthetic.main.activity_ranking_map_detail.*
+import kotlinx.android.synthetic.main.activity_running_save.*
 import java.util.*
 
 class RankingMapDetailActivity : AppCompatActivity() {
@@ -114,7 +116,8 @@ class RankingMapDetailActivity : AppCompatActivity() {
                                 rankingDetailDistance.text = infoData.distance.toString()
                                 rankingDetailTime.text = infoData.time.toString()
                                 rankingDetailSpeed.text = infoData.speed.average().toString()
-                                setChart(infoData.speed)
+                                var chart= Chart(routeData.altitude,infoData.speed,rankingDetailChart)
+                                chart.setChart()
                             }
                         }
                         .addOnFailureListener { exception ->
@@ -187,93 +190,5 @@ class RankingMapDetailActivity : AppCompatActivity() {
         alertDialog.setView(view)
         alertDialog.show() //팝업 띄우기
 
-    }
-
-    private fun setChart(speed: MutableList<Double> = mutableListOf(.0)) {    //클래스로 따로 빼야할듯
-        var lineChart = rankingDetailChart as CombinedChart
-        val alts = ArrayList<BarEntry>()
-        val speeds = ArrayList<Entry>()
-
-        for (index in altitude.indices) {
-            alts.add(BarEntry(index.toFloat(), altitude[index].toFloat()))
-            speeds.add(Entry(index.toFloat(), speed[index].toFloat()))
-        }
-
-        val xAxis = lineChart.getXAxis()
-        xAxis.position = XAxis.XAxisPosition.BOTTOM
-        xAxis.textColor = Color.BLACK
-        xAxis.enableGridDashedLine(8f, 24f, 0f)
-
-        val yLAxis = lineChart.axisLeft
-        yLAxis.textColor = Color.RED
-        yLAxis.axisMaximum = speed.max()!!.toFloat() + 5
-        yLAxis.axisMinimum = 0F
-
-        val yRAxis = lineChart.axisRight
-        yRAxis.textColor = Color.BLUE
-        yRAxis.axisMaximum = altitude.max()!!.toFloat() + 5
-        yRAxis.axisMinimum = altitude.min()!!.toFloat() - 5
-
-
-        // 고도 셋팅
-        var altsData = LineData()
-
-//        val lineDataSet = LineDataSet(alts, "고도")
-//        lineDataSet.lineWidth = 1.5f
-//        lineDataSet.color = Color.parseColor("#FF0000FF") // 파랑
-//        lineDataSet.setDrawHorizontalHighlightIndicator(false)
-//        lineDataSet.setDrawHighlightIndicators(false)
-//        lineDataSet.setDrawValues(false)
-//       // lineDataSet.setCircleColor(Color.parseColor("#FFFFFFFF"))
-//        lineDataSet.setDrawCircles(false)
-//        lineDataSet.setDrawCircleHole(false)
-//        lineDataSet.axisDependency = YAxis.AxisDependency.RIGHT
-        val set = BarDataSet(alts, "고도")
-        set.color = Color.parseColor("#FF0000FF") // 파랑
-        set.barBorderColor = Color.parseColor("#FF0000FF") // 파랑
-        set.barBorderWidth = 3f
-        set.setDrawValues(false)
-        set.setDrawIcons(false)
-        set.isHighlightEnabled = false
-        set.axisDependency = YAxis.AxisDependency.RIGHT
-
-        //altsData.addDataSet(set)
-
-        // 스피드 셋팅
-        var speedsData = LineData()
-        val lineDataSet2 = LineDataSet(speeds, "속력")
-        lineDataSet2.lineWidth = 1.5f
-        lineDataSet2.color = Color.parseColor("#FFFF0000") // 빨강
-        lineDataSet2.setDrawHorizontalHighlightIndicator(false)
-        lineDataSet2.setDrawHighlightIndicators(false)
-        lineDataSet2.setDrawValues(false)
-//        lineDataSet2.setCircleColor(Color.parseColor("#FFFF0000"))
-//        lineDataSet2.setCircleColorHole(Color.parseColor("#FFFF0000"))
-        lineDataSet2.setDrawCircles(false)
-        lineDataSet2.setDrawCircleHole(false)
-        lineDataSet2.axisDependency = YAxis.AxisDependency.LEFT
-
-        speedsData.addDataSet(lineDataSet2)
-
-        var combinedData = CombinedData()
-
-        combinedData.setData(BarData(set))
-        combinedData.setData(speedsData)
-
-//        val lineData = LineData(lineDataSet)
-//        lineChart.data = lineData
-//        lineChart.data.addDataSet(lineDataSet2)
-
-
-        //val description = Description()
-        //description.text = ""
-
-        lineChart.isDoubleTapToZoomEnabled = false // 더블 클릭 막기
-        lineChart.setDrawGridBackground(false)
-        //lineChart.description = description
-        lineChart.animateY(2000, Easing.EasingOption.EaseInCubic)
-
-        lineChart.data = combinedData
-        lineChart.invalidate()
     }
 }

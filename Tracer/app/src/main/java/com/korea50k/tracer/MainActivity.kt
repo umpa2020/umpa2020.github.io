@@ -22,6 +22,7 @@ class MainActivity : AppCompatActivity() {
         Manifest.permission.ACCESS_BACKGROUND_LOCATION,
         Manifest.permission.READ_EXTERNAL_STORAGE
     )
+
     //bottomNavigation 아이템 선택 리스너
     private val navListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         var selectedFragment: Fragment? = null//선택된 프래그먼트 저장하는 변수

@@ -18,6 +18,7 @@ import com.korea50k.tracer.R
 import com.korea50k.tracer.UserInfo
 import com.korea50k.tracer.dataClass.*
 import com.korea50k.tracer.map.ViewerMap
+import com.korea50k.tracer.util.Chart
 import kotlinx.android.synthetic.main.activity_running_save.*
 import java.io.File
 import java.text.SimpleDateFormat
@@ -54,7 +55,8 @@ class RunningSaveActivity : AppCompatActivity() {
             racingRadio.isEnabled = false
             publicRadio.isChecked = true
         }
-        setChart()
+        var chart= Chart(routeData.altitude,infoData.speed,chart)
+        chart.setChart()
     }
 
     fun onClick(view: View) {
@@ -136,94 +138,5 @@ class RunningSaveActivity : AppCompatActivity() {
 
         // 위에 지정한 스레드 스타트
         mapSaveThread.start()
-    }
-
-    //TODO: chart 클래스 빼는거 혹은 정리 부탁좀요 어딜 지워야할지 ..
-    private fun setChart() {    //클래스로 따로 빼야할듯
-        var lineChart = chart as CombinedChart
-        val alts = ArrayList<BarEntry>()
-        val speeds = ArrayList<Entry>()
-
-        for (index in routeData.altitude?.indices!!) {
-            alts.add(BarEntry(index.toFloat(), routeData.altitude!![index]?.toFloat()))
-            speeds.add(Entry(index.toFloat(), infoData.speed[index].toFloat()))
-        }
-
-        val xAxis = lineChart.getXAxis()
-        xAxis.position = XAxis.XAxisPosition.BOTTOM
-        xAxis.textColor = Color.BLACK
-        xAxis.enableGridDashedLine(8f, 24f, 0f)
-
-        val yLAxis = lineChart.axisLeft
-        yLAxis.textColor = Color.RED
-        yLAxis.axisMaximum = infoData.speed.max()!!.toFloat() + 5
-        yLAxis.axisMinimum = 0F
-
-        val yRAxis = lineChart.axisRight
-        yRAxis.textColor = Color.BLUE
-        yRAxis.axisMaximum = routeData.altitude?.max()!!.toFloat() + 5
-        yRAxis.axisMinimum = routeData.altitude?.min()!!.toFloat() - 5
-
-
-        // 고도 셋팅
-        var altsData = LineData()
-
-//        val lineDataSet = LineDataSet(alts, "고도")
-//        lineDataSet.lineWidth = 1.5f
-//        lineDataSet.color = Color.parseColor("#FF0000FF") // 파랑
-//        lineDataSet.setDrawHorizontalHighlightIndicator(false)
-//        lineDataSet.setDrawHighlightIndicators(false)
-//        lineDataSet.setDrawValues(false)
-//       // lineDataSet.setCircleColor(Color.parseColor("#FFFFFFFF"))
-//        lineDataSet.setDrawCircles(false)
-//        lineDataSet.setDrawCircleHole(false)
-//        lineDataSet.axisDependency = YAxis.AxisDependency.RIGHT
-        val set = BarDataSet(alts, "고도")
-        set.color = Color.parseColor("#FF0000FF") // 파랑
-        set.barBorderColor = Color.parseColor("#FF0000FF") // 파랑
-        set.barBorderWidth = 3f
-        set.setDrawValues(false)
-        set.setDrawIcons(false)
-        set.isHighlightEnabled = false
-        set.axisDependency = YAxis.AxisDependency.RIGHT
-
-        //altsData.addDataSet(set)
-
-        // 스피드 셋팅
-        var speedsData = LineData()
-        val lineDataSet2 = LineDataSet(speeds, "속력")
-        lineDataSet2.lineWidth = 1.5f
-        lineDataSet2.color = Color.parseColor("#FFFF0000") // 빨강
-        lineDataSet2.setDrawHorizontalHighlightIndicator(false)
-        lineDataSet2.setDrawHighlightIndicators(false)
-        lineDataSet2.setDrawValues(false)
-//        lineDataSet2.setCircleColor(Color.parseColor("#FFFF0000"))
-//        lineDataSet2.setCircleColorHole(Color.parseColor("#FFFF0000"))
-        lineDataSet2.setDrawCircles(false)
-        lineDataSet2.setDrawCircleHole(false)
-        lineDataSet2.axisDependency = YAxis.AxisDependency.LEFT
-
-        speedsData.addDataSet(lineDataSet2)
-
-        var combinedData = CombinedData()
-
-        combinedData.setData(BarData(set))
-        combinedData.setData(speedsData)
-
-//        val lineData = LineData(lineDataSet)
-//        lineChart.data = lineData
-//        lineChart.data.addDataSet(lineDataSet2)
-
-
-        //val description = Description()
-        //description.text = ""
-
-        lineChart.isDoubleTapToZoomEnabled = false // 더블 클릭 막기
-        lineChart.setDrawGridBackground(false)
-        //lineChart.description = description
-        lineChart.animateY(2000, Easing.EasingOption.EaseInCubic)
-
-        lineChart.data = combinedData
-        lineChart.invalidate()
     }
 }
