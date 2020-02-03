@@ -29,10 +29,7 @@ class Chart {
         }
 
         val xAxis = lineChart.xAxis
-        xAxis.position = XAxis.XAxisPosition.BOTTOM
-        xAxis.textColor = Color.BLACK
-        xAxis.enableGridDashedLine(8f, 24f, 0f)
-
+        xAxis.isEnabled=false
         val yLAxis = lineChart.axisLeft
         yLAxis.textColor = Color.RED
         yLAxis.axisMaximum = altsData.max()!!.toFloat() + 5
