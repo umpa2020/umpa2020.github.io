@@ -7,13 +7,25 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.korea50k.tracer.R
+import com.korea50k.tracer.UserInfo
+import com.korea50k.tracer.dataClass.InfoData
+import com.korea50k.tracer.ranking.RankRecyclerViewAdapterMap
+import kotlinx.android.synthetic.main.activity_ranking_map_detail.*
 import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.fragment_profile.view.*
+import kotlinx.android.synthetic.main.fragment_ranking.view.*
 
 /**
  * A simple [Fragment] subclass.
@@ -25,8 +37,9 @@ class ProfileFragment : Fragment() {
     //  firebase Storage
     private var mStorage: FirebaseStorage? = null
     private var mStorageReference: StorageReference? = null
-    lateinit var root:View
+    lateinit var root: View
     var bundle = Bundle()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,18 +49,16 @@ class ProfileFragment : Fragment() {
 
         mFirestoreDB = FirebaseFirestore.getInstance()
 
-        /**
-         *  Firebase Storage 초기화
-         */
+        Log.d("ssmm11", " sha email" + UserInfo.email)
+        Log.d("ssmm11", " shared prefrence " + UserInfo.nickname)
 
-        mStorage = FirebaseStorage.getInstance()
-        mStorageReference = mStorage!!.reference
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         var view: View = inflater!!.inflate(R.layout.fragment_profile, container, false)
-        root=view
+        root = view
         val fragmentAdapter = UserPagerAdapter(childFragmentManager)
 
         //아이콘 선택, 비선택 이미지, 타이틀 이름, 추가할 프래그먼트 지정해서 어댑터에 프래그먼트 추가
@@ -77,10 +88,34 @@ class ProfileFragment : Fragment() {
             override fun onTabReselected(tab: TabLayout.Tab?) {
             }
         })
+
+
         root.profileFragmentProfileTabLayout.setupWithViewPager(view.profileFragmentViewPager)!!
-       // tabIconSelect()
+        // tabIconSelect()
 
 
+
+
+        val profileNickname = view.findViewById<TextView>(R.id.profileIdTextView)
+        profileNickname.text = UserInfo.nickname
+
+        // glide imageview 소스
+
+        val imageView = view.findViewById<ImageView>(R.id.profileImageView)
+
+        val storage = FirebaseStorage.getInstance("gs://tracer-9070d.appspot.com/")
+        val mapImageRef = storage.reference.child(UserInfo.nickname).child("Profile/2020_02_03_Mon.jpg")
+
+        mapImageRef.downloadUrl.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                // Glide 이용하여 이미지뷰에 로딩
+                Glide.with(this@ProfileFragment)
+                    .load(task.result)
+                    .override(1024, 980)
+                    .into(imageView)
+            } else {
+            }
+        }
         return view
     }
 
@@ -98,7 +133,6 @@ class ProfileFragment : Fragment() {
             )
 
         for (i in 0..1) {
-            Log.d("profile", "for문안에 들어옴")
             var tab = root.profileFragmentProfileTabLayout.getTabAt(i)!!
             Log.d("profile", tab.toString())
             if (tab.isSelected) {

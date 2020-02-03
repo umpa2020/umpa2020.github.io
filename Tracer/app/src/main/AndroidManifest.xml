@@ -35,18 +35,18 @@
         <activity android:name=".join.GenderSelectActivity" />
         <activity android:name=".join.SignUpActivity" />
         <activity android:name=".splash.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name=".ranking.RankRecyclerItemClickActivity" />
         <activity android:name=".ranking.RankingMapDetailActivity" />
         <activity android:name=".start.RunningSaveActivity" />
         <activity android:name=".start.RunningActivity" />
         <activity android:name=".MainActivity" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".login.LoginActivity" />
 
