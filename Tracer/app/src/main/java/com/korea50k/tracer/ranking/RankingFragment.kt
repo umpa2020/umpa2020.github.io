@@ -31,7 +31,6 @@ class RankingFragment : Fragment() {
         //레이아웃 매니저 추가
         view.rank_recycler_map.layoutManager = LinearLayoutManager(context)
 
-        //TODO:레이싱 추가되면 실행 순으로 쿼리 날리는 거 넣어야 함
         rankingDownloadThread = Thread( Runnable {
             val db = FirebaseFirestore.getInstance()
 

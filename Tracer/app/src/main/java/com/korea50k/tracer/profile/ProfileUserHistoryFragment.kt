@@ -18,7 +18,7 @@ class ProfileUserHistoryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile_user_history, container, false)
+        return inflater.inflate(R.layout.recycler_profile_user_history, container, false)
     }
 
 
