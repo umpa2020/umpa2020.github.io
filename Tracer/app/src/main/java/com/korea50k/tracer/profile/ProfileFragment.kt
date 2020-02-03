@@ -25,7 +25,7 @@ class ProfileFragment : Fragment() {
     //  firebase Storage
     private var mStorage: FirebaseStorage? = null
     private var mStorageReference: StorageReference? = null
-
+    lateinit var root:View
     var bundle = Bundle()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,7 +47,7 @@ class ProfileFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         var view: View = inflater!!.inflate(R.layout.fragment_profile, container, false)
-
+        root=view
         val fragmentAdapter = UserPagerAdapter(childFragmentManager)
 
         //아이콘 선택, 비선택 이미지, 타이틀 이름, 추가할 프래그먼트 지정해서 어댑터에 프래그먼트 추가
@@ -55,10 +55,10 @@ class ProfileFragment : Fragment() {
         fragmentAdapter.addFragment(R.drawable.ic_launcher_background, R.drawable.ic_launcher_foreground, "Route", ProfileUserRouteFragment())
         fragmentAdapter.addFragment(R.drawable.ic_launcher_background, R.drawable.ic_launcher_foreground, "History", ProfileUserRouteFragment())
 
-        view!!.profileFragmentViewPager.adapter = fragmentAdapter
+        root.profileFragmentViewPager.adapter = fragmentAdapter
 
 
-        view.profileFragmentViewPager.addOnPageChangeListener(
+        root.profileFragmentViewPager.addOnPageChangeListener(
             TabLayout.TabLayoutOnPageChangeListener(view!!.profileFragmentProfileTabLayout)
 
         )
@@ -67,7 +67,7 @@ class ProfileFragment : Fragment() {
         view!!.profileFragmentProfileTabLayout!!.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 var i = tab!!.position
-                view.profileFragmentViewPager.currentItem = i
+                root.profileFragmentViewPager.currentItem = i
                 tabIconSelect()
             }
 
@@ -77,8 +77,8 @@ class ProfileFragment : Fragment() {
             override fun onTabReselected(tab: TabLayout.Tab?) {
             }
         })
-        view.profileFragmentProfileTabLayout.setupWithViewPager(view.profileFragmentViewPager)!!
-        tabIconSelect()
+        root.profileFragmentProfileTabLayout.setupWithViewPager(view.profileFragmentViewPager)!!
+       // tabIconSelect()
 
 
         return view
@@ -99,9 +99,9 @@ class ProfileFragment : Fragment() {
 
         for (i in 0..1) {
             Log.d("profile", "for문안에 들어옴")
-            var tab = view!!.profileFragmentProfileTabLayout.getTabAt(i)!!
+            var tab = root.profileFragmentProfileTabLayout.getTabAt(i)!!
             Log.d("profile", tab.toString())
-            if (tab.view.isSelected) {
+            if (tab.isSelected) {
                 tab.setIcon(tabBtnImgOn[i])
             } else {
                 tab.setIcon(tabBtnImgOff[i])
