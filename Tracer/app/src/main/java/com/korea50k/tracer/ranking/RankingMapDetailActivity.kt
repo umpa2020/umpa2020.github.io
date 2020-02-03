@@ -45,7 +45,8 @@ class RankingMapDetailActivity : AppCompatActivity() {
         val intent = getIntent()
         //전달 받은 값으로 Title 설정
         var mapTitle = intent.extras?.getString("MapTitle").toString()
-        rankingDetailMapTitle.text = mapTitle
+        var cutted = mapTitle.split("||")
+        rankingDetailMapTitle.text = cutted[0]
 
         rankingDetailThread = Thread(Runnable {
             val db = FirebaseFirestore.getInstance()
@@ -54,8 +55,7 @@ class RankingMapDetailActivity : AppCompatActivity() {
                 .get()
                 .addOnSuccessListener { result ->
                     for (document in result) {
-                        var cutting = document.id.split("||")
-                        if (cutting[0].equals(mapTitle)) {
+                        if (document.id.equals(mapTitle)) {
                             // 1차원 배열인 고도는 그대로 받아오면 되고
                             altitude = document.get("altitude") as List<Double>
 
@@ -98,15 +98,17 @@ class RankingMapDetailActivity : AppCompatActivity() {
                     }
 
                     // 단순 맵 정보 받아오는 부분
+                    //TODO: 맵 타이틀 바꿔야함
                     db.collection("mapInfo").whereEqualTo("mapTitle", mapTitle)
                         .get()
                         .addOnSuccessListener { result ->
                             for (document in result) {
                                 infoData = document.toObject(InfoData::class.java)
-                                rankingDetailDate.text = document.id
+                                rankingDetailDate.text = cutted[1]
                             }
                             // ui 스레드 따로 빼주기
                             runOnUiThread {
+                                Log.d("ssmm11", "info data = " + infoData)
                                 rankingDetailNickname.text = infoData.makersNickname
                                 rankingDetailMapDetail.text = infoData.mapExplanation
                                 rankingDetailDistance.text = infoData.distance.toString()
@@ -135,7 +137,6 @@ class RankingMapDetailActivity : AppCompatActivity() {
                         .override(1024, 980)
                         .into(imageView)
                 } else {
-                    Log.d("ssmm11", "실패")
                 }
             }
         })

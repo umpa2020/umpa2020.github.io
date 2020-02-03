@@ -20,9 +20,11 @@ class RankRecyclerViewAdapterMap (val mdata :ArrayList<InfoData>) : RecyclerView
         val singleItem = mdata[position]
         var ranking = position + 1
 
+        var cutted = singleItem.mapTitle!!.split("||")
+        Log.d("ssmm11", "어댑텅에서 maptitle = " + singleItem.mapTitle)
         //데이터 바인딩
         holder.rank.text = ranking.toString()
-        holder.maptitle.text = singleItem.mapTitle
+        holder.maptitle.text = cutted[0]
         holder.execute.text = singleItem.execute.toString()
 
         //ranking에 따라 트로피 색 바뀌게 하는 부분
@@ -38,7 +40,7 @@ class RankRecyclerViewAdapterMap (val mdata :ArrayList<InfoData>) : RecyclerView
         //클릭하면 맵 상세보기 페이지로 이동
         holder.itemView.setOnClickListener{
             val nextIntent = Intent(context, RankRecyclerItemClickActivity::class.java)
-            nextIntent.putExtra("MapTitle",  holder.maptitle.text.toString()) //mapTitle 정보 인텐트로 넘김
+            nextIntent.putExtra("MapTitle",  singleItem.mapTitle) //mapTitle 정보 인텐트로 넘김
             context!!.startActivity(nextIntent)
         }
     }

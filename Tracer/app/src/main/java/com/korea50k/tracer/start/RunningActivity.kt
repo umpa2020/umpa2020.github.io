@@ -1,6 +1,5 @@
 package com.korea50k.tracer.start
 
-
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
@@ -25,7 +24,6 @@ import hollowsoft.slidingdrawer.OnDrawerOpenListener
 import hollowsoft.slidingdrawer.OnDrawerScrollListener
 import hollowsoft.slidingdrawer.SlidingDrawer
 import kotlinx.android.synthetic.main.activity_running.*
-
 
 class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpenListener,
     OnDrawerCloseListener {

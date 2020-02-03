@@ -77,8 +77,12 @@ class RunningSaveActivity : AppCompatActivity() {
     }
 
     fun save(imgPath: String) {
+        val dt = Date()
+        val full_sdf = SimpleDateFormat("yyyy-MM-dd, hh:mm:ss a")
+
+        infoData.makersNickname = UserInfo.nickname
         infoData.mapImage = imgPath
-        infoData.mapTitle = mapTitleEdit.text.toString()
+        infoData.mapTitle = mapTitleEdit.text.toString()+"||" + full_sdf.format(dt).toString()
         infoData.mapExplanation = mapExplanationEdit.text.toString()
         infoData.makersNickname = UserInfo.nickname
         infoData.execute = 0
@@ -92,8 +96,7 @@ class RunningSaveActivity : AppCompatActivity() {
         }
 
         // 맵 타이틀과, 랭킹 중복 방지를 위해서 시간 값을 넣어서 중복 방지
-        val dt = Date()
-        val full_sdf = SimpleDateFormat("yyyy-MM-dd, hh:mm:ss a")
+
 
         // db에 그려진 맵 저장하는 스레드 - 여기서는 실제 그려진 것 보다 후 보정을 통해서
         // 간략화 된 맵을 업로드 합니다.
@@ -101,22 +104,21 @@ class RunningSaveActivity : AppCompatActivity() {
             val db = FirebaseFirestore.getInstance()
 
             // InfoData class upload to database 참조 - 루트를 제외한 맵 정보 기술
-            db.collection("mapInfo").document(infoData.mapTitle+"||" + full_sdf.format(dt).toString()).set(infoData)
+            db.collection("mapInfo").document(infoData.mapTitle!!).set(infoData)
 
             // RouteData class upload to database 참조 - 루트 정보만 표기 (위도경도, 고도, 마커의 위도경도)
             var routeDataOne = RouteDataOne(routeData.altitude, routeData.markerlatlngs)
-            db.collection("mapRoute").document(infoData.mapTitle+"||" + full_sdf.format(dt).toString()).set(routeDataOne)
+            db.collection("mapRoute").document(infoData.mapTitle!!).set(routeDataOne)
             for (index in routeData.latlngs.indices) {
                 var routeDataTwo = RouteDataTwo(routeData.latlngs[index])
                 Log.d("ssmm11", ""+index+" = "+routeDataTwo)
-                db.collection("mapRoute").document(infoData.mapTitle + "||" + full_sdf.format(dt).toString())
+                db.collection("mapRoute").document(infoData.mapTitle!!)
                     .collection("routes").add(routeDataTwo)
             }
 
             //TODO: 랭킹 부분 구현 필요 레이싱으로 옮겨야함
-            val recordData = RankingData("jungbin", "13:33")
-            db.collection("maps").document(infoData.mapTitle+"||" + full_sdf.format(dt).toString()).collection("record")
-                .document("jungbin||" + full_sdf.format(dt).toString()).set(recordData)
+            val rankingData = RankingData(UserInfo.nickname, "se - young", "11")
+            db.collection("rankingMap").document(infoData.mapTitle!!).set(rankingData)
             // db에 원하는 경로 및, 문서로 업로드
 
 

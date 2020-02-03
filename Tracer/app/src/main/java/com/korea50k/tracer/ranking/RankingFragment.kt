@@ -40,6 +40,7 @@ class RankingFragment : Fragment() {
                 .addOnSuccessListener { result ->
                     for (document in result) {
                         infoData = document.toObject(InfoData::class.java)
+                        infoData.mapTitle = document.id
                         infoDatas.add(infoData)
                     }
                     //adpater 추가

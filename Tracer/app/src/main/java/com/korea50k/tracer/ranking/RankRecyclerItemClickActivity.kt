@@ -20,7 +20,10 @@ class RankRecyclerItemClickActivity : AppCompatActivity() {
         val intent = getIntent()
         //전달 받은 값으로 Title 설정
         var mapTitle = intent.extras?.getString("MapTitle").toString()
-        rankRecyclerMapTitle.text = mapTitle
+        Log.d("ssmm11", "아이템 클릭 리스너에서 maptitle = " + mapTitle)
+
+        var cutted = mapTitle.split("||")
+        rankRecyclerMapTitle.text = cutted[0]
 
         //TODO:ImageView 에 이미지 박는 코드 (firebase)
 
@@ -28,17 +31,16 @@ class RankRecyclerItemClickActivity : AppCompatActivity() {
 
         val storage = FirebaseStorage.getInstance("gs://tracer-9070d.appspot.com/")
         val mapImageRef = storage.reference.child("mapImage").child(mapTitle)
-
         mapImageRef.downloadUrl.addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 // Glide 이용하여 이미지뷰에 로딩
-                Log.d("ssmm11", "흐음"+mapImageRef.downloadUrl)
+                Log.d("ssmm11", "이미지 뷰 로드 성공 : "+mapImageRef.downloadUrl)
                 Glide.with(this@RankRecyclerItemClickActivity)
                     .load(task.result)
                     .override(1024, 980)
                     .into(imageView)
             } else {
-                Log.d("ssmm11", "실패")
+                Log.d("ssmm11", "이미지 뷰 로드 실패")
             }
         }
 
@@ -67,7 +69,7 @@ class RankRecyclerItemClickActivity : AppCompatActivity() {
 
         rankRecyclerMoreButton.setOnClickListener{
             val nextIntent = Intent(this, RankingMapDetailActivity::class.java)
-            nextIntent.putExtra("MapTitle", rankRecyclerMapTitle.text.toString())
+            nextIntent.putExtra("MapTitle", mapTitle)
             startActivity(nextIntent)
         }
     }
