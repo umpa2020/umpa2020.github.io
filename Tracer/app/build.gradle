@@ -111,4 +111,7 @@ dependencies {
     // WorkManager에 종속성을 추가 - 백그라운드 작업에 사용
     implementation "androidx.work:work-runtime-ktx:2.2.0"
 
+    //noinspection GradleCompatible
+    implementation 'com.android.support:appcompat-v7:26.1.0' // 툴바 사용
+
 }
