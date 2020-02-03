@@ -36,7 +36,7 @@ class RankingMapDetailActivity : AppCompatActivity() {
     var altitude: List<Double> = listOf()
     var latLngs: MutableList<MutableList<LatLng>> = mutableListOf()
     var markerlatlngs: MutableList<LatLng> = mutableListOf()
-    var dbMapTitle =""
+    var dbMapTitle = ""
 
     lateinit var rankingDetailThread: Thread
 
@@ -116,7 +116,7 @@ class RankingMapDetailActivity : AppCompatActivity() {
                                 rankingDetailDistance.text = infoData.distance.toString()
                                 rankingDetailTime.text = infoData.time.toString()
                                 rankingDetailSpeed.text = infoData.speed.average().toString()
-                                var chart= Chart(routeData.altitude,infoData.speed,rankingDetailChart)
+                                var chart = Chart(routeData.altitude, infoData.speed, rankingDetailChart)
                                 chart.setChart()
                             }
                         }

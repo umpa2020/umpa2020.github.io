@@ -101,6 +101,7 @@ class RunningMap (smf: SupportMapFragment, context: Context) : OnMapReadyCallbac
 
         //TODO: speed
         infoData.speed = speeds
+        Log.d("ssmm11" , "스피드를 안넣나 = "+ infoData.speed)
     }
 
     fun pauseTracking() {

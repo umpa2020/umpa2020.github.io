@@ -15,13 +15,11 @@ class RankRecyclerViewAdapterMap (val mdata :ArrayList<InfoData>) : RecyclerView
     var context : Context? = null
     //생성된 뷰 홀더에 데이터를 바인딩 해줌.
     override fun onBindViewHolder(holder: mViewHolder, position: Int) {
-        Log.d("rank", "리사이클러뷰가 불러짐")
 
         val singleItem = mdata[position]
         var ranking = position + 1
 
         var cutted = singleItem.mapTitle!!.split("||")
-        Log.d("ssmm11", "어댑텅에서 maptitle = " + singleItem.mapTitle)
         //데이터 바인딩
         holder.rank.text = ranking.toString()
         holder.maptitle.text = cutted[0]
