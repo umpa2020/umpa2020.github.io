@@ -1,10 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
-    android:layout_marginLeft="20dp"
-    android:layout_marginRight="20dp">
+    >
 
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+    <Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="0dp"
+        android:elevation="2dp"
+        android:minHeight="?attr/actionBarSize"
+        android:background="@drawable/ic_bar_profile">
+    </Toolbar>
+
+
+    <LinearLayout
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -30,6 +48,8 @@
 
 
     <TextView
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
@@ -41,8 +61,8 @@
         android:id="@+id/profileFragmentMyData" />
 
     <LinearLayout
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
         android:id="@+id/rankingDetailInfoLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -115,6 +135,8 @@
     </LinearLayout>
 
     <com.google.android.material.tabs.TabLayout
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:layout_below="@+id/rankingDetailInfoLinearLayout"
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"
@@ -124,6 +146,8 @@
     </com.google.android.material.tabs.TabLayout>
 
     <androidx.viewpager.widget.ViewPager
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:layout_below="@+id/profileFragmentProfileTabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -131,5 +155,5 @@
 
 
     </androidx.viewpager.widget.ViewPager>
-
+    </LinearLayout>
 </RelativeLayout>

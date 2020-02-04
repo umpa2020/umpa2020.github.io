@@ -84,6 +84,8 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener,OnDrawerOpen
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         setContentView(R.layout.activity_running)
 
+        supportActionBar?.title = "RUNNING"
+
         init()
 
         btn_stop!!.setOnLongClickListener {

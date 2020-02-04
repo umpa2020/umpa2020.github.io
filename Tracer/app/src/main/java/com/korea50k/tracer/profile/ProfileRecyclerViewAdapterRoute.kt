@@ -29,7 +29,7 @@ class ProfileRecyclerViewAdapterRoute (val mdata :ArrayList<String>) : RecyclerV
 
 
         val storage = FirebaseStorage.getInstance("gs://tracer-9070d.appspot.com/")
-        val mapImageRef = storage.reference.child(UserInfo.nickname).child("mapImage").child(singleItem!!)
+        val mapImageRef = storage.reference.child("mapImage").child(singleItem!!)
 
         Log.d("ssmm11" , mapImageRef.toString())
         mapImageRef.downloadUrl.addOnCompleteListener { task ->
