@@ -18,6 +18,7 @@ import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.*
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.storage.FirebaseStorage
 import com.korea50k.tracer.R
 import com.korea50k.tracer.dataClass.InfoData
@@ -78,10 +79,11 @@ class RankingMapDetailActivity : AppCompatActivity() {
 
                             // 2차원 배열은 새로 나누어 담아서 받음 1차원 배열 만들고 2차원 배열에 add
                             // 맵 위도경도 받아오기
-                            db.collection("mapRoute").document(document.id).collection("routes")
+                            db.collection("mapRoute").document(document.id).collection("routes").orderBy("index", Query.Direction.ASCENDING )
                                 .get()
                                 .addOnSuccessListener { result2 ->
                                     for (document2 in result2) {
+                                        Log.d("ssmm11", "순서대로 되어랏  = " +document2.id)
                                         var routeArray: MutableList<LatLng> = mutableListOf()
                                         var receiveRouteDatas = document2.get("latlngs") as MutableList<Object>
                                         for (receiveRouteData in receiveRouteDatas) {

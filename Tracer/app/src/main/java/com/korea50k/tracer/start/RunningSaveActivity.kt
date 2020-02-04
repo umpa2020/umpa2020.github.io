@@ -110,12 +110,14 @@ class RunningSaveActivity : AppCompatActivity() {
 
             // RouteData class upload to database 참조 - 루트 정보만 표기 (위도경도, 고도, 마커의 위도경도)
             var routeDataOne = RouteDataOne(routeData.altitude, routeData.markerlatlngs)
+
             db.collection("mapRoute").document(infoData.mapTitle!!).set(routeDataOne)
             for (index in routeData.latlngs.indices) {
-                var routeDataTwo = RouteDataTwo(routeData.latlngs[index])
+                var routeDataTwo = RouteDataTwo(index, routeData.latlngs[index])
                 Log.d("ssmm11", ""+index+" = "+routeDataTwo)
                 db.collection("mapRoute").document(infoData.mapTitle!!)
-                    .collection("routes").add(routeDataTwo)
+                //.collection("routes").add(routeDataTwo)
+                .collection("routes").document(index.toString()).set(routeDataTwo)
             }
 
             //TODO: 랭킹 부분 구현 필요 레이싱으로 옮겨야함
