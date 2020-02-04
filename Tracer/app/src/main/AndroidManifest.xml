@@ -30,7 +30,7 @@
         <activity android:name=".racing.RacingFinishActivity"></activity>
         <activity android:name=".racing.RankingRecodeRacingActivity" />
         <activity android:name=".racing.PracticeRacingActivity" />
-        <activity android:name=".start.NearRouteActivity" />
+        <activity android:name=".racing.NearRouteActivity" />
 
         <activity android:name=".join.GenderSelectActivity" />
         <activity android:name=".join.SignUpActivity" />
