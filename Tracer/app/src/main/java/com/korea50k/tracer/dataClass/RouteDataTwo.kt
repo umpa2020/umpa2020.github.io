@@ -9,5 +9,6 @@ import java.io.Serializable
 @Parcelize
 data class RouteDataTwo(
     //var latlngs: ArrayList<ArrayList<LatLng>> = arrayListOf()
+    var index: Int? = 0,
     var latlngs: MutableList<LatLng> = mutableListOf()
 ) : Parcelable
