@@ -64,7 +64,7 @@ class ProfileFragment : Fragment() {
         //아이콘 선택, 비선택 이미지, 타이틀 이름, 추가할 프래그먼트 지정해서 어댑터에 프래그먼트 추가
 
         fragmentAdapter.addFragment(R.drawable.ic_launcher_background, R.drawable.ic_launcher_foreground, "Route", ProfileUserRouteFragment())
-        fragmentAdapter.addFragment(R.drawable.ic_launcher_background, R.drawable.ic_launcher_foreground, "History", ProfileUserRouteFragment())
+        fragmentAdapter.addFragment(R.drawable.ic_launcher_background, R.drawable.ic_launcher_foreground, "History", ProfileUserHistoryFragment())
 
         root.profileFragmentViewPager.adapter = fragmentAdapter
 
