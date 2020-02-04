@@ -109,6 +109,8 @@ class ManageRacing {
         infoData.time = SystemClock.elapsedRealtime() - chronometer.base
         infoData.speed = racingMap.speeds
 
+
+        //TODO: DB에 올려야됨
         if (result) {
             val newIntent = Intent(context, RacingFinishActivity::class.java)
             newIntent.putExtra("Result", result)

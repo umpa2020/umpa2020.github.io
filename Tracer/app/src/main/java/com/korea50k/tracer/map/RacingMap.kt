@@ -93,8 +93,8 @@ class RacingMap : OnMapReadyCallback {
             )
         )
 
-        loadRoute = makerRouteData.latlngs
-        markers = makerRouteData.markerlatlngs
+       /* loadRoute = makerRouteData.latlngs
+        markers = makerRouteData.markerlatlngs*/
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -138,6 +138,7 @@ class RacingMap : OnMapReadyCallback {
         makerMarker = mMap.addMarker(makerOptions)//maker 마커 추가
 
         makerRunningThread = Thread(Runnable {
+            //TODO: 이거 고쳐야할듯
             var time = 0.0.toLong()
             db.collection("mapInfo").whereEqualTo("mapTitle", mapTitle)
                 .get()
