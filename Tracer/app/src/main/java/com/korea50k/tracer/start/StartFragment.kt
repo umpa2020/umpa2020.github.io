@@ -1,5 +1,4 @@
 package com.korea50k.tracer.start
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,6 +8,7 @@ import android.view.ViewGroup
 import com.google.android.gms.maps.SupportMapFragment
 import com.korea50k.tracer.R
 import com.korea50k.tracer.map.BasicMap
+import com.korea50k.tracer.racing.NearRouteActivity
 import kotlinx.android.synthetic.main.fragment_start.view.*
 
 

@@ -6,7 +6,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.korea50k.tracer.R
+import com.korea50k.tracer.dataClass.HistoryData
+import kotlinx.android.synthetic.main.fragment_profile_user_history.*
+import kotlinx.android.synthetic.main.fragment_profile_user_history.view.*
 
 /**
  * A simple [Fragment] subclass.
@@ -18,8 +22,26 @@ class ProfileUserHistoryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.recycler_profile_user_history, container, false)
+        var view:View = inflater.inflate(R.layout.fragment_profile_user_history, container, false)
+
+        //TODO. 서버에서 데이터 받아옴
+        val datas = ArrayList<HistoryData>()
+        datas.add(HistoryData("test1", "50"))
+        datas.add(HistoryData("test1", "150"))
+        datas.add(HistoryData("test1", "250"))
+        datas.add(HistoryData("test1", "350"))
+        datas.add(HistoryData("test1", "450"))
+        datas.add(HistoryData("test1", "550"))
+
+
+        view.profileRecyclerHistory.adapter = ProfileRecyclerViewAdapterHistory(datas)
+        view.profileRecyclerHistory.layoutManager = LinearLayoutManager(context!!)
+
+
+        return view
     }
+
+
 
 
 }

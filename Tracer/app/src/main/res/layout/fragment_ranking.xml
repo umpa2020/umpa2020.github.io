@@ -22,7 +22,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/rankingFragmentMonthTextView"
-        android:layout_marginTop="10dp"
         android:text="2020.01\n월간차트"
         style="@style/blackBoldText20"
         android:gravity="center"/>
