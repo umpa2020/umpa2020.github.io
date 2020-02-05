@@ -17,7 +17,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.korea50k.tracer.join.SignUpActivity
 import com.korea50k.tracer.MainActivity
 import com.korea50k.tracer.R
-import com.korea50k.tracer.UserInfo
+import com.korea50k.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_login.*
 
 

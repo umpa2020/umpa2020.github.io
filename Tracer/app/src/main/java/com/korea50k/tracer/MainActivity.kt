@@ -1,18 +1,23 @@
 package com.korea50k.tracer
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.korea50k.tracer.locationBackground.LocationBackgroundService
+import com.korea50k.tracer.locationBackground.ServiceStatus
 import com.korea50k.tracer.ranking.RankingFragment
 import com.korea50k.tracer.start.StartFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import com.korea50k.tracer.profile.ProfileFragment
+import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity() {
     private val multiplePermissionsCode = 100          //권한
@@ -46,6 +51,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         checkPermissions()          //모든 권한 확인
+
+       // mHandler = IncomingMessageHandler()
+
+        startService()
 
 
         //선택한 메뉴로 프래그먼트 바꿈
@@ -112,5 +121,79 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        stopService()
+    }
+
+    // as google doc says
+    // Handler for incoming messages from the service.
+   // private var mHandler: IncomingMessageHandler? = null
+
+    /**
+     * start service
+     * main 액티비티 실행 시 위치 서비스 시작.
+     */
+    private fun startService() {
+        startStopServiceCommand(ServiceStatus.START)
+    }
+
+    /**
+     * stop service
+     */
+    private fun stopService() {
+        startStopServiceCommand(ServiceStatus.STOP)
+    }
+
+//    internal inner class IncomingMessageHandler : Handler() {
+//        override fun handleMessage(msg: Message) {
+//            Log.i(TAG, "handleMessage..." + msg.toString())
+//
+//            super.handleMessage(msg)
+//
+//            when (msg.what) {
+//                LocationBackgroundService.LOCATION_MESSAGE -> {
+//                    val obj = msg.obj as Location
+//                    val currentDateTimeString = DateFormat.getDateTimeInstance().format(Date())
+//                    toast("LAT :  " + obj.latitude + "\nLNG : " + obj.longitude + "\n\n" + obj.toString() + " \n\n\nLast updated- " + currentDateTimeString)
+//                }
+//            }
+//        }
+//
+//    }
+
+    /**
+     *  단순 서비스 시작 메소드
+     *  action => ServiceStatus.START or ServiceStatus.STOP
+     */
+
+    private fun startStopServiceCommand(action: ServiceStatus) {
+        Log.d(TAG,"이건 실행되잖아?")
+        Intent(this, LocationBackgroundService::class.java).also {
+            it.action = action.name
+            Log.d(TAG,action.toString()) // 처음 실행 시 START
+//            if (action == ServiceStatus.START) {
+//                Log.d(TAG,"zzzzz")
+//                val messengerIncoming = Messenger(mHandler)
+//                it.putExtra(MESSENGER_INTENT_KEY, messengerIncoming)
+//            }
+
+//            //  출처: https://mixup.tistory.com/59 [투믹스 작업장]
+            // https://developer.android.com/about/versions/oreo/background?hl=ko
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                startForegroundService(it)  // Oreo(26) 부터 지원
+//                return
+//            }
+            startService(it)
+        }
+    }
+
+    companion object {
+        val TAG = "service"
+        val WSY = "WSY"
+        private const val REQUEST_PERMISSIONS_REQUEST_CODE = 34
+        const val MESSENGER_INTENT_KEY = "msg-intent-key"
     }
 }

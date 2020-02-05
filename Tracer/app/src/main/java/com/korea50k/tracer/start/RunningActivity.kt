@@ -4,7 +4,8 @@ package com.korea50k.tracer.start
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
-import android.os.Bundle
+import android.location.Location
+import android.os.*
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -15,56 +16,39 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.maps.SupportMapFragment
-import com.korea50k.tracer.MainActivity
-import com.korea50k.tracer.R
+import com.korea50k.tracer.*
+import com.korea50k.tracer.MainActivity.Companion.WSY
 import com.korea50k.tracer.dataClass.NoticeState
 import com.korea50k.tracer.dataClass.Privacy
+import com.korea50k.tracer.locationBackground.LocationBackgroundService
+import com.korea50k.tracer.util.LocationUpdatesComponent
 import hollowsoft.slidingdrawer.OnDrawerCloseListener
 import hollowsoft.slidingdrawer.OnDrawerOpenListener
 import hollowsoft.slidingdrawer.OnDrawerScrollListener
 import hollowsoft.slidingdrawer.SlidingDrawer
 import kotlinx.android.synthetic.main.activity_running.*
+import java.text.DateFormat
+import java.util.*
 
 
 class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpenListener,
     OnDrawerCloseListener {
-    var TAG = "what u wanna say?~~!~!"       //로그용 태그
+    var TAG = "WSY"       //로그용 태그
     lateinit var manageRunning: ManageRunning
     lateinit var drawer: SlidingDrawer
     var B_RUNNIG = true
     var ns = NoticeState.NOTHING
     private var doubleBackToExitPressedOnce1 = false
 
-    // 버튼 애니메이션
+    // 버튼 에니메이션
     private var fabOpen: Animation? = null // Floating Animation Button
     private var startButton: Button? = null
     private var stopButton: Button? = null
     private var pauseButton: Button? = null
 
     override fun onBackPressed() {
-        /*
-        if (doubleBackToExitPressedOnce1) {
-            super.onBackPressed()
-            return
-        }
-
-        this.doubleBackToExitPressedOnce1 = true
-        val li = layoutInflater
-        val layout: View =
-            li.inflate(R.layout.custom_toast_start, findViewById<ViewGroup>(R.id.custom_toast_layout_start))
-
-        val toast = Toast(applicationContext)
-        toast.duration = Toast.LENGTH_SHORT
-        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 850)
-        toast.view = layout //setting the view of custom toast layout
-
-        toast.show()
-
-        Handler().postDelayed(Runnable { doubleBackToExitPressedOnce1 = false }, 2000)
-*/
-        //Toast.makeText(this, "'뒤로'버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_LONG).show()
-
         if (doubleBackToExitPressedOnce1) {
             super.onBackPressed()
             return
@@ -86,6 +70,8 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         setContentView(R.layout.activity_running)
 
+        LocationUpdatesComponent.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+
         init()
 
         btn_stop!!.setOnLongClickListener {
@@ -95,6 +81,17 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
             } else
                 manageRunning.stopRunning()
             true
+        }
+
+        // 서비스로 값 전달.
+        mHandler = IncomingMessageHandler()
+
+        Log.d(WSY, "핸들러 생성?")
+        Intent(this, LocationBackgroundService::class.java).also {
+            val messengerIncoming = Messenger(mHandler)
+            it.putExtra(MESSENGER_INTENT_KEY, messengerIncoming)
+
+            startService(it)
         }
     }
 
@@ -114,14 +111,9 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
         pauseButton = findViewById(R.id.btn_pause)
     }
 
-    /*
-    fun noticeMessage(text: String, ns: NoticeState) {
-        runningNotificationLayout.visibility = View.VISIBLE
-        runningNotificationTextView.text = text
-        this.ns = ns
 
-    }
-
+    /**
+     *  버튼 하나에서 두개로 퍼지는 애니메니션
      */
     private fun anim() {
         btn_start.visibility = View.INVISIBLE
@@ -150,32 +142,13 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
                 }
 
             }
-            R.id.btn_stop -> stop()
+            R.id.btn_stop -> {
+                val text = "종료를 원하시면 길게 눌러주세요"
+                val duration = Toast.LENGTH_LONG
 
-            /*
-            R.id.runningNotificationYes -> {
-                when (ns) {
-                    NoticeState.NOTHING -> {
-                    }
-                    NoticeState.PAUSE -> {
-                        runningNotificationLayout.visibility = View.GONE
-                        manageRunning.pauseRunning()
-                    }
-                    NoticeState.SIOP -> {
-                        var newIntent = Intent(this, MainActivity::class.java)
-                        newIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-                        newIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-                        startActivity(newIntent)
-                    }
-                }
-                ns = NoticeState.NOTHING
-
+                val toast = Toast.makeText(applicationContext, text, duration)
+                toast.show()
             }
-            R.id.runningNotificationNo -> {
-                ns = NoticeState.NOTHING
-                runningNotificationLayout.visibility = View.GONE
-            }
-             */
         }
     }
 
@@ -185,61 +158,12 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
         B_RUNNIG = false
     }
 
-    private fun stop() {    //타이머 멈추는거 만들어야함
-        /*
-        val li = layoutInflater
-        val layout: View =
-            li.inflate(R.layout.custom_toast_stop, findViewById<ViewGroup>(R.id.custom_toast_layout_stop))
-
-        val toast = Toast(applicationContext)
-        toast.duration = Toast.LENGTH_SHORT
-        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 850)
-        toast.view = layout //setting the view of custom toast layout
-
-        toast.show()
-
-         */
-
-        //Toast.makeText(this, "종료를 원하시면 길게 눌러주세요", Toast.LENGTH_SHORT).show()
-
-        val text = "종료를 원하시면 길게 눌러주세요"
-        val duration = Toast.LENGTH_LONG
-
-        val toast = Toast.makeText(applicationContext, text, duration)
-        toast.show()
-    }
-
     private fun restart() { //TODO:Start with new polyline
         btn_pause.text = "PAUSE"
         //btn_pause.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_pause_icon_pressed, 0, 0, 0)
         B_RUNNIG = true
         manageRunning.restartRunning()
     }
-
-    override fun onScrollStarted() {
-        Log.d(TAG, "onScrollStarted()")
-    }
-
-    override fun onScrollEnded() {
-        Log.d(TAG, "onScrollEnded()")
-    }
-
-    override fun onDrawerOpened() {
-        //runningHandle.background = getDrawable(R.drawable.close_selector)
-        runningHandle.text = "▼"
-        Log.d(TAG, "onDrawerOpened()")
-    }
-
-    override fun onDrawerClosed() {
-        //runningHandle.background = getDrawable(R.drawable.extend_selector)
-        runningHandle.text = "▲"
-        Log.d(TAG, "onDrawerClosed()")
-    }
-
-    fun print_log(text: String) {
-        Log.d(TAG, text.toString())
-    }
-
     /**
      * 팝업 띄우는 함수
      * */
@@ -288,4 +212,58 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
 
         this.ns = ns
     }
+
+
+    /**
+     *  백그라운드에서 메시지 받는 거
+     */
+    var mHandler : IncomingMessageHandler? = null
+    val MESSENGER_INTENT_KEY = "msg-intent-key"
+
+    inner class IncomingMessageHandler : Handler() {
+        override fun handleMessage(msg: Message) {
+            Log.i(WSY, "handleMessage..." + msg.toString())
+
+            super.handleMessage(msg)
+
+            when (msg.what) {
+                LocationBackgroundService.LOCATION_MESSAGE -> {
+                    val obj = msg.obj as Location
+                    val currentDateTimeString = DateFormat.getDateTimeInstance().format(Date())
+                    Log.d(WSY,"RunningActivity : 값을 가져옴?")
+                    manageRunning.runningMap.setLocation(obj)
+                }
+            }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        LocationUpdatesComponent.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY)
+    }
+
+    override fun onScrollStarted() {
+        Log.d(TAG, "onScrollStarted()")
+    }
+
+    override fun onScrollEnded() {
+        Log.d(TAG, "onScrollEnded()")
+    }
+
+    override fun onDrawerOpened() {
+        //runningHandle.background = getDrawable(R.drawable.close_selector)
+        runningHandle.text = "▼"
+        Log.d(TAG, "onDrawerOpened()")
+    }
+
+    override fun onDrawerClosed() {
+        //runningHandle.background = getDrawable(R.drawable.extend_selector)
+        runningHandle.text = "▲"
+        Log.d(TAG, "onDrawerClosed()")
+    }
+
+    fun print_log(text: String) {
+        Log.d(TAG, text.toString())
+    }
+
 }

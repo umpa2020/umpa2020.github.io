@@ -1,4 +1,4 @@
-package com.korea50k.tracer
+package com.korea50k.tracer.util
 
 import com.chibatching.kotpref.KotprefModel
 
