@@ -20,7 +20,7 @@ class ViewerMap : OnMapReadyCallback {
     var TAG = "what u wanna say?~~!~!"       //로그용 태그
     var context: Context
     lateinit var routeData: RouteData
-    var loadRoute: MutableList<LatLng> = mutableListOf()
+    var loadRoute: MutableList<MutableList<LatLng>> = mutableListOf()
     var smf: SupportMapFragment
 
     //Running
@@ -69,18 +69,27 @@ class ViewerMap : OnMapReadyCallback {
         return routes
     }*/ // 윤권
 
-    fun loadRoute(): MutableList<LatLng> {
-        var routes: MutableList<LatLng>
+    fun loadRoute(): MutableList<MutableList<LatLng>> {
+        var routes: MutableList<MutableList<LatLng>> = mutableListOf()
+        for (i in routeData.latlngs.indices) {
+            var latlngs: MutableList<LatLng> = mutableListOf()
+            for (j in routeData.latlngs[i].indices) {
+                latlngs.add(routeData.latlngs[i][j])
+            }
+            routes.add(latlngs)
+        }
+        return routes
+
         routes = routeData.latlngs!!
         return routes
     }
 
-    fun drawRoute(routes: MutableList<LatLng>) { //로드 된 경로 그리기
+    fun drawRoute(routes: MutableList<MutableList<LatLng>>) { //로드 된 경로 그리기
         for (i in routes.indices) {
             var polyline =
                 mMap.addPolyline(
                     PolylineOptions()
-                        .addAll(routes)
+                        .addAll(routes[i])
                         .color(Color.RED)
                         .startCap(RoundCap() as Cap)
                         .endCap(RoundCap())

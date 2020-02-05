@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:layout="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <fragment
+        android:id="@+id/map_viewer"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        tools:context=".fragment.MapFragment" />
+
+    <hollowsoft.slidingdrawer.SlidingDrawer
+        android:id="@+id/drawer"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="55dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        layout:content="@+id/content"
+        layout:handle="@+id/racingHandle"
+        >
+
+        <Button
+            android:id="@+id/racingHandle"
+            android:layout_width="70dp"
+            android:layout_height="27dp"
+            android:background="@drawable/button_white_background"
+            android:text="▲"
+            android:textColor="@color/red"
+            android:textSize="15dp"
+            android:gravity="center" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:id="@+id/content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/runninghandle_bg">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1.0"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/info_text"
+                        android:text="DISTANCE"/>
+
+                    <TextView
+                        android:id="@+id/racingDistanceTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="0.00"
+                        style="@style/info_text_1" />
+                </LinearLayout>
+                <View
+                    android:layout_width="2dp"
+                    android:layout_height="match_parent"
+                    android:background="#d02027"/>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1.0"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="TIME"
+                        style="@style/info_text"/>
+
+                    <Chronometer
+                        android:id="@+id/racingTimerTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/info_text_1"/>
+                </LinearLayout>
+                <View
+                    android:layout_width="2dp"
+                    android:layout_height="match_parent"
+                    android:background="#d02027"/>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1.0"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="SPEED"
+                        style="@style/info_text"/>
+
+                    <TextView
+                        android:id="@+id/racingSpeedTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="0.0"
+                        style="@style/info_text_1"/>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+    </hollowsoft.slidingdrawer.SlidingDrawer>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
+        android:background="@color/white"
+
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/racingControlButton"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:text="START"
+            style="@style/buttonTextRedText"
+            android:background="@drawable/button_empty_background"
+            android:onClick="onClick"
+            android:layout_margin="10dp"
+            android:gravity="center"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:id="@+id/yamae1"/>
+
+    <LinearLayout
+        android:id="@+id/racingNotificationLayout"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:layout_width="match_parent"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_height="150dp"
+        android:visibility="visible"
+        android:background="#990044FF"
+        android:layout_below="@id/yamae1">
+
+        <Button
+            android:id="@+id/racingNotificationButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:background="#00000000"
+            android:text="시작 포인트로 이동하십시오.\n\n시작포인트까지 남은거리 : "
+            android:textSize="20dp"
+            android:textColor="@color/white"
+            android:fontFamily="@font/notosansmedium"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/countDownTextView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:background="#4400FF00"
+        android:gravity="center"
+        android:text="3"
+        android:textColor="#FFFFFF"
+        android:textSize="100sp"
+        android:textStyle="bold"
+        android:visibility="gone" />
+
+</RelativeLayout>

@@ -1,22 +1,26 @@
-package com.korea50k.tracer.start
+package com.korea50k.tracer.racing
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.FirebaseFirestore
 import com.korea50k.tracer.R
-import com.korea50k.tracer.dataClass.InfoData
-import com.korea50k.tracer.dataClass.RouteData
+import com.korea50k.tracer.dataClass.NearMap
+import kotlinx.android.synthetic.main.activity_near_route.*
+import kotlinx.android.synthetic.main.recycler_nearactivity_item.*
 
 
 class NearRouteActivity : AppCompatActivity() {
+    /*
     lateinit var locationCallback: LocationCallback
     var cur_loc = LatLng(0.0,0.0)          //현재위치
     var latLngs : MutableList<LatLng> = mutableListOf(LatLng(0.0,0.0))
     var markerlatlngs: MutableList<LatLng> = mutableListOf(LatLng(0.0,0.0))
+    var nearMaps: ArrayList<NearMap> = arrayListOf()
+
     /*lateinit var distanceArray: ArrayList<Double>
     lateinit var mapTitleArray: ArrayList<String>*/
 
@@ -31,21 +35,6 @@ class NearRouteActivity : AppCompatActivity() {
         latLngs.removeAt(0)
         markerlatlngs.removeAt(0)
 
-
-        /*//TODO:db에 있는 모든 mapdata 받아오는 클래스
-        db.collection("maps")
-            .whereEqualTo("mapTitle","11")
-            .get()
-            .addOnSuccessListener { result ->
-                Log.d("ssmm11",  "안으로 들어오긴했는데")
-                for (document in result) {
-                    Log.d("ssmm11", "${document.id}")
-                }
-            }
-            .addOnFailureListener { exception ->
-                Log.w("ssmm11", "Error getting documents.", exception)
-            }
-*/
         locationCallback = object : LocationCallback() {        //위치요청 결과가 들어오면 실행되는 코드
             override fun onLocationResult(locationResult: LocationResult?) {
                 locationResult?.let {
@@ -57,6 +46,7 @@ class NearRouteActivity : AppCompatActivity() {
                 }
             }
         }
+/*
         db.collection("mapRoute")
             .get()
             .addOnSuccessListener { result ->
@@ -81,14 +71,15 @@ class NearRouteActivity : AppCompatActivity() {
                     var routeData = RouteData(altitude, latLngs,markerlatlngs)
                     Log.d("ssmm11" , routeData.toString())
 
+                    Log.d("ssmm11", routeData.latlngs.toString())
                     //Log.d("ssmm11", receiveRouteData.latlngs.toString())
                     //var receive_loc = LatLng(receiveRouteData[0].latitude, receiveRouteData[0].longitude)
                     //var distance = SphericalUtil.computeDistanceBetween(currentLocation, receive_loc)
 
-                    //TODO:클래스를 하나 만들어서 맵 타이틀, 거리 이렇게 놓고 정렬 해서 가지고 있으면 되겠다.
-                    /*distanceArray.add(distance)
-                    mapTitleArray.add(document.id)*/
-                    //Log.d("ssmm11", "첫번째 : ${document.data.getValue("latlngs")}")
+                    var receive_loc = LatLng(routeData.latlngs[0].latitude, routeData.latlngs[0].longitude)
+                    var temp = document.id.split("||")
+                    var nearMap = NearMap(temp[0], SphericalUtil.computeDistanceBetween(cur_loc, receive_loc))
+                    nearMaps.add(nearMap)
                 }
             }
             .addOnFailureListener { exception ->
@@ -106,5 +97,29 @@ class NearRouteActivity : AppCompatActivity() {
             .addOnFailureListener { exception ->
                 Log.w("ssmm11", "Error getting documents.", exception)
             }
+
+ */
+    }
+
+
+     */
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_near_route)
+
+        //TODO. 서버에서 데이터 받아옴
+        val datas = ArrayList<NearMap>()
+        datas.add(NearMap("test1", 50.0))
+        datas.add(NearMap("test2", 100.0))
+        datas.add(NearMap("test3", 10.0))
+        datas.add(NearMap("test4", 20.0))
+        datas.add(NearMap("test5", 60.0))
+        datas.add(NearMap("test6", 50.0))
+        datas.add(NearMap("test7", 70.0))
+        datas.add(NearMap("test8", 10.0))
+        datas.add(NearMap("test9", 50.0))
+
+        near_recycler_map.adapter = NearRecyclerViewAdapter(datas)
+        near_recycler_map.layoutManager = LinearLayoutManager(this)
     }
 }

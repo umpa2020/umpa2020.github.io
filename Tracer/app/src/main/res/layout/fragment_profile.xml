@@ -1,195 +1,159 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    >
 
-
-    <TextView
-        android:id="@+id/tracerTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Tracer"
-        android:textColor="@color/red"
-        android:fontFamily="@font/godoroundedl"
-        android:textSize="60dp"
-        android:layout_centerHorizontal="true"/>
-
-    <TextView
-        android:layout_below="@id/tracerTitle"
-        style="@style/divisionTextView"
-        />
-
-    <RelativeLayout
-        android:id="@+id/profileBottom"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tracerTitle"
-        android:layout_marginTop="-15dp"
-        android:layout_marginBottom="8dp"
-        android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="vertical"
+        >
+
+    <Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="0dp"
+        android:elevation="2dp"
+        android:minHeight="?attr/actionBarSize"
+        android:background="@drawable/ic_bar_profile">
+    </Toolbar>
 
 
+    <LinearLayout
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/profileFragmentLinearLayout">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/profileImageView"
-            android:layout_width="90dp"
-            android:layout_height="90dp"
-            android:layout_centerInParent="true"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="20dp"
             android:background="@drawable/ic_profile_logo" />
 
-
         <TextView
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="20dp"
             android:id="@+id/profileIdTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/profileImageView"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="40dp"
-            android:fontFamily="@font/notosansbold"
+            android:fontFamily="@font/notosansmedium"
             android:text="player"
             style="@style/blackBoldText20"/>
-
-        <TextView
-            android:layout_marginTop="15dp"
-            android:layout_below="@id/profileIdTextView"
-            style="@style/divisionTextView"
-            />
-
-        <Button
-            style="@style/buttonText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/button_background"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="130dp"
-            android:layout_marginRight="20dp"
-            android:paddingRight="5dp"
-            android:paddingLeft="5dp"
-            android:gravity="center_horizontal|center_vertical"
-            android:onClick="onClick"
-            android:text="자세한 기록 보기"
-            android:textSize="15dp"/>
+    </LinearLayout>
 
 
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/profileIntroduce"
-        android:layout_below="@id/profileBottom"
-        android:layout_width="wrap_content"
+    <TextView
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        >
+        android:layout_marginTop="15dp"
+        android:padding="10dp"
+        android:layout_below="@id/profileFragmentLinearLayout"
+        android:text="내 통계"
+        style="@style/ListDetail"
+        android:background="@drawable/textlines"
+        android:id="@+id/profileFragmentMyData" />
+
+    <LinearLayout
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:id="@+id/rankingDetailInfoLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/profileFragmentMyData"
+        android:layout_marginTop="10dp">
 
         <LinearLayout
-            android:id="@+id/detailInformation"
-            android:weightSum="3"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center">
 
-            <LinearLayout
-                android:layout_marginLeft="30dp"
-                android:layout_weight="1"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="DISTANCE"
-                    android:textSize="17dp"
-                    android:fontFamily="@font/notosansbold"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="0.00 km"
-                    android:textSize="17dp"
-                    android:textColor="#000000"
-                    android:fontFamily="@font/notosansbold"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_weight="1"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="TIME"
-                    android:textSize="17dp"
-                    android:fontFamily="@font/notosansbold"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="00:00:00"
-                    android:textSize="17dp"
-                    android:textColor="#000000"
-                    android:fontFamily="@font/notosansbold" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/speed"
-                android:layout_weight="1"
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="SPEED"
-                    android:textSize="17dp"
-                    android:fontFamily="@font/notosansbold"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="0.00 km/h"
-                    android:textSize="17dp"
-                    android:textColor="#000000"
-                    android:fontFamily="@font/notosansbold"/>
+                android:text="총 거리"
+                style="@style/ListDetail" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="test"
+                style="@style/ListDetail"
+                android:id="@+id/profileFragmentTotalDistance"/>
 
-            </LinearLayout>
         </LinearLayout>
-        <TextView
-            android:layout_marginTop="15dp"
-            android:layout_below="@id/detailInformation"
-            style="@style/divisionTextView"
-            />
-    </RelativeLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="총 주행시간"
+                style="@style/ListDetail"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="test"
+                android:id="@+id/profileFragmentTotalTime"
+                style="@style/ListDetail"/>
 
-        /////////////무엇을 넣어야할까요~
+        </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="평균 속력"
+                style="@style/ListDetail"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="test"
+                style="@style/ListDetail"
+                android:id="@+id/profileFragmentAverageSpeed"/>
 
+        </LinearLayout>
+    </LinearLayout>
 
-
-
-
-    </RelativeLayout>
-
-    <androidx.viewpager.widget.ViewPager
+    <com.google.android.material.tabs.TabLayout
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_below="@+id/rankingDetailInfoLinearLayout"
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/profileIntroduce"
-        android:id="@+id/userViewpager">
+        android:id="@+id/profileFragmentProfileTabLayout">
+
+    </com.google.android.material.tabs.TabLayout>
+
+    <androidx.viewpager.widget.ViewPager
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_below="@+id/profileFragmentProfileTabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/profileFragmentViewPager">
+
 
     </androidx.viewpager.widget.ViewPager>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/userRecyclerview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/profileIntroduce"/>
-
-
-
+    </LinearLayout>
 </RelativeLayout>

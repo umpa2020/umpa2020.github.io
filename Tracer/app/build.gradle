@@ -80,9 +80,6 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.2'
 
 
-    //chart
-    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.2'
-
 
     implementation 'com.firebaseui:firebase-ui-auth:4.3.1' // firebaseUi google 로그인
     implementation 'com.google.firebase:firebase-auth:19.2.0' // firebase auth 설정 - 로그인 시 필요
@@ -113,5 +110,8 @@ dependencies {
 
     // WorkManager에 종속성을 추가 - 백그라운드 작업에 사용
     implementation "androidx.work:work-runtime-ktx:2.2.0"
+
+    //noinspection GradleCompatible
+    implementation 'com.android.support:appcompat-v7:26.1.0' // 툴바 사용
 
 }

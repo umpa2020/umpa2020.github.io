@@ -35,7 +35,7 @@ class RunningMap(smf: SupportMapFragment, context: Context) : OnMapReadyCallback
     var currentLocation: LatLng = LatLng(0.0, 0.0)              //현재위치
 
     var latlngs: MutableList<LatLng> = mutableListOf()   //움직인 점들의 집합 나중에 저장될 점들 집합
-    var routes: MutableList<LatLng> = mutableListOf()
+    var routes: MutableList<MutableList<LatLng>> = mutableListOf()
     var altitude: MutableList<Double> = mutableListOf(.0)
     var speeds: MutableList<Double> = mutableListOf(.0)
     var distance = 0.0
@@ -84,7 +84,23 @@ class RunningMap(smf: SupportMapFragment, context: Context) : OnMapReadyCallback
         userState = UserState.PAUSED
 
         print_log("Stop")
-        routes = PolyUtil.simplify(latlngs, 10.0)
+        routes.add(PolyUtil.simplify(latlngs, 10.0).toMutableList())
+        markers.add(currentLocation)
+        var arrLatLng: MutableList<MutableList<LatLng>> = mutableListOf()
+        var cpLatLag: MutableList<LatLng> = mutableListOf()
+        for(i in routes.indices) {
+            var latlngs: MutableList<LatLng> = mutableListOf()
+            for (j in routes[i].indices) {
+                latlngs.add(LatLng(routes[i][j].latitude,routes[i][j].longitude))
+            }
+            arrLatLng.add(latlngs)
+            cpLatLag.add(LatLng(markers[i].latitude, markers[i].longitude))
+        }
+        cpLatLag.add(LatLng(markers[markers.size-1].latitude, markers[markers.size-1].longitude))
+        routeData.latlngs = arrLatLng
+        routeData.markerlatlngs = cpLatLag
+        routes.add(PolyUtil.simplify(latlngs, 10.0).toMutableList())
+
         markers.add(currentLocation)
 
         routeData.latlngs = routes
@@ -93,6 +109,7 @@ class RunningMap(smf: SupportMapFragment, context: Context) : OnMapReadyCallback
 
         //TODO: speed
         infoData.speed = speeds
+        Log.d("ssmm11" , "스피드를 안넣나 = "+ infoData.speed)
     }
 
     fun pauseTracking() {
@@ -194,9 +211,9 @@ class RunningMap(smf: SupportMapFragment, context: Context) : OnMapReadyCallback
             createPolyline()  // 이전 위치, 현재 위치로 폴리라인 형성
 
 
-                            /**
-                             *  100m마다 체크 포인트 찍는거
-                             */
+            /**
+             *  100m마다 체크 포인트 찍는거
+             */
 //                            if (distance.toInt() / 100 >= markerCount) {    //100m마다
 //                                cpOption.position(currentLocation)
 //                                if(distance > 0)

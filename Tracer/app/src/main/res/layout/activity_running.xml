@@ -8,6 +8,22 @@
     android:orientation="vertical"
     android:weightSum="100">
 
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+    <Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="0dp"
+        android:elevation="2dp"
+        android:minHeight="?attr/actionBarSize"
+        android:background="@drawable/ic_bar_running">
+    </Toolbar>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -132,6 +148,8 @@
             </LinearLayout>
         </hollowsoft.slidingdrawer.SlidingDrawer>
     </RelativeLayout>
+
+    </LinearLayout>
     <View
         android:layout_width="0dp"
         android:layout_height="80dp"
@@ -162,31 +180,6 @@
             android:orientation="vertical"
             android:gravity="center"
             >
-            <!--
-            <Button
-                android:id="@+id/runningNotificationYes"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:gravity="center"
-                android:text="Yes"
-                android:fontFamily="@font/notosansmedium"
-                android:clickable="false"
-                android:onClick="onClick"
-                android:background="#99FFFFFF"
-                android:layout_margin="2dp"
-                />
-            <Button
-                android:id="@+id/runningNotificationNo"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:gravity="center"
-                android:text="No"
-                android:fontFamily="@font/notosansmedium"
-                android:clickable="false"
-                android:onClick="onClick"
-                android:background="#99FFFFFF"
-                android:layout_margin="2dp"/>
-                -->
         </LinearLayout>
 
     </LinearLayout>
@@ -199,35 +192,7 @@
         android:background="@color/white"
         android:paddingBottom="15dp"
         android:paddingTop="15dp">
-        <!--
-        <Button
-            android:id="@+id/btn_stop"
-            android:layout_width="150dp"
-            android:layout_height="40dp"
-            android:background="@drawable/base_button_selector"
-            android:textColor="@color/red"
-            android:text="  STOP"
-            android:fontFamily="@font/notosansmedium"
-            android:onClick="onClick"
-            android:drawableLeft="@drawable/ic_stop_icon_pressed"
-            android:paddingLeft="45dp"
-            android:gravity="center_vertical|left"
-            android:layout_marginRight="5dp"
-            />
-        <Button
-            android:id="@+id/btn_pause"
-            android:layout_width="150dp"
-            android:layout_height="40dp"
-            android:background="@drawable/base_button_selector"
-            android:textColor="@color/red"
-            android:text="  PAUSE"
-            android:fontFamily="@font/notosansmedium"
-            android:onClick="onClick"
-            android:drawableLeft="@drawable/ic_pause_icon_pressed"
-            android:paddingLeft="37dp"
-            android:gravity="center_vertical|left"
-            android:layout_marginLeft="5dp"/>
-            -->
+
         <Button
             android:id="@+id/btn_start"
             android:layout_width="130dp"

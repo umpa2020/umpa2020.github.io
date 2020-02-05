@@ -16,6 +16,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.korea50k.tracer.locationBackground.LocationBackgroundService
 import com.korea50k.tracer.R
 import com.korea50k.tracer.map.BasicMap
+import com.korea50k.tracer.racing.NearRouteActivity
 import kotlinx.android.synthetic.main.fragment_start.view.*
 import java.text.DateFormat
 import java.util.*

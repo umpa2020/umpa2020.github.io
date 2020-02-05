@@ -1,6 +1,5 @@
 package com.korea50k.tracer.start
 
-
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
@@ -32,8 +31,7 @@ import kotlinx.android.synthetic.main.activity_running.*
 import java.text.DateFormat
 import java.util.*
 
-
-class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpenListener,
+class RunningActivity : AppCompatActivity(), OnDrawerScrollListener,OnDrawerOpenListener,
     OnDrawerCloseListener {
     var TAG = "WSY"       //로그용 태그
     lateinit var manageRunning: ManageRunning
@@ -70,7 +68,11 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         setContentView(R.layout.activity_running)
 
+
         LocationUpdatesComponent.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+
+        supportActionBar?.title = "RUNNING"
+
 
         init()
 
