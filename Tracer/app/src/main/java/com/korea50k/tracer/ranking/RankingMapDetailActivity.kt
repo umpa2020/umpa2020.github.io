@@ -83,7 +83,6 @@ class RankingMapDetailActivity : AppCompatActivity() {
                                 .get()
                                 .addOnSuccessListener { result2 ->
                                     for (document2 in result2) {
-                                        Log.d("ssmm11", "순서대로 되어랏  = " +document2.id)
                                         var routeArray: MutableList<LatLng> = mutableListOf()
                                         var receiveRouteDatas = document2.get("latlngs") as MutableList<Object>
                                         for (receiveRouteData in receiveRouteDatas) {

@@ -4,7 +4,6 @@ import android.util.Log
 import com.google.gson.Gson
 import com.korea50k.tracer.dataClass.InfoData
 import com.korea50k.tracer.dataClass.RouteData
-import com.korea50k.tracer.dataClass.RunningData
 import org.json.JSONObject
 import java.lang.Exception
 

@@ -114,10 +114,12 @@ class ManageRacing {
         if (result) {
             val newIntent = Intent(context, RacingFinishActivity::class.java)
             newIntent.putExtra("Result", result)
-            newIntent.putExtra("Racer Data", infoData)
+            newIntent.putExtra("info Data", infoData)
             newIntent.putExtra("Maker Data", makerRouteData)
             context.startActivity(newIntent)
             activity.finish()
+
+
 
         } else {
             val newIntent = Intent(context, RacingFinishActivity::class.java)

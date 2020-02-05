@@ -55,7 +55,7 @@ class RunningSaveActivity : AppCompatActivity() {
             racingRadio.isEnabled = false
             publicRadio.isChecked = true
         }
-        var chart= Chart(routeData.altitude,infoData.speed,chart)
+        var chart = Chart(routeData.altitude, infoData.speed, chart)
         chart.setChart()
     }
 
@@ -84,7 +84,7 @@ class RunningSaveActivity : AppCompatActivity() {
 
         infoData.makersNickname = UserInfo.nickname
         infoData.mapImage = imgPath
-        infoData.mapTitle = mapTitleEdit.text.toString()+"||" + full_sdf.format(dt).toString()
+        infoData.mapTitle = mapTitleEdit.text.toString() + "||" + full_sdf.format(dt).toString()
         infoData.mapExplanation = mapExplanationEdit.text.toString()
         infoData.makersNickname = UserInfo.nickname
         infoData.execute = 0
@@ -114,15 +114,19 @@ class RunningSaveActivity : AppCompatActivity() {
             db.collection("mapRoute").document(infoData.mapTitle!!).set(routeDataOne)
             for (index in routeData.latlngs.indices) {
                 var routeDataTwo = RouteDataTwo(index, routeData.latlngs[index])
-                Log.d("ssmm11", ""+index+" = "+routeDataTwo)
+                Log.d("ssmm11", "" + index + " = " + routeDataTwo)
                 db.collection("mapRoute").document(infoData.mapTitle!!)
-                //.collection("routes").add(routeDataTwo)
-                .collection("routes").document(index.toString()).set(routeDataTwo)
+                    //.collection("routes").add(routeDataTwo)
+                    .collection("routes").document(index.toString()).set(routeDataTwo)
             }
 
-            //TODO: 랭킹 부분 구현 필요 레이싱으로 옮겨야함
-            val rankingData = RankingData(UserInfo.nickname, "se - young", "11")
+            //TODO: 랭킹 부분 구현 필요 레이싱에도 같은 구조 필요
+            val rankingData = RankingData(UserInfo.nickname, UserInfo.nickname, infoData.time)
+            //db.collection("rankingMap").document(infoData.mapTitle!!).set(rankingData)
             db.collection("rankingMap").document(infoData.mapTitle!!).set(rankingData)
+            db.collection("rankingMap").document(infoData.mapTitle!!).collection("ranking")
+                .document(rankingData.makerNickname + "||" + full_sdf.format(dt)).set(rankingData)
+
             // db에 원하는 경로 및, 문서로 업로드
 
 
