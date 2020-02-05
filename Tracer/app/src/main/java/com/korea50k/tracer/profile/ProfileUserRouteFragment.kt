@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.korea50k.tracer.R
-import com.korea50k.tracer.UserInfo
+import com.korea50k.tracer.util.UserInfo
 
 /**
  * A simple [Fragment] subclass.

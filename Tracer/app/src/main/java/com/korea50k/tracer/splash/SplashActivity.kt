@@ -11,7 +11,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.korea50k.tracer.login.LoginActivity
 import com.korea50k.tracer.MainActivity
 import com.korea50k.tracer.R
-import com.korea50k.tracer.UserInfo
+import com.korea50k.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_splash.*
 import kotlin.system.exitProcess
 
