@@ -4,7 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.os.Looper
+import android.location.Location
 import android.util.Log
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -21,60 +21,68 @@ import com.korea50k.tracer.dataClass.UserState
 import com.korea50k.tracer.start.RunningActivity
 import com.korea50k.tracer.util.Wow.Companion.makingIcon
 import kotlinx.android.synthetic.main.activity_running.*
-import java.util.*
 
+/**
+ *  앱에서 지도를 사용하려면 OnMapReadyCallback 인터페이스를 구현하고
+ *  MapFragment 객체에서 getMapAsync(OnMapReadyCallback)를 통해 콜백 인스턴스를 설정해야 한다.
+ */
+class RunningMap(smf: SupportMapFragment, context: Context) : OnMapReadyCallback {
 
-class RunningMap (smf: SupportMapFragment, context: Context) : OnMapReadyCallback{
     lateinit var mMap: GoogleMap    //racingMap 인스턴스
-    lateinit var fusedLocationClient: FusedLocationProviderClient   //위치정보 가져오는 인스턴스
-    lateinit var locationCallback: LocationCallback
-    lateinit var locationRequest: LocationRequest
     var TAG = "WSY"       //로그용 태그
+
     var previousLocation: LatLng = LatLng(0.0, 0.0)          //이전위치
-    lateinit var currentLocation: LatLng            //현재위치
+    var currentLocation: LatLng = LatLng(0.0, 0.0)              //현재위치
+
     var latlngs: MutableList<LatLng> = mutableListOf()   //움직인 점들의 집합 나중에 저장될 점들 집합
     var routes: MutableList<MutableList<LatLng>> = mutableListOf()
     var altitude: MutableList<Double> = mutableListOf(.0)
     var speeds: MutableList<Double> = mutableListOf(.0)
     var distance = 0.0
     var context: Context = context
-    var userState: UserState
+    var userState: UserState? = null
     var markers: MutableList<LatLng> = mutableListOf()
     var markerCount = 0
+
+
     var cpOption = MarkerOptions()
+
     var currentMarker: Marker? = null
-    lateinit var racerIcon: BitmapDescriptor
+
+
+    lateinit var myIcon: BitmapDescriptor
 
     //Running
     init {
-        userState = UserState.RUNNING
+//        userState = UserState.RUNNING
+        this.context = context
+        userState = UserState.PAUSED
         smf.getMapAsync(this)
+        createMyIcon()
     }
+
 //    constructor(smf: SupportMapFragment, context: Context){
 //        this.context = context
 //        userState = UserState.RUNNING
 //        smf.getMapAsync(this)
+//        createMyIcon()
 //        print_log("Set UserState Running")
 //    }
 
     override fun onMapReady(googleMap: GoogleMap) {
-        init()
         mMap = googleMap
-        initLocation()
-        //startLocationUpdates()
+//        initLocation()
     }
 
-    private fun init() {
-        cpOption
-        cpOption.icon(makingIcon(R.drawable.ic_racing_startpoint, context))
-    }
 
     fun startTracking() {
-        startLocationUpdates()
+        setStartIcon()  // 마지막 현재 위치에 아이콘 설정
+        userState = UserState.RUNNING
     }
 
     fun stopTracking(routeData: RouteData, infoData: InfoData) {
-        stopLocationUpdates() // 위치 업데이트 중지
+        userState = UserState.PAUSED
+
         print_log("Stop")
         routes.add(PolyUtil.simplify(latlngs, 10.0).toMutableList())
         markers.add(currentLocation)
@@ -106,198 +114,166 @@ class RunningMap (smf: SupportMapFragment, context: Context) : OnMapReadyCallbac
 
     fun pauseTracking() {
         print_log("pause")
-        stopLocationUpdates() // 위치 업데이트 중지
+        //  stopLocationUpdates() // 위치 업데이트 중지
         userState = UserState.PAUSED
         print_log("Set UserState PAUSED")
     }
 
     fun restartTracking() {
-        initLocation()
-        startLocationUpdates()
+        //  startLocationUpdates()
     }
 
     /**
-     *  위치 요청 설정
-     *  정확도: 위치 데이터의 정밀함. 일반적으로 정확도가 높을수록 배터리 소모가 큽니다.
-     *  빈도: 위치 연산 빈도. 위치 연산 빈도가 높을수록 배터리를 더 많이 사용합니다.
-     *  지연 시간: 위치 데이터의 제공 속도. 일반적으로 지연 시간이 적을수록 더 많은 배터리가 필요합니다.
-     *  https://developer.android.com/guide/topics/location/battery?hl=ko#accuracy
+     *  내 아이콘 만들기 메소드
+     *  위치 관련 정보 넣는거 없이 순수 아이콘 생성.
      */
-    private fun createLocationRequest() {
-        locationRequest = LocationRequest.create() // 위치 요청
-        locationRequest.run {
-            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-            interval = 1000 // 위치 받아오는 주기, setinterval() 메서드를 사용하여 앱을 위해 위치를 연산하는 간격을 지정합니다.
-            print_log("위치 받아오는 중?")
-        }
+    private fun createMyIcon() {
+
+        val circleDrawable = context.getDrawable(R.drawable.ic_racer_marker)
+        var canvas = Canvas()
+        var bitmap = Bitmap.createBitmap(
+            circleDrawable!!.intrinsicWidth,
+            circleDrawable!!.intrinsicHeight,
+            Bitmap.Config.ARGB_8888
+        )
+        canvas.setBitmap(bitmap)
+        circleDrawable.setBounds(
+            0,
+            0,
+            circleDrawable.intrinsicWidth,
+            circleDrawable.intrinsicHeight
+        )
+        circleDrawable.draw(canvas)
+        myIcon = BitmapDescriptorFactory.fromBitmap(bitmap)
     }
 
     /**
-     *  위치 업데이트 요청
-     *  앱에서 위치 업데이트를 요청하기 전에 위치 서비스에 연결하고 위치를 요청해야 합니다.
-     *  위치 설정 변경의 과정에서 이 방법을 보여줍니다. 위치 요청이 완료되면 requestLocationUpdates()를 호출하여 정기 업데이트를 시작할 수 있습니다.
+     *  start Icon 설정
+     *  현재 위치의 마지막 지점에 설정.
      */
-    private fun startLocationUpdates() {
-        fusedLocationClient.requestLocationUpdates(
-            locationRequest,
-            locationCallback,
-            Looper.myLooper()
+    private fun setStartIcon() {
+        cpOption.title("StartPoint")
+
+        cpOption.position(previousLocation)
+        markerCount++
+        markers.add(previousLocation)
+
+        cpOption.icon(makingIcon(R.drawable.ic_racing_startpoint, context))
+        mMap.addMarker(cpOption)
+    }
+
+    var location = null
+
+
+    /**
+     *  서비스에서 데이터 받아오는 부분
+     */
+    fun setLocation(location: Location) {
+        if (userState == UserState.RUNNING)
+            createData(location)
+        else
+            currentLocation = LatLng(location!!.latitude, location!!.longitude)
+
+        setMyIconToMap()
+        previousLocation = currentLocation                              //현재위치를 이전위치로 변경
+    }
+
+
+    // 이 데이터 받아서 처리
+    // Location[fused 37.619672,127.059084 hAcc=15 et=+5d2h34m37s51ms alt=53.5 vel=0.0014348121 bear=219.74748 vAcc=2 sAcc=??? bAcc=??? {Bundle[mParcelledData.dataSize=52]}]
+
+    private fun createData(location: Location) {
+        var lat = location!!.latitude
+        var lng = location!!.longitude
+        var alt = location!!.altitude
+        var speed = location!!.speed
+
+        currentLocation = LatLng(lat, lng)
+
+        if (previousLocation.latitude == currentLocation.latitude && previousLocation.longitude == currentLocation.longitude) {
+            return  //움직임이 없다면 추가안함
+        } else if (false) { //비정상적인 움직임일 경우 + finish에 도착한 경우
+        } else {
+            latlngs.add(currentLocation)    //위 조건들을 통과하면 점 추가
+            altitude.add(alt)
+            speeds.add(speed.toDouble())
+
+            getDistance()
+
+            // 속도 UI 스레드
+            (context as Activity).runOnUiThread(Runnable {
+                print_log("속도 : " + speed.toString())
+                (context as RunningActivity).runningSpeedTextView.text =
+                    String.format("%.3f km/h", speed)
+            })
+
+            // 위치가 계속 업데이트 되어야해서 여기에 선언
+            createPolyline()  // 이전 위치, 현재 위치로 폴리라인 형성
+
+
+            /**
+             *  100m마다 체크 포인트 찍는거
+             */
+//                            if (distance.toInt() / 100 >= markerCount) {    //100m마다
+//                                cpOption.position(currentLocation)
+//                                if(distance > 0)
+//                                    markerCount = distance.toInt() / 100
+//                                cpOption.title(markerCount.toString())
+//                                cpOption.icon(makingIcon(R.drawable.ic_checkpoint_red, context))
+//                                mMap.addMarker(cpOption) // 이게 기본 마커 찍나? => start지점 찍으려는거 같은데
+//                                markers.add(currentLocation)
+//                                markerCount++
+//                                routes = PolyUtil.simplify(latlngs, 10.0)
+//                                print_log(routes[routes.size - 1].toString())
+//                                latlngs.add(currentLocation)
+//                            }
+        }// if 문 끝
+    }
+
+    /**
+     *    이전 위치( previousLocation ), 현재 위치( currentLocation )로 폴리라인 추가.
+     *    맵에 폴리라인 추가
+     *    => 추후 그리는 후 처리 필요
+     */
+    private fun createPolyline() {
+        print_log("폴리라인")
+        mMap.addPolyline(
+            PolylineOptions().add(
+                previousLocation,
+                currentLocation
+            )
         )
     }
 
     /**
-     *  마지막으로 알려진 위치 가져오기
-     *  위치 서비스 클라이언트를 만든 후 마지막으로 알려진 사용자 기기의 위치를 가져올 수 있습니다
-     *  자료 : https://developer.android.com/training/location/retrieve-current?hl=ko#kotlin
-     *
-     *  마지막 위치를 가져와서 UI 설정. 시작 마커, 현재 자신의 위치 마커
+     *   내 위치 마커로 계속 업데이트
+     *   현재 위치(currentLocation)
      */
-    private fun getLastLocation(fusedLocationClient: FusedLocationProviderClient){
-        fusedLocationClient!!.lastLocation // 마지막으로 알려진 위치 가져오기
-            .addOnSuccessListener { location ->
-                if (location == null) {
-                    print_log("Location is null")
-                } else {
-                    print_log("Success to get Init Location : " + location.toString())
-                    previousLocation = LatLng(location.latitude, location.longitude) // 이전 위치
-                    if (currentMarker != null) currentMarker!!.remove()
-                    val markerOptions = MarkerOptions()
-                    markerOptions.position(previousLocation)
-                    markerOptions.title("Me")
+    private fun setMyIconToMap() {
+        if (currentMarker != null) currentMarker!!.remove() // 이전 마커 지워주는 행동
 
-                    val circleDrawable = context.getDrawable(R.drawable.ic_racer_marker)
-                    var canvas = Canvas();
-                    var bitmap = Bitmap.createBitmap(
-                        circleDrawable!!.intrinsicWidth,
-                        circleDrawable.intrinsicHeight,
-                        Bitmap.Config.ARGB_8888
-                    )
-                    canvas.setBitmap(bitmap);
-                    circleDrawable.setBounds(
-                        0,
-                        0,
-                        circleDrawable.getIntrinsicWidth(),
-                        circleDrawable.getIntrinsicHeight()
-                    );
-                    circleDrawable.draw(canvas)
-                    racerIcon = BitmapDescriptorFactory.fromBitmap(bitmap);
+        val markerOptions = MarkerOptions()
+        markerOptions.position(currentLocation)
+        markerOptions.title("Me")
+        markerOptions.icon(myIcon)
+        currentMarker = mMap.addMarker(markerOptions) // 이게 내 아이콘 찍네 => 지도에 현재 위치 찍는 듯?
 
-                    markerOptions.icon(racerIcon)
-                    currentMarker = mMap.addMarker(markerOptions)
-
-                    //startPoint 추가
-                    cpOption.title("StartPoint")
-
-                    cpOption.position(previousLocation)
-                    mMap.addMarker(cpOption)
-                    markerCount++
-                    markers.add(previousLocation)
-                    cpOption.icon(makingIcon(R.drawable.ic_checkpoint_red, context))
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(previousLocation, 17F))
-                    if (userState == UserState.PAUSED) {
-                        startTracking()
-                        userState = UserState.RUNNING
-                        print_log("Set UserState Running")
-                    }
-                }
-            }
-            .addOnFailureListener {
-                print_log("Error is " + it.message.toString())
-                it.printStackTrace()
-            }
+        /**
+         *   현재위치 따라서 카메라 이동
+         */
+        mMap.animateCamera(
+            CameraUpdateFactory.newLatLngZoom(
+                currentLocation,
+                17F
+            )
+        )
     }
 
-    private fun initLocation() {            //첫 위치 설정하고, previousLocation 설정
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(context) // 위치 서비스 클라이언트 만들기
+    fun getDistance() {
 
-        getLastLocation(fusedLocationClient)
-        createLocationRequest()
-
-        locationCallback = object : LocationCallback() {
-            override fun onLocationResult(locationResult: LocationResult?) {
-                locationResult?.let {
-                    Log.d("RMAP","hmm")
-                    for ((i, location) in it.locations.withIndex()) {
-                        var lat = location.latitude
-                        var lng = location.longitude
-                        var alt = location.altitude
-                        var speed = location.speed
-
-                        currentLocation = LatLng(lat, lng)
-                        if (previousLocation.latitude == currentLocation.latitude && previousLocation.longitude == currentLocation.longitude) {
-                            return  //움직임이 없다면 추가안함
-                        } else if (false) { //비정상적인 움직임일 경우 + finish에 도착한 경우
-                        } else {
-                            latlngs.add(currentLocation)    //위 조건들을 통과하면 점 추가
-                            altitude.add(alt)
-                            speeds.add(speed.toDouble())
-
-                            distance += SphericalUtil.computeDistanceBetween(previousLocation, currentLocation)
-
-                            (context as Activity).runOnUiThread(Runnable {
-                                print_log("속도 : " + speed.toString())
-                                (context as RunningActivity).runningSpeedTextView.text =
-                                    String.format("%.3f km/h", speed)
-                            })
-
-                            mMap.addPolyline(
-                                PolylineOptions().add(
-                                    previousLocation,
-                                    currentLocation
-                                )
-                            )   //맵에 폴리라인 추가
-
-                            if (distance.toInt() / 100 >= markerCount) {    //100m마다
-                                cpOption.position(currentLocation)
-                                markerCount = distance.toInt() / 100
-                                cpOption.title(markerCount.toString())
-                                mMap.addMarker(cpOption)
-                                markers.add(currentLocation)
-                                markerCount++
-                                routes.add(PolyUtil.simplify(latlngs, 10.0).toMutableList())
-                                print_log(routes[routes.size - 1].toString())
-                                latlngs.add(currentLocation)
-                            }
-                        }
-                        previousLocation = currentLocation                              //현재위치를 이전위치로 변경
-
-                        if (currentMarker != null) currentMarker!!.remove()
-                        val markerOptions = MarkerOptions()
-                        markerOptions.position(currentLocation)
-                        markerOptions.title("Me")
-                        markerOptions.icon(racerIcon)
-                        currentMarker = mMap.addMarker(markerOptions)
-                        mMap.animateCamera(
-                            CameraUpdateFactory.newLatLngZoom(
-                                currentLocation,
-                                17F
-                            )
-                        )        //현재위치 따라서 카메라 이동
-                    }
-                }
-            }
-        }
+        // 이전 위치, 현재 위치로 거리 계산
+        distance += SphericalUtil.computeDistanceBetween(previousLocation, currentLocation)
     }
-
-    fun getDistance(locations: Vector<LatLng>): Double {  //점들의 집합에서 거리구하기
-        var distance = 0.0
-        var i = 0
-        while (i < locations.size - 1) {
-            distance += SphericalUtil.computeDistanceBetween(locations[i], locations[i + 1])
-            i++
-        }
-        return distance
-    }
-
-    /**
-     *  위치 업데이트 중지
-     *  사용자가 다른 앱 또는 동일한 앱의 다른 활동으로 전환하는 경우와 같이 더 이상 활동에 포커스가 없을 때 위치 업데이트를 중지
-     *  백그라운드에서 실행 중일 때에도 앱이 정보를 수집할 필요가 없는 경우 위치 업데이트를 중지하면 전력 소모를 줄이는 데 도움이 될 수 있습니다.
-     */
-    fun stopLocationUpdates() {
-        fusedLocationClient.removeLocationUpdates(locationCallback)
-    }
-
 
     fun print_log(text: String) {
         Log.d(TAG, text.toString())

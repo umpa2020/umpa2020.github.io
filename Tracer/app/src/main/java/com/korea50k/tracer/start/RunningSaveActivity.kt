@@ -15,7 +15,12 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.korea50k.tracer.R
-import com.korea50k.tracer.UserInfo
+
+import com.korea50k.tracer.util.UserInfo
+import com.korea50k.tracer.dataClass.InfoData
+import com.korea50k.tracer.dataClass.Privacy
+import com.korea50k.tracer.dataClass.RankingData
+import com.korea50k.tracer.dataClass.RouteData
 import com.korea50k.tracer.dataClass.*
 import com.korea50k.tracer.map.ViewerMap
 import com.korea50k.tracer.util.Chart

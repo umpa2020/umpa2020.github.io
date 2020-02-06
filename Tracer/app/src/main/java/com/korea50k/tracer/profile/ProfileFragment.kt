@@ -19,9 +19,9 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.korea50k.tracer.R
-import com.korea50k.tracer.UserInfo
 import com.korea50k.tracer.dataClass.InfoData
 import com.korea50k.tracer.ranking.RankRecyclerViewAdapterMap
+import com.korea50k.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_ranking_map_detail.*
 import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.fragment_profile.view.*

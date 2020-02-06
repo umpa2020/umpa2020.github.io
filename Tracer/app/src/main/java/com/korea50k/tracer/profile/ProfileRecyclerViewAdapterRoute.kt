@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.firebase.storage.FirebaseStorage
 import com.korea50k.tracer.R
-import com.korea50k.tracer.UserInfo
 import com.korea50k.tracer.dataClass.InfoData
 import com.korea50k.tracer.ranking.RankRecyclerItemClickActivity
 import kotlinx.android.synthetic.main.recycler_profilefragment_route_grid_image.view.*
