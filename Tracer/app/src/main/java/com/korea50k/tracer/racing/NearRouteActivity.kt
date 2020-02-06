@@ -2,18 +2,23 @@ package com.korea50k.tracer.racing
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.FirebaseFirestore
 import com.korea50k.tracer.R
+import com.korea50k.tracer.dataClass.InfoData
 import com.korea50k.tracer.dataClass.NearMap
 import kotlinx.android.synthetic.main.activity_near_route.*
 import kotlinx.android.synthetic.main.recycler_nearactivity_item.*
 
 
 class NearRouteActivity : AppCompatActivity() {
+
+    lateinit var racerData: InfoData
+    lateinit var makerData: InfoData
     /*
     lateinit var locationCallback: LocationCallback
     var cur_loc = LatLng(0.0,0.0)          //현재위치
@@ -106,6 +111,8 @@ class NearRouteActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_near_route)
+
+
 
         //TODO. 서버에서 데이터 받아옴
         val datas = ArrayList<NearMap>()

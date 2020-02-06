@@ -1,6 +1,7 @@
 package com.korea50k.tracer.ranking
 
 import android.content.Context
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -9,20 +10,24 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.korea50k.tracer.R
 import com.korea50k.tracer.dataClass.RankRecyclerItemClickItem
+import com.korea50k.tracer.dataClass.RankingData
 import kotlinx.android.synthetic.main.recycler_rankfragment_topplayer_item.view.*
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
-class RankRecyclerViewAdapterTopPlayer (val mydata :ArrayList<RankRecyclerItemClickItem>) : RecyclerView.Adapter<RankRecyclerViewAdapterTopPlayer.myViewHolder>() {
+class RankRecyclerViewAdapterTopPlayer (val mydata :ArrayList<RankingData>) : RecyclerView.Adapter<RankRecyclerViewAdapterTopPlayer.myViewHolder>() {
     var context : Context? = null
     //생성된 뷰 홀더에 데이터를 바인딩 해줌.
     override fun onBindViewHolder(holder: myViewHolder, position: Int) {
-        Log.d("rank", "리사이클러뷰가 불러짐")
         val singleItem1 = mydata[position]
         var ranking = position + 1
+        val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
 
         //데이터 바인딩
         holder.rank.text = ranking.toString()
-        holder.maptitle.text = singleItem1.mapTitle
-        holder.time.text = singleItem1.time.toString()
+        holder.maptitle.text = singleItem1.challengerNickname
+        holder.time.text = formatter.format(Date(singleItem1.challengerTime!!))
 
         //ranking에 따라 트로피 색 바뀌게 하는 부분
         if (ranking == 1)
@@ -41,8 +46,8 @@ class RankRecyclerViewAdapterTopPlayer (val mydata :ArrayList<RankRecyclerItemCl
             val nextIntent = Intent(context, RankRecyclerItemClickActivity::class.java)
             nextIntent.putExtra("MapTitle",  holder.maptitle.text.toString()) //mapTitle 정보 인텐트로 넘김
             context!!.startActivity(nextIntent)
+            */
 
-             */
             Toast.makeText(context!!, "상대방 프로필 넘어가면 됨", Toast.LENGTH_SHORT).show()
         }
     }
@@ -58,14 +63,14 @@ class RankRecyclerViewAdapterTopPlayer (val mydata :ArrayList<RankRecyclerItemCl
     //item 사이즈, 데이터의 전체 길이 반환
     override fun getItemCount(): Int {
         Log.d("rank", "데이터 크기 " + mydata.size.toString())
-        return 10 //TODO 갯수 조절 여기서
+        return mydata.size //TODO 갯수 조절 여기서
     }
 
     //여기서 item을 textView에 옮겨줌
 
     inner class myViewHolder(view: View) : RecyclerView.ViewHolder(view!!) {
         var rank = view.rankRecyclerItemClickCountTextView
-        var maptitle = view.rankRecyclerItemClickMapTitleTextView
+        var maptitle = view.rankRecyclerItemClickChallengerNicknameTextView
         var time = view.rankRecyclerItemClickTimeTextView
     }
 

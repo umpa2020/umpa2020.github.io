@@ -18,7 +18,7 @@
         android:layout_weight="0.5"/>
 
     <TextView
-        android:id="@+id/rankRecyclerItemClickMapTitleTextView"
+        android:id="@+id/rankRecyclerItemClickChallengerNicknameTextView"
         android:paddingLeft="25dp"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
