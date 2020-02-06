@@ -7,13 +7,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.google.firebase.storage.FirebaseStorage
 import com.korea50k.tracer.R
 import com.korea50k.tracer.dataClass.NearMap
 import com.korea50k.tracer.ranking.RankRecyclerItemClickActivity
+import kotlinx.android.synthetic.main.activity_ranking_map_detail.*
 import kotlinx.android.synthetic.main.recycler_nearactivity_item.view.*
 
-class NearRecyclerViewAdapter(private var datas: ArrayList<NearMap>) : RecyclerView.Adapter<NearRecyclerViewAdapter.MyViewHolder>() {
+class NearRecyclerViewAdapter(private var datas: List<NearMap>) : RecyclerView.Adapter<NearRecyclerViewAdapter.MyViewHolder>() {
     var context : Context? = null
+    lateinit var mapImageDownloadThread: Thread
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.recycler_nearactivity_item, parent, false)
         context = parent.context
@@ -28,9 +33,31 @@ class NearRecyclerViewAdapter(private var datas: ArrayList<NearMap>) : RecyclerV
         Log.d("rank", "리사이클러뷰가 불러짐")
         val singleItem1 = datas[position]
 
+        var cutted = singleItem1.mapTitle.split("||")
         //데이터 바인딩
-        holder.mapTitle.text = singleItem1.mapTitle
-        holder.distance.text = singleItem1.distance.toString()
+        holder.mapTitle.text = cutted[0]
+        holder.distance.text = String.format("%.3f",singleItem1.distance)+"m"
+      //  holder.distance.text = singleItem1.distance.toString()
+
+
+
+        mapImageDownloadThread = Thread(Runnable {
+            // glide imageview 소스
+            val storage = FirebaseStorage.getInstance("gs://tracer-9070d.appspot.com/")
+            val mapImageRef = storage.reference.child("mapImage").child(singleItem1.mapTitle)
+
+            mapImageRef.downloadUrl.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    // Glide 이용하여 이미지뷰에 로딩
+                    Glide.with(context!!)
+                        .load(task.result)
+                        .override(1024, 980)
+                        .into(holder.imageView)
+                } else {
+                }
+            }
+        })
+        mapImageDownloadThread.start()
 
         //클릭하면 맵 상세보기 페이지로 이동
         holder.itemView.setOnClickListener{
@@ -43,6 +70,7 @@ class NearRecyclerViewAdapter(private var datas: ArrayList<NearMap>) : RecyclerV
     }
 
     inner class MyViewHolder(view: View): RecyclerView.ViewHolder(view!!) {
+        var imageView = view.nearRouteActivityRouteImage
         var mapTitle = view.nearRouteActivityMapTitle
         var distance = view.nearRouteActivityDistanceAway
     }
