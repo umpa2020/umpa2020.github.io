@@ -14,11 +14,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.korea50k.tracer.R
-import com.korea50k.tracer.UserInfo
 import com.korea50k.tracer.dataClass.InfoData
 import com.korea50k.tracer.dataClass.RankingData
 import com.korea50k.tracer.ranking.RankRecyclerViewAdapterMap
 import com.korea50k.tracer.ranking.RankRecyclerViewAdapterTopPlayer
+import com.korea50k.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_racing_finish.*
 import kotlinx.android.synthetic.main.activity_rank_recycler_item_click.*
 import kotlinx.android.synthetic.main.fragment_ranking.view.*
