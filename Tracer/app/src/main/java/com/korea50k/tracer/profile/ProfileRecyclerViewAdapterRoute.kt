@@ -30,7 +30,6 @@ class ProfileRecyclerViewAdapterRoute (val mdata :ArrayList<String>) : RecyclerV
         val storage = FirebaseStorage.getInstance("gs://tracer-9070d.appspot.com/")
         val mapImageRef = storage.reference.child("mapImage").child(singleItem!!)
 
-        Log.d("ssmm11" , mapImageRef.toString())
         mapImageRef.downloadUrl.addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 // Glide 이용하여 이미지뷰에 로딩

@@ -39,7 +39,7 @@ class ProfileFragment : Fragment() {
     private var mStorageReference: StorageReference? = null
     lateinit var root: View
     var bundle = Bundle()
-
+    lateinit var profileImagePathDownloadThread: Thread
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -94,28 +94,48 @@ class ProfileFragment : Fragment() {
         // tabIconSelect()
 
 
-
-
         val profileNickname = view.findViewById<TextView>(R.id.profileIdTextView)
         profileNickname.text = UserInfo.nickname
 
-        // glide imageview 소스
 
-        val imageView = view.findViewById<ImageView>(R.id.profileImageView)
+        var profileImagePath = "init"
+        profileImagePathDownloadThread = Thread(Runnable {
+            val db = FirebaseFirestore.getInstance()
+            Log.d("ssmm11", "들어옴 = " + UserInfo.nickname)
 
-        val storage = FirebaseStorage.getInstance("gs://tracer-9070d.appspot.com/")
-        val mapImageRef = storage.reference.child(UserInfo.nickname).child("Profile/2020_02_03_Mon.jpg")
+            db.collection("userinfo").whereEqualTo("nickname", UserInfo.nickname)
+                .get()
+                .addOnSuccessListener { result ->
+                    for (document in result) {
+                        profileImagePath = document.get("profileImagePath") as String
+                    }
 
-        mapImageRef.downloadUrl.addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                // Glide 이용하여 이미지뷰에 로딩
-                Glide.with(this@ProfileFragment)
-                    .load(task.result)
-                    .override(1024, 980)
-                    .into(imageView)
-            } else {
-            }
-        }
+                    // glide imageview 소스
+                    // 프사 설정하는 코드 db -> imageView glide
+                    val imageView = view.findViewById<ImageView>(R.id.profileImageView)
+
+                    val storage = FirebaseStorage.getInstance("gs://tracer-9070d.appspot.com/")
+                    val mapImageRef = storage.reference.child(UserInfo.nickname).child("Profile").child(profileImagePath)
+
+                    mapImageRef.downloadUrl.addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            // Glide 이용하여 이미지뷰에 로딩
+                            Glide.with(this@ProfileFragment)
+                                .load(task.result)
+                                .override(1024, 980)
+                                .into(imageView)
+                        } else {
+                        }
+                    }
+                }
+                .addOnFailureListener { exception ->
+                }
+        })
+
+        profileImagePathDownloadThread.start()
+
+
+
         return view
     }
 
