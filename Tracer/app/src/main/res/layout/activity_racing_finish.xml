@@ -5,7 +5,7 @@
     android:orientation="vertical"
     >
     <RelativeLayout
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="5dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingBottom="30dp">
@@ -17,7 +17,7 @@
             android:gravity="center"
             android:text="Race Result"
             android:textColor="#000000"
-            android:textSize="30dp"
+            android:textSize="24dp"
             android:fontFamily="@font/notosansmedium"/>
         <TextView
             android:id="@+id/resultRankTextView"
@@ -25,17 +25,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="1등"
+            android:text="..."
             android:textColor="#FF0000"
-            android:textSize="30dp"
-            android:layout_marginTop="10dp"
+            android:textSize="24dp"
             android:fontFamily="@font/notosansmedium"/>
 
         <LinearLayout
             android:id="@+id/raceResultLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:layout_below="@+id/resultRankTextView"
             android:orientation="vertical">
 
@@ -53,7 +51,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="Record"
-                android:textSize="20dp"
+                android:textSize="18dp"
                 android:fontFamily="@font/notosansmedium"/>
 
             <TextView
@@ -84,7 +82,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="MY"
-                    android:textSize="18dp"
+                    android:textSize="15dp"
                     android:fontFamily="@font/notosansmedium"/>
 
                 <TextView
@@ -93,7 +91,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="MAKER"
-                    android:textSize="18dp"
+                    android:textSize="15dp"
                     android:fontFamily="@font/notosansmedium"/>
             </LinearLayout>
 
@@ -110,7 +108,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Lap Time"
-                    android:textSize="16dp"
+                    android:textSize="14dp"
                     android:fontFamily="@font/notosansmedium"/>
 
                 <TextView
@@ -120,7 +118,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="my record"
-                    android:textSize="18dp"
+                    android:textSize="16dp"
                     android:fontFamily="@font/notosansmedium"/>
 
                 <TextView
@@ -130,7 +128,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="maker record"
-                    android:textSize="18dp"
+                    android:textSize="16dp"
                     android:fontFamily="@font/notosansmedium"/>
             </LinearLayout>
 
@@ -147,7 +145,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Highest\nSpeed\n(km/h)"
-                    android:textSize="16dp"
+                    android:textSize="14dp"
                     android:fontFamily="@font/notosansmedium"/>
 
                 <TextView
@@ -157,7 +155,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="my record"
-                    android:textSize="18dp"
+                    android:textSize="16dp"
                     android:fontFamily="@font/notosansmedium"/>
 
                 <TextView
@@ -167,7 +165,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="maker record"
-                    android:textSize="18dp"
+                    android:textSize="16dp"
                     android:fontFamily="@font/notosansmedium"/>
             </LinearLayout>
 
@@ -183,7 +181,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Average\nSpeed\n(km/h)"
-                    android:textSize="16dp"
+                    android:textSize="14dp"
                     android:fontFamily="@font/notosansmedium"/>
 
                 <TextView
@@ -193,7 +191,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="my record"
-                    android:textSize="18dp"
+                    android:textSize="16dp"
                     android:fontFamily="@font/notosansmedium"/>
 
                 <TextView
@@ -203,7 +201,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="maker record"
-                    android:textSize="18dp"
+                    android:textSize="16dp"
                     android:fontFamily="@font/notosansmedium"/>
 
             </LinearLayout>
@@ -232,7 +230,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Ranking"
-                android:textSize="20dp"
+                android:textSize="18dp"
                 android:gravity="center"
                 android:fontFamily="@font/notosansmedium"/>
 
@@ -256,7 +254,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:text="player"
-                    android:textSize="18dp"
+                    android:textSize="16dp"
                     android:fontFamily="@font/notosansmedium"/>
                 <TextView
                     android:layout_width="0dp"
@@ -264,7 +262,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:text="랩 타임"
-                    android:textSize="18dp"
+                    android:textSize="16dp"
                     android:fontFamily="@font/notosansmedium"/>
             </LinearLayout>
 
@@ -286,10 +284,10 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="10dp"
-            android:background="@drawable/base_button_selector"
             android:onClick="onClick"
             android:text="확인"
-            android:textColor="@color/red"
+            android:background="@drawable/button_background"
+            style="@style/buttonText"
             android:fontFamily="@font/notosansmedium"/>
     </RelativeLayout>
 

@@ -122,8 +122,6 @@ class ManageRacing {
             context.startActivity(newIntent)
             activity.finish()
 
-
-
         } else {
             val newIntent = Intent(context, RacingFinishActivity::class.java)
             newIntent.putExtra("Result", result)
