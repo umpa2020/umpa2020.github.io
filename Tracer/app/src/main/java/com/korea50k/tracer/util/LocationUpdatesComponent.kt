@@ -1,5 +1,6 @@
 package com.korea50k.tracer.util
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.location.Location
 import android.os.Looper
@@ -12,6 +13,7 @@ object LocationUpdatesComponent {
     /**
      * Provides access to the Fused Location Provider API.
      */
+    @SuppressLint("StaticFieldLeak")
     private lateinit var fusedLocationClient: FusedLocationProviderClient   //위치정보 가져오는 인스턴스
 
     /**
@@ -45,6 +47,11 @@ object LocationUpdatesComponent {
         Log.i(WSY, "created...............")
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(context) // 위치 서비스 클라이언트 만들기
 
+        // create location request
+        createLocationRequest()
+        // get last known location
+        getLastLocation()
+
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult?) {
                 super.onLocationResult(locationResult)
@@ -53,10 +60,6 @@ object LocationUpdatesComponent {
                 onNewLocation(locationResult.lastLocation)
             }
         }
-        // create location request
-        createLocationRequest()
-        // get last known location
-        getLastLocation()
     }
     /**
      * start location updates

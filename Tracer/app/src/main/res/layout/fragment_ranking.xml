@@ -27,12 +27,21 @@
         </Toolbar>
 
         <TextView
-            android:id="@+id/rankingFragmentMonthTextView"
-            style="@style/blackBoldText20"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="2020.01\n월간차트" />
+            android:id="@+id/rankingFragmentMonthTextView"
+            style="@style/blackBoldText20"
+            android:gravity="center"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/rankingFragmentPopularTextView"
+            android:text="월간인기차트"
+            android:textSize="18dp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:gravity="center"/>
 
         <LinearLayout
             android:id="@+id/listTitleLinearLayout"
