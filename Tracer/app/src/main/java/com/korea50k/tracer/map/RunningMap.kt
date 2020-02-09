@@ -259,12 +259,14 @@ class RunningMap(smf: SupportMapFragment, context: Context) : OnMapReadyCallback
         /**
          *   현재위치 따라서 카메라 이동
          */
-        mMap.animateCamera(
-            CameraUpdateFactory.newLatLngZoom(
-                currentLocation,
-                17F
-            )
-        )
+        //카메라를 이전 위치로 옮긴다.
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 16F))
+//        mMap.animateCamera(
+//            CameraUpdateFactory.newLatLngZoom(
+//                currentLocation,
+//                17F
+//            )
+//        )
     }
 
     fun getDistance() {
