@@ -186,10 +186,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#00000000"
-            android:clickable="false"
-            android:fontFamily="@font/notosansmedium"
             android:textColor="@color/white"
-            android:textSize="20dp" />
+            android:textSize="20dp"
+            android:clickable="false"
+            android:fontFamily="@font/notosansmedium"/>
     </LinearLayout>
 
     <TextView
