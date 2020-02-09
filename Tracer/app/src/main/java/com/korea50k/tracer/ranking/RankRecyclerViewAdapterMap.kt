@@ -42,8 +42,7 @@ class RankRecyclerViewAdapterMap (val mdata :ArrayList<InfoData>) : RecyclerView
             nextIntent.putExtra("MapTitle",  singleItem.mapTitle) //mapTitle 정보 인텐트로 넘김
             context!!.startActivity(nextIntent)
 
-            val progressbar = ProgressBar(context!!)
-            progressbar.show()
+
         }
     }
 

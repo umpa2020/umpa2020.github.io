@@ -12,6 +12,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.korea50k.tracer.R
 import com.korea50k.tracer.dataClass.InfoData
+import com.korea50k.tracer.util.ProgressBar
 import kotlinx.android.synthetic.main.fragment_ranking.*
 import kotlinx.android.synthetic.main.fragment_ranking.view.*
 import java.text.DateFormat
@@ -36,6 +37,8 @@ class RankingFragment : Fragment() {
         // Inflate the layout for this fragment
         var view:View = inflater!!.inflate(R.layout.fragment_ranking, container, false)
 
+        val progressbar = ProgressBar(context!!)
+        progressbar.show()
         /**
         * TextView에 현재 날짜, 월 입력하는 함수
          */
@@ -60,7 +63,7 @@ class RankingFragment : Fragment() {
                     }
                     //adpater 추가
                     view.rank_recycler_map.adapter = RankRecyclerViewAdapterMap(infoDatas)
-
+                    progressbar.dismiss()
                 }
                 .addOnFailureListener { exception ->
                 }
