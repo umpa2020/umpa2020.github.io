@@ -66,6 +66,8 @@ dependencies {
     implementation "androidx.recyclerview:recyclerview:1.1.0"
 
     // google maps 에서 map 정보 및 location 정보 받아오기
+    //noinspection UseOfBundledGooglePlayServices
+    //implementation 'com.google.android.gms:play-services:12.0.1'
     implementation 'com.google.android.gms:play-services-location:17.0.0'
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
 
