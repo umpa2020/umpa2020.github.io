@@ -3,11 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="1dp"
-    android:background="@drawable/profile_route_bg"
-    android:orientation="vertical">
+    android:layout_margin="5dp"
+    android:orientation="vertical"
+    android:background="@color/white">
 
     <TextView
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
         android:id="@+id/profileFragmentGridMapTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -15,87 +17,69 @@
         android:gravity="center"
         android:textStyle="bold"
         android:textSize="16dp"
-        android:text="월계동">
+        android:background="@color/lightgray">
 
     </TextView>
+
+    <ImageView
+        android:id="@+id/profileFragmentRouteGridImage"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:gravity="center"
+        android:padding="1dp"
+        android:src="#00000000"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </ImageView>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/profileFragmentRouteGridImage"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_marginLeft="12dp"
-            android:gravity="center"
-            android:padding="1dp"
-            android:src="#00000000"
-            app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-        </ImageView>
+        <TextView
+            android:id="@+id/profileFragmentCreateTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="12dp"
-            android:layout_marginTop="14dp"
-            android:orientation="vertical">
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/profileFragmentCreateTime"
+                android:id="@+id/profileFragmentDistance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#6799FF"
+                android:textSize="24dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/profileFragmentKm"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="2020-02-05, 03:17:38 PM"
-                android:textSize="16dp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/profileFragmentDistance"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="0.71"
-                    android:textColor="#6799FF"
-                    android:textSize="24dp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/profileFragmentKm"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="7dp"
-                    android:text="Km" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="7dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/profileFragmentTime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="00:07:51"
-                    android:textSize="15dp"/>
-
-            </LinearLayout>
-
-
-
+                android:layout_marginLeft="7dp"
+                android:text="Km" />
         </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/profileFragmentTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15dp"/>
+
     </LinearLayout>
-
-
-
 </LinearLayout>
+

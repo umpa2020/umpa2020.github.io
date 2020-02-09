@@ -40,6 +40,7 @@
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_marginTop="10dp"
+                android:scaleType="fitXY"
                 android:background="@drawable/ic_profile_logo" />
 
             <TextView
@@ -49,8 +50,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="20dp"
-                android:fontFamily="@font/notosansmedium"
-                android:text="player" />
+                android:fontFamily="@font/notosansmedium"/>
         </LinearLayout>
 
 
@@ -127,14 +127,15 @@
             android:layout_height="wrap_content">
 
             <TextView
+                style="@style/divisionTextView"/>
+
+            <TextView
                 android:id="@+id/profileRouteTextView"
                 style="@style/ListDetail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
-                android:layout_marginTop="10dp"
                 android:layout_marginRight="20dp"
-                android:background="@drawable/textlines"
                 android:padding="10dp"
                 android:text="나의 루트" />
 
@@ -154,14 +155,15 @@
             android:layout_height="wrap_content">
 
             <TextView
+                style="@style/divisionTextView"/>
+
+            <TextView
                 android:id="@+id/profileRecordTextView"
                 style="@style/ListDetail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
-                android:layout_marginTop="10dp"
                 android:layout_marginRight="20dp"
-                android:background="@drawable/textlines"
                 android:padding="10dp"
                 android:text="나의 활동" />
 
@@ -174,7 +176,11 @@
                 android:text=">  "
                 android:textSize="18dp" />
 
+
         </RelativeLayout>
+
+        <TextView
+            style="@style/divisionTextView"/>
 
     </LinearLayout>
 </RelativeLayout>
