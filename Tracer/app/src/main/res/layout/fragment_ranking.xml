@@ -11,31 +11,6 @@
         <Toolbar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-<<<<<<< HEAD
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="0dp"
-            android:elevation="2dp"
-            android:minHeight="?attr/actionBarSize"
-            android:background="@drawable/ic_bar_ranking">
-        </Toolbar>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/rankingFragmentMonthTextView"
-            style="@style/blackBoldText20"
-            android:gravity="center"/>
-
-            <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/rankingFragmentPopularTextView"
-            android:text="월간인기차트"
-                android:textSize="18dp"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-            android:gravity="center"/>
-=======
             android:layout_alignParentTop="true">
 
             <TextView
@@ -47,18 +22,26 @@
                 android:text="Ranking"
                 android:textColor="@color/red"
                 android:textSize="60dp">
->>>>>>> c9aec0d3f60cd0cfa2fbe35bc027677d55c766c6
 
             </TextView>
         </Toolbar>
 
         <TextView
-            android:id="@+id/rankingFragmentMonthTextView"
-            style="@style/blackBoldText20"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="2020.01\n월간차트" />
+            android:id="@+id/rankingFragmentMonthTextView"
+            style="@style/blackBoldText20"
+            android:gravity="center"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/rankingFragmentPopularTextView"
+            android:text="월간인기차트"
+            android:textSize="18dp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:gravity="center"/>
 
         <LinearLayout
             android:id="@+id/listTitleLinearLayout"

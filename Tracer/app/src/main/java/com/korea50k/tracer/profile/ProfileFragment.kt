@@ -66,14 +66,6 @@ class ProfileFragment : Fragment() {
         val profileNickname = view.findViewById<TextView>(R.id.profileIdTextView)
         profileNickname.text = UserInfo.nickname
 
-<<<<<<< HEAD
-        // glide imageview 소스
-/*
-        val imageView = view.findViewById<ImageView>(R.id.profileImageView)
-
-        val storage = FirebaseStorage.getInstance("gs://tracer-9070d.appspot.com/")
-        val mapImageRef = storage.reference.child(UserInfo.nickname).child("Profile/2020_02_03_Mon.jpg")
-=======
         // storage에 profile image 파일이 어디에 있는지 받아옴
         var profileImagePath = "init"
         profileImagePathDownloadThread = Thread(Runnable {
@@ -137,16 +129,19 @@ class ProfileFragment : Fragment() {
                 }
         })
         profileImagePathDownloadThread.start()
->>>>>>> c9aec0d3f60cd0cfa2fbe35bc027677d55c766c6
 
-        var routeTextView = view.findViewById<TextView>(R.id.profileRouteTextView)
+        val routeTextView = view.findViewById<TextView>(R.id.profileRouteTextView)
         routeTextView.setOnClickListener {
             val nextIntent = Intent(activity, ProfileRouteActivity::class.java)
             startActivity(nextIntent)
         }
 
- */
+        val recordTextView = view.findViewById<TextView>(R.id.profileRecordTextView)
+        recordTextView.setOnClickListener {
+            val nextIntent = Intent(activity, ProfileRecordActivity::class.java)
+            startActivity(nextIntent)
+        }
+
         return view
     }
 }
-
