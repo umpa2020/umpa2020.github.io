@@ -7,57 +7,65 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
 
-    <Toolbar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="0dp"
-        android:elevation="2dp"
-        android:minHeight="?attr/actionBarSize"
-        android:background="@drawable/ic_bar_start">
-    </Toolbar>
+        <Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true">
 
-    <fragment
-        android:id="@+id/map_viewer_start"
-        class="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        tools:context=".fragment.StartFragment" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="12dp"
+                android:fontFamily="@font/godoroundedl"
+                android:gravity="center"
+                android:text="Start"
+                android:textColor="@color/red"
+                android:textSize="60dp">
+
+            </TextView>
+        </Toolbar>
+
+        <fragment
+            android:id="@+id/map_viewer_start"
+            class="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            tools:context=".fragment.StartFragment" />
 
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:gravity="center"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="30dp">
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="30dp"
+        android:gravity="center">
 
         <Button
             android:id="@+id/mainStartRunning"
+            style="@style/buttonTextRedText"
             android:layout_width="100dp"
             android:layout_height="40dp"
-            android:text="RUNNING"
-            style="@style/buttonTextRedText"
-            android:background="@drawable/button_empty_background"
-            android:onClick="onClick"
             android:layout_margin="10dp"
-            android:gravity="center"/>
+            android:background="@drawable/button_empty_background"
+            android:gravity="center"
+            android:onClick="onClick"
+            android:text="RUNNING" />
 
         <Button
             android:id="@+id/mainStartRacing"
+            style="@style/buttonText"
             android:layout_width="100dp"
             android:layout_height="40dp"
-            android:text="RACING"
-            style="@style/buttonText"
-            android:background="@drawable/button_background"
-            android:onClick="onClick"
             android:layout_margin="10dp"
-            android:gravity="center"/>
+            android:background="@drawable/button_background"
+            android:gravity="center"
+            android:onClick="onClick"
+            android:text="RACING" />
 
     </LinearLayout>
 </RelativeLayout>

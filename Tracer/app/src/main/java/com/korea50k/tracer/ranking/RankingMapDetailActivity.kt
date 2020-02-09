@@ -28,6 +28,7 @@ import com.korea50k.tracer.racing.RankingRecodeRacingActivity
 import com.korea50k.tracer.util.Chart
 import kotlinx.android.synthetic.main.activity_ranking_map_detail.*
 import kotlinx.android.synthetic.main.activity_running_save.*
+import java.text.SimpleDateFormat
 import java.util.*
 
 class RankingMapDetailActivity : AppCompatActivity() {
@@ -114,8 +115,10 @@ class RankingMapDetailActivity : AppCompatActivity() {
                                 Log.d("ssmm11", "info data = " + infoData)
                                 rankingDetailNickname.text = infoData.makersNickname
                                 rankingDetailMapDetail.text = infoData.mapExplanation
-                                rankingDetailDistance.text = infoData.distance.toString()
-                                rankingDetailTime.text = infoData.time.toString()
+                                rankingDetailDistance.text = String.format("%.3f", infoData.distance!!/1000)+"km"
+                                val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
+                                formatter.setTimeZone(TimeZone.getTimeZone("UTC"))
+                                rankingDetailTime.text = formatter.format(Date(infoData.time!!))
                                 rankingDetailSpeed.text = infoData.speed.average().toString()
                                 var chart = Chart(routeData.altitude, infoData.speed, rankingDetailChart)
                                 chart.setChart()
