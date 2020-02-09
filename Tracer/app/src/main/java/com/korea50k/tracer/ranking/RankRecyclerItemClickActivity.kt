@@ -29,6 +29,7 @@ class RankRecyclerItemClickActivity : AppCompatActivity() {
         //전달 받은 값으로 Title 설정
         var mapTitle = intent.extras?.getString("MapTitle").toString()
 
+
         var cutted = mapTitle.split("||")
         rankRecyclerMapTitle.text = cutted[0]
 
@@ -64,10 +65,17 @@ class RankRecyclerItemClickActivity : AppCompatActivity() {
                     //레이아웃 매니저 추가
                     rankRecyclerItemClickRecyclerView.layoutManager = LinearLayoutManager(this)
                     //adpater 추가
-                    Log.d("ssmm11", "받아옴 ? = "+ arrRankingData)
                     rankRecyclerItemClickRecyclerView.adapter = RankRecyclerViewAdapterTopPlayer(arrRankingData)
                 }
                 .addOnFailureListener { exception ->
+                }
+
+            db.collection("mapInfo").whereEqualTo("mapTitle", mapTitle)
+                .get()
+                .addOnSuccessListener { result ->
+                    for (document in result) {
+                        rankRecyclerNickname.text = document.get("makersNickname") as String
+                    }
                 }
         })
 

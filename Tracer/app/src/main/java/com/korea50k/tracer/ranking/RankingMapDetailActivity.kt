@@ -57,33 +57,43 @@ class RankingMapDetailActivity : AppCompatActivity() {
 
         rankingDetailThread = Thread(Runnable {
             val db = FirebaseFirestore.getInstance()
+            var makersNickname = ""
 
-            // storage 에 올린 경로를 db에 저장해두었으니 다시 역 추적 하여 프로필 이미지 반영
-            db.collection("userinfo").whereEqualTo("nickname", UserInfo.nickname)
+            db.collection("mapInfo").whereEqualTo("mapTitle", mapTitle)
                 .get()
-                .addOnSuccessListener { result ->
+                .addOnSuccessListener {result ->
                     for (document in result) {
-                        profileImagePath = document.get("profileImagePath") as String
+                        makersNickname = document.get("makersNickname") as String
                     }
-                    // glide imageview 소스
-                    // 프사 설정하는 코드 db -> imageView glide
-                    val imageView = rankingDetailProfileImage
+                    // storage 에 올린 경로를 db에 저장해두었으니 다시 역 추적 하여 프로필 이미지 반영
+                    db.collection("userinfo").whereEqualTo("nickname", makersNickname)
+                        .get()
+                        .addOnSuccessListener { result ->
+                            for (document in result) {
+                                profileImagePath = document.get("profileImagePath") as String
+                            }
+                            // glide imageview 소스
+                            // 프사 설정하는 코드 db -> imageView glide
+                            val imageView = rankingDetailProfileImage
 
-                    val storage = FirebaseStorage.getInstance("gs://tracer-9070d.appspot.com/")
-                    val mapImageRef = storage.reference.child(UserInfo.nickname).child("Profile").child(profileImagePath)
-                    mapImageRef.downloadUrl.addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            // Glide 이용하여 이미지뷰에 로딩
-                            Glide.with(this@RankingMapDetailActivity)
-                                .load(task.result)
-                                .override(1024, 980)
-                                .into(imageView)
-                        } else {
+                            val storage = FirebaseStorage.getInstance("gs://tracer-9070d.appspot.com/")
+                            val mapImageRef = storage.reference.child(makersNickname).child("Profile").child(profileImagePath)
+                            mapImageRef.downloadUrl.addOnCompleteListener { task ->
+                                if (task.isSuccessful) {
+                                    // Glide 이용하여 이미지뷰에 로딩
+                                    Glide.with(this@RankingMapDetailActivity)
+                                        .load(task.result)
+                                        .override(1024, 980)
+                                        .into(imageView)
+                                } else {
+                                }
+                            }
                         }
-                    }
+                        .addOnFailureListener { exception ->
+                        }
+
                 }
-                .addOnFailureListener { exception ->
-                }
+
 
 
             db.collection("mapRoute")
@@ -128,35 +138,32 @@ class RankingMapDetailActivity : AppCompatActivity() {
                                         latLngs.add(routeArray)
                                     }
                                     routeData = RouteData(altitude, latLngs, markerlatlngs)
+                                    // 단순 맵 정보 받아오는 부분
+                                    db.collection("mapInfo").whereEqualTo("mapTitle", mapTitle)
+                                        .get()
+                                        .addOnSuccessListener { result ->
+                                            for (document in result) {
+                                                infoData = document.toObject(InfoData::class.java)
+                                                rankingDetailDate.text = cutted[1]
+                                            }
+                                            // ui 스레드 따로 빼주기
+                                            runOnUiThread {
+                                                rankingDetailNickname.text = infoData.makersNickname
+                                                rankingDetailMapDetail.text = infoData.mapExplanation
+                                                rankingDetailDistance.text = String.format("%.3f", infoData.distance!! / 1000) + "km"
+                                                val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
+                                                formatter.setTimeZone(TimeZone.getTimeZone("UTC"))
+                                                rankingDetailTime.text = formatter.format(Date(infoData.time!!))
+                                                rankingDetailSpeed.text = infoData.speed.average().toString()
+                                                var chart = Chart(routeData.altitude, infoData.speed, rankingDetailChart)
+                                                chart.setChart()
+                                            }
+                                        }
+                                        .addOnFailureListener { exception ->
+                                        }
                                 }
                         }
                     }
-
-                    // 단순 맵 정보 받아오는 부분
-                    //TODO: 맵 타이틀 바꿔야함
-                    db.collection("mapInfo").whereEqualTo("mapTitle", mapTitle)
-                        .get()
-                        .addOnSuccessListener { result ->
-                            for (document in result) {
-                                infoData = document.toObject(InfoData::class.java)
-                                rankingDetailDate.text = cutted[1]
-                            }
-                            // ui 스레드 따로 빼주기
-                            runOnUiThread {
-                                Log.d("ssmm11", "info data = " + infoData)
-                                rankingDetailNickname.text = infoData.makersNickname
-                                rankingDetailMapDetail.text = infoData.mapExplanation
-                                rankingDetailDistance.text = String.format("%.3f", infoData.distance!! / 1000) + "km"
-                                val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
-                                formatter.setTimeZone(TimeZone.getTimeZone("UTC"))
-                                rankingDetailTime.text = formatter.format(Date(infoData.time!!))
-                                rankingDetailSpeed.text = infoData.speed.average().toString()
-                                var chart = Chart(routeData.altitude, infoData.speed, rankingDetailChart)
-                                chart.setChart()
-                            }
-                        }
-                        .addOnFailureListener { exception ->
-                        }
                 }
                 .addOnFailureListener { exception ->
                 }
