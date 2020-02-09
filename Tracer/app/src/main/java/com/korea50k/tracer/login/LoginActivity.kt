@@ -48,8 +48,8 @@ class LoginActivity : AppCompatActivity() {
          *  a. GCP Console에서 사용자 인증 정보 페이지를 엽니다.
          *  b. 웹 애플리케이션 유형의 클라이언트 ID가 백엔드 서버의 OAuth 2.0 클라이언트 ID입니다.
          */
-        signInButton =
-            googleSignInButton // googleSignInButton 사용. Gradle에서 implementation을 해줘야 사용 가능.
+        mAuth = FirebaseAuth.getInstance() // FirebaseAuth를 사용하기 위해서 인스턴스를 꼭 받아오기
+        signInButton = googleSignInButton // googleSignInButton 사용. Gradle에서 implementation을 해줘야 사용 가능.
 
 
         //  Configure Google Sign In
@@ -61,7 +61,6 @@ class LoginActivity : AppCompatActivity() {
 
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions) //구글 로그인 클래스
-        mAuth = FirebaseAuth.getInstance() // FirebaseAuth를 사용하기 위해서 인스턴스를 꼭 받아오기
         Kotpref.init(this) // Kotpref 사용을 위한 singleton context 저장
 
         // 람다식으로 onClick 설정
@@ -83,10 +82,10 @@ class LoginActivity : AppCompatActivity() {
 
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN /*&&  resultCode == RESULT_OK*/) {
-
-            // 구글 로그인에 성공했을때 넘어오는 토큰값을 가지고 있는 Task
-            var task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
+                // 구글 로그인에 성공했을때 넘어오는 토큰값을 가지고 있는 Task
+                Log.d(WSY, data.toString())
+                var task = GoogleSignIn.getSignedInAccountFromIntent(data)
                 Log.d(WSY, "여기까지 실행??")
                 // Google Sign In was successful, authenticate with Firebase
                 // 구글 로그인 성공

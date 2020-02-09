@@ -17,7 +17,7 @@ import com.korea50k.tracer.R
 class BasicMap : OnMapReadyCallback {
     var mMap: GoogleMap? = null    //racingMap 인스턴스
 
-    var TAG = "what u wanna say?~~!~!"       //로그용 태그
+    var TAG = "BasicMap"       //로그용 태그
     var previousLocation: LatLng = LatLng(0.0, 0.0)          //이전위치
     var currentLocation: LatLng  = LatLng(0.0, 0.0)              //현재위치
     var context: Context
@@ -89,12 +89,13 @@ class BasicMap : OnMapReadyCallback {
         /**
          *   현재위치 따라서 카메라 이동
          */
-        mMap!!.animateCamera(
-            CameraUpdateFactory.newLatLngZoom(
-                currentLocation,
-                17F
-            )
-        )
+        mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 17F))   //화면이동
+//        mMap!!.animateCamera(
+//            CameraUpdateFactory.newLatLngZoom(
+//                currentLocation,
+//                17F
+//            )
+//        )
     }
 
 

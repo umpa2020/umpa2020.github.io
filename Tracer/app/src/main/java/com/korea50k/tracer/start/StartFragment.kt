@@ -23,12 +23,12 @@ import java.util.*
 
 
 class StartFragment : Fragment(), View.OnClickListener {
-    val WSY = "WSY"
+    val WSY = "StartFragment"
     lateinit var map: BasicMap
     var mHandler : IncomingMessageHandler? = null
 
     lateinit  var obj : Location
-
+    var smf : SupportMapFragment? = null
     override fun onClick(v: View) {
         when (v.id) {
             R.id.mainStartRunning -> {
@@ -48,7 +48,6 @@ class StartFragment : Fragment(), View.OnClickListener {
         super.onCreate(savedInstanceState)
 
         mHandler = IncomingMessageHandler()
-
         Log.d(WSY, "핸들러 생성?")
         Intent(context, LocationBackgroundService::class.java).also {
             val messengerIncoming = Messenger(mHandler)
@@ -58,18 +57,20 @@ class StartFragment : Fragment(), View.OnClickListener {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle? ): View? {
+        Log.d(WSY, "onCreateView()")
         return inflater.inflate(R.layout.fragment_start, container, false)
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val smf = childFragmentManager.findFragmentById(R.id.map_viewer_start) as SupportMapFragment
-
-        map = BasicMap(smf, context as Context)
+        Log.d(WSY, "onViewCreated()")
+        smf = childFragmentManager.findFragmentById(R.id.map_viewer_start) as SupportMapFragment
+        map = BasicMap(smf!!, context as Context)
+//        val smf = childFragmentManager.findFragmentById(R.id.map_viewer_start) as SupportMapFragment
+//
+//        map = BasicMap(smf, context as Context)
         view.mainStartRunning.setOnClickListener(this)
         view.mainStartRacing.setOnClickListener(this)
     }
