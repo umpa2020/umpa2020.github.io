@@ -100,7 +100,7 @@ class ProfileFragment : Fragment() {
         profileNickname.text = UserInfo.nickname
 
         // glide imageview 소스
-
+/*
         val imageView = view.findViewById<ImageView>(R.id.profileImageView)
 
         val storage = FirebaseStorage.getInstance("gs://tracer-9070d.appspot.com/")
@@ -116,6 +116,8 @@ class ProfileFragment : Fragment() {
             } else {
             }
         }
+
+ */
         return view
     }
 

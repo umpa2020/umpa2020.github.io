@@ -114,4 +114,7 @@ dependencies {
     //noinspection GradleCompatible
     implementation 'com.android.support:appcompat-v7:26.1.0' // 툴바 사용
 
+    //coordinatorlayout
+    implementation "androidx.coordinatorlayout:coordinatorlayout:1.0.0"
+
 }
