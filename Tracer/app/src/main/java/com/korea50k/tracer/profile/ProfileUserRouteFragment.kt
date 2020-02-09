@@ -13,9 +13,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.korea50k.tracer.R
 import com.korea50k.tracer.util.UserInfo
 
-/**
- * A simple [Fragment] subclass.
- */
 class ProfileUserRouteFragment : Fragment() {
     lateinit var profileDownloadThread: Thread
     var titleArray : ArrayList<String> = arrayListOf()
@@ -43,8 +40,8 @@ class ProfileUserRouteFragment : Fragment() {
                         titleArray.add(document.id)
                     }
                     //adpater 추가
-                    mAdapter = ProfileRecyclerViewAdapterRoute(titleArray)
-                    mRecyclerView.adapter = mAdapter
+                    //mAdapter = ProfileRecyclerViewAdapterRoute(titleArray)
+                    //mRecyclerView.adapter = mAdapter
 
 
                     Log.d("ssmm11", "title array = " + titleArray)

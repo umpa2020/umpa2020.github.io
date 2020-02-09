@@ -80,7 +80,6 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.2'
 
 
-
     implementation 'com.firebaseui:firebase-ui-auth:4.3.1' // firebaseUi google 로그인
     implementation 'com.google.firebase:firebase-auth:19.2.0' // firebase auth 설정 - 로그인 시 필요
     implementation 'com.google.android.gms:play-services-auth:17.0.0' // firebase google 로그인 설정
