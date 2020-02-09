@@ -1,159 +1,181 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
-    >
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
 
-    <Toolbar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="0dp"
-        android:elevation="2dp"
-        android:minHeight="?attr/actionBarSize"
-        android:background="@drawable/ic_bar_profile">
-    </Toolbar>
+        <Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true">
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="12dp"
+                android:fontFamily="@font/godoroundedl"
+                android:gravity="center"
+                android:text="Profile"
+                android:textColor="@color/red"
+                android:textSize="60dp">
 
-    <LinearLayout
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:id="@+id/profileFragmentLinearLayout">
+            </TextView>
+        </Toolbar>
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/profileImageView"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/ic_profile_logo" />
+        <LinearLayout
+            android:id="@+id/profileFragmentLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:orientation="horizontal">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/profileImageView"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/ic_profile_logo" />
+
+            <TextView
+                android:id="@+id/profileIdTextView"
+                style="@style/blackBoldText20"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="20dp"
+                android:fontFamily="@font/notosansmedium"
+                android:text="player" />
+        </LinearLayout>
+
 
         <TextView
-            android:layout_gravity="center_vertical"
+            android:id="@+id/profileFragmentMyData"
+            style="@style/ListDetail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/profileFragmentLinearLayout"
             android:layout_marginLeft="20dp"
-            android:id="@+id/profileIdTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/notosansmedium"
-            android:text="player"
-            style="@style/blackBoldText20"/>
-    </LinearLayout>
-
-
-    <TextView
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:padding="10dp"
-        android:layout_below="@id/profileFragmentLinearLayout"
-        android:text="내 통계"
-        style="@style/ListDetail"
-        android:background="@drawable/textlines"
-        android:id="@+id/profileFragmentMyData" />
-
-    <LinearLayout
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
-        android:id="@+id/rankingDetailInfoLinearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_below="@+id/profileFragmentMyData"
-        android:layout_marginTop="10dp">
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/textlines"
+            android:padding="10dp"
+            android:text="내 통계" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:id="@+id/rankingDetailInfoLinearLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center">
+            android:layout_below="@+id/profileFragmentMyData"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="40dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/ListDetail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="총 거리" />
+
+                <TextView
+                    android:id="@+id/profileFragmentTotalDistance"
+                    style="@style/ListDetail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/notosansmedium"
+                    android:text="test" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/ListDetail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="총 주행시간" />
+
+                <TextView
+                    android:id="@+id/profileFragmentTotalTime"
+                    style="@style/ListDetail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/notosansmedium"
+                    android:text="test" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="총 거리"
-                style="@style/ListDetail" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="test"
+                android:id="@+id/profileRouteTextView"
                 style="@style/ListDetail"
-                android:id="@+id/profileFragmentTotalDistance"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/textlines"
+                android:padding="10dp"
+                android:text="나의 루트" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="총 주행시간"
-                style="@style/ListDetail"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="test"
-                android:id="@+id/profileFragmentTotalTime"
-                style="@style/ListDetail"/>
+                android:layout_alignEnd="@id/profileRouteTextView"
+                android:layout_centerVertical="true"
+                android:paddingTop="5dp"
+                android:text=">  "
+                android:textSize="18dp" />
 
-        </LinearLayout>
+        </RelativeLayout>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="평균 속력"
-                style="@style/ListDetail"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="test"
+                android:id="@+id/profileRecordTextView"
                 style="@style/ListDetail"
-                android:id="@+id/profileFragmentAverageSpeed"/>
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/textlines"
+                android:padding="10dp"
+                android:text="나의 기록" />
 
-        </LinearLayout>
-    </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@id/profileRecordTextView"
+                android:layout_centerVertical="true"
+                android:paddingTop="5dp"
+                android:text=">  "
+                android:textSize="18dp" />
 
-    <com.google.android.material.tabs.TabLayout
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_below="@+id/rankingDetailInfoLinearLayout"
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/profileFragmentProfileTabLayout">
+        </RelativeLayout>
 
-    </com.google.android.material.tabs.TabLayout>
-
-    <androidx.viewpager.widget.ViewPager
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_below="@+id/profileFragmentProfileTabLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/profileFragmentViewPager">
-
-
-    </androidx.viewpager.widget.ViewPager>
     </LinearLayout>
 </RelativeLayout>

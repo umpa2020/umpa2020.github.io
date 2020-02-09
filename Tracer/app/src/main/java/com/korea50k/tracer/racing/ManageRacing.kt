@@ -111,6 +111,7 @@ class ManageRacing {
         infoData.time = SystemClock.elapsedRealtime() - chronometer.base
         infoData.speed = racingMap.speeds
         infoData.mapTitle = mapTitle
+        infoData.distance = calcLeftDistance()
 
         //TODO: DB에 올려야됨
         if (result) {
@@ -121,8 +122,6 @@ class ManageRacing {
             Log.d("ssmm11", "레이싱 끝!")
             context.startActivity(newIntent)
             activity.finish()
-
-
 
         } else {
             val newIntent = Intent(context, RacingFinishActivity::class.java)
