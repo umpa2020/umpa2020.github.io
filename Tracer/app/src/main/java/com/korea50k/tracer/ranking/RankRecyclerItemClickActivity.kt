@@ -13,6 +13,7 @@ import com.korea50k.tracer.R
 import com.korea50k.tracer.dataClass.InfoData
 import com.korea50k.tracer.dataClass.RankRecyclerItemClickItem
 import com.korea50k.tracer.dataClass.RankingData
+import com.korea50k.tracer.util.ProgressBar
 import kotlinx.android.synthetic.main.activity_rank_recycler_item_click.*
 import kotlinx.android.synthetic.main.fragment_ranking.view.*
 
@@ -25,6 +26,8 @@ class RankRecyclerItemClickActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_rank_recycler_item_click)
 
+        val progressbar = ProgressBar(this)
+        progressbar.show()
         val intent = getIntent()
         //전달 받은 값으로 Title 설정
         var mapTitle = intent.extras?.getString("MapTitle").toString()
@@ -66,6 +69,7 @@ class RankRecyclerItemClickActivity : AppCompatActivity() {
                     rankRecyclerItemClickRecyclerView.layoutManager = LinearLayoutManager(this)
                     //adpater 추가
                     rankRecyclerItemClickRecyclerView.adapter = RankRecyclerViewAdapterTopPlayer(arrRankingData)
+                    progressbar.dismiss()
                 }
                 .addOnFailureListener { exception ->
                 }
