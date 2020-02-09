@@ -24,12 +24,12 @@ class GetLocationMessage : Handler() {
         super.handleMessage(msg)
         when (msg.what) {
             LocationBackgroundService.LOCATION_MESSAGE -> {
-                val obj = msg.obj as Location
+                val obj = msg.obj as Location // 서비스에서 받아온 위치가 저장됨.
                 val currentDateTimeString = DateFormat.getDateTimeInstance().format(Date())
                 location!!.set(obj)
+                //return
                // toast("LAT :  " + obj.latitude + "\nLNG : " + obj.longitude + "\n\n" + obj.toString() + " \n\n\nLast updated- " + currentDateTimeString)
             }
         }
     }
-
 }

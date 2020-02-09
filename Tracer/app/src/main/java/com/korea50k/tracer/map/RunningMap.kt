@@ -164,7 +164,6 @@ class RunningMap(smf: SupportMapFragment, context: Context) : OnMapReadyCallback
 
     var location = null
 
-
     /**
      *  서비스에서 데이터 받아오는 부분
      */
@@ -177,7 +176,6 @@ class RunningMap(smf: SupportMapFragment, context: Context) : OnMapReadyCallback
         setMyIconToMap()
         previousLocation = currentLocation                              //현재위치를 이전위치로 변경
     }
-
 
     // 이 데이터 받아서 처리
     // Location[fused 37.619672,127.059084 hAcc=15 et=+5d2h34m37s51ms alt=53.5 vel=0.0014348121 bear=219.74748 vAcc=2 sAcc=??? bAcc=??? {Bundle[mParcelledData.dataSize=52]}]
