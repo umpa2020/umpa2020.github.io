@@ -92,8 +92,6 @@ class RacingFinishActivity : AppCompatActivity() {
                         }
                     makerData = document.toObject(InfoData::class.java)!!
                     runOnUiThread {
-                        resultTitleTextView.text = "등 수"
-
                         makerLapTimeTextView.text = formatter.format(Date(makerData.time!!))
                         makerMaxSpeedTextView.text = String.format("%.3f", makerData.speed.max())
                         makerAvgSpeedTextView.text = String.format("%.3f", makerData.speed.average())

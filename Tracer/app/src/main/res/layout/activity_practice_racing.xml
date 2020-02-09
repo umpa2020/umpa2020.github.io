@@ -6,6 +6,23 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:elevation="1dp"
+        android:background="@color/white">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="12dp"
+            android:gravity="center"
+            android:text="Racing"
+            style="@style/appBarText">
+        </TextView>
+    </Toolbar>
+
     <fragment
         android:id="@+id/map_viewer"
         android:name="com.google.android.gms.maps.SupportMapFragment"
@@ -134,8 +151,8 @@
             android:layout_width="100dp"
             android:layout_height="40dp"
             android:text="START"
-            style="@style/buttonTextRedText"
-            android:background="@drawable/button_empty_background"
+            style="@style/buttonText"
+            android:background="@drawable/button_background"
             android:onClick="onClick"
             android:layout_margin="10dp"
             android:gravity="center"/>

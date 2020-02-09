@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -10,18 +11,18 @@
 
         <Toolbar
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true">
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:elevation="1dp"
+            android:background="@color/white">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="12dp"
-                android:fontFamily="@font/godoroundedl"
                 android:gravity="center"
                 android:text="Profile"
-                android:textColor="@color/red"
-                android:textSize="60dp">
+                style="@style/appBarText">
 
             </TextView>
         </Toolbar>
@@ -94,8 +95,7 @@
                     style="@style/ListDetail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/notosansmedium"
-                    android:text="test" />
+                    android:fontFamily="@font/notosansmedium" />
 
             </LinearLayout>
 
@@ -117,8 +117,7 @@
                     style="@style/ListDetail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/notosansmedium"
-                    android:text="test" />
+                    android:fontFamily="@font/notosansmedium"/>
 
             </LinearLayout>
         </LinearLayout>

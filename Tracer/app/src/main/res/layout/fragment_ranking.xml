@@ -10,18 +10,20 @@
 
         <Toolbar
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true">
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:elevation="1dp"
+
+            android:background="@color/white">
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginRight="12dp"
-                android:fontFamily="@font/godoroundedl"
                 android:gravity="center"
                 android:text="Ranking"
-                android:textColor="@color/red"
-                android:textSize="60dp">
+                android:textSize="20dp"
+                style="@style/appBarText">
 
             </TextView>
         </Toolbar>
