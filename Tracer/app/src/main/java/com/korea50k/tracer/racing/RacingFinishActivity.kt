@@ -84,7 +84,6 @@ class RacingFinishActivity : AppCompatActivity() {
                                     //레이아웃 매니저 추가
                                     resultPlayerRankingRecycler.layoutManager = LinearLayoutManager(this)
                                     //adpater 추가
-                                    Log.d("ssmm11", "받아옴 ? = " + arrRankingData)
                                     resultPlayerRankingRecycler.adapter = RankRecyclerViewAdapterTopPlayer(arrRankingData)
                                 }
                                 .addOnFailureListener { exception ->
@@ -107,6 +106,10 @@ class RacingFinishActivity : AppCompatActivity() {
                 }
         })
         makerInfoDataDownload.start()
+
+        OKButton.setOnClickListener {
+            finish()
+        }
 
     }
 }
