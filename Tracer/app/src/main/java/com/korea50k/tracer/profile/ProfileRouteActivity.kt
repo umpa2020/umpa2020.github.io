@@ -21,7 +21,8 @@ class ProfileRouteActivity : AppCompatActivity() {
         profileDownloadThread = Thread(Runnable {
             val db = FirebaseFirestore.getInstance()
 
-            db.collection("mapInfo").whereEqualTo("makersNickname", UserInfo.nickname)
+//            db.collection("mapInfo").whereEqualTo("makersNickname", UserInfo.nickname)
+            db.collection("mapInfo").whereEqualTo("makersNickname", UserInfo.nickname).whereEqualTo("privacy", "RACING")
                 .get()
                 .addOnSuccessListener { result ->
                     for (document in result) {
@@ -29,8 +30,8 @@ class ProfileRouteActivity : AppCompatActivity() {
                         infoData.add(data)
                     }
                     //adpater 추가
-                    profileRrecyclerRoute.adapter = ProfileRecyclerViewAdapterRoute(infoData)
-                    profileRrecyclerRoute.layoutManager = LinearLayoutManager(this)
+                    profileRecyclerRoute.adapter = ProfileRecyclerViewAdapterRoute(infoData)
+                    profileRecyclerRoute.layoutManager = LinearLayoutManager(this)
                 }
                 .addOnFailureListener { exception ->
                 }
