@@ -16,7 +16,9 @@
             android:id="@+id/app_toolbar"
             layout="@layout/signup_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:elevation="1dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -24,8 +26,7 @@
             android:layout_gravity="center"
             android:text="@string/join_name"
             android:textColor="@color/black"
-            android:fontFamily="@font/godoroundedl"
-            android:textSize="48dp" />
+            android:textSize="20dp" />
     </FrameLayout>
 
     <LinearLayout

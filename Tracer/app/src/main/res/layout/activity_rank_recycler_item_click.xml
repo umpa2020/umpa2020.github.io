@@ -11,6 +11,23 @@
         android:orientation="vertical"
         android:descendantFocusability="blocksDescendants">
 
+        <Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:elevation="1dp"
+            android:background="@color/white">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="12dp"
+                android:gravity="center"
+                android:text="맵 기록"
+                style="@style/appBarText">
+            </TextView>
+        </Toolbar>
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="300dp"

@@ -39,4 +39,17 @@
 
     </style>
 
+    <style name="blackMediumText20" parent="blackBoldText20">
+        <item name = "android:fontFamily">@font/notosansmedium</item>
+        <item name = "android:textSize">20dp</item>
+
+    </style>
+
+    <style name="appBarText">
+        <item name = "android:textSize">17dp</item>
+        <item name = "android:textColor">#000000</item>
+    </style>
+
+
+
 </resources>

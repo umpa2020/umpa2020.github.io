@@ -5,9 +5,24 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:layout_marginBottom="30dp"
-    android:layout_marginTop="10dp"
     tools:context=".start.RunningSaveActivity">
 
+    <Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:elevation="1dp"
+        android:background="@color/white">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="12dp"
+            android:gravity="center"
+            android:text="활동 내용"
+            style="@style/appBarText">
+        </TextView>
+    </Toolbar>
 
     <ScrollView
         android:layout_width="match_parent"
