@@ -140,7 +140,7 @@ class ManageRacing {
             activity.noticeMessage("")
         } else if (countDeviation <= 20) {
             noticeState = NoticeState.DEVIATION
-            activity.noticeMessage("경로를 20초이상 이탈하면\n\n경기가 자동 종료됩니다.\n\n" + countDeviation + "초")
+            activity.noticeMessage("경로를 20초이상 이탈하면\n경기가 자동 종료됩니다.\n" + countDeviation + "초")
         } else {
             stopRacing(false)
         }

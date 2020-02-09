@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.korea50k.tracer.R
 import com.korea50k.tracer.dataClass.InfoData
+import com.korea50k.tracer.util.ProgressBar
 import kotlinx.android.synthetic.main.recycler_rankfragment_item.view.*
 
 class RankRecyclerViewAdapterMap (val mdata :ArrayList<InfoData>) : RecyclerView.Adapter<RankRecyclerViewAdapterMap.mViewHolder>() {
@@ -40,6 +41,9 @@ class RankRecyclerViewAdapterMap (val mdata :ArrayList<InfoData>) : RecyclerView
             val nextIntent = Intent(context, RankRecyclerItemClickActivity::class.java)
             nextIntent.putExtra("MapTitle",  singleItem.mapTitle) //mapTitle 정보 인텐트로 넘김
             context!!.startActivity(nextIntent)
+
+            val progressbar = ProgressBar(context!!)
+            progressbar.show()
         }
     }
 
