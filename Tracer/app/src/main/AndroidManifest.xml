@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.korea50k.tracer">
 
-
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <!--
@@ -19,9 +18,7 @@
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" /> <!-- 카메라 권한 -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
-    <!--foreground service-->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- foreground service -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
@@ -31,10 +28,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".profile.ProfileRecordActivity"></activity>
+        <activity android:name=".profile.ProfileRouteActivity" />
 
-        <service android:name=".locationBackground.LocationBackgroundService"
-            android:exported="false"/>
-        <activity android:name=".racing.RacingFinishActivity"></activity>
+        <service
+            android:name=".locationBackground.LocationBackgroundService"
+            android:exported="false" />
+
+        <activity android:name=".racing.RacingFinishActivity" />
         <activity android:name=".racing.RankingRecodeRacingActivity" />
         <activity android:name=".racing.PracticeRacingActivity" />
         <activity android:name=".racing.NearRouteActivity" />
@@ -51,9 +52,7 @@
         <activity android:name=".ranking.RankingMapDetailActivity" />
         <activity android:name=".start.RunningSaveActivity" />
         <activity android:name=".start.RunningActivity" />
-        <activity android:name=".MainActivity" >
-
-        </activity>
+        <activity android:name=".MainActivity" />
         <activity android:name=".login.LoginActivity" />
 
         <meta-data

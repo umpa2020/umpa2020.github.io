@@ -26,6 +26,7 @@ class ManageRacing {
     var makerRouteData: RouteData
     var timeWhenStopped: Long = 0
     lateinit var distances: DoubleArray
+    lateinit var mapTitle: String
 
     constructor(
         smf: SupportMapFragment,
@@ -41,6 +42,7 @@ class ManageRacing {
     }
 
     fun startRacing(mapTitle: String) {
+        this.mapTitle = mapTitle
         racingMap.startRacing(mapTitle)
     }
 
@@ -108,7 +110,8 @@ class ManageRacing {
         var infoData = InfoData()
         infoData.time = SystemClock.elapsedRealtime() - chronometer.base
         infoData.speed = racingMap.speeds
-
+        infoData.mapTitle = mapTitle
+        infoData.distance = calcLeftDistance()
 
         //TODO: DB에 올려야됨
         if (result) {
@@ -116,10 +119,9 @@ class ManageRacing {
             newIntent.putExtra("Result", result)
             newIntent.putExtra("info Data", infoData)
             newIntent.putExtra("Maker Data", makerRouteData)
+            Log.d("ssmm11", "레이싱 끝!")
             context.startActivity(newIntent)
             activity.finish()
-
-
 
         } else {
             val newIntent = Intent(context, RacingFinishActivity::class.java)

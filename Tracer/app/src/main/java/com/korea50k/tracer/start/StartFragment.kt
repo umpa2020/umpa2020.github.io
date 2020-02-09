@@ -27,6 +27,8 @@ class StartFragment : Fragment(), View.OnClickListener {
     lateinit var map: BasicMap
     var mHandler : IncomingMessageHandler? = null
 
+    lateinit  var obj : Location
+
     override fun onClick(v: View) {
         when (v.id) {
             R.id.mainStartRunning -> {
@@ -35,6 +37,8 @@ class StartFragment : Fragment(), View.OnClickListener {
             }
             R.id.mainStartRacing -> {
                 val newIntent = Intent(activity, NearRouteActivity::class.java)
+                newIntent.putExtra("currentLocation", obj) //obj 정보 인텐트로 넘김
+                Log.d("jsj", "mainStartRunning누르는 순간의 intent "+obj.toString())
                 startActivity(newIntent)
             }
         }
@@ -81,9 +85,10 @@ class StartFragment : Fragment(), View.OnClickListener {
 
             when (msg.what) {
                 LocationBackgroundService.LOCATION_MESSAGE -> {
-                    val obj = msg.obj as Location
+                    obj = msg.obj as Location
                     val currentDateTimeString = DateFormat.getDateTimeInstance().format(Date())
                     Log.d(WSY,"StartFragment : 값을 가져옴?")
+                    Log.d("jsj", "현재 위치 : "+obj.toString())
                     map.setLocation(obj)
                 }
             }

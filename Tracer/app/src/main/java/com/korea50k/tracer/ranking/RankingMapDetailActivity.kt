@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import com.bumptech.glide.Glide
@@ -26,8 +27,10 @@ import com.korea50k.tracer.dataClass.RouteData
 import com.korea50k.tracer.racing.PracticeRacingActivity
 import com.korea50k.tracer.racing.RankingRecodeRacingActivity
 import com.korea50k.tracer.util.Chart
+import com.korea50k.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_ranking_map_detail.*
 import kotlinx.android.synthetic.main.activity_running_save.*
+import java.text.SimpleDateFormat
 import java.util.*
 
 class RankingMapDetailActivity : AppCompatActivity() {
@@ -38,6 +41,7 @@ class RankingMapDetailActivity : AppCompatActivity() {
     var latLngs: MutableList<MutableList<LatLng>> = mutableListOf()
     var markerlatlngs: MutableList<LatLng> = mutableListOf()
     var dbMapTitle = ""
+    var profileImagePath = ""
 
     lateinit var rankingDetailThread: Thread
 
@@ -53,6 +57,34 @@ class RankingMapDetailActivity : AppCompatActivity() {
 
         rankingDetailThread = Thread(Runnable {
             val db = FirebaseFirestore.getInstance()
+
+            // storage 에 올린 경로를 db에 저장해두었으니 다시 역 추적 하여 프로필 이미지 반영
+            db.collection("userinfo").whereEqualTo("nickname", UserInfo.nickname)
+                .get()
+                .addOnSuccessListener { result ->
+                    for (document in result) {
+                        profileImagePath = document.get("profileImagePath") as String
+                    }
+                    // glide imageview 소스
+                    // 프사 설정하는 코드 db -> imageView glide
+                    val imageView = rankingDetailProfileImage
+
+                    val storage = FirebaseStorage.getInstance("gs://tracer-9070d.appspot.com/")
+                    val mapImageRef = storage.reference.child(UserInfo.nickname).child("Profile").child(profileImagePath)
+                    mapImageRef.downloadUrl.addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            // Glide 이용하여 이미지뷰에 로딩
+                            Glide.with(this@RankingMapDetailActivity)
+                                .load(task.result)
+                                .override(1024, 980)
+                                .into(imageView)
+                        } else {
+                        }
+                    }
+                }
+                .addOnFailureListener { exception ->
+                }
+
 
             db.collection("mapRoute")
                 .get()
@@ -79,7 +111,7 @@ class RankingMapDetailActivity : AppCompatActivity() {
 
                             // 2차원 배열은 새로 나누어 담아서 받음 1차원 배열 만들고 2차원 배열에 add
                             // 맵 위도경도 받아오기
-                            db.collection("mapRoute").document(document.id).collection("routes").orderBy("index", Query.Direction.ASCENDING )
+                            db.collection("mapRoute").document(document.id).collection("routes").orderBy("index", Query.Direction.ASCENDING)
                                 .get()
                                 .addOnSuccessListener { result2 ->
                                     for (document2 in result2) {
@@ -114,8 +146,10 @@ class RankingMapDetailActivity : AppCompatActivity() {
                                 Log.d("ssmm11", "info data = " + infoData)
                                 rankingDetailNickname.text = infoData.makersNickname
                                 rankingDetailMapDetail.text = infoData.mapExplanation
-                                rankingDetailDistance.text = infoData.distance.toString()
-                                rankingDetailTime.text = infoData.time.toString()
+                                rankingDetailDistance.text = String.format("%.3f", infoData.distance!! / 1000) + "km"
+                                val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
+                                formatter.setTimeZone(TimeZone.getTimeZone("UTC"))
+                                rankingDetailTime.text = formatter.format(Date(infoData.time!!))
                                 rankingDetailSpeed.text = infoData.speed.average().toString()
                                 var chart = Chart(routeData.altitude, infoData.speed, rankingDetailChart)
                                 chart.setChart()
