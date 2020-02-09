@@ -111,27 +111,6 @@
                 style="@style/ListDetail"/>
 
         </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="평균 속력"
-                style="@style/ListDetail"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="test"
-                style="@style/ListDetail"
-                android:id="@+id/profileFragmentAverageSpeed"/>
-
-        </LinearLayout>
     </LinearLayout>
 
     <com.google.android.material.tabs.TabLayout

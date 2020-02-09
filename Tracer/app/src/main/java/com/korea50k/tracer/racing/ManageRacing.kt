@@ -111,6 +111,7 @@ class ManageRacing {
         infoData.time = SystemClock.elapsedRealtime() - chronometer.base
         infoData.speed = racingMap.speeds
         infoData.mapTitle = mapTitle
+        infoData.distance = calcLeftDistance()
 
         //TODO: DB에 올려야됨
         if (result) {

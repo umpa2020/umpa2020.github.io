@@ -58,8 +58,8 @@ class RacingFinishActivity : AppCompatActivity() {
                     val full_sdf = SimpleDateFormat("yyyy-MM-dd, hh:mm:ss a")
                     val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
 
-                    val ranMapsData = RanMapsData(racerData.mapTitle!!)
-                    db.collection("userinfo").document(UserInfo.email).collection("user ran these maps").document(racerData.mapTitle!!).set(ranMapsData)
+                    val ranMapsData = RanMapsData(racerData.mapTitle, racerData.distance, racerData.time)
+                    db.collection("userinfo").document(UserInfo.email).collection("user ran these maps").add(ranMapsData)
 
                     val rankingData = RankingData(racerData.makersNickname, UserInfo.nickname, racerData.time)
 
@@ -74,7 +74,7 @@ class RacingFinishActivity : AppCompatActivity() {
                                     var index = 1
                                     for (document in result) {
                                         if (document.id == rankingData.challengerNickname + "||" + full_sdf.format(dt)) {
-                                            resultRankTextView.text = ""+index+"등"
+                                            resultRankTextView.text = "" + index + "등"
                                         }
                                         var recycleRankingData = RankingData()
                                         recycleRankingData = document.toObject(RankingData::class.java)
@@ -84,7 +84,7 @@ class RacingFinishActivity : AppCompatActivity() {
                                     //레이아웃 매니저 추가
                                     resultPlayerRankingRecycler.layoutManager = LinearLayoutManager(this)
                                     //adpater 추가
-                                    Log.d("ssmm11", "받아옴 ? = "+ arrRankingData)
+                                    Log.d("ssmm11", "받아옴 ? = " + arrRankingData)
                                     resultPlayerRankingRecycler.adapter = RankRecyclerViewAdapterTopPlayer(arrRankingData)
                                 }
                                 .addOnFailureListener { exception ->

@@ -26,6 +26,8 @@ import kotlinx.android.synthetic.main.activity_ranking_map_detail.*
 import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.fragment_profile.view.*
 import kotlinx.android.synthetic.main.fragment_ranking.view.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * A simple [Fragment] subclass.
@@ -51,8 +53,6 @@ class ProfileFragment : Fragment() {
 
         Log.d("ssmm11", " sha email" + UserInfo.email)
         Log.d("ssmm11", " shared prefrence " + UserInfo.nickname)
-
-
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -103,6 +103,32 @@ class ProfileFragment : Fragment() {
             val db = FirebaseFirestore.getInstance()
             Log.d("ssmm11", "들어옴 = " + UserInfo.nickname)
 
+            db.collection("userinfo").document(UserInfo.email).collection("user ran these maps")
+                .get()
+                .addOnSuccessListener {result ->
+                    var sumDistance = 0.0
+                    var sumTime = 0.0
+
+                    for (document in result) {
+                        sumDistance += document.get("distance") as Double
+                        sumTime += document.get("time") as Long
+                    }
+
+                    db.collection("mapInfo").whereEqualTo("makersNickname", UserInfo.nickname)
+                        .get()
+                        .addOnSuccessListener {result ->
+                            for (document2 in result) {
+                                sumDistance += document2.get("distance") as Double
+                                sumTime += document2.get("time") as Long
+                            }
+                            profileFragmentTotalDistance.text = String.format("%.3f", sumDistance/1000)+"km"
+                            val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
+                            formatter.setTimeZone(TimeZone.getTimeZone("UTC"))
+                            profileFragmentTotalTime.text = formatter.format(Date(sumTime.toLong()))
+
+                        }
+                }
+
             db.collection("userinfo").whereEqualTo("nickname", UserInfo.nickname)
                 .get()
                 .addOnSuccessListener { result ->
@@ -110,13 +136,13 @@ class ProfileFragment : Fragment() {
                         profileImagePath = document.get("profileImagePath") as String
                     }
 
+
                     // glide imageview 소스
                     // 프사 설정하는 코드 db -> imageView glide
                     val imageView = view.findViewById<ImageView>(R.id.profileImageView)
 
                     val storage = FirebaseStorage.getInstance("gs://tracer-9070d.appspot.com/")
                     val mapImageRef = storage.reference.child(UserInfo.nickname).child("Profile").child(profileImagePath)
-
                     mapImageRef.downloadUrl.addOnCompleteListener { task ->
                         if (task.isSuccessful) {
                             // Glide 이용하여 이미지뷰에 로딩
