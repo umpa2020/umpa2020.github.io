@@ -73,7 +73,6 @@
                 android:id="@+id/rankRecyclerMapTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="map name"
                 android:fontFamily="@font/notosansmedium"
                 style="@style/ListDetail1"
                 android:textSize="18dp"/>
@@ -81,7 +80,6 @@
             <TextView android:id="@+id/rankRecyclerNickname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="player"
                 style="@style/ListDetail1"/>
 
         </LinearLayout>

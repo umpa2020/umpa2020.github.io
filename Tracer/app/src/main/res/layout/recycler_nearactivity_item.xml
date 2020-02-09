@@ -10,7 +10,7 @@
         android:layout_height="100dp"
         android:id="@+id/nearRouteActivityRouteImage"
         android:scaleType="fitXY"
-        android:background="@color/gray"/>
+        android:background="#00000000"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -23,7 +23,6 @@
             android:id="@+id/nearRouteActivityMapTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="asdf"
             android:layout_weight="1"
             android:singleLine="true"
             android:ellipsize="marquee"
@@ -37,7 +36,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="떨어진 거리 표시"
             style="@style/ListDetail"/>
 
     </LinearLayout>
