@@ -57,7 +57,7 @@ class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) : Recycler
         //클릭하면 맵 상세보기 페이지로 이동
         holder.itemView.setOnClickListener {
             val nextIntent = Intent(context, RankRecyclerItemClickActivity::class.java)
-            nextIntent.putExtra("MapTitle", singleItem) //mapTitle 정보 인텐트로 넘김
+            nextIntent.putExtra("MapTitle", singleItem.mapTitle) //mapTitle 정보 인텐트로 넘김
             context!!.startActivity(nextIntent)
         }
     }

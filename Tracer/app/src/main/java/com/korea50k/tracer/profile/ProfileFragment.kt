@@ -130,11 +130,18 @@ class ProfileFragment : Fragment() {
         })
         profileImagePathDownloadThread.start()
 
-        var routeTextView = view.findViewById<TextView>(R.id.profileRouteTextView)
+        val routeTextView = view.findViewById<TextView>(R.id.profileRouteTextView)
         routeTextView.setOnClickListener {
             val nextIntent = Intent(activity, ProfileRouteActivity::class.java)
             startActivity(nextIntent)
         }
+
+        val recordTextView = view.findViewById<TextView>(R.id.profileRecordTextView)
+        recordTextView.setOnClickListener {
+            val nextIntent = Intent(activity, ProfileRecordActivity::class.java)
+            startActivity(nextIntent)
+        }
+
         return view
     }
 }

@@ -4,22 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".profile.ProfileRouteActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".profile.ProfileRecordActivity">
 
     <TextView
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/profileMyRouteTextView"
-        android:text="나의 루트"
+        android:id="@+id/profileMyRecordTextView"
+        android:text="나의 활동"
         style="@style/blackBoldText20"
         android:gravity="center"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/profileRecyclerRoute">
+        android:id="@+id/profileRecyclerRecord">
     </androidx.recyclerview.widget.RecyclerView>
 
 </LinearLayout>
