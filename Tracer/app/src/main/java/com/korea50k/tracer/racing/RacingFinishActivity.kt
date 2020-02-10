@@ -19,6 +19,7 @@ import com.korea50k.tracer.dataClass.RanMapsData
 import com.korea50k.tracer.dataClass.RankingData
 import com.korea50k.tracer.ranking.RankRecyclerViewAdapterMap
 import com.korea50k.tracer.ranking.RankRecyclerViewAdapterTopPlayer
+import com.korea50k.tracer.util.ProgressBar
 import com.korea50k.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_racing_finish.*
 import kotlinx.android.synthetic.main.activity_rank_recycler_item_click.*
@@ -44,6 +45,8 @@ class RacingFinishActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_racing_finish)
+        val progressbar = ProgressBar(this)
+        progressbar.show()
 
         // Racing Activity 에서 넘겨준 infoData를 받아서 활용
         racerData = intent.getParcelableExtra("info Data") as InfoData
@@ -85,6 +88,7 @@ class RacingFinishActivity : AppCompatActivity() {
                                     resultPlayerRankingRecycler.layoutManager = LinearLayoutManager(this)
                                     //adpater 추가
                                     resultPlayerRankingRecycler.adapter = RankRecyclerViewAdapterTopPlayer(arrRankingData)
+                                    progressbar.dismiss()
                                 }
                                 .addOnFailureListener { exception ->
                                 }
@@ -101,6 +105,7 @@ class RacingFinishActivity : AppCompatActivity() {
 
 
                     }
+                    progressbar.dismiss()
                 }
                 .addOnFailureListener { exception ->
                 }

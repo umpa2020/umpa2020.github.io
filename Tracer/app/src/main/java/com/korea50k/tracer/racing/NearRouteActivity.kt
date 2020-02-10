@@ -14,6 +14,7 @@ import com.korea50k.tracer.R
 import com.korea50k.tracer.dataClass.InfoData
 import com.korea50k.tracer.dataClass.NearMap
 import com.korea50k.tracer.dataClass.RouteData
+import com.korea50k.tracer.util.ProgressBar
 import kotlinx.android.synthetic.main.activity_near_route.*
 import kotlinx.android.synthetic.main.recycler_nearactivity_item.*
 
@@ -35,6 +36,8 @@ class NearRouteActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_near_route)
+        val progressbar = ProgressBar(this)
+        progressbar.show()
 
         //startFragment에서 넘긴 현재 위치를 intent로 받음
         val intent = getIntent()
@@ -73,6 +76,7 @@ class NearRouteActivity : AppCompatActivity() {
                 }
                 near_recycler_map.adapter = NearRecyclerViewAdapter(nearMaps.sortedWith(compareBy({it.distance})))
                 near_recycler_map.layoutManager = LinearLayoutManager(this)
+                progressbar.dismiss()
             }
             .addOnFailureListener { exception ->
                 Log.w("ssmm11", "Error getting documents.", exception)
