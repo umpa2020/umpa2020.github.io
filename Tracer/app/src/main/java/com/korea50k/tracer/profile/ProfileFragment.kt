@@ -23,6 +23,7 @@ import com.korea50k.tracer.R
 import com.korea50k.tracer.dataClass.InfoData
 import com.korea50k.tracer.racing.PracticeRacingActivity
 import com.korea50k.tracer.ranking.RankRecyclerViewAdapterMap
+import com.korea50k.tracer.util.ProgressBar
 import com.korea50k.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_ranking_map_detail.*
 import kotlinx.android.synthetic.main.fragment_profile.*
@@ -62,6 +63,9 @@ class ProfileFragment : Fragment() {
         var view: View = inflater!!.inflate(R.layout.fragment_profile, container, false)
         root = view
 
+        val progressbar = ProgressBar(context!!)
+        progressbar.show()
+
         // 공유 프리페런스에 있는 닉네임을 반영
         val profileNickname = view.findViewById<TextView>(R.id.profileIdTextView)
         profileNickname.text = UserInfo.nickname
@@ -99,6 +103,7 @@ class ProfileFragment : Fragment() {
                             profileFragmentTotalTime.text = formatter.format(Date(sumTime.toLong()))
 
                         }
+                    progressbar.dismiss()
                 }
 
             // storage 에 올린 경로를 db에 저장해두었으니 다시 역 추적 하여 프로필 이미지 반영
@@ -124,6 +129,7 @@ class ProfileFragment : Fragment() {
                         } else {
                         }
                     }
+                    progressbar.dismiss()
                 }
                 .addOnFailureListener { exception ->
                 }

@@ -27,6 +27,7 @@ import com.korea50k.tracer.dataClass.RouteData
 import com.korea50k.tracer.racing.PracticeRacingActivity
 import com.korea50k.tracer.racing.RankingRecodeRacingActivity
 import com.korea50k.tracer.util.Chart
+import com.korea50k.tracer.util.ProgressBar
 import com.korea50k.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_ranking_map_detail.*
 import kotlinx.android.synthetic.main.activity_running_save.*
@@ -48,6 +49,8 @@ class RankingMapDetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ranking_map_detail)
+        val progressbar = ProgressBar(this)
+        progressbar.show()
 
         val intent = getIntent()
         //전달 받은 값으로 Title 설정
@@ -88,6 +91,7 @@ class RankingMapDetailActivity : AppCompatActivity() {
                                 } else {
                                 }
                             }
+                            progressbar.dismiss()
                         }
                         .addOnFailureListener { exception ->
                         }
@@ -158,12 +162,14 @@ class RankingMapDetailActivity : AppCompatActivity() {
                                                 var chart = Chart(routeData.altitude, infoData.speed, rankingDetailChart)
                                                 chart.setChart()
                                             }
+                                            progressbar.dismiss()
                                         }
                                         .addOnFailureListener { exception ->
                                         }
                                 }
                         }
                     }
+                    progressbar.dismiss()
                 }
                 .addOnFailureListener { exception ->
                 }
