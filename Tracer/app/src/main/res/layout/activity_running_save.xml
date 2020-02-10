@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_marginBottom="30dp"
+    android:layout_marginBottom="?actionBarSize"
     tools:context=".start.RunningSaveActivity">
 
     <Toolbar
@@ -94,7 +94,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Distance(km)"
-                        android:textSize="17dp"
+                        android:textSize="15dp"
                         android:fontFamily="@font/notosansmedium"/>
 
                     <TextView
@@ -120,7 +120,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Time"
-                        android:textSize="17dp"
+                        android:textSize="15dp"
                         android:fontFamily="@font/notosansmedium"/>
 
                     <TextView
@@ -144,7 +144,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Speed(km/h)"
-                        android:textSize="17dp"
+                        android:textSize="15dp"
                         android:fontFamily="@font/notosansmedium"/>
 
                     <TextView
@@ -281,6 +281,7 @@
         android:text="활동 저장"
         android:fontFamily="@font/notosansmedium"/>
 -->
+
     <Button
         android:layout_marginBottom="20dp"
         android:id="@+id/save_btn"
@@ -294,4 +295,6 @@
         style="@style/buttonText"
         android:text="활동 저장"/>
 
+
 </RelativeLayout>
+
