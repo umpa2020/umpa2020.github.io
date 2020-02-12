@@ -6,7 +6,6 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.location.Location
 import android.util.Log
-import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -131,6 +130,7 @@ class RunningMap(smf: SupportMapFragment, context: Context) : OnMapReadyCallback
 
         val circleDrawable = context.getDrawable(R.drawable.ic_racer_marker)
         var canvas = Canvas()
+        //TODO: 기본 파란색 으로 하는걸로 - 삭제 필요
         var bitmap = Bitmap.createBitmap(
             circleDrawable!!.intrinsicWidth,
             circleDrawable!!.intrinsicHeight,

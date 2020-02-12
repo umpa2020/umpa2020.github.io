@@ -10,19 +10,18 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
-import com.google.android.gms.maps.model.BitmapDescriptor
-import com.korea50k.tracer.dataClass.UserState
 import com.korea50k.tracer.R
+import com.korea50k.tracer.dataClass.UserState
 
 class BasicMap : OnMapReadyCallback {
     var mMap: GoogleMap? = null    //racingMap 인스턴스
 
     var TAG = "BasicMap"       //로그용 태그
     var previousLocation: LatLng = LatLng(0.0, 0.0)          //이전위치
-    var currentLocation: LatLng  = LatLng(0.0, 0.0)              //현재위치
+    var currentLocation: LatLng = LatLng(0.0, 0.0)              //현재위치
     var context: Context
     var userState: UserState       //사용자의 현재상태 달리기전 or 달리는중 등 자세한내용은 enum참고
-    var currentMarker: Marker? =null        //사용자 마커
+    var currentMarker: Marker? = null        //사용자 마커
     lateinit var myIcon: BitmapDescriptor    //사용자 이미지 아이콘(마커에 들어가는 이미지)
 
     //Running
@@ -32,6 +31,7 @@ class BasicMap : OnMapReadyCallback {
         smf.getMapAsync(this)                                   //맵프레그먼트와 연결
         createMyIcon()
     }
+
     override fun onMapReady(googleMap: GoogleMap) { //after the map is loaded
         Log.d("ssmm11", "onMapReady")
 
@@ -39,16 +39,17 @@ class BasicMap : OnMapReadyCallback {
         mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(previousLocation, 17F))   //화면이동
     }
 
-
-    fun setLocation(location : Location){
+    //TODO: Location을 확장해서 tolatlng
+    fun setLocation(location: Location) {
         var lat = location!!.latitude
         var lng = location!!.longitude
-        currentLocation = LatLng(lat,lng)
+        currentLocation = LatLng(lat, lng)
 
         setMyIconToMap()
 
         previousLocation = currentLocation                              //현재위치를 이전위치로 변경
     }
+
     /**
      *  내 아이콘 만들기 메소드
      *  위치 관련 정보 넣는거 없이 순수 아이콘 생성.
@@ -97,7 +98,6 @@ class BasicMap : OnMapReadyCallback {
 //            )
 //        )
     }
-
 
 
     fun print_log(text: String) {

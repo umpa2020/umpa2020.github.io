@@ -6,18 +6,15 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.firebase.storage.FirebaseStorage
 import com.korea50k.tracer.R
 import com.korea50k.tracer.dataClass.InfoData
 import com.korea50k.tracer.ranking.RankRecyclerItemClickActivity
-import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.recycler_profilefragment_route_grid_image.view.*
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) : RecyclerView.Adapter<ProfileRecyclerViewAdapterRoute.mViewHolder>() {
     var context: Context? = null
@@ -30,10 +27,10 @@ class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) : Recycler
         //데이터 바인딩
         // glide imageview 소스
 
-
-        val storage = FirebaseStorage.getInstance("gs://tracer-9070d.appspot.com/")
+        //TODO: Network class 테이블에 맞게 클래스 다 만들어 놓기
+        // app.getString   google_storage_bucket
+        val storage = FirebaseStorage.getInstance("gs://tracer-9070d.appspot.com/") // debug용, release용 구분
         val mapImageRef = storage.reference.child("mapImage").child(singleItem.mapTitle!!)
-
         mapImageRef.downloadUrl.addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 // Glide 이용하여 이미지뷰에 로딩
