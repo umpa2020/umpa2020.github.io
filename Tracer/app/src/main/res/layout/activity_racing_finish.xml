@@ -69,7 +69,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/notosansmedium"
                     android:gravity="center"
-                    android:text="Record"
+                    android:text="기록"
                     android:textSize="18dp" />
 
                 <TextView
@@ -100,7 +100,7 @@
                         android:layout_weight="1"
                         android:fontFamily="@font/notosansmedium"
                         android:gravity="center"
-                        android:text="MY"
+                        android:text="나"
                         android:textSize="15dp" />
 
                     <TextView
@@ -109,7 +109,7 @@
                         android:layout_weight="1"
                         android:fontFamily="@font/notosansmedium"
                         android:gravity="center"
-                        android:text="MAKER"
+                        android:text="게시자"
                         android:textSize="15dp" />
                 </LinearLayout>
 
@@ -249,7 +249,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/notosansmedium"
                     android:gravity="center"
-                    android:text="Ranking"
+                    android:text="랭킹"
                     android:textSize="18dp" />
 
                 <TextView
@@ -273,7 +273,7 @@
                         android:layout_weight="1"
                         android:fontFamily="@font/notosansmedium"
                         android:gravity="center"
-                        android:text="player"
+                        android:text="플레이어"
                         android:textSize="16dp" />
 
                     <TextView

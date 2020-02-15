@@ -36,7 +36,7 @@ class NearRecyclerViewAdapter(private var datas: List<NearMap>) : RecyclerView.A
         var cutted = singleItem1.mapTitle.split("||")
         //데이터 바인딩
         holder.mapTitle.text = cutted[0]
-        holder.distance.text = String.format("%.3f",singleItem1.distance/1000)+"km"
+        holder.distance.text = String.format("%.2f",singleItem1.distance/1000)
       //  holder.distance.text = singleItem1.distance.toString()
 
 

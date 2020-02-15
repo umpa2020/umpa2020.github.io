@@ -153,7 +153,7 @@ class LocationBackgroundService : IntentService("LocationBackgroundService"), Lo
     private fun startService() {
         //hey request for location updates
         LocationUpdatesComponent.onStart()
-        Toast.makeText(this, "Service starting its task", Toast.LENGTH_SHORT).show()
+       // Toast.makeText(this, "Service starting its task", Toast.LENGTH_SHORT).show()
     }
 
     private fun stopService() {

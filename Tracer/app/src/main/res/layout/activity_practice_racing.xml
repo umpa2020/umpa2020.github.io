@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="12dp"
             android:gravity="center"
-            android:text="Racing"
+            android:text="경기"
             style="@style/appBarText">
         </TextView>
     </Toolbar>
@@ -150,7 +150,7 @@
             android:id="@+id/racingControlButton"
             android:layout_width="100dp"
             android:layout_height="40dp"
-            android:text="START"
+            android:text="시작"
             style="@style/buttonText"
             android:background="@drawable/button_background"
             android:onClick="onClick"

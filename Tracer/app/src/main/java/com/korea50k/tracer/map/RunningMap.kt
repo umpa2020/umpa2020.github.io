@@ -202,7 +202,7 @@ class RunningMap(smf: SupportMapFragment, context: Context) : OnMapReadyCallback
             (context as Activity).runOnUiThread(Runnable {
                 print_log("속도 : " + speed.toString())
                 (context as RunningActivity).runningSpeedTextView.text =
-                    String.format("%.3f km/h", speed)
+                    String.format("%.2f km/h", speed)
             })
 
             // 위치가 계속 업데이트 되어야해서 여기에 선언

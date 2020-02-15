@@ -154,12 +154,12 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Distance"
+                        android:text="거리 (km)"
                         style="@style/ListDetail" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        style="@style/ListDetail"
+                        style="@style/MapDetail"
                         android:id="@+id/rankingDetailDistance"/>
 
                 </LinearLayout>
@@ -174,13 +174,13 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Time"
+                        android:text="시간"
                         style="@style/ListDetail"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/rankingDetailTime"
-                        style="@style/ListDetail"/>
+                        style="@style/MapDetail"/>
 
                 </LinearLayout>
 
@@ -194,12 +194,12 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Speed"
+                        android:text="속력 (km/h)"
                         style="@style/ListDetail"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        style="@style/ListDetail"
+                        style="@style/MapDetail"
                         android:id="@+id/rankingDetailSpeed"/>
 
                 </LinearLayout>
@@ -260,7 +260,7 @@
         android:layout_marginRight="20dp"
         android:layout_marginLeft="20dp"
         android:layout_marginBottom="10dp"
-        android:text="Race Start"
+        android:text="경기 시작"
         style="@style/buttonText"
         android:background="@drawable/button_background"
         android:layout_alignParentBottom="true"

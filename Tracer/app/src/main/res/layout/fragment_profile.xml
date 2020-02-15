@@ -21,7 +21,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="12dp"
                 android:gravity="center"
-                android:text="Profile"
+                android:text="프로필"
                 style="@style/appBarText">
 
             </TextView>
@@ -91,10 +91,11 @@
 
                 <TextView
                     android:id="@+id/profileFragmentTotalDistance"
-                    style="@style/ListDetail"
+                    style="@style/MapDetail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/notosansmedium" />
+                    android:fontFamily="@font/notosansmedium"
+                    />
 
             </LinearLayout>
 
@@ -113,7 +114,7 @@
 
                 <TextView
                     android:id="@+id/profileFragmentTotalTime"
-                    style="@style/ListDetail"
+                    style="@style/MapDetail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/notosansmedium"/>

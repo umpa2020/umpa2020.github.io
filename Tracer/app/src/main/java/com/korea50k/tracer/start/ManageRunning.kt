@@ -45,7 +45,7 @@ class ManageRunning {
                     Log.d(WSY,"???")
                     Log.d(WSY, "거리 : " + runningMap.distance.toString())
                     activity.runOnUiThread(Runnable {
-                        activity.runningDistanceTextView.text=String.format("%.3f",(runningMap.distance/1000))
+                        activity.runningDistanceTextView.text=String.format("%.2f",(runningMap.distance/1000))
                         i += 1
                         Log.d(WSY,  i.toString())
                     })

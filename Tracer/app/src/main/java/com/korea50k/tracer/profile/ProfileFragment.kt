@@ -97,7 +97,7 @@ class ProfileFragment : Fragment() {
                             }
 
                             // 총 거리와 시간을 띄워줌
-                            profileFragmentTotalDistance.text = String.format("%.3f", sumDistance / 1000) + "km"
+                            profileFragmentTotalDistance.text = String.format("%.2f", sumDistance / 1000) + " km"
                             val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
                             formatter.setTimeZone(TimeZone.getTimeZone("UTC"))
                             profileFragmentTotalTime.text = formatter.format(Date(sumTime.toLong()))

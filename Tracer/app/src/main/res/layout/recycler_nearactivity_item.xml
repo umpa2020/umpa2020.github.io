@@ -16,27 +16,42 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:paddingLeft="25dp">
+        android:paddingLeft="25dp"
+        android:gravity="center_vertical">
 
         <TextView
             android:gravity="center"
             android:id="@+id/nearRouteActivityMapTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:singleLine="true"
             android:ellipsize="marquee"
             style="@style/blackMediumText18"
+            android:text="test"
             />
 
-
-        <TextView
-            android:gravity="center"
-            android:id="@+id/nearRouteActivityDistanceAway"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            style="@style/ListDetail"/>
+            android:orientation="horizontal">
+            <TextView
+                android:gravity="center"
+                android:id="@+id/nearRouteActivityDistanceAway"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="test"
+                android:textColor="#6799FF"
+                android:textStyle="bold"
+                android:fontFamily="@font/notosansmedium"
+                android:textSize="17dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" km"
+                style="@style/ListDetail"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 </LinearLayout>

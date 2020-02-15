@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="12dp"
             android:gravity="center"
-            android:text="Running"
+            android:text="루트 만들기"
             style="@style/appBarText">
         </TextView>
     </Toolbar>
@@ -28,13 +28,13 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <fragment
+            android:id="@+id/map_viewer"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/map_viewer"
-            tools:context=".fragment.MapFragment"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
-            android:layout_centerInParent="true"/>
+            tools:context=".fragment.MapFragment" />
 
         <hollowsoft.slidingdrawer.SlidingDrawer
             android:id="@+id/drawer"
@@ -44,14 +44,7 @@
             layout:handle="@+id/runningHandle"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="70dp">
-            <!--
-            <Button
-                android:id="@+id/runningHandle"
-                android:layout_width="70dp"
-                android:layout_height="25dp"
-                android:background="@drawable/extend_selector"
-                android:gravity="center" />
-                -->
+
             <Button
                 android:id="@+id/runningHandle"
                 android:layout_width="70dp"
@@ -87,7 +80,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             style="@style/ListDetail"
-                            android:text="DISTANCE (km)"/>
+                            android:text="거리 (km)"/>
 
                         <TextView
                             android:gravity="center"
@@ -112,7 +105,7 @@
                             style="@style/ListDetail"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="TIME" />
+                            android:text="시간" />
 
                         <Chronometer
                             android:id="@+id/runningTimerTextView"
@@ -134,7 +127,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="SPEED (km/h)"
+                            android:text="속력 (km/h)"
                             style="@style/ListDetail"/>
 
                         <TextView
@@ -198,7 +191,7 @@
             android:layout_height="40dp"
             android:background="@drawable/button_background"
             style="@style/buttonText"
-            android:text="START"
+            android:text="시작"
             android:onClick="onClick"
             android:gravity="center"
             android:layout_gravity="center"/>
@@ -214,7 +207,7 @@
                 android:layout_height="40dp"
                 android:background="@drawable/button_background"
                 style="@style/buttonText"
-                android:text="STOP"
+                android:text="정지"
                 android:onClick="onClick"
                 android:gravity="center"
                 android:visibility="invisible"
@@ -226,33 +219,10 @@
                 android:layout_height="40dp"
                 android:background="@drawable/button_empty_background"
                 style="@style/buttonTextRedText"
-                android:text="PAUSE"
+                android:text="일시정지"
                 android:onClick="onClick"
                 android:gravity="center"
                 android:visibility="invisible"/>
         </LinearLayout>
-
-
-        <!--Button
-            android:id="@+id/btn_stop"
-            android:layout_width="130dp"
-            android:layout_height="40dp"
-            android:background="@drawable/button_background"
-            style="@style/buttonText"
-            android:text="STOP"
-            android:onClick="onClick"
-            android:gravity="center"
-            /-->
-        <!--Button
-            android:layout_marginLeft="20dp"
-            android:id="@+id/btn_pause"
-            android:layout_width="130dp"
-            android:layout_height="40dp"
-            android:background="@drawable/button_empty_background"
-            style="@style/buttonTextRedText"
-            android:text="PAUSE"
-            android:onClick="onClick"
-            android:gravity="center" /-->
-
     </FrameLayout>
 </RelativeLayout>

@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="5dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="5dp"
     android:orientation="vertical"
     android:background="@color/white">
 
@@ -15,8 +16,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:gravity="center"
-        android:textStyle="bold"
         android:textSize="16dp"
+        android:text="test"
         android:background="@color/lightgray">
 
     </TextView>
@@ -27,6 +28,8 @@
         android:layout_height="200dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="3dp"
         android:gravity="center"
         android:padding="1dp"
         android:src="#00000000"
@@ -38,6 +41,7 @@
     </ImageView>
 
     <LinearLayout
+        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
@@ -49,6 +53,7 @@
             android:id="@+id/profileFragmentCreateTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="test"
             android:textSize="16dp" />
 
         <LinearLayout
@@ -63,14 +68,15 @@
                 android:layout_height="wrap_content"
                 android:textColor="#6799FF"
                 android:textSize="24dp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:text="test" />
 
             <TextView
                 android:id="@+id/profileFragmentKm"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="7dp"
-                android:text="Km" />
+                android:text="km" />
         </LinearLayout>
 
 
@@ -78,7 +84,8 @@
             android:id="@+id/profileFragmentTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="15dp"/>
+            android:textSize="15dp"
+            android:text="test"/>
 
     </LinearLayout>
 </LinearLayout>

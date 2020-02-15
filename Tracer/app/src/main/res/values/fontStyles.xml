@@ -12,6 +12,12 @@
         <item name = "android:fontFamily">@font/notosanslight</item>
     </style>
 
+    <style name="MapDetail">
+        <item name = "android:textSize">17dp</item>
+        <item name = "android:textColor">#6799FF</item>
+        <item name = "android:fontFamily">@font/notosansmedium</item>
+    </style>
+
     <style name="ListDetail1" parent="ListDetail">
         <item name = "android:textSize">15dp</item>
     </style>

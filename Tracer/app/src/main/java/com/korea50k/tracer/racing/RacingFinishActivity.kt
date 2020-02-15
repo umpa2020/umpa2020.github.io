@@ -96,12 +96,12 @@ class RacingFinishActivity : AppCompatActivity() {
                     makerData = document.toObject(InfoData::class.java)!!
                     runOnUiThread {
                         makerLapTimeTextView.text = formatter.format(Date(makerData.time!!))
-                        makerMaxSpeedTextView.text = String.format("%.3f", makerData.speed.max())
-                        makerAvgSpeedTextView.text = String.format("%.3f", makerData.speed.average())
+                        makerMaxSpeedTextView.text = String.format("%.2f", makerData.speed.max())
+                        makerAvgSpeedTextView.text = String.format("%.2f", makerData.speed.average())
 
                         racerLapTimeTextView.text = formatter.format(Date(racerData.time!!))
-                        racerMaxSpeedTextView.text = String.format("%.3f", racerData.speed.max())
-                        racerAvgSpeedTextView.text = String.format("%.3f", racerData.speed.average())
+                        racerMaxSpeedTextView.text = String.format("%.2f", racerData.speed.max())
+                        racerAvgSpeedTextView.text = String.format("%.2f", racerData.speed.average())
 
 
                     }

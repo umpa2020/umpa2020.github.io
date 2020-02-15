@@ -46,7 +46,7 @@ class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) : Recycler
         }
 
         holder.maptitle.text = cutted[0]
-        holder.distance.text = String.format("%.3f", singleItem.distance!! / 1000)
+        holder.distance.text = String.format("%.2f", singleItem.distance!! / 1000)
         val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
         formatter.setTimeZone(TimeZone.getTimeZone("UTC"))
         holder.time.text = formatter.format(Date(singleItem.time!!))

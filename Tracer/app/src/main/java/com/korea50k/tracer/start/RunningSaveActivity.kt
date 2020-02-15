@@ -48,13 +48,13 @@ class RunningSaveActivity : AppCompatActivity() {
         //TODO: 액티비티에 그리는 거 먼저
         val smf = supportFragmentManager.findFragmentById(R.id.map_viewer) as SupportMapFragment
         map = ViewerMap(smf, this, routeData)
-        distance_tv.text = String.format("%.3f", infoData.distance!! / 1000)
+        distance_tv.text = String.format("%.2f", infoData.distance!! / 1000)
         val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
         formatter.setTimeZone(TimeZone.getTimeZone("UTC"))
 
         time_tv.text = formatter.format(Date(infoData.time!!))
 
-        speed_tv.text = String.format("%.3f", infoData.speed.average())
+        speed_tv.text = String.format("%.2f", infoData.speed.average())
         if (infoData.privacy == Privacy.PUBLIC) {
             racingRadio.isChecked = false
             racingRadio.isEnabled = false

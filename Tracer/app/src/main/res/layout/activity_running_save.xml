@@ -93,7 +93,7 @@
                         android:gravity="center"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Distance(km)"
+                        android:text="거리 (km)"
                         android:textSize="15dp"
                         android:fontFamily="@font/notosansmedium"/>
 
@@ -119,7 +119,7 @@
                         android:gravity="center"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Time"
+                        android:text="시간"
                         android:textSize="15dp"
                         android:fontFamily="@font/notosansmedium"/>
 
@@ -143,7 +143,7 @@
                         android:gravity="center"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Speed(km/h)"
+                        android:text="속력 (km/h)"
                         android:textSize="15dp"
                         android:fontFamily="@font/notosansmedium"/>
 
@@ -208,7 +208,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="20dp"
                 android:layout_marginLeft="20dp"
-                android:hint="Title"
+                android:hint="맵 제목"
                 android:fontFamily="@font/notosansmedium"
                 android:layout_below="@+id/line4"/>
 
@@ -266,21 +266,6 @@
             </LinearLayout>
         </RelativeLayout>
     </ScrollView>
-
-    <!--
-    <Button
-        android:layout_marginBottom="20dp"
-        android:id="@+id/save_btn"
-        android:layout_alignParentBottom="true"
-        android:layout_centerInParent="true"
-        android:onClick="onClick"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/base_button_selector"
-        android:textColor="@color/red"
-        android:text="활동 저장"
-        android:fontFamily="@font/notosansmedium"/>
--->
 
     <Button
         android:layout_marginBottom="20dp"

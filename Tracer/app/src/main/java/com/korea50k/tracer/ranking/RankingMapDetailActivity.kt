@@ -154,7 +154,7 @@ class RankingMapDetailActivity : AppCompatActivity() {
                                             runOnUiThread {
                                                 rankingDetailNickname.text = infoData.makersNickname
                                                 rankingDetailMapDetail.text = infoData.mapExplanation
-                                                rankingDetailDistance.text = String.format("%.3f", infoData.distance!! / 1000) + "km"
+                                                rankingDetailDistance.text = String.format("%.2f", infoData.distance!! / 1000)
                                                 val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
                                                 formatter.setTimeZone(TimeZone.getTimeZone("UTC"))
                                                 rankingDetailTime.text = formatter.format(Date(infoData.time!!))
@@ -209,13 +209,17 @@ class RankingMapDetailActivity : AppCompatActivity() {
         textView.text = "어떤 유형으로 경기하시겠습니까?"
 
         val textView1: TextView = view.findViewById(R.id.rankingMapDetailPopUpTextView1)
-        textView1.text = "연습용 : 루트 연습용(랭킹 등록 불가능)" +
-                "\n랭킹 기록용 : 랭킹 등록 가능"
+        //TODO. 연습용 만들면 밑의 주석 지워서 사용
+        //textView1.text = "연습용 : 루트 연습용(랭킹 등록 불가능)" +
+        //        "\n랭킹 기록용 : 랭킹 등록 가능"
+
+        textView1.text = "랭킹 기록용 : 랭킹 등록 가능"
 
         val alertDialog = AlertDialog.Builder(this) //alertDialog 생성
             .setTitle("유형을 선택해주세요.")
             .create()
 
+        /*
         //연습용 버튼 눌렀을 때
         val practiceButton = view.findViewById<Button>(R.id.rankingMapDetailPracticeButton)
         practiceButton.setOnClickListener {
@@ -224,6 +228,8 @@ class RankingMapDetailActivity : AppCompatActivity() {
             nextIntent.putExtra("maptitle", dbMapTitle)
             startActivity(nextIntent)
         }
+
+         */
 
 
         //랭킹 기록용 버튼 눌렀을 때
