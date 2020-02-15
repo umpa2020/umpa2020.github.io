@@ -1,8 +1,7 @@
 package com.korea50k.tracer.profile
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.FirebaseFirestore
 import com.korea50k.tracer.R
@@ -41,7 +40,6 @@ class ProfileRouteActivity : AppCompatActivity() {
                 .addOnFailureListener { exception ->
                 }
         })
-
         profileDownloadThread.start()
     }
 }

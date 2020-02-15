@@ -92,6 +92,9 @@ object LocationUpdatesComponent {
         locationRequest.run {
 //            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
             interval = 1000 // 위치 받아오는 주기, setinterval() 메서드를 사용하여 앱을 위해 위치를 연산하는 간격을 지정합니다.
+
+
+
         }
     }
 

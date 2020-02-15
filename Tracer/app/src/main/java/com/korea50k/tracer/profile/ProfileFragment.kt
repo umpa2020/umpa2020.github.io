@@ -4,31 +4,20 @@ package com.korea50k.tracer.profile
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
-import com.google.android.material.tabs.TabLayout
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.korea50k.tracer.R
-import com.korea50k.tracer.dataClass.InfoData
-import com.korea50k.tracer.racing.PracticeRacingActivity
-import com.korea50k.tracer.ranking.RankRecyclerViewAdapterMap
 import com.korea50k.tracer.util.ProgressBar
 import com.korea50k.tracer.util.UserInfo
-import kotlinx.android.synthetic.main.activity_ranking_map_detail.*
 import kotlinx.android.synthetic.main.fragment_profile.*
-import kotlinx.android.synthetic.main.fragment_profile.view.*
-import kotlinx.android.synthetic.main.fragment_ranking.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -141,12 +130,14 @@ class ProfileFragment : Fragment() {
             val nextIntent = Intent(activity, ProfileRouteActivity::class.java)
             startActivity(nextIntent)
         }
+/*
 
         val recordTextView = view.findViewById<TextView>(R.id.profileRecordTextView)
         recordTextView.setOnClickListener {
             val nextIntent = Intent(activity, ProfileRecordActivity::class.java)
             startActivity(nextIntent)
         }
+*/
 
         return view
     }
