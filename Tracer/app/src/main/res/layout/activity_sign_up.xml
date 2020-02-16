@@ -16,16 +16,17 @@
             android:id="@+id/app_toolbar"
             layout="@layout/signup_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:elevation="1dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/join_name"
+            android:text="회원가입"
             android:textColor="@color/black"
-            android:fontFamily="@font/godoroundedl"
-            android:textSize="48dp" />
+            android:textSize="20dp" />
     </FrameLayout>
 
     <LinearLayout
@@ -56,11 +57,12 @@
         </FrameLayout>
 
         <TextView
+            android:gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:layout_marginBottom="10dp"
-            android:text="Profile Image Settings"
+            android:text="프로필 이미지를\n선택해주세요"
             android:textSize="18dp" />
 
         <LinearLayout
@@ -84,7 +86,7 @@
                         android:id="@+id/editNickname"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:hint="@string/nickname"
+                        android:hint="닉네임"
                         android:inputType="text"
                         android:maxLength="12"
                         android:maxLines="1" />
@@ -110,7 +112,7 @@
                     android:id="@+id/editAge"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="@string/age"
+                    android:hint="나이"
                     android:inputType="number"
                     android:maxLength="2"
                     android:onClick="onClick"
@@ -127,7 +129,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:focusableInTouchMode="false"
-                    android:hint="@string/gender"
+                    android:hint="성별"
                     android:onClick="onClick"
                     android:singleLine="true" />
 
@@ -151,7 +153,7 @@
             android:background="@drawable/button_background"
             style="@style/buttonText"
             android:onClick="onClick"
-            android:text="SIGN UP"/>
+            android:text="회원가입"/>
 
     </LinearLayout>
 

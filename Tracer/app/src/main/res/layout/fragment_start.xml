@@ -11,18 +11,18 @@
 
         <Toolbar
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true">
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:elevation="1dp"
+            android:background="@color/white">
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginRight="12dp"
-                android:fontFamily="@font/godoroundedl"
                 android:gravity="center"
-                android:text="Start"
-                android:textColor="@color/red"
-                android:textSize="60dp">
+                android:text="Tracer"
+                style="@style/appBarText">
 
             </TextView>
         </Toolbar>
@@ -54,7 +54,7 @@
             android:background="@drawable/button_empty_background"
             android:gravity="center"
             android:onClick="onClick"
-            android:text="RUNNING" />
+            android:text="러닝 모드" />
 
         <Button
             android:id="@+id/mainStartRacing"
@@ -65,7 +65,7 @@
             android:background="@drawable/button_background"
             android:gravity="center"
             android:onClick="onClick"
-            android:text="RACING" />
+            android:text="레이싱 모드" />
 
     </LinearLayout>
 </RelativeLayout>

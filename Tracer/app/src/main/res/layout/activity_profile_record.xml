@@ -7,14 +7,22 @@
     android:orientation="vertical"
     tools:context=".profile.ProfileRecordActivity">
 
-    <TextView
-        android:layout_marginTop="10dp"
+    <Toolbar
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/profileMyRecordTextView"
-        android:text="나의 활동"
-        style="@style/blackBoldText20"
-        android:gravity="center"/>
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:elevation="1dp"
+        android:background="@color/white">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="12dp"
+            android:gravity="center"
+            android:text="나의 활동"
+            style="@style/appBarText">
+        </TextView>
+    </Toolbar>
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"

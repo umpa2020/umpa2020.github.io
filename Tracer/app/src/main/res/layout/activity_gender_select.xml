@@ -37,7 +37,7 @@
                     android:gravity="left|center_vertical"
                     android:layout_weight="1"
                     android:paddingLeft="15dp"
-                    android:text="Man"
+                    android:text="남성"
                     android:textSize="20dp" />
                 <ImageView
                     android:id="@+id/manCheck"
@@ -73,7 +73,7 @@
                     android:gravity="left|center_vertical"
                     android:layout_weight="1"
                     android:paddingLeft="15dp"
-                    android:text="Woman"
+                    android:text="여성"
                     android:textSize="20dp" />
                 <ImageView
                     android:id="@+id/womanCheck"
@@ -103,7 +103,7 @@
         android:enabled="false"
         android:background="@drawable/button_background"
         style="@style/buttonText"
-        android:text="NEXT"
+        android:text="다음"
         />
     <!--
        android:background="@drawable/gender_change_button"

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -10,18 +11,18 @@
 
         <Toolbar
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true">
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:elevation="1dp"
+            android:background="@color/white">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="12dp"
-                android:fontFamily="@font/godoroundedl"
                 android:gravity="center"
-                android:text="Profile"
-                android:textColor="@color/red"
-                android:textSize="60dp">
+                android:text="프로필"
+                style="@style/appBarText">
 
             </TextView>
         </Toolbar>
@@ -48,8 +49,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="20dp"
-                android:fontFamily="@font/notosansmedium"
-                android:text="player" />
+                android:fontFamily="@font/notosansmedium"/>
         </LinearLayout>
 
 
@@ -91,11 +91,11 @@
 
                 <TextView
                     android:id="@+id/profileFragmentTotalDistance"
-                    style="@style/ListDetail"
+                    style="@style/MapDetail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/notosansmedium"
-                    android:text="test" />
+                    />
 
             </LinearLayout>
 
@@ -114,11 +114,10 @@
 
                 <TextView
                     android:id="@+id/profileFragmentTotalTime"
-                    style="@style/ListDetail"
+                    style="@style/MapDetail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/notosansmedium"
-                    android:text="test" />
+                    android:fontFamily="@font/notosansmedium"/>
 
             </LinearLayout>
         </LinearLayout>
@@ -128,14 +127,15 @@
             android:layout_height="wrap_content">
 
             <TextView
+                style="@style/divisionTextView"/>
+
+            <TextView
                 android:id="@+id/profileRouteTextView"
                 style="@style/ListDetail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
-                android:layout_marginTop="10dp"
                 android:layout_marginRight="20dp"
-                android:background="@drawable/textlines"
                 android:padding="10dp"
                 android:text="나의 루트" />
 
@@ -150,9 +150,12 @@
 
         </RelativeLayout>
 
-        <RelativeLayout
+   <!--     <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
+            <TextView
+                style="@style/divisionTextView"/>
 
             <TextView
                 android:id="@+id/profileRecordTextView"
@@ -160,9 +163,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
-                android:layout_marginTop="10dp"
                 android:layout_marginRight="20dp"
-                android:background="@drawable/textlines"
                 android:padding="10dp"
                 android:text="나의 활동" />
 
@@ -175,7 +176,11 @@
                 android:text=">  "
                 android:textSize="18dp" />
 
+
         </RelativeLayout>
+-->
+        <TextView
+            style="@style/divisionTextView"/>
 
     </LinearLayout>
 </RelativeLayout>

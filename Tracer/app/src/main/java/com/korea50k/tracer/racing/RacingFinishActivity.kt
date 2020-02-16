@@ -19,6 +19,7 @@ import com.korea50k.tracer.dataClass.RanMapsData
 import com.korea50k.tracer.dataClass.RankingData
 import com.korea50k.tracer.ranking.RankRecyclerViewAdapterMap
 import com.korea50k.tracer.ranking.RankRecyclerViewAdapterTopPlayer
+import com.korea50k.tracer.util.ProgressBar
 import com.korea50k.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_racing_finish.*
 import kotlinx.android.synthetic.main.activity_rank_recycler_item_click.*
@@ -44,6 +45,8 @@ class RacingFinishActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_racing_finish)
+        val progressbar = ProgressBar(this)
+        progressbar.show()
 
         // Racing Activity 에서 넘겨준 infoData를 받아서 활용
         racerData = intent.getParcelableExtra("info Data") as InfoData
@@ -84,31 +87,34 @@ class RacingFinishActivity : AppCompatActivity() {
                                     //레이아웃 매니저 추가
                                     resultPlayerRankingRecycler.layoutManager = LinearLayoutManager(this)
                                     //adpater 추가
-                                    Log.d("ssmm11", "받아옴 ? = " + arrRankingData)
                                     resultPlayerRankingRecycler.adapter = RankRecyclerViewAdapterTopPlayer(arrRankingData)
+                                    progressbar.dismiss()
                                 }
                                 .addOnFailureListener { exception ->
                                 }
                         }
                     makerData = document.toObject(InfoData::class.java)!!
                     runOnUiThread {
-                        resultTitleTextView.text = "등 수"
-
                         makerLapTimeTextView.text = formatter.format(Date(makerData.time!!))
-                        makerMaxSpeedTextView.text = String.format("%.3f", makerData.speed.max())
-                        makerAvgSpeedTextView.text = String.format("%.3f", makerData.speed.average())
+                        makerMaxSpeedTextView.text = String.format("%.2f", makerData.speed.max())
+                        makerAvgSpeedTextView.text = String.format("%.2f", makerData.speed.average())
 
                         racerLapTimeTextView.text = formatter.format(Date(racerData.time!!))
-                        racerMaxSpeedTextView.text = String.format("%.3f", racerData.speed.max())
-                        racerAvgSpeedTextView.text = String.format("%.3f", racerData.speed.average())
+                        racerMaxSpeedTextView.text = String.format("%.2f", racerData.speed.max())
+                        racerAvgSpeedTextView.text = String.format("%.2f", racerData.speed.average())
 
 
                     }
+                    progressbar.dismiss()
                 }
                 .addOnFailureListener { exception ->
                 }
         })
         makerInfoDataDownload.start()
+
+        OKButton.setOnClickListener {
+            finish()
+        }
 
     }
 }

@@ -3,21 +3,20 @@ package com.korea50k.tracer
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.korea50k.tracer.locationBackground.LocationBackgroundService
 import com.korea50k.tracer.locationBackground.ServiceStatus
+import com.korea50k.tracer.profile.ProfileFragment
 import com.korea50k.tracer.ranking.RankingFragment
 import com.korea50k.tracer.start.StartFragment
 import kotlinx.android.synthetic.main.activity_main.*
-import com.korea50k.tracer.profile.ProfileFragment
-import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity() {
     private val multiplePermissionsCode = 100          //권한
@@ -56,7 +55,8 @@ class MainActivity : AppCompatActivity() {
 
        // mHandler = IncomingMessageHandler()
 
-       // startService()
+        //TODO:권한 획득 후에 실행
+        startService()
 
 
         //선택한 메뉴로 프래그먼트 바꿈

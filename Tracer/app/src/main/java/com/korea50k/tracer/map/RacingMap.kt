@@ -276,7 +276,7 @@ class RacingMap : OnMapReadyCallback {
                             UserState.BEFORERACING -> { //경기 시작전
                                 (context as Activity).runOnUiThread(Runnable {
                                     (context as Activity).racingNotificationButton.text =
-                                        ("시작 포인트로 이동하십시오.\n시작포인트까지 남은거리 : "
+                                        ("시작 포인트로 이동하십시오.\n시작포인트까지 남은거리\n"
                                                 + (SphericalUtil.computeDistanceBetween(
                                             cur_loc,
                                             markers[0]
@@ -316,7 +316,7 @@ class RacingMap : OnMapReadyCallback {
                                     (context as Activity).runOnUiThread(Runnable {
                                         print_log(speed.toString())
                                         (context as RankingRecodeRacingActivity).racingSpeedTextView.text =
-                                            String.format("%.3f", speed)
+                                            String.format("%.2f", speed)
                                     })
 
                                     latlngs.add(cur_loc)    //위 조건들을 통과하면 점 추가

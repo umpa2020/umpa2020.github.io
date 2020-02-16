@@ -77,7 +77,7 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener,OnDrawerOpen
         init()
 
         btn_stop!!.setOnLongClickListener {
-            if (manageRunning.runningMap.distance < 200) {
+            if (manageRunning.runningMap.distance < 5) {
                 //noticeMessage("거리가 200m 미만일때\n\n정지하시면 저장이 불가능합니다. \n\n정지하시겠습니까?", NoticeState.SIOP)
                 showChoicePopup("거리가 200m 미만일때\n정지하시면 저장이 불가능합니다. \n\n정지하시겠습니까?", NoticeState.SIOP)
             } else

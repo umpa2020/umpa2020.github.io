@@ -1,12 +1,12 @@
 package com.korea50k.tracer.profile
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.FirebaseFirestore
 import com.korea50k.tracer.R
 import com.korea50k.tracer.dataClass.InfoData
+import com.korea50k.tracer.util.ProgressBar
 import com.korea50k.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_profile_route.*
 
@@ -17,6 +17,9 @@ class ProfileRouteActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile_route)
+
+        val progressbar = ProgressBar(this)
+        progressbar.show()
 
         profileDownloadThread = Thread(Runnable {
             val db = FirebaseFirestore.getInstance()
@@ -32,11 +35,11 @@ class ProfileRouteActivity : AppCompatActivity() {
                     //adpater 추가
                     profileRecyclerRoute.adapter = ProfileRecyclerViewAdapterRoute(infoData)
                     profileRecyclerRoute.layoutManager = LinearLayoutManager(this)
+                    progressbar.dismiss()
                 }
                 .addOnFailureListener { exception ->
                 }
         })
-
         profileDownloadThread.start()
     }
 }

@@ -1,17 +1,20 @@
 package com.korea50k.tracer.locationBackground
 
 import android.app.*
-import android.content.Intent
 import android.content.Context
+import android.content.Intent
 import android.location.Location
-import android.os.*
+import android.os.Build
+import android.os.Message
+import android.os.Messenger
+import android.os.RemoteException
 import android.util.Log
 import android.widget.Toast
 import com.google.android.gms.location.LocationRequest
-import com.korea50k.tracer.util.LocationUpdatesComponent
 import com.korea50k.tracer.MainActivity.Companion.MESSENGER_INTENT_KEY
 import com.korea50k.tracer.R
 import com.korea50k.tracer.start.RunningActivity
+import com.korea50k.tracer.util.LocationUpdatesComponent
 
 /**
  *  IntentService : 오래걸리지만 메인스레드와 관련이 없는 작업을할 때 주로 이용한다.
@@ -32,6 +35,7 @@ class LocationBackgroundService : IntentService("LocationBackgroundService"), Lo
     override fun onCreate() {
         super.onCreate()
         Log.i(TAG, "onCreate ")
+
 
         /**
          *  위치 관련 생성.
@@ -106,6 +110,7 @@ class LocationBackgroundService : IntentService("LocationBackgroundService"), Lo
      *  => 이걸 이제 액티비티 or 프래그먼트에 전달해주는 것.
      */
     //it의 경우는 함수의 변수가 한 개여야 만 허용.
+    //TODO: onLocationUpdated 로 변경
     override fun onLocationUpdate(location: Location?) {
         location?.let { sendMessage(LOCATION_MESSAGE, it) }
     }
@@ -153,7 +158,7 @@ class LocationBackgroundService : IntentService("LocationBackgroundService"), Lo
     private fun startService() {
         //hey request for location updates
         LocationUpdatesComponent.onStart()
-        Toast.makeText(this, "Service starting its task", Toast.LENGTH_SHORT).show()
+       // Toast.makeText(this, "Service starting its task", Toast.LENGTH_SHORT).show()
     }
 
     private fun stopService() {

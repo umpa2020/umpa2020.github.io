@@ -6,7 +6,6 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.location.Location
 import android.util.Log
-import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -131,6 +130,7 @@ class RunningMap(smf: SupportMapFragment, context: Context) : OnMapReadyCallback
 
         val circleDrawable = context.getDrawable(R.drawable.ic_racer_marker)
         var canvas = Canvas()
+        //TODO: 기본 파란색 으로 하는걸로 - 삭제 필요
         var bitmap = Bitmap.createBitmap(
             circleDrawable!!.intrinsicWidth,
             circleDrawable!!.intrinsicHeight,
@@ -202,7 +202,7 @@ class RunningMap(smf: SupportMapFragment, context: Context) : OnMapReadyCallback
             (context as Activity).runOnUiThread(Runnable {
                 print_log("속도 : " + speed.toString())
                 (context as RunningActivity).runningSpeedTextView.text =
-                    String.format("%.3f km/h", speed)
+                    String.format("%.2f km/h", speed)
             })
 
             // 위치가 계속 업데이트 되어야해서 여기에 선언

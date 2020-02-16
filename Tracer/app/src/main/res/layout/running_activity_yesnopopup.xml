@@ -25,7 +25,7 @@
         <Button
             android:layout_width="130dp"
             android:layout_height="wrap_content"
-            android:text="YES"
+            android:text="예"
             android:id="@+id/runningActivityYesButton"
             android:background="@drawable/button_empty_background"
             style="@style/ListTitle"
@@ -35,7 +35,7 @@
             android:layout_marginLeft="20dp"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
-            android:text="NO"
+            android:text="아니오"
             android:id="@+id/runningActivityNoButton"
             android:background="@drawable/button_background"
             style="@style/ListTitle"

@@ -4,30 +4,20 @@ package com.korea50k.tracer.profile
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
-import com.google.android.material.tabs.TabLayout
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.korea50k.tracer.R
-import com.korea50k.tracer.dataClass.InfoData
-import com.korea50k.tracer.racing.PracticeRacingActivity
-import com.korea50k.tracer.ranking.RankRecyclerViewAdapterMap
+import com.korea50k.tracer.util.ProgressBar
 import com.korea50k.tracer.util.UserInfo
-import kotlinx.android.synthetic.main.activity_ranking_map_detail.*
 import kotlinx.android.synthetic.main.fragment_profile.*
-import kotlinx.android.synthetic.main.fragment_profile.view.*
-import kotlinx.android.synthetic.main.fragment_ranking.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -62,6 +52,9 @@ class ProfileFragment : Fragment() {
         var view: View = inflater!!.inflate(R.layout.fragment_profile, container, false)
         root = view
 
+        val progressbar = ProgressBar(context!!)
+        progressbar.show()
+
         // 공유 프리페런스에 있는 닉네임을 반영
         val profileNickname = view.findViewById<TextView>(R.id.profileIdTextView)
         profileNickname.text = UserInfo.nickname
@@ -93,12 +86,13 @@ class ProfileFragment : Fragment() {
                             }
 
                             // 총 거리와 시간을 띄워줌
-                            profileFragmentTotalDistance.text = String.format("%.3f", sumDistance / 1000) + "km"
+                            profileFragmentTotalDistance.text = String.format("%.2f", sumDistance / 1000) + " km"
                             val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
                             formatter.setTimeZone(TimeZone.getTimeZone("UTC"))
                             profileFragmentTotalTime.text = formatter.format(Date(sumTime.toLong()))
 
                         }
+                    progressbar.dismiss()
                 }
 
             // storage 에 올린 경로를 db에 저장해두었으니 다시 역 추적 하여 프로필 이미지 반영
@@ -124,6 +118,7 @@ class ProfileFragment : Fragment() {
                         } else {
                         }
                     }
+                    progressbar.dismiss()
                 }
                 .addOnFailureListener { exception ->
                 }
@@ -135,12 +130,14 @@ class ProfileFragment : Fragment() {
             val nextIntent = Intent(activity, ProfileRouteActivity::class.java)
             startActivity(nextIntent)
         }
+/*
 
         val recordTextView = view.findViewById<TextView>(R.id.profileRecordTextView)
         recordTextView.setOnClickListener {
             val nextIntent = Intent(activity, ProfileRecordActivity::class.java)
             startActivity(nextIntent)
         }
+*/
 
         return view
     }

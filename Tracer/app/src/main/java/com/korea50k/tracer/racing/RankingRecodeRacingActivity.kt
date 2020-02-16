@@ -80,7 +80,6 @@ class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener,
                         manageRacing.startRacing(mapTitle)
                         racingNotificationLayout.visibility = View.GONE
                         racingControlButton.text = "Stop"
-                        racingControlButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_stop_icon_pressed, 0, 0, 0)
                     }
                     UserState.RACING -> {
                         stop()
@@ -115,12 +114,12 @@ class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener,
     }
 
     override fun onDrawerOpened() {
-        racingHandle.background = getDrawable(R.drawable.close_selector)
+        racingHandle.text = "▼"
         Log.d(TAG, "onDrawerOpened()")
     }
 
     override fun onDrawerClosed() {
-        racingHandle.background = getDrawable(R.drawable.extend_selector)
+        racingHandle.text = "▲"
         Log.d(TAG, "onDrawerClosed()")
     }
 }

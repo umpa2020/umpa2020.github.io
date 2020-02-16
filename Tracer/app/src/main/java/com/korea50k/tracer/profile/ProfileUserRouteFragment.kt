@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.korea50k.tracer.R
+import com.korea50k.tracer.util.ProgressBar
 import com.korea50k.tracer.util.UserInfo
 
 class ProfileUserRouteFragment : Fragment() {
@@ -28,6 +29,8 @@ class ProfileUserRouteFragment : Fragment() {
         val mRecyclerView = view.findViewById<RecyclerView>(R.id.profileRrecyclerRoute)
         val mGridLayoutManager = GridLayoutManager(context, 3)
         mRecyclerView.layoutManager = mGridLayoutManager
+        val progressbar = ProgressBar(context!!)
+        progressbar.show()
 
 
         profileDownloadThread = Thread(Runnable {
@@ -45,6 +48,7 @@ class ProfileUserRouteFragment : Fragment() {
 
 
                     Log.d("ssmm11", "title array = " + titleArray)
+                    progressbar.dismiss()
                 }
                 .addOnFailureListener { exception ->
                 }
