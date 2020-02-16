@@ -15,11 +15,80 @@
       },
       "oauth_client": [
         {
+          "client_id": "1000155468156-sepfcnr22op7jung1g6rod12ls8ll3ge.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.korea50k.tracer",
+            "certificate_hash": "b7a74f569d69be0b822378174e38fb54fca99465"
+          }
+        },
+        {
+          "client_id": "1000155468156-mnkb3otrpla041rbpmd1u1q764lmjhkg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.korea50k.tracer",
+            "certificate_hash": "c5fffda0f0dbe63cb85c725b81dc6a73bc3eebde"
+          }
+        },
+        {
+          "client_id": "1000155468156-nc1h7tldfvjqnraqj16lp70g5racq56q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.korea50k.tracer",
+            "certificate_hash": "4131c976dda64f040ea75391f4b7c7e149c2e959"
+          }
+        },
+        {
+          "client_id": "1000155468156-gp4olotfqk9l50reaf6cic9bj5sdq5r1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.korea50k.tracer",
+            "certificate_hash": "5a5b0e38f5916d2ee42c22b443150ba09e077477"
+          }
+        },
+        {
           "client_id": "1000155468156-k4i4vgdb2qtmdbfqnblvfn9e1uk6hqav.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.korea50k.tracer",
             "certificate_hash": "a31bd37c0f0a702f8068295172653834a59e05c1"
+          }
+        },
+        {
+          "client_id": "1000155468156-l28tn9qs82tuaaookendiluorrgl8eb3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB_JSUJNSsY3BM8pxFVgA9RNnR_wSDcCsg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1000155468156-l28tn9qs82tuaaookendiluorrgl8eb3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1000155468156:android:a2de3203f860ec1576d4f9",
+        "android_client_info": {
+          "package_name": "com.umpa2020.tracer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1000155468156-m8o5qs5el7dfjevub0u5i60fqi9vtin7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.umpa2020.tracer",
+            "certificate_hash": "c5fffda0f0dbe63cb85c725b81dc6a73bc3eebde"
           }
         },
         {
