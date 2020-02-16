@@ -1,18 +1,11 @@
 package com.korea50k.tracer.start
 
-import android.app.Activity
+//import androidx.work.PeriodicWorkRequest
 import android.content.Context
-import android.os.SystemClock
 import android.widget.Chronometer
 import com.google.android.gms.maps.SupportMapFragment
-import kotlinx.android.synthetic.main.activity_running.*
-import android.content.Intent
-import android.util.Log
-//import androidx.work.PeriodicWorkRequest
-import com.korea50k.tracer.dataClass.*
+import com.korea50k.tracer.dataClass.Privacy
 import com.korea50k.tracer.map.RunningMap
-import java.text.SimpleDateFormat
-import java.util.*
 
 
 class ManageRunning {
@@ -36,7 +29,7 @@ class ManageRunning {
     var i = 0
     fun startRunning(activity:RunningActivity) {
         runningMap.startTracking()
-//
+
 //        Log.d(WSY, "거리 : " + runningMap.distance.toString())
 //        distanceThread = Thread(Runnable { // 거리 계산해주는 스레드 -> 일시 정지, 정지 해도 스레드 계속 실행됨.
 //            try {
@@ -50,7 +43,7 @@ class ManageRunning {
 //                        Log.d(WSY,  i.toString())
 //                    })
 //                }
-//            }catch (e : InterruptedException){
+//            } catch (e : InterruptedException){
 //                Log.d(WSY,"intertupt() 실행")
 //            }
 //

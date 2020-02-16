@@ -215,6 +215,17 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener,OnDrawerOpen
         this.ns = ns
     }
 
+    // 화면 안보일
+    override fun onStop() {
+        super.onStop()
+        Log.d("screen", "onStop()")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d("screen", "onPause()")
+    }
+
 
     /**
      *  백그라운드에서 메시지 받는 거
@@ -241,6 +252,7 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener,OnDrawerOpen
 
     override fun onDestroy() {
         super.onDestroy()
+        Log.d("screen", "onDestroy()")
         LocationUpdatesComponent.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY)
     }
 

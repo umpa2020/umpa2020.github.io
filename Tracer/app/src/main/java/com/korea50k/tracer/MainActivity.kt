@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity() {
 
        // mHandler = IncomingMessageHandler()
 
-        startService()
+       // startService()
 
 
         //선택한 메뉴로 프래그먼트 바꿈
