@@ -16,10 +16,12 @@
 앱이 Android 10 이상을 타겟팅하는 경우 앱이 백그라운드에 있는 동안 정기 위치 업데이트를 받으려면
      앱의 manifest 파일에 ACCESS_BACKGROUND_LOCATION 권한을 선언하고 사용자 권한을 수신해야 합니다.
     -->
-    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" /> <!-- 카메라 권한 -->
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <!-- 카메라 권한 -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- foreground service -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- foreground service -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application

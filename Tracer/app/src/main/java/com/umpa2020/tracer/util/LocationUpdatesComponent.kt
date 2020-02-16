@@ -151,7 +151,7 @@ object LocationUpdatesComponent {
      *  앱에서 위치 업데이트를 요청하기 전에 위치 서비스에 연결하고 위치를 요청해야 합니다.
      *  위치 설정 변경의 과정에서 이 방법을 보여줍니다. 위치 요청이 완료되면 requestLocationUpdates()를 호출하여 정기 업데이트를 시작할 수 있습니다.
      */
-    private fun requestLocationUpdates() {
+    fun requestLocationUpdates() {
         Log.i(WSY, "Requesting location updates")
         try {
             fusedLocationClient.requestLocationUpdates(

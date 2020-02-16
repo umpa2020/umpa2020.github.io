@@ -1,13 +1,14 @@
 package com.umpa2020.tracer.start
 
+//import androidx.work.PeriodicWorkRequest
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.SystemClock
+import android.util.Log
 import android.widget.Chronometer
 import com.google.android.gms.maps.SupportMapFragment
 import kotlinx.android.synthetic.main.activity_running.*
-import android.content.Intent
-import android.util.Log
 //import androidx.work.PeriodicWorkRequest
 import com.umpa2020.tracer.dataClass.*
 import com.umpa2020.tracer.map.RunningMap
@@ -58,7 +59,7 @@ class ManageRunning {
         distanceThread.start()
 
         chronometer=activity.runningTimerTextView
-        chronometer.base=SystemClock.elapsedRealtime()
+        chronometer.base= SystemClock.elapsedRealtime()
         chronometer.start()
     }
     fun restartRunning() {
