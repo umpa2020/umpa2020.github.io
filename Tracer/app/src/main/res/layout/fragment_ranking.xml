@@ -22,7 +22,6 @@
                 android:layout_marginRight="12dp"
                 android:gravity="center"
                 android:text="랭킹"
-                android:textSize="20dp"
                 style="@style/appBarText">
 
             </TextView>
