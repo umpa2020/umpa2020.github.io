@@ -4,7 +4,10 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.location.Location
-import android.os.*
+import android.os.Bundle
+import android.os.Handler
+import android.os.Message
+import android.os.Messenger
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -17,8 +20,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.maps.SupportMapFragment
-import com.umpa2020.tracer.*
+import com.umpa2020.tracer.MainActivity
 import com.umpa2020.tracer.MainActivity.Companion.WSY
+import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.NoticeState
 import com.umpa2020.tracer.dataClass.Privacy
 import com.umpa2020.tracer.locationBackground.LocationBackgroundService
@@ -77,7 +81,7 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener,OnDrawerOpen
         init()
 
         btn_stop!!.setOnLongClickListener {
-            if (manageRunning.runningMap.distance < 5) {
+            if (manageRunning.runningMap.distance < 200) {
                 //noticeMessage("거리가 200m 미만일때\n\n정지하시면 저장이 불가능합니다. \n\n정지하시겠습니까?", NoticeState.SIOP)
                 showChoicePopup("거리가 200m 미만일때\n정지하시면 저장이 불가능합니다. \n\n정지하시겠습니까?", NoticeState.SIOP)
             } else

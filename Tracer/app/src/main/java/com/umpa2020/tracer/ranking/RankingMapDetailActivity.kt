@@ -2,12 +2,12 @@ package com.umpa2020.tracer.ranking
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.FirebaseFirestore
@@ -147,7 +147,7 @@ class RankingMapDetailActivity : AppCompatActivity() {
                                                 val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
                                                 formatter.setTimeZone(TimeZone.getTimeZone("UTC"))
                                                 rankingDetailTime.text = formatter.format(Date(infoData.time!!))
-                                                rankingDetailSpeed.text = infoData.speed.average().toString()
+                                                rankingDetailSpeed.text = String.format("%.2f", infoData.speed.average())
                                                 var chart = Chart(routeData.altitude, infoData.speed, rankingDetailChart)
                                                 chart.setChart()
                                             }
