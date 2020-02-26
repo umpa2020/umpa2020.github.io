@@ -175,8 +175,8 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener,OnDrawerOpen
      * */
     private fun showChoicePopup(text: String, ns: NoticeState) {
         val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val view = inflater.inflate(com.umpa2020.tracer.R.layout.running_activity_yesnopopup, null)
-        val textView: TextView = view.findViewById(com.umpa2020.tracer.R.id.runningActivityPopUpTextView)
+        val view = inflater.inflate(R.layout.running_activity_yesnopopup, null)
+        val textView: TextView = view.findViewById(R.id.runningActivityPopUpTextView)
         textView.text = text
 
         val alertDialog = AlertDialog.Builder(this) //alertDialog 생성
@@ -184,8 +184,10 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener,OnDrawerOpen
             .create()
 
         //Yes 버튼 눌렀을 때
-        val yesButton = view.findViewById<Button>(com.umpa2020.tracer.R.id.runningActivityYesButton)
+        val yesButton = view.findViewById<Button>(R.id.runningActivityYesButton)
         yesButton.setOnClickListener {
+            Log.d("ssmm11", "what is ns = "+ ns)
+
             when (ns) {
                 NoticeState.NOTHING -> {
                 }
@@ -200,7 +202,9 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener,OnDrawerOpen
                     newIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
                     startActivity(newIntent)
                 }
+
             }
+
             this.ns = NoticeState.NOTHING
             alertDialog.dismiss()
         }
