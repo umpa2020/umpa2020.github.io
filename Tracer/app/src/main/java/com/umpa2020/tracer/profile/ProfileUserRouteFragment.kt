@@ -3,10 +3,10 @@ package com.umpa2020.tracer.profile
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
@@ -16,8 +16,8 @@ import com.umpa2020.tracer.util.UserInfo
 
 class ProfileUserRouteFragment : Fragment() {
     lateinit var profileDownloadThread: Thread
-    var titleArray : ArrayList<String> = arrayListOf()
-    lateinit var mAdapter : ProfileRecyclerViewAdapterRoute
+    var titleArray: ArrayList<String> = arrayListOf()
+    lateinit var mAdapter: ProfileRecyclerViewAdapterRoute
 
 
     override fun onCreateView(

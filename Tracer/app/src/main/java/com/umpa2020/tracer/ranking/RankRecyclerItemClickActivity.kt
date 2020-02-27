@@ -1,9 +1,9 @@
 package com.umpa2020.tracer.ranking
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FirebaseFirestore
@@ -42,7 +42,7 @@ class RankRecyclerItemClickActivity : AppCompatActivity() {
         mapImageRef.downloadUrl.addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 // Glide 이용하여 이미지뷰에 로딩
-                Log.d("ssmm11", "이미지 뷰 로드 성공 : "+mapImageRef.downloadUrl)
+                Log.d("ssmm11", "이미지 뷰 로드 성공 : " + mapImageRef.downloadUrl)
                 Glide.with(this@RankRecyclerItemClickActivity)
                     .load(task.result)
                     .override(1024, 980)
@@ -82,7 +82,7 @@ class RankRecyclerItemClickActivity : AppCompatActivity() {
 
         mapRankingDownloadThread.start()
 
-        rankRecyclerMoreButton.setOnClickListener{
+        rankRecyclerMoreButton.setOnClickListener {
             val nextIntent = Intent(this, RankingMapDetailActivity::class.java)
             nextIntent.putExtra("MapTitle", mapTitle)
             startActivity(nextIntent)

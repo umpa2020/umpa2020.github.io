@@ -12,6 +12,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.ranking.RankRecyclerItemClickActivity
+import com.umpa2020.tracer.util.PrettyDistance
 import kotlinx.android.synthetic.main.recycler_profilefragment_route_grid_image.view.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -43,7 +44,7 @@ class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) : Recycler
         }
 
         holder.maptitle.text = cutted[0]
-        holder.distance.text = String.format("%.2f", singleItem.distance!! / 1000)
+        holder.distance.text = PrettyDistance().convertPretty(singleItem.distance!!)
         val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
         formatter.setTimeZone(TimeZone.getTimeZone("UTC"))
         holder.time.text = formatter.format(Date(singleItem.time!!))

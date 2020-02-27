@@ -1,9 +1,9 @@
 package com.umpa2020.tracer.racing
 
 import android.location.Location
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.maps.model.LatLng
@@ -68,8 +68,10 @@ class NearRouteActivity : AppCompatActivity() {
                         )
                         break
                     }
-                    var nearMap = NearMap(document.id, SphericalUtil.computeDistanceBetween(cur_loc, latLng))
-                    nearMaps.add(nearMap)
+                    if ( SphericalUtil.computeDistanceBetween(cur_loc, latLng) <= 2000) {
+                        var nearMap = NearMap(document.id, SphericalUtil.computeDistanceBetween(cur_loc, latLng))
+                        nearMaps.add(nearMap)
+                    }
                 }
                 near_recycler_map.adapter = NearRecyclerViewAdapter(nearMaps.sortedWith(compareBy({it.distance})))
                 near_recycler_map.layoutManager = LinearLayoutManager(this)

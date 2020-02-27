@@ -2,10 +2,10 @@ package com.umpa2020.tracer.profile
 
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.HistoryData
@@ -21,7 +21,7 @@ class ProfileUserHistoryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        var view:View = inflater.inflate(R.layout.fragment_profile_user_history, container, false)
+        var view: View = inflater.inflate(R.layout.fragment_profile_user_history, container, false)
 
         //TODO. 서버에서 데이터 받아옴
         val datas = ArrayList<HistoryData>()
@@ -39,8 +39,6 @@ class ProfileUserHistoryFragment : Fragment() {
 
         return view
     }
-
-
 
 
 }

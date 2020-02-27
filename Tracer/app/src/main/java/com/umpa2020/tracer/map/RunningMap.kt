@@ -84,21 +84,21 @@ class RunningMap(smf: SupportMapFragment, context: Context) : OnMapReadyCallback
 
         print_log("Stop")
         if (latlngs.size > 0) {
-            Log.d("ssmm11", "latlngs = "+ latlngs.size)
+            Log.d("ssmm11", "latlngs = " + latlngs.size)
             routes.add(PolyUtil.simplify(latlngs, 10.0).toMutableList())
         }
         markers.add(currentLocation)
         var arrLatLng: MutableList<MutableList<LatLng>> = mutableListOf()
         var cpLatLag: MutableList<LatLng> = mutableListOf()
-        for(i in routes.indices) {
+        for (i in routes.indices) {
             var latlngs: MutableList<LatLng> = mutableListOf()
             for (j in routes[i].indices) {
-                latlngs.add(LatLng(routes[i][j].latitude,routes[i][j].longitude))
+                latlngs.add(LatLng(routes[i][j].latitude, routes[i][j].longitude))
             }
             arrLatLng.add(latlngs)
             cpLatLag.add(LatLng(markers[i].latitude, markers[i].longitude))
         }
-        cpLatLag.add(LatLng(markers[markers.size-1].latitude, markers[markers.size-1].longitude))
+        cpLatLag.add(LatLng(markers[markers.size - 1].latitude, markers[markers.size - 1].longitude))
         routeData.latlngs = arrLatLng
         routeData.markerlatlngs = cpLatLag
 
@@ -106,7 +106,7 @@ class RunningMap(smf: SupportMapFragment, context: Context) : OnMapReadyCallback
 
         //TODO: speed
         infoData.speed = speeds
-        Log.d("ssmm11" , "스피드를 안넣나 = "+ infoData.speed)
+        Log.d("ssmm11", "스피드를 안넣나 = " + infoData.speed)
     }
 
     fun pauseTracking() {
@@ -210,20 +210,20 @@ class RunningMap(smf: SupportMapFragment, context: Context) : OnMapReadyCallback
             /**
              *  100m마다 체크 포인트 찍는거
              */
-                           if (distance.toInt() / 100 >= markerCount) {    //100m마다
-                               cpOption.position(currentLocation)
-                               if(distance > 0)
-                                   markerCount = distance.toInt() / 100
-                               cpOption.title(markerCount.toString())
-                               cpOption.icon(makingIcon(R.drawable.ic_checkpoint_red, context))
-                               mMap.addMarker(cpOption) // 이게 기본 마커 찍나? => start지점 찍으려는거 같은데
-                               markers.add(currentLocation)
-                               markerCount++
-                               routes.add(PolyUtil.simplify(latlngs, 10.0).toMutableList())
-                               print_log(routes[routes.size - 1].toString())
-                               latlngs.clear()
-                               latlngs.add(currentLocation)
-                           }
+            if (distance.toInt() / 100 >= markerCount) {    //100m마다
+                cpOption.position(currentLocation)
+                if (distance > 0)
+                    markerCount = distance.toInt() / 100
+                cpOption.title(markerCount.toString())
+                cpOption.icon(makingIcon(R.drawable.ic_checkpoint_red, context))
+                mMap.addMarker(cpOption) // 이게 기본 마커 찍나? => start지점 찍으려는거 같은데
+                markers.add(currentLocation)
+                markerCount++
+                routes.add(PolyUtil.simplify(latlngs, 10.0).toMutableList())
+                print_log(routes[routes.size - 1].toString())
+                latlngs.clear()
+                latlngs.add(currentLocation)
+            }
         }// if 문 끝
     }
 

@@ -35,7 +35,7 @@ import kotlinx.android.synthetic.main.activity_running.*
 import java.text.DateFormat
 import java.util.*
 
-class RunningActivity : AppCompatActivity(), OnDrawerScrollListener,OnDrawerOpenListener,
+class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpenListener,
     OnDrawerCloseListener {
     var TAG = "WSY"       //로그용 태그
     lateinit var manageRunning: ManageRunning
@@ -170,6 +170,7 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener,OnDrawerOpen
         B_RUNNIG = true
         manageRunning.restartRunning()
     }
+
     /**
      * 팝업 띄우는 함수
      * */
@@ -186,7 +187,7 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener,OnDrawerOpen
         //Yes 버튼 눌렀을 때
         val yesButton = view.findViewById<Button>(R.id.runningActivityYesButton)
         yesButton.setOnClickListener {
-            Log.d("ssmm11", "what is ns = "+ ns)
+            Log.d("ssmm11", "what is ns = " + ns)
 
             when (ns) {
                 NoticeState.NOTHING -> {
@@ -238,7 +239,7 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener,OnDrawerOpen
     /**
      *  백그라운드에서 메시지 받는 거
      */
-    var mHandler : IncomingMessageHandler? = null
+    var mHandler: IncomingMessageHandler? = null
     val MESSENGER_INTENT_KEY = "msg-intent-key"
 
     inner class IncomingMessageHandler : Handler() {
@@ -251,7 +252,7 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener,OnDrawerOpen
                 LocationBackgroundService.LOCATION_MESSAGE -> {
                     val obj = msg.obj as Location
                     val currentDateTimeString = DateFormat.getDateTimeInstance().format(Date())
-                    Log.d(WSY,"RunningActivity : 값을 가져옴?")
+                    Log.d(WSY, "RunningActivity : 값을 가져옴?")
                     manageRunning.runningMap.setLocation(obj)
                 }
             }

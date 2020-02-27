@@ -11,7 +11,7 @@ import com.umpa2020.tracer.dataClass.HistoryData
 import kotlinx.android.synthetic.main.recycler_profile_user_history_item.view.*
 
 class ProfileRecyclerViewAdapterHistory(private var datas: ArrayList<HistoryData>) : RecyclerView.Adapter<ProfileRecyclerViewAdapterHistory.MyViewHolder>() {
-    var context : Context? = null
+    var context: Context? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.recycler_profile_user_history_item, parent, false)
         context = parent.context
@@ -30,7 +30,7 @@ class ProfileRecyclerViewAdapterHistory(private var datas: ArrayList<HistoryData
         holder.testvalues.text = singleItem1.testvalues
 
         //클릭하면 맵 상세보기 페이지로 이동
-        holder.itemView.setOnClickListener{
+        holder.itemView.setOnClickListener {
             //TODO 히스토리 누르면 어케?
             Toast.makeText(context!!, "누름", Toast.LENGTH_SHORT).show()
 
@@ -43,7 +43,7 @@ class ProfileRecyclerViewAdapterHistory(private var datas: ArrayList<HistoryData
         }
     }
 
-    inner class MyViewHolder(view: View): RecyclerView.ViewHolder(view!!) {
+    inner class MyViewHolder(view: View) : RecyclerView.ViewHolder(view!!) {
         var mapTitle = view.profileFragmentHistoryTextView1
         var testvalues = view.profileFragmentHistoryTextView2
     }

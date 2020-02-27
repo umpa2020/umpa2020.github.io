@@ -1,6 +1,7 @@
 package com.umpa2020.tracer.start
 
 //import androidx.work.PeriodicWorkRequest
+//import androidx.work.PeriodicWorkRequest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -8,10 +9,11 @@ import android.os.SystemClock
 import android.util.Log
 import android.widget.Chronometer
 import com.google.android.gms.maps.SupportMapFragment
-import kotlinx.android.synthetic.main.activity_running.*
-//import androidx.work.PeriodicWorkRequest
-import com.umpa2020.tracer.dataClass.*
+import com.umpa2020.tracer.dataClass.InfoData
+import com.umpa2020.tracer.dataClass.Privacy
+import com.umpa2020.tracer.dataClass.RouteData
 import com.umpa2020.tracer.map.RunningMap
+import kotlinx.android.synthetic.main.activity_running.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -20,52 +22,54 @@ class ManageRunning {
     val WSY = "WSY"
 
     lateinit var runningMap: RunningMap
-    lateinit var context:Context
-    lateinit var activity:RunningActivity
+    lateinit var context: Context
+    lateinit var activity: RunningActivity
     lateinit var chronometer: Chronometer
-    lateinit var distanceThread : Thread
-    var timeWhenStopped:Long=0
-    var privacy= Privacy.RACING
+    lateinit var distanceThread: Thread
+    var timeWhenStopped: Long = 0
+    var privacy = Privacy.RACING
 
     constructor(smf: SupportMapFragment, context: Context) {
-        this.context=context
-        activity=context as RunningActivity
+        this.context = context
+        activity = context as RunningActivity
         runningMap = RunningMap(smf, context)
 
     }
 
     var i = 0
-    fun startRunning(activity:RunningActivity) {
+    fun startRunning(activity: RunningActivity) {
         runningMap.startTracking()
 
         Log.d(WSY, "거리 : " + runningMap.distance.toString())
-        distanceThread = Thread(Runnable { // 거리 계산해주는 스레드 -> 일시 정지, 정지 해도 스레드 계속 실행됨.
+        distanceThread = Thread(Runnable {
+            // 거리 계산해주는 스레드 -> 일시 정지, 정지 해도 스레드 계속 실행됨.
             try {
-                while(true) {
+                while (true) {
                     Thread.sleep(1000)
-                    Log.d(WSY,"???")
+                    Log.d(WSY, "???")
                     Log.d(WSY, "거리 : " + runningMap.distance.toString())
                     activity.runOnUiThread(Runnable {
-                        activity.runningDistanceTextView.text=String.format("%.2f",(runningMap.distance/1000))
+                        activity.runningDistanceTextView.text = String.format("%.2f", (runningMap.distance / 1000))
                         i += 1
-                        Log.d(WSY,  i.toString())
+                        Log.d(WSY, i.toString())
                     })
                 }
-            }catch (e : InterruptedException){
-                Log.d(WSY,"intertupt() 실행")
+            } catch (e: InterruptedException) {
+                Log.d(WSY, "intertupt() 실행")
             }
 
         })
         distanceThread.start()
 
-        chronometer=activity.runningTimerTextView
-        chronometer.base= SystemClock.elapsedRealtime()
+        chronometer = activity.runningTimerTextView
+        chronometer.base = SystemClock.elapsedRealtime()
         chronometer.start()
     }
+
     fun restartRunning() {
         runningMap.restartTracking()
 
-        chronometer.base=SystemClock.elapsedRealtime()+timeWhenStopped
+        chronometer.base = SystemClock.elapsedRealtime() + timeWhenStopped
         chronometer.start()
         distanceThread.start()
     }
@@ -76,10 +80,10 @@ class ManageRunning {
 
 
 
-        timeWhenStopped=chronometer.base-SystemClock.elapsedRealtime()
+        timeWhenStopped = chronometer.base - SystemClock.elapsedRealtime()
         chronometer.stop()
         activity.pause()
-        privacy=Privacy.PUBLIC
+        privacy = Privacy.PUBLIC
 
     }
 
@@ -95,7 +99,7 @@ class ManageRunning {
 
         infoData.distance = runningMap.distance
         infoData.time = SystemClock.elapsedRealtime() - chronometer.base
-        infoData.privacy=privacy
+        infoData.privacy = privacy
 
         var newIntent = Intent((context as Activity), RunningSaveActivity::class.java)
         newIntent.putExtra("Route Data", routeData)

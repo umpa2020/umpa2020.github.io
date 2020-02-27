@@ -89,8 +89,8 @@ class RacingMap : OnMapReadyCallback {
             )
         )
 
-       /* loadRoute = makerRouteData.latlngs
-        markers = makerRouteData.markerlatlngs*/
+        /* loadRoute = makerRouteData.latlngs
+         markers = makerRouteData.markerlatlngs*/
     }
 
     override fun onMapReady(googleMap: GoogleMap) {

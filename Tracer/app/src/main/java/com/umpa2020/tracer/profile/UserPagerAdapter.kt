@@ -5,12 +5,13 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 
 class UserPagerAdapter(fm: FragmentManager) :
-    FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT){
+    FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
     class FragmentInfo(val iconOnResId: Int, val iconOffResId: Int, val titleText: String, val fragment: Fragment)
+
     private val mFragmentInfoList = ArrayList<FragmentInfo>()
 
-    fun addFragment(iconOnResID:Int, iconOffResID:Int, title: String, fragment:Fragment){
-        val info = FragmentInfo(iconOnResID, iconOffResID, title,fragment)
+    fun addFragment(iconOnResID: Int, iconOffResID: Int, title: String, fragment: Fragment) {
+        val info = FragmentInfo(iconOnResID, iconOffResID, title, fragment)
         mFragmentInfoList.add(info)
     }
 

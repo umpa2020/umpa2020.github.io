@@ -53,7 +53,7 @@ class RankingMapDetailActivity : AppCompatActivity() {
 
             db.collection("mapInfo").whereEqualTo("mapTitle", mapTitle)
                 .get()
-                .addOnSuccessListener {result ->
+                .addOnSuccessListener { result ->
                     for (document in result) {
                         makersNickname = document.get("makersNickname") as String
                     }

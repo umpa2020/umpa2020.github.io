@@ -12,7 +12,5 @@ class ProgressBar(context:Context): AlertDialog(context) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.custom_dialog)
-
-        
     }
 }

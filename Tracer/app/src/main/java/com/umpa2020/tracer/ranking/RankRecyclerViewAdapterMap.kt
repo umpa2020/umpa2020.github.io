@@ -11,8 +11,8 @@ import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.InfoData
 import kotlinx.android.synthetic.main.recycler_rankfragment_item.view.*
 
-class RankRecyclerViewAdapterMap (val mdata :ArrayList<InfoData>) : RecyclerView.Adapter<RankRecyclerViewAdapterMap.mViewHolder>() {
-    var context : Context? = null
+class RankRecyclerViewAdapterMap(val mdata: ArrayList<InfoData>) : RecyclerView.Adapter<RankRecyclerViewAdapterMap.mViewHolder>() {
+    var context: Context? = null
     //생성된 뷰 홀더에 데이터를 바인딩 해줌.
     override fun onBindViewHolder(holder: mViewHolder, position: Int) {
 
@@ -36,9 +36,9 @@ class RankRecyclerViewAdapterMap (val mdata :ArrayList<InfoData>) : RecyclerView
             holder.rank.setBackgroundResource(R.drawable.ic_4)
 
         //클릭하면 맵 상세보기 페이지로 이동
-        holder.itemView.setOnClickListener{
+        holder.itemView.setOnClickListener {
             val nextIntent = Intent(context, RankRecyclerItemClickActivity::class.java)
-            nextIntent.putExtra("MapTitle",  singleItem.mapTitle) //mapTitle 정보 인텐트로 넘김
+            nextIntent.putExtra("MapTitle", singleItem.mapTitle) //mapTitle 정보 인텐트로 넘김
             context!!.startActivity(nextIntent)
 
 

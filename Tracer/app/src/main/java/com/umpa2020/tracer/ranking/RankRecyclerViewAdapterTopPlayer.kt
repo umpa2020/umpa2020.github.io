@@ -12,10 +12,9 @@ import com.umpa2020.tracer.dataClass.RankingData
 import kotlinx.android.synthetic.main.recycler_rankfragment_topplayer_item.view.*
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
-class RankRecyclerViewAdapterTopPlayer (val mydata :ArrayList<RankingData>) : RecyclerView.Adapter<RankRecyclerViewAdapterTopPlayer.myViewHolder>() {
-    var context : Context? = null
+class RankRecyclerViewAdapterTopPlayer(val mydata: ArrayList<RankingData>) : RecyclerView.Adapter<RankRecyclerViewAdapterTopPlayer.myViewHolder>() {
+    var context: Context? = null
     //생성된 뷰 홀더에 데이터를 바인딩 해줌.
     override fun onBindViewHolder(holder: myViewHolder, position: Int) {
         val singleItem1 = mydata[position]
@@ -38,7 +37,7 @@ class RankRecyclerViewAdapterTopPlayer (val mydata :ArrayList<RankingData>) : Re
             holder.rank.setBackgroundResource(R.drawable.ic_4)
 
         //클릭하면 맵 상세보기 페이지로 이동
-        holder.itemView.setOnClickListener{
+        holder.itemView.setOnClickListener {
             //TODO 상대방 프로필 넘어가게 해야함
             /*
             val nextIntent = Intent(context, RankRecyclerItemClickActivity::class.java)

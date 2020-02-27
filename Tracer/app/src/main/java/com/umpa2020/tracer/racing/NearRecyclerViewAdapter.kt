@@ -12,6 +12,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.NearMap
 import com.umpa2020.tracer.ranking.RankRecyclerItemClickActivity
+import com.umpa2020.tracer.util.PrettyDistance
 import kotlinx.android.synthetic.main.recycler_nearactivity_item.view.*
 
 class NearRecyclerViewAdapter(private var datas: List<NearMap>) : RecyclerView.Adapter<NearRecyclerViewAdapter.MyViewHolder>() {
@@ -35,9 +36,7 @@ class NearRecyclerViewAdapter(private var datas: List<NearMap>) : RecyclerView.A
         var cutted = singleItem1.mapTitle.split("||")
         //데이터 바인딩
         holder.mapTitle.text = cutted[0]
-        holder.distance.text = String.format("%.2f",singleItem1.distance/1000)
-      //  holder.distance.text = singleItem1.distance.toString()
-
+        holder.distance.text = PrettyDistance().convertPretty(singleItem1.distance)
 
 
         mapImageDownloadThread = Thread(Runnable {

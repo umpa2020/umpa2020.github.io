@@ -10,7 +10,7 @@ import java.util.*
 
 class GetLocationMessage : Handler() {
 
-    var location : Location?
+    var location: Location?
         get() {
             return this.location
         }
@@ -28,7 +28,7 @@ class GetLocationMessage : Handler() {
                 val currentDateTimeString = DateFormat.getDateTimeInstance().format(Date())
                 location!!.set(obj)
                 //return
-               // toast("LAT :  " + obj.latitude + "\nLNG : " + obj.longitude + "\n\n" + obj.toString() + " \n\n\nLast updated- " + currentDateTimeString)
+                // toast("LAT :  " + obj.latitude + "\nLNG : " + obj.longitude + "\n\n" + obj.toString() + " \n\n\nLast updated- " + currentDateTimeString)
             }
         }
     }

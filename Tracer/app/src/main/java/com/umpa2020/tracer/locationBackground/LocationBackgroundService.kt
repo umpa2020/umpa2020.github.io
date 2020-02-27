@@ -29,7 +29,7 @@ class LocationBackgroundService : IntentService("LocationBackgroundService"), Lo
      */
     private var mActivityMessenger: Messenger? = null
 
-    var notification : Notification? = null
+    var notification: Notification? = null
 
     override fun onCreate() {
         super.onCreate()
@@ -55,12 +55,12 @@ class LocationBackgroundService : IntentService("LocationBackgroundService"), Lo
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Log.i(TAG, "onStartCommand Service started....")
         if (intent != null) {
-           mActivityMessenger = intent.getParcelableExtra(MESSENGER_INTENT_KEY)
+            mActivityMessenger = intent.getParcelableExtra(MESSENGER_INTENT_KEY)
         }
 
         var test = intent!!.getStringExtra("test")
-        if(test != null){
-            Log.d(TAG,"중간 요청 성공?" + ", " + test)
+        if (test != null) {
+            Log.d(TAG, "중간 요청 성공?" + ", " + test)
         }
 
         if (intent != null) {
@@ -97,7 +97,7 @@ class LocationBackgroundService : IntentService("LocationBackgroundService"), Lo
         m.obj = location
         try {
             mActivityMessenger!!.send(m)
-           // Toast.makeText(applicationContext, "zzz"+"$location", Toast.LENGTH_SHORT).show()
+            // Toast.makeText(applicationContext, "zzz"+"$location", Toast.LENGTH_SHORT).show()
         } catch (e: RemoteException) {
             Log.e(TAG, "Error passing service object back to activity.")
         }
@@ -157,7 +157,7 @@ class LocationBackgroundService : IntentService("LocationBackgroundService"), Lo
     private fun startService() {
         //hey request for location updates
         LocationUpdatesComponent.onStart()
-       // Toast.makeText(this, "Service starting its task", Toast.LENGTH_SHORT).show()
+        // Toast.makeText(this, "Service starting its task", Toast.LENGTH_SHORT).show()
     }
 
     private fun stopService() {
