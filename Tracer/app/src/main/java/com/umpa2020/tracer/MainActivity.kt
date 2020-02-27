@@ -16,6 +16,7 @@ import com.umpa2020.tracer.locationBackground.ServiceStatus
 import com.umpa2020.tracer.profile.ProfileFragment
 import com.umpa2020.tracer.ranking.RankingFragment
 import com.umpa2020.tracer.start.StartFragment
+import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -53,17 +54,15 @@ class MainActivity : AppCompatActivity() {
         checkPermissions()          //모든 권한 확인
         TTS.set(applicationContext)
 
-       // mHandler = IncomingMessageHandler()
-
-        //TODO:권한 획득 후에 실행
-        startService()
+        // mHandler = IncomingMessageHandler()
 
 
         //선택한 메뉴로 프래그먼트 바꿈
         bottom_navigation.setOnNavigationItemSelectedListener(navListener)
+
         //회전됐을 때 프래그먼트 유지
         //처음 실행 했을때 초기 프래그먼트 설정
-        if (savedInstanceState == null) {
+        if (savedInstanceState == null && UserInfo.permission == 1) {
             bottom_navigation.selectedItemId = R.id.navigation_start
             supportFragmentManager.beginTransaction().replace(
                 R.id.container,
@@ -74,16 +73,8 @@ class MainActivity : AppCompatActivity() {
 
     fun onClick(v: View) {
         when (v.id) {
-            /*
-            R.id.mainTest -> {
-                    val newIntent = Intent(this, RunningSaveActivity::class.java)
-                    startActivity(newIntent)
 
-            }
-
-             */
         }
-
     }
 
     private fun checkPermissions() {
@@ -123,6 +114,15 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+        if (UserInfo.permission == 0) {
+            bottom_navigation.selectedItemId = R.id.navigation_start
+            supportFragmentManager.beginTransaction().replace(
+                R.id.container,
+                StartFragment()
+            ).commit()
+        }
+        UserInfo.permission = 1
+        startService()
     }
 
     override fun onDestroy() {
@@ -132,7 +132,7 @@ class MainActivity : AppCompatActivity() {
 
     // as google doc says
     // Handler for incoming messages from the service.
-   // private var mHandler: IncomingMessageHandler? = null
+    // private var mHandler: IncomingMessageHandler? = null
 
     /**
      * start service
@@ -172,10 +172,10 @@ class MainActivity : AppCompatActivity() {
      */
 
     private fun startStopServiceCommand(action: ServiceStatus) {
-        Log.d(TAG,"이건 실행되잖아?")
+        Log.d(TAG, "이건 실행되잖아?")
         Intent(this, LocationBackgroundService::class.java).also {
             it.action = action.name
-            Log.d(TAG,action.toString()) // 처음 실행 시 START
+            Log.d(TAG, action.toString()) // 처음 실행 시 START
 //            if (action == ServiceStatus.START) {
 //                Log.d(TAG,"zzzzz")
 //                val messengerIncoming = Messenger(mHandler)
