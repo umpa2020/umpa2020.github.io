@@ -4,10 +4,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_marginBottom="30dp"
-    android:layout_marginTop="10dp"
+    android:layout_marginBottom="?actionBarSize"
     tools:context=".start.RunningSaveActivity">
 
+    <Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:elevation="1dp"
+        android:background="@color/white">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="12dp"
+            android:gravity="center"
+            android:text="활동 내용"
+            style="@style/appBarText">
+        </TextView>
+    </Toolbar>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -78,8 +93,8 @@
                         android:gravity="center"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Distance(km)"
-                        android:textSize="17dp"
+                        android:text="거리 (km)"
+                        android:textSize="15dp"
                         android:fontFamily="@font/notosansmedium"/>
 
                     <TextView
@@ -88,7 +103,6 @@
                         android:id="@+id/distance_tv"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="0.0"
                         android:fontFamily="@font/notosansmedium"
                         android:textSize="20dp" />
                 </LinearLayout>
@@ -105,8 +119,8 @@
                         android:gravity="center"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Time"
-                        android:textSize="17dp"
+                        android:text="시간"
+                        android:textSize="15dp"
                         android:fontFamily="@font/notosansmedium"/>
 
                     <TextView
@@ -115,7 +129,6 @@
                         android:id="@+id/time_tv"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="0.0"
                         android:fontFamily="@font/notosansmedium"
                         android:textSize="20dp" />
                 </LinearLayout>
@@ -130,8 +143,8 @@
                         android:gravity="center"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Speed(km/h)"
-                        android:textSize="17dp"
+                        android:text="속력 (km/h)"
+                        android:textSize="15dp"
                         android:fontFamily="@font/notosansmedium"/>
 
                     <TextView
@@ -140,7 +153,6 @@
                         android:id="@+id/speed_tv"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="0.0"
                         android:fontFamily="@font/notosansmedium"
                         android:textSize="20dp" />
                 </LinearLayout>
@@ -196,7 +208,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="20dp"
                 android:layout_marginLeft="20dp"
-                android:hint="Title"
+                android:hint="맵 제목"
                 android:fontFamily="@font/notosansmedium"
                 android:layout_below="@+id/line4"/>
 
@@ -255,20 +267,6 @@
         </RelativeLayout>
     </ScrollView>
 
-    <!--
-    <Button
-        android:layout_marginBottom="20dp"
-        android:id="@+id/save_btn"
-        android:layout_alignParentBottom="true"
-        android:layout_centerInParent="true"
-        android:onClick="onClick"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/base_button_selector"
-        android:textColor="@color/red"
-        android:text="활동 저장"
-        android:fontFamily="@font/notosansmedium"/>
--->
     <Button
         android:layout_marginBottom="20dp"
         android:id="@+id/save_btn"
@@ -282,4 +280,6 @@
         style="@style/buttonText"
         android:text="활동 저장"/>
 
+
 </RelativeLayout>
+

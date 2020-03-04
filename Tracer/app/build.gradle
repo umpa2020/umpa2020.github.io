@@ -10,11 +10,11 @@ android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
     defaultConfig {
-        applicationId "com.korea50k.tracer"
+        applicationId "com.umpa2020.tracer"
         minSdkVersion 24
         targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
+        versionCode 3
+        versionName "1.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -33,7 +33,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.core:core-ktx:1.1.0'
+    implementation 'androidx.core:core-ktx:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation 'junit:junit:4.12'
@@ -44,13 +44,13 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics:17.2.2'
 
     // firebase Cloud Store - Our Database
-    implementation 'com.google.firebase:firebase-firestore:21.3.1'
-    implementation 'com.google.firebase:firebase-database:19.2.0'
+    implementation 'com.google.firebase:firebase-firestore:21.4.0'
+    implementation 'com.google.firebase:firebase-database:19.2.1'
 
     // firebase UI - Storage
     implementation 'com.firebaseui:firebase-ui-storage:4.3.1'
     implementation 'com.google.firebase:firebase-core:17.2.2'
-    implementation 'com.google.firebase:firebase-storage:19.1.0'
+    implementation 'com.google.firebase:firebase-storage:19.1.1'
 
     // glide - image download and update to imageview
     implementation 'com.github.bumptech.glide:glide:4.10.0'
@@ -60,12 +60,14 @@ dependencies {
     implementation 'com.google.android.material:material:1.2.0-alpha04'
 
     // ExtendedFloatingActionButton 로 인해 추가
-    implementation 'com.google.android.material:material:1.1.0-alpha09'
+    implementation 'com.google.android.material:material:1.2.0-alpha04'
 
     // recyclerView 사용
     implementation "androidx.recyclerview:recyclerview:1.1.0"
 
     // google maps 에서 map 정보 및 location 정보 받아오기
+    //noinspection UseOfBundledGooglePlayServices
+    //implementation 'com.google.android.gms:play-services:12.0.1'
     implementation 'com.google.android.gms:play-services-location:17.0.0'
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
 
@@ -74,11 +76,10 @@ dependencies {
 
     // 맵 달릴때 정확히 뭔진 모르겠으나 윤권이가 알듯 ㅎ
     implementation 'com.github.moraisigor:slidingdrawer:1.7.1'
-    implementation 'androidx.fragment:fragment-ktx:1.2.0'
+    implementation 'androidx.fragment:fragment-ktx:1.2.1'
 
     // chart 그리는 gradle
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.2'
-
 
 
     implementation 'com.firebaseui:firebase-ui-auth:4.3.1' // firebaseUi google 로그인
@@ -113,5 +114,8 @@ dependencies {
 
     //noinspection GradleCompatible
     implementation 'com.android.support:appcompat-v7:26.1.0' // 툴바 사용
+
+    //coordinatorlayout
+    implementation "androidx.coordinatorlayout:coordinatorlayout:1.0.0"
 
 }
