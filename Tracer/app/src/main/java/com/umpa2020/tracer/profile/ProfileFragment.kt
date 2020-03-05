@@ -33,7 +33,6 @@ class ProfileFragment : Fragment() {
     private var mStorageReference: StorageReference? = null
     lateinit var root: View
     var bundle = Bundle()
-    lateinit var profileImagePathDownloadThread: Thread
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,68 +60,66 @@ class ProfileFragment : Fragment() {
 
         // storage에 profile image 파일이 어디에 있는지 받아옴
         var profileImagePath = "init"
-        profileImagePathDownloadThread = Thread(Runnable {
-            val db = FirebaseFirestore.getInstance()
+        val db = FirebaseFirestore.getInstance()
 
-            // 총 거리, 총 시간을 구하기 위해서 db에 접근하여 일단 먼저
-            // 이용자가 뛴 다른 사람의 맵을 구함
-            db.collection("userinfo").document(UserInfo.email).collection("user ran these maps")
-                .get()
-                .addOnSuccessListener { result ->
-                    var sumDistance = 0.0
-                    var sumTime = 0.0
+        // 총 거리, 총 시간을 구하기 위해서 db에 접근하여 일단 먼저
+        // 이용자가 뛴 다른 사람의 맵을 구함
+        db.collection("userinfo").document(UserInfo.email).collection("user ran these maps")
+            .get()
+            .addOnSuccessListener { result ->
+                var sumDistance = 0.0
+                var sumTime = 0.0
 
-                    for (document in result) {
-                        sumDistance += document.get("distance") as Double
-                        sumTime += document.get("time") as Long
-                    }
-                    // 구하고 나서 이용자가 만든 맵의 거리와 시간을 더함
-                    db.collection("mapInfo").whereEqualTo("makersNickname", UserInfo.nickname)
-                        .get()
-                        .addOnSuccessListener { result ->
-                            for (document2 in result) {
-                                sumDistance += document2.get("distance") as Double
-                                sumTime += document2.get("time") as Long
-                            }
-
-                            // 총 거리와 시간을 띄워줌
-                            profileFragmentTotalDistance.text = String.format("%.2f", sumDistance / 1000) + " km"
-                            val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
-                            formatter.setTimeZone(TimeZone.getTimeZone("UTC"))
-                            profileFragmentTotalTime.text = formatter.format(Date(sumTime.toLong()))
-
+                for (document in result) {
+                    sumDistance += document.get("distance") as Double
+                    sumTime += document.get("time") as Long
+                }
+                // 구하고 나서 이용자가 만든 맵의 거리와 시간을 더함
+                db.collection("mapInfo").whereEqualTo("makersNickname", UserInfo.nickname)
+                    .get()
+                    .addOnSuccessListener { result ->
+                        for (document2 in result) {
+                            sumDistance += document2.get("distance") as Double
+                            sumTime += document2.get("time") as Long
                         }
-                }
 
-            // storage 에 올린 경로를 db에 저장해두었으니 다시 역 추적 하여 프로필 이미지 반영
-            db.collection("userinfo").whereEqualTo("nickname", UserInfo.nickname)
-                .get()
-                .addOnSuccessListener { result ->
-                    for (document in result) {
-                        profileImagePath = document.get("profileImagePath") as String
-                    }
-                    // glide imageview 소스
-                    // 프사 설정하는 코드 db -> imageView glide
-                    val imageView = view.findViewById<ImageView>(R.id.profileImageView)
+                        // 총 거리와 시간을 띄워줌
+                        profileFragmentTotalDistance.text = String.format("%.2f", sumDistance / 1000) + " km"
+                        val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
+                        formatter.setTimeZone(TimeZone.getTimeZone("UTC"))
+                        profileFragmentTotalTime.text = formatter.format(Date(sumTime.toLong()))
 
-                    val storage = FirebaseStorage.getInstance("gs://tracer-9070d.appspot.com/")
-                    val mapImageRef = storage.reference.child(UserInfo.nickname).child("Profile").child(profileImagePath)
-                    mapImageRef.downloadUrl.addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            // Glide 이용하여 이미지뷰에 로딩
-                            Glide.with(this@ProfileFragment)
-                                .load(task.result)
-                                .override(1024, 980)
-                                .into(imageView)
-                            progressbar.dismiss()
-                        } else {
-                        }
+                    }
+            }
+
+        // storage 에 올린 경로를 db에 저장해두었으니 다시 역 추적 하여 프로필 이미지 반영
+        db.collection("userinfo").whereEqualTo("nickname", UserInfo.nickname)
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    profileImagePath = document.get("profileImagePath") as String
+                }
+                // glide imageview 소스
+                // 프사 설정하는 코드 db -> imageView glide
+                val imageView = view.findViewById<ImageView>(R.id.profileImageView)
+
+                val storage = FirebaseStorage.getInstance("gs://tracer-9070d.appspot.com/")
+                val profileRef = storage.reference.child("Profile").child(UserInfo.autoLoginKey!!).child(profileImagePath)
+
+                profileRef.downloadUrl.addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        // Glide 이용하여 이미지뷰에 로딩
+                        Glide.with(this@ProfileFragment)
+                            .load(task.result)
+                            .override(1024, 980)
+                            .into(imageView)
+                        progressbar.dismiss()
+                    } else {
                     }
                 }
-                .addOnFailureListener { exception ->
-                }
-        })
-        profileImagePathDownloadThread.start()
+            }
+            .addOnFailureListener { exception ->
+            }
 
         val routeTextView = view.findViewById<TextView>(R.id.profileRouteTextView)
         routeTextView.setOnClickListener {
