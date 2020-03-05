@@ -92,7 +92,6 @@ class ProfileFragment : Fragment() {
                             profileFragmentTotalTime.text = formatter.format(Date(sumTime.toLong()))
 
                         }
-                    progressbar.dismiss()
                 }
 
             // storage 에 올린 경로를 db에 저장해두었으니 다시 역 추적 하여 프로필 이미지 반영
@@ -115,10 +114,10 @@ class ProfileFragment : Fragment() {
                                 .load(task.result)
                                 .override(1024, 980)
                                 .into(imageView)
+                            progressbar.dismiss()
                         } else {
                         }
                     }
-                    progressbar.dismiss()
                 }
                 .addOnFailureListener { exception ->
                 }

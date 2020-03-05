@@ -13,13 +13,6 @@ class ConvertJson {
             return jsonString
         }
 
-        fun InfoDataToJson(infoData: InfoData): String {
-            var gson = Gson()
-
-            var jsonString = gson.toJson(infoData)
-            return jsonString
-        }
-
         fun JsonToRouteData(json: String): RouteData {
             var routeData = Gson().fromJson(json, RouteData::class.java)
             return routeData
