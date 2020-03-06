@@ -46,11 +46,29 @@ class RacingFinishActivity : AppCompatActivity() {
                 val ranMapsData = RanMapsData(racerData.mapTitle, racerData.distance, racerData.time)
                 db.collection("userinfo").document(UserInfo.email).collection("user ran these maps").add(ranMapsData)
 
-                val rankingData = RankingData(racerData.makersNickname, UserInfo.nickname, racerData.time)
+                var rankingData = RankingData(racerData.makersNickname, UserInfo.nickname, racerData.time, 1)
 
+
+                db.collection("rankingMap").document(racerData.mapTitle!!).collection("ranking").whereEqualTo("bestTime", 1)
+                    .whereEqualTo("challengerNickname", UserInfo.nickname).get()
+                    .addOnSuccessListener { result ->
+                        for (document in result) {
+                            if (racerData.time!! < document.get("challengerTime") as Long ) {
+                                db.collection("rankingMap").document(racerData.mapTitle!!).collection("ranking").document(document.id).update("bestTime",0)
+                            }
+                            else {
+                                rankingData = RankingData(racerData.makersNickname, UserInfo.nickname, racerData.time, 0)
+                            }
+                        }
+
+                    }
 
                 // ranking에 내용 등록
                 db.collection("rankingMap").document(racerData.mapTitle!!).set(rankingData)
+
+
+
+                // 랭킹의 내용을 가져와서 마지막 페이지 구성
                 db.collection("rankingMap").document(racerData.mapTitle!!).collection("ranking")
                     .document(UserInfo.nickname + "||" + full_sdf.format(dt)).set(rankingData)
                     .addOnSuccessListener {
@@ -76,6 +94,8 @@ class RacingFinishActivity : AppCompatActivity() {
                             .addOnFailureListener { exception ->
                             }
                     }
+
+
                 makerData = document.toObject(InfoData::class.java)!!
                 runOnUiThread {
                     makerLapTimeTextView.text = formatter.format(Date(makerData.time!!))

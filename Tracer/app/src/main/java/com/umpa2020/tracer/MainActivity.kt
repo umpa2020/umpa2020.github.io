@@ -11,6 +11,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.firestore.FirebaseFirestore
 import com.umpa2020.tracer.locationBackground.LocationBackgroundService
 import com.umpa2020.tracer.locationBackground.ServiceStatus
 import com.umpa2020.tracer.profile.ProfileFragment
@@ -55,7 +56,6 @@ class MainActivity : AppCompatActivity() {
         TTS.set(applicationContext)
 
         // mHandler = IncomingMessageHandler()
-
 
         //선택한 메뉴로 프래그먼트 바꿈
         bottom_navigation.setOnNavigationItemSelectedListener(navListener)
