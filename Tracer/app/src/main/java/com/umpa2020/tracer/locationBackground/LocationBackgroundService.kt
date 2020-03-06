@@ -20,7 +20,7 @@ import com.umpa2020.tracer.util.LocationUpdatesComponent
  *  만약 메인 스레드와 관련된 작업을 해야 한다면 메인스레드 Handler나 Boradcast intent를 이용해야 한다.
  *  출처: https://fullstatck.tistory.com/23 [풀스택 엔지니어]
  */
-class LocationBackgroundService : IntentService("LocationBackgroundService"), LocationUpdatesComponent.ILocationProvider {
+class LocationBackgroundService : IntentService("LocationBackgroundService"), LocationUpdatesComponent.ILocationProvider{
     /**
      * Activity와 Service 통신
      *  1. Activity는 Service에 이벤트를 전달
@@ -44,7 +44,7 @@ class LocationBackgroundService : IntentService("LocationBackgroundService"), Lo
         Log.d(TAG, this.toString())
         LocationUpdatesComponent.setILocationProvider(this)
         LocationUpdatesComponent.onCreate(this)
-        LocationUpdatesComponent.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY)
+//        LocationUpdatesComponent.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
 
 
         notification = createNotification()
@@ -146,8 +146,8 @@ class LocationBackgroundService : IntentService("LocationBackgroundService"), Lo
         ) else Notification.Builder(this)
 
         return builder
-            .setContentTitle("Background Service")
-            .setContentText("Background location service is getting location...")
+            .setContentTitle("GPS 활성화")
+          //  .setContentText("Background location service is getting location...")
             .setContentIntent(pendingIntent)
             .setSmallIcon(R.mipmap.ic_launcher)
             .setTicker("Ticker text")

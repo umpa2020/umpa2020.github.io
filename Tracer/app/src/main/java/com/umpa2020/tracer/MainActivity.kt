@@ -10,12 +10,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.google.android.gms.location.LocationRequest
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.umpa2020.tracer.locationBackground.LocationBackgroundService
 import com.umpa2020.tracer.locationBackground.ServiceStatus
 import com.umpa2020.tracer.profile.ProfileFragment
 import com.umpa2020.tracer.ranking.RankingFragment
 import com.umpa2020.tracer.start.StartFragment
+import com.umpa2020.tracer.util.LocationUpdatesComponent
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -47,6 +49,10 @@ class MainActivity : AppCompatActivity() {
         true
     }
 
+    override fun onResume() {
+        super.onResume()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -71,12 +77,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun onClick(v: View) {
-        when (v.id) {
-
-        }
-    }
-
     private fun checkPermissions() {
         var rejectedPermissionList = ArrayList<String>()
         //필요한 퍼미션들을 하나씩 끄집어내서 현재 권한을 받았는지 체크
@@ -98,12 +98,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
-    ) {
-        when (requestCode) {
+    override fun onRequestPermissionsResult( requestCode: Int, permissions: Array<String>, grantResults: IntArray ) {
+        when (requestCode)
+        {
             multiplePermissionsCode -> {
                 if (grantResults.isNotEmpty()) {
                     for ((i, permission) in permissions.withIndex()) {
@@ -149,22 +146,6 @@ class MainActivity : AppCompatActivity() {
         startStopServiceCommand(ServiceStatus.STOP)
     }
 
-//    internal inner class IncomingMessageHandler : Handler() {
-//        override fun handleMessage(msg: Message) {
-//            Log.i(TAG, "handleMessage..." + msg.toString())
-//
-//            super.handleMessage(msg)
-//
-//            when (msg.what) {
-//                LocationBackgroundService.LOCATION_MESSAGE -> {
-//                    val obj = msg.obj as Location
-//                    val currentDateTimeString = DateFormat.getDateTimeInstance().format(Date())
-//                    toast("LAT :  " + obj.latitude + "\nLNG : " + obj.longitude + "\n\n" + obj.toString() + " \n\n\nLast updated- " + currentDateTimeString)
-//                }
-//            }
-//        }
-//
-//    }
 
     /**
      *  단순 서비스 시작 메소드

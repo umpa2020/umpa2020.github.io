@@ -72,9 +72,6 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         setContentView(R.layout.activity_running)
 
-
-        LocationUpdatesComponent.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-
         supportActionBar?.title = "RUNNING"
 
 
@@ -253,6 +250,8 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
                     val obj = msg.obj as Location
                     val currentDateTimeString = DateFormat.getDateTimeInstance().format(Date())
                     Log.d(WSY, "RunningActivity : 값을 가져옴?")
+
+
                     manageRunning.runningMap.setLocation(obj)
                 }
             }
@@ -262,7 +261,6 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
     override fun onDestroy() {
         super.onDestroy()
         Log.d("screen", "onDestroy()")
-        LocationUpdatesComponent.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY)
     }
 
     override fun onScrollStarted() {

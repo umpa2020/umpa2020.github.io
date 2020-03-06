@@ -47,10 +47,6 @@ object LocationUpdatesComponent {
         Log.i(WSY, "created...............")
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(context) // 위치 서비스 클라이언트 만들기
 
-        // create location request
-        createLocationRequest()
-        // get last known location
-        getLastLocation()
 
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult?) {
@@ -60,6 +56,11 @@ object LocationUpdatesComponent {
                 onNewLocation(locationResult.lastLocation)
             }
         }
+
+        // create location request
+        createLocationRequest()
+        // get last known location
+        getLastLocation()
     }
     /**
      * start location updates
@@ -90,11 +91,8 @@ object LocationUpdatesComponent {
     private fun createLocationRequest() {
         locationRequest = LocationRequest.create() // 위치 요청
         locationRequest.run {
-//            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
             interval = 1000 // 위치 받아오는 주기, setinterval() 메서드를 사용하여 앱을 위해 위치를 연산하는 간격을 지정합니다.
-
-
-
         }
     }
 
@@ -105,6 +103,10 @@ object LocationUpdatesComponent {
      */
     fun setPriority(priority : Int){
         locationRequest.priority = priority
+    }
+
+    fun getPriority() : String{
+        return locationRequest.priority.toString()
     }
 
     /**
