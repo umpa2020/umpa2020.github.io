@@ -15,7 +15,6 @@ import com.umpa2020.tracer.util.ProgressBar
 import kotlinx.android.synthetic.main.activity_rank_recycler_item_click.*
 
 class RankRecyclerItemClickActivity : AppCompatActivity() {
-    lateinit var mapRankingDownloadThread: Thread
     var arrRankingData: ArrayList<RankingData> = arrayListOf()
     var rankingData = RankingData()
 
@@ -47,40 +46,38 @@ class RankRecyclerItemClickActivity : AppCompatActivity() {
                     .load(task.result)
                     .override(1024, 980)
                     .into(imageView)
+                progressbar.dismiss()
+
             } else {
                 Log.d("ssmm11", "이미지 뷰 로드 실패")
             }
         }
 
-        mapRankingDownloadThread = Thread(Runnable {
-            val db = FirebaseFirestore.getInstance()
+        val db = FirebaseFirestore.getInstance()
 
-            db.collection("rankingMap").document(mapTitle).collection("ranking").orderBy("challengerTime", Query.Direction.ASCENDING)
-                .get()
-                .addOnSuccessListener { result ->
-                    for (document in result) {
-                        rankingData = document.toObject(RankingData::class.java)
-                        arrRankingData.add(rankingData)
-                    }
-                    //레이아웃 매니저 추가
-                    rankRecyclerItemClickRecyclerView.layoutManager = LinearLayoutManager(this)
-                    //adpater 추가
-                    rankRecyclerItemClickRecyclerView.adapter = RankRecyclerViewAdapterTopPlayer(arrRankingData)
-                    progressbar.dismiss()
+        db.collection("rankingMap").document(mapTitle).collection("ranking").orderBy("challengerTime", Query.Direction.ASCENDING)
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    rankingData = document.toObject(RankingData::class.java)
+                    arrRankingData.add(rankingData)
                 }
-                .addOnFailureListener { exception ->
-                }
+                //레이아웃 매니저 추가
+                rankRecyclerItemClickRecyclerView.layoutManager = LinearLayoutManager(this)
+                //adpater 추가
+                rankRecyclerItemClickRecyclerView.adapter = RankRecyclerViewAdapterTopPlayer(arrRankingData)
+            }
+            .addOnFailureListener { exception ->
+            }
 
-            db.collection("mapInfo").whereEqualTo("mapTitle", mapTitle)
-                .get()
-                .addOnSuccessListener { result ->
-                    for (document in result) {
-                        rankRecyclerNickname.text = document.get("makersNickname") as String
-                    }
+        db.collection("mapInfo").whereEqualTo("mapTitle", mapTitle)
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    rankRecyclerNickname.text = document.get("makersNickname") as String
                 }
-        })
+            }
 
-        mapRankingDownloadThread.start()
 
         rankRecyclerMoreButton.setOnClickListener {
             val nextIntent = Intent(this, RankingMapDetailActivity::class.java)

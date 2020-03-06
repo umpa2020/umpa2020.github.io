@@ -7,7 +7,6 @@ import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.text.Editable
@@ -21,6 +20,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.android.material.textfield.TextInputLayout
@@ -74,7 +74,8 @@ class SignUpActivity : AppCompatActivity() {
     private var tokenId: String? = null
     private var email: String? = null
 
-    lateinit var dateText: String
+    var timestamp: Long = 0
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -355,9 +356,13 @@ class SignUpActivity : AppCompatActivity() {
 
     private fun uploadProfileImage(bitmapImg: Bitmap, nickname: String) {
         // 현재 날짜를 프로필 이름으로 nickname/Profile/현재날짜(영어).jpg 경로 만들기
-        val currentTime = Calendar.getInstance().time
-        dateText = SimpleDateFormat("yyyy_MM_dd_EEE", Locale.ENGLISH).format(currentTime)
-        val profileRef = mStorageReference!!.child(nickname).child("Profile").child(dateText + ".jpg")
+        val dt = Date()
+        val full_sdf = SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.getDefault())
+
+        val date = full_sdf.parse(dt.toString())
+        timestamp = date!!.time
+
+        val profileRef = mStorageReference!!.child("Profile").child(tokenId!!).child(timestamp.toString() + ".jpg")
         // 이미지
         val bitmap = bitmapImg
         val baos = ByteArrayOutputStream()
@@ -369,8 +374,8 @@ class SignUpActivity : AppCompatActivity() {
         }.addOnSuccessListener {
             // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
             // ...
-            Log.d(WSY, "성공")
             UserInfo.autoLoginKey = tokenId!!
+            Log.d("ssmm11" , "tokenID = " +tokenId)
             UserInfo.email = email!!
             UserInfo.nickname = nickname // Shared에 nickname저장.
             var nextIntent = Intent(this@SignUpActivity, MainActivity::class.java)
@@ -387,11 +392,9 @@ class SignUpActivity : AppCompatActivity() {
             "nickname" to nickname,
             "age" to age,
             "gender" to gender,
-            "totalDistance" to 0,
-            "totalTime" to 0,
-            "profileImagePath" to dateText+".jpg"
+            "profileImagePath" to timestamp.toString()+".jpg"
         )
-        mFirestoreDB!!.collection("userinfo").document(email!!).set(data)
+        mFirestoreDB!!.collection("userinfo").add(data)
             .addOnSuccessListener { Log.d(WSY, "DocumentSnapshot successfully written!") }
             .addOnFailureListener { e -> Log.w(WSY, "Error writing document", e) }
 
