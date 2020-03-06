@@ -44,7 +44,7 @@ class LocationBackgroundService : IntentService("LocationBackgroundService"), Lo
         Log.d(TAG, this.toString())
         LocationUpdatesComponent.setILocationProvider(this)
         LocationUpdatesComponent.onCreate(this)
-        LocationUpdatesComponent.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY)
+        LocationUpdatesComponent.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
 
 
         notification = createNotification()
