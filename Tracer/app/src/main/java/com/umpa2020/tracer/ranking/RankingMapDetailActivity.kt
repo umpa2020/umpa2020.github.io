@@ -33,7 +33,6 @@ class RankingMapDetailActivity : AppCompatActivity() {
     var dbMapTitle = ""
     var profileImagePath = ""
 
-    lateinit var rankingDetailThread: Thread
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,141 +46,133 @@ class RankingMapDetailActivity : AppCompatActivity() {
         var cutted = mapTitle.split("||")
         rankingDetailMapTitle.text = cutted[0]
 
-        rankingDetailThread = Thread(Runnable {
-            val db = FirebaseFirestore.getInstance()
-            var makersNickname = ""
+        val db = FirebaseFirestore.getInstance()
+        var makersNickname = ""
 
-            db.collection("mapInfo").whereEqualTo("mapTitle", mapTitle)
-                .get()
-                .addOnSuccessListener { result ->
-                    for (document in result) {
-                        makersNickname = document.get("makersNickname") as String
-                    }
-                    // storage 에 올린 경로를 db에 저장해두었으니 다시 역 추적 하여 프로필 이미지 반영
-                    db.collection("userinfo").whereEqualTo("nickname", makersNickname)
-                        .get()
-                        .addOnSuccessListener { result ->
-                            for (document in result) {
-                                profileImagePath = document.get("profileImagePath") as String
-                            }
-                            // glide imageview 소스
-                            // 프사 설정하는 코드 db -> imageView glide
-                            val imageView = rankingDetailProfileImage
-
-                            val storage = FirebaseStorage.getInstance("gs://tracer-9070d.appspot.com/")
-                            val mapImageRef = storage.reference.child(makersNickname).child("Profile").child(profileImagePath)
-                            mapImageRef.downloadUrl.addOnCompleteListener { task ->
-                                if (task.isSuccessful) {
-                                    // Glide 이용하여 이미지뷰에 로딩
-                                    Glide.with(this@RankingMapDetailActivity)
-                                        .load(task.result)
-                                        .override(1024, 980)
-                                        .into(imageView)
-                                } else {
-                                }
-                            }
-                            progressbar.dismiss()
-                        }
-                        .addOnFailureListener { exception ->
-                        }
-
+        db.collection("mapInfo").whereEqualTo("mapTitle", mapTitle)
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    makersNickname = document.get("makersNickname") as String
                 }
+                // storage 에 올린 경로를 db에 저장해두었으니 다시 역 추적 하여 프로필 이미지 반영
+                db.collection("userinfo").whereEqualTo("nickname", makersNickname)
+                    .get()
+                    .addOnSuccessListener { result ->
+                        for (document in result) {
+                            profileImagePath = document.get("profileImagePath") as String
+                        }
+                        // glide imageview 소스
+                        // 프사 설정하는 코드 db -> imageView glide
+                        val imageView = rankingDetailProfileImage
 
+                        val storage = FirebaseStorage.getInstance("gs://tracer-9070d.appspot.com/")
+                        val mapImageRef = storage.reference.child(makersNickname).child("Profile").child(profileImagePath)
+                        mapImageRef.downloadUrl.addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                // Glide 이용하여 이미지뷰에 로딩
+                                Glide.with(this@RankingMapDetailActivity)
+                                    .load(task.result)
+                                    .override(1024, 980)
+                                    .into(imageView)
+                                progressbar.dismiss()
 
-
-            db.collection("mapRoute")
-                .get()
-                .addOnSuccessListener { result ->
-                    for (document in result) {
-                        if (document.id.equals(mapTitle)) {
-                            // 1차원 배열인 고도는 그대로 받아오면 되고
-                            altitude = document.get("altitude") as List<Double>
-
-                            // 마커의 LatLng 는 나눠서 넣어줘야함
-                            var receiveMarkerDatas = document.get("markerlatlngs") as List<Object>
-
-                            for (receiveMarkerData in receiveMarkerDatas) {
-                                val location = receiveMarkerData as Map<String, Any>
-                                val latLng = LatLng(
-                                    location["latitude"] as Double,
-                                    location["longitude"] as Double
-                                )
-                                markerlatlngs.add(latLng)
+                            } else {
                             }
+                        }
+                    }
+                    .addOnFailureListener { exception ->
+                    }
+            }
 
-                            // 실행 수 및 db에 있는 맵타이틀을 알기위해서 (구분 시간 값 포함)
-                            dbMapTitle = document.id
+        db.collection("mapRoute")
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    if (document.id.equals(mapTitle)) {
+                        // 1차원 배열인 고도는 그대로 받아오면 되고
+                        altitude = document.get("altitude") as List<Double>
 
-                            // 2차원 배열은 새로 나누어 담아서 받음 1차원 배열 만들고 2차원 배열에 add
-                            // 맵 위도경도 받아오기
-                            db.collection("mapRoute").document(document.id).collection("routes").orderBy("index", Query.Direction.ASCENDING)
-                                .get()
-                                .addOnSuccessListener { result2 ->
-                                    for (document2 in result2) {
-                                        var routeArray: MutableList<LatLng> = mutableListOf()
-                                        var receiveRouteDatas = document2.get("latlngs") as MutableList<Object>
-                                        for (receiveRouteData in receiveRouteDatas) {
-                                            val location = receiveRouteData as Map<String, Any>
-                                            val latLng = LatLng(
-                                                location["latitude"] as Double,
-                                                location["longitude"] as Double
-                                            )
-                                            routeArray.add(latLng)
-                                        }
-                                        latLngs.add(routeArray)
+                        // 마커의 LatLng 는 나눠서 넣어줘야함
+                        var receiveMarkerDatas = document.get("markerlatlngs") as List<Object>
+
+                        for (receiveMarkerData in receiveMarkerDatas) {
+                            val location = receiveMarkerData as Map<String, Any>
+                            val latLng = LatLng(
+                                location["latitude"] as Double,
+                                location["longitude"] as Double
+                            )
+                            markerlatlngs.add(latLng)
+                        }
+
+                        // 실행 수 및 db에 있는 맵타이틀을 알기위해서 (구분 시간 값 포함)
+                        dbMapTitle = document.id
+
+                        // 2차원 배열은 새로 나누어 담아서 받음 1차원 배열 만들고 2차원 배열에 add
+                        // 맵 위도경도 받아오기
+                        db.collection("mapRoute").document(document.id).collection("routes").orderBy("index", Query.Direction.ASCENDING)
+                            .get()
+                            .addOnSuccessListener { result2 ->
+                                for (document2 in result2) {
+                                    var routeArray: MutableList<LatLng> = mutableListOf()
+                                    var receiveRouteDatas = document2.get("latlngs") as MutableList<Object>
+                                    for (receiveRouteData in receiveRouteDatas) {
+                                        val location = receiveRouteData as Map<String, Any>
+                                        val latLng = LatLng(
+                                            location["latitude"] as Double,
+                                            location["longitude"] as Double
+                                        )
+                                        routeArray.add(latLng)
                                     }
-                                    routeData = RouteData(altitude, latLngs, markerlatlngs)
-                                    // 단순 맵 정보 받아오는 부분
-                                    db.collection("mapInfo").whereEqualTo("mapTitle", mapTitle)
-                                        .get()
-                                        .addOnSuccessListener { result ->
-                                            for (document in result) {
-                                                infoData = document.toObject(InfoData::class.java)
-                                                rankingDetailDate.text = cutted[1]
-                                            }
-                                            // ui 스레드 따로 빼주기
-                                            runOnUiThread {
-                                                rankingDetailNickname.text = infoData.makersNickname
-                                                rankingDetailMapDetail.text = infoData.mapExplanation
-                                                rankingDetailDistance.text = String.format("%.2f", infoData.distance!! / 1000)
-                                                val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
-                                                formatter.setTimeZone(TimeZone.getTimeZone("UTC"))
-                                                rankingDetailTime.text = formatter.format(Date(infoData.time!!))
-                                                rankingDetailSpeed.text = String.format("%.2f", infoData.speed.average())
-                                                var chart = Chart(routeData.altitude, infoData.speed, rankingDetailChart)
-                                                chart.setChart()
-                                            }
-                                            progressbar.dismiss()
-                                        }
-                                        .addOnFailureListener { exception ->
-                                        }
+                                    latLngs.add(routeArray)
                                 }
-                        }
+                                routeData = RouteData(altitude, latLngs, markerlatlngs)
+                                // 단순 맵 정보 받아오는 부분
+                                db.collection("mapInfo").whereEqualTo("mapTitle", mapTitle)
+                                    .get()
+                                    .addOnSuccessListener { result ->
+                                        for (document in result) {
+                                            infoData = document.toObject(InfoData::class.java)
+                                            rankingDetailDate.text = cutted[1]
+                                        }
+                                        // ui 스레드 따로 빼주기
+                                        runOnUiThread {
+                                            rankingDetailNickname.text = infoData.makersNickname
+                                            rankingDetailMapDetail.text = infoData.mapExplanation
+                                            rankingDetailDistance.text = String.format("%.2f", infoData.distance!! / 1000)
+                                            val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
+                                            formatter.setTimeZone(TimeZone.getTimeZone("UTC"))
+                                            rankingDetailTime.text = formatter.format(Date(infoData.time!!))
+                                            rankingDetailSpeed.text = String.format("%.2f", infoData.speed.average())
+                                            var chart = Chart(routeData.altitude, infoData.speed, rankingDetailChart)
+                                            chart.setChart()
+                                        }
+                                    }
+                                    .addOnFailureListener { exception ->
+                                    }
+                            }
                     }
-                    progressbar.dismiss()
-                }
-                .addOnFailureListener { exception ->
-                }
-
-            // glide imageview 소스
-            val imageView = rankingDetailGoogleMap
-
-            val storage = FirebaseStorage.getInstance("gs://tracer-9070d.appspot.com/")
-            val mapImageRef = storage.reference.child("mapImage").child(mapTitle)
-
-            mapImageRef.downloadUrl.addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    // Glide 이용하여 이미지뷰에 로딩
-                    Glide.with(this@RankingMapDetailActivity)
-                        .load(task.result)
-                        .override(1024, 980)
-                        .into(imageView)
-                } else {
                 }
             }
-        })
+            .addOnFailureListener { exception ->
+            }
 
-        rankingDetailThread.start()
+        // glide imageview 소스
+        val imageView = rankingDetailGoogleMap
+
+        val storage = FirebaseStorage.getInstance("gs://tracer-9070d.appspot.com/")
+        val mapImageRef = storage.reference.child("mapImage").child(mapTitle)
+
+        mapImageRef.downloadUrl.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                // Glide 이용하여 이미지뷰에 로딩
+                Glide.with(this@RankingMapDetailActivity)
+                    .load(task.result)
+                    .override(1024, 980)
+                    .into(imageView)
+            } else {
+            }
+        }
 
         //버튼 누르면 연습용, 랭킹 기록용 선택 팝업 띄우기
         rankingDetailRaceButton.setOnClickListener {

@@ -6,11 +6,12 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class InfoData(
     var makersNickname: String? = null,
+    var makersUserNumber: String? = null,
     var mapTitle: String? = null,
     var mapExplanation: String? = null,
     var mapImage: String? = null,
     var distance: Double? = null,
-    var time: Long? = null, // Time 형식 어떻게 할지
+    var time: Long? = null,
     var execute: Int? = null,
     var likes: Int? = null,
     var privacy: Privacy=Privacy.PUBLIC,
