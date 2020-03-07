@@ -30,6 +30,7 @@ import com.google.firebase.storage.StorageReference
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.umpa2020.tracer.MainActivity
 import com.umpa2020.tracer.R
+import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_sign_up.*
@@ -74,12 +75,14 @@ class SignUpActivity : AppCompatActivity() {
     private var email: String? = null
 
     var timestamp: Long = 0
-
+    private lateinit var progressbar: ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_sign_up)
+
+        progressbar = ProgressBar(this)
 
         editNickname.requestFocus()
         init()
@@ -374,6 +377,7 @@ class SignUpActivity : AppCompatActivity() {
             UserInfo.nickname = nickname // Shared에 nickname저장.
             var nextIntent = Intent(this@SignUpActivity, MainActivity::class.java)
             startActivity(nextIntent)
+            progressbar.dismiss()
             finish()
 
         }
@@ -405,7 +409,8 @@ class SignUpActivity : AppCompatActivity() {
             R.id.editGender -> {
                 var intent = Intent(this, GenderSelectActivity::class.java)
                 startActivityForResult(intent, 102)
-
+                editAge.clearFocus()
+                editNickname.clearFocus()
             }
             R.id.profileImage -> {
                 // tedPermission()
@@ -426,6 +431,7 @@ class SignUpActivity : AppCompatActivity() {
                 nickname = editNickname.text.toString()
                 age = editAge.text.toString()
                 gender = editGender.text.toString()
+                progressbar.show()
 
                 Log.d(WSY, "가입 버튼 눌렀을 때" + nickname + ", " + age + ", " + gender)
 
