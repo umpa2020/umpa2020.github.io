@@ -27,12 +27,20 @@ class RankRecyclerViewAdapterTopPlayer(val mydata: ArrayList<RankingData>) : Rec
         holder.time.text = formatter.format(Date(singleItem1.challengerTime!!))
 
         //ranking에 따라 트로피 색 바뀌게 하는 부분
-        if (ranking == 1)
-            holder.rank.setBackgroundResource(R.drawable.ic_1)
-        else if (ranking == 2)
-            holder.rank.setBackgroundResource(R.drawable.ic_2)
-        else if (ranking == 3)
-            holder.rank.setBackgroundResource(R.drawable.ic_3)
+        if (ranking == 1){
+            holder.rank.setBackgroundResource(R.drawable.ic_ranking_1_black)
+            holder.rank.text = ""
+        }
+
+        else if (ranking == 2){
+            holder.rank.setBackgroundResource(R.drawable.ic_ranking_2_black)
+            holder.rank.text = ""
+        }
+
+        else if (ranking == 3){
+            holder.rank.setBackgroundResource(R.drawable.ic_ranking_3_black)
+            holder.rank.text = ""
+        }
         else
             holder.rank.setBackgroundResource(R.drawable.ic_4)
 

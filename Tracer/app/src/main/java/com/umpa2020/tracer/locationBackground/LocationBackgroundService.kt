@@ -44,7 +44,7 @@ class LocationBackgroundService : IntentService("LocationBackgroundService"), Lo
         Log.d(TAG, this.toString())
         LocationUpdatesComponent.setILocationProvider(this)
         LocationUpdatesComponent.onCreate(this)
-        LocationUpdatesComponent.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY)
+        LocationUpdatesComponent.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
 
 
         notification = createNotification()
@@ -146,8 +146,8 @@ class LocationBackgroundService : IntentService("LocationBackgroundService"), Lo
         ) else Notification.Builder(this)
 
         return builder
-            .setContentTitle("Background Service")
-            .setContentText("Background location service is getting location...")
+            .setContentTitle("GPS 활성화")
+            //  .setContentText("Background location service is getting location...")
             .setContentIntent(pendingIntent)
             .setSmallIcon(R.mipmap.ic_launcher)
             .setTicker("Ticker text")
