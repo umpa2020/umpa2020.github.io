@@ -13,13 +13,12 @@ import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.Toast
+import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -379,7 +378,6 @@ class SignUpActivity : AppCompatActivity() {
             startActivity(nextIntent)
             progressbar.dismiss()
             finish()
-
         }
     }
 
@@ -431,18 +429,18 @@ class SignUpActivity : AppCompatActivity() {
                 nickname = editNickname.text.toString()
                 age = editAge.text.toString()
                 gender = editGender.text.toString()
-                progressbar.show()
+
 
                 Log.d(WSY, "가입 버튼 눌렀을 때" + nickname + ", " + age + ", " + gender)
 
                 if (isInputCorrectData[0] && age!!.isNotEmpty() && gender!!.isNotEmpty()) {
-
                     if (bitmapImg == null) // 기본 프로필로 가입하기
                     {
-                        basicBitmapImg = BitmapFactory.decodeResource(resources, R.drawable.basic_profile)
-                        signUp(basicBitmapImg!!, nickname!!, age!!, gender!!)
+                        showSettingPopup()
+
                     } else { // 설정한 프로필로 가입하기
                         signUp(bitmapImg!!, nickname!!, age!!, gender!!)
+                        progressbar.show()
                     }
 
                 }
@@ -454,9 +452,46 @@ class SignUpActivity : AppCompatActivity() {
                             reactiveInputTextViewData(a, false)
                     }
                 }
+
+
             }
 
         }
 
+    }
+
+    /**
+    기본 이미지로 설정할건지 물어보는 팝업
+     **/
+    fun showSettingPopup(){
+        val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val view = inflater.inflate(R.layout.sign_up_activity_yesnopopup, null)
+        val textView: TextView = view.findViewById(R.id.signUpActivityPopUpTextView)
+        textView.text = "기본 이미지로 설정하시겠습니까?"
+
+        val alertDialog = AlertDialog.Builder(this) //alertDialog 생성
+            .setTitle("선택해주세요.")
+            .create()
+
+        //Yes 버튼 눌렀을 때
+        val yesButton = view.findViewById<Button>(R.id.signUpActivityYesButton)
+        yesButton.setOnClickListener {
+            //TODO 기본 이미지로 넘어가게
+            basicBitmapImg = BitmapFactory.decodeResource(resources, R.drawable.basic_profile)
+            signUp(basicBitmapImg!!, nickname!!, age!!, gender!!)
+            alertDialog.dismiss()
+            progressbar.show()
+        }
+
+        //No 버튼 눌렀을 때
+        val noButton = view.findViewById<Button>(R.id.signUpActivityNoButton)
+        noButton.setOnClickListener {
+            //TODO 갤러리 선택하게
+            alertDialog.dismiss()
+            checkSelfPermission()
+        }
+
+        alertDialog.setView(view)
+        alertDialog.show() //팝업 띄우기
     }
 }

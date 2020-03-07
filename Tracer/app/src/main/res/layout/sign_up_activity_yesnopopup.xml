@@ -16,7 +16,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/runningActivityPopUpTextView"
+        android:id="@+id/signUpActivityPopUpTextView"
         android:layout_weight="1"
         android:layout_marginTop="20dp"
         android:gravity="center"
@@ -34,7 +34,7 @@
             android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:text="예"
-            android:id="@+id/runningActivityYesButton"
+            android:id="@+id/signUpActivityYesButton"
             android:background="@drawable/button_empty_background"
             style="@style/ListTitle"
             android:textSize="15dp"/>
@@ -44,7 +44,7 @@
             android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:text="아니오"
-            android:id="@+id/runningActivityNoButton"
+            android:id="@+id/signUpActivityNoButton"
             android:background="@drawable/button_background"
             style="@style/ListTitle"
             android:textSize="15dp"
