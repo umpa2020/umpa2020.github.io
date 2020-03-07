@@ -26,7 +26,8 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_weight="1">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -159,7 +160,7 @@
             </LinearLayout>
 
 
-            <com.github.mikephil.charting.charts.CombinedChart
+            <com.github.mikephil.charting.charts.LineChart
                 android:layout_marginTop="10dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"

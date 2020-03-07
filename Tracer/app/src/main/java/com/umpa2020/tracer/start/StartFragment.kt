@@ -13,7 +13,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.firebase.firestore.FirebaseFirestore
 import com.umpa2020.tracer.R
+import com.umpa2020.tracer.dataClass.testdata
 import com.umpa2020.tracer.locationBackground.LocationBackgroundService
 import com.umpa2020.tracer.map.BasicMap
 import com.umpa2020.tracer.racing.NearRouteActivity
@@ -27,17 +29,22 @@ class StartFragment : Fragment(), View.OnClickListener {
 
     lateinit var obj: Location
     var smf: SupportMapFragment? = null
+
     override fun onClick(v: View) {
         when (v.id) {
-            R.id.mainStartRunning -> {
+            com.umpa2020.tracer.R.id.mainStartRunning -> {
                 val newIntent = Intent(activity, RunningActivity::class.java)
                 startActivity(newIntent)
             }
-            R.id.mainStartRacing -> {
+            com.umpa2020.tracer.R.id.mainStartRacing -> {
                 val newIntent = Intent(activity, NearRouteActivity::class.java)
                 newIntent.putExtra("currentLocation", obj) //obj 정보 인텐트로 넘김
                 Log.d("jsj", "mainStartRunning누르는 순간의 intent " + obj.toString())
                 startActivity(newIntent)
+            }
+            R.id.test -> {
+
+
             }
         }
     }
@@ -57,14 +64,28 @@ class StartFragment : Fragment(), View.OnClickListener {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         Log.d(WSY, "onCreateView()")
-        return inflater.inflate(R.layout.fragment_start, container, false)
+        val view = inflater.inflate(R.layout.fragment_start, container, false)
+        view.test.setOnClickListener{
+            Log.d("ssmm11", "test 실행")
+            val testdata = testdata()
+            val db = FirebaseFirestore.getInstance()
+            db.collection("mapRoute").document("테스트트트트트트").set(testdata)
+                .addOnSuccessListener {
+                    Log.d("ssmm11", "성공!")
+                }
+                .addOnFailureListener {
+                    Log.d("ssmm11", "실패 ㅅㅂ")
+                }
+        }
+
+        return view
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d(WSY, "onViewCreated()")
-        smf = childFragmentManager.findFragmentById(R.id.map_viewer_start) as SupportMapFragment
+        smf = childFragmentManager.findFragmentById(com.umpa2020.tracer.R.id.map_viewer_start) as SupportMapFragment
         map = BasicMap(smf!!, context as Context)
 //        val smf = childFragmentManager.findFragmentById(R.id.map_viewer_start) as SupportMapFragment
 //
@@ -72,7 +93,6 @@ class StartFragment : Fragment(), View.OnClickListener {
         view.mainStartRunning.setOnClickListener(this)
         view.mainStartRacing.setOnClickListener(this)
     }
-
 
     val MESSENGER_INTENT_KEY = "msg-intent-key"
 
@@ -88,6 +108,8 @@ class StartFragment : Fragment(), View.OnClickListener {
                     obj = msg.obj as Location
                     Log.d(WSY, "StartFragment : 값을 가져왔음")
                     Log.d(WSY, "현재 위치 : " + obj.toString())
+
+
                     map.setLocation(obj)
                 }
             }
