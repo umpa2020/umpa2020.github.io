@@ -308,8 +308,9 @@ class SignUpActivity : AppCompatActivity() {
     // 서버로의 회원가입 진행
     private fun signUp(bitmapImg: Bitmap, nickname: String, age: String, gender: String) {
         if (flag == 1) {// false이면 닉네임 체크가 안된 것. 그러면 실행되면 안돼
-            uploadProfileImage(bitmapImg, nickname)
-            uploadUserInfo(nickname, age, gender)
+            val dt = Date().time
+            uploadProfileImage(bitmapImg, nickname, dt.toString())
+            uploadUserInfo(nickname, age, gender, dt.toString())
         } else if (flag == 3) {
             textInputLayoutArray[0].setErrorTextColor(resources.getColorStateList(R.color.red, null))
             textInputLayoutArray[0].error = "중복 확인을 해주십시오."
@@ -352,11 +353,10 @@ class SignUpActivity : AppCompatActivity() {
         flag = 3 // 비동기라서 이건 무조건 실행. 하지만 firebase보단 항상 먼저 실행됨.
     }
 
-    private fun uploadProfileImage(bitmapImg: Bitmap, nickname: String) {
+    private fun uploadProfileImage(bitmapImg: Bitmap, nickname: String, dt: String) {
         // 현재 날짜를 프로필 이름으로 nickname/Profile/현재날짜(영어).jpg 경로 만들기
-        val dt = Date().time
 
-        val profileRef = mStorageReference!!.child("Profile").child(tokenId!!).child(dt.toString() + ".jpg")
+        val profileRef = mStorageReference!!.child("Profile").child(tokenId!!).child(dt + ".jpg")
         // 이미지
         val bitmap = bitmapImg
         val baos = ByteArrayOutputStream()
@@ -379,14 +379,14 @@ class SignUpActivity : AppCompatActivity() {
         }
     }
 
-    private fun uploadUserInfo(nickname: String, age: String, gender: String) {
+    private fun uploadUserInfo(nickname: String, age: String, gender: String, dt: String) {
         // 회원 정보
         val data = hashMapOf(
             "googleTokenId" to tokenId,
             "nickname" to nickname,
             "age" to age,
             "gender" to gender,
-            "profileImagePath" to timestamp.toString()+".jpg"
+            "profileImagePath" to dt+".jpg"
         )
         mFirestoreDB!!.collection("userinfo").add(data)
             .addOnSuccessListener { Log.d(WSY, "DocumentSnapshot successfully written!") }
