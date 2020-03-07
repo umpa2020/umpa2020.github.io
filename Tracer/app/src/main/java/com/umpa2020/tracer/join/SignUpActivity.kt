@@ -75,15 +75,14 @@ class SignUpActivity : AppCompatActivity() {
     private var email: String? = null
 
     var timestamp: Long = 0
-    val progressbar = ProgressBar(this)
-
+    private lateinit var progressbar: ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_sign_up)
 
-        progressbar.show()
+        progressbar = ProgressBar(this)
 
         editNickname.requestFocus()
         init()
@@ -432,6 +431,7 @@ class SignUpActivity : AppCompatActivity() {
                 nickname = editNickname.text.toString()
                 age = editAge.text.toString()
                 gender = editGender.text.toString()
+                progressbar.show()
 
                 Log.d(WSY, "가입 버튼 눌렀을 때" + nickname + ", " + age + ", " + gender)
 
