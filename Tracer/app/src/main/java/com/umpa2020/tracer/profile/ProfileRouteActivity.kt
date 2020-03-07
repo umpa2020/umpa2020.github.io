@@ -1,6 +1,7 @@
 package com.umpa2020.tracer.profile
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.FirebaseFirestore
@@ -31,6 +32,12 @@ class ProfileRouteActivity : AppCompatActivity() {
                     for (document in result) {
                         val data = document.toObject(InfoData::class.java)
                         infoData.add(data)
+                    }
+                    if (result.isEmpty == true) {
+                        profileRecyclerRouteisEmpty.visibility = View.VISIBLE
+                    }
+                    else {
+                        profileRecyclerRouteisEmpty.visibility = View.GONE
                     }
                     //adpater 추가
                     profileRecyclerRoute.adapter = ProfileRecyclerViewAdapterRoute(infoData)

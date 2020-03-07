@@ -5,7 +5,9 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".join.SignUpActivity">
+    tools:context=".join.SignUpActivity"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
 
     <FrameLayout
         android:layout_width="match_parent"
