@@ -3,16 +3,14 @@
   <component name="ChangeListManager">
     <list default="true" id="115c0ecb-cb45-4aed-8dd7-9ac429a28adc" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tracer/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Tracer/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tracer/app/src/main/java/com/korea50k/tracer/MainActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/Tracer/app/src/main/java/com/korea50k/tracer/MainActivity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tracer/app/src/main/java/com/korea50k/tracer/start/ManageRunning.kt" beforeDir="false" afterPath="$PROJECT_DIR$/Tracer/app/src/main/java/com/korea50k/tracer/start/ManageRunning.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tracer/app/src/main/java/com/korea50k/tracer/start/RunningActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/Tracer/app/src/main/java/com/korea50k/tracer/start/RunningActivity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tracer/app/src/main/java/com/korea50k/tracer/util/LocationUpdatesComponent.kt" beforeDir="false" afterPath="$PROJECT_DIR$/Tracer/app/src/main/java/com/korea50k/tracer/util/LocationUpdatesComponent.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/local.properties" beforeDir="false" afterPath="$PROJECT_DIR$/local.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tracer.iml" beforeDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/build/" />
     <ignored path="$PROJECT_DIR$/out/" />
+    <ignored path="$PROJECT_DIR$/.gradle/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,7 +44,7 @@
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="595" />
-    <option name="width" value="697" />
+    <option name="width" value="698" />
     <option name="height" value="735" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -55,6 +53,18 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
+      <pane id="Scope">
+        <subPane subId="Scope 'Default Changelist'; set:Default Changelist; class com.intellij.packageDependencies.ChangeListScope">
+          <expand>
+            <path>
+              <item name="Tracer_gitlab" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="C:\Users\syg48\Documents\Tracer_gitlab" type="442cc68d:ScopeViewTreeModel$RootNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -66,18 +76,6 @@
               <item name="tracer" type="b2602c69:ProjectViewProjectNode" />
               <item name="tracer" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
               <item name="gradle" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-      <pane id="PackagesPane" />
-      <pane id="Scope">
-        <subPane subId="Scope 'Default Changelist'; set:Default Changelist; class com.intellij.packageDependencies.ChangeListScope">
-          <expand>
-            <path>
-              <item name="tracer" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="C:\Users\user\Documents\GitHub\tracer" type="442cc68d:ScopeViewTreeModel$RootNode" />
             </path>
           </expand>
           <select />
@@ -127,10 +125,10 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
+    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <layout>
       <window_info id="Captures" order="0" weight="0.25" />
-      <window_info active="true" content_ui="combo" id="Project" order="1" visible="true" weight="0.27609682" />
+      <window_info active="true" content_ui="combo" id="Project" order="1" visible="true" weight="0.27986577" />
       <window_info id="Structure" order="2" side_tool="true" />
       <window_info id="Build Variants" order="3" side_tool="true" />
       <window_info id="Image Layers" order="4" />
@@ -142,7 +140,7 @@
       <window_info anchor="bottom" id="TODO" order="1" />
       <window_info anchor="bottom" id="Terminal" order="2" />
       <window_info anchor="bottom" id="Event Log" order="3" side_tool="true" />
-      <window_info anchor="bottom" id="Build" order="4" visible="true" weight="0.32786885" />
+      <window_info anchor="bottom" id="Build" order="4" visible="true" weight="0.32650074" />
       <window_info anchor="right" id="Capture Analysis" order="0" />
       <window_info anchor="right" id="Gradle" order="1" />
       <window_info anchor="right" id="Theme Preview" order="2" />

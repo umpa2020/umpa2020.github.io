@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/tracer.iml" filepath="$PROJECT_DIR$/tracer.iml" group="tracer" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Tracer_gitlab.iml" filepath="$PROJECT_DIR$/.idea/modules/Tracer_gitlab.iml" group="Tracer_gitlab" />
     </modules>
   </component>
 </project>
