@@ -181,7 +181,7 @@
         android:layout_height="70dp"
         android:gravity="center"
         android:layout_gravity="bottom"
-        android:background="@color/white"
+        android:background="@drawable/button_handle_background"
         android:paddingBottom="15dp"
         android:paddingTop="15dp">
 
