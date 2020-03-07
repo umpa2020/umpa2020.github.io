@@ -37,8 +37,8 @@ class BasicMap : OnMapReadyCallback {
         Log.d("ssmm11", "onMapReady")
 
         mMap = googleMap //구글맵
-        mMap!!.isMyLocationEnabled = true
-        mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(previousLocation, 17F))   //화면이동
+        mMap!!.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
+        mMap!!.uiSettings.isZoomControlsEnabled = true
     }
 
     //TODO: Location을 확장해서 tolatlng
@@ -52,6 +52,7 @@ class BasicMap : OnMapReadyCallback {
 
         previousLocation = currentLocation                              //현재위치를 이전위치로 변경
     }
+    
 //
 //    /**
 //     *  내 아이콘 만들기 메소드
