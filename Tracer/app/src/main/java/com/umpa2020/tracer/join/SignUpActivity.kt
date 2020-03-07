@@ -433,26 +433,29 @@ class SignUpActivity : AppCompatActivity() {
 
                 Log.d(WSY, "가입 버튼 눌렀을 때" + nickname + ", " + age + ", " + gender)
 
-                if (isInputCorrectData[0] && age!!.isNotEmpty() && gender!!.isNotEmpty()) {
-                    if (bitmapImg == null) // 기본 프로필로 가입하기
-                    {
-                        showSettingPopup()
-
-                    } else { // 설정한 프로필로 가입하기
-                        signUp(bitmapImg!!, nickname!!, age!!, gender!!)
-                        progressbar.show()
-                    }
-
+                if(textInputLayoutArray[0].error != "사용 가능한 닉네임입니다."){ //무조건 중복 확인 버튼을 눌러야만 회원가입 가능하게 함
+                    Log.d("sujin", textInputLayoutArray[0].error.toString() + "if문 검사")
+                    Toast.makeText(this, "중복 확인을 해주세요.", Toast.LENGTH_LONG).show()
                 }
-                // 정보가 하나라도 입력 안되면 error 메시지 출력
-                else {
-                    for (a in 0..2) {
-                        // 에러 메시지 중에서도 정보가 입력되것 제외하고 출력.
-                        if (!isInputCorrectData[a])
-                            reactiveInputTextViewData(a, false)
+                else{
+                    if (isInputCorrectData[0] && age!!.isNotEmpty() && gender!!.isNotEmpty()) {
+                        if (bitmapImg == null) // 프로필 이미지를 설정하지 않았을 때 = 사용자 입장에서 프로필 버튼을 누르지 않았음
+                        {
+                            showSettingPopup() //팝업창으로 물어봄
+                        } else { // 프로필 이미지 있는 경우 설정한 프로필로 가입하기
+                            signUp(bitmapImg!!, nickname!!, age!!, gender!!)
+                            progressbar.show() //메인창으로 넘어가기 전까지 프로그래스 바 띄움
+                        }
+                    }
+                    // 정보가 하나라도 입력 안되면 error 메시지 출력
+                    else {
+                        for (a in 0..2) {
+                            // 에러 메시지 중에서도 정보가 입력되것 제외하고 출력.
+                            if (!isInputCorrectData[a])
+                                reactiveInputTextViewData(a, false)
+                        }
                     }
                 }
-
 
             }
 
@@ -476,17 +479,17 @@ class SignUpActivity : AppCompatActivity() {
         //Yes 버튼 눌렀을 때
         val yesButton = view.findViewById<Button>(R.id.signUpActivityYesButton)
         yesButton.setOnClickListener {
-            //TODO 기본 이미지로 넘어가게
+            //기본 이미지로 설정
             basicBitmapImg = BitmapFactory.decodeResource(resources, R.drawable.basic_profile)
             signUp(basicBitmapImg!!, nickname!!, age!!, gender!!)
             alertDialog.dismiss()
-            progressbar.show()
+            progressbar.show() //기본이미지로 회원가입이 바로 진행되도록 프로그레스바 띄움
         }
 
         //No 버튼 눌렀을 때
         val noButton = view.findViewById<Button>(R.id.signUpActivityNoButton)
         noButton.setOnClickListener {
-            //TODO 갤러리 선택하게
+            //갤러리에서 원하는 프로필 이미지 선택할 수 있도록 권한체크
             alertDialog.dismiss()
             checkSelfPermission()
         }
