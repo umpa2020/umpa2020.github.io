@@ -1,30 +1,30 @@
 package com.umpa2020.tracer.util
 
 import android.graphics.Color
-import com.github.mikephil.charting.animation.Easing
-import com.github.mikephil.charting.charts.CombinedChart
+import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.YAxis
-import com.github.mikephil.charting.data.*
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
 
 class Chart {
     var altsData:List<Double>
     var speedsData:List<Double>
-    var chart:CombinedChart
-    constructor(alts:List<Double>,speeds:List<Double>,chart:CombinedChart){
+    var chart:LineChart
+    constructor(alts:List<Double>,speeds:List<Double>,chart:LineChart){
         this.altsData=alts
         this.speedsData=speeds
         this.chart=chart
     }
 
-    //TODO: chart 클래스 빼는거 혹은 정리 부탁좀요 어딜 지워야할지 ..
     fun setChart() {    //클래스로 따로 빼야할듯
         var lineChart = chart
         val alts = ArrayList<Entry>()
-        val speeds = ArrayList<BarEntry>()
+        val speeds = ArrayList<Entry>()
 
         for (index in altsData.indices) {
             alts.add(Entry(index.toFloat(), altsData[index].toFloat()))
-            speeds.add(BarEntry(index.toFloat(), speedsData[index].toFloat()))
+            speeds.add(Entry(index.toFloat(), speedsData[index].toFloat()))
         }
 
         val xAxis = lineChart.xAxis
@@ -40,17 +40,22 @@ class Chart {
         yRAxis.axisMinimum = 0F
 
 
-        val set = BarDataSet(speeds, "속력")
-        set.color = Color.parseColor("#FF0000FF") // 파랑
-        set.barBorderColor = Color.parseColor("#FF0000FF") // 파랑
-        set.barBorderWidth = 3f
-        set.setDrawValues(false)
-        set.setDrawIcons(false)
-        set.isHighlightEnabled = false
-        set.axisDependency = YAxis.AxisDependency.RIGHT
+        // 속도 셋팅
+        var speedsData = LineData()
+        val lineDataSet = LineDataSet(speeds, "속도")
+        lineDataSet.lineWidth = 1.5f
+        lineDataSet.color = Color.parseColor("#FF0000FF") // 파랑
+        lineDataSet.setDrawHorizontalHighlightIndicator(false)
+        lineDataSet.setDrawHighlightIndicators(false)
+        lineDataSet.setDrawValues(false)
+        lineDataSet.setDrawCircles(false)
+        lineDataSet.setDrawCircleHole(false)
+        lineDataSet.axisDependency = YAxis.AxisDependency.LEFT
+        lineDataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER)
+        speedsData.addDataSet(lineDataSet)
 
         // 고도 셋팅
-        var speedsData = LineData()
+        var altsData = LineData()
         val lineDataSet2 = LineDataSet(alts, "고도")
         lineDataSet2.lineWidth = 1.5f
         lineDataSet2.color = Color.parseColor("#FFFF0000") // 빨강
@@ -59,21 +64,24 @@ class Chart {
         lineDataSet2.setDrawValues(false)
         lineDataSet2.setDrawCircles(false)
         lineDataSet2.setDrawCircleHole(false)
+        lineDataSet2.fillColor = Color.parseColor("#FFFF0000")
+        lineDataSet2.setDrawFilled(true)
         lineDataSet2.axisDependency = YAxis.AxisDependency.LEFT
 
-        speedsData.addDataSet(lineDataSet2)
+        altsData.addDataSet(lineDataSet2)
 
-        var combinedData = CombinedData()
+        val chartData = LineData()
 
-        combinedData.setData(BarData(set))
-        combinedData.setData(speedsData)
+        chartData.addDataSet(lineDataSet)
+        chartData.addDataSet(lineDataSet2)
 
 
-        lineChart.isDoubleTapToZoomEnabled = false // 더블 클릭 막기
+       /* lineChart.isDoubleTapToZoomEnabled = false // 더블 클릭 막기
         lineChart.setDrawGridBackground(false)
-        lineChart.animateY(2000, Easing.EasingOption.EaseInCubic)
+        lineChart.animateY(2000, Easing.EasingOption.EaseInCubic)*/
 
-        lineChart.data = combinedData
+        lineChart.data = chartData
         lineChart.invalidate()
+
     }
 }

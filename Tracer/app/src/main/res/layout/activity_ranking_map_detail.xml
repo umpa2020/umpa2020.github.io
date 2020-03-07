@@ -238,7 +238,7 @@
                 style="@style/ListTitle"
                 android:textColor="@android:color/black"/>
 
-            <com.github.mikephil.charting.charts.CombinedChart
+            <com.github.mikephil.charting.charts.LineChart
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:id="@+id/rankingDetailChart"
@@ -248,7 +248,7 @@
                 android:layout_below="@+id/rankingDetailMapDetailItem3"
                 android:layout_marginBottom="50dp"
                 >
-            </com.github.mikephil.charting.charts.CombinedChart>
+            </com.github.mikephil.charting.charts.LineChart>
 
 
         </RelativeLayout>

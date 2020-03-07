@@ -39,7 +39,6 @@ class BasicMap : OnMapReadyCallback {
         mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(previousLocation, 17F))   //화면이동
     }
 
-    //TODO: Location을 확장해서 tolatlng
     fun setLocation(location: Location) {
         var lat = location!!.latitude
         var lng = location!!.longitude

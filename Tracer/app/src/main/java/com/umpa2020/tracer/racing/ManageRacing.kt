@@ -113,7 +113,6 @@ class ManageRacing {
         infoData.mapTitle = mapTitle
         infoData.distance = calcLeftDistance()
 
-        //TODO: DB에 올려야됨
         if (result) {
             val newIntent = Intent(context, RacingFinishActivity::class.java)
             newIntent.putExtra("Result", result)
