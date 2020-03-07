@@ -145,7 +145,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_gravity="bottom"
-        android:background="@color/white"
+        android:background="@drawable/button_handle_background"
         android:gravity="center">
 
         <Button
