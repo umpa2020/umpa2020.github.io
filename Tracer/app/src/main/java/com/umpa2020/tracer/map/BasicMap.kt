@@ -41,7 +41,6 @@ class BasicMap : OnMapReadyCallback {
         mMap!!.uiSettings.isZoomControlsEnabled = true
     }
 
-    //TODO: Location을 확장해서 tolatlng
     fun setLocation(location: Location) {
         var lat = location!!.latitude
         var lng = location!!.longitude

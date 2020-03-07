@@ -3,7 +3,6 @@ package com.umpa2020.tracer.start
 import android.content.Context
 import android.content.Intent
 import android.location.Location
-import android.location.LocationManager
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
@@ -13,12 +12,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.firebase.firestore.FirebaseFirestore
+import com.umpa2020.tracer.R
+import com.umpa2020.tracer.dataClass.testdata
 import com.umpa2020.tracer.locationBackground.LocationBackgroundService
 import com.umpa2020.tracer.map.BasicMap
 import com.umpa2020.tracer.racing.NearRouteActivity
-import com.umpa2020.tracer.util.LocationUpdatesComponent
 import kotlinx.android.synthetic.main.fragment_start.view.*
 
 
@@ -42,6 +42,10 @@ class StartFragment : Fragment(), View.OnClickListener {
                 Log.d("jsj", "mainStartRunning누르는 순간의 intent " + obj.toString())
                 startActivity(newIntent)
             }
+            R.id.test -> {
+
+
+            }
         }
     }
 
@@ -60,7 +64,21 @@ class StartFragment : Fragment(), View.OnClickListener {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         Log.d(WSY, "onCreateView()")
-        return inflater.inflate(com.umpa2020.tracer.R.layout.fragment_start, container, false)
+        val view = inflater.inflate(R.layout.fragment_start, container, false)
+        view.test.setOnClickListener{
+            Log.d("ssmm11", "test 실행")
+            val testdata = testdata()
+            val db = FirebaseFirestore.getInstance()
+            db.collection("mapRoute").document("테스트트트트트트").set(testdata)
+                .addOnSuccessListener {
+                    Log.d("ssmm11", "성공!")
+                }
+                .addOnFailureListener {
+                    Log.d("ssmm11", "실패 ㅅㅂ")
+                }
+        }
+
+        return view
     }
 
 

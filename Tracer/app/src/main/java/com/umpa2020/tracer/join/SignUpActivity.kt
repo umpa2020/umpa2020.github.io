@@ -34,7 +34,6 @@ import com.umpa2020.tracer.util.UserInfo
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_sign_up.*
 import java.io.ByteArrayOutputStream
-import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.Pattern
 
@@ -273,7 +272,6 @@ class SignUpActivity : AppCompatActivity() {
 
                     profileImage.setImageBitmap(bitmapImg)
                     profileImage.scaleType = ImageView.ScaleType.CENTER_CROP
-                    //TODO:서버로 데이터 전송
                 } catch (e: java.lang.Exception) {
 
                 }
@@ -356,13 +354,9 @@ class SignUpActivity : AppCompatActivity() {
 
     private fun uploadProfileImage(bitmapImg: Bitmap, nickname: String) {
         // 현재 날짜를 프로필 이름으로 nickname/Profile/현재날짜(영어).jpg 경로 만들기
-        val dt = Date()
-        val full_sdf = SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.getDefault())
+        val dt = Date().time
 
-        val date = full_sdf.parse(dt.toString())
-        timestamp = date!!.time
-
-        val profileRef = mStorageReference!!.child("Profile").child(tokenId!!).child(timestamp.toString() + ".jpg")
+        val profileRef = mStorageReference!!.child("Profile").child(tokenId!!).child(dt.toString() + ".jpg")
         // 이미지
         val bitmap = bitmapImg
         val baos = ByteArrayOutputStream()
