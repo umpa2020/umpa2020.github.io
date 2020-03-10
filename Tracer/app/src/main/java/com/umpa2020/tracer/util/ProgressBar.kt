@@ -17,11 +17,11 @@ class ProgressBar(context:Context): AlertDialog(context) {
         setContentView(R.layout.custom_dialog)
         window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     }
-
+/*
     //백버튼 막기
     override fun onBackPressed() {
         return
-    }
+    }*/
 
     //바깥레이어 클릭시 안닫히게
     override fun onTouchEvent(event: MotionEvent): Boolean {

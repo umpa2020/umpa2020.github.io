@@ -33,7 +33,6 @@ class RunningSaveActivity : AppCompatActivity() {
         infoData = intent.getParcelableExtra("Info Data")
         routeData = intent.getParcelableExtra("Route Data")
 
-        //TODO: 액티비티에 그리는 거 먼저
         val smf = supportFragmentManager.findFragmentById(com.umpa2020.tracer.R.id.map_viewer) as SupportMapFragment
         map = ViewerMap(smf, this, routeData)
         distance_tv.text = String.format("%.2f", infoData.distance!! / 1000)

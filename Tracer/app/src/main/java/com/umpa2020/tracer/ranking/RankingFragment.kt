@@ -1,84 +1,82 @@
 package com.umpa2020.tracer.ranking
 
+import android.content.Intent
+import android.location.Location
 import android.os.Bundle
-import android.util.Log
+import android.os.Handler
+import android.os.Message
+import android.os.Messenger
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
+import com.umpa2020.tracer.MainActivity.Companion.MESSENGER_INTENT_KEY
 import com.umpa2020.tracer.R
-import com.umpa2020.tracer.dataClass.InfoData
-import com.umpa2020.tracer.util.ProgressBar
+import com.umpa2020.tracer.locationBackground.LocationBackgroundService
+import com.umpa2020.tracer.network.getRanking
 import kotlinx.android.synthetic.main.fragment_ranking.view.*
-import java.text.SimpleDateFormat
-import java.util.*
+import kotlinx.android.synthetic.main.fragment_ranking.view.test_button1 as test_button11
 
 /**
  * main 화면의 ranking tab
  */
 class RankingFragment : Fragment() {
-    lateinit var infoData: InfoData
-    lateinit var infoDatas: ArrayList<InfoData>
-    lateinit var rankingDownloadThread: Thread
     lateinit var strDate: String
+    lateinit var obj: Location
+    var mHandler: IncomingMessageHandler? = null
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         //TODO: return inflate~~~
-        var view: View = inflater!!.inflate(R.layout.fragment_ranking, container, false)
-
-        val progressbar = ProgressBar(context!!)
-        progressbar.show()
-        /**
-         * TextView에 현재 날짜, 월 입력하는 함수
-         */
-        timeSetTextView()
-        view!!.rankingFragmentMonthTextView.text = strDate
-
-        infoDatas = arrayListOf()
-
-        //레이아웃 매니저 추가
-        view.rank_recycler_map.layoutManager = LinearLayoutManager(context)
-
-
         //TODO: Thread 사용하지 말고, 클래스로 빼서 getInfos 처럼 하면 배열이 받아온다는 걸 미리 알 수 있게
         //TODO: activity Created 로 이전
-        rankingDownloadThread = Thread(Runnable {
-            val db = FirebaseFirestore.getInstance()
+        val view: View = inflater.inflate(R.layout.fragment_ranking, container, false)
 
-            db.collection("mapInfo").orderBy("execute", Query.Direction.DESCENDING)
-                .get()
-                .addOnSuccessListener { result ->
-                    //
-                    // result.forEachIndexed()
-                    for (document in result) {
-                        infoData = document.toObject(InfoData::class.java)
-                        infoData.mapTitle = document.id
-                        infoDatas.add(infoData)
-                    }
-                    //adpater 추가
-                    view.rank_recycler_map.adapter = RankRecyclerViewAdapterMap(infoDatas)
-                    progressbar.dismiss()
-                }
-                .addOnFailureListener { exception ->
-                }
-        })
+        mHandler = IncomingMessageHandler()
 
-        rankingDownloadThread.start()
+
+        getRanking().getExcuteDESCENDING(context!!, view)
+
+        /**
+         * 수진이가 xml 만들어주면 해당 기능 붙히기
+         */
+        view.test_button11.setOnClickListener {
+            getRanking().getExcuteDESCENDING(context!!, view)
+        }
+
+        view.test_button3.setOnClickListener {
+            getRanking().getFilterRange(context!!, view, obj)
+        }
+
         return view
     }
 
-    fun timeSetTextView() {
-        val dateFormat = SimpleDateFormat("yyyy년 MM월")
-        dateFormat.timeZone = TimeZone.getTimeZone("Asia/Seoul")
-        val date = Calendar.getInstance().time
-        strDate = dateFormat.format(date)
-        Log.d("date", strDate)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        mHandler = IncomingMessageHandler()
+        Intent(context, LocationBackgroundService::class.java).also {
+            val messengerIncoming = Messenger(mHandler)
+            it.putExtra(MESSENGER_INTENT_KEY, messengerIncoming)
+
+            activity!!.startService(it)
+        }
+    }
+
+    inner class IncomingMessageHandler : Handler() {
+        override fun handleMessage(msg: Message) {
+
+            super.handleMessage(msg)
+
+            when (msg.what) {
+                LocationBackgroundService.LOCATION_MESSAGE -> {
+                    obj = msg.obj as Location
+                }
+            }
+        }
     }
 
 }

@@ -32,11 +32,11 @@ class StartFragment : Fragment(), View.OnClickListener {
 
     override fun onClick(v: View) {
         when (v.id) {
-            com.umpa2020.tracer.R.id.mainStartRunning -> {
+            R.id.mainStartRunning -> {
                 val newIntent = Intent(activity, RunningActivity::class.java)
                 startActivity(newIntent)
             }
-            com.umpa2020.tracer.R.id.mainStartRacing -> {
+            R.id.mainStartRacing -> {
                 val newIntent = Intent(activity, NearRouteActivity::class.java)
                 newIntent.putExtra("currentLocation", obj) //obj 정보 인텐트로 넘김
                 Log.d("jsj", "mainStartRunning누르는 순간의 intent " + obj.toString())
@@ -65,7 +65,7 @@ class StartFragment : Fragment(), View.OnClickListener {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         Log.d(WSY, "onCreateView()")
         val view = inflater.inflate(R.layout.fragment_start, container, false)
-        view.test.setOnClickListener{
+        view.test.setOnClickListener {
             Log.d("ssmm11", "test 실행")
             val testdata = testdata()
             val db = FirebaseFirestore.getInstance()

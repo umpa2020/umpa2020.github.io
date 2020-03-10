@@ -9,25 +9,62 @@
         android:orientation="vertical">
 
         <Toolbar
-            android:layout_width="match_parent"
+            android:layout_width="350dp"
             android:layout_height="50dp"
-            android:layout_alignParentTop="true"
             android:elevation="1dp"
-
             android:background="@color/white">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginRight="12dp"
+                android:layout_marginRight="45dp"
+                android:layout_marginLeft="40dp"
                 android:gravity="center"
                 android:text="랭킹"
                 style="@style/appBarText">
 
             </TextView>
-        </Toolbar>
 
-        <TextView
+
+
+        </Toolbar>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:text="실행순"
+                android:textSize="12dp"
+                android:id="@+id/test_button1"
+                />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:text="좋아요"
+                android:textSize="12dp"
+                android:id="@+id/test_button2"
+                />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:text="작게"
+                android:textSize="12dp"
+                android:id="@+id/test_button3"
+                />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:text="크게"
+                android:textSize="12dp"
+                android:id="@+id/test_button4"
+                />
+        </LinearLayout>
+
+      <!-- <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/rankingFragmentMonthTextView"
@@ -42,7 +79,7 @@
             android:textSize="18dp"
             android:textColor="@color/black"
             android:textStyle="bold"
-            android:gravity="center"/>
+            android:gravity="center"/>-->
 
         <LinearLayout
             android:id="@+id/listTitleLinearLayout"
@@ -80,17 +117,15 @@
 
         <TextView
             android:id="@+id/divisionTextView"
-            style="@style/divisionTextView"
-            android:layout_below="@id/listTitleLinearLayout"></TextView>
+            style="@style/divisionTextView" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rank_recycler_map"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/divisionTextView"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="5dp"
-            android:layout_marginRight="20dp"></androidx.recyclerview.widget.RecyclerView>
+            android:layout_marginRight="20dp" />
 
 
     </LinearLayout>

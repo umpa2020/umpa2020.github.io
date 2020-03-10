@@ -38,15 +38,15 @@ class NearRouteActivity : AppCompatActivity() {
 
         //startFragment에서 넘긴 현재 위치를 intent로 받음
         val intent = getIntent()
-        var current = intent.extras?.getParcelable<Location>("currentLocation")
+        val current = intent.extras?.getParcelable<Location>("currentLocation")
 
         Log.d("jsj", "near 넘어와서 getintent 한 값 " + current.toString())
 
         //결과로 가져온 location에서 정보추출 / 이건 위도 경도 형태로 받아오는 형식
         //Location 형태로 받아오고 싶다면 아래처럼
         //var getintentLocation = current
-        var lat = current!!.latitude
-        var lng = current!!.longitude
+        val lat = current!!.latitude
+        val lng = current!!.longitude
         cur_loc = LatLng(lat, lng)
 
         Log.d("ssmm11", "현재 위치 = " + lat.toString() + lng.toString())
