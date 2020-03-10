@@ -26,8 +26,7 @@ class getRanking {
 
 
     var cur_loc = LatLng(0.0, 0.0)          //현재위치
-    var latLng = LatLng(0.0,0.0)
-
+    var latLng = LatLng(0.0, 0.0)
 
 
     /**
@@ -63,6 +62,10 @@ class getRanking {
             }
     }
 
+    /**
+     * 현재 위치를 받아서 현재 위치와 필터에 적용한 위치 만큼 떨어져 있는 구간에서 실행순으로 정렬한 코드
+     */
+
     fun getFilterRange(context: Context, view: View, location: Location) {
         val progressbar = ProgressBar(context)
         progressbar.show()
@@ -96,33 +99,30 @@ class getRanking {
                         )
                         break
                     }
-                    if ( SphericalUtil.computeDistanceBetween(cur_loc, latLng) <= 22000) {
+                    if (SphericalUtil.computeDistanceBetween(cur_loc, latLng) <= 22000) {
                         db.collection("mapInfo").whereEqualTo("mapTitle", document.id)
                             .get()
                             .addOnSuccessListener { result2 ->
 
                                 for (document2 in result2) {
                                     infoData = document2.toObject(InfoData::class.java)
-                                    Log.d("ssmm11", "맵 : " + document2.id + " 실행수 : "+ infoData.execute)
+                                    Log.d("ssmm11", "맵 : " + document2.id + " 실행수 : " + infoData.execute)
                                     infoData.mapTitle = document2.id
                                     infoDatas.add(infoData)
                                     break
                                 }
 
-                                infoDatas.sortByDescending { infoData -> infoData.execute  }
+                                infoDatas.sortByDescending { infoData -> infoData.execute }
                                 view.rank_recycler_map.adapter = RankRecyclerViewAdapterMap(infoDatas)
 
                                 progressbar.dismiss()
                             }
                     }
                 }
-
-
                 progressbar.dismiss()
             }
             .addOnFailureListener { exception ->
                 Log.w("ssmm11", "Error getting documents.", exception)
             }
     }
-
 }

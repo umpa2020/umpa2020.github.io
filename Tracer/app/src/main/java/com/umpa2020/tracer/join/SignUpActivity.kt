@@ -390,7 +390,7 @@ class SignUpActivity : AppCompatActivity() {
             "gender" to gender,
             "profileImagePath" to dt+".jpg"
         )
-        mFirestoreDB!!.collection("userinfo").add(data)
+        mFirestoreDB!!.collection("userinfo").document(tokenId!!).set(data)
             .addOnSuccessListener { Log.d(WSY, "DocumentSnapshot successfully written!") }
             .addOnFailureListener { e -> Log.w(WSY, "Error writing document", e) }
 

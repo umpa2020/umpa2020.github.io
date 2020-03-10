@@ -50,7 +50,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/profileFragmentCreateTime"
+            android:id="@+id/profileFragmentNickname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="test"
