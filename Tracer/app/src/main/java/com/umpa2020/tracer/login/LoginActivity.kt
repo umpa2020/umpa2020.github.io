@@ -123,7 +123,7 @@ class LoginActivity : AppCompatActivity() {
      */
     private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
         Log.d(WSY, "firebaseAuthWithGoogle:" + acct.id!!) // firebaseAuthWithGoogle:117635384468060774340 => 계정 고유 번호 => 이것을 Shared에 저장하여 자동 로그인 구현
-        Log.d(WSY, acct.email)
+        //Log.d(WSY, acct.email)
 
         val tokenId = acct.id!!.toString()
         val email = acct.email.toString()
