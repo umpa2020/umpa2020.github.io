@@ -29,6 +29,8 @@ class ManageRunning {
     var timeWhenStopped: Long = 0
     var privacy = Privacy.RACING
 
+    var distanceFlag = false
+
     constructor(smf: SupportMapFragment, context: Context) {
         this.context = context
         activity = context as RunningActivity
@@ -44,7 +46,7 @@ class ManageRunning {
         distanceThread = Thread(Runnable {
             // 거리 계산해주는 스레드 -> 일시 정지, 정지 해도 스레드 계속 실행됨.
             try {
-                while (true) {
+                while (!distanceFlag) {
                     Thread.sleep(1000)
                     Log.d(WSY, "???")
                     Log.d(WSY, "거리 : " + runningMap.distance.toString())
@@ -84,6 +86,8 @@ class ManageRunning {
         chronometer.stop()
         activity.pause()
         privacy = Privacy.PUBLIC
+
+        distanceFlag = true
 
     }
 

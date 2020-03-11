@@ -79,7 +79,6 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
 
         btn_stop!!.setOnLongClickListener {
             if (manageRunning.runningMap.distance < 200) {
-                //noticeMessage("거리가 200m 미만일때\n\n정지하시면 저장이 불가능합니다. \n\n정지하시겠습니까?", NoticeState.SIOP)
                 showChoicePopup("거리가 200m 미만일때\n정지하시면 저장이 불가능합니다. \n\n정지하시겠습니까?", NoticeState.SIOP)
             } else
                 manageRunning.stopRunning()
@@ -97,7 +96,7 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
             startService(it)
         }
     }
-
+    
     private fun init() {
         val smf = supportFragmentManager.findFragmentById(R.id.map_viewer) as SupportMapFragment
         manageRunning = ManageRunning(smf, this)

@@ -12,13 +12,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.chibatching.kotpref.Kotpref
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.FirebaseFirestore
+import com.umpa2020.tracer.MainActivity.Companion.WSY
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.testdata
 import com.umpa2020.tracer.locationBackground.LocationBackgroundService
 import com.umpa2020.tracer.map.BasicMap
 import com.umpa2020.tracer.racing.NearRouteActivity
+import com.umpa2020.tracer.util.LocationUpdatesComponent
+import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.fragment_start.view.*
 
 
@@ -30,21 +35,19 @@ class StartFragment : Fragment(), View.OnClickListener {
     lateinit var obj: Location
     var smf: SupportMapFragment? = null
 
+    var lastLacation : Location? = null
+
     override fun onClick(v: View) {
         when (v.id) {
-            com.umpa2020.tracer.R.id.mainStartRunning -> {
+            R.id.mainStartRunning -> {
                 val newIntent = Intent(activity, RunningActivity::class.java)
                 startActivity(newIntent)
             }
-            com.umpa2020.tracer.R.id.mainStartRacing -> {
+            R.id.mainStartRacing -> {
                 val newIntent = Intent(activity, NearRouteActivity::class.java)
                 newIntent.putExtra("currentLocation", obj) //obj 정보 인텐트로 넘김
                 Log.d("jsj", "mainStartRunning누르는 순간의 intent " + obj.toString())
                 startActivity(newIntent)
-            }
-            R.id.test -> {
-
-
             }
         }
     }
@@ -54,6 +57,7 @@ class StartFragment : Fragment(), View.OnClickListener {
 
         mHandler = IncomingMessageHandler()
         Log.d(WSY, "핸들러 생성?")
+
         Intent(context, LocationBackgroundService::class.java).also {
             val messengerIncoming = Messenger(mHandler)
             it.putExtra(MESSENGER_INTENT_KEY, messengerIncoming)
@@ -87,11 +91,19 @@ class StartFragment : Fragment(), View.OnClickListener {
         Log.d(WSY, "onViewCreated()")
         smf = childFragmentManager.findFragmentById(com.umpa2020.tracer.R.id.map_viewer_start) as SupportMapFragment
         map = BasicMap(smf!!, context as Context)
-//        val smf = childFragmentManager.findFragmentById(R.id.map_viewer_start) as SupportMapFragment
-//
-//        map = BasicMap(smf, context as Context)
+
         view.mainStartRunning.setOnClickListener(this)
         view.mainStartRacing.setOnClickListener(this)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d("sss", "onPause()")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d("sss", "onDestroy()")
     }
 
     val MESSENGER_INTENT_KEY = "msg-intent-key"
@@ -108,9 +120,9 @@ class StartFragment : Fragment(), View.OnClickListener {
                     obj = msg.obj as Location
                     Log.d(WSY, "StartFragment : 값을 가져왔음")
                     Log.d(WSY, "현재 위치 : " + obj.toString())
-
-
                     map.setLocation(obj)
+                    if(obj != null)
+                        lastLacation = obj
                 }
             }
         }

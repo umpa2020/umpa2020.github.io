@@ -19,7 +19,7 @@ import kotlinx.android.synthetic.main.activity_ranking_recode_racing.*
 
 class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpenListener,
     OnDrawerCloseListener {
-    var TAG = "what u wanna say?~~!~!"       //로그용 태그
+    var TAG = "WSY"       //로그용 태그
     lateinit var manageRacing: ManageRacing
     lateinit var makerRouteData: RouteData
     lateinit var drawer: SlidingDrawer

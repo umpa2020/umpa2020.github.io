@@ -2,8 +2,7 @@ package com.umpa2020.tracer.map
 
 import android.app.Activity
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.Canvas
+import android.graphics.Color
 import android.location.Location
 import android.util.Log
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -18,8 +17,10 @@ import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.RouteData
 import com.umpa2020.tracer.dataClass.UserState
 import com.umpa2020.tracer.start.RunningActivity
+import com.umpa2020.tracer.util.UserInfo
 import com.umpa2020.tracer.util.Wow.Companion.makingIcon
 import kotlinx.android.synthetic.main.activity_running.*
+
 
 /**
  *  앱에서 지도를 사용하려면 OnMapReadyCallback 인터페이스를 구현하고
@@ -43,6 +44,7 @@ class RunningMap(smf: SupportMapFragment, context: Context) : OnMapReadyCallback
     var markers: MutableList<LatLng> = mutableListOf()
     var markerCount = 0
 
+    var cameraFlag = false
 
     var cpOption = MarkerOptions()
 
@@ -53,34 +55,44 @@ class RunningMap(smf: SupportMapFragment, context: Context) : OnMapReadyCallback
 
     //Running
     init {
-//        userState = UserState.RUNNING
         this.context = context
         userState = UserState.PAUSED
         smf.getMapAsync(this)
-        createMyIcon()
+        //createMyIcon()
     }
 
-//    constructor(smf: SupportMapFragment, context: Context){
-//        this.context = context
-//        userState = UserState.RUNNING
-//        smf.getMapAsync(this)
-//        createMyIcon()
-//        print_log("Set UserState Running")
-//    }
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-//        initLocation()
+        mMap!!.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
     }
 
-
     fun startTracking() {
-        setStartIcon()  // 마지막 현재 위치에 아이콘 설정
+       // setStartIcon()  // 마지막 현재 위치에 아이콘 설정
+
+        mMap.addCircle(
+            CircleOptions()
+                .center(currentLocation)
+                .radius(2.0)
+                .strokeWidth(6f)
+                .strokeColor(Color.WHITE)
+                .fillColor(Color.GREEN)
+        )
+
         userState = UserState.RUNNING
     }
 
     fun stopTracking(routeData: RouteData, infoData: InfoData) {
         userState = UserState.PAUSED
+
+        mMap.addCircle(
+            CircleOptions()
+                .center(currentLocation)
+                .radius(2.0)
+                .strokeWidth(6f)
+                .strokeColor(Color.WHITE)
+                .fillColor(Color.RED)
+        )
 
         print_log("Stop")
         if (latlngs.size > 0) {
@@ -124,26 +136,26 @@ class RunningMap(smf: SupportMapFragment, context: Context) : OnMapReadyCallback
      *  내 아이콘 만들기 메소드
      *  위치 관련 정보 넣는거 없이 순수 아이콘 생성.
      */
-    private fun createMyIcon() {
-
-        val circleDrawable = context.getDrawable(R.drawable.ic_racer_marker)
-        var canvas = Canvas()
-        //TODO: 기본 파란색 으로 하는걸로 - 삭제 필요
-        var bitmap = Bitmap.createBitmap(
-            circleDrawable!!.intrinsicWidth,
-            circleDrawable!!.intrinsicHeight,
-            Bitmap.Config.ARGB_8888
-        )
-        canvas.setBitmap(bitmap)
-        circleDrawable.setBounds(
-            0,
-            0,
-            circleDrawable.intrinsicWidth,
-            circleDrawable.intrinsicHeight
-        )
-        circleDrawable.draw(canvas)
-        myIcon = BitmapDescriptorFactory.fromBitmap(bitmap)
-    }
+//    private fun createMyIcon() {
+//
+//        val circleDrawable = context.getDrawable(R.drawable.ic_racer_marker)
+//        var canvas = Canvas()
+//        //TODO: 기본 파란색 으로 하는걸로 - 삭제 필요
+//        var bitmap = Bitmap.createBitmap(
+//            circleDrawable!!.intrinsicWidth,
+//            circleDrawable!!.intrinsicHeight,
+//            Bitmap.Config.ARGB_8888
+//        )
+//        canvas.setBitmap(bitmap)
+//        circleDrawable.setBounds(
+//            0,
+//            0,
+//            circleDrawable.intrinsicWidth,
+//            circleDrawable.intrinsicHeight
+//        )
+//        circleDrawable.draw(canvas)
+//        myIcon = BitmapDescriptorFactory.fromBitmap(bitmap)
+//    }
 
     /**
      *  start Icon 설정
@@ -171,7 +183,12 @@ class RunningMap(smf: SupportMapFragment, context: Context) : OnMapReadyCallback
         else
             currentLocation = LatLng(location!!.latitude, location!!.longitude)
 
-        setMyIconToMap()
+        if(!cameraFlag) {
+            mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 17F))   //화면이동
+            cameraFlag = true
+        }
+
+//        setMyIconToMap()
         previousLocation = currentLocation                              //현재위치를 이전위치로 변경
     }
 
@@ -246,27 +263,27 @@ class RunningMap(smf: SupportMapFragment, context: Context) : OnMapReadyCallback
      *   내 위치 마커로 계속 업데이트
      *   현재 위치(currentLocation)
      */
-    private fun setMyIconToMap() {
-        if (currentMarker != null) currentMarker!!.remove() // 이전 마커 지워주는 행동
-
-        val markerOptions = MarkerOptions()
-        markerOptions.position(currentLocation)
-        markerOptions.title("Me")
-        markerOptions.icon(myIcon)
-        currentMarker = mMap.addMarker(markerOptions) // 이게 내 아이콘 찍네 => 지도에 현재 위치 찍는 듯?
-
-        /**
-         *   현재위치 따라서 카메라 이동
-         */
-        //카메라를 이전 위치로 옮긴다.
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 16F))
-//        mMap.animateCamera(
-//            CameraUpdateFactory.newLatLngZoom(
-//                currentLocation,
-//                17F
-//            )
-//        )
-    }
+//    private fun setMyIconToMap() {
+//        if (currentMarker != null) currentMarker!!.remove() // 이전 마커 지워주는 행동
+//
+//        val markerOptions = MarkerOptions()
+//        markerOptions.position(currentLocation)
+//        markerOptions.title("Me")
+//        markerOptions.icon(myIcon)
+//        currentMarker = mMap.addMarker(markerOptions) // 이게 내 아이콘 찍네 => 지도에 현재 위치 찍는 듯?
+//
+//        /**
+//         *   현재위치 따라서 카메라 이동
+//         */
+//        //카메라를 이전 위치로 옮긴다.
+//        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 16F))
+////        mMap.animateCamera(
+////            CameraUpdateFactory.newLatLngZoom(
+////                currentLocation,
+////                17F
+////            )
+////        )
+//    }
 
     fun getDistance() {
 

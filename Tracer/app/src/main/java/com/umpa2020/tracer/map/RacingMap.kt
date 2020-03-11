@@ -428,12 +428,6 @@ class RacingMap : OnMapReadyCallback {
         )
     }
 
-    fun calcLeftDistance() {
-        var i = markerCount
-
-    }
-
-
     fun print_log(text: String) {
         Log.d(TAG, text.toString())
     }
