@@ -118,7 +118,7 @@ class RunningSaveActivity : AppCompatActivity() {
         }
 
         //TODO: 랭킹 부분 구현 필요 레이싱에도 같은 구조 필요
-        val rankingData = RankingData(UserInfo.nickname, UserInfo.nickname, infoData.time)
+        val rankingData = RankingData(UserInfo.nickname, UserInfo.nickname, infoData.time, 1)
         db.collection("rankingMap").document(infoData.mapTitle!!).set(rankingData)
         db.collection("rankingMap").document(infoData.mapTitle!!).collection("ranking")
             .document(rankingData.makerNickname + "||" + full_sdf.format(dt)).set(rankingData)

@@ -116,13 +116,13 @@ object LocationUpdatesComponent {
      *
      *  마지막 위치를 가져와서 UI 설정. 시작 마커, 현재 자신의 위치 마커
      */
-    private fun getLastLocation(){
+    fun getLastLocation(){
         try{
             fusedLocationClient!!.lastLocation // 마지막으로 알려진 위치 가져오기
                 .addOnCompleteListener{task ->
                     if (task.isSuccessful && task.result != null) {
                         currentLocation = task.result!!
-                        Log.i(WSY, "getLastLocation " + currentLocation!!)
+                        Log.i("last", "getLastLocation " + currentLocation!!)
                         // getLastLocation Location[fused 37.619672,127.059084
                         // hAcc=15 et=+5d2h34m37s51ms alt=53.5 vel=0.0014348121
                         // bear=219.74748 vAcc=2 sAcc=??? bAcc=??? {Bundle[mParcelledData.dataSize=52]}]

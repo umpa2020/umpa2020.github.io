@@ -21,24 +21,21 @@ class BasicMap : OnMapReadyCallback {
     var currentLocation: LatLng = LatLng(0.0, 0.0)              //현재위치
     var context: Context
     var userState: UserState       //사용자의 현재상태 달리기전 or 달리는중 등 자세한내용은 enum참고
-    var currentMarker: Marker? = null        //사용자 마커
-    lateinit var myIcon: BitmapDescriptor    //사용자 이미지 아이콘(마커에 들어가는 이미지)
+    var cameraFlag = false
 
     //Running
     constructor(smf: SupportMapFragment, context: Context) {    //객체 생성자
         this.context = context
         userState = UserState.NORMAL
         smf.getMapAsync(this)                                   //맵프레그먼트와 연결
-      //  createMyIcon()
-    }
 
+    }
 
     override fun onMapReady(googleMap: GoogleMap) { //after the map is loaded
         Log.d("ssmm11", "onMapReady")
 
         mMap = googleMap //구글맵
         mMap!!.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
-        mMap!!.uiSettings.isZoomControlsEnabled = true
     }
 
     fun setLocation(location: Location) {
@@ -46,61 +43,13 @@ class BasicMap : OnMapReadyCallback {
         var lng = location!!.longitude
         currentLocation = LatLng(lat, lng)
 
-        mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 17F))   //화면이동
-       // setMyIconToMap()
-
+        if(!cameraFlag) {
+            mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 17F))   //화면이동
+            cameraFlag = true
+        }
         previousLocation = currentLocation                              //현재위치를 이전위치로 변경
     }
-    
-//
-//    /**
-//     *  내 아이콘 만들기 메소드
-//     *  위치 관련 정보 넣는거 없이 순수 아이콘 생성.
-//     */
-//    private fun createMyIcon() {
-//
-//        val circleDrawable = context.getDrawable(R.drawable.ic_racer_marker)
-//        var canvas = Canvas()
-//        var bitmap = Bitmap.createBitmap(
-//            circleDrawable!!.intrinsicWidth,
-//            circleDrawable!!.intrinsicHeight,
-//            Bitmap.Config.ARGB_8888
-//        )
-//        canvas.setBitmap(bitmap)
-//        circleDrawable.setBounds(
-//            0,
-//            0,
-//            circleDrawable.intrinsicWidth,
-//            circleDrawable.intrinsicHeight
-//        )
-//        circleDrawable.draw(canvas)
-//        myIcon = BitmapDescriptorFactory.fromBitmap(bitmap)
-//    }
-//
-//    /**
-//     *   내 위치 마커로 계속 업데이트
-//     *   현재 위치(currentLocation)
-//     */
-//    private fun setMyIconToMap() {
-//        if (currentMarker != null) currentMarker!!.remove() // 이전 마커 지워주는 행동
-//
-//        val markerOptions = MarkerOptions()
-//        markerOptions.position(currentLocation)
-//        markerOptions.title("Me")
-//        markerOptions.icon(myIcon)
-//        currentMarker = mMap!!.addMarker(markerOptions) // 이게 내 아이콘 찍네 => 지도에 현재 위치 찍는 듯?
-//
-//        /**
-//         *   현재위치 따라서 카메라 이동
-//         */
-//        mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 17F))   //화면이동
-////        mMap!!.animateCamera(
-////            CameraUpdateFactory.newLatLngZoom(
-////                currentLocation,
-////                17F
-////            )
-////        )
-//    }
+
 
 
     fun print_log(text: String) {

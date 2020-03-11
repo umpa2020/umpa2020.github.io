@@ -139,34 +139,32 @@ class LoginActivity : AppCompatActivity() {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d(WSY, "signInWithCredential:success")
                     // 로그인 성공
-                    mFirestoreDB!!.collection("userinfo").document(email).get()
-                        .addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                // Document found in the offline cache
-                                val document = task.result
-
-                                Log.d(WSY, document.toString()) // DocumentSnapshot{key=UserInfo/117635384468060774340, metadata=SnapshotMetadata{hasPendingWrites=false, isFromCache=false}, doc=null}
-                                Log.d(WSY, document!!.id)  // 117635384468060774340
-                                Log.d(WSY, document.exists().toString()) // false
-                                Log.d(WSY, document.reference.toString()) // com.google.firebase.firestore.DocumentReference@aafeaf20
-                                Log.d(WSY, "Cached document data: ${document?.data}") // Cached document data: null
+                    mFirestoreDB!!.collection("userinfo").whereEqualTo("googleTokenId", tokenId).get()
+                        .addOnSuccessListener { result ->
+                            // Document found in the offline cache
+                            if(result.isEmpty) {
+                                Log.d(WSY, "초기 가입인가")
+                                var nextIntent = Intent(this@LoginActivity, SignUpActivity::class.java)
+                                nextIntent.putExtra("tokenId", tokenId)
+                                nextIntent.putExtra("email", email)
 
 
+                                startActivity(nextIntent)
+                                finish()
+                                progressbar.dismiss()
+                            }
+                            else {
+                                for (document in result) {
+                                    Log.d(
+                                        WSY,
+                                        "이거임????? = " + document.toString()
+                                    )
+                                    // DocumentSnapshot{key=UserInfo/117635384468060774340, metadata=SnapshotMetadata{hasPendingWrites=false, isFromCache=false}, doc=null}
+                                    Log.d(WSY, document.exists().toString()) // false
+                                    Log.d(WSY, document.reference.toString()) // com.google.firebase.firestore.DocumentReference@aafeaf20
+                                    Log.d(WSY, "Cached document data: ${document?.data}") // Cached document data: null
 
-                                if ("${document?.data}" == "null") // data가 없으면 SignUpActivity로 이동
-                                {
-                                    // 최초 가입자
-                                    Log.d(WSY, "초기 가입인가")
-                                    var nextIntent = Intent(this@LoginActivity, SignUpActivity::class.java)
-                                    nextIntent.putExtra("tokenId", tokenId)
-                                    nextIntent.putExtra("email", email)
 
-
-                                    startActivity(nextIntent)
-                                    finish()
-                                    progressbar.dismiss()
-
-                                } else { // data가 있으면 Main으로
                                     Log.d(WSY, "기존 가입자 -> 메인으로") // 이 부분에 들어왔다는 것은 로그아웃 or 앱 삭제 후 재로그인일 테니깐 Shared에 다시 값 저장.
 
                                     Log.d(WSY, document.data.toString()) // {gender=Man, nickname=gfyhv, googleTokenId=117635384468060774340, age=26}
@@ -182,10 +180,7 @@ class LoginActivity : AppCompatActivity() {
                                     progressbar.dismiss()
 
                                 }
-                            } else {
-                                Log.d(WSY, "Cached get failed: ", task.exception)
                             }
-
                         }
                     // 1. 회원 정보가 없으면 초기 가입자이므로 정보 입력받는 창으로
                     // 2. 로그아웃을 했을 경우 회원 정보를 받은 기록이 있는지 판단하고 있으면 메인 화면으로

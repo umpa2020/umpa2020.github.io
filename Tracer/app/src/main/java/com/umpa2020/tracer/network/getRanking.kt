@@ -10,10 +10,10 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.maps.android.SphericalUtil
 import com.umpa2020.tracer.dataClass.InfoData
+import com.umpa2020.tracer.dataClass.NearMap
 import com.umpa2020.tracer.ranking.RankRecyclerViewAdapterMap
 import com.umpa2020.tracer.util.ProgressBar
 import kotlinx.android.synthetic.main.fragment_ranking.view.*
-import java.util.*
 
 
 /**
@@ -23,11 +23,11 @@ import java.util.*
 class getRanking {
     lateinit var infoData: InfoData
     lateinit var infoDatas: ArrayList<InfoData>
+    var nearMaps: ArrayList<NearMap> = arrayListOf()
 
 
     var cur_loc = LatLng(0.0, 0.0)          //현재위치
-    var latLng = LatLng(0.0,0.0)
-
+    var latLng = LatLng(0.0, 0.0)
 
 
     /**
@@ -53,7 +53,7 @@ class getRanking {
                     infoData.mapTitle = document.id
                     infoDatas.add(infoData)
                 }
-                view.rank_recycler_map.adapter = RankRecyclerViewAdapterMap(infoDatas)
+                //view.rank_recycler_map.adapter = RankRecyclerViewAdapterMap(infoDatas, nearMaps)
 
                 progressbar.dismiss()
             }
@@ -62,6 +62,10 @@ class getRanking {
 
             }
     }
+
+    /**
+     * 현재 위치를 받아서 현재 위치와 필터에 적용한 위치 만큼 떨어져 있는 구간에서 실행순으로 정렬한 코드
+     */
 
     fun getFilterRange(context: Context, view: View, location: Location) {
         val progressbar = ProgressBar(context)
@@ -84,9 +88,8 @@ class getRanking {
             .addOnSuccessListener { result ->
                 infoDatas = arrayListOf()
 
-                //TODO: SORT 함수를 새로 만들어서 해야할 듯 가져오는 건 되는데 정렬이 안되니깐
                 for (document in result) {
-                    var receiveRouteDatas = document.get("markerlatlngs") as List<Object>
+                    val receiveRouteDatas = document.get("markerlatlngs") as List<Object>
 
                     for (receiveRouteData in receiveRouteDatas) {
                         val location = receiveRouteData as Map<String, Any>
@@ -96,33 +99,32 @@ class getRanking {
                         )
                         break
                     }
-                    if ( SphericalUtil.computeDistanceBetween(cur_loc, latLng) <= 22000) {
+                    if (SphericalUtil.computeDistanceBetween(cur_loc, latLng) <= 22000) {
                         db.collection("mapInfo").whereEqualTo("mapTitle", document.id)
                             .get()
                             .addOnSuccessListener { result2 ->
 
                                 for (document2 in result2) {
                                     infoData = document2.toObject(InfoData::class.java)
-                                    Log.d("ssmm11", "맵 : " + document2.id + " 실행수 : "+ infoData.execute)
+                                    Log.d("ssmm11", "맵 : " + document2.id + " 실행수 : " + infoData.execute)
                                     infoData.mapTitle = document2.id
                                     infoDatas.add(infoData)
+                                    val nearMap = NearMap(document.id, SphericalUtil.computeDistanceBetween(cur_loc, latLng))
+                                    nearMaps.add(nearMap)
                                     break
                                 }
 
-                                infoDatas.sortByDescending { infoData -> infoData.execute  }
-                                view.rank_recycler_map.adapter = RankRecyclerViewAdapterMap(infoDatas)
+                                infoDatas.sortByDescending { infoData -> infoData.execute }
+                                view.rank_recycler_map.adapter = RankRecyclerViewAdapterMap(infoDatas ,nearMaps)
 
                                 progressbar.dismiss()
                             }
                     }
                 }
-
-
                 progressbar.dismiss()
             }
             .addOnFailureListener { exception ->
                 Log.w("ssmm11", "Error getting documents.", exception)
             }
     }
-
 }
