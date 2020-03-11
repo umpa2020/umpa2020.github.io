@@ -97,7 +97,7 @@ class ManageRacing {
         for (i in makerRouteData.markerlatlngs.size - 2 downTo racingMap.markerCount) {
             distance += distances[i]
         }
-        distance += SphericalUtil.computeDistanceBetween(racingMap.cur_loc, racingMap.markers[racingMap.markerCount])
+        distance += SphericalUtil.computeDistanceBetween(racingMap.currentLocation, racingMap.markers[racingMap.markerCount])
         return distance
     }
 

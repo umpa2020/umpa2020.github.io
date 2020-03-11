@@ -98,7 +98,7 @@ class RacingMap : OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-        mMap!!.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
+        mMap.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
         loadRoute()
         drawRoute()
         mMap.moveCamera(
@@ -145,7 +145,7 @@ class RacingMap : OnMapReadyCallback {
                     Log.w("ssmm11", "Error getting documents.", exception)
                 }
             //전체 시간 / 체크포인트 개수 = 한체크포인트에서 머물 시간
-            var sleepTime = ((time!!.toDouble() / markers.size.toDouble())).roundToLong()
+            var sleepTime = ((time.toDouble() / markers.size.toDouble())).roundToLong()
             print_log("시간 : " + time + ", " + sleepTime.toString())
 
             for (index in markers.indices) {
@@ -235,7 +235,7 @@ class RacingMap : OnMapReadyCallback {
         mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(LatLngBounds(min, max), 1080, 300, 50))
     }
 
-    fun setMyPosition(location : Location){
+    fun setMyPosition(location : Location) =
         /**
          *  여기서 서비스와의 통신으로 위치 설정
          */
@@ -258,7 +258,6 @@ class RacingMap : OnMapReadyCallback {
             markerCount++
             markers.add(prev_loc)*/
         }
-    }
 
     fun createData(location: Location){
         var lat = location.latitude

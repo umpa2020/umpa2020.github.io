@@ -6,30 +6,35 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <Toolbar
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentTop="true"
-        android:elevation="1dp"
-        android:background="@color/white">
-
-        <TextView
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <Toolbar
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="12dp"
-            android:gravity="center"
-            android:text="랭킹 기록용"
-            style="@style/appBarText">
-        </TextView>
-    </Toolbar>
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:elevation="1dp"
+            android:background="@color/white">
 
-    <fragment
-        android:id="@+id/map_viewer"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerInParent="true"
-        tools:context=".fragment.MapFragment" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="12dp"
+                android:gravity="center"
+                android:text="랭킹 기록용"
+                style="@style/appBarText">
+            </TextView>
+        </Toolbar>
+
+        <fragment
+            android:id="@+id/map_viewer"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            tools:context=".fragment.MapFragment" />
+    </LinearLayout>
 
     <hollowsoft.slidingdrawer.SlidingDrawer
         android:id="@+id/drawer"
