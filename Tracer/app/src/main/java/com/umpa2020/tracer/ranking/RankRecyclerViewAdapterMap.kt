@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.marginTop
 import androidx.recyclerview.widget.RecyclerView
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.InfoData
@@ -25,6 +24,7 @@ class RankRecyclerViewAdapterMap(val mdata: ArrayList<InfoData>) : RecyclerView.
         holder.rank.text = ranking.toString()
 
         holder.maptitle.text = cutted[0]
+        holder.distance.text = "temp"
         holder.execute.text = singleItem.execute.toString()
 
         //ranking에 따라 트로피 색 바뀌게 하는 부분
@@ -76,6 +76,7 @@ class RankRecyclerViewAdapterMap(val mdata: ArrayList<InfoData>) : RecyclerView.
     inner class mViewHolder(view: View) : RecyclerView.ViewHolder(view!!) {
         var rank = view.rankingFragmentCountTextView
         var maptitle = view.rankingFragmentMapTitleTextView
+        var distance = view.rankingFragmentDistanceTextView
         var execute = view.rankingFragmentExecuteTextView
     }
 

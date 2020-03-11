@@ -87,9 +87,8 @@ class getRanking {
             .addOnSuccessListener { result ->
                 infoDatas = arrayListOf()
 
-                //TODO: SORT 함수를 새로 만들어서 해야할 듯 가져오는 건 되는데 정렬이 안되니깐
                 for (document in result) {
-                    var receiveRouteDatas = document.get("markerlatlngs") as List<Object>
+                    val receiveRouteDatas = document.get("markerlatlngs") as List<Object>
 
                     for (receiveRouteData in receiveRouteDatas) {
                         val location = receiveRouteData as Map<String, Any>
@@ -113,7 +112,7 @@ class getRanking {
                                 }
 
                                 infoDatas.sortByDescending { infoData -> infoData.execute }
-                                view.rank_recycler_map.adapter = RankRecyclerViewAdapterMap(infoDatas)
+                                view.rank_recycler_map.adapter = RankRecyclerViewAdapterMap(infoDatas )
 
                                 progressbar.dismiss()
                             }
