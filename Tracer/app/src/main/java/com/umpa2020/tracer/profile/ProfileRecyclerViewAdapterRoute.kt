@@ -50,7 +50,7 @@ class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) : Recycler
         holder.time.text = formatter.format(Date(singleItem.time!!))
 
         // 아마 이 부분에서 터질건데 이거는 예전 데이터 지우면 해결
-        holder.createTime.text = cutted[1]
+        holder.nickname.text = singleItem.makersNickname
 
         //클릭하면 맵 상세보기 페이지로 이동
         holder.itemView.setOnClickListener {
@@ -79,7 +79,7 @@ class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) : Recycler
     inner class mViewHolder(view: View) : RecyclerView.ViewHolder(view!!) {
         var image = view.profileFragmentRouteGridImage
         var maptitle = view.profileFragmentGridMapTitle
-        var createTime = view.profileFragmentCreateTime
+        var nickname = view.profileFragmentNickname
         var distance = view.profileFragmentDistance
         var time = view.profileFragmentTime
     }

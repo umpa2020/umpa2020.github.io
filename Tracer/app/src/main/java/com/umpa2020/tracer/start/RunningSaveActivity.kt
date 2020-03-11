@@ -33,7 +33,6 @@ class RunningSaveActivity : AppCompatActivity() {
         infoData = intent.getParcelableExtra("Info Data")
         routeData = intent.getParcelableExtra("Route Data")
 
-        //TODO: 액티비티에 그리는 거 먼저
         val smf = supportFragmentManager.findFragmentById(com.umpa2020.tracer.R.id.map_viewer) as SupportMapFragment
         map = ViewerMap(smf, this, routeData)
         distance_tv.text = String.format("%.2f", infoData.distance!! / 1000)
@@ -119,7 +118,7 @@ class RunningSaveActivity : AppCompatActivity() {
         }
 
         //TODO: 랭킹 부분 구현 필요 레이싱에도 같은 구조 필요
-        val rankingData = RankingData(UserInfo.nickname, UserInfo.nickname, infoData.time)
+        val rankingData = RankingData(UserInfo.nickname, UserInfo.nickname, infoData.time, 1)
         db.collection("rankingMap").document(infoData.mapTitle!!).set(rankingData)
         db.collection("rankingMap").document(infoData.mapTitle!!).collection("ranking")
             .document(rankingData.makerNickname + "||" + full_sdf.format(dt)).set(rankingData)

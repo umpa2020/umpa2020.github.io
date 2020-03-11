@@ -3,6 +3,7 @@ package com.umpa2020.tracer.ranking
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.TextView
@@ -32,6 +33,7 @@ class RankingMapDetailActivity : AppCompatActivity() {
     var markerlatlngs: MutableList<LatLng> = mutableListOf()
     var dbMapTitle = ""
     var profileImagePath = ""
+    var googletokenId = ""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,13 +63,15 @@ class RankingMapDetailActivity : AppCompatActivity() {
                     .addOnSuccessListener { result ->
                         for (document in result) {
                             profileImagePath = document.get("profileImagePath") as String
+                            googletokenId = document.get("googleTokenId") as String
                         }
                         // glide imageview 소스
                         // 프사 설정하는 코드 db -> imageView glide
                         val imageView = rankingDetailProfileImage
 
                         val storage = FirebaseStorage.getInstance("gs://tracer-9070d.appspot.com/")
-                        val mapImageRef = storage.reference.child(makersNickname).child("Profile").child(profileImagePath)
+
+                        val mapImageRef = storage.reference.child("Profile").child(googletokenId).child(profileImagePath)
                         mapImageRef.downloadUrl.addOnCompleteListener { task ->
                             if (task.isSuccessful) {
                                 // Glide 이용하여 이미지뷰에 로딩

@@ -13,13 +13,12 @@ import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.Toast
+import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -30,6 +29,7 @@ import com.google.firebase.storage.StorageReference
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.umpa2020.tracer.MainActivity
 import com.umpa2020.tracer.R
+import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_sign_up.*
@@ -74,12 +74,14 @@ class SignUpActivity : AppCompatActivity() {
     private var email: String? = null
 
     var timestamp: Long = 0
-
+    private lateinit var progressbar: ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_sign_up)
+
+        progressbar = ProgressBar(this)
 
         editNickname.requestFocus()
         init()
@@ -308,8 +310,9 @@ class SignUpActivity : AppCompatActivity() {
     // 서버로의 회원가입 진행
     private fun signUp(bitmapImg: Bitmap, nickname: String, age: String, gender: String) {
         if (flag == 1) {// false이면 닉네임 체크가 안된 것. 그러면 실행되면 안돼
-            uploadProfileImage(bitmapImg, nickname)
-            uploadUserInfo(nickname, age, gender)
+            val dt = Date().time
+            uploadProfileImage(bitmapImg, nickname, dt.toString())
+            uploadUserInfo(nickname, age, gender, dt.toString())
         } else if (flag == 3) {
             textInputLayoutArray[0].setErrorTextColor(resources.getColorStateList(R.color.red, null))
             textInputLayoutArray[0].error = "중복 확인을 해주십시오."
@@ -352,11 +355,10 @@ class SignUpActivity : AppCompatActivity() {
         flag = 3 // 비동기라서 이건 무조건 실행. 하지만 firebase보단 항상 먼저 실행됨.
     }
 
-    private fun uploadProfileImage(bitmapImg: Bitmap, nickname: String) {
+    private fun uploadProfileImage(bitmapImg: Bitmap, nickname: String, dt: String) {
         // 현재 날짜를 프로필 이름으로 nickname/Profile/현재날짜(영어).jpg 경로 만들기
-        val dt = Date().time
 
-        val profileRef = mStorageReference!!.child("Profile").child(tokenId!!).child(dt.toString() + ".jpg")
+        val profileRef = mStorageReference!!.child("Profile").child(tokenId!!).child(dt + ".jpg")
         // 이미지
         val bitmap = bitmapImg
         val baos = ByteArrayOutputStream()
@@ -374,21 +376,21 @@ class SignUpActivity : AppCompatActivity() {
             UserInfo.nickname = nickname // Shared에 nickname저장.
             var nextIntent = Intent(this@SignUpActivity, MainActivity::class.java)
             startActivity(nextIntent)
+            progressbar.dismiss()
             finish()
-
         }
     }
 
-    private fun uploadUserInfo(nickname: String, age: String, gender: String) {
+    private fun uploadUserInfo(nickname: String, age: String, gender: String, dt: String) {
         // 회원 정보
         val data = hashMapOf(
             "googleTokenId" to tokenId,
             "nickname" to nickname,
             "age" to age,
             "gender" to gender,
-            "profileImagePath" to timestamp.toString()+".jpg"
+            "profileImagePath" to dt+".jpg"
         )
-        mFirestoreDB!!.collection("userinfo").add(data)
+        mFirestoreDB!!.collection("userinfo").document(tokenId!!).set(data)
             .addOnSuccessListener { Log.d(WSY, "DocumentSnapshot successfully written!") }
             .addOnFailureListener { e -> Log.w(WSY, "Error writing document", e) }
 
@@ -405,7 +407,8 @@ class SignUpActivity : AppCompatActivity() {
             R.id.editGender -> {
                 var intent = Intent(this, GenderSelectActivity::class.java)
                 startActivityForResult(intent, 102)
-
+                editAge.clearFocus()
+                editNickname.clearFocus()
             }
             R.id.profileImage -> {
                 // tedPermission()
@@ -427,30 +430,71 @@ class SignUpActivity : AppCompatActivity() {
                 age = editAge.text.toString()
                 gender = editGender.text.toString()
 
+
                 Log.d(WSY, "가입 버튼 눌렀을 때" + nickname + ", " + age + ", " + gender)
 
-                if (isInputCorrectData[0] && age!!.isNotEmpty() && gender!!.isNotEmpty()) {
-
-                    if (bitmapImg == null) // 기본 프로필로 가입하기
-                    {
-                        basicBitmapImg = BitmapFactory.decodeResource(resources, R.drawable.basic_profile)
-                        signUp(basicBitmapImg!!, nickname!!, age!!, gender!!)
-                    } else { // 설정한 프로필로 가입하기
-                        signUp(bitmapImg!!, nickname!!, age!!, gender!!)
-                    }
-
+                if(textInputLayoutArray[0].error != "사용 가능한 닉네임입니다."){ //무조건 중복 확인 버튼을 눌러야만 회원가입 가능하게 함
+                    Log.d("sujin", textInputLayoutArray[0].error.toString() + "if문 검사")
+                    Toast.makeText(this, "중복 확인을 해주세요.", Toast.LENGTH_LONG).show()
                 }
-                // 정보가 하나라도 입력 안되면 error 메시지 출력
-                else {
-                    for (a in 0..2) {
-                        // 에러 메시지 중에서도 정보가 입력되것 제외하고 출력.
-                        if (!isInputCorrectData[a])
-                            reactiveInputTextViewData(a, false)
+                else{
+                    if (isInputCorrectData[0] && age!!.isNotEmpty() && gender!!.isNotEmpty()) {
+                        if (bitmapImg == null) // 프로필 이미지를 설정하지 않았을 때 = 사용자 입장에서 프로필 버튼을 누르지 않았음
+                        {
+                            showSettingPopup() //팝업창으로 물어봄
+                        } else { // 프로필 이미지 있는 경우 설정한 프로필로 가입하기
+                            signUp(bitmapImg!!, nickname!!, age!!, gender!!)
+                            progressbar.show() //메인창으로 넘어가기 전까지 프로그래스 바 띄움
+                        }
+                    }
+                    // 정보가 하나라도 입력 안되면 error 메시지 출력
+                    else {
+                        for (a in 0..2) {
+                            // 에러 메시지 중에서도 정보가 입력되것 제외하고 출력.
+                            if (!isInputCorrectData[a])
+                                reactiveInputTextViewData(a, false)
+                        }
                     }
                 }
+
             }
 
         }
 
+    }
+
+    /**
+    기본 이미지로 설정할건지 물어보는 팝업
+     **/
+    fun showSettingPopup(){
+        val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val view = inflater.inflate(R.layout.sign_up_activity_yesnopopup, null)
+        val textView: TextView = view.findViewById(R.id.signUpActivityPopUpTextView)
+        textView.text = "기본 이미지로 설정하시겠습니까?"
+
+        val alertDialog = AlertDialog.Builder(this) //alertDialog 생성
+            .setTitle("선택해주세요.")
+            .create()
+
+        //Yes 버튼 눌렀을 때
+        val yesButton = view.findViewById<Button>(R.id.signUpActivityYesButton)
+        yesButton.setOnClickListener {
+            //기본 이미지로 설정
+            basicBitmapImg = BitmapFactory.decodeResource(resources, R.drawable.basic_profile)
+            signUp(basicBitmapImg!!, nickname!!, age!!, gender!!)
+            alertDialog.dismiss()
+            progressbar.show() //기본이미지로 회원가입이 바로 진행되도록 프로그레스바 띄움
+        }
+
+        //No 버튼 눌렀을 때
+        val noButton = view.findViewById<Button>(R.id.signUpActivityNoButton)
+        noButton.setOnClickListener {
+            //갤러리에서 원하는 프로필 이미지 선택할 수 있도록 권한체크
+            alertDialog.dismiss()
+            checkSelfPermission()
+        }
+
+        alertDialog.setView(view)
+        alertDialog.show() //팝업 띄우기
     }
 }

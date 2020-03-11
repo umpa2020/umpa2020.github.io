@@ -7,13 +7,13 @@
     <TextView
         android:id="@+id/rankingFragmentCountTextView"
         android:layout_width="0dp"
-        android:layout_height="30dp"
+        android:layout_height="35dp"
         android:fontFamily="@font/notosansmedium"
         android:textSize="15dp"
         android:textStyle="bold"
         android:textColor="@color/black"
         android:gravity="center"
-        android:background="@drawable/ic_1"
+        android:background="@drawable/ic_ranking1_black"
         android:layout_weight="0.5"/>
 
     <TextView
@@ -26,6 +26,14 @@
         android:ellipsize="marquee"
         style="@style/ListDetail"
         />
+
+    <TextView
+        android:id="@+id/rankingFragmentDistanceTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:gravity="center"
+        style="@style/ListDetail"/>
 
     <TextView
         android:id="@+id/rankingFragmentExecuteTextView"

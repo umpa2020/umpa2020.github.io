@@ -15,7 +15,6 @@ import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
 
 class ProfileUserRouteFragment : Fragment() {
-    lateinit var profileDownloadThread: Thread
     var titleArray: ArrayList<String> = arrayListOf()
     lateinit var mAdapter: ProfileRecyclerViewAdapterRoute
 
@@ -33,28 +32,25 @@ class ProfileUserRouteFragment : Fragment() {
         progressbar.show()
 
 
-        profileDownloadThread = Thread(Runnable {
-            val db = FirebaseFirestore.getInstance()
+        val db = FirebaseFirestore.getInstance()
 
-            db.collection("mapInfo").whereEqualTo("makersNickname", UserInfo.nickname)
-                .get()
-                .addOnSuccessListener { result ->
-                    for (document in result) {
-                        titleArray.add(document.id)
-                    }
-                    //adpater 추가
-                    //mAdapter = ProfileRecyclerViewAdapterRoute(titleArray)
-                    //mRecyclerView.adapter = mAdapter
-
-
-                    Log.d("ssmm11", "title array = " + titleArray)
-                    progressbar.dismiss()
+        db.collection("mapInfo").whereEqualTo("makersNickname", UserInfo.nickname)
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    titleArray.add(document.id)
                 }
-                .addOnFailureListener { exception ->
-                }
-        })
+                //adpater 추가
+                //mAdapter = ProfileRecyclerViewAdapterRoute(titleArray)
+                //mRecyclerView.adapter = mAdapter
 
-        profileDownloadThread.start()
+
+                Log.d("ssmm11", "title array = " + titleArray)
+                progressbar.dismiss()
+            }
+            .addOnFailureListener { exception ->
+            }
+
 
         return view
     }

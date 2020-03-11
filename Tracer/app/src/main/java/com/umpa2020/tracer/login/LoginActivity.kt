@@ -17,6 +17,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.umpa2020.tracer.MainActivity
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.join.SignUpActivity
+import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_login.*
 
@@ -33,9 +34,14 @@ class LoginActivity : AppCompatActivity() {
     // firebase DB
     private var mFirestoreDB: FirebaseFirestore? = null
 
+    //progressbar
+    private lateinit var progressbar: ProgressBar
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
+        progressbar = ProgressBar(this)
 
         /**
          *  Firestore 관련 코드
@@ -79,6 +85,8 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+
+        progressbar.show()
 
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN /*&&  resultCode == RESULT_OK*/) {
@@ -143,6 +151,8 @@ class LoginActivity : AppCompatActivity() {
                                 Log.d(WSY, document.reference.toString()) // com.google.firebase.firestore.DocumentReference@aafeaf20
                                 Log.d(WSY, "Cached document data: ${document?.data}") // Cached document data: null
 
+
+
                                 if ("${document?.data}" == "null") // data가 없으면 SignUpActivity로 이동
                                 {
                                     // 최초 가입자
@@ -150,8 +160,12 @@ class LoginActivity : AppCompatActivity() {
                                     var nextIntent = Intent(this@LoginActivity, SignUpActivity::class.java)
                                     nextIntent.putExtra("tokenId", tokenId)
                                     nextIntent.putExtra("email", email)
+
+
                                     startActivity(nextIntent)
                                     finish()
+                                    progressbar.dismiss()
+
                                 } else { // data가 있으면 Main으로
                                     Log.d(WSY, "기존 가입자 -> 메인으로") // 이 부분에 들어왔다는 것은 로그아웃 or 앱 삭제 후 재로그인일 테니깐 Shared에 다시 값 저장.
 
@@ -165,6 +179,8 @@ class LoginActivity : AppCompatActivity() {
                                     var nextIntent = Intent(this@LoginActivity, MainActivity::class.java)
                                     startActivity(nextIntent)
                                     finish()
+                                    progressbar.dismiss()
+
                                 }
                             } else {
                                 Log.d(WSY, "Cached get failed: ", task.exception)

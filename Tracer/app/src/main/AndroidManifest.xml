@@ -29,6 +29,8 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        android:icon="@mipmap/ic_launcher_tracer_foreground"
+        android:roundIcon="@mipmap/ic_launcher_tracer_round"
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name="com.umpa2020.tracer.profile.ProfileRecordActivity"/>
         <activity android:name="com.umpa2020.tracer.profile.ProfileRouteActivity" />
