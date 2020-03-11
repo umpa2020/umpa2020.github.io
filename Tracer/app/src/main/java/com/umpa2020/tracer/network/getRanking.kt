@@ -10,10 +10,10 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.maps.android.SphericalUtil
 import com.umpa2020.tracer.dataClass.InfoData
+import com.umpa2020.tracer.dataClass.NearMap
 import com.umpa2020.tracer.ranking.RankRecyclerViewAdapterMap
 import com.umpa2020.tracer.util.ProgressBar
 import kotlinx.android.synthetic.main.fragment_ranking.view.*
-import java.util.*
 
 
 /**
@@ -23,6 +23,7 @@ import java.util.*
 class getRanking {
     lateinit var infoData: InfoData
     lateinit var infoDatas: ArrayList<InfoData>
+    var nearMaps: ArrayList<NearMap> = arrayListOf()
 
 
     var cur_loc = LatLng(0.0, 0.0)          //현재위치
@@ -52,7 +53,7 @@ class getRanking {
                     infoData.mapTitle = document.id
                     infoDatas.add(infoData)
                 }
-                view.rank_recycler_map.adapter = RankRecyclerViewAdapterMap(infoDatas)
+                //view.rank_recycler_map.adapter = RankRecyclerViewAdapterMap(infoDatas, nearMaps)
 
                 progressbar.dismiss()
             }
@@ -108,11 +109,13 @@ class getRanking {
                                     Log.d("ssmm11", "맵 : " + document2.id + " 실행수 : " + infoData.execute)
                                     infoData.mapTitle = document2.id
                                     infoDatas.add(infoData)
+                                    val nearMap = NearMap(document.id, SphericalUtil.computeDistanceBetween(cur_loc, latLng))
+                                    nearMaps.add(nearMap)
                                     break
                                 }
 
                                 infoDatas.sortByDescending { infoData -> infoData.execute }
-                                view.rank_recycler_map.adapter = RankRecyclerViewAdapterMap(infoDatas )
+                                view.rank_recycler_map.adapter = RankRecyclerViewAdapterMap(infoDatas ,nearMaps)
 
                                 progressbar.dismiss()
                             }
