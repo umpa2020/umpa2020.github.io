@@ -6,9 +6,10 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import android.os.Messenger
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.util.Log
+import android.view.*
+import android.widget.Toast
+import android.widget.Toolbar
 import androidx.fragment.app.Fragment
 import com.umpa2020.tracer.MainActivity.Companion.MESSENGER_INTENT_KEY
 import com.umpa2020.tracer.R
@@ -50,7 +51,9 @@ class RankingFragment : Fragment() {
         view.test_button3.setOnClickListener {
             getRanking().getFilterRange(context!!, view, obj)
         }
-
+        var toolbar: Toolbar = view.findViewById(R.id.rankingToolBar)
+        toolbar.inflateMenu(R.menu.ranking_menu)
+        setHasOptionsMenu(true)
         return view
     }
 
@@ -77,6 +80,24 @@ class RankingFragment : Fragment() {
                 }
             }
         }
+    }
+
+    //액션버튼 메뉴 액션바에 집어 넣기
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.ranking_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    //액션버튼 클릭 했을 때
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return (when(item.itemId) {
+            R.id.rankingMenuSearch -> {
+                Toast.makeText(context, "클릭", Toast.LENGTH_SHORT).show()
+                true
+            }
+            else ->
+                super.onOptionsItemSelected(item)
+        })
     }
 
 }

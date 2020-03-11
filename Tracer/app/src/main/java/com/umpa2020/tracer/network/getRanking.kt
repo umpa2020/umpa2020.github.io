@@ -23,10 +23,13 @@ import kotlinx.android.synthetic.main.fragment_ranking.view.*
 class getRanking {
     lateinit var infoData: InfoData
     lateinit var infoDatas: ArrayList<InfoData>
-    var nearMaps: ArrayList<NearMap> = arrayListOf()
+    var nearMaps1: ArrayList<NearMap> = arrayListOf()
+    var nearMaps2: ArrayList<NearMap> = arrayListOf()
 
 
     var cur_loc = LatLng(0.0, 0.0)          //현재위치
+
+
     var latLng = LatLng(0.0, 0.0)
 
 
@@ -97,27 +100,32 @@ class getRanking {
                             location["latitude"] as Double,
                             location["longitude"] as Double
                         )
+                        nearMaps1.add(NearMap(document.id, SphericalUtil.computeDistanceBetween(cur_loc, latLng)))
                         break
                     }
-                    if (SphericalUtil.computeDistanceBetween(cur_loc, latLng) <= 22000) {
-                        db.collection("mapInfo").whereEqualTo("mapTitle", document.id)
+                }
+
+
+                Log.d("ssmm11", "거리1 = " + SphericalUtil.computeDistanceBetween(cur_loc, latLng))
+
+                for (nearmap in nearMaps1) {
+                    if (nearmap.distance < 100) {
+                        db.collection("mapInfo").whereEqualTo("mapTitle", nearmap.mapTitle)
                             .get()
                             .addOnSuccessListener { result2 ->
 
                                 for (document2 in result2) {
                                     infoData = document2.toObject(InfoData::class.java)
-                                    Log.d("ssmm11", "맵 : " + document2.id + " 실행수 : " + infoData.execute)
+                                    Log.d("ssmm11", nearmap.mapTitle + "  맵 : " + document2.id + " 실행수 : " + infoData.execute)
                                     infoData.mapTitle = document2.id
                                     infoDatas.add(infoData)
-                                    val nearMap = NearMap(document.id, SphericalUtil.computeDistanceBetween(cur_loc, latLng))
-                                    nearMaps.add(nearMap)
+                                    nearMaps2.add(nearmap)
                                     break
                                 }
 
                                 infoDatas.sortByDescending { infoData -> infoData.execute }
-                                view.rank_recycler_map.adapter = RankRecyclerViewAdapterMap(infoDatas ,nearMaps)
+                                view.rank_recycler_map.adapter = RankRecyclerViewAdapterMap(infoDatas, nearMaps2)
 
-                                progressbar.dismiss()
                             }
                     }
                 }
@@ -127,4 +135,12 @@ class getRanking {
                 Log.w("ssmm11", "Error getting documents.", exception)
             }
     }
+/*
+    fun getFilterRangeReal(context: Context, view: View, location: Location) {
+        val db = FirebaseFirestore.getInstance()
+
+
+    }*/
+
+
 }
