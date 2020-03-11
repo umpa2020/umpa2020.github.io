@@ -10,6 +10,7 @@
         android:orientation="vertical">
 
         <Toolbar
+            android:id="@+id/rankingToolBar"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:elevation="1dp"
@@ -25,6 +26,7 @@
                 style="@style/appBarText">
 
             </TextView>
+
 
 
 

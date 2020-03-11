@@ -6,18 +6,16 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import android.os.Messenger
+import android.util.Log
 import android.view.*
 import android.widget.Toast
 import android.widget.Toolbar
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.umpa2020.tracer.MainActivity
 import com.umpa2020.tracer.MainActivity.Companion.MESSENGER_INTENT_KEY
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.locationBackground.LocationBackgroundService
 import com.umpa2020.tracer.network.getRanking
 import kotlinx.android.synthetic.main.fragment_ranking.view.*
-import java.nio.file.Files.find
 import kotlinx.android.synthetic.main.fragment_ranking.view.test_button1 as test_button11
 
 /**
@@ -53,6 +51,8 @@ class RankingFragment : Fragment() {
         view.test_button3.setOnClickListener {
             getRanking().getFilterRange(context!!, view, obj)
         }
+        var toolbar: Toolbar = view.findViewById(R.id.rankingToolBar)
+        toolbar.inflateMenu(R.menu.ranking_menu)
         setHasOptionsMenu(true)
         return view
     }
