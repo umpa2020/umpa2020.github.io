@@ -9,9 +9,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.InfoData
+import com.umpa2020.tracer.dataClass.NearMap
 import kotlinx.android.synthetic.main.recycler_rankfragment_item.view.*
 
-class RankRecyclerViewAdapterMap(val mdata: ArrayList<InfoData>) : RecyclerView.Adapter<RankRecyclerViewAdapterMap.mViewHolder>() {
+class RankRecyclerViewAdapterMap(val mdata: ArrayList<InfoData>, val nearMaps: ArrayList<NearMap>) : RecyclerView.Adapter<RankRecyclerViewAdapterMap.mViewHolder>() {
     var context: Context? = null
     //생성된 뷰 홀더에 데이터를 바인딩 해줌.
     override fun onBindViewHolder(holder: mViewHolder, position: Int) {
@@ -24,7 +25,7 @@ class RankRecyclerViewAdapterMap(val mdata: ArrayList<InfoData>) : RecyclerView.
         holder.rank.text = ranking.toString()
 
         holder.maptitle.text = cutted[0]
-        holder.distance.text = "temp"
+        holder.distance.text = nearMaps[position].distance.toString()
         holder.execute.text = singleItem.execute.toString()
 
         //ranking에 따라 트로피 색 바뀌게 하는 부분
