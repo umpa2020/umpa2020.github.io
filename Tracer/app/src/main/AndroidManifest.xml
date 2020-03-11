@@ -32,31 +32,31 @@
         android:icon="@mipmap/ic_launcher_tracer_foreground"
         android:roundIcon="@mipmap/ic_launcher_tracer_round"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name="com.umpa2020.tracer.profile.ProfileRecordActivity"/>
-        <activity android:name="com.umpa2020.tracer.profile.ProfileRouteActivity" />
+        <activity android:name="com.umpa2020.tracer.main.profile.ProfileRecordActivity"/>
+        <activity android:name="com.umpa2020.tracer.main.profile.ProfileRouteActivity" />
 
         <service
             android:name="com.umpa2020.tracer.locationBackground.LocationBackgroundService"
             android:exported="false" />
 
-        <activity android:name="com.umpa2020.tracer.racing.RacingFinishActivity" />
-        <activity android:name="com.umpa2020.tracer.racing.RankingRecodeRacingActivity" />
-        <activity android:name="com.umpa2020.tracer.racing.PracticeRacingActivity" />
-        <activity android:name="com.umpa2020.tracer.racing.NearRouteActivity" />
-        <activity android:name="com.umpa2020.tracer.join.GenderSelectActivity" />
-        <activity android:name="com.umpa2020.tracer.join.SignUpActivity" />
-        <activity android:name="com.umpa2020.tracer.splash.SplashActivity">
+        <activity android:name="com.umpa2020.tracer.main.trace.racing.RacingFinishActivity" />
+        <activity android:name="com.umpa2020.tracer.main.trace.racing.RankingRecodeRacingActivity" />
+        <activity android:name="com.umpa2020.tracer.main.trace.racing.PracticeRacingActivity" />
+        <activity android:name="com.umpa2020.tracer.main.trace.racing.NearRouteActivity" />
+        <activity android:name="com.umpa2020.tracer.login.join.GenderSelectActivity" />
+        <activity android:name="com.umpa2020.tracer.login.join.SignUpActivity" />
+        <activity android:name="com.umpa2020.tracer.login.splash.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.umpa2020.tracer.ranking.RankRecyclerItemClickActivity" />
-        <activity android:name="com.umpa2020.tracer.ranking.RankingMapDetailActivity" />
-        <activity android:name="com.umpa2020.tracer.start.RunningSaveActivity" />
-        <activity android:name="com.umpa2020.tracer.start.RunningActivity" />
-        <activity android:name="com.umpa2020.tracer.MainActivity" />
+        <activity android:name="com.umpa2020.tracer.main.ranking.RankRecyclerItemClickActivity" />
+        <activity android:name="com.umpa2020.tracer.main.ranking.RankingMapDetailActivity" />
+        <activity android:name="com.umpa2020.tracer.main.trace.running.RunningSaveActivity" />
+        <activity android:name="com.umpa2020.tracer.main.trace.running.RunningActivity" />
+        <activity android:name="com.umpa2020.tracer.main.MainActivity" />
         <activity android:name="com.umpa2020.tracer.login.LoginActivity" />
 
         <meta-data

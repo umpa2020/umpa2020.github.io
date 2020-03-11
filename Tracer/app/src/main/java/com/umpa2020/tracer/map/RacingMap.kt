@@ -4,9 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.graphics.Color
 import android.location.Location
-import android.os.Looper
 import android.util.Log
-import com.google.android.gms.location.*
 import com.google.maps.android.PolyUtil
 import com.google.maps.android.SphericalUtil
 import java.util.*
@@ -16,12 +14,12 @@ import android.view.View
 import com.google.android.gms.maps.*
 import com.google.firebase.firestore.FirebaseFirestore
 import com.umpa2020.tracer.R
-import com.umpa2020.tracer.TTS
+import com.umpa2020.tracer.util.TTS
 import com.umpa2020.tracer.dataClass.NoticeState
 import com.umpa2020.tracer.dataClass.RouteData
 import com.umpa2020.tracer.dataClass.UserState
-import com.umpa2020.tracer.racing.ManageRacing
-import com.umpa2020.tracer.racing.RankingRecodeRacingActivity
+import com.umpa2020.tracer.main.trace.racing.ManageRacing
+import com.umpa2020.tracer.main.trace.racing.RankingRecodeRacingActivity
 import com.umpa2020.tracer.util.Wow
 import com.umpa2020.tracer.util.Wow.Companion.makingIcon
 import kotlinx.android.synthetic.main.activity_ranking_recode_racing.*
@@ -247,10 +245,6 @@ class RacingMap : OnMapReadyCallback {
             val markerOptions = MarkerOptions()
             markerOptions.position(previousLocation)
             markerOptions.title("Me")
-            racerIcon = makingIcon(R.drawable.ic_racer_marker, context)
-
-            markerOptions.icon(racerIcon)
-            currentMarker = mMap.addMarker(markerOptions)
 
             /*cpOption.title("StartPoint")
             cpOption.position(prev_loc)
@@ -264,6 +258,8 @@ class RacingMap : OnMapReadyCallback {
         var lng = location.longitude
         var alt = location.altitude
         var speed = location.speed
+        Log.d("createData","HI")
+        Log.d("createData",userState.toString())
         currentLocation = LatLng(lat, lng)
         when (userState) {
             UserState.BEFORERACING -> { //경기 시작전
@@ -359,13 +355,6 @@ class RacingMap : OnMapReadyCallback {
         previousLocation = currentLocation                              //현재위치를 이전위치로 변경
 
         if (currentMarker != null) currentMarker!!.remove()
-        val markerOptions = MarkerOptions()
-        markerOptions.position(currentLocation)
-        markerOptions.title("Me")
-        markerOptions.icon(racerIcon)
-        currentMarker = mMap.addMarker(markerOptions)
-
-
 
         when (userState) {
             UserState.RACING -> {
@@ -408,8 +397,9 @@ class RacingMap : OnMapReadyCallback {
         }
     }
     fun setLocation(location: Location) {
+        createData(location)
         if (userState == UserState.RUNNING) {
-            createData(location)
+
           //  setMyPosition(location)
         }
         else

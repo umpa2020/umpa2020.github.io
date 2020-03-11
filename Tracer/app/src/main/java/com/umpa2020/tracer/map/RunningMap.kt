@@ -16,8 +16,7 @@ import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.RouteData
 import com.umpa2020.tracer.dataClass.UserState
-import com.umpa2020.tracer.start.RunningActivity
-import com.umpa2020.tracer.util.UserInfo
+import com.umpa2020.tracer.main.trace.running.RunningActivity
 import com.umpa2020.tracer.util.Wow.Companion.makingIcon
 import kotlinx.android.synthetic.main.activity_running.*
 

@@ -11,7 +11,7 @@ import com.google.android.gms.maps.model.*
 import android.graphics.Color
 import com.umpa2020.tracer.util.Wow
 import com.umpa2020.tracer.dataClass.RouteData
-import com.umpa2020.tracer.start.RunningSaveActivity
+import com.umpa2020.tracer.main.trace.running.RunningSaveActivity
 import java.io.File
 import java.io.FileOutputStream
 

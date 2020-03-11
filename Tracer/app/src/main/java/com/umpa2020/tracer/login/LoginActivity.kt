@@ -14,9 +14,9 @@ import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
-import com.umpa2020.tracer.MainActivity
+import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.R
-import com.umpa2020.tracer.join.SignUpActivity
+import com.umpa2020.tracer.login.join.SignUpActivity
 import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_login.*

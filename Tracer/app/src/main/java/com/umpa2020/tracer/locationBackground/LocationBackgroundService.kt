@@ -10,9 +10,9 @@ import android.os.Messenger
 import android.os.RemoteException
 import android.util.Log
 import com.google.android.gms.location.LocationRequest
-import com.umpa2020.tracer.MainActivity.Companion.MESSENGER_INTENT_KEY
+import com.umpa2020.tracer.main.MainActivity.Companion.MESSENGER_INTENT_KEY
 import com.umpa2020.tracer.R
-import com.umpa2020.tracer.start.RunningActivity
+import com.umpa2020.tracer.main.trace.running.RunningActivity
 import com.umpa2020.tracer.util.LocationUpdatesComponent
 
 /**
