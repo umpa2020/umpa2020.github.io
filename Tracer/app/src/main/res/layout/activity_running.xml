@@ -28,7 +28,7 @@
                 style="@style/appBarText">
             </TextView>
         </Toolbar>
-        
+
         <fragment
             android:id="@+id/map_viewer"
             android:name="com.google.android.gms.maps.SupportMapFragment"

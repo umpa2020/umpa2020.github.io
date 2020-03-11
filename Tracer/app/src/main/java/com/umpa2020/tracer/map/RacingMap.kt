@@ -3,6 +3,7 @@ package com.umpa2020.tracer.map
 import android.app.Activity
 import android.content.Context
 import android.graphics.Color
+import android.location.Location
 import android.os.Looper
 import android.util.Log
 import com.google.android.gms.location.*
@@ -31,12 +32,13 @@ class RacingMap : OnMapReadyCallback {
     var markerCount = 1
     lateinit var cpOption: MarkerOptions
     lateinit var mMap: GoogleMap    //racingMap 인스턴스
-    lateinit var fusedLocationClient: FusedLocationProviderClient   //위치정보 가져오는 인스턴스
-    lateinit var locationCallback: LocationCallback
-    lateinit var locationRequest: LocationRequest
+//    lateinit var fusedLocationClient: FusedLocationProviderClient   //위치정보 가져오는 인스턴스
+//    lateinit var locationCallback: LocationCallback
+//    lateinit var locationRequest: LocationRequest
     var TAG = "what u wanna say?~~!~!"       //로그용 태그
-    var prev_loc: LatLng = LatLng(0.0, 0.0)          //이전위치
-    lateinit var cur_loc: LatLng            //현재위치
+    var previousLocation: LatLng = LatLng(0.0, 0.0)          //이전위치
+    lateinit var currentLocation: LatLng            //현재위치
+
     var latlngs: MutableList<LatLng> = mutableListOf()   //움직인 점들의 집합 나중에 저장될 점들 집합
     var alts = Vector<Double>()
     var speeds = Vector<Double>()
@@ -56,12 +58,10 @@ class RacingMap : OnMapReadyCallback {
     var cpMarkers = Vector<Marker>()
     var db: FirebaseFirestore
 
+    var cameraFlag = false
+
     //Racing
-    constructor(
-        smf: SupportMapFragment,
-        context: Context,
-        manageRacing: ManageRacing
-    ) {
+    constructor( smf: SupportMapFragment, context: Context, manageRacing: ManageRacing ) {
         this.context = context
         this.manageRacing = manageRacing
         this.makerRouteData = manageRacing.makerRouteData
@@ -73,6 +73,9 @@ class RacingMap : OnMapReadyCallback {
 
     }
 
+    /**
+     * Manage에서 전달 받은 클래스 사용하기 편하도록 쪼개기.
+     */
     fun loadRoute() {
         for (i in makerRouteData.latlngs.indices) {
             var latlngs: MutableList<LatLng> = mutableListOf()
@@ -95,6 +98,7 @@ class RacingMap : OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
+        mMap!!.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
         loadRoute()
         drawRoute()
         mMap.moveCamera(
@@ -104,12 +108,6 @@ class RacingMap : OnMapReadyCallback {
             )
         )
 
-        initLocation()
-        fusedLocationClient.requestLocationUpdates(
-            locationRequest,
-            locationCallback,
-            Looper.myLooper()
-        )
         if (userState == UserState.BEFORERACING) {
             (context as Activity).runOnUiThread(Runnable {
                 TTS.speech("시작 포인트로 이동하세요")
@@ -182,7 +180,20 @@ class RacingMap : OnMapReadyCallback {
 
     fun stopTracking() {
         print_log("Stop")
-        fusedLocationClient.removeLocationUpdates(locationCallback)
+//        fusedLocationClient.removeLocationUpdates(locationCallback)
+    }
+
+    fun startRacing(mapTitle: String) {
+        print_log("Start Racing")
+        makerRunning(mapTitle)
+        userState = UserState.RACING
+        manageRacing.startRunning()
+        mMap.animateCamera(
+            CameraUpdateFactory.newLatLngZoom(
+                currentLocation,
+                20F
+            )
+        )
     }
 
     fun drawRoute() { //로드 된 경로 그리기
@@ -224,208 +235,193 @@ class RacingMap : OnMapReadyCallback {
         mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(LatLngBounds(min, max), 1080, 300, 50))
     }
 
-    fun initLocation() {            //첫 위치 설정하고, prev_loc 설정
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
-        fusedLocationClient.lastLocation
-            .addOnSuccessListener { location ->
-                if (location == null) {
-                    print_log("Location is null")
-                } else {
-                    print_log("Success to get Init Location : " + location.toString())
-                    prev_loc = LatLng(location.latitude, location.longitude)
-                    val markerOptions = MarkerOptions()
-                    markerOptions.position(prev_loc)
-                    markerOptions.title("Me")
-                    racerIcon = makingIcon(R.drawable.ic_racer_marker, context)
+    fun setMyPosition(location : Location){
+        /**
+         *  여기서 서비스와의 통신으로 위치 설정
+         */
+        if (location == null) {
+            print_log("Location is null")
+        } else {
+            print_log("Success to get Init Location : " + location.toString())
+            previousLocation = LatLng(location.latitude, location.longitude)
+            val markerOptions = MarkerOptions()
+            markerOptions.position(previousLocation)
+            markerOptions.title("Me")
+            racerIcon = makingIcon(R.drawable.ic_racer_marker, context)
 
-                    markerOptions.icon(racerIcon)
-                    currentMarker = mMap.addMarker(markerOptions)
+            markerOptions.icon(racerIcon)
+            currentMarker = mMap.addMarker(markerOptions)
 
-                    /*cpOption.title("StartPoint")
-                    cpOption.position(prev_loc)
-                    mMap.addMarker(cpOption)
-                    markerCount++
-                    markers.add(prev_loc)*/
+            /*cpOption.title("StartPoint")
+            cpOption.position(prev_loc)
+            mMap.addMarker(cpOption)
+            markerCount++
+            markers.add(prev_loc)*/
+        }
+    }
+
+    fun createData(location: Location){
+        var lat = location.latitude
+        var lng = location.longitude
+        var alt = location.altitude
+        var speed = location.speed
+        currentLocation = LatLng(lat, lng)
+        when (userState) {
+            UserState.BEFORERACING -> { //경기 시작전
+                (context as Activity).runOnUiThread(Runnable {
+                    (context as Activity).racingNotificationButton.text =
+                        ("시작 포인트로 이동하십시오.\n시작포인트까지 남은거리\n"
+                                + (SphericalUtil.computeDistanceBetween(
+                            currentLocation,
+                            markers[0]
+                        )).roundToLong().toString() + "m")
+                })
+                //시작포인트에 10m이내로 들어오면 준비상태로 변경
+                if (SphericalUtil.computeDistanceBetween(
+                        currentLocation,
+                        markers[0]
+                    ) <= 10
+                ) {
+                    userState = UserState.READYTORACING
                 }
             }
-            .addOnFailureListener {
-                print_log("Error is " + it.message.toString())
-                it.printStackTrace()
+            UserState.READYTORACING -> {
+                //10m밖으로 나가면 상태변경
+                if (SphericalUtil.computeDistanceBetween(
+                        currentLocation,
+                        markers[0]
+                    ) > 10
+                ) {
+                    userState = UserState.BEFORERACING
+                } else {
+                    (context as Activity).runOnUiThread(Runnable {
+                        (context as Activity).racingNotificationButton.text =
+                            "시작을 원하시면 START를 누르세요"
+                    })
+                }
             }
+            UserState.RACING -> {
+                print_log("R U Here?" + userState)
+                if (previousLocation.latitude == currentLocation.latitude && previousLocation.longitude == currentLocation.longitude) {
+                    return  //움직임이 없다면 추가안함
+                } else if (false) { //비정상적인 움직임일 경우 + finish에 도착한 경우
+                } else {
+                    speeds.add(speed.toDouble())
+                    (context as Activity).runOnUiThread(Runnable {
+                        print_log(speed.toString())
+                        (context as RankingRecodeRacingActivity).racingSpeedTextView.text =
+                            String.format("%.2f", speed)
+                    })
 
-        locationRequest = LocationRequest.create()
-        locationRequest.run {
-            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-            interval = 1000
-        }
+                    latlngs.add(currentLocation)    //위 조건들을 통과하면 점 추가
+                    alts.add(alt)
+                    passedLine.add(
+                        mMap.addPolyline(
+                            PolylineOptions().add(
+                                previousLocation,
+                                currentLocation
+                            ).color(Color.RED)
+                        )
+                    )
+                    //다음 포인트랑 현재 위치랑 10m이내가 되면
+                    if (SphericalUtil.computeDistanceBetween(
+                            currentLocation,
+                            markers[markerCount]
+                        ) < 10
+                    ) {
+                        //이전포인트에서 현재까지 달린 경로 지우고
+                        for (i in passedLine.indices)
+                            passedLine[i].remove()
+                        routeLine[0].remove()
+                        routeLine.removeAt(0)
 
-        locationCallback = object : LocationCallback() {
-            override fun onLocationResult(locationResult: LocationResult?) {
-                locationResult?.let {
-                    for ((i, location) in it.locations.withIndex()) {
-                        var lat = location.latitude
-                        var lng = location.longitude
-                        var alt = location.altitude
-                        var speed = location.speed
-                        cur_loc = LatLng(lat, lng)
-                        when (userState) {
-                            UserState.BEFORERACING -> { //경기 시작전
-                                (context as Activity).runOnUiThread(Runnable {
-                                    (context as Activity).racingNotificationButton.text =
-                                        ("시작 포인트로 이동하십시오.\n시작포인트까지 남은거리\n"
-                                                + (SphericalUtil.computeDistanceBetween(
-                                            cur_loc,
-                                            markers[0]
-                                        )).roundToLong().toString() + "m")
-                                })
-                                //시작포인트에 10m이내로 들어오면 준비상태로 변경
-                                if (SphericalUtil.computeDistanceBetween(
-                                        cur_loc,
-                                        markers[0]
-                                    ) <= 10
-                                ) {
-                                    userState = UserState.READYTORACING
-                                }
-                            }
-                            UserState.READYTORACING -> {
-                                //10m밖으로 나가면 상태변경
-                                if (SphericalUtil.computeDistanceBetween(
-                                        cur_loc,
-                                        markers[0]
-                                    ) > 10
-                                ) {
-                                    userState = UserState.BEFORERACING
-                                } else {
-                                    (context as Activity).runOnUiThread(Runnable {
-                                        (context as Activity).racingNotificationButton.text =
-                                            "시작을 원하시면 START를 누르세요"
-                                    })
-                                }
-                            }
-                            UserState.RACING -> {
-                                print_log("R U Here?" + userState)
-                                if (prev_loc.latitude == cur_loc.latitude && prev_loc.longitude == cur_loc.longitude) {
-                                    return  //움직임이 없다면 추가안함
-                                } else if (false) { //비정상적인 움직임일 경우 + finish에 도착한 경우
-                                } else {
-                                    speeds.add(speed.toDouble())
-                                    (context as Activity).runOnUiThread(Runnable {
-                                        print_log(speed.toString())
-                                        (context as RankingRecodeRacingActivity).racingSpeedTextView.text =
-                                            String.format("%.2f", speed)
-                                    })
+                        mMap.addPolyline( //깔끔하게 새로 직선 그리기
+                            PolylineOptions()
+                                .addAll(loadRoute[markerCount - 1])
+                                .color(Color.BLUE)
+                                .startCap(RoundCap())
+                                .endCap(RoundCap())
+                        )        //지나간길
 
-                                    latlngs.add(cur_loc)    //위 조건들을 통과하면 점 추가
-                                    alts.add(alt)
-                                    passedLine.add(
-                                        mMap.addPolyline(
-                                            PolylineOptions().add(
-                                                prev_loc,
-                                                cur_loc
-                                            ).color(Color.RED)
-                                        )
-                                    )
-                                    //다음 포인트랑 현재 위치랑 10m이내가 되면
-                                    if (SphericalUtil.computeDistanceBetween(
-                                            cur_loc,
-                                            markers[markerCount]
-                                        ) < 10
-                                    ) {
-                                        //이전포인트에서 현재까지 달린 경로 지우고
-                                        for (i in passedLine.indices)
-                                            passedLine[i].remove()
-                                        routeLine[0].remove()
-                                        routeLine.removeAt(0)
-
-                                        mMap.addPolyline( //깔끔하게 새로 직선 그리기
-                                            PolylineOptions()
-                                                .addAll(loadRoute[markerCount - 1])
-                                                .color(Color.BLUE)
-                                                .startCap(RoundCap())
-                                                .endCap(RoundCap())
-                                        )        //지나간길
-
-                                        //
-                                        if (markerCount == markers.size - 1) {
-                                            manageRacing.stopRacing(true)
-                                        } else {
-                                            cpOption.position(cpMarkers[markerCount - 1].position)
-                                            cpMarkers[markerCount - 1].remove()
-                                            cpMarkers[markerCount - 1] = mMap.addMarker(cpOption)
-                                            markerCount++
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        prev_loc = cur_loc                              //현재위치를 이전위치로 변경
-
-                        if (currentMarker != null) currentMarker!!.remove()
-                        val markerOptions = MarkerOptions()
-                        markerOptions.position(cur_loc)
-                        markerOptions.title("Me")
-                        markerOptions.icon(racerIcon)
-                        currentMarker = mMap.addMarker(markerOptions)
-
-
-
-                        when (userState) {
-                            UserState.RACING -> {
-                                mMap.animateCamera(
-                                    CameraUpdateFactory.newLatLngZoom(
-                                        cur_loc,
-                                        18F
-                                    )
-                                )
-                                //경로이탈검사
-                                if (PolyUtil.isLocationOnPath(
-                                        LatLng(lat, lng),
-                                        loadRoute[markerCount - 1],
-                                        false,
-                                        20.0
-                                    )
-                                ) {//경로 안에 있으면
-                                    print_log("위도 : " + lat.toString() + "경도 : " + lng.toString())
-                                    if (manageRacing.noticeState == NoticeState.DEVIATION) {
-                                        manageRacing.noticeState = NoticeState.NOTHING
-                                        countDeviation = 0
-                                        manageRacing.deviation(countDeviation)
-                                    }
-                                } else {//경로 이탈이면
-                                    manageRacing.deviation(++countDeviation)
-                                    if (countDeviation > 30) {
-                                        manageRacing.stopRacing(false)
-                                    }
-
-                                }
-                            }
-                            else -> {
-                                mMap.animateCamera(
-                                    CameraUpdateFactory.newLatLngZoom(
-                                        cur_loc,
-                                        17F
-                                    )
-                                )
-                            }
+                        //
+                        if (markerCount == markers.size - 1) {
+                            manageRacing.stopRacing(true)
+                        } else {
+                            cpOption.position(cpMarkers[markerCount - 1].position)
+                            cpMarkers[markerCount - 1].remove()
+                            cpMarkers[markerCount - 1] = mMap.addMarker(cpOption)
+                            markerCount++
                         }
                     }
                 }
             }
         }
-    }
 
-    fun startRacing(mapTitle: String) {
-        print_log("Start Racing")
-        makerRunning(mapTitle)
-        userState = UserState.RACING
-        manageRacing.startRunning()
-        mMap.animateCamera(
-            CameraUpdateFactory.newLatLngZoom(
-                cur_loc,
-                20F
-            )
-        )
+        previousLocation = currentLocation                              //현재위치를 이전위치로 변경
+
+        if (currentMarker != null) currentMarker!!.remove()
+        val markerOptions = MarkerOptions()
+        markerOptions.position(currentLocation)
+        markerOptions.title("Me")
+        markerOptions.icon(racerIcon)
+        currentMarker = mMap.addMarker(markerOptions)
+
+
+
+        when (userState) {
+            UserState.RACING -> {
+                mMap.animateCamera(
+                    CameraUpdateFactory.newLatLngZoom(
+                        currentLocation,
+                        18F
+                    )
+                )
+                //경로이탈검사
+                if (PolyUtil.isLocationOnPath(
+                        LatLng(lat, lng),
+                        loadRoute[markerCount - 1],
+                        false,
+                        20.0
+                    )
+                ) {//경로 안에 있으면
+                    print_log("위도 : " + lat.toString() + "경도 : " + lng.toString())
+                    if (manageRacing.noticeState == NoticeState.DEVIATION) {
+                        manageRacing.noticeState = NoticeState.NOTHING
+                        countDeviation = 0
+                        manageRacing.deviation(countDeviation)
+                    }
+                } else {//경로 이탈이면
+                    manageRacing.deviation(++countDeviation)
+                    if (countDeviation > 30) {
+                        manageRacing.stopRacing(false)
+                    }
+
+                }
+            }
+            else -> {
+                mMap.animateCamera(
+                    CameraUpdateFactory.newLatLngZoom(
+                        currentLocation,
+                        17F
+                    )
+                )
+            }
+        }
+    }
+    fun setLocation(location: Location) {
+        if (userState == UserState.RUNNING) {
+            createData(location)
+          //  setMyPosition(location)
+        }
+        else
+            currentLocation = LatLng(location!!.latitude, location!!.longitude)
+
+        if(!cameraFlag) {
+            mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 17F))   //화면이동
+            cameraFlag = true
+        }
+
+        previousLocation = currentLocation                              //현재위치를 이전위치로 변경
     }
 
     fun print_log(text: String) {
