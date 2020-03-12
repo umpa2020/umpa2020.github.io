@@ -1,7 +1,12 @@
 package com.umpa2020.tracer.main.trace.racing
 
+import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.location.Location
+import android.os.Handler
+import android.os.Message
+import android.os.Messenger
 import android.os.SystemClock
 import android.util.Log
 import android.view.View
@@ -15,9 +20,17 @@ import com.umpa2020.tracer.dataClass.RouteData
 import com.umpa2020.tracer.locationBackground.LocationBackgroundService
 import com.umpa2020.tracer.locationBackground.ServiceStatus
 import com.umpa2020.tracer.main.MainActivity
+import com.umpa2020.tracer.main.MainActivity.Companion.MESSENGER_INTENT_KEY
 import com.umpa2020.tracer.map.RacingMap
 import com.umpa2020.tracer.util.Wow
 import kotlinx.android.synthetic.main.activity_ranking_recode_racing.*
+import java.text.DateFormat
+import java.util.*
+
+/*
+
+ */
+
 
 class ManageRacing {
     var racingMap: RacingMap
@@ -107,7 +120,7 @@ class ManageRacing {
     fun stopRacing(result: Boolean) {
         racingMap.stopTracking()
 
-        removeHandler(ServiceStatus.STOP)
+        removeHandler()
         timeWhenStopped = chronometer.base - SystemClock.elapsedRealtime()
         chronometer.stop()
 
@@ -138,10 +151,21 @@ class ManageRacing {
         }
     }
 
-    private fun removeHandler(action:ServiceStatus) {
-        Intent(context, LocationBackgroundService::class.java).also {
-            it.action = action.name
-            context.startService(it)
+    private fun removeHandler() {
+        Log.d(MainActivity.TAG, "이건 실행되잖아?")
+        Intent(context.applicationContext, LocationBackgroundService::class.java).also {
+            it.action = ServiceStatus.STOP.name
+            context.applicationContext.startService(it)
+        }
+    }
+
+    var mHandler: IncomingMessageHandler? = null
+    val MESSENGER_INTENT_KEY = "msg-intent-key"
+
+    inner class IncomingMessageHandler : Handler() {
+        override fun handleMessage(msg: Message) {
+            super.handleMessage(msg)
+            Log.d(MainActivity.WSY, "EmptyHandler : $msg")
         }
     }
 

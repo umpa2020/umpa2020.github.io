@@ -21,13 +21,6 @@ import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
-    private val multiplePermissionsCode = 100          //권한
-    private val requiredPermissions = arrayOf(
-        Manifest.permission.ACCESS_FINE_LOCATION,
-        Manifest.permission.ACCESS_COARSE_LOCATION,
-        Manifest.permission.ACCESS_BACKGROUND_LOCATION,
-        Manifest.permission.READ_EXTERNAL_STORAGE
-    )
 
     //bottomNavigation 아이템 선택 리스너
     private val navListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
@@ -50,17 +43,18 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        startService()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d("mainActivitiy","Hello I'm New")
         setContentView(R.layout.activity_main)
-
-        checkPermissions()          //모든 권한 확인
+        bottom_navigation.selectedItemId = R.id.navigation_start
+        supportFragmentManager.beginTransaction().replace(
+            R.id.container,
+            StartFragment()
+        ).commit()
         TTS.set(applicationContext)
-
-        // mHandler = IncomingMessageHandler()
 
         //선택한 메뉴로 프래그먼트 바꿈
         bottom_navigation.setOnNavigationItemSelectedListener(navListener)
@@ -74,51 +68,10 @@ class MainActivity : AppCompatActivity() {
                 StartFragment()
             ).commit()
         }
+        Log.d("MainActivity","restart service")
+        startService()
     }
 
-    private fun checkPermissions() {
-        var rejectedPermissionList = ArrayList<String>()
-        //필요한 퍼미션들을 하나씩 끄집어내서 현재 권한을 받았는지 체크
-        for (permission in requiredPermissions) {
-            if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
-                //만약 권한이 없다면 rejectedPermissionList에 추가
-                rejectedPermissionList.add(permission)
-            }
-        }
-        //거절된 퍼미션이 있다면...
-        if (rejectedPermissionList.isNotEmpty()) {
-            //권한 요청!
-            val array = arrayOfNulls<String>(rejectedPermissionList.size)
-            ActivityCompat.requestPermissions(
-                this,
-                rejectedPermissionList.toArray(array),
-                multiplePermissionsCode
-            )
-        }
-    }
-
-    override fun onRequestPermissionsResult( requestCode: Int, permissions: Array<String>, grantResults: IntArray ) {
-        when (requestCode)
-        {
-            multiplePermissionsCode -> {
-                if (grantResults.isNotEmpty()) {
-                    for ((i, permission) in permissions.withIndex()) {
-                        if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
-                            //권한 획득 실패
-                        }
-                    }
-                }
-            }
-        }
-        if (UserInfo.permission == 0) {
-            bottom_navigation.selectedItemId = R.id.navigation_start
-            supportFragmentManager.beginTransaction().replace(
-                R.id.container,
-                StartFragment()
-            ).commit()
-        }
-        UserInfo.permission = 1
-    }
 
     override fun onDestroy() {
         super.onDestroy()
@@ -152,21 +105,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun startStopServiceCommand(action: ServiceStatus) {
         Log.d(TAG, "이건 실행되잖아?")
-        Intent(this, LocationBackgroundService::class.java).also {
+        Intent(applicationContext, LocationBackgroundService::class.java).also {
             it.action = action.name
-            Log.d(TAG, action.toString()) // 처음 실행 시 START
-//            if (action == ServiceStatus.START) {
-//                Log.d(TAG,"zzzzz")
-//                val messengerIncoming = Messenger(mHandler)
-//                it.putExtra(MESSENGER_INTENT_KEY, messengerIncoming)
-//            }
-
-//            //  출처: https://mixup.tistory.com/59 [투믹스 작업장]
-            // https://developer.android.com/about/versions/oreo/background?hl=ko
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//                startForegroundService(it)  // Oreo(26) 부터 지원
-//                return
-//            }
+            Log.d(TAG, action.toString())
             startService(it)
         }
     }

@@ -238,18 +238,13 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
 
     inner class IncomingMessageHandler : Handler() {
         override fun handleMessage(msg: Message) {
-            Log.i(WSY, "handleMessage..." + msg.toString())
-
             super.handleMessage(msg)
-
+            Log.d(WSY, "RunningActivity : $msg")
             when (msg.what) {
                 LocationBackgroundService.LOCATION_MESSAGE -> {
-                    val obj = msg.obj as Location
+                    val curLoc = msg.obj as Location
                     val currentDateTimeString = DateFormat.getDateTimeInstance().format(Date())
-                    Log.d(WSY, "RunningActivity : 값을 가져옴?")
-
-
-                    manageRunning.runningMap.setLocation(obj)
+                    manageRunning.runningMap.setLocation(curLoc)
                 }
             }
         }
