@@ -130,11 +130,10 @@ class RacingMap : OnMapReadyCallback {
     }
 
     fun makerRunning(mapTitle: String) {
-        var makerIcon = makingIcon(R.drawable.ic_maker_marker, context)
+//        var makerIcon = makingIcon(R.drawable.ic_maker_marker, context)
         val makerOptions = MarkerOptions()
         makerOptions.position(markers[0])
         makerOptions.title("Maker")
-        makerOptions.icon(makerIcon)
         makerMarker = mMap.addMarker(makerOptions)//maker 마커 추가
 
         makerRunningThread = Thread(Runnable {
@@ -161,7 +160,7 @@ class RacingMap : OnMapReadyCallback {
                     val makerOptions = MarkerOptions()
                     makerOptions.position(markers[index])
                     makerOptions.title("Maker")
-                    makerOptions.icon(makerIcon)
+//                    makerOptions.icon(makerIcon)
 
                     makerMarker = mMap.addMarker(makerOptions)
                 })
@@ -214,12 +213,20 @@ class RacingMap : OnMapReadyCallback {
                 )        //경로를 그릴 폴리라인 집합
             )
             if (i == 0) {   //처음엔 스타트포인트
-                var spIcon = makingIcon(R.drawable.ic_racing_startpoint, context)
-                val startMarkerOptions = MarkerOptions()
-                startMarkerOptions.position(markers[0])
-                startMarkerOptions.title("Start")
-                startMarkerOptions.icon(spIcon)
-                mMap.addMarker(startMarkerOptions)
+//                var spIcon = makingIcon(R.drawable.ic_racing_startpoint, context)
+//                val startMarkerOptions = MarkerOptions()
+//                startMarkerOptions.position(markers[0])
+//                startMarkerOptions.title("Start")
+//                startMarkerOptions.icon(spIcon)
+//                mMap.addMarker(startMarkerOptions)
+                mMap.addCircle(
+                    CircleOptions()
+                        .center(currentLocation)
+                        .radius(2.0)
+                        .strokeWidth(6f)
+                        .strokeColor(Color.WHITE)
+                        .fillColor(Color.GREEN)
+                )
             } else {        //나머진 다 체크포인트
                 cpOption.position(markers[i])
                 cpOption.title(i.toString())
@@ -228,12 +235,23 @@ class RacingMap : OnMapReadyCallback {
         }
         val cpPassedIcon = makingIcon(R.drawable.ic_checkpoint_red, context)
         cpOption.icon(cpPassedIcon)
-        var fpIcon = makingIcon(R.drawable.ic_racing_finishpoint, context)
-        val finishMarkerOptions = MarkerOptions()
-        finishMarkerOptions.position(markers[markers.size - 1])
-        finishMarkerOptions.title("Finish")
-        finishMarkerOptions.icon(fpIcon)
-        mMap.addMarker(finishMarkerOptions) //마지막엔 피니시 포인트
+
+//        var fpIcon = makingIcon(R.drawable.ic_racing_finishpoint, context)
+//        val finishMarkerOptions = MarkerOptions()
+//        finishMarkerOptions.position(markers[markers.size - 1])
+//        finishMarkerOptions.title("Finish")
+//        finishMarkerOptions.icon(fpIcon)
+//        mMap.addMarker(finishMarkerOptions) //마지막엔 피니시 포인트
+
+        //마지막엔 피니시 포인트
+        mMap.addCircle(
+            CircleOptions()
+                .center(currentLocation)
+                .radius(2.0)
+                .strokeWidth(6f)
+                .strokeColor(Color.WHITE)
+                .fillColor(Color.RED)
+        )
 
         var min = LatLng(Wow.minDoubleLat(makerRouteData.latlngs), Wow.minDoubleLng(makerRouteData.latlngs))
         var max = LatLng(Wow.maxDoubleLat(makerRouteData.latlngs), Wow.maxDoubleLng(makerRouteData.latlngs))
