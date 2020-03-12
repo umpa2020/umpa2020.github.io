@@ -121,7 +121,7 @@ class RunningSaveActivity : AppCompatActivity() {
         val rankingData = RankingData(UserInfo.nickname, UserInfo.nickname, infoData.time, 1)
         db.collection("rankingMap").document(infoData.mapTitle!!).set(rankingData)
         db.collection("rankingMap").document(infoData.mapTitle!!).collection("ranking")
-            .document(rankingData.makerNickname + "||" + full_sdf.format(dt)).set(rankingData)
+            .document(UserInfo.autoLoginKey+timestamp).set(rankingData)
 
         // db에 원하는 경로 및, 문서로 업로드
 

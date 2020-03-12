@@ -7,7 +7,6 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
 import com.google.maps.android.SphericalUtil
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.NearMap
@@ -37,49 +36,19 @@ class getRanking {
      * 필터를 거치지 않고, 실행순으로 정렬되는 데이터를 가져오는 함수.
      */
 
-    fun getExcuteDESCENDING(context: Context, view: View) {
+    fun getExcuteDESCENDING(context: Context, view: View, location: Location) {
         val progressbar = ProgressBar(context)
         progressbar.show()
-
-        //레이아웃 매니저 추가
-        view.rank_recycler_map.layoutManager = LinearLayoutManager(context)
-
-        val db = FirebaseFirestore.getInstance()
-
-        db.collection("mapInfo").orderBy("execute", Query.Direction.DESCENDING)
-            .get()
-            .addOnSuccessListener { result ->
-                infoDatas = arrayListOf()
-
-                for (document in result) {
-                    infoData = document.toObject(InfoData::class.java)
-                    infoData.mapTitle = document.id
-                    infoDatas.add(infoData)
-                }
-                //view.rank_recycler_map.adapter = RankRecyclerViewAdapterMap(infoDatas, nearMaps)
-
-                progressbar.dismiss()
-            }
-            .addOnFailureListener { exception ->
-                Log.d("ssmm11", exception.toString())
-
-            }
-    }
-
-    /**
-     * 현재 위치를 받아서 현재 위치와 필터에 적용한 위치 만큼 떨어져 있는 구간에서 실행순으로 정렬한 코드
-     */
-
-    fun getFilterRange(context: Context, view: View, location: Location) {
-        val progressbar = ProgressBar(context)
-        progressbar.show()
-
-        //결과로 가져온 location에서 정보추출 / 이건 위도 경도 형태로 받아오는 형식
+//결과로 가져온 location에서 정보추출 / 이건 위도 경도 형태로 받아오는 형식
         //Location 형태로 받아오고 싶다면 아래처럼
         //var getintentLocation = current
+
         val lat = location.latitude
         val lng = location.longitude
         cur_loc = LatLng(lat, lng)
+
+        nearMaps1.clear()
+        nearMaps2.clear()
 
         //레이아웃 매니저 추가
         view.rank_recycler_map.layoutManager = LinearLayoutManager(context)
@@ -105,29 +74,96 @@ class getRanking {
                     }
                 }
 
+                for (nearmap in nearMaps1) {
+                    db.collection("mapInfo").whereEqualTo("mapTitle", nearmap.mapTitle)
+                        .get()
+                        .addOnSuccessListener { result2 ->
 
-                Log.d("ssmm11", "거리1 = " + SphericalUtil.computeDistanceBetween(cur_loc, latLng))
+                            for (document2 in result2) {
+                                infoData = document2.toObject(InfoData::class.java)
+                                infoData.mapTitle = document2.id
+                                infoDatas.add(infoData)
+                                nearMaps2.add(nearmap)
+                                break
+                            }
+
+                            infoDatas.sortByDescending { infoData -> infoData.execute }
+                            view.rank_recycler_map.adapter = RankRecyclerViewAdapterMap(infoDatas, nearMaps2)
+
+                        }
+                }
+                progressbar.dismiss()
+            }
+            .addOnFailureListener { exception ->
+                Log.w("ssmm11", "Error getting documents.", exception)
+            }
+    }
+
+    /**
+     * 현재 위치를 받아서 현재 위치와 필터에 적용한 위치 만큼 떨어져 있는 구간에서 실행순으로 정렬한 코드
+     */
+
+    fun getFilterRange(context: Context, view: View, location: Location) {
+        val progressbar = ProgressBar(context)
+        progressbar.show()
+
+        //결과로 가져온 location에서 정보추출 / 이건 위도 경도 형태로 받아오는 형식
+        //Location 형태로 받아오고 싶다면 아래처럼
+        //var getintentLocation = current
+        val lat = location.latitude
+        val lng = location.longitude
+        cur_loc = LatLng(lat, lng)
+
+        //레이아웃 매니저 추가
+        view.rank_recycler_map.layoutManager = LinearLayoutManager(context)
+
+        val db = FirebaseFirestore.getInstance()
+
+        nearMaps1.clear()
+        nearMaps2.clear()
+
+        db.collection("mapRoute")
+            .get()
+            .addOnSuccessListener { result ->
+                infoDatas = arrayListOf()
+
+
+
+                for (document in result) {
+                    val receiveRouteDatas = document.get("markerlatlngs") as List<Object>
+
+                    for (receiveRouteData in receiveRouteDatas) {
+                        val location = receiveRouteData as Map<String, Any>
+                        latLng = LatLng(
+                            location["latitude"] as Double,
+                            location["longitude"] as Double
+                        )
+                        nearMaps1.add(NearMap(document.id, SphericalUtil.computeDistanceBetween(cur_loc, latLng)))
+                        break
+                    }
+                }
 
                 for (nearmap in nearMaps1) {
-                    if (nearmap.distance < 100) {
+                    if (nearmap.distance < 5000) {
                         db.collection("mapInfo").whereEqualTo("mapTitle", nearmap.mapTitle)
                             .get()
                             .addOnSuccessListener { result2 ->
 
                                 for (document2 in result2) {
                                     infoData = document2.toObject(InfoData::class.java)
-                                    Log.d("ssmm11", nearmap.mapTitle + "  맵 : " + document2.id + " 실행수 : " + infoData.execute)
                                     infoData.mapTitle = document2.id
                                     infoDatas.add(infoData)
                                     nearMaps2.add(nearmap)
                                     break
                                 }
-
                                 infoDatas.sortByDescending { infoData -> infoData.execute }
                                 view.rank_recycler_map.adapter = RankRecyclerViewAdapterMap(infoDatas, nearMaps2)
-
                             }
                     }
+                    else {
+                        view.rank_recycler_map.adapter = RankRecyclerViewAdapterMap(infoDatas, nearMaps2)
+                    }
+
                 }
                 progressbar.dismiss()
             }

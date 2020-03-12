@@ -5,25 +5,27 @@ import android.content.Context
 import android.graphics.Color
 import android.location.Location
 import android.util.Log
+import android.view.View
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.*
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.maps.android.PolyUtil
 import com.google.maps.android.SphericalUtil
-import java.util.*
-import com.google.android.gms.maps.model.*
-import com.google.android.gms.maps.model.BitmapDescriptor
-import android.view.View
-import com.google.android.gms.maps.*
-import com.google.firebase.firestore.FirebaseFirestore
 import com.umpa2020.tracer.R
-import com.umpa2020.tracer.util.TTS
 import com.umpa2020.tracer.dataClass.NoticeState
 import com.umpa2020.tracer.dataClass.RouteData
 import com.umpa2020.tracer.dataClass.UserState
+import com.umpa2020.tracer.locationBackground.LocationUpdatesComponent
 import com.umpa2020.tracer.main.trace.racing.ManageRacing
 import com.umpa2020.tracer.main.trace.racing.RankingRecodeRacingActivity
-import com.umpa2020.tracer.util.LocationUpdatesComponent
+import com.umpa2020.tracer.util.TTS
 import com.umpa2020.tracer.util.Wow
 import com.umpa2020.tracer.util.Wow.Companion.makingIcon
 import kotlinx.android.synthetic.main.activity_ranking_recode_racing.*
+import java.util.*
 import kotlin.math.roundToLong
 
 
@@ -103,14 +105,14 @@ class RacingMap : OnMapReadyCallback {
         var lat =  LocationUpdatesComponent.getLastLocat().latitude
         var lng =  LocationUpdatesComponent.getLastLocat().longitude
         currentLocation = LatLng(lat, lng)
-        mMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 17F))   //화면이동
+        mMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 20F))   //화면이동
 
         loadRoute()
         drawRoute()
         mMap.moveCamera(
             CameraUpdateFactory.newLatLngZoom(
                 loadRoute[0][0],
-                17F
+                20F
             )
         )
 
@@ -222,7 +224,7 @@ class RacingMap : OnMapReadyCallback {
                 mMap.addCircle(
                     CircleOptions()
                         .center(markers[0])
-                        .radius(2.0)
+                        .radius(5.0)
                         .strokeWidth(6f)
                         .strokeColor(Color.WHITE)
                         .fillColor(Color.GREEN)
@@ -247,7 +249,7 @@ class RacingMap : OnMapReadyCallback {
         mMap.addCircle(
             CircleOptions()
                 .center(markers[markers.size - 1])
-                .radius(2.0)
+                .radius(5.0)
                 .strokeWidth(6f)
                 .strokeColor(Color.WHITE)
                 .fillColor(Color.RED)
@@ -258,26 +260,6 @@ class RacingMap : OnMapReadyCallback {
         print_log(min.toString() + max.toString())
         mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(LatLngBounds(min, max), 1080, 300, 50))
     }
-
-    fun setMyPosition(location : Location) =
-        /**
-         *  여기서 서비스와의 통신으로 위치 설정
-         */
-        if (location == null) {
-            print_log("Location is null")
-        } else {
-            print_log("Success to get Init Location : " + location.toString())
-            previousLocation = LatLng(location.latitude, location.longitude)
-            val markerOptions = MarkerOptions()
-            markerOptions.position(previousLocation)
-            markerOptions.title("Me")
-
-            /*cpOption.title("StartPoint")
-            cpOption.position(prev_loc)
-            mMap.addMarker(cpOption)
-            markerCount++
-            markers.add(prev_loc)*/
-        }
 
     fun createData(location: Location){
         var lat = location.latitude

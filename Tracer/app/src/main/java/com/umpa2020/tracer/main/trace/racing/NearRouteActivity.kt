@@ -28,7 +28,7 @@ class NearRouteActivity : AppCompatActivity() {
     lateinit var distanceArray: ArrayList<Double>
     lateinit var mapTitleArray: ArrayList<String>
 
-    var latLng = LatLng(0.0,0.0)
+    var latLng = LatLng(0.0, 0.0)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +40,6 @@ class NearRouteActivity : AppCompatActivity() {
         val intent = getIntent()
         val current = intent.extras?.getParcelable<Location>("currentLocation")
 
-        Log.d("jsj", "near 넘어와서 getintent 한 값 " + current.toString())
 
         //결과로 가져온 location에서 정보추출 / 이건 위도 경도 형태로 받아오는 형식
         //Location 형태로 받아오고 싶다면 아래처럼
@@ -48,8 +47,6 @@ class NearRouteActivity : AppCompatActivity() {
         val lat = current!!.latitude
         val lng = current!!.longitude
         cur_loc = LatLng(lat, lng)
-
-        Log.d("ssmm11", "현재 위치 = " + lat.toString() + lng.toString())
 
 
         val db = FirebaseFirestore.getInstance()
@@ -68,12 +65,12 @@ class NearRouteActivity : AppCompatActivity() {
                         )
                         break
                     }
-                    if ( SphericalUtil.computeDistanceBetween(cur_loc, latLng) <= 2000) {
+                    if (SphericalUtil.computeDistanceBetween(cur_loc, latLng) <= 2000) {
                         var nearMap = NearMap(document.id, SphericalUtil.computeDistanceBetween(cur_loc, latLng))
                         nearMaps.add(nearMap)
                     }
                 }
-                near_recycler_map.adapter = NearRecyclerViewAdapter(nearMaps.sortedWith(compareBy({it.distance})))
+                near_recycler_map.adapter = NearRecyclerViewAdapter(nearMaps.sortedWith(compareBy({ it.distance })))
                 near_recycler_map.layoutManager = LinearLayoutManager(this)
                 progressbar.dismiss()
             }

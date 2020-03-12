@@ -1,4 +1,4 @@
-package com.umpa2020.tracer.util
+package com.umpa2020.tracer.locationBackground
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -55,9 +55,7 @@ object LocationUpdatesComponent {
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult?) {
                 super.onLocationResult(locationResult)
-                Log.i(WSY, "onCreate...onLocationResult...............loc " + locationResult!!.lastLocation)
-
-                onNewLocation(locationResult.lastLocation)
+                onNewLocation(locationResult!!.lastLocation)
             }
         }
     }
@@ -185,11 +183,7 @@ object LocationUpdatesComponent {
 
 
     private fun onNewLocation(location: Location?) {
-        Log.i(WSY, "New location: " + location!!)
-        Log.d(WSY, locationRequest.priority.toString()) // 102 출력됨. => PRIORITY_BALANCED_POWER_ACCURACY
-        //        Toast.makeText(getApplicationContext(), "onNewLocation " + location, Toast.LENGTH_LONG).show();
-
-        currentLocation = location
+        currentLocation = location!!
         iLocationProvider!!.onLocationUpdate(currentLocation)
     }
 

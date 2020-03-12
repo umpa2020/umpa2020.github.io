@@ -28,7 +28,8 @@ class StartFragment : Fragment(), View.OnClickListener {
 
     lateinit var map: BasicMap
     var mHandler: IncomingMessageHandler? = null
-    lateinit var obj: Location
+
+    lateinit var curLoc: Location
 
     var smf: SupportMapFragment? = null
 
@@ -44,8 +45,8 @@ class StartFragment : Fragment(), View.OnClickListener {
 
             R.id.mainStartRacing -> {
                 val newIntent = Intent(activity, NearRouteActivity::class.java)
-                newIntent.putExtra("currentLocation", obj) //obj 정보 인텐트로 넘김
-                Log.d("jsj", "mainStartRunning누르는 순간의 intent " + obj.toString())
+                newIntent.putExtra("currentLocation", curLoc) //curLoc 정보 인텐트로 넘김
+                Log.d("jsj", "mainStartRunning누르는 순간의 intent " + curLoc.toString())
                 startActivity(newIntent)
             }
         }
@@ -54,15 +55,7 @@ class StartFragment : Fragment(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mHandler = IncomingMessageHandler()
-        Log.d(WSY, "핸들러 생성?")
 
-        Intent(context, LocationBackgroundService::class.java).also {
-            val messengerIncoming = Messenger(mHandler)
-            it.putExtra(MESSENGER_INTENT_KEY, messengerIncoming)
-
-            activity!!.startService(it)
-        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -105,23 +98,30 @@ class StartFragment : Fragment(), View.OnClickListener {
         Log.d("sss", "onDestroy()")
     }
 
+    override fun onResume() {
+        super.onResume()
+        mHandler = IncomingMessageHandler()
+
+        Intent(context, LocationBackgroundService::class.java).also {
+            val messengerIncoming = Messenger(mHandler)
+            it.putExtra(MESSENGER_INTENT_KEY, messengerIncoming)
+            activity!!.startService(it)
+        }
+    }
+
     val MESSENGER_INTENT_KEY = "msg-intent-key"
 
     // 옵저버 패턴에서 location Manager
     inner class IncomingMessageHandler : Handler() {
         override fun handleMessage(msg: Message) {
-            Log.i(WSY, "handleMessage..." + msg.toString())
-
             super.handleMessage(msg)
-
             when (msg.what) {
                 LocationBackgroundService.LOCATION_MESSAGE -> {
-                    obj = msg.obj as Location
-                    Log.d(WSY, "StartFragment : 값을 가져왔음")
-                    Log.d(WSY, "현재 위치 : " + obj.toString())
-                    map.setLocation(obj)
-                    if(obj != null)
-                        lastLacation = obj
+                    curLoc = msg.obj as Location
+                    Log.d(WSY, "StartFragment : $curLoc")
+                    map.setLocation(curLoc)
+                    if(curLoc != null)
+                        lastLacation = curLoc
                 }
             }
         }

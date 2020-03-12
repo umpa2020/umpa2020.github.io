@@ -12,7 +12,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.UserState
-import com.umpa2020.tracer.util.LocationUpdatesComponent
+import com.umpa2020.tracer.locationBackground.LocationUpdatesComponent
 
 class BasicMap : OnMapReadyCallback {
     var mMap: GoogleMap? = null    //racingMap 인스턴스
