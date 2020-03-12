@@ -88,13 +88,18 @@ class RacingFinishActivity : AppCompatActivity() {
                                         .addOnSuccessListener { result ->
                                             var index = 1
                                             for (document in result) {
-                                                if (document.get("challengerNickname") == UserInfo.nickname && document.get("challengerTime").toString().equals(racerData.time.toString()) ) {
+                                                if (document.get("challengerNickname") == UserInfo.nickname && document.get("challengerTime").toString().equals(racerData.time.toString())) {
                                                     resultRankTextView.text = "" + index + "등"
                                                 }
                                                 var recycleRankingData: RankingData
                                                 recycleRankingData = document.toObject(RankingData::class.java)
                                                 if (recycleRankingData.bestTime == 1) {
+                                                    //최대 10위까지만 띄우기
+                                                    if (arrRankingData.size > 10)
+                                                        break
+
                                                     arrRankingData.add(recycleRankingData)
+
                                                 }
                                                 index++
                                             }

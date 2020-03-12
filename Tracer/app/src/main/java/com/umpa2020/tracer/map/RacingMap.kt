@@ -5,25 +5,27 @@ import android.content.Context
 import android.graphics.Color
 import android.location.Location
 import android.util.Log
+import android.view.View
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.*
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.maps.android.PolyUtil
 import com.google.maps.android.SphericalUtil
-import java.util.*
-import com.google.android.gms.maps.model.*
-import com.google.android.gms.maps.model.BitmapDescriptor
-import android.view.View
-import com.google.android.gms.maps.*
-import com.google.firebase.firestore.FirebaseFirestore
 import com.umpa2020.tracer.R
-import com.umpa2020.tracer.util.TTS
 import com.umpa2020.tracer.dataClass.NoticeState
 import com.umpa2020.tracer.dataClass.RouteData
 import com.umpa2020.tracer.dataClass.UserState
 import com.umpa2020.tracer.main.trace.racing.ManageRacing
 import com.umpa2020.tracer.main.trace.racing.RankingRecodeRacingActivity
 import com.umpa2020.tracer.util.LocationUpdatesComponent
+import com.umpa2020.tracer.util.TTS
 import com.umpa2020.tracer.util.Wow
 import com.umpa2020.tracer.util.Wow.Companion.makingIcon
 import kotlinx.android.synthetic.main.activity_ranking_recode_racing.*
+import java.util.*
 import kotlin.math.roundToLong
 
 
@@ -103,14 +105,14 @@ class RacingMap : OnMapReadyCallback {
         var lat =  LocationUpdatesComponent.getLastLocat().latitude
         var lng =  LocationUpdatesComponent.getLastLocat().longitude
         currentLocation = LatLng(lat, lng)
-        mMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 17F))   //화면이동
+        mMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 20F))   //화면이동
 
         loadRoute()
         drawRoute()
         mMap.moveCamera(
             CameraUpdateFactory.newLatLngZoom(
                 loadRoute[0][0],
-                17F
+                20F
             )
         )
 
@@ -221,8 +223,8 @@ class RacingMap : OnMapReadyCallback {
 //                mMap.addMarker(startMarkerOptions)
                 mMap.addCircle(
                     CircleOptions()
-                        .center(currentLocation)
-                        .radius(2.0)
+                        .center(markers[0])
+                        .radius(5.0)
                         .strokeWidth(6f)
                         .strokeColor(Color.WHITE)
                         .fillColor(Color.GREEN)
@@ -246,8 +248,8 @@ class RacingMap : OnMapReadyCallback {
         //마지막엔 피니시 포인트
         mMap.addCircle(
             CircleOptions()
-                .center(currentLocation)
-                .radius(2.0)
+                .center(markers[markers.size - 1])
+                .radius(5.0)
                 .strokeWidth(6f)
                 .strokeColor(Color.WHITE)
                 .fillColor(Color.RED)
