@@ -52,7 +52,6 @@ class RacingFinishActivity : AppCompatActivity() {
 
                     var rankingData = RankingData(racerData.makersNickname, UserInfo.nickname, racerData.time, 1)
 
-
                     // 랭킹 맵에서
                     db.collection("rankingMap").document(racerData.mapTitle!!).collection("ranking").whereEqualTo("bestTime", 1)
                         .whereEqualTo("challengerNickname", UserInfo.nickname).get()
@@ -60,67 +59,69 @@ class RacingFinishActivity : AppCompatActivity() {
                             for (document in result) {
                                 Log.d("ssmm11", "racer time = " + racerData.time)
                                 Log.d("ssmm11", "\ndocument.get(\"challengerTime\") as Long = " + document.get("challengerTime") as Long)
-                                if (racerData.time!! < document.get("challengerTime") as Long) {
+                                if (racerData.time!!.toLong() < document.get("challengerTime") as Long) {
+                                    Log.d("ssm11", "원래가 더 느리다 ")
+
                                     db.collection("rankingMap").document(racerData.mapTitle!!).collection("ranking").document(document.id).update("bestTime", 0)
+
                                 } else {
-                                    rankingData = RankingData(racerData.makersNickname, UserInfo.nickname, racerData.time, 0)
+                                    Log.d("ssmm11", "안드 위 베타 = " + rankingData.bestTime)
+                                    rankingData.bestTime = 0
+                                    Log.d("ssmm11", "안드 아래 베타 = " + rankingData.bestTime)
                                 }
                                 break
                             }
 
-                        }
+                            // 타임스탬프
+                            val dt = Date()
+                            val full_sdf = SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.getDefault())
 
-                    // ranking에 내용 등록
-                    db.collection("rankingMap").document(racerData.mapTitle!!).set(rankingData)
+                            val date = full_sdf.parse(dt.toString())
+                            val timestamp = date!!.time
 
-                    // 타임스탬프
-                    val dt = Date()
-                    val full_sdf = SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.getDefault())
+                            // 랭킹의 내용을 가져와서 마지막 페이지 구성
+                            db.collection("rankingMap").document(racerData.mapTitle!!).collection("ranking")
+                                .document(UserInfo.autoLoginKey + timestamp).set(rankingData)
+                                .addOnSuccessListener {
+                                    db.collection("rankingMap").document(racerData.mapTitle!!).collection("ranking").orderBy("challengerTime", Query.Direction.ASCENDING)
+                                        .get()
+                                        .addOnSuccessListener { result ->
+                                            var index = 1
+                                            for (document in result) {
+                                                if (document.get("challengerNickname") == UserInfo.nickname && document.get("challengerTime").toString().equals(racerData.time.toString()) ) {
+                                                    resultRankTextView.text = "" + index + "등"
+                                                }
+                                                var recycleRankingData: RankingData
+                                                recycleRankingData = document.toObject(RankingData::class.java)
+                                                if (recycleRankingData.bestTime == 1) {
+                                                    arrRankingData.add(recycleRankingData)
+                                                }
+                                                index++
+                                            }
+                                            //레이아웃 매니저 추가
+                                            resultPlayerRankingRecycler.layoutManager = LinearLayoutManager(this)
+                                            //adpater 추가
+                                            resultPlayerRankingRecycler.adapter = RankRecyclerViewAdapterTopPlayer(arrRankingData)
 
-                    val date = full_sdf.parse(dt.toString())
-                    val timestamp = date!!.time
+                                            makerData = document.toObject(InfoData::class.java)!!
+                                            runOnUiThread {
+                                                makerLapTimeTextView.text = formatter.format(Date(makerData.time!!))
+                                                makerMaxSpeedTextView.text = PrettyDistance().convertPretty(makerData.speed.max()!!)
+                                                makerAvgSpeedTextView.text = PrettyDistance().convertPretty(makerData.speed.average())
 
-                    // 랭킹의 내용을 가져와서 마지막 페이지 구성
-                    db.collection("rankingMap").document(racerData.mapTitle!!).collection("ranking")
-                        .document(UserInfo.autoLoginKey+timestamp).set(rankingData)
-                        .addOnSuccessListener {
-                            db.collection("rankingMap").document(racerData.mapTitle!!).collection("ranking").orderBy("challengerTime", Query.Direction.ASCENDING)
-                                .get()
-                                .addOnSuccessListener { result ->
-                                    var index = 1
-                                    for (document in result) {
-                                        if (document.get("challengerNickname") == UserInfo.nickname) {
-                                            resultRankTextView.text = "" + index + "등"
+                                                racerLapTimeTextView.text = formatter.format(Date(racerData.time!!))
+                                                racerMaxSpeedTextView.text = PrettyDistance().convertPretty(racerData.speed.max()!!)
+                                                racerAvgSpeedTextView.text = PrettyDistance().convertPretty(racerData.speed.average())
+
+                                            }
+                                            progressbar.dismiss()
                                         }
-                                        var recycleRankingData: RankingData
-                                        recycleRankingData = document.toObject(RankingData::class.java)
-                                        arrRankingData.add(recycleRankingData)
-                                        index++
-                                    }
-                                    //레이아웃 매니저 추가
-                                    resultPlayerRankingRecycler.layoutManager = LinearLayoutManager(this)
-                                    //adpater 추가
-                                    resultPlayerRankingRecycler.adapter = RankRecyclerViewAdapterTopPlayer(arrRankingData)
-                                    progressbar.dismiss()
-                                }
-                                .addOnFailureListener { exception ->
+                                        .addOnFailureListener { exception ->
+                                        }
                                 }
                         }
-
-
-                    makerData = document.toObject(InfoData::class.java)!!
-                    runOnUiThread {
-                        makerLapTimeTextView.text = formatter.format(Date(makerData.time!!))
-                        makerMaxSpeedTextView.text = PrettyDistance().convertPretty(makerData.speed.max()!!)
-                        makerAvgSpeedTextView.text = PrettyDistance().convertPretty(makerData.speed.average())
-
-                        racerLapTimeTextView.text = formatter.format(Date(racerData.time!!))
-                        racerMaxSpeedTextView.text = PrettyDistance().convertPretty(racerData.speed.max()!!)
-                        racerAvgSpeedTextView.text = PrettyDistance().convertPretty(racerData.speed.average())
-
-                    }
-                    progressbar.dismiss()
                 }
+
                 .addOnFailureListener { exception ->
                 }
         } else {
