@@ -99,11 +99,12 @@ class RacingMap : OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
+
         mMap.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
         // 마지막 위치 가져와서 카메라 설정
         Log.d(TAG, "잘 가져왔니? " + LocationUpdatesComponent.getLastLocat().toString())
-        var lat =  LocationUpdatesComponent.getLastLocat().latitude
-        var lng =  LocationUpdatesComponent.getLastLocat().longitude
+        val lat =  LocationUpdatesComponent.getLastLocat().latitude
+        val lng =  LocationUpdatesComponent.getLastLocat().longitude
         currentLocation = LatLng(lat, lng)
         mMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 20F))   //화면이동
 
