@@ -40,19 +40,14 @@ class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener,
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
         setContentView(R.layout.activity_ranking_recode_racing)
 
-        // 서비스로 값 전달.
+        // 서비스에 레이싱 핸들러 등록
         mHandler = IncomingMessageHandler()
-
         Log.d(MainActivity.WSY, "핸들러 생성?")
         Intent(this, LocationBackgroundService::class.java).also {
             val messengerIncoming = Messenger(mHandler)
             it.putExtra(MESSENGER_INTENT_KEY, messengerIncoming)
-
             startService(it)
         }
-
-        makerRouteData = intent.getParcelableExtra("makerRouteData") as RouteData
-        mapTitle = intent.getStringExtra("maptitle")!!
         init()
         racingControlButton.setOnLongClickListener {
             if (manageRacing.racingMap.userState == UserState.RACING) {
@@ -77,6 +72,10 @@ class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener,
     }
 
     fun init() {
+        //루트 받아오기
+        makerRouteData = intent.getParcelableExtra("makerRouteData") as RouteData
+        mapTitle = intent.getStringExtra("maptitle")!!
+
         val smf = supportFragmentManager.findFragmentById(R.id.map_viewer) as SupportMapFragment
         manageRacing = ManageRacing(smf, this, this, makerRouteData)
 
@@ -131,9 +130,7 @@ class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener,
     inner class IncomingMessageHandler : Handler() {
         override fun handleMessage(msg: Message) {
             Log.i(MainActivity.WSY, "handleMessage..." + msg.toString())
-
             super.handleMessage(msg)
-
             when (msg.what) {
                 LocationBackgroundService.LOCATION_MESSAGE -> {
                     val obj = msg.obj as Location

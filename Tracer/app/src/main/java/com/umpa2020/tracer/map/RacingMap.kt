@@ -18,9 +18,9 @@ import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.NoticeState
 import com.umpa2020.tracer.dataClass.RouteData
 import com.umpa2020.tracer.dataClass.UserState
+import com.umpa2020.tracer.locationBackground.LocationUpdatesComponent
 import com.umpa2020.tracer.main.trace.racing.ManageRacing
 import com.umpa2020.tracer.main.trace.racing.RankingRecodeRacingActivity
-import com.umpa2020.tracer.util.LocationUpdatesComponent
 import com.umpa2020.tracer.util.TTS
 import com.umpa2020.tracer.util.Wow
 import com.umpa2020.tracer.util.Wow.Companion.makingIcon
@@ -260,26 +260,6 @@ class RacingMap : OnMapReadyCallback {
         print_log(min.toString() + max.toString())
         mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(LatLngBounds(min, max), 1080, 300, 50))
     }
-
-    fun setMyPosition(location : Location) =
-        /**
-         *  여기서 서비스와의 통신으로 위치 설정
-         */
-        if (location == null) {
-            print_log("Location is null")
-        } else {
-            print_log("Success to get Init Location : " + location.toString())
-            previousLocation = LatLng(location.latitude, location.longitude)
-            val markerOptions = MarkerOptions()
-            markerOptions.position(previousLocation)
-            markerOptions.title("Me")
-
-            /*cpOption.title("StartPoint")
-            cpOption.position(prev_loc)
-            mMap.addMarker(cpOption)
-            markerCount++
-            markers.add(prev_loc)*/
-        }
 
     fun createData(location: Location){
         var lat = location.latitude

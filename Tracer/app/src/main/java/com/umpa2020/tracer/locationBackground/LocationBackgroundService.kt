@@ -13,7 +13,6 @@ import com.google.android.gms.location.LocationRequest
 import com.umpa2020.tracer.main.MainActivity.Companion.MESSENGER_INTENT_KEY
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.main.trace.running.RunningActivity
-import com.umpa2020.tracer.util.LocationUpdatesComponent
 
 /**
  *  IntentService : 오래걸리지만 메인스레드와 관련이 없는 작업을할 때 주로 이용한다.
@@ -35,11 +34,9 @@ class LocationBackgroundService : IntentService("LocationBackgroundService"), Lo
         super.onCreate()
         Log.i(TAG, "onCreate ")
 
-
         /**
          *  위치 관련 생성.
          */
-
 
         Log.d(TAG, this.toString())
         LocationUpdatesComponent.setILocationProvider(this)

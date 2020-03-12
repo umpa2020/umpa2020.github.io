@@ -1,7 +1,12 @@
 package com.umpa2020.tracer.main.trace.racing
 
+import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.location.Location
+import android.os.Handler
+import android.os.Message
+import android.os.Messenger
 import android.os.SystemClock
 import android.view.View
 import android.widget.Chronometer
@@ -16,6 +21,13 @@ import com.umpa2020.tracer.map.RacingMap
 import com.umpa2020.tracer.util.TTS
 import com.umpa2020.tracer.util.Wow
 import kotlinx.android.synthetic.main.activity_ranking_recode_racing.*
+import java.text.DateFormat
+import java.util.*
+
+/*
+
+ */
+
 
 class ManageRacing {
     var racingMap: RacingMap
@@ -105,7 +117,7 @@ class ManageRacing {
     fun stopRacing(result: Boolean) {
         racingMap.stopTracking()
 
-        removeHandler(ServiceStatus.STOP)
+        removeHandler()
         timeWhenStopped = chronometer.base - SystemClock.elapsedRealtime()
         chronometer.stop()
 
@@ -124,12 +136,13 @@ class ManageRacing {
         activity.finish()
     }
 
-    private fun removeHandler(action: ServiceStatus) {
-        Intent(context, LocationBackgroundService::class.java).also {
-            it.action = action.name
-            context.startService(it)
+    private fun removeHandler() {
+        Intent(context.applicationContext, LocationBackgroundService::class.java).also {
+            it.action = ServiceStatus.STOP.name
+            context.applicationContext.startService(it)
         }
     }
+
 
     fun deviation(countDeviation: Int) {
         if (countDeviation == 0) {
