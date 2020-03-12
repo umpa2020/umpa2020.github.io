@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import android.os.Messenger
-import android.util.Log
 import android.view.*
 import android.widget.Toast
 import android.widget.Toolbar
@@ -99,5 +98,4 @@ class RankingFragment : Fragment() {
                 super.onOptionsItemSelected(item)
         })
     }
-
 }
