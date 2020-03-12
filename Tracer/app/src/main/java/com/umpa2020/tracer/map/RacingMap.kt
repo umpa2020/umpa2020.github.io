@@ -221,7 +221,7 @@ class RacingMap : OnMapReadyCallback {
 //                mMap.addMarker(startMarkerOptions)
                 mMap.addCircle(
                     CircleOptions()
-                        .center(currentLocation)
+                        .center(markers[0])
                         .radius(2.0)
                         .strokeWidth(6f)
                         .strokeColor(Color.WHITE)
@@ -246,7 +246,7 @@ class RacingMap : OnMapReadyCallback {
         //마지막엔 피니시 포인트
         mMap.addCircle(
             CircleOptions()
-                .center(currentLocation)
+                .center(markers[markers.size - 1])
                 .radius(2.0)
                 .strokeWidth(6f)
                 .strokeColor(Color.WHITE)

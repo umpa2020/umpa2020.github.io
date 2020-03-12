@@ -25,20 +25,23 @@ import kotlinx.android.synthetic.main.fragment_start.view.*
 
 class StartFragment : Fragment(), View.OnClickListener {
     val WSY = "StartFragment"
+
     lateinit var map: BasicMap
     var mHandler: IncomingMessageHandler? = null
-
     lateinit var obj: Location
+
     var smf: SupportMapFragment? = null
 
     var lastLacation : Location? = null
 
     override fun onClick(v: View) {
         when (v.id) {
+
             R.id.mainStartRunning -> {
                 val newIntent = Intent(activity, RunningActivity::class.java)
                 startActivity(newIntent)
             }
+
             R.id.mainStartRacing -> {
                 val newIntent = Intent(activity, NearRouteActivity::class.java)
                 newIntent.putExtra("currentLocation", obj) //obj 정보 인텐트로 넘김

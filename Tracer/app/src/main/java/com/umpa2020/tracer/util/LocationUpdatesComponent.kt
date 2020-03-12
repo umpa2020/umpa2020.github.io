@@ -47,6 +47,10 @@ object LocationUpdatesComponent {
         Log.i(WSY, "created...............")
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(context) // 위치 서비스 클라이언트 만들기
 
+        // create location request
+        createLocationRequest()
+        // get last known location
+        getLastLocation()
 
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult?) {
@@ -56,11 +60,6 @@ object LocationUpdatesComponent {
                 onNewLocation(locationResult.lastLocation)
             }
         }
-
-        // create location request
-        createLocationRequest()
-        // get last known location
-        getLastLocation()
     }
     /**
      * start location updates
@@ -124,7 +123,7 @@ object LocationUpdatesComponent {
                     if (task.isSuccessful && task.result != null) {
                         currentLocation = task.result!!
                         lastLocation = task.result!!
-                        Log.i("last", "getLastLocation " + currentLocation!!)
+                        Log.i("WSY", "getLastLocation " + currentLocation!!)
                         // getLastLocation Location[fused 37.619672,127.059084
                         // hAcc=15 et=+5d2h34m37s51ms alt=53.5 vel=0.0014348121
                         // bear=219.74748 vAcc=2 sAcc=??? bAcc=??? {Bundle[mParcelledData.dataSize=52]}]

@@ -80,9 +80,10 @@ class RunningMap(smf: SupportMapFragment, context: Context) : OnMapReadyCallback
             CircleOptions()
                 .center(currentLocation)
                 .radius(2.0)
-                .strokeWidth(6f)
+                .strokeWidth(5f)
                 .strokeColor(Color.WHITE)
                 .fillColor(Color.GREEN)
+                .zIndex(6f)
         )
 
         userState = UserState.RUNNING
@@ -95,7 +96,7 @@ class RunningMap(smf: SupportMapFragment, context: Context) : OnMapReadyCallback
             CircleOptions()
                 .center(currentLocation)
                 .radius(2.0)
-                .strokeWidth(6f)
+                .strokeWidth(5f)
                 .strokeColor(Color.WHITE)
                 .fillColor(Color.RED)
         )
