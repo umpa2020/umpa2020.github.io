@@ -14,9 +14,9 @@ import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
-import com.umpa2020.tracer.MainActivity
+import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.R
-import com.umpa2020.tracer.join.SignUpActivity
+import com.umpa2020.tracer.login.join.SignUpActivity
 import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_login.*
@@ -123,7 +123,8 @@ class LoginActivity : AppCompatActivity() {
      */
     private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
         Log.d(WSY, "firebaseAuthWithGoogle:" + acct.id!!) // firebaseAuthWithGoogle:117635384468060774340 => 계정 고유 번호 => 이것을 Shared에 저장하여 자동 로그인 구현
-        //Log.d(WSY, acct.email)
+        Log.d(WSY, acct.email!!)
+
 
         val tokenId = acct.id!!.toString()
         val email = acct.email.toString()
@@ -168,11 +169,11 @@ class LoginActivity : AppCompatActivity() {
                                     Log.d(WSY, "기존 가입자 -> 메인으로") // 이 부분에 들어왔다는 것은 로그아웃 or 앱 삭제 후 재로그인일 테니깐 Shared에 다시 값 저장.
 
                                     Log.d(WSY, document.data.toString()) // {gender=Man, nickname=gfyhv, googleTokenId=117635384468060774340, age=26}
-                                    Log.d(WSY, document.data!!.get("nickname").toString())
+                                    Log.d(WSY, document.data.get("nickname").toString())
 
-                                    UserInfo.autoLoginKey = tokenId!!
-                                    UserInfo.email = email!!
-                                    UserInfo.nickname = document.data!!.get("nickname").toString() // Shared에 nickname저장.
+                                    UserInfo.autoLoginKey = tokenId
+                                    UserInfo.email = email
+                                    UserInfo.nickname = document.data.get("nickname").toString() // Shared에 nickname저장.
 
                                     var nextIntent = Intent(this@LoginActivity, MainActivity::class.java)
                                     startActivity(nextIntent)

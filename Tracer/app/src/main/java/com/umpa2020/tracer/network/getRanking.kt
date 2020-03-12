@@ -11,7 +11,7 @@ import com.google.firebase.firestore.Query
 import com.google.maps.android.SphericalUtil
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.NearMap
-import com.umpa2020.tracer.ranking.RankRecyclerViewAdapterMap
+import com.umpa2020.tracer.main.ranking.RankRecyclerViewAdapterMap
 import com.umpa2020.tracer.util.ProgressBar
 import kotlinx.android.synthetic.main.fragment_ranking.view.*
 
