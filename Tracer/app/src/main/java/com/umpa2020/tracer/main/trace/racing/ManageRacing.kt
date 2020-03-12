@@ -12,6 +12,9 @@ import com.umpa2020.tracer.util.TTS
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.NoticeState
 import com.umpa2020.tracer.dataClass.RouteData
+import com.umpa2020.tracer.locationBackground.LocationBackgroundService
+import com.umpa2020.tracer.locationBackground.ServiceStatus
+import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.map.RacingMap
 import com.umpa2020.tracer.util.Wow
 import kotlinx.android.synthetic.main.activity_ranking_recode_racing.*
@@ -104,6 +107,7 @@ class ManageRacing {
     fun stopRacing(result: Boolean) {
         racingMap.stopTracking()
 
+        removeHandler(ServiceStatus.STOP)
         timeWhenStopped = chronometer.base - SystemClock.elapsedRealtime()
         chronometer.stop()
 
@@ -131,6 +135,13 @@ class ManageRacing {
 
             context.startActivity(newIntent)
             activity.finish()
+        }
+    }
+
+    private fun removeHandler(action:ServiceStatus) {
+        Intent(context, LocationBackgroundService::class.java).also {
+            it.action = action.name
+            context.startService(it)
         }
     }
 

@@ -37,7 +37,7 @@ class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener,
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
         setContentView(R.layout.activity_ranking_recode_racing)
 
         // 서비스로 값 전달.

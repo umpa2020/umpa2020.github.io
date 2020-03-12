@@ -1,5 +1,6 @@
 package com.umpa2020.tracer.main.trace.racing
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -9,6 +10,7 @@ import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.RanMapsData
 import com.umpa2020.tracer.dataClass.RankingData
+import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.main.ranking.RankRecyclerViewAdapterTopPlayer
 import com.umpa2020.tracer.util.PrettyDistance
 import com.umpa2020.tracer.util.ProgressBar
@@ -113,7 +115,9 @@ class RacingFinishActivity : AppCompatActivity() {
             }
 
         OKButton.setOnClickListener {
-            finish()
+            var intent = Intent(this,MainActivity::class.java)
+            intent.flags=Intent.FLAG_ACTIVITY_CLEAR_TOP
+            startActivity(intent)
         }
 
     }

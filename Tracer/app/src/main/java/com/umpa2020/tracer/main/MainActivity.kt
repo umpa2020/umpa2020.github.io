@@ -50,6 +50,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        startService()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -117,7 +118,6 @@ class MainActivity : AppCompatActivity() {
             ).commit()
         }
         UserInfo.permission = 1
-        startService()
     }
 
     override fun onDestroy() {
