@@ -8,20 +8,17 @@ import android.os.Handler
 import android.os.Message
 import android.os.Messenger
 import android.os.SystemClock
-import android.util.Log
 import android.view.View
 import android.widget.Chronometer
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.maps.android.SphericalUtil
-import com.umpa2020.tracer.util.TTS
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.NoticeState
 import com.umpa2020.tracer.dataClass.RouteData
 import com.umpa2020.tracer.locationBackground.LocationBackgroundService
 import com.umpa2020.tracer.locationBackground.ServiceStatus
-import com.umpa2020.tracer.main.MainActivity
-import com.umpa2020.tracer.main.MainActivity.Companion.MESSENGER_INTENT_KEY
 import com.umpa2020.tracer.map.RacingMap
+import com.umpa2020.tracer.util.TTS
 import com.umpa2020.tracer.util.Wow
 import kotlinx.android.synthetic.main.activity_ranking_recode_racing.*
 import java.text.DateFormat
@@ -130,44 +127,22 @@ class ManageRacing {
         infoData.mapTitle = mapTitle
         infoData.distance = calcLeftDistance()
 
-        if (result) {
-            val newIntent = Intent(context, RacingFinishActivity::class.java)
-            newIntent.putExtra("Result",    result)
-            newIntent.putExtra("info Data", infoData)
-            newIntent.putExtra("Maker Data", makerRouteData)
-            Log.d("ssmm11", "레이싱 끝!")
+        val newIntent = Intent(context, RacingFinishActivity::class.java)
+        newIntent.putExtra("Result", result)
+        newIntent.putExtra("info Data", infoData)
+        newIntent.putExtra("Maker Data", makerRouteData)
 
-            context.startActivity(newIntent)
-            activity.finish()
-
-        } else {
-            val newIntent = Intent(context, RacingFinishActivity::class.java)
-            newIntent.putExtra("Result", result)
-            newIntent.putExtra("info Data", infoData)
-            newIntent.putExtra("Maker Data", makerRouteData)
-
-            context.startActivity(newIntent)
-            activity.finish()
-        }
+        context.startActivity(newIntent)
+        activity.finish()
     }
 
     private fun removeHandler() {
-        Log.d(MainActivity.TAG, "이건 실행되잖아?")
         Intent(context.applicationContext, LocationBackgroundService::class.java).also {
             it.action = ServiceStatus.STOP.name
             context.applicationContext.startService(it)
         }
     }
 
-    var mHandler: IncomingMessageHandler? = null
-    val MESSENGER_INTENT_KEY = "msg-intent-key"
-
-    inner class IncomingMessageHandler : Handler() {
-        override fun handleMessage(msg: Message) {
-            super.handleMessage(msg)
-            Log.d(MainActivity.WSY, "EmptyHandler : $msg")
-        }
-    }
 
     fun deviation(countDeviation: Int) {
         if (countDeviation == 0) {

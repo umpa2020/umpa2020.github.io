@@ -98,5 +98,4 @@ class RankingFragment : Fragment() {
                 super.onOptionsItemSelected(item)
         })
     }
-
 }

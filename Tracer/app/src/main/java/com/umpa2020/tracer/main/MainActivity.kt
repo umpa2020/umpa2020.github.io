@@ -49,6 +49,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         Log.d("mainActivitiy","Hello I'm New")
         setContentView(R.layout.activity_main)
+        startService()
         bottom_navigation.selectedItemId = R.id.navigation_start
         supportFragmentManager.beginTransaction().replace(
             R.id.container,
@@ -69,7 +70,6 @@ class MainActivity : AppCompatActivity() {
             ).commit()
         }
         Log.d("MainActivity","restart service")
-        startService()
     }
 
 
