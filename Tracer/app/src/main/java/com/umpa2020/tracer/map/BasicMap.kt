@@ -12,6 +12,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.UserState
+import com.umpa2020.tracer.util.LocationUpdatesComponent
 
 class BasicMap : OnMapReadyCallback {
     var mMap: GoogleMap? = null    //racingMap 인스턴스
@@ -31,11 +32,20 @@ class BasicMap : OnMapReadyCallback {
 
     }
 
+    var lastLocat : Location? = null
     override fun onMapReady(googleMap: GoogleMap) { //after the map is loaded
         Log.d("ssmm11", "onMapReady")
 
         mMap = googleMap //구글맵
         mMap!!.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
+        // 마지막 위치 가져와서 카메라 설정
+        Log.d(TAG, "잘 가져왔니? " + LocationUpdatesComponent.getLastLocat().toString())
+        var lat =  LocationUpdatesComponent.getLastLocat().latitude
+        var lng =  LocationUpdatesComponent.getLastLocat().longitude
+        currentLocation = LatLng(lat, lng)
+        mMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 17F))   //화면이동
+
+
     }
 
     fun setLocation(location: Location) {
