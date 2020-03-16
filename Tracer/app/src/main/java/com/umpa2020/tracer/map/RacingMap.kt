@@ -74,6 +74,8 @@ class RacingMap : OnMapReadyCallback {
 
     }
 
+
+
     /**
      * Manage에서 전달 받은 클래스 사용하기 편하도록 쪼개기.
      */
