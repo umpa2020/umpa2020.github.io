@@ -7,7 +7,6 @@ import android.location.Location
 import android.util.Log
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.google.maps.android.PolyUtil
@@ -26,57 +25,68 @@ import kotlinx.android.synthetic.main.activity_running.*
  *  앱에서 지도를 사용하려면 OnMapReadyCallback 인터페이스를 구현하고
  *  MapFragment 객체에서 getMapAsync(OnMapReadyCallback)를 통해 콜백 인스턴스를 설정해야 한다.
  */
-class RunningMap(smf: SupportMapFragment, context: Context) : OnMapReadyCallback {
+class RunningMap(smf: SupportMapFragment, override var context: Context) : BasicMap(smf,context) {
 
-    lateinit var mMap: GoogleMap    //racingMap 인스턴스
+//    lateinit var mMap: GoogleMap    //racingMap 인스턴스
     var TAG = "WSY"       //로그용 태그
 
-    var previousLocation: LatLng = LatLng(0.0, 0.0)          //이전위치
-    var currentLocation: LatLng = LatLng(0.0, 0.0)              //현재위치
+//    var previousLocation: LatLng = LatLng(0.0, 0.0)          //이전위치
+//    var currentLocation: LatLng = LatLng(0.0, 0.0)              //현재위치
 
     var latlngs: MutableList<LatLng> = mutableListOf()   //움직인 점들의 집합 나중에 저장될 점들 집합
     var routes: MutableList<MutableList<LatLng>> = mutableListOf()
     var altitude: MutableList<Double> = mutableListOf(.0)
     var speeds: MutableList<Double> = mutableListOf(.0)
     var distance = 0.0
-    var context: Context = context
-    var userState: UserState? = null
+//    var userState: UserState? = null
     var markers: MutableList<LatLng> = mutableListOf()
     var markerCount = 0
 
-    var cameraFlag = false
+//    var cameraFlag = false
 
     var cpOption = MarkerOptions()
 
     var currentMarker: Marker? = null
 
-
     lateinit var myIcon: BitmapDescriptor
 
     //Running
     init {
-        this.context = context
         userState = UserState.PAUSED
         smf.getMapAsync(this)
         //createMyIcon()
     }
 
+
     override fun onMapReady(googleMap: GoogleMap) {
+        super.onMapReady(googleMap)
         mMap = googleMap
-        mMap.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
+        mMap!!.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
 
         // 마지막 위치 가져와서 카메라 설정
         Log.d(TAG, "잘 가져왔니? " + LocationUpdatesComponent.getLastLocat().toString())
-        var lat =  LocationUpdatesComponent.getLastLocat().latitude
-        var lng =  LocationUpdatesComponent.getLastLocat().longitude
+        val lat =  LocationUpdatesComponent.getLastLocat().latitude
+        val lng =  LocationUpdatesComponent.getLastLocat().longitude
         currentLocation = LatLng(lat, lng)
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 17F))   //화면이동
+        mMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 17F))   //화면이동
     }
+//    override fun onMapReady(googleMap: GoogleMap) {
+//        mMap = googleMap
+//        mMap.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
+//
+//        // 마지막 위치 가져와서 카메라 설정
+//        Log.d(TAG, "잘 가져왔니? " + LocationUpdatesComponent.getLastLocat().toString())
+//        val lat =  LocationUpdatesComponent.getLastLocat().latitude
+//        val lng =  LocationUpdatesComponent.getLastLocat().longitude
+//        currentLocation = LatLng(lat, lng)
+//        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 17F))   //화면이동
+//    }
+
 
     fun startTracking() {
        // setStartIcon()  // 마지막 현재 위치에 아이콘 설정
 
-        mMap.addCircle(
+        mMap!!.addCircle(
             CircleOptions()
                 .center(currentLocation)
                 .radius(2.0)
@@ -92,7 +102,7 @@ class RunningMap(smf: SupportMapFragment, context: Context) : OnMapReadyCallback
     fun stopTracking(routeData: RouteData, infoData: InfoData) {
         userState = UserState.PAUSED
 
-        mMap.addCircle(
+        mMap!!.addCircle(
             CircleOptions()
                 .center(currentLocation)
                 .radius(2.0)
@@ -107,10 +117,10 @@ class RunningMap(smf: SupportMapFragment, context: Context) : OnMapReadyCallback
             routes.add(PolyUtil.simplify(latlngs, 10.0).toMutableList())
         }
         markers.add(currentLocation)
-        var arrLatLng: MutableList<MutableList<LatLng>> = mutableListOf()
-        var cpLatLag: MutableList<LatLng> = mutableListOf()
+        val arrLatLng: MutableList<MutableList<LatLng>> = mutableListOf()
+        val cpLatLag: MutableList<LatLng> = mutableListOf()
         for (i in routes.indices) {
-            var latlngs: MutableList<LatLng> = mutableListOf()
+            val latlngs: MutableList<LatLng> = mutableListOf()
             for (j in routes[i].indices) {
                 latlngs.add(LatLng(routes[i][j].latitude, routes[i][j].longitude))
             }
@@ -176,7 +186,7 @@ class RunningMap(smf: SupportMapFragment, context: Context) : OnMapReadyCallback
         markers.add(previousLocation)
 
         cpOption.icon(makingIcon(R.drawable.ic_racing_startpoint, context))
-        mMap.addMarker(cpOption)
+        mMap!!.addMarker(cpOption)
     }
 
     var location = null
@@ -184,11 +194,11 @@ class RunningMap(smf: SupportMapFragment, context: Context) : OnMapReadyCallback
     /**
      *  서비스에서 데이터 받아오는 부분
      */
-    fun setLocation(location: Location) {
+    override fun setLocation(location: Location) {
         if (userState == UserState.RUNNING)
             createData(location)
         else
-            currentLocation = LatLng(location!!.latitude, location!!.longitude)
+            currentLocation = LatLng(location.latitude, location.longitude)
 
         if(!cameraFlag) {
             mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 17F))   //화면이동
@@ -203,10 +213,10 @@ class RunningMap(smf: SupportMapFragment, context: Context) : OnMapReadyCallback
     // Location[fused 37.619672,127.059084 hAcc=15 et=+5d2h34m37s51ms alt=53.5 vel=0.0014348121 bear=219.74748 vAcc=2 sAcc=??? bAcc=??? {Bundle[mParcelledData.dataSize=52]}]
 
     private fun createData(location: Location) {
-        var lat = location!!.latitude
-        var lng = location!!.longitude
-        var alt = location!!.altitude
-        var speed = location!!.speed
+        val lat = location.latitude
+        val lng = location.longitude
+        val alt = location.altitude
+        val speed = location.speed
 
         currentLocation = LatLng(lat, lng)
 
@@ -240,7 +250,7 @@ class RunningMap(smf: SupportMapFragment, context: Context) : OnMapReadyCallback
                     markerCount = distance.toInt() / 100
                 cpOption.title(markerCount.toString())
                 cpOption.icon(makingIcon(R.drawable.ic_checkpoint_red, context))
-                mMap.addMarker(cpOption) // 이게 기본 마커 찍나? => start지점 찍으려는거 같은데
+                mMap!!.addMarker(cpOption) // 이게 기본 마커 찍나? => start지점 찍으려는거 같은데
                 markers.add(currentLocation)
                 markerCount++
                 routes.add(PolyUtil.simplify(latlngs, 10.0).toMutableList())
@@ -258,7 +268,7 @@ class RunningMap(smf: SupportMapFragment, context: Context) : OnMapReadyCallback
      */
     private fun createPolyline() {
         print_log("폴리라인")
-        mMap.addPolyline(
+        mMap!!.addPolyline(
             PolylineOptions().add(
                 previousLocation,
                 currentLocation
@@ -297,9 +307,4 @@ class RunningMap(smf: SupportMapFragment, context: Context) : OnMapReadyCallback
         // 이전 위치, 현재 위치로 거리 계산
         distance += SphericalUtil.computeDistanceBetween(previousLocation, currentLocation)
     }
-
-    fun print_log(text: String) {
-        Log.d(TAG, text.toString())
-    }
-
 }
