@@ -29,20 +29,20 @@ import java.util.*
 import kotlin.math.roundToLong
 
 
-class RacingMap (smf: SupportMapFragment, var context: Context, var manageRacing: ManageRacing) : OnMapReadyCallback {
+class RacingMap (smf: SupportMapFragment, override var context: Context, var manageRacing: ManageRacing) : BasicMap(smf,context) {
     var markerCount = 1
     lateinit var cpOption: MarkerOptions
-    lateinit var mMap: GoogleMap    //racingMap 인스턴스
+//    lateinit var mMap: GoogleMap    //racingMap 인스턴스
 
     var TAG = "what u wanna say?~~!~!"       //로그용 태그
-    var previousLocation: LatLng = LatLng(0.0, 0.0)          //이전위치
-    lateinit var currentLocation: LatLng            //현재위치
+//    var previousLocation: LatLng = LatLng(0.0, 0.0)          //이전위치
+//    lateinit var currentLocation: LatLng            //현재위치
 
     var latlngs: MutableList<LatLng> = mutableListOf()   //움직인 점들의 집합 나중에 저장될 점들 집합
     var alts = Vector<Double>()
     var speeds = Vector<Double>()
     var loadRoute: MutableList<MutableList<LatLng>> = mutableListOf() //로드된 점들의 집합
-    var userState: UserState
+//    var userState: UserState
     var countDeviation = 0
     var currentMarker: Marker? = null
     var makerMarker: Marker? = null
@@ -55,7 +55,7 @@ class RacingMap (smf: SupportMapFragment, var context: Context, var manageRacing
     var cpMarkers = Vector<Marker>()
     var db: FirebaseFirestore
 
-    var cameraFlag = false
+//    var cameraFlag = false
 
     init {
         this.makerRouteData = manageRacing.makerRouteData
@@ -94,7 +94,7 @@ class RacingMap (smf: SupportMapFragment, var context: Context, var manageRacing
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
-        mMap.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
+        mMap!!.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
         // 마지막 위치 가져와서 카메라 설정
         Log.d(TAG, "잘 가져왔니? " + LocationUpdatesComponent.getLastLocat().toString())
         val lat =  LocationUpdatesComponent.getLastLocat().latitude
@@ -104,7 +104,7 @@ class RacingMap (smf: SupportMapFragment, var context: Context, var manageRacing
 
         loadRoute()
         drawRoute()
-        mMap.moveCamera(
+        mMap!!.moveCamera(
             CameraUpdateFactory.newLatLngZoom(
                 loadRoute[0][0],
                 20F
@@ -131,7 +131,7 @@ class RacingMap (smf: SupportMapFragment, var context: Context, var manageRacing
         val makerOptions = MarkerOptions()
         makerOptions.position(markers[0])
         makerOptions.title("Maker")
-        makerMarker = mMap.addMarker(makerOptions)//maker 마커 추가
+        makerMarker = mMap!!.addMarker(makerOptions)//maker 마커 추가
 
         makerRunningThread = Thread(Runnable {
             //TODO: 이거 고쳐야할듯
@@ -159,7 +159,7 @@ class RacingMap (smf: SupportMapFragment, var context: Context, var manageRacing
                     makerOptions.title("Maker")
 //                    makerOptions.icon(makerIcon)
 
-                    makerMarker = mMap.addMarker(makerOptions)
+                    makerMarker = mMap!!.addMarker(makerOptions)
                 })
             }
             (context as Activity).runOnUiThread(Runnable {
@@ -190,7 +190,7 @@ class RacingMap (smf: SupportMapFragment, var context: Context, var manageRacing
         makerRunning(mapTitle)
         userState = UserState.RACING
         manageRacing.startRunning()
-        mMap.animateCamera(
+        mMap!!.animateCamera(
             CameraUpdateFactory.newLatLngZoom(
                 currentLocation,
                 20F
@@ -201,7 +201,7 @@ class RacingMap (smf: SupportMapFragment, var context: Context, var manageRacing
     fun drawRoute() { //로드 된 경로 그리기
         for (i in loadRoute.indices) {
             routeLine.add(
-                mMap.addPolyline(
+                mMap!!.addPolyline(
                     PolylineOptions()
                         .addAll(loadRoute[i])
                         .color(Color.GRAY)
@@ -216,7 +216,7 @@ class RacingMap (smf: SupportMapFragment, var context: Context, var manageRacing
 //                startMarkerOptions.title("Start")
 //                startMarkerOptions.icon(spIcon)
 //                mMap.addMarker(startMarkerOptions)
-                mMap.addCircle(
+                mMap!!.addCircle(
                     CircleOptions()
                         .center(markers[0])
                         .radius(5.0)
@@ -227,7 +227,7 @@ class RacingMap (smf: SupportMapFragment, var context: Context, var manageRacing
             } else {        //나머진 다 체크포인트
                 cpOption.position(markers[i])
                 cpOption.title(i.toString())
-                cpMarkers.add(mMap.addMarker(cpOption))
+                cpMarkers.add(mMap!!.addMarker(cpOption))
             }
         }
         val cpPassedIcon = makingIcon(R.drawable.ic_checkpoint_red, context)
@@ -241,7 +241,7 @@ class RacingMap (smf: SupportMapFragment, var context: Context, var manageRacing
 //        mMap.addMarker(finishMarkerOptions) //마지막엔 피니시 포인트
 
         //마지막엔 피니시 포인트
-        mMap.addCircle(
+        mMap!!.addCircle(
             CircleOptions()
                 .center(markers[markers.size - 1])
                 .radius(5.0)
@@ -253,14 +253,14 @@ class RacingMap (smf: SupportMapFragment, var context: Context, var manageRacing
         var min = LatLng(Wow.minDoubleLat(makerRouteData.latlngs), Wow.minDoubleLng(makerRouteData.latlngs))
         var max = LatLng(Wow.maxDoubleLat(makerRouteData.latlngs), Wow.maxDoubleLng(makerRouteData.latlngs))
         print_log(min.toString() + max.toString())
-        mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(LatLngBounds(min, max), 1080, 300, 50))
+        mMap!!.moveCamera(CameraUpdateFactory.newLatLngBounds(LatLngBounds(min, max), 1080, 300, 50))
     }
 
     fun createData(location: Location){
-        var lat = location.latitude
-        var lng = location.longitude
-        var alt = location.altitude
-        var speed = location.speed
+        val lat = location.latitude
+        val lng = location.longitude
+        val alt = location.altitude
+        val speed = location.speed
         Log.d("createData","HI")
         Log.d("createData",userState.toString())
         currentLocation = LatLng(lat, lng)
@@ -314,7 +314,7 @@ class RacingMap (smf: SupportMapFragment, var context: Context, var manageRacing
                     latlngs.add(currentLocation)    //위 조건들을 통과하면 점 추가
                     alts.add(alt)
                     passedLine.add(
-                        mMap.addPolyline(
+                        mMap!!.addPolyline(
                             PolylineOptions().add(
                                 previousLocation,
                                 currentLocation
@@ -333,7 +333,7 @@ class RacingMap (smf: SupportMapFragment, var context: Context, var manageRacing
                         routeLine[0].remove()
                         routeLine.removeAt(0)
 
-                        mMap.addPolyline( //깔끔하게 새로 직선 그리기
+                        mMap!!.addPolyline( //깔끔하게 새로 직선 그리기
                             PolylineOptions()
                                 .addAll(loadRoute[markerCount - 1])
                                 .color(Color.BLUE)
@@ -347,7 +347,7 @@ class RacingMap (smf: SupportMapFragment, var context: Context, var manageRacing
                         } else {
                             cpOption.position(cpMarkers[markerCount - 1].position)
                             cpMarkers[markerCount - 1].remove()
-                            cpMarkers[markerCount - 1] = mMap.addMarker(cpOption)
+                            cpMarkers[markerCount - 1] = mMap!!.addMarker(cpOption)
                             markerCount++
                         }
                     }
@@ -361,7 +361,7 @@ class RacingMap (smf: SupportMapFragment, var context: Context, var manageRacing
 
         when (userState) {
             UserState.RACING -> {
-                mMap.animateCamera(
+                mMap!!.animateCamera(
                     CameraUpdateFactory.newLatLngZoom(
                         currentLocation,
                         18F
@@ -390,7 +390,7 @@ class RacingMap (smf: SupportMapFragment, var context: Context, var manageRacing
                 }
             }
             else -> {
-                mMap.animateCamera(
+                mMap!!.animateCamera(
                     CameraUpdateFactory.newLatLngZoom(
                         currentLocation,
                         17F
@@ -399,14 +399,14 @@ class RacingMap (smf: SupportMapFragment, var context: Context, var manageRacing
             }
         }
     }
-    fun setLocation(location: Location) {
+    override fun setLocation(location: Location) {
         createData(location)
         if (userState == UserState.RUNNING) {
 
           //  setMyPosition(location)
         }
         else
-            currentLocation = LatLng(location!!.latitude, location!!.longitude)
+            currentLocation = LatLng(location.latitude, location.longitude)
 
         if(!cameraFlag) {
             mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 17F))   //화면이동
@@ -415,9 +415,4 @@ class RacingMap (smf: SupportMapFragment, var context: Context, var manageRacing
 
         previousLocation = currentLocation                              //현재위치를 이전위치로 변경
     }
-
-    fun print_log(text: String) {
-        Log.d(TAG, text.toString())
-    }
-
 }
