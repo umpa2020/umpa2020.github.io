@@ -1,13 +1,12 @@
 package com.umpa2020.tracer.main.trace.running
 
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.ActivityInfo
 import android.location.Location
 import android.os.Bundle
-import android.os.Handler
-import android.os.Message
-import android.os.Messenger
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -18,24 +17,21 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.maps.SupportMapFragment
-import com.umpa2020.tracer.main.MainActivity
-import com.umpa2020.tracer.main.MainActivity.Companion.WSY
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.NoticeState
 import com.umpa2020.tracer.dataClass.Privacy
-import com.umpa2020.tracer.locationBackground.LocationBackgroundService
+import com.umpa2020.tracer.main.MainActivity
 import hollowsoft.slidingdrawer.OnDrawerCloseListener
 import hollowsoft.slidingdrawer.OnDrawerOpenListener
 import hollowsoft.slidingdrawer.OnDrawerScrollListener
 import hollowsoft.slidingdrawer.SlidingDrawer
 import kotlinx.android.synthetic.main.activity_running.*
-import java.text.DateFormat
-import java.util.*
 
 class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpenListener,
     OnDrawerCloseListener {
-    var TAG = "WSY"       //로그용 태그
+    var TAG = "RunningActivity"       //로그용 태그
     lateinit var manageRunning: ManageRunning
     lateinit var drawer: SlidingDrawer
     var B_RUNNIG = true
@@ -72,7 +68,6 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
 
         supportActionBar?.title = "RUNNING"
 
-
         init()
 
         btn_stop!!.setOnLongClickListener {
@@ -81,17 +76,6 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
             } else
                 manageRunning.stopRunning()
             true
-        }
-
-        // 서비스로 값 전달.
-        mHandler = IncomingMessageHandler()
-
-        Log.d(WSY, "핸들러 생성?")
-        Intent(this, LocationBackgroundService::class.java).also {
-            val messengerIncoming = Messenger(mHandler)
-            it.putExtra(MESSENGER_INTENT_KEY, messengerIncoming)
-
-            startService(it)
         }
     }
     
@@ -224,29 +208,33 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
         Log.d("screen", "onStop()")
     }
 
+    override fun onResume() {
+        super.onResume()
+        // 브로드 캐스트 등록 - 전역 context로 수정해야함
+        LocalBroadcastManager.getInstance(this)
+            .registerReceiver(myBroadcastReceiver, IntentFilter("custom-event-name"))
+    }
+
     override fun onPause() {
         super.onPause()
         Log.d("screen", "onPause()")
+        //        브로드 캐스트 해제 - 전역 context로 수정해야함
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(myBroadcastReceiver)
     }
-
 
     /**
      *  백그라운드에서 메시지 받는 거
      */
-    var mHandler: IncomingMessageHandler? = null
-    val MESSENGER_INTENT_KEY = "msg-intent-key"
+    // 서버에서 보내주는 데이터를 받는 브로드캐스트 - 나중엔 클래스화 요구??
+    private val myBroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            Log.d("$TAG receiver", "받는다.")
 
-    inner class IncomingMessageHandler : Handler() {
-        override fun handleMessage(msg: Message) {
-            super.handleMessage(msg)
-            Log.d(WSY, "RunningActivity : $msg")
-            when (msg.what) {
-                LocationBackgroundService.LOCATION_MESSAGE -> {
-                    val curLoc = msg.obj as Location
-                    val currentDateTimeString = DateFormat.getDateTimeInstance().format(Date())
-                    manageRunning.runningMap.setLocation(curLoc)
-                }
-            }
+            // getParcelableExtra<T> : T = Location
+            val message = intent?.getParcelableExtra<Location>("message")
+            Log.d("$TAG receiver", "Got message : $message")
+            val currentLocation = message as Location
+            manageRunning.runningMap.setLocation(currentLocation)
         }
     }
 

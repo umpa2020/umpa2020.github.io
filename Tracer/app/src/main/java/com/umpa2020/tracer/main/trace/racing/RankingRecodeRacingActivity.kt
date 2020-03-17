@@ -1,34 +1,31 @@
 package com.umpa2020.tracer.main.trace.racing
 
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.ActivityInfo
 import android.location.Location
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
-import android.os.Message
-import android.os.Messenger
 import android.util.Log
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
-import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.RouteData
 import com.umpa2020.tracer.dataClass.UserState
-import com.umpa2020.tracer.locationBackground.LocationBackgroundService
 import hollowsoft.slidingdrawer.OnDrawerCloseListener
 import hollowsoft.slidingdrawer.OnDrawerOpenListener
 import hollowsoft.slidingdrawer.OnDrawerScrollListener
 import hollowsoft.slidingdrawer.SlidingDrawer
 import kotlinx.android.synthetic.main.activity_ranking_recode_racing.*
-import java.text.DateFormat
-import java.util.*
 
 class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpenListener,
     OnDrawerCloseListener {
-    var TAG = "WSY"       //로그용 태그
+    var TAG = "RankingRecodeRacingActivity"       //로그용 태그
     lateinit var manageRacing: ManageRacing
     lateinit var makerRouteData: RouteData
     lateinit var drawer: SlidingDrawer
@@ -40,15 +37,8 @@ class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener,
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
         setContentView(R.layout.activity_ranking_recode_racing)
 
-        // 서비스에 레이싱 핸들러 등록
-        mHandler = IncomingMessageHandler()
-        Log.d(MainActivity.WSY, "핸들러 생성?")
-        Intent(this, LocationBackgroundService::class.java).also {
-            val messengerIncoming = Messenger(mHandler)
-            it.putExtra(MESSENGER_INTENT_KEY, messengerIncoming)
-            startService(it)
-        }
         init()
+
         racingControlButton.setOnLongClickListener {
             if (manageRacing.racingMap.userState == UserState.RACING) {
                 manageRacing.stopRacing(false)
@@ -121,27 +111,33 @@ class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener,
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        // 브로드 캐스트 등록 - 전역 context로 수정해야함
+        LocalBroadcastManager.getInstance(this)
+            .registerReceiver(myBroadcastReceiver, IntentFilter("custom-event-name"))
+    }
+
+    override fun onPause() {
+        super.onPause()
+        //        브로드 캐스트 해제 - 전역 context로 수정해야함
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(myBroadcastReceiver)
+    }
+
     /**
      *  백그라운드에서 메시지 받는 거
      */
-    var mHandler: IncomingMessageHandler? = null
-    val MESSENGER_INTENT_KEY = "msg-intent-key"
 
-    inner class IncomingMessageHandler : Handler() {
-        override fun handleMessage(msg: Message) {
-            Log.i(MainActivity.WSY, "handleMessage..." + msg.toString())
-            super.handleMessage(msg)
-            when (msg.what) {
-                LocationBackgroundService.LOCATION_MESSAGE -> {
-                    val obj = msg.obj as Location
-                    val currentDateTimeString = DateFormat.getDateTimeInstance().format(Date())
-                    Log.d(MainActivity.WSY, "RacingActivity : 값을 가져옴?")
+    // 서버에서 보내주는 데이터를 받는 브로드캐스트 - 나중엔 클래스화 요구??
+    private val myBroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            Log.d("$TAG receiver", "받는다.")
 
-
-                    manageRacing.racingMap.setLocation(obj)
-//                    manageRunning.runningMap.setLocation(obj)
-                }
-            }
+            // getParcelableExtra<T> : T = Location
+            val message = intent?.getParcelableExtra<Location>("message")
+            Log.d("$TAG receiver", "Got message : $message")
+            val currentLocation = message as Location
+            manageRacing.racingMap.setLocation(currentLocation)
         }
     }
 

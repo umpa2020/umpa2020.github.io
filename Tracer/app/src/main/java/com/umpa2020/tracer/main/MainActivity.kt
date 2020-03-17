@@ -1,14 +1,19 @@
 package com.umpa2020.tracer.main
 
 import android.Manifest
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
+import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.util.TTS
@@ -45,11 +50,18 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
     }
 
+    override fun onPause() {
+        super.onPause()
+    }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d("mainActivitiy","Hello I'm New")
         setContentView(R.layout.activity_main)
+
         startService()
+
         bottom_navigation.selectedItemId = R.id.navigation_start
         supportFragmentManager.beginTransaction().replace(
             R.id.container,

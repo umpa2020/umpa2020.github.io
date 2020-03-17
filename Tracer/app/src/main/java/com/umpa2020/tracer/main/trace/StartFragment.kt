@@ -1,7 +1,9 @@
 package com.umpa2020.tracer.main.trace
 
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.location.Location
 import android.os.Bundle
 import android.os.Handler
@@ -12,6 +14,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.firebase.firestore.FirebaseFirestore
 import com.umpa2020.tracer.R
@@ -24,16 +27,16 @@ import kotlinx.android.synthetic.main.fragment_start.view.*
 
 
 class StartFragment : Fragment(), View.OnClickListener {
-    val WSY = "StartFragment"
+    val TAG = "StartFragment"
 
     lateinit var map: BasicMap
-    var mHandler: IncomingMessageHandler? = null
+//    var mHandler: IncomingMessageHandler? = null
 
-    lateinit var curLoc: Location
+    lateinit var currentLocation: Location
 
     var smf: SupportMapFragment? = null
 
-    var lastLacation : Location? = null
+    var lastLacation: Location? = null
 
     override fun onClick(v: View) {
         when (v.id) {
@@ -45,8 +48,8 @@ class StartFragment : Fragment(), View.OnClickListener {
 
             R.id.mainStartRacing -> {
                 val newIntent = Intent(activity, NearRouteActivity::class.java)
-                newIntent.putExtra("currentLocation", curLoc) //curLoc 정보 인텐트로 넘김
-                Log.d("jsj", "mainStartRunning누르는 순간의 intent " + curLoc.toString())
+                newIntent.putExtra("currentLocation", currentLocation) //curLoc 정보 인텐트로 넘김
+                Log.d("jsj", "mainStartRunning누르는 순간의 intent " + currentLocation.toString())
                 startActivity(newIntent)
             }
         }
@@ -54,12 +57,10 @@ class StartFragment : Fragment(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        Log.d(WSY, "onCreateView()")
+        Log.d(TAG, "onCreateView()")
         val view = inflater.inflate(R.layout.fragment_start, container, false)
         view.test.setOnClickListener {
             Log.d("ssmm11", "test 실행")
@@ -80,7 +81,7 @@ class StartFragment : Fragment(), View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d(WSY, "onViewCreated()")
+        Log.d(TAG, "onViewCreated()")
         smf = childFragmentManager.findFragmentById(com.umpa2020.tracer.R.id.map_viewer_start) as SupportMapFragment
         map = BasicMap(smf!!, context as Context)
 
@@ -88,9 +89,19 @@ class StartFragment : Fragment(), View.OnClickListener {
         view.mainStartRacing.setOnClickListener(this)
     }
 
+    override fun onResume() {
+        super.onResume()
+        // 브로드 캐스트 등록 - 전역 context로 수정해야함
+        LocalBroadcastManager.getInstance(this.requireContext())
+            .registerReceiver(myBroadcastReceiver, IntentFilter("custom-event-name"))
+    }
+
     override fun onPause() {
         super.onPause()
         Log.d("sss", "onPause()")
+
+        //        브로드 캐스트 해제 - 전역 context로 수정해야함
+        LocalBroadcastManager.getInstance(this.requireContext()).unregisterReceiver(myBroadcastReceiver)
     }
 
     override fun onDestroy() {
@@ -98,32 +109,14 @@ class StartFragment : Fragment(), View.OnClickListener {
         Log.d("sss", "onDestroy()")
     }
 
-    override fun onResume() {
-        super.onResume()
-        mHandler = IncomingMessageHandler()
-
-        Intent(context, LocationBackgroundService::class.java).also {
-            val messengerIncoming = Messenger(mHandler)
-            it.putExtra(MESSENGER_INTENT_KEY, messengerIncoming)
-            activity!!.startService(it)
-        }
-    }
-
-    val MESSENGER_INTENT_KEY = "msg-intent-key"
-
-    // 옵저버 패턴에서 location Manager
-    inner class IncomingMessageHandler : Handler() {
-        override fun handleMessage(msg: Message) {
-            super.handleMessage(msg)
-            when (msg.what) {
-                LocationBackgroundService.LOCATION_MESSAGE -> {
-                    curLoc = msg.obj as Location
-                    Log.d(WSY, "StartFragment : $curLoc")
-                    map.setLocation(curLoc)
-                    if(curLoc != null)
-                        lastLacation = curLoc
-                }
-            }
+    // 서버에서 보내주는 데이터를 받는 브로드캐스트 - 나중엔 클래스화 요구??
+    private val myBroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            Log.d("$TAG receiver", "받는다.")
+            val message = intent?.getParcelableExtra<Location>("message")
+            Log.d("$TAG receiver", "Got message : $message")
+            currentLocation = message as Location
+            map.setLocation(currentLocation)
         }
     }
 }
