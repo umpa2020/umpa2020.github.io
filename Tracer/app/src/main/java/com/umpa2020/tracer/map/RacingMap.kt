@@ -29,13 +29,11 @@ import java.util.*
 import kotlin.math.roundToLong
 
 
-class RacingMap : OnMapReadyCallback {
+class RacingMap (smf: SupportMapFragment, var context: Context, var manageRacing: ManageRacing) : OnMapReadyCallback {
     var markerCount = 1
     lateinit var cpOption: MarkerOptions
     lateinit var mMap: GoogleMap    //racingMap 인스턴스
-//    lateinit var fusedLocationClient: FusedLocationProviderClient   //위치정보 가져오는 인스턴스
-//    lateinit var locationCallback: LocationCallback
-//    lateinit var locationRequest: LocationRequest
+
     var TAG = "what u wanna say?~~!~!"       //로그용 태그
     var previousLocation: LatLng = LatLng(0.0, 0.0)          //이전위치
     lateinit var currentLocation: LatLng            //현재위치
@@ -44,14 +42,12 @@ class RacingMap : OnMapReadyCallback {
     var alts = Vector<Double>()
     var speeds = Vector<Double>()
     var loadRoute: MutableList<MutableList<LatLng>> = mutableListOf() //로드된 점들의 집합
-    var context: Context
     var userState: UserState
     var countDeviation = 0
     var currentMarker: Marker? = null
     var makerMarker: Marker? = null
     lateinit var racerIcon: BitmapDescriptor
     var makerRouteData: RouteData
-    var manageRacing: ManageRacing
     lateinit var makerRunningThread: Thread
     var passedLine = Vector<Polyline>()
     var routeLine = Vector<Polyline>()
@@ -61,17 +57,13 @@ class RacingMap : OnMapReadyCallback {
 
     var cameraFlag = false
 
-    //Racing
-    constructor( smf: SupportMapFragment, context: Context, manageRacing: ManageRacing ) {
-        this.context = context
-        this.manageRacing = manageRacing
+    init {
         this.makerRouteData = manageRacing.makerRouteData
         init()
         smf.getMapAsync(this)
         userState = UserState.BEFORERACING
         print_log("Set UserState BEFORERACING")
         db = FirebaseFirestore.getInstance()
-
     }
 
 

@@ -85,15 +85,10 @@ class RunningMap(smf: SupportMapFragment, override var context: Context) : Basic
 
     fun startTracking() {
        // setStartIcon()  // 마지막 현재 위치에 아이콘 설정
-
-        mMap!!.addCircle(
-            CircleOptions()
-                .center(currentLocation)
-                .radius(2.0)
-                .strokeWidth(5f)
-                .strokeColor(Color.WHITE)
-                .fillColor(Color.GREEN)
-                .zIndex(6f)
+        mMap!!.addMarker(
+            MarkerOptions()
+                .position(currentLocation)
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
         )
 
         userState = UserState.RUNNING
@@ -102,13 +97,10 @@ class RunningMap(smf: SupportMapFragment, override var context: Context) : Basic
     fun stopTracking(routeData: RouteData, infoData: InfoData) {
         userState = UserState.PAUSED
 
-        mMap!!.addCircle(
-            CircleOptions()
-                .center(currentLocation)
-                .radius(2.0)
-                .strokeWidth(5f)
-                .strokeColor(Color.WHITE)
-                .fillColor(Color.RED)
+        mMap!!.addMarker(
+            MarkerOptions()
+                .position(currentLocation)
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
         )
 
         print_log("Stop")
