@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import android.os.Messenger
+import android.util.Log
 import android.view.*
 import android.widget.Toast
 import android.widget.Toolbar
@@ -13,6 +14,7 @@ import androidx.fragment.app.Fragment
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.locationBackground.LocationBackgroundService
 import com.umpa2020.tracer.main.MainActivity.Companion.MESSENGER_INTENT_KEY
+import com.umpa2020.tracer.main.MainActivity.Companion.WSY
 import com.umpa2020.tracer.network.getRanking
 import kotlinx.android.synthetic.main.fragment_ranking.view.*
 import kotlinx.android.synthetic.main.fragment_ranking.view.test_button1 as test_button11
@@ -60,6 +62,7 @@ class RankingFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+
         mHandler = IncomingMessageHandler()
         Intent(context, LocationBackgroundService::class.java).also {
             val messengerIncoming = Messenger(mHandler)
@@ -77,6 +80,8 @@ class RankingFragment : Fragment() {
             when (msg.what) {
                 LocationBackgroundService.LOCATION_MESSAGE -> {
                     location = msg.obj as Location
+                    Log.d(WSY, "RankingFragment : $location")
+
                 }
             }
         }

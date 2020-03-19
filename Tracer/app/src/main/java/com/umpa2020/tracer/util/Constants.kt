@@ -1,4 +1,4 @@
-package com.umpa2020.tracer.login.join
+package com.umpa2020.tracer.util
 
 class Constants {
     companion object {
