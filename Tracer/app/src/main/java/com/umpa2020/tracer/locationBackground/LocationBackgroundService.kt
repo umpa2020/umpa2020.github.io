@@ -10,7 +10,7 @@ import android.util.Log
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.location.LocationRequest
 import com.umpa2020.tracer.R
-import com.umpa2020.tracer.main.trace.running.RunningActivity
+import com.umpa2020.tracer.main.start.running.RunningActivity
 
 /**
  *  IntentService : 오래걸리지만 메인스레드와 관련이 없는 작업을할 때 주로 이용한다.

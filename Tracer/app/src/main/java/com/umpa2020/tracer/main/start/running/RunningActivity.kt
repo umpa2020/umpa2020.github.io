@@ -1,4 +1,4 @@
-package com.umpa2020.tracer.main.trace.running
+package com.umpa2020.tracer.main.start.running
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -23,6 +23,7 @@ import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.NoticeState
 import com.umpa2020.tracer.dataClass.Privacy
 import com.umpa2020.tracer.main.MainActivity
+import com.umpa2020.tracer.trace.ManageRunning
 import hollowsoft.slidingdrawer.OnDrawerCloseListener
 import hollowsoft.slidingdrawer.OnDrawerOpenListener
 import hollowsoft.slidingdrawer.OnDrawerScrollListener

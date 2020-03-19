@@ -1,4 +1,5 @@
-package com.umpa2020.tracer.main.trace.running
+package com.umpa2020.tracer.main.start.running
+
 
 import android.graphics.Color
 import android.net.Uri
@@ -10,11 +11,11 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.dataClass.*
-import com.umpa2020.tracer.map.ViewerMap
-import com.umpa2020.tracer.util.Chart
+import com.umpa2020.tracer.trace.map.ViewerMap
+import com.umpa2020.tracer.util.gpx.GPXConverter
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_running_save.*
-import java.io.File
+import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -23,7 +24,7 @@ class RunningSaveActivity : AppCompatActivity() {
     var switch = 0
 
     lateinit var infoData: InfoData
-    lateinit var routeData: RouteData
+    lateinit var routeGPX: RouteGPX
     lateinit var map: ViewerMap
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,24 +32,25 @@ class RunningSaveActivity : AppCompatActivity() {
         setContentView(com.umpa2020.tracer.R.layout.activity_running_save)
 
         infoData = intent.getParcelableExtra("Info Data")
-        routeData = intent.getParcelableExtra("Route Data")
+        routeGPX = intent.getParcelableExtra("Route GPX")
 
+        //TODO: 액티비티에 그리는 거 먼저
         val smf = supportFragmentManager.findFragmentById(com.umpa2020.tracer.R.id.map_viewer) as SupportMapFragment
-        map = ViewerMap(smf, this, routeData)
+        map = ViewerMap(smf, this, routeGPX)
         distance_tv.text = String.format("%.2f", infoData.distance!! / 1000)
         val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
-        formatter.setTimeZone(TimeZone.getTimeZone("UTC"))
+        formatter.timeZone = TimeZone.getTimeZone("UTC")
 
         time_tv.text = formatter.format(Date(infoData.time!!))
-
-        speed_tv.text = String.format("%.2f", infoData.speed.average())
+        //TODO:routeGPX 파싱해서 speed랑 고도 넣기
+        //speed_tv.text = String.format("%.2f", infoData.speed.average())
         if (infoData.privacy == Privacy.PUBLIC) {
             racingRadio.isChecked = false
             racingRadio.isEnabled = false
             publicRadio.isChecked = true
         }
-        var chart = Chart(routeData.altitude, infoData.speed, chart)
-        chart.setChart()
+        //var chart = Chart(routeData.altitude, infoData.speed, chart)
+        // chart.setChart()
     }
 
     fun onClick(view: View) {
@@ -71,7 +73,7 @@ class RunningSaveActivity : AppCompatActivity() {
     }
 
     fun save(imgPath: String) {
-
+        Log.d("Save", "Start Saving")
         // 타임스탭프 찍는 코드
         val dt = Date()
         val full_sdf = SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.getDefault())
@@ -96,32 +98,41 @@ class RunningSaveActivity : AppCompatActivity() {
         }
 
         // 맵 타이틀과, 랭킹 중복 방지를 위해서 시간 값을 넣어서 중복 방지
+        var gpxConverter = GPXConverter()
+        var saveFolder = File(baseContext.filesDir, "routeGPX") // 저장 경로
+        if (!saveFolder.exists()) {       //폴더 없으면 생성
+            saveFolder.mkdir()
+        }
+        var routeGpxFile=gpxConverter.classToGpx(routeGPX, saveFolder.path)
+        // storage에 이미지 업로드 모든 맵 이미지는 mapimage/maptitle로 업로드가 된다.
+        val fstorage = FirebaseStorage.getInstance("gs://tracer-9070d.appspot.com/")
+        Log.d("Save", "HI0?")
+        val fRef = fstorage.reference.child("mapRoute").child(infoData.mapTitle!!)
 
+        Log.d("Save", "HI1?")
+        var fuploadTask = fRef.putFile(routeGpxFile)
 
+        Log.d("Save", "HI2?")
+        fuploadTask.addOnFailureListener {
+            Log.d("Save", "Success")
+        }.addOnSuccessListener {
+            Log.d("Save", "Fail : $it")
+        }
+        Log.d("Save", "HI3?")
         // db에 그려진 맵 저장하는 스레드 - 여기서는 실제 그려진 것 보다 후 보정을 통해서
         // 간략화 된 맵을 업로드 합니다.
         val db = FirebaseFirestore.getInstance()
 
         // InfoData class upload to database 참조 - 루트를 제외한 맵 정보 기술
+        //TODO: routeGPX 파일로 스토리지에 업로드 후 경로 infoData에 넣어서 set
         db.collection("mapInfo").document(infoData.mapTitle!!).set(infoData)
 
-        // RouteData class upload to database 참조 - 루트 정보만 표기 (위도경도, 고도, 마커의 위도경도)
-        var routeDataOne = RouteDataOne(routeData.altitude, routeData.markerlatlngs)
-
-        db.collection("mapRoute").document(infoData.mapTitle!!).set(routeDataOne)
-        for (index in routeData.latlngs.indices) {
-            var routeDataTwo = RouteDataTwo(index, routeData.latlngs[index])
-            Log.d("ssmm11", "" + index + " = " + routeDataTwo)
-            db.collection("mapRoute").document(infoData.mapTitle!!)
-                //.collection("routes").add(routeDataTwo)
-                .collection("routes").document(index.toString()).set(routeDataTwo)
-        }
 
         //TODO: 랭킹 부분 구현 필요 레이싱에도 같은 구조 필요
-        val rankingData = RankingData(UserInfo.nickname, UserInfo.nickname, infoData.time, 1)
+        val rankingData = RankingData(UserInfo.nickname, UserInfo.nickname, infoData.time)
         db.collection("rankingMap").document(infoData.mapTitle!!).set(rankingData)
         db.collection("rankingMap").document(infoData.mapTitle!!).collection("ranking")
-            .document(UserInfo.autoLoginKey+timestamp).set(rankingData)
+            .document(rankingData.makerNickname + "||" + full_sdf.format(dt)).set(rankingData)
 
         // db에 원하는 경로 및, 문서로 업로드
 

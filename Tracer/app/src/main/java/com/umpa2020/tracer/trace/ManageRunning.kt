@@ -1,4 +1,4 @@
-package com.umpa2020.tracer.main.trace.running
+package com.umpa2020.tracer.trace
 
 //import androidx.work.PeriodicWorkRequest
 //import androidx.work.PeriodicWorkRequest
@@ -11,32 +11,25 @@ import android.widget.Chronometer
 import com.google.android.gms.maps.SupportMapFragment
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.Privacy
-import com.umpa2020.tracer.dataClass.RouteData
-import com.umpa2020.tracer.map.RunningMap
+import com.umpa2020.tracer.main.start.running.RunningActivity
+import com.umpa2020.tracer.main.start.running.RunningSaveActivity
+import com.umpa2020.tracer.trace.map.RunningMap
 import kotlinx.android.synthetic.main.activity_running.*
 import java.text.SimpleDateFormat
 import java.util.*
 
 
-class ManageRunning {
+class ManageRunning(smf: SupportMapFragment, var context: Context) {
     val WSY = "WSY"
 
-    lateinit var runningMap: RunningMap
-    lateinit var context: Context
-    lateinit var activity: RunningActivity
+    var runningMap: RunningMap = RunningMap(smf, context)
+    var activity: RunningActivity = context as RunningActivity
     lateinit var chronometer: Chronometer
     lateinit var distanceThread: Thread
     var timeWhenStopped: Long = 0
     var privacy = Privacy.RACING
 
     var distanceFlag = false
-
-    constructor(smf: SupportMapFragment, context: Context) {
-        this.context = context
-        activity = context as RunningActivity
-        runningMap = RunningMap(smf, context)
-
-    }
 
     var i = 0
     fun startRunning(activity: RunningActivity) {
@@ -90,23 +83,18 @@ class ManageRunning {
         distanceFlag = true
 
     }
-
     fun stopRunning() {
         val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
         formatter.setTimeZone(TimeZone.getTimeZone("UTC"))
-        var routeData = RouteData()
+        var routeGPX = runningMap.stopTracking()
         var infoData = InfoData()
-
-        //TODO: 이거 RX 기반인거 같아서 주석
-        //activity.runningHandle.clicks()
-        runningMap.stopTracking(routeData, infoData)
 
         infoData.distance = runningMap.distance
         infoData.time = SystemClock.elapsedRealtime() - chronometer.base
         infoData.privacy = privacy
 
         var newIntent = Intent((context as Activity), RunningSaveActivity::class.java)
-        newIntent.putExtra("Route Data", routeData)
+        newIntent.putExtra("Route GPX", routeGPX)
         newIntent.putExtra("Info Data", infoData)
         context.startActivity(newIntent)
         activity.finish()
@@ -114,4 +102,5 @@ class ManageRunning {
         distanceThread.interrupt() // 일시 정지 상태의 스레드에서 InterruptedException 예외를 발생시켜, 예외 처리 코드(catch)에서 실행 대기 상태로 가거나 종료 상태로 갈 수 있도록 한다.
 
     }
+
 }

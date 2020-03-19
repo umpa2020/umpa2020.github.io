@@ -1,4 +1,4 @@
-package com.umpa2020.tracer.login.join
+package com.umpa2020.tracer.util
 
 class Constants {
     companion object {
@@ -11,5 +11,12 @@ class Constants {
 
         // 나이 제한
         val AGE_RULS = "^(?=.*\\d).{1,2}\$"
+
+        //체크포인트에 도착 범위(단위 : 미터)
+        val NEAR_DISTANCE = 10
+        //경로이탈 범위(단위 : 미터)
+        val DEVIATION_DISTANCE=20.0
+        //경로이탈 카운트
+        val DEVIATION_COUNT=30
     }
 }

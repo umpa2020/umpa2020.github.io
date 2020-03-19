@@ -1,4 +1,4 @@
-package com.umpa2020.tracer.main.trace
+package com.umpa2020.tracer.main.start
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -6,9 +6,6 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.location.Location
 import android.os.Bundle
-import android.os.Handler
-import android.os.Message
-import android.os.Messenger
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -19,10 +16,9 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.firebase.firestore.FirebaseFirestore
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.testdata
-import com.umpa2020.tracer.locationBackground.LocationBackgroundService
-import com.umpa2020.tracer.map.BasicMap
-import com.umpa2020.tracer.main.trace.racing.NearRouteActivity
-import com.umpa2020.tracer.main.trace.running.RunningActivity
+import com.umpa2020.tracer.trace.map.BasicMap
+import com.umpa2020.tracer.main.start.racing.NearRouteActivity
+import com.umpa2020.tracer.main.start.running.RunningActivity
 import kotlinx.android.synthetic.main.fragment_start.view.*
 
 

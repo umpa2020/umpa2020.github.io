@@ -1,33 +1,20 @@
-package com.umpa2020.tracer.main.trace.racing
+package com.umpa2020.tracer.trace
 
-import android.app.Service
 import android.content.Context
 import android.content.Intent
-import android.location.Location
-import android.os.Handler
-import android.os.Message
-import android.os.Messenger
 import android.os.SystemClock
+import android.util.Log
 import android.view.View
 import android.widget.Chronometer
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.maps.android.SphericalUtil
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.NoticeState
-import com.umpa2020.tracer.dataClass.RouteData
-import com.umpa2020.tracer.locationBackground.LocationBackgroundService
-import com.umpa2020.tracer.locationBackground.ServiceStatus
-import com.umpa2020.tracer.map.RacingMap
+import com.umpa2020.tracer.dataClass.RouteGPX
+import com.umpa2020.tracer.main.start.racing.RankingRecodeRacingActivity
+import com.umpa2020.tracer.main.start.racing.RacingFinishActivity
+import com.umpa2020.tracer.trace.map.RacingMap
 import com.umpa2020.tracer.util.TTS
-import com.umpa2020.tracer.util.Wow
 import kotlinx.android.synthetic.main.activity_ranking_recode_racing.*
-import java.text.DateFormat
-import java.util.*
-
-/*
-
- */
-
 
 class ManageRacing {
     var racingMap: RacingMap
@@ -36,7 +23,7 @@ class ManageRacing {
     lateinit var chronometer: Chronometer
     lateinit var distanceThread: Thread
     var activity: RankingRecodeRacingActivity
-    var makerRouteData: RouteData
+    var mapRouteGPX: RouteGPX
     var timeWhenStopped: Long = 0
     lateinit var distances: DoubleArray
     lateinit var mapTitle: String
@@ -45,12 +32,12 @@ class ManageRacing {
         smf: SupportMapFragment,
         activity: RankingRecodeRacingActivity,
         context: Context,
-        makerRouteData: RouteData
+        mapRouteGPX: RouteGPX
     ) {
         this.activity = activity
         this.context = context
-        this.makerRouteData = makerRouteData
-        this.racingMap = RacingMap(smf, context, this)
+        this.mapRouteGPX = mapRouteGPX
+        this.racingMap = RacingMap(smf, context, this,mapRouteGPX)
 
     }
 
@@ -60,9 +47,9 @@ class ManageRacing {
     }
 
     fun startRunning() {
-        distances = DoubleArray(makerRouteData.markerlatlngs.size - 1)
+        // distances = DoubleArray(makerRouteData.markerlatlngs.size - 1)
         for (i in distances.indices) {
-            distances[i] = Wow.getDistance(racingMap.loadRoute[i])
+            //   distances[i] = Wow.getDistance(racingMap.loadRoute[i])
         }
         distanceThread = Thread(Runnable {
             while (true) {
@@ -107,17 +94,16 @@ class ManageRacing {
 
     private fun calcLeftDistance(): Double {
         var distance = 0.0
-        for (i in makerRouteData.markerlatlngs.size - 2 downTo racingMap.markerCount) {
+        /*for (i in makerRouteData.markerlatlngs.size - 2 downTo racingMap.markerCount) {
             distance += distances[i]
-        }
-        distance += SphericalUtil.computeDistanceBetween(racingMap.currentLocation, racingMap.markers[racingMap.markerCount])
+        }*/
+        //distance += SphericalUtil.computeDistanceBetween(racingMap.cur_loc, racingMap.markers[racingMap.markerCount])
         return distance
     }
 
     fun stopRacing(result: Boolean) {
         racingMap.stopTracking()
 
-        removeHandler()
         timeWhenStopped = chronometer.base - SystemClock.elapsedRealtime()
         chronometer.stop()
 
@@ -127,22 +113,26 @@ class ManageRacing {
         infoData.mapTitle = mapTitle
         infoData.distance = calcLeftDistance()
 
-        val newIntent = Intent(context, RacingFinishActivity::class.java)
-        newIntent.putExtra("Result", result)
-        newIntent.putExtra("info Data", infoData)
-        newIntent.putExtra("Maker Data", makerRouteData)
+        if (result) {
+            val newIntent = Intent(context, RacingFinishActivity::class.java)
+            newIntent.putExtra("Result", result)
+            newIntent.putExtra("info Data", infoData)
+            //    newIntent.putExtra("Maker Data", makerRouteData)
+            Log.d("ssmm11", "레이싱 끝!")
+            context.startActivity(newIntent)
+            activity.finish()
 
-        context.startActivity(newIntent)
-        activity.finish()
-    }
-
-    private fun removeHandler() {
-        Intent(context.applicationContext, LocationBackgroundService::class.java).also {
-            it.action = ServiceStatus.STOP.name
-            context.applicationContext.startService(it)
+        } else {
+            val newIntent = Intent(context, RacingFinishActivity::class.java)
+            newIntent.putExtra("Result", result)
+            newIntent.putExtra("Racer Data", infoData)
+            //    newIntent.putExtra("Maker Data", makerRouteData)
+            context.startActivity(newIntent)
+            activity.finish()
         }
-    }
 
+
+    }
 
     fun deviation(countDeviation: Int) {
         if (countDeviation == 0) {
