@@ -10,29 +10,30 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.trace
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.firebase.firestore.FirebaseFirestore
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.testdata
-import com.umpa2020.tracer.trace.map.BasicMap
+import com.umpa2020.tracer.trace.decorate.BasicMap
 import com.umpa2020.tracer.main.start.racing.NearRouteActivity
 import com.umpa2020.tracer.main.start.running.RunningActivity
+import com.umpa2020.tracer.trace.decorate.TraceMap
+import com.umpa2020.tracer.util.LocationBroadcastReceiver
 import kotlinx.android.synthetic.main.fragment_start.view.*
 
 
 class StartFragment : Fragment(), View.OnClickListener {
     val TAG = "StartFragment"
 
-    lateinit var map: BasicMap
+    lateinit var traceMap: TraceMap
 //    var mHandler: IncomingMessageHandler? = null
 
     lateinit var currentLocation: Location
 
-    var smf: SupportMapFragment? = null
-
-    var lastLacation: Location? = null
+    lateinit var locationBroadcastReceiver:LocationBroadcastReceiver
 
     override fun onClick(v: View) {
         when (v.id) {
@@ -53,6 +54,8 @@ class StartFragment : Fragment(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -70,16 +73,16 @@ class StartFragment : Fragment(), View.OnClickListener {
                     Log.d("ssmm11", "실패 ㅅㅂ")
                 }
         }
-
+        val smf = childFragmentManager.findFragmentById(R.id.map_viewer_start) as SupportMapFragment
+        traceMap = BasicMap(smf!!, context!!)
+        locationBroadcastReceiver=LocationBroadcastReceiver(traceMap)
         return view
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "onViewCreated()")
-        smf = childFragmentManager.findFragmentById(com.umpa2020.tracer.R.id.map_viewer_start) as SupportMapFragment
-        map = BasicMap(smf!!, context as Context)
+
 
         view.mainStartRunning.setOnClickListener(this)
         view.mainStartRacing.setOnClickListener(this)
@@ -89,7 +92,7 @@ class StartFragment : Fragment(), View.OnClickListener {
         super.onResume()
         // 브로드 캐스트 등록 - 전역 context로 수정해야함
         LocalBroadcastManager.getInstance(this.requireContext())
-            .registerReceiver(myBroadcastReceiver, IntentFilter("custom-event-name"))
+            .registerReceiver(locationBroadcastReceiver, IntentFilter("custom-event-name"))
     }
 
     override fun onPause() {
@@ -97,7 +100,7 @@ class StartFragment : Fragment(), View.OnClickListener {
         Log.d("sss", "onPause()")
 
         //        브로드 캐스트 해제 - 전역 context로 수정해야함
-        LocalBroadcastManager.getInstance(this.requireContext()).unregisterReceiver(myBroadcastReceiver)
+        LocalBroadcastManager.getInstance(this.requireContext()).unregisterReceiver(locationBroadcastReceiver)
     }
 
     override fun onDestroy() {
@@ -105,14 +108,4 @@ class StartFragment : Fragment(), View.OnClickListener {
         Log.d("sss", "onDestroy()")
     }
 
-    // 서버에서 보내주는 데이터를 받는 브로드캐스트 - 나중엔 클래스화 요구??
-    private val myBroadcastReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            Log.d("$TAG receiver", "받는다.")
-            val message = intent?.getParcelableExtra<Location>("message")
-            Log.d("$TAG receiver", "Got message : $message")
-            currentLocation = message as Location
-            map.setLocation(currentLocation)
-        }
-    }
 }

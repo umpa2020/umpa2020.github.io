@@ -82,10 +82,10 @@ class RankRecyclerItemClickActivity : AppCompatActivity() {
                 }
             }
 
-     /*   rankRecyclerMoreButton.setOnClickListener {
+        rankRecyclerMoreButton.setOnClickListener {
             val nextIntent = Intent(this, RankingMapDetailActivity::class.java)
             nextIntent.putExtra("MapTitle", mapTitle)
             startActivity(nextIntent)
-        }*/
+        }
     }
 }

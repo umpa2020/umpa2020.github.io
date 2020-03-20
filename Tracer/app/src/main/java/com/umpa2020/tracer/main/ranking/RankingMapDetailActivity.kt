@@ -15,15 +15,16 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.InfoData
+import com.umpa2020.tracer.main.start.racing.RankingRecodeRacingActivity
 import com.umpa2020.tracer.util.Chart
 import com.umpa2020.tracer.util.ProgressBar
 import kotlinx.android.synthetic.main.activity_ranking_map_detail.*
 import java.text.SimpleDateFormat
 import java.util.*
-/*
+
 class RankingMapDetailActivity : AppCompatActivity() {
     var infoData = InfoData()
-    var routeData = RouteData()
+    //var routeData = RouteData()
 
     var altitude: List<Double> = listOf()
     var latLngs: MutableList<MutableList<LatLng>> = mutableListOf()
@@ -127,7 +128,7 @@ class RankingMapDetailActivity : AppCompatActivity() {
                                     }
                                     latLngs.add(routeArray)
                                 }
-                                routeData = RouteData(altitude, latLngs, markerlatlngs)
+                              //  routeData = RouteData(altitude, latLngs, markerlatlngs)
                                 // 단순 맵 정보 받아오는 부분
                                 db.collection("mapInfo").whereEqualTo("mapTitle", mapTitle)
                                     .get()
@@ -145,8 +146,8 @@ class RankingMapDetailActivity : AppCompatActivity() {
                                             formatter.setTimeZone(TimeZone.getTimeZone("UTC"))
                                             rankingDetailTime.text = formatter.format(Date(infoData.time!!))
                                             rankingDetailSpeed.text = String.format("%.2f", infoData.speed.average())
-                                            var chart = Chart(routeData.altitude, infoData.speed, rankingDetailChart)
-                                            chart.setChart()
+                                            /*var chart = Chart(routeData.altitude, infoData.speed, rankingDetailChart)
+                                            chart.setChart()*/
                                         }
                                     }
                                     .addOnFailureListener { exception ->
@@ -217,7 +218,7 @@ class RankingMapDetailActivity : AppCompatActivity() {
         val recordButton = view.findViewById<Button>(R.id.rankingMapDetailRecordButton)
         recordButton.setOnClickListener {
             val nextIntent = Intent(this, RankingRecodeRacingActivity::class.java)
-            nextIntent.putExtra("makerRouteData", routeData)
+            //nextIntent.putExtra("makerRouteData", routeData)
             nextIntent.putExtra("maptitle", dbMapTitle)
             startActivity(nextIntent)
         }
@@ -227,4 +228,3 @@ class RankingMapDetailActivity : AppCompatActivity() {
 
     }
 }
-*/

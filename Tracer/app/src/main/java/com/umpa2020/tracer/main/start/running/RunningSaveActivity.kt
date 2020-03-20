@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.dataClass.*
 import com.umpa2020.tracer.trace.map.ViewerMap
 import com.umpa2020.tracer.util.gpx.GPXConverter

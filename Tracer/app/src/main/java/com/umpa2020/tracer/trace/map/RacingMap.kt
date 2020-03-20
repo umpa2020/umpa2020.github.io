@@ -17,12 +17,12 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.NoticeState
 import com.umpa2020.tracer.dataClass.RouteGPX
-import com.umpa2020.tracer.dataClass.UserState
+import com.umpa2020.tracer.constant.UserState
 import com.umpa2020.tracer.main.start.racing.RankingRecodeRacingActivity
 import com.umpa2020.tracer.trace.ManageRacing
-import com.umpa2020.tracer.util.Constants.Companion.DEVIATION_COUNT
-import com.umpa2020.tracer.util.Constants.Companion.DEVIATION_DISTANCE
-import com.umpa2020.tracer.util.Constants.Companion.NEAR_DISTANCE
+import com.umpa2020.tracer.constant.Constants.Companion.DEVIATION_COUNT
+import com.umpa2020.tracer.constant.Constants.Companion.DEVIATION_DISTANCE
+import com.umpa2020.tracer.constant.Constants.Companion.NEAR_DISTANCE
 import com.umpa2020.tracer.util.TTS
 import com.umpa2020.tracer.util.Wow.Companion.makingIcon
 import com.umpa2020.tracer.util.gpx.GPXHelper

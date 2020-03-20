@@ -1,4 +1,4 @@
-package com.umpa2020.tracer.util
+package com.umpa2020.tracer.constant
 
 class Constants {
     companion object {
@@ -18,5 +18,6 @@ class Constants {
         val DEVIATION_DISTANCE=20.0
         //경로이탈 카운트
         val DEVIATION_COUNT=30
+        val WPINTERVAL = 100  //way point interval
     }
 }

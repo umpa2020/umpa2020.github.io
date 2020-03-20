@@ -15,6 +15,8 @@ import com.google.maps.android.SphericalUtil
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.*
 import com.umpa2020.tracer.main.start.running.RunningActivity
+import com.umpa2020.tracer.constant.Constants.Companion.WPINTERVAL
+import com.umpa2020.tracer.constant.UserState
 import com.umpa2020.tracer.util.Wow.Companion.makingIcon
 import io.jenetics.jpx.WayPoint
 import kotlinx.android.synthetic.main.activity_running.*
@@ -25,7 +27,7 @@ import kotlinx.android.synthetic.main.activity_running.*
  */
 class RunningMap(smf: SupportMapFragment, context: Context) : OnMapReadyCallback {
 
-    val WPINTERVAL = 100  //way point interval
+
     lateinit var mMap: GoogleMap    //racingMap 인스턴스
     var TAG = "WSY"       //로그용 태그
 

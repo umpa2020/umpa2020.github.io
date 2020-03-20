@@ -1,11 +1,9 @@
 package com.umpa2020.tracer.main.start.running
 
-import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.ActivityInfo
-import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -17,13 +15,16 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.trace
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.maps.SupportMapFragment
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.NoticeState
-import com.umpa2020.tracer.dataClass.Privacy
+import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.main.MainActivity
-import com.umpa2020.tracer.trace.ManageRunning
+import com.umpa2020.tracer.trace.decorate.BasicMap
+import com.umpa2020.tracer.trace.decorate.TraceMap
+import com.umpa2020.tracer.util.LocationBroadcastReceiver
 import hollowsoft.slidingdrawer.OnDrawerCloseListener
 import hollowsoft.slidingdrawer.OnDrawerOpenListener
 import hollowsoft.slidingdrawer.OnDrawerScrollListener
@@ -33,7 +34,6 @@ import kotlinx.android.synthetic.main.activity_running.*
 class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpenListener,
     OnDrawerCloseListener {
     var TAG = "RunningActivity"       //로그용 태그
-    lateinit var manageRunning: ManageRunning
     lateinit var drawer: SlidingDrawer
     var B_RUNNIG = true
     var ns = NoticeState.NOTHING
@@ -41,10 +41,9 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
 
     // 버튼 에니메이션
     private var fabOpen: Animation? = null // Floating Animation Button
-    private var startButton: Button? = null
-    private var stopButton: Button? = null
-    private var pauseButton: Button? = null
 
+    lateinit var locationBroadcastReceiver:LocationBroadcastReceiver
+    private lateinit var traceMap: TraceMap
     override fun onBackPressed() {
         if (doubleBackToExitPressedOnce1) {
             super.onBackPressed()
@@ -72,17 +71,18 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
         init()
 
         btn_stop!!.setOnLongClickListener {
-            if (manageRunning.runningMap.distance < 200) {
+            if (traceMap.distance < 200) {
                 showChoicePopup("거리가 200m 미만일때\n정지하시면 저장이 불가능합니다. \n\n정지하시겠습니까?", NoticeState.SIOP)
             } else
-                manageRunning.stopRunning()
+                traceMap.stop()
             true
         }
     }
-    
+
     private fun init() {
-        val smf = supportFragmentManager.findFragmentById(R.id.map_viewer) as SupportMapFragment
-        manageRunning = ManageRunning(smf, this)
+        val smf = supportFragmentManager.findFragmentById(R.id.map_viewer_start) as SupportMapFragment
+        traceMap = BasicMap(smf, this)
+        locationBroadcastReceiver= LocationBroadcastReceiver(traceMap)
 
         drawer = findViewById(R.id.drawer)
         drawer.setOnDrawerScrollListener(this)
@@ -91,9 +91,6 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
 
         fabOpen = AnimationUtils.loadAnimation(applicationContext, R.anim.running_btn_open) // 애니매이션 초기화
 
-        startButton = findViewById(R.id.btn_start)
-        stopButton = findViewById(R.id.btn_stop)
-        pauseButton = findViewById(R.id.btn_pause)
     }
 
 
@@ -112,15 +109,14 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
         when (view.id) {
             R.id.btn_start -> {
                 anim()
-                manageRunning.startRunning(this)
+                traceMap.start()
             }
             R.id.btn_pause -> {
-                if (manageRunning.privacy == Privacy.RACING) {
-                    //noticeMessage("일시정지를 하게 되면\n\n경쟁 모드 업로드가 불가합니다.\n\n일시정지를 하시겠습니까?", NoticeState.PAUSE)
+                if (traceMap.privacy == Privacy.RACING) {
                     showChoicePopup("일시정지를 하게 되면\n경쟁 모드 업로드가 불가합니다.\n\n일시정지를 하시겠습니까?", NoticeState.PAUSE)
                 } else {
                     if (B_RUNNIG)
-                        manageRunning.pauseRunning()
+                        traceMap.pause()
                     else
                         restart()
 
@@ -147,7 +143,7 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
         btn_pause.text = "일시정지"
         //btn_pause.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_pause_icon_pressed, 0, 0, 0)
         B_RUNNIG = true
-        manageRunning.restartRunning()
+        traceMap.restart()
     }
 
     /**
@@ -173,23 +169,19 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
                 }
                 NoticeState.PAUSE -> {
                     runningNotificationLayout.visibility = View.GONE
-                    manageRunning.pauseRunning()
+                    traceMap.pause()
                 }
                 NoticeState.SIOP -> {
-                    manageRunning.stopRunning()
+                    traceMap.stop()
                     var newIntent = Intent(this, MainActivity::class.java)
                     newIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                     newIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
                     startActivity(newIntent)
                 }
-
             }
-
             this.ns = NoticeState.NOTHING
             alertDialog.dismiss()
         }
-
-
         //No 기록용 버튼 눌렀을 때
         val recordButton = view.findViewById<Button>(com.umpa2020.tracer.R.id.runningActivityNoButton)
         recordButton.setOnClickListener {
@@ -213,30 +205,14 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
         super.onResume()
         // 브로드 캐스트 등록 - 전역 context로 수정해야함
         LocalBroadcastManager.getInstance(this)
-            .registerReceiver(myBroadcastReceiver, IntentFilter("custom-event-name"))
+            .registerReceiver(locationBroadcastReceiver, IntentFilter("custom-event-name"))
     }
 
     override fun onPause() {
         super.onPause()
         Log.d("screen", "onPause()")
         //        브로드 캐스트 해제 - 전역 context로 수정해야함
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(myBroadcastReceiver)
-    }
-
-    /**
-     *  백그라운드에서 메시지 받는 거
-     */
-    // 서버에서 보내주는 데이터를 받는 브로드캐스트 - 나중엔 클래스화 요구??
-    private val myBroadcastReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            Log.d("$TAG receiver", "받는다.")
-
-            // getParcelableExtra<T> : T = Location
-            val message = intent?.getParcelableExtra<Location>("message")
-            Log.d("$TAG receiver", "Got message : $message")
-            val currentLocation = message as Location
-            manageRunning.runningMap.setLocation(currentLocation)
-        }
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(locationBroadcastReceiver)
     }
 
     override fun onDestroy() {
@@ -262,10 +238,6 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
         //runningHandle.background = getDrawable(R.drawable.extend_selector)
         runningHandle.text = "▲"
         Log.d(TAG, "onDrawerClosed()")
-    }
-
-    fun print_log(text: String) {
-        Log.d(TAG, text.toString())
     }
 
 }

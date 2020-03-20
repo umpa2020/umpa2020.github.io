@@ -10,7 +10,7 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.RouteGPX
-import com.umpa2020.tracer.dataClass.UserState
+import com.umpa2020.tracer.constant.UserState
 import com.umpa2020.tracer.trace.ManageRacing
 import hollowsoft.slidingdrawer.OnDrawerCloseListener
 import hollowsoft.slidingdrawer.OnDrawerOpenListener

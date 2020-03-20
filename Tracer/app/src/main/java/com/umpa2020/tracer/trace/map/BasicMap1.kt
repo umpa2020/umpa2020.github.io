@@ -1,16 +1,7 @@
 package com.umpa2020.tracer.trace.map
 
-import android.content.Context
-import android.location.Location
-import android.util.Log
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.*
-import com.umpa2020.tracer.dataClass.UserState
-
-class BasicMap : OnMapReadyCallback {
+/*
+class BasicMap : OnMapReadyCallback{
     var mMap: GoogleMap? = null    //racingMap 인스턴스
 
     var TAG = "BasicMap"       //로그용 태그
@@ -31,7 +22,6 @@ class BasicMap : OnMapReadyCallback {
     var lastLocat : Location? = null
     override fun onMapReady(googleMap: GoogleMap) { //after the map is loaded
         Log.d("ssmm11", "onMapReady")
-
         mMap = googleMap //구글맵
         mMap!!.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
     }
@@ -47,10 +37,4 @@ class BasicMap : OnMapReadyCallback {
         }
         previousLocation = currentLocation                              //현재위치를 이전위치로 변경
     }
-
-
-
-    fun print_log(text: String) {
-        Log.d(TAG, text.toString())
-    }
-}
+}*/

@@ -8,9 +8,8 @@ import android.content.Intent
 import android.os.SystemClock
 import android.util.Log
 import android.widget.Chronometer
-import com.google.android.gms.maps.SupportMapFragment
 import com.umpa2020.tracer.dataClass.InfoData
-import com.umpa2020.tracer.dataClass.Privacy
+import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.main.start.running.RunningActivity
 import com.umpa2020.tracer.main.start.running.RunningSaveActivity
 import com.umpa2020.tracer.trace.map.RunningMap
@@ -19,10 +18,9 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class ManageRunning(smf: SupportMapFragment, var context: Context) {
+class ManageRunning(var runningMap: RunningMap, var context: Context) {
     val WSY = "WSY"
 
-    var runningMap: RunningMap = RunningMap(smf, context)
     var activity: RunningActivity = context as RunningActivity
     lateinit var chronometer: Chronometer
     lateinit var distanceThread: Thread
@@ -71,10 +69,6 @@ class ManageRunning(smf: SupportMapFragment, var context: Context) {
 
     fun pauseRunning() {
         runningMap.pauseTracking()
-
-
-
-
         timeWhenStopped = chronometer.base - SystemClock.elapsedRealtime()
         chronometer.stop()
         activity.pause()
@@ -100,7 +94,8 @@ class ManageRunning(smf: SupportMapFragment, var context: Context) {
         activity.finish()
 
         distanceThread.interrupt() // 일시 정지 상태의 스레드에서 InterruptedException 예외를 발생시켜, 예외 처리 코드(catch)에서 실행 대기 상태로 가거나 종료 상태로 갈 수 있도록 한다.
-
     }
+
+   // val locationBroadcastReceiver=LocationBroadcastReceiver()
 
 }
