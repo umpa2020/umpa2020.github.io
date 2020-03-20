@@ -23,7 +23,7 @@ class ProfileUserHistoryFragment : Fragment() {
         // Inflate the layout for this fragment
         var view: View = inflater.inflate(R.layout.fragment_profile_user_history, container, false)
 
-        //TODO. 서버에서 데이터 받아옴
+        //TODO. 현재 사용 안하고 있어서 추 후 구현 필요
         val datas = ArrayList<HistoryData>()
         datas.add(HistoryData("test1", "50"))
         datas.add(HistoryData("test1", "150"))

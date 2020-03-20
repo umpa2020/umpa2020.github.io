@@ -105,7 +105,7 @@ class ManageRunning {
         infoData.time = SystemClock.elapsedRealtime() - chronometer.base
         infoData.privacy = privacy
 
-        var newIntent = Intent((context as Activity), RunningSaveActivity::class.java)
+        val newIntent = Intent((context as Activity), RunningSaveActivity::class.java)
         newIntent.putExtra("Route Data", routeData)
         newIntent.putExtra("Info Data", infoData)
         context.startActivity(newIntent)

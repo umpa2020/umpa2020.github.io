@@ -15,7 +15,7 @@ import com.umpa2020.tracer.R
 import com.umpa2020.tracer.locationBackground.LocationBackgroundService
 import com.umpa2020.tracer.main.MainActivity.Companion.MESSENGER_INTENT_KEY
 import com.umpa2020.tracer.main.MainActivity.Companion.WSY
-import com.umpa2020.tracer.network.getRanking
+import com.umpa2020.tracer.network.GetRanking
 import kotlinx.android.synthetic.main.fragment_ranking.view.*
 import kotlinx.android.synthetic.main.fragment_ranking.view.test_button1 as test_button11
 
@@ -46,11 +46,11 @@ class RankingFragment : Fragment() {
          * 수진이가 xml 만들어주면 해당 기능 붙히기
          */
         view.test_button11.setOnClickListener {
-            getRanking().getExcuteDESCENDING(context!!, view, location)
+            GetRanking().getExcuteDESCENDING(context!!, view, location)
         }
 
         view.test_button3.setOnClickListener {
-            getRanking().getFilterRange(view, location)
+            GetRanking().getFilterRange(view, location)
         }
 
         var toolbar: Toolbar = view.findViewById(R.id.rankingToolBar)

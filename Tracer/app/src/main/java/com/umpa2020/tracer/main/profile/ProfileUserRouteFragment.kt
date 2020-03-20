@@ -17,6 +17,7 @@ class ProfileUserRouteFragment : Fragment() {
     var titleArray: ArrayList<String> = arrayListOf()
     lateinit var mAdapter: ProfileRecyclerViewAdapterRoute
 
+    //TODO. 현재 사용 안하고 있어서 추 후 구현 필요
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

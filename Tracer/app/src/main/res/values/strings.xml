@@ -23,4 +23,7 @@
 
     <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyAymdWK_9DnHXKY19cuUvg0oMo_FItNvQ0</string>
 
+    <!-- firebase string-->
+    <string name="google_storage_bucket_string" >gs://tracer-9070d.appspot.com/</string>
+
 </resources>

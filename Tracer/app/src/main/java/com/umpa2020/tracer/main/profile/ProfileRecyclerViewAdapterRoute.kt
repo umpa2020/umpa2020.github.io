@@ -2,7 +2,6 @@ package com.umpa2020.tracer.main.profile
 
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,12 +23,15 @@ class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) : Recycler
 
         val singleItem = mdata[position]
 
-        var cutted = singleItem.mapTitle!!.split("||")
+        val cutted = singleItem.mapTitle!!.split("||")
         //데이터 바인딩
         // glide imageview 소스
 
         //TODO: Network class 테이블에 맞게 클래스 다 만들어 놓기
         // app.getString   google_storage_bucket
+        // string에 저장해서 사용 해보았으나
+        // Please use a gs:// URL for your Firebase Storage bucket. 에러가 뜨면서 실행이 안되는 문제..
+        //val storage = FirebaseStorage.getInstance(R.string.google_storage_bucket_string.toString()) // debug용, release용 구분
         val storage = FirebaseStorage.getInstance("gs://tracer-9070d.appspot.com/") // debug용, release용 구분
         val mapImageRef = storage.reference.child("mapImage").child(singleItem.mapTitle!!)
         mapImageRef.downloadUrl.addOnCompleteListener { task ->
@@ -39,7 +41,6 @@ class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) : Recycler
                     .load(task.result)
                     .override(1024, 980)
                     .into(holder.image)
-            } else {
             }
         }
 
@@ -69,14 +70,12 @@ class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) : Recycler
 
     //item 사이즈, 데이터의 전체 길이 반ㅎ환
     override fun getItemCount(): Int {
-        Log.d("rank", "데이터 크기 " + mdata.size.toString())
-        //return 10 //TODO 갯수 조절 여기서
+        //TODO 갯수 조절 여기서
         return mdata.size
     }
 
     //여기서 item을 textView에 옮겨줌
-
-    inner class mViewHolder(view: View) : RecyclerView.ViewHolder(view!!) {
+    inner class mViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var image = view.profileFragmentRouteGridImage
         var maptitle = view.profileFragmentGridMapTitle
         var nickname = view.profileFragmentNickname

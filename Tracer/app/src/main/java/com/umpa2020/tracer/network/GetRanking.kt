@@ -20,18 +20,14 @@ import kotlinx.android.synthetic.main.fragment_ranking.view.*
  * 랭킹 네트워크 클래스 - 랭킹에 관련한
  * 네트워크 접근 함수는 이 곳에 정의
  */
-class getRanking {
+class GetRanking {
     lateinit var infoData: InfoData
     lateinit var infoDatas: ArrayList<InfoData>
     var nearMaps1: ArrayList<NearMap> = arrayListOf()
     var nearMaps2: ArrayList<NearMap> = arrayListOf()
 
-
     var cur_loc = LatLng(0.0, 0.0)          //현재위치
-
-
     var latLng = LatLng(0.0, 0.0)
-
 
     /**
      * 필터를 거치지 않고, 실행순으로 정렬되는 데이터를 가져오는 함수.
@@ -90,7 +86,6 @@ class getRanking {
 
                             infoDatas.sortByDescending { infoData -> infoData.execute }
                             view.rank_recycler_map.adapter = RankRecyclerViewAdapterMap(infoDatas, nearMaps2)
-
                         }
                 }
                 progressbar.dismiss()

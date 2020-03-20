@@ -1,20 +1,20 @@
 package com.umpa2020.tracer.network
 
 import android.app.Activity
+import android.os.Handler
+import android.os.Message
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.InfoData
-import com.umpa2020.tracer.main.profile.ProfileRecyclerViewAdapterRoute
 import com.umpa2020.tracer.util.PrettyDistance
 import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
-import kotlinx.android.synthetic.main.activity_profile_route.*
 import kotlinx.android.synthetic.main.fragment_profile.view.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -24,8 +24,10 @@ import java.util.*
  *
  */
 
-class getProfile {
 
+class GetProfile {
+    val MYROUTE = 60 // 마이 루트가 존재
+    val MYROUTEFAIL = 70 // 마이 루트가 없을 경우
 
     fun setProfile(view: View) {
         val progressbar = ProgressBar(App.instance.currentActivity() as Activity)
@@ -36,7 +38,7 @@ class getProfile {
 
         // 총 거리, 총 시간을 구하기 위해서 db에 접근하여 일단 먼저
         // 이용자가 뛴 다른 사람의 맵을 구함
-        db.collection("userinfo").document(UserInfo.email).collection("user ran these maps")
+        db.collection("userinfo").document(UserInfo.autoLoginKey).collection("user ran these maps")
             .get()
             .addOnSuccessListener { result ->
                 var sumDistance = 0.0
@@ -87,7 +89,6 @@ class getProfile {
                             .override(1024, 980)
                             .into(imageView)
                         progressbar.dismiss()
-                    } else {
                     }
                 }
             }
@@ -95,31 +96,31 @@ class getProfile {
             }
     }
 
-    fun getMyRoute(activity: Activity) {
-        /*val progressbar = ProgressBar(App.instance.currentActivity() as Activity)
-        progressbar.show()*/
-        val infoData: ArrayList<InfoData> = arrayListOf()
+    fun getMyRoute(mHandler: Handler) {
+
+        var infoDatas: ArrayList<InfoData> = arrayListOf()
 
         val db = FirebaseFirestore.getInstance()
 
-        db.collection("mapInfo").whereEqualTo("makersNickname", UserInfo.nickname).whereEqualTo("privacy", "RACING")
+        db.collection("mapInfo").whereEqualTo("makersNickname", "logintestjb").whereEqualTo("privacy", "RACING")
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {
                     val data = document.toObject(InfoData::class.java)
-                    infoData.add(data)
+                    infoDatas.add(data)
+                    Log.d("ssmm11", "in get profile (보내기 전)!~ > " + document.id)
                 }
+                val msg: Message
 
+                // 만든 맵이 없는 경우, 저장된 맵이 없다는 창을 띄우기
+                // 만든 맵이 있는 경우, 내용 띄우기 msg.what 으로 구분
                 if (result.isEmpty) {
-                    activity.profileRecyclerRouteisEmpty.visibility = View.VISIBLE
+                    msg = mHandler.obtainMessage(MYROUTEFAIL)
                 } else {
-                    activity.profileRecyclerRouteisEmpty.visibility = View.GONE
+                    msg = mHandler.obtainMessage(MYROUTE)
                 }
-
-                //adpater 추가
-                activity.profileRecyclerRoute.adapter = ProfileRecyclerViewAdapterRoute(infoData)
-                activity.profileRecyclerRoute.layoutManager = LinearLayoutManager(activity)
-              //  progressbar.dismiss()
+                msg.obj = infoDatas
+                mHandler.sendMessage(msg)
             }
             .addOnFailureListener { exception ->
             }
