@@ -10,12 +10,10 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.NoticeState
 import com.umpa2020.tracer.dataClass.RouteGPX
-import com.umpa2020.tracer.main.start.racing.RankingRecodeRacingActivity
 import com.umpa2020.tracer.main.start.racing.RacingFinishActivity
-import com.umpa2020.tracer.trace.map.RacingMap
 import com.umpa2020.tracer.util.TTS
 import kotlinx.android.synthetic.main.activity_ranking_recode_racing.*
-
+/*
 class ManageRacing {
     var racingMap: RacingMap
     var context: Context
@@ -144,4 +142,4 @@ class ManageRacing {
             stopRacing(false)
         }
     }
-}
+}*/

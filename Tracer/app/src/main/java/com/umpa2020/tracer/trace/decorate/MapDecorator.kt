@@ -7,8 +7,4 @@ abstract class MapDecorator(var decoratedMap: TraceMap): TraceMap() {
     override fun display(location: Location) {
         decoratedMap.display(location)
     }
-
-    override fun start() {
-        decoratedMap.start()
-    }
 }

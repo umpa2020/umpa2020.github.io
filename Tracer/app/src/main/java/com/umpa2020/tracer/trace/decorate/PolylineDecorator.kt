@@ -1,16 +1,16 @@
 package com.umpa2020.tracer.trace.decorate
 
 import android.location.Location
+import com.umpa2020.tracer.constant.UserState
 
-class PolylineMaker(decoratedMap: TraceMap) : MapDecorator(decoratedMap) {
-    override fun start() {
-        super.start()
-        startFlag=true
-    }
-    var startFlag=false
+class PolylineDecorator(decoratedMap: TraceMap) : MapDecorator(decoratedMap) {
     override fun display(location: Location) {
         super.display(location)
-        if(startFlag) polyLineMake()
+        when (userState) {
+            UserState.RUNNING -> {
+                polyLineMake()
+            }
+        }
     }
 
     private fun polyLineMake() {

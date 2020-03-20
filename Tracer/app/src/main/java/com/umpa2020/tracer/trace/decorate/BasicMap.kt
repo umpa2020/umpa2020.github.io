@@ -10,14 +10,9 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 
 class BasicMap (val smf: SupportMapFragment, val context: Context):OnMapReadyCallback, TraceMap(){
-    override fun start() {
-    }
-
     override fun display(location: Location) {
         setLocation(location)
     }
-
-
 
     init{
         smf.getMapAsync(this)

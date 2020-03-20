@@ -26,6 +26,7 @@ abstract class TraceMap {
     var TAG = "TraceMap"       //로그용 태그
     var privacy=Privacy.RACING
     var distance=0.0
+    var time=0.0
     var previousLocation: LatLng = LatLng(0.0, 0.0)          //이전위치
     var currentLocation: LatLng = LatLng(37.619742, 127.060836)              //현재위치
     var userState: UserState = UserState.NORMAL       //사용자의 현재상태 달리기전 or 달리는중 등 자세한내용은 enum참고

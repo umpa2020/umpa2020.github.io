@@ -11,13 +11,12 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.constant.UserState
-import com.umpa2020.tracer.trace.ManageRacing
 import hollowsoft.slidingdrawer.OnDrawerCloseListener
 import hollowsoft.slidingdrawer.OnDrawerOpenListener
 import hollowsoft.slidingdrawer.OnDrawerScrollListener
 import hollowsoft.slidingdrawer.SlidingDrawer
 import kotlinx.android.synthetic.main.activity_ranking_recode_racing.*
-
+/*
 class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpenListener,
     OnDrawerCloseListener {
     var TAG = "what u wanna say?~~!~!"       //로그용 태그
@@ -35,12 +34,12 @@ class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener,
         mapRouteGPX = intent.getParcelableExtra("RouteGpx") as RouteGPX
         mapTitle = intent.getStringExtra("maptitle")!!
         init()
-        racingControlButton.setOnLongClickListener {
+        /*racingControlButton.setOnLongClickListener {
             if (manageRacing.racingMap.userState == UserState.RACING) {
                 manageRacing.stopRacing(false)
             }
             true
-        }
+        }*/
     }
 
     private fun increaseExecute(mapTitle: String) {
@@ -121,3 +120,4 @@ class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener,
         Log.d(TAG, "onDrawerClosed()")
     }
 }
+*/

@@ -18,8 +18,6 @@ import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.NoticeState
 import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.constant.UserState
-import com.umpa2020.tracer.main.start.racing.RankingRecodeRacingActivity
-import com.umpa2020.tracer.trace.ManageRacing
 import com.umpa2020.tracer.constant.Constants.Companion.DEVIATION_COUNT
 import com.umpa2020.tracer.constant.Constants.Companion.DEVIATION_DISTANCE
 import com.umpa2020.tracer.constant.Constants.Companion.NEAR_DISTANCE
@@ -30,7 +28,7 @@ import io.jenetics.jpx.WayPoint
 import kotlinx.android.synthetic.main.activity_ranking_recode_racing.*
 import kotlin.math.roundToLong
 
-
+/*
 class RacingMap : OnMapReadyCallback {
     lateinit var mMap: GoogleMap    //racingMap 인스턴스
     lateinit var fusedLocationClient: FusedLocationProviderClient   //위치정보 가져오는 인스턴스
@@ -402,4 +400,4 @@ class RacingMap : OnMapReadyCallback {
         )
     }
 
-}
+}*/

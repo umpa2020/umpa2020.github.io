@@ -15,15 +15,13 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.trace
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.maps.SupportMapFragment
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.NoticeState
 import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.main.MainActivity
-import com.umpa2020.tracer.trace.decorate.BasicMap
-import com.umpa2020.tracer.trace.decorate.TraceMap
+import com.umpa2020.tracer.trace.decorate.*
 import com.umpa2020.tracer.util.LocationBroadcastReceiver
 import hollowsoft.slidingdrawer.OnDrawerCloseListener
 import hollowsoft.slidingdrawer.OnDrawerOpenListener
@@ -42,7 +40,7 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
     // 버튼 에니메이션
     private var fabOpen: Animation? = null // Floating Animation Button
 
-    lateinit var locationBroadcastReceiver:LocationBroadcastReceiver
+    lateinit var locationBroadcastReceiver: LocationBroadcastReceiver
     private lateinit var traceMap: TraceMap
     override fun onBackPressed() {
         if (doubleBackToExitPressedOnce1) {
@@ -80,9 +78,16 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
     }
 
     private fun init() {
-        val smf = supportFragmentManager.findFragmentById(R.id.map_viewer_start) as SupportMapFragment
-        traceMap = BasicMap(smf, this)
-        locationBroadcastReceiver= LocationBroadcastReceiver(traceMap)
+        val smf = supportFragmentManager.findFragmentById(R.id.map_viewer_running) as SupportMapFragment
+        //running map 선언 Polyline + Timer + Distance + Basic
+        traceMap = PolylineDecorator(
+            TimerDecorator(
+                DistanceDecorator(
+                    BasicMap(smf, this)
+                )
+            )
+        )
+        locationBroadcastReceiver = LocationBroadcastReceiver(traceMap)
 
         drawer = findViewById(R.id.drawer)
         drawer.setOnDrawerScrollListener(this)

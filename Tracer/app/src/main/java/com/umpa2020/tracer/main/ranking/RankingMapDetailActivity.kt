@@ -15,7 +15,6 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.InfoData
-import com.umpa2020.tracer.main.start.racing.RankingRecodeRacingActivity
 import com.umpa2020.tracer.util.Chart
 import com.umpa2020.tracer.util.ProgressBar
 import kotlinx.android.synthetic.main.activity_ranking_map_detail.*
@@ -214,7 +213,7 @@ class RankingMapDetailActivity : AppCompatActivity() {
          */
 
 
-        //랭킹 기록용 버튼 눌렀을 때
+     /*   //랭킹 기록용 버튼 눌렀을 때
         val recordButton = view.findViewById<Button>(R.id.rankingMapDetailRecordButton)
         recordButton.setOnClickListener {
             val nextIntent = Intent(this, RankingRecodeRacingActivity::class.java)
@@ -222,7 +221,7 @@ class RankingMapDetailActivity : AppCompatActivity() {
             nextIntent.putExtra("maptitle", dbMapTitle)
             startActivity(nextIntent)
         }
-
+*/
         alertDialog.setView(view)
         alertDialog.show() //팝업 띄우기
 
