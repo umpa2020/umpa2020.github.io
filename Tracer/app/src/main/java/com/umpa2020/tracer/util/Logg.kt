@@ -1,51 +1,46 @@
 package com.umpa2020.tracer.util
 
 import android.util.Log
-import android.widget.Toast
-import com.umpa2020.tracer.App
-import java.net.UnknownHostException
 
+/**
+ * 로그 표시
+ */
 object Logg {
-    private fun formattedMessage(): String {
-        val level = 4
-        val trace = Thread.currentThread().stackTrace[level]
+    private fun tag(): String {
+        val trace = Thread.currentThread().stackTrace[4]
         val fileName = trace.fileName
         val classPath = trace.className
         val className = classPath.substring(classPath.lastIndexOf(".") + 1)
         val methodName = trace.methodName
         val lineNumber = trace.lineNumber
-        return "$className.$methodName($fileName:$lineNumber)"
+        return "App# $className.$methodName($fileName:$lineNumber)"
     }
 
-    fun v(tag: String, msg: String?) {
-        Log.v(tag, formattedMessage() + "|" + msg)
+    fun v(msg: String?) {
+        Log.v(tag(), "" + msg)
     }
 
-    fun d(tag: String, msg: String?) {
-        Log.d(tag, formattedMessage() + "|" + msg)
+    fun d(msg: String?) {
+        Log.d(tag(), "" + msg)
     }
 
-    fun i(tag: String, msg: String?) {
-        Log.i(tag, formattedMessage() + "|" + msg)
+    fun i(msg: String?) {
+        Log.i(tag(), "" + msg)
     }
 
-    fun w(tag: String, msg: String?) {
-        Log.w(tag, formattedMessage() + "|" + msg)
+    fun w(msg: String?) {
+        Log.w(tag(), "" + msg)
     }
 
-    fun w(tag: String, e: Throwable) {
-        Log.w(tag, formattedMessage() + "|" + e.toString())
-
-        if (e is UnknownHostException) {
-            Toast.makeText(App.instance, e.toString(), Toast.LENGTH_LONG).show()
-        }
+    fun w(e: Throwable) {
+        Log.w(tag(), "" + e.localizedMessage)
     }
 
-    fun w(tag: String, e: Exception) {
-        Log.w(tag, formattedMessage() + "|" + e.toString())
+    fun w(e: Exception) {
+        Log.w(tag(), "" + e.localizedMessage)
     }
 
-    fun e(tag: String, msg: String?) {
-        Log.e(tag, formattedMessage() + "|" + msg)
+    fun e(msg: String?) {
+        Log.e(tag(), "" + msg)
     }
 }
