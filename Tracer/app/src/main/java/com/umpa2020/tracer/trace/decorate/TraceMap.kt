@@ -21,8 +21,8 @@ abstract class TraceMap {
    fun stop(){
        userState=UserState.STOP
    }
-    var mMap: GoogleMap? = null    //racingMap 인스턴스
-
+    lateinit var mMap: GoogleMap
+    var testString=""
     var TAG = "TraceMap"       //로그용 태그
     var privacy=Privacy.RACING
     var distance=0.0
