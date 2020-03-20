@@ -181,8 +181,6 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
         //Yes 버튼 눌렀을 때
         val yesButton = view.findViewById<Button>(R.id.runningActivityYesButton)
         yesButton.setOnClickListener {
-            Log.d("ssmm11", "what is ns = " + ns)
-
             when (ns) {
                 NoticeState.NOTHING -> {
                 }
@@ -192,7 +190,7 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
                 }
                 NoticeState.SIOP -> {
                     manageRunning.stopRunning()
-                    var newIntent = Intent(this, MainActivity::class.java)
+                    val newIntent = Intent(this, MainActivity::class.java)
                     newIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                     newIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
                     startActivity(newIntent)

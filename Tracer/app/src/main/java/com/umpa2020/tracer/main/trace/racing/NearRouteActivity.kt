@@ -65,7 +65,7 @@ class NearRouteActivity : AppCompatActivity() {
                         )
                         break
                     }
-                    if (SphericalUtil.computeDistanceBetween(cur_loc, latLng) <= 2000) {
+                    if (SphericalUtil.computeDistanceBetween(cur_loc, latLng) <= 20000) {
                         var nearMap = NearMap(document.id, SphericalUtil.computeDistanceBetween(cur_loc, latLng))
                         nearMaps.add(nearMap)
                     }
@@ -75,7 +75,6 @@ class NearRouteActivity : AppCompatActivity() {
                 progressbar.dismiss()
             }
             .addOnFailureListener { exception ->
-                Log.w("ssmm11", "Error getting documents.", exception)
             }
     }
 }

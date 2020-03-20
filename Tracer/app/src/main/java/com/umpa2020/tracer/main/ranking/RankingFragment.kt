@@ -48,7 +48,7 @@ class RankingFragment : Fragment() {
         }
 
         view.test_button3.setOnClickListener {
-            getRanking().getFilterRange(context!!, view, location)
+            getRanking().getFilterRange(view, location)
         }
 
         var toolbar: Toolbar = view.findViewById(R.id.rankingToolBar)

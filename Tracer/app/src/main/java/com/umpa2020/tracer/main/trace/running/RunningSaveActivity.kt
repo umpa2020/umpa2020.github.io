@@ -3,7 +3,6 @@ package com.umpa2020.tracer.main.trace.running
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.SupportMapFragment
@@ -111,7 +110,6 @@ class RunningSaveActivity : AppCompatActivity() {
         db.collection("mapRoute").document(infoData.mapTitle!!).set(routeDataOne)
         for (index in routeData.latlngs.indices) {
             var routeDataTwo = RouteDataTwo(index, routeData.latlngs[index])
-            Log.d("ssmm11", "" + index + " = " + routeDataTwo)
             db.collection("mapRoute").document(infoData.mapTitle!!)
                 //.collection("routes").add(routeDataTwo)
                 .collection("routes").document(index.toString()).set(routeDataTwo)
@@ -130,7 +128,6 @@ class RunningSaveActivity : AppCompatActivity() {
         val mapImageRef = storage.reference.child("mapImage").child(infoData.mapTitle!!)
         var uploadTask = mapImageRef.putFile(Uri.fromFile(File(imgPath)))
         uploadTask.addOnFailureListener {
-            Log.d("ssmm11", "스토리지 실패 = " + it.toString())
         }.addOnSuccessListener {
             finish()
         }

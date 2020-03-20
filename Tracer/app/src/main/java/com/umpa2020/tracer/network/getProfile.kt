@@ -1,14 +1,13 @@
 package com.umpa2020.tracer.network
 
 import android.app.Activity
-import android.content.Context
 import android.view.View
 import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
+import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.main.profile.ProfileRecyclerViewAdapterRoute
@@ -20,14 +19,16 @@ import kotlinx.android.synthetic.main.fragment_profile.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-class getProfile {
-    // firebase DB
-    //  firebase Storage
-    private var mStorage: FirebaseStorage? = null
-    private var mStorageReference: StorageReference? = null
+/**
+ * Profile fragment 에서 프로필을 설정하는 네트워크 클래스
+ *
+ */
 
-    fun setProfile(context: Context, view: View) {
-        val progressbar = ProgressBar(context)
+class getProfile {
+
+
+    fun setProfile(view: View) {
+        val progressbar = ProgressBar(App.instance.currentActivity() as Activity)
         progressbar.show()
         var profileImagePath = "init"
 
@@ -76,7 +77,7 @@ class getProfile {
                 val imageView = view.findViewById<ImageView>(R.id.profileImageView)
 
                 val storage = FirebaseStorage.getInstance("gs://tracer-9070d.appspot.com/")
-                val profileRef = storage.reference.child("Profile").child(UserInfo.autoLoginKey!!).child(profileImagePath)
+                val profileRef = storage.reference.child("Profile").child(UserInfo.autoLoginKey).child(profileImagePath)
 
                 profileRef.downloadUrl.addOnCompleteListener { task ->
                     if (task.isSuccessful) {
@@ -95,9 +96,9 @@ class getProfile {
     }
 
     fun getMyRoute(activity: Activity) {
-        /*val progressbar = ProgressBar(context)
+        /*val progressbar = ProgressBar(App.instance.currentActivity() as Activity)
         progressbar.show()*/
-        var infoData: ArrayList<InfoData> = arrayListOf()
+        val infoData: ArrayList<InfoData> = arrayListOf()
 
         val db = FirebaseFirestore.getInstance()
 

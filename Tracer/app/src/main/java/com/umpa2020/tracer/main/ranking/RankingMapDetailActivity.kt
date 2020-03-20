@@ -32,7 +32,7 @@ class RankingMapDetailActivity : AppCompatActivity() {
     var markerlatlngs: MutableList<LatLng> = mutableListOf()
     var dbMapTitle = ""
     var profileImagePath = ""
-    var googletokenId = ""
+    var uid = ""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,7 +62,7 @@ class RankingMapDetailActivity : AppCompatActivity() {
                     .addOnSuccessListener { result ->
                         for (document in result) {
                             profileImagePath = document.get("profileImagePath") as String
-                            googletokenId = document.get("googleTokenId") as String
+                            uid = document.get("UID") as String
                         }
                         // glide imageview 소스
                         // 프사 설정하는 코드 db -> imageView glide
@@ -70,7 +70,7 @@ class RankingMapDetailActivity : AppCompatActivity() {
 
                         val storage = FirebaseStorage.getInstance("gs://tracer-9070d.appspot.com/")
 
-                        val mapImageRef = storage.reference.child("Profile").child(googletokenId).child(profileImagePath)
+                        val mapImageRef = storage.reference.child("Profile").child(uid).child(profileImagePath)
                         mapImageRef.downloadUrl.addOnCompleteListener { task ->
                             if (task.isSuccessful) {
                                 // Glide 이용하여 이미지뷰에 로딩
@@ -80,7 +80,6 @@ class RankingMapDetailActivity : AppCompatActivity() {
                                     .into(imageView)
                                 progressbar.dismiss()
 
-                            } else {
                             }
                         }
                     }
@@ -97,7 +96,7 @@ class RankingMapDetailActivity : AppCompatActivity() {
                         altitude = document.get("altitude") as List<Double>
 
                         // 마커의 LatLng 는 나눠서 넣어줘야함
-                        var receiveMarkerDatas = document.get("markerlatlngs") as List<Object>
+                        val receiveMarkerDatas = document.get("markerlatlngs") as List<Object>
 
                         for (receiveMarkerData in receiveMarkerDatas) {
                             val location = receiveMarkerData as Map<String, Any>
@@ -117,8 +116,8 @@ class RankingMapDetailActivity : AppCompatActivity() {
                             .get()
                             .addOnSuccessListener { result2 ->
                                 for (document2 in result2) {
-                                    var routeArray: MutableList<LatLng> = mutableListOf()
-                                    var receiveRouteDatas = document2.get("latlngs") as MutableList<Object>
+                                    val routeArray: MutableList<LatLng> = mutableListOf()
+                                    val receiveRouteDatas = document2.get("latlngs") as MutableList<Object>
                                     for (receiveRouteData in receiveRouteDatas) {
                                         val location = receiveRouteData as Map<String, Any>
                                         val latLng = LatLng(
@@ -173,7 +172,6 @@ class RankingMapDetailActivity : AppCompatActivity() {
                     .load(task.result)
                     .override(1024, 980)
                     .into(imageView)
-            } else {
             }
         }
 

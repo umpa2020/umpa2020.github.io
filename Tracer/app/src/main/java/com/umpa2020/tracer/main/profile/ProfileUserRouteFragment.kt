@@ -2,7 +2,6 @@ package com.umpa2020.tracer.main.profile
 
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -44,8 +43,6 @@ class ProfileUserRouteFragment : Fragment() {
                 //mAdapter = ProfileRecyclerViewAdapterRoute(titleArray)
                 //mRecyclerView.adapter = mAdapter
 
-
-                Log.d("ssmm11", "title array = " + titleArray)
                 progressbar.dismiss()
             }
             .addOnFailureListener { exception ->

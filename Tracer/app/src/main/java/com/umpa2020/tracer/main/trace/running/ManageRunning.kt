@@ -34,7 +34,7 @@ class ManageRunning {
     constructor(smf: SupportMapFragment, context: Context) {
         this.context = context
         activity = context as RunningActivity
-        runningMap = RunningMap(smf, context)
+        runningMap = RunningMap(smf/*, context*/)
 
     }
 

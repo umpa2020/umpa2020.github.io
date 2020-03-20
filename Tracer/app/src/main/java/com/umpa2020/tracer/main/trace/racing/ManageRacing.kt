@@ -1,12 +1,7 @@
 package com.umpa2020.tracer.main.trace.racing
 
-import android.app.Service
 import android.content.Context
 import android.content.Intent
-import android.location.Location
-import android.os.Handler
-import android.os.Message
-import android.os.Messenger
 import android.os.SystemClock
 import android.view.View
 import android.widget.Chronometer
@@ -21,8 +16,6 @@ import com.umpa2020.tracer.map.RacingMap
 import com.umpa2020.tracer.util.TTS
 import com.umpa2020.tracer.util.Wow
 import kotlinx.android.synthetic.main.activity_ranking_recode_racing.*
-import java.text.DateFormat
-import java.util.*
 
 /*
 
@@ -76,15 +69,11 @@ class ManageRacing {
         chronometer = activity.racingTimerTextView
 
         var countDownThread = Thread(Runnable {
-            activity.runOnUiThread(Runnable {
-                activity.countDownTextView.visibility = View.VISIBLE
-            })
+            activity.runOnUiThread { activity.countDownTextView.visibility = View.VISIBLE }
             TTS.speech("셋")
             Thread.sleep(1000)
-            // TTS.speech("둘")
-            activity.runOnUiThread(Runnable {
-                activity.countDownTextView.text = "2"
-            })
+            TTS.speech("둘")
+            activity.runOnUiThread { activity.countDownTextView.text = "2" }
 
             Thread.sleep(1000)
             TTS.speech("하나")

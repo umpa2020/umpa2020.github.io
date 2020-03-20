@@ -57,17 +57,11 @@ class RacingFinishActivity : AppCompatActivity() {
                         .whereEqualTo("challengerNickname", UserInfo.nickname).get()
                         .addOnSuccessListener { result ->
                             for (document in result) {
-                                Log.d("ssmm11", "racer time = " + racerData.time)
-                                Log.d("ssmm11", "\ndocument.get(\"challengerTime\") as Long = " + document.get("challengerTime") as Long)
                                 if (racerData.time!!.toLong() < document.get("challengerTime") as Long) {
-                                    Log.d("ssm11", "원래가 더 느리다 ")
-
                                     db.collection("rankingMap").document(racerData.mapTitle!!).collection("ranking").document(document.id).update("bestTime", 0)
 
                                 } else {
-                                    Log.d("ssmm11", "안드 위 베타 = " + rankingData.bestTime)
                                     rankingData.bestTime = 0
-                                    Log.d("ssmm11", "안드 아래 베타 = " + rankingData.bestTime)
                                 }
                                 break
                             }

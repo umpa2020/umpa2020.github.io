@@ -33,7 +33,7 @@ class RacingMap : OnMapReadyCallback {
     var markerCount = 1
     lateinit var cpOption: MarkerOptions
     lateinit var mMap: GoogleMap    //racingMap 인스턴스
-//    lateinit var fusedLocationClient: FusedLocationProviderClient   //위치정보 가져오는 인스턴스
+    //    lateinit var fusedLocationClient: FusedLocationProviderClient   //위치정보 가져오는 인스턴스
 //    lateinit var locationCallback: LocationCallback
 //    lateinit var locationRequest: LocationRequest
     var TAG = "what u wanna say?~~!~!"       //로그용 태그
@@ -62,7 +62,7 @@ class RacingMap : OnMapReadyCallback {
     var cameraFlag = false
 
     //Racing
-    constructor( smf: SupportMapFragment, context: Context, manageRacing: ManageRacing ) {
+    constructor(smf: SupportMapFragment, context: Context, manageRacing: ManageRacing) {
         this.context = context
         this.manageRacing = manageRacing
         this.makerRouteData = manageRacing.makerRouteData
@@ -78,20 +78,9 @@ class RacingMap : OnMapReadyCallback {
      * Manage에서 전달 받은 클래스 사용하기 편하도록 쪼개기.
      */
     fun loadRoute() {
-        for (i in makerRouteData.latlngs.indices) {
-            var latlngs: MutableList<LatLng> = mutableListOf()
-            for (j in makerRouteData.latlngs[i].indices) {
-                latlngs.add(LatLng(makerRouteData.latlngs[i][j].latitude, makerRouteData.latlngs[i][j].longitude))
-            }
-            loadRoute.add(latlngs)
-            markers.add(LatLng(makerRouteData.markerlatlngs[i].latitude, makerRouteData.markerlatlngs[i].longitude))
-        }
-        markers.add(
-            LatLng(
-                makerRouteData.markerlatlngs[makerRouteData.markerlatlngs.size - 1].latitude,
-                makerRouteData.markerlatlngs[makerRouteData.markerlatlngs.size - 1].longitude
-            )
-        )
+        //TODO : foreach로 바꾸기 method Chain
+        loadRoute = makerRouteData.latlngs
+        markers = makerRouteData.markerlatlngs
 
         /* loadRoute = makerRouteData.latlngs
          markers = makerRouteData.markerlatlngs*/
@@ -102,10 +91,10 @@ class RacingMap : OnMapReadyCallback {
         mMap.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
         // 마지막 위치 가져와서 카메라 설정
         Log.d(TAG, "잘 가져왔니? " + LocationUpdatesComponent.getLastLocat().toString())
-        var lat =  LocationUpdatesComponent.getLastLocat().latitude
-        var lng =  LocationUpdatesComponent.getLastLocat().longitude
+        val lat = LocationUpdatesComponent.getLastLocat().latitude
+        val lng = LocationUpdatesComponent.getLastLocat().longitude
         currentLocation = LatLng(lat, lng)
-        mMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 20F))   //화면이동
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 20F))   //화면이동
 
         loadRoute()
         drawRoute()
@@ -149,10 +138,9 @@ class RacingMap : OnMapReadyCallback {
                     }
                 }
                 .addOnFailureListener { exception ->
-                    Log.w("ssmm11", "Error getting documents.", exception)
                 }
             //전체 시간 / 체크포인트 개수 = 한체크포인트에서 머물 시간
-            var sleepTime = ((time.toDouble() / markers.size.toDouble())).roundToLong()
+            val sleepTime = ((time.toDouble() / markers.size.toDouble())).roundToLong()
             print_log("시간 : " + time + ", " + sleepTime.toString())
 
             for (index in markers.indices) {
@@ -255,19 +243,19 @@ class RacingMap : OnMapReadyCallback {
                 .fillColor(Color.RED)
         )
 
-        var min = LatLng(Wow.minDoubleLat(makerRouteData.latlngs), Wow.minDoubleLng(makerRouteData.latlngs))
-        var max = LatLng(Wow.maxDoubleLat(makerRouteData.latlngs), Wow.maxDoubleLng(makerRouteData.latlngs))
+        val min = LatLng(Wow.minDoubleLat(makerRouteData.latlngs), Wow.minDoubleLng(makerRouteData.latlngs))
+        val max = LatLng(Wow.maxDoubleLat(makerRouteData.latlngs), Wow.maxDoubleLng(makerRouteData.latlngs))
         print_log(min.toString() + max.toString())
         mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(LatLngBounds(min, max), 1080, 300, 50))
     }
 
-    fun createData(location: Location){
-        var lat = location.latitude
-        var lng = location.longitude
-        var alt = location.altitude
-        var speed = location.speed
-        Log.d("createData","HI")
-        Log.d("createData",userState.toString())
+    fun createData(location: Location) {
+        val lat = location.latitude
+        val lng = location.longitude
+        val alt = location.altitude
+        val speed = location.speed
+        Log.d("createData", "HI")
+        Log.d("createData", userState.toString())
         currentLocation = LatLng(lat, lng)
         when (userState) {
             UserState.BEFORERACING -> { //경기 시작전
@@ -404,16 +392,16 @@ class RacingMap : OnMapReadyCallback {
             }
         }
     }
+
     fun setLocation(location: Location) {
         createData(location)
         if (userState == UserState.RUNNING) {
 
-          //  setMyPosition(location)
-        }
-        else
-            currentLocation = LatLng(location!!.latitude, location!!.longitude)
+            //  setMyPosition(location)
+        } else
+            currentLocation = LatLng(location.latitude, location.longitude)
 
-        if(!cameraFlag) {
+        if (!cameraFlag) {
             mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 17F))   //화면이동
             cameraFlag = true
         }

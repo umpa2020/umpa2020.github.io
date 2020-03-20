@@ -1,13 +1,9 @@
 package com.umpa2020.tracer.login
 
-import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import com.chibatching.kotpref.Kotpref
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -18,14 +14,12 @@ import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
-import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.login.join.SignUpActivity
-import com.umpa2020.tracer.main.trace.StartFragment
+import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_login.*
-import kotlinx.android.synthetic.main.activity_main.*
 
 
 class LoginActivity : AppCompatActivity() {
@@ -99,7 +93,7 @@ class LoginActivity : AppCompatActivity() {
             try {
                 // 구글 로그인에 성공했을때 넘어오는 토큰값을 가지고 있는 Task
                 Log.d(WSY, data.toString())
-                var task = GoogleSignIn.getSignedInAccountFromIntent(data)
+                val task = GoogleSignIn.getSignedInAccountFromIntent(data)
                 Log.d(WSY, "여기까지 실행??")
                 // Google Sign In was successful, authenticate with Firebase
                 // 구글 로그인 성공
@@ -111,7 +105,7 @@ class LoginActivity : AppCompatActivity() {
                  *   firebase SHA-1 키 등록이 안되어 있어서 오류가 남
                  *   추가 등록을 해줘서 해결은 했는데 이런 방식이 맞는지 모르겠음...
                  */
-                var account = task.getResult(ApiException::class.java)
+                val account = task.getResult(ApiException::class.java)
                 firebaseAuthWithGoogle(account!!)
             } catch (e: ApiException) {
                 // Google Sign In failed, update UI appropriately
@@ -131,8 +125,7 @@ class LoginActivity : AppCompatActivity() {
         Log.d(WSY, "firebaseAuthWithGoogle:" + acct.id!!) // firebaseAuthWithGoogle:117635384468060774340 => 계정 고유 번호 => 이것을 Shared에 저장하여 자동 로그인 구현
         Log.d(WSY, acct.email!!)
 
-
-        val tokenId = acct.id!!.toString()
+        val uid = mAuth!!.uid.toString()
         val email = acct.email.toString()
 
         // Credentail 구글 로그인에 성공했다는 인증서
@@ -146,13 +139,13 @@ class LoginActivity : AppCompatActivity() {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d(WSY, "signInWithCredential:success")
                     // 로그인 성공
-                    mFirestoreDB!!.collection("userinfo").whereEqualTo("googleTokenId", tokenId).get()
+                    mFirestoreDB!!.collection("userinfo").whereEqualTo("UID", uid).get()
                         .addOnSuccessListener { result ->
                             // Document found in the offline cache
                             if(result.isEmpty) {
                                 Log.d(WSY, "초기 가입인가")
-                                var nextIntent = Intent(this@LoginActivity, SignUpActivity::class.java)
-                                nextIntent.putExtra("tokenId", tokenId)
+                                val nextIntent = Intent(this@LoginActivity, SignUpActivity::class.java)
+                                nextIntent.putExtra("user UID", mAuth!!.uid.toString())
                                 nextIntent.putExtra("email", email)
 
 
@@ -162,26 +155,20 @@ class LoginActivity : AppCompatActivity() {
                             }
                             else {
                                 for (document in result) {
-                                    Log.d(
-                                        WSY,
-                                        "이거임????? = " + document.toString()
-                                    )
                                     // DocumentSnapshot{key=UserInfo/117635384468060774340, metadata=SnapshotMetadata{hasPendingWrites=false, isFromCache=false}, doc=null}
                                     Log.d(WSY, document.exists().toString()) // false
                                     Log.d(WSY, document.reference.toString()) // com.google.firebase.firestore.DocumentReference@aafeaf20
                                     Log.d(WSY, "Cached document data: ${document?.data}") // Cached document data: null
-
-
                                     Log.d(WSY, "기존 가입자 -> 메인으로") // 이 부분에 들어왔다는 것은 로그아웃 or 앱 삭제 후 재로그인일 테니깐 Shared에 다시 값 저장.
 
-                                    Log.d(WSY, document.data.toString()) // {gender=Man, nickname=gfyhv, googleTokenId=117635384468060774340, age=26}
+                                    Log.d(WSY, document.data.toString()) // {gender=Man, nickname=gfyhv, age=26}
                                     Log.d(WSY, document.data.get("nickname").toString())
 
-                                    UserInfo.autoLoginKey = tokenId
+                                    UserInfo.autoLoginKey = mAuth!!.uid.toString()
                                     UserInfo.email = email
                                     UserInfo.nickname = document.data.get("nickname").toString() // Shared에 nickname저장.
 
-                                    var nextIntent = Intent(this@LoginActivity, MainActivity::class.java)
+                                    val nextIntent = Intent(this@LoginActivity, MainActivity::class.java)
                                     startActivity(nextIntent)
                                     finish()
                                     progressbar.dismiss()
@@ -195,23 +182,7 @@ class LoginActivity : AppCompatActivity() {
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w(WSY, "signInWithCredential:failure", task.exception)
-                    // Snackbar.make(main_layout, "Authentication Failed.", Snackbar.LENGTH_SHORT).show()
-                    //   updateUI(null)
                 }
-
-                // ...
             }
     }
-
-//    /**
-//     *  로그인 후에 MainActivity로 intent로 옮기겠다
-//     */
-//    private fun updateUI(user: FirebaseUser?) { //update ui code here
-//        if (user != null) {
-//            val intent = Intent(this, MainActivity::class.java)
-//            startActivity(intent)
-//            finish()
-//        }
-//    }
-
 }

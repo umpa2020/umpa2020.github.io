@@ -3,21 +3,21 @@ package com.umpa2020.tracer.main.trace.racing
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.location.Location
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import android.os.Messenger
 import android.util.Log
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
-import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.RouteData
 import com.umpa2020.tracer.dataClass.UserState
 import com.umpa2020.tracer.locationBackground.LocationBackgroundService
+import com.umpa2020.tracer.main.MainActivity
 import hollowsoft.slidingdrawer.OnDrawerCloseListener
 import hollowsoft.slidingdrawer.OnDrawerOpenListener
 import hollowsoft.slidingdrawer.OnDrawerScrollListener
@@ -111,12 +111,10 @@ class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener,
     fun stop() {    //타이머 멈추는거 만들어야함
         // Toast.makeText(this, "종료를 원하시면, 길게 눌러주세요", Toast.LENGTH_LONG).show()
     }
-
+    //TODO: text null일때 테스트
     fun noticeMessage(text: String) {
-        if (text == "") {
-            racingNotificationLayout.visibility = View.GONE
-        } else {
-            racingNotificationLayout.visibility = View.VISIBLE
+        racingNotificationLayout.visibility = if (text.isBlank()) View.GONE else View.VISIBLE
+        if (text.isNotBlank()) {
             racingNotificationButton.text = text
         }
     }
@@ -136,8 +134,6 @@ class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener,
                     val obj = msg.obj as Location
                     val currentDateTimeString = DateFormat.getDateTimeInstance().format(Date())
                     Log.d(MainActivity.WSY, "RacingActivity : 값을 가져옴?")
-
-
                     manageRacing.racingMap.setLocation(obj)
 //                    manageRunning.runningMap.setLocation(obj)
                 }

@@ -41,15 +41,12 @@ class RankRecyclerItemClickActivity : AppCompatActivity() {
         mapImageRef.downloadUrl.addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 // Glide 이용하여 이미지뷰에 로딩
-                Log.d("ssmm11", "이미지 뷰 로드 성공 : " + mapImageRef.downloadUrl)
                 Glide.with(this@RankRecyclerItemClickActivity)
                     .load(task.result)
                     .override(1024, 980)
                     .into(imageView)
                 progressbar.dismiss()
 
-            } else {
-                Log.d("ssmm11", "이미지 뷰 로드 실패")
             }
         }
 

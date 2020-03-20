@@ -27,8 +27,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.jakewharton.rxbinding2.widget.RxTextView
-import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.R
+import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
 import io.reactivex.disposables.CompositeDisposable
@@ -69,8 +69,8 @@ class SignUpActivity : AppCompatActivity() {
     // 중복 확인 버튼
     private var redundantCheckButton: Button? = null
 
-    // 초기 가입자인 경우 LoginActivity에서 tokenId, email을 넘겨 받음
-    private var tokenId: String? = null
+    // 초기 가입자인 경우 LoginActivity에서 uid, email을 넘겨 받음
+    private var uid: String? = null
     private var email: String? = null
 
     var timestamp: Long = 0
@@ -78,7 +78,7 @@ class SignUpActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
         setContentView(R.layout.activity_sign_up)
 
         progressbar = ProgressBar(this)
@@ -132,10 +132,10 @@ class SignUpActivity : AppCompatActivity() {
         redundantCheckButton = redundantCheckButton
 
         /**
-         *   초기 가입자인 경우 LoginActivity에서 tokenId, email을 넘겨 받음
+         *   초기 가입자인 경우 LoginActivity에서 uid, email을 넘겨 받음
          */
-        var intent = intent
-        tokenId = intent.getStringExtra("tokenId")
+        val intent = intent
+        uid = intent.getStringExtra("user UID")
         email = intent.getStringExtra("email")
     }
 
@@ -178,7 +178,7 @@ class SignUpActivity : AppCompatActivity() {
         }
 
         Log.d(WSY, temp)
-        if (TextUtils.isEmpty(temp) == false) {
+        if (!TextUtils.isEmpty(temp)) {
             // 권한 요청
             ActivityCompat.requestPermissions(this, temp.trim().split(" ").toTypedArray(), 1)
         } else {
@@ -237,7 +237,7 @@ class SignUpActivity : AppCompatActivity() {
      * ReActive 로 입력 들어오는 데이터에 대한 결과를 UI 로 표시합니다
      */
     private fun reactiveInputTextViewData(indexPath: Int, it: Boolean) {
-        if (!inputDataField[indexPath].text.toString().isEmpty()) {
+        if (inputDataField[indexPath].text.toString().isEmpty().not()) {
             isInputCorrectData[indexPath] = it
         } else {
             isInputCorrectData[indexPath] = false
@@ -264,7 +264,7 @@ class SignUpActivity : AppCompatActivity() {
 //
             if (resultCode == RESULT_OK) {
                 try {
-                    var inputStream = intentData!!.data?.let { getContentResolver().openInputStream(it) }
+                    val inputStream = intentData!!.data?.let { getContentResolver().openInputStream(it) }
 
                     // 프로필 사진을 비트맵으로 변환
                     options = BitmapFactory.Options()
@@ -302,7 +302,7 @@ class SignUpActivity : AppCompatActivity() {
 
     // 바탕 클릭 시 키패드 숨기기
     override fun onTouchEvent(event: MotionEvent?): Boolean {
-        var imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
         return true
     }
@@ -358,23 +358,22 @@ class SignUpActivity : AppCompatActivity() {
     private fun uploadProfileImage(bitmapImg: Bitmap, nickname: String, dt: String) {
         // 현재 날짜를 프로필 이름으로 nickname/Profile/현재날짜(영어).jpg 경로 만들기
 
-        val profileRef = mStorageReference!!.child("Profile").child(tokenId!!).child(dt + ".jpg")
+        val profileRef = mStorageReference!!.child("Profile").child(uid!!).child(dt + ".jpg")
         // 이미지
         val bitmap = bitmapImg
         val baos = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
         val imageData = baos.toByteArray()
-        var uploadTask = profileRef.putBytes(imageData)
+        val uploadTask = profileRef.putBytes(imageData)
         uploadTask.addOnFailureListener {
             // Handle unsuccessful uploads
         }.addOnSuccessListener {
             // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
             // ...
-            UserInfo.autoLoginKey = tokenId!!
-            Log.d("ssmm11" , "tokenID = " +tokenId)
+            UserInfo.autoLoginKey = uid!!
             UserInfo.email = email!!
             UserInfo.nickname = nickname // Shared에 nickname저장.
-            var nextIntent = Intent(this@SignUpActivity, MainActivity::class.java)
+            val nextIntent = Intent(this@SignUpActivity, MainActivity::class.java)
             startActivity(nextIntent)
             progressbar.dismiss()
             finish()
@@ -384,13 +383,13 @@ class SignUpActivity : AppCompatActivity() {
     private fun uploadUserInfo(nickname: String, age: String, gender: String, dt: String) {
         // 회원 정보
         val data = hashMapOf(
-            "googleTokenId" to tokenId,
+            "UID" to uid,
             "nickname" to nickname,
             "age" to age,
             "gender" to gender,
             "profileImagePath" to dt+".jpg"
         )
-        mFirestoreDB!!.collection("userinfo").document(tokenId!!).set(data)
+        mFirestoreDB!!.collection("userinfo").document(uid!!).set(data)
             .addOnSuccessListener { Log.d(WSY, "DocumentSnapshot successfully written!") }
             .addOnFailureListener { e -> Log.w(WSY, "Error writing document", e) }
 

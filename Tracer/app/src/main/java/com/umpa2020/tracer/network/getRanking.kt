@@ -1,13 +1,14 @@
 package com.umpa2020.tracer.network
 
+import android.app.Activity
 import android.content.Context
 import android.location.Location
-import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.maps.android.SphericalUtil
+import com.umpa2020.tracer.App
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.NearMap
 import com.umpa2020.tracer.main.ranking.RankRecyclerViewAdapterMap
@@ -95,7 +96,6 @@ class getRanking {
                 progressbar.dismiss()
             }
             .addOnFailureListener { exception ->
-                Log.w("ssmm11", "Error getting documents.", exception)
             }
     }
 
@@ -103,8 +103,8 @@ class getRanking {
      * 현재 위치를 받아서 현재 위치와 필터에 적용한 위치 만큼 떨어져 있는 구간에서 실행순으로 정렬한 코드
      */
 
-    fun getFilterRange(context: Context, view: View, location: Location) {
-        val progressbar = ProgressBar(context)
+    fun getFilterRange(view: View, location: Location) {
+        val progressbar = ProgressBar(App.instance.currentActivity() as Activity)
         progressbar.show()
 
         //결과로 가져온 location에서 정보추출 / 이건 위도 경도 형태로 받아오는 형식
@@ -115,7 +115,7 @@ class getRanking {
         cur_loc = LatLng(lat, lng)
 
         //레이아웃 매니저 추가
-        view.rank_recycler_map.layoutManager = LinearLayoutManager(context)
+        view.rank_recycler_map.layoutManager = LinearLayoutManager(App.instance.currentActivity() as Activity)
 
         val db = FirebaseFirestore.getInstance()
 
@@ -168,7 +168,6 @@ class getRanking {
                 progressbar.dismiss()
             }
             .addOnFailureListener { exception ->
-                Log.w("ssmm11", "Error getting documents.", exception)
             }
     }
 /*

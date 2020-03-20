@@ -1,7 +1,6 @@
 package com.umpa2020.tracer.map
 
 import android.app.Activity
-import android.content.Context
 import android.graphics.Color
 import android.location.Location
 import android.util.Log
@@ -12,7 +11,9 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.google.maps.android.PolyUtil
 import com.google.maps.android.SphericalUtil
+import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
+import com.umpa2020.tracer.constant.AppConstant
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.RouteData
 import com.umpa2020.tracer.dataClass.UserState
@@ -26,7 +27,7 @@ import kotlinx.android.synthetic.main.activity_running.*
  *  앱에서 지도를 사용하려면 OnMapReadyCallback 인터페이스를 구현하고
  *  MapFragment 객체에서 getMapAsync(OnMapReadyCallback)를 통해 콜백 인스턴스를 설정해야 한다.
  */
-class RunningMap(smf: SupportMapFragment, context: Context) : OnMapReadyCallback {
+class RunningMap(smf: SupportMapFragment/*, var context: Context*/) : OnMapReadyCallback {
 
     lateinit var mMap: GoogleMap    //racingMap 인스턴스
     var TAG = "WSY"       //로그용 태그
@@ -39,7 +40,6 @@ class RunningMap(smf: SupportMapFragment, context: Context) : OnMapReadyCallback
     var altitude: MutableList<Double> = mutableListOf(.0)
     var speeds: MutableList<Double> = mutableListOf(.0)
     var distance = 0.0
-    var context: Context = context
     var userState: UserState? = null
     var markers: MutableList<LatLng> = mutableListOf()
     var markerCount = 0
@@ -55,7 +55,6 @@ class RunningMap(smf: SupportMapFragment, context: Context) : OnMapReadyCallback
 
     //Running
     init {
-        this.context = context
         userState = UserState.PAUSED
         smf.getMapAsync(this)
         //createMyIcon()
@@ -66,13 +65,16 @@ class RunningMap(smf: SupportMapFragment, context: Context) : OnMapReadyCallback
         mMap.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
 
         // 마지막 위치 가져와서 카메라 설정
-        Log.d(TAG, "잘 가져왔니? " + LocationUpdatesComponent.getLastLocat().toString())
-        var lat =  LocationUpdatesComponent.getLastLocat().latitude
-        var lng =  LocationUpdatesComponent.getLastLocat().longitude
+        Log.d(TAG, "잘 가져왔니? " + LocationUpdatesComponent.lastLocation.toString())
+        val lat =  LocationUpdatesComponent.lastLocation!!.latitude
+        var lng =  LocationUpdatesComponent.lastLocation!!.longitude
         currentLocation = LatLng(lat, lng)
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 17F))   //화면이동
     }
 
+    /**
+     *
+     */
     fun startTracking() {
        // setStartIcon()  // 마지막 현재 위치에 아이콘 설정
 
@@ -103,7 +105,6 @@ class RunningMap(smf: SupportMapFragment, context: Context) : OnMapReadyCallback
 
         print_log("Stop")
         if (latlngs.size > 0) {
-            Log.d("ssmm11", "latlngs = " + latlngs.size)
             routes.add(PolyUtil.simplify(latlngs, 10.0).toMutableList())
         }
         markers.add(currentLocation)
@@ -125,7 +126,6 @@ class RunningMap(smf: SupportMapFragment, context: Context) : OnMapReadyCallback
 
         //TODO: speed
         infoData.speed = speeds
-        Log.d("ssmm11", "스피드를 안넣나 = " + infoData.speed)
     }
 
     fun pauseTracking() {
@@ -175,7 +175,7 @@ class RunningMap(smf: SupportMapFragment, context: Context) : OnMapReadyCallback
         markerCount++
         markers.add(previousLocation)
 
-        cpOption.icon(makingIcon(R.drawable.ic_racing_startpoint, context))
+        cpOption.icon(makingIcon(R.drawable.ic_racing_startpoint, App.instance))
         mMap.addMarker(cpOption)
     }
 
@@ -203,10 +203,10 @@ class RunningMap(smf: SupportMapFragment, context: Context) : OnMapReadyCallback
     // Location[fused 37.619672,127.059084 hAcc=15 et=+5d2h34m37s51ms alt=53.5 vel=0.0014348121 bear=219.74748 vAcc=2 sAcc=??? bAcc=??? {Bundle[mParcelledData.dataSize=52]}]
 
     private fun createData(location: Location) {
-        var lat = location!!.latitude
-        var lng = location!!.longitude
-        var alt = location!!.altitude
-        var speed = location!!.speed
+        val lat = location.latitude
+        val lng = location.longitude
+        val alt = location.altitude
+        val speed = location.speed
 
         currentLocation = LatLng(lat, lng)
 
@@ -221,25 +221,24 @@ class RunningMap(smf: SupportMapFragment, context: Context) : OnMapReadyCallback
             getDistance()
 
             // 속도 UI 스레드
-            (context as Activity).runOnUiThread(Runnable {
+            (App.instance.currentActivity() as Activity).runOnUiThread{
                 print_log("속도 : " + speed.toString())
-                (context as RunningActivity).runningSpeedTextView.text =
+                (App.instance.currentActivity() as RunningActivity).runningSpeedTextView.text =
                     String.format("%.2f km/h", speed)
-            })
+            }
 
             // 위치가 계속 업데이트 되어야해서 여기에 선언
             createPolyline()  // 이전 위치, 현재 위치로 폴리라인 형성
 
 
-            /**
-             *  100m마다 체크 포인트 찍는거
-             */
-            if (distance.toInt() / 100 >= markerCount) {    //100m마다
+
+            // 100m마다 체크 포인트 찍는거
+            if (distance.toInt() / AppConstant.WAYPOINT_DISTANCE >= markerCount) {    //100m마다
                 cpOption.position(currentLocation)
                 if (distance > 0)
-                    markerCount = distance.toInt() / 100
+                    markerCount = distance.toInt() / AppConstant.WAYPOINT_DISTANCE
                 cpOption.title(markerCount.toString())
-                cpOption.icon(makingIcon(R.drawable.ic_checkpoint_red, context))
+                cpOption.icon(makingIcon(R.drawable.ic_checkpoint_red, App.instance))
                 mMap.addMarker(cpOption) // 이게 기본 마커 찍나? => start지점 찍으려는거 같은데
                 markers.add(currentLocation)
                 markerCount++
@@ -254,7 +253,7 @@ class RunningMap(smf: SupportMapFragment, context: Context) : OnMapReadyCallback
     /**
      *    이전 위치( previousLocation ), 현재 위치( currentLocation )로 폴리라인 추가.
      *    맵에 폴리라인 추가
-     *    => 추후 그리는 후 처리 필요
+     *    => TODO: 추후 그리는 후 처리 필요
      */
     private fun createPolyline() {
         print_log("폴리라인")
