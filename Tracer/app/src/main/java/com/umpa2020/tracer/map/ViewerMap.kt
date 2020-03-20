@@ -3,7 +3,6 @@ package com.umpa2020.tracer.map
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
-import android.util.Log
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -11,6 +10,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.umpa2020.tracer.dataClass.RouteData
 import com.umpa2020.tracer.main.trace.running.RunningSaveActivity
+import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.Wow
 import java.io.File
 import java.io.FileOutputStream
@@ -103,6 +103,6 @@ class ViewerMap : OnMapReadyCallback {
   }
 
   fun print_log(text: String) {
-    Log.d(TAG, text.toString())
+    Logg.d(text)
   }
 }

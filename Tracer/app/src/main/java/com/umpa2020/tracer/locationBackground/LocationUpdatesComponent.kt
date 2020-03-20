@@ -4,9 +4,9 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.location.Location
 import android.os.Looper
-import android.util.Log
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.model.LatLng
+import com.umpa2020.tracer.util.Logg
 
 object LocationUpdatesComponent {
   private var iLocationProvider: ILocationProvider? = null
@@ -46,7 +46,7 @@ object LocationUpdatesComponent {
   }
 
   fun onCreate(context: Context) {
-    Log.i(WSY, "created...............")
+    Logg.i("created...............")
     fusedLocationClient = LocationServices.getFusedLocationProviderClient(context) // 위치 서비스 클라이언트 만들기
 
     // create location request
@@ -66,7 +66,7 @@ object LocationUpdatesComponent {
    * start location updates
    */
   fun onStart() {
-    Log.i(WSY, "onStart ")
+    Logg.i("onStart ")
     //hey request for location updates
     requestLocationUpdates()
   }
@@ -75,7 +75,7 @@ object LocationUpdatesComponent {
    * remove location updates
    */
   fun onStop() {
-    Log.i(WSY, "onStop....")
+    Logg.i("onStop....")
     removeLocationUpdates()
   }
 
@@ -124,7 +124,7 @@ object LocationUpdatesComponent {
           if (task.isSuccessful && task.result != null) {
             currentLocation = task.result!!
             lastLocation = task.result!!
-            Log.i("WSY", "getLastLocation " + currentLocation!!)
+            Logg.i("getLastLocation " + currentLocation!!)
             // getLastLocation Location[fused 37.619672,127.059084
             // hAcc=15 et=+5d2h34m37s51ms alt=53.5 vel=0.0014348121
             // bear=219.74748 vAcc=2 sAcc=??? bAcc=??? {Bundle[mParcelledData.dataSize=52]}]
@@ -132,20 +132,20 @@ object LocationUpdatesComponent {
             //                                Toast.makeText(getApplicationContext(), "" + mLocation, Toast.LENGTH_SHORT).show();
             onNewLocation(currentLocation)
           } else {
-            Log.w(WSY, "Failed to get location.")
+            Logg.w("Failed to get location.")
           }
 
         }
         .addOnSuccessListener { location ->
           if (location == null) {
-            Log.d(WSY, "Location is null")
+            Logg.d("Location is null")
           } else {
-            Log.d(WSY, "Success to get Init Location : " + location.toString())
+            Logg.d("Success to get Init Location : " + location.toString())
             previousLocation = LatLng(location.latitude, location.longitude) // 이전 위치
           }
         }
     } catch (e: Exception) {
-      Log.e(WSY, "Lost location permission.$e")
+      Logg.e("Lost location permission.$e")
     }
 
   }
@@ -156,7 +156,7 @@ object LocationUpdatesComponent {
    *  위치 설정 변경의 과정에서 이 방법을 보여줍니다. 위치 요청이 완료되면 requestLocationUpdates()를 호출하여 정기 업데이트를 시작할 수 있습니다.
    */
   fun requestLocationUpdates() {
-    Log.i(WSY, "Requesting location updates")
+    Logg.i("Requesting location updates")
     try {
       fusedLocationClient.requestLocationUpdates(
         locationRequest,
@@ -164,7 +164,7 @@ object LocationUpdatesComponent {
         Looper.getMainLooper()
       )
     } catch (e: Exception) {
-      Log.e(WSY, "Lost location permission. Could not request updates. $e")
+      Logg.e("Lost location permission. Could not request updates. $e")
     }
 
   }
@@ -175,12 +175,12 @@ object LocationUpdatesComponent {
    *  백그라운드에서 실행 중일 때에도 앱이 정보를 수집할 필요가 없는 경우 위치 업데이트를 중지하면 전력 소모를 줄이는 데 도움이 될 수 있습니다.
    */
   fun removeLocationUpdates() {
-    Log.i(WSY, "Removing location updates")
+    Logg.i("Removing location updates")
     try {
       fusedLocationClient.removeLocationUpdates(locationCallback)
     } catch (err: Exception) {
       //            Utils.setRequestingLocationUpdates(this, true);
-      Log.e(WSY, "Lost location permission. Could not remove updates. $err")
+      Logg.e("Lost location permission. Could not remove updates. $err")
     }
   }
 

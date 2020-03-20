@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import android.os.Messenger
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.Animation
@@ -24,7 +23,7 @@ import com.umpa2020.tracer.dataClass.NoticeState
 import com.umpa2020.tracer.dataClass.Privacy
 import com.umpa2020.tracer.locationBackground.LocationBackgroundService
 import com.umpa2020.tracer.main.MainActivity
-import com.umpa2020.tracer.main.MainActivity.Companion.WSY
+import com.umpa2020.tracer.util.Logg
 import hollowsoft.slidingdrawer.OnDrawerCloseListener
 import hollowsoft.slidingdrawer.OnDrawerOpenListener
 import hollowsoft.slidingdrawer.OnDrawerScrollListener
@@ -86,7 +85,7 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
     // 서비스로 값 전달.
     mHandler = IncomingMessageHandler()
 
-    Log.d(WSY, "핸들러 생성?")
+    Logg.d("핸들러 생성?")
     Intent(this, LocationBackgroundService::class.java).also {
       val messengerIncoming = Messenger(mHandler)
       it.putExtra(MESSENGER_INTENT_KEY, messengerIncoming)
@@ -219,12 +218,12 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
   // 화면 안보일
   override fun onStop() {
     super.onStop()
-    Log.d("screen", "onStop()")
+    Logg.d("onStop()")
   }
 
   override fun onPause() {
     super.onPause()
-    Log.d("screen", "onPause()")
+    Logg.d("onPause()")
   }
 
 
@@ -237,7 +236,7 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
   inner class IncomingMessageHandler : Handler() {
     override fun handleMessage(msg: Message) {
       super.handleMessage(msg)
-      Log.d(WSY, "RunningActivity : $msg")
+      Logg.d("RunningActivity : $msg")
       when (msg.what) {
         LocationBackgroundService.LOCATION_MESSAGE -> {
           val curLoc = msg.obj as Location
@@ -250,31 +249,31 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
 
   override fun onDestroy() {
     super.onDestroy()
-    Log.d("screen", "onDestroy()")
+    Logg.d("onDestroy()")
   }
 
   override fun onScrollStarted() {
-    Log.d(TAG, "onScrollStarted()")
+    Logg.d("onScrollStarted()")
   }
 
   override fun onScrollEnded() {
-    Log.d(TAG, "onScrollEnded()")
+    Logg.d("onScrollEnded()")
   }
 
   override fun onDrawerOpened() {
     //runningHandle.background = getDrawable(R.drawable.close_selector)
     runningHandle.text = "▼"
-    Log.d(TAG, "onDrawerOpened()")
+    Logg.d("onDrawerOpened()")
   }
 
   override fun onDrawerClosed() {
     //runningHandle.background = getDrawable(R.drawable.extend_selector)
     runningHandle.text = "▲"
-    Log.d(TAG, "onDrawerClosed()")
+    Logg.d("onDrawerClosed()")
   }
 
   fun print_log(text: String) {
-    Log.d(TAG, text.toString())
+    Logg.d(text.toString())
   }
 
 }

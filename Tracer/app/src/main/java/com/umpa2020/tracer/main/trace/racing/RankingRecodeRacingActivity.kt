@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import android.os.Messenger
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.SupportMapFragment
@@ -17,7 +16,7 @@ import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.RouteData
 import com.umpa2020.tracer.dataClass.UserState
 import com.umpa2020.tracer.locationBackground.LocationBackgroundService
-import com.umpa2020.tracer.main.MainActivity
+import com.umpa2020.tracer.util.Logg
 import hollowsoft.slidingdrawer.OnDrawerCloseListener
 import hollowsoft.slidingdrawer.OnDrawerOpenListener
 import hollowsoft.slidingdrawer.OnDrawerScrollListener
@@ -42,7 +41,7 @@ class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener,
 
     // 서비스에 레이싱 핸들러 등록
     mHandler = IncomingMessageHandler()
-    Log.d(MainActivity.WSY, "핸들러 생성?")
+    Logg.d("핸들러 생성?")
     Intent(this, LocationBackgroundService::class.java).also {
       val messengerIncoming = Messenger(mHandler)
       it.putExtra(MESSENGER_INTENT_KEY, messengerIncoming)
@@ -64,8 +63,8 @@ class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener,
 
       db.collection("mapInfo").document(mapTitle)
         .update("execute", FieldValue.increment(1))
-        .addOnSuccessListener { Log.d("ssmm11", "DocumentSnapshot successfully updated!") }
-        .addOnFailureListener { e -> Log.w("ssmm11", "Error updating document", e) }
+        .addOnSuccessListener { Logg.d("DocumentSnapshot successfully updated!") }
+        .addOnFailureListener { Logg.w("Error updating document $it") }
     })
 
     increaseExecuteThread.start()
@@ -128,13 +127,13 @@ class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener,
 
   inner class IncomingMessageHandler : Handler() {
     override fun handleMessage(msg: Message) {
-      Log.i(MainActivity.WSY, "handleMessage..." + msg.toString())
+      Logg.i("handleMessage..." + msg.toString())
       super.handleMessage(msg)
       when (msg.what) {
         LocationBackgroundService.LOCATION_MESSAGE -> {
           val obj = msg.obj as Location
           val currentDateTimeString = DateFormat.getDateTimeInstance().format(Date())
-          Log.d(MainActivity.WSY, "RacingActivity : 값을 가져옴?")
+          Logg.d("RacingActivity : 값을 가져옴?")
           manageRacing.racingMap.setLocation(obj)
 //                    manageRunning.runningMap.setLocation(obj)
         }
@@ -143,20 +142,20 @@ class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener,
   }
 
   override fun onScrollStarted() {
-    Log.d(TAG, "onScrollStarted()")
+    Logg.d("onScrollStarted()")
   }
 
   override fun onScrollEnded() {
-    Log.d(TAG, "onScrollEnded()")
+    Logg.d("onScrollEnded()")
   }
 
   override fun onDrawerOpened() {
     racingHandle.text = "▼"
-    Log.d(TAG, "onDrawerOpened()")
+    Logg.d("onDrawerOpened()")
   }
 
   override fun onDrawerClosed() {
     racingHandle.text = "▲"
-    Log.d(TAG, "onDrawerClosed()")
+    Logg.d("onDrawerClosed()")
   }
 }

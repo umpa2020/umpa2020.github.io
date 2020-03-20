@@ -3,7 +3,6 @@ package com.umpa2020.tracer.map
 import android.app.Activity
 import android.graphics.Color
 import android.location.Location
-import android.util.Log
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -19,6 +18,7 @@ import com.umpa2020.tracer.dataClass.RouteData
 import com.umpa2020.tracer.dataClass.UserState
 import com.umpa2020.tracer.locationBackground.LocationUpdatesComponent
 import com.umpa2020.tracer.main.trace.running.RunningActivity
+import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.Wow.Companion.makingIcon
 import kotlinx.android.synthetic.main.activity_running.*
 
@@ -65,7 +65,7 @@ class RunningMap(smf: SupportMapFragment/*, var context: Context*/) : OnMapReady
     mMap.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
 
     // 마지막 위치 가져와서 카메라 설정
-    Log.d(TAG, "잘 가져왔니? " + LocationUpdatesComponent.lastLocation.toString())
+    Logg.d("잘 가져왔니? " + LocationUpdatesComponent.lastLocation.toString())
     val lat = LocationUpdatesComponent.lastLocation!!.latitude
     var lng = LocationUpdatesComponent.lastLocation!!.longitude
     currentLocation = LatLng(lat, lng)
@@ -297,7 +297,7 @@ class RunningMap(smf: SupportMapFragment/*, var context: Context*/) : OnMapReady
   }
 
   fun print_log(text: String) {
-    Log.d(TAG, text.toString())
+    Logg.d(text.toString())
   }
 
 }

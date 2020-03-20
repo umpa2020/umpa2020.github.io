@@ -2,7 +2,6 @@ package com.umpa2020.tracer.main.trace.racing
 
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +11,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.NearMap
 import com.umpa2020.tracer.main.ranking.RankRecyclerItemClickActivity
+import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.PrettyDistance
 import kotlinx.android.synthetic.main.recycler_nearactivity_item.view.*
 
@@ -30,7 +30,7 @@ class NearRecyclerViewAdapter(private var datas: List<NearMap>) : RecyclerView.A
   }
 
   override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-    Log.d("rank", "리사이클러뷰가 불러짐")
+    Logg.d("리사이클러뷰가 불러짐")
     val singleItem1 = datas[position]
 
     var cutted = singleItem1.mapTitle.split("||")

@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import android.os.Messenger
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,6 +19,7 @@ import com.umpa2020.tracer.locationBackground.LocationBackgroundService
 import com.umpa2020.tracer.main.trace.racing.NearRouteActivity
 import com.umpa2020.tracer.main.trace.running.RunningActivity
 import com.umpa2020.tracer.map.BasicMap
+import com.umpa2020.tracer.util.Logg
 import kotlinx.android.synthetic.main.fragment_start.view.*
 
 
@@ -46,7 +46,7 @@ class StartFragment : Fragment(), View.OnClickListener {
       R.id.mainStartRacing -> {
         val newIntent = Intent(activity, NearRouteActivity::class.java)
         newIntent.putExtra("currentLocation", curLoc) //curLoc 정보 인텐트로 넘김
-        Log.d("jsj", "mainStartRunning누르는 순간의 intent " + curLoc.toString())
+        Logg.d("mainStartRunning누르는 순간의 intent ${curLoc.toString()}")
         startActivity(newIntent)
       }
     }
@@ -59,14 +59,14 @@ class StartFragment : Fragment(), View.OnClickListener {
   }
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-    Log.d(WSY, "onCreateView()")
+    Logg.d("onCreateView()")
     val view = inflater.inflate(R.layout.fragment_start, container, false)
     view.test.setOnClickListener {
       val testdata = testdata()
       val db = FirebaseFirestore.getInstance()
       db.collection("mapRoute").document("테스트트트트트트").set(testdata)
         .addOnSuccessListener {
-          Log.d("ssmm11", "성공!")
+          Logg.d("성공!")
         }
         .addOnFailureListener {
         }
@@ -78,7 +78,7 @@ class StartFragment : Fragment(), View.OnClickListener {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    Log.d(WSY, "onViewCreated()")
+    Logg.d("onViewCreated()")
     smf = childFragmentManager.findFragmentById(com.umpa2020.tracer.R.id.map_viewer_start) as SupportMapFragment
     map = BasicMap(smf!!, context as Context)
 
@@ -88,12 +88,12 @@ class StartFragment : Fragment(), View.OnClickListener {
 
   override fun onPause() {
     super.onPause()
-    Log.d("sss", "onPause()")
+    Logg.d("onPause()")
   }
 
   override fun onDestroy() {
     super.onDestroy()
-    Log.d("sss", "onDestroy()")
+    Logg.d("onDestroy()")
   }
 
   override fun onResume() {
@@ -116,7 +116,7 @@ class StartFragment : Fragment(), View.OnClickListener {
       when (msg.what) {
         LocationBackgroundService.LOCATION_MESSAGE -> {
           curLoc = msg.obj as Location
-          Log.d(WSY, "StartFragment : $curLoc")
+          Logg.d("StartFragment : $curLoc")
           map.setLocation(curLoc)
           if (curLoc != null)
             lastLacation = curLoc

@@ -6,13 +6,13 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.SystemClock
-import android.util.Log
 import android.widget.Chronometer
 import com.google.android.gms.maps.SupportMapFragment
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.Privacy
 import com.umpa2020.tracer.dataClass.RouteData
 import com.umpa2020.tracer.map.RunningMap
+import com.umpa2020.tracer.util.Logg
 import kotlinx.android.synthetic.main.activity_running.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -42,22 +42,22 @@ class ManageRunning {
   fun startRunning(activity: RunningActivity) {
     runningMap.startTracking()
 
-    Log.d(WSY, "거리 : " + runningMap.distance.toString())
+    Logg.d("거리 : " + runningMap.distance.toString())
     distanceThread = Thread(Runnable {
       // 거리 계산해주는 스레드 -> 일시 정지, 정지 해도 스레드 계속 실행됨.
       try {
         while (!distanceFlag) {
           Thread.sleep(1000)
-          Log.d(WSY, "???")
-          Log.d(WSY, "거리 : " + runningMap.distance.toString())
+          Logg.d("???")
+          Logg.d("거리 : " + runningMap.distance.toString())
           activity.runOnUiThread(Runnable {
             activity.runningDistanceTextView.text = String.format("%.2f", (runningMap.distance / 1000))
             i += 1
-            Log.d(WSY, i.toString())
+            Logg.d(i.toString())
           })
         }
       } catch (e: InterruptedException) {
-        Log.d(WSY, "intertupt() 실행")
+        Logg.d("intertupt() 실행")
       }
 
     })

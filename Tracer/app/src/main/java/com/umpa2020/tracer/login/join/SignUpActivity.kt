@@ -12,7 +12,6 @@ import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -30,6 +29,7 @@ import com.jakewharton.rxbinding2.widget.RxTextView
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.util.Constants
+import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
 import io.reactivex.disposables.CompositeDisposable
@@ -90,7 +90,7 @@ class SignUpActivity : AppCompatActivity() {
     editNickname.addTextChangedListener(object : TextWatcher {
       override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
         flag = 3
-        Log.d(WSY, flag.toString())
+        Logg.d(flag.toString())
       }
 
       override fun afterTextChanged(p0: Editable?) {
@@ -156,7 +156,7 @@ class SignUpActivity : AppCompatActivity() {
       for (i in 0 until length - 1) {
         if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
           // 동의
-          Log.d(WSY, "권한 허용 : " + permissions[i])
+          Logg.d("권한 허용 : " + permissions[i])
           goToAlbum()
         }
       }
@@ -178,7 +178,7 @@ class SignUpActivity : AppCompatActivity() {
       temp += Manifest.permission.READ_EXTERNAL_STORAGE + " "
     }
 
-    Log.d(WSY, temp)
+    Logg.d(temp)
     if (!TextUtils.isEmpty(temp)) {
       // 권한 요청
       ActivityCompat.requestPermissions(this, temp.trim().split(" ").toTypedArray(), 1)
@@ -217,7 +217,7 @@ class SignUpActivity : AppCompatActivity() {
       .map { t -> t.isEmpty() || Pattern.matches(Constants.GENDER_RULS, t) }
       .subscribe({ it ->
         //inputDataField[2].setText("")
-        Log.d(WSY, "성별 : " + it.toString())
+        Logg.d("성별 : " + it.toString())
         reactiveInputTextViewData(2, it)
       }) {
         //Error Block
@@ -294,7 +294,7 @@ class SignUpActivity : AppCompatActivity() {
     for (check in isInputCorrectData) {
       if (!check) {
         isSuccess = false
-        Log.d(WSY, "입력 상황 : " + check.toString())
+        Logg.d("입력 상황 : " + check.toString())
         return
       }
     }
@@ -332,19 +332,17 @@ class SignUpActivity : AppCompatActivity() {
     mFirestoreDB!!.collection("userinfo").whereEqualTo("nickname", nickname).get()
       .addOnSuccessListener { documents ->
         for (document in documents) {
-          Log.d(WSY, document.id)
-          Log.d(WSY, document.exists().toString())
+          Logg.d(document.id)
+          Logg.d(document.exists().toString())
           if (document.exists()) {
-            Log.d(WSY, "${document.id} => ${document.data}")
+            Logg.d("${document.id} => ${document.data}")
             textInputLayoutArray[0].setErrorTextColor(resources.getColorStateList(R.color.red, null))
             textInputLayoutArray[0].error = "이미 사용중인 닉네임입니다."
             flag = 2 // flag = false로 하여 addOnCompleteListener의 if문이 실행 안되게 하기
           }
         }
       }
-      .addOnFailureListener { exception ->
-        Log.w(WSY, "Error getting documents: ", exception)
-      }
+      .addOnFailureListener { Logg.w("Error getting documents: $it") }
       .addOnCompleteListener {
         if (flag == 3) {
           textInputLayoutArray[0].setErrorTextColor(resources.getColorStateList(R.color.yellowGreen, null))
@@ -391,8 +389,8 @@ class SignUpActivity : AppCompatActivity() {
       "profileImagePath" to dt + ".jpg"
     )
     mFirestoreDB!!.collection("userinfo").document(uid!!).set(data)
-      .addOnSuccessListener { Log.d(WSY, "DocumentSnapshot successfully written!") }
-      .addOnFailureListener { e -> Log.w(WSY, "Error writing document", e) }
+      .addOnSuccessListener { Logg.d("DocumentSnapshot successfully written!") }
+      .addOnFailureListener { Logg.w("Error writing document $it") }
 
   }
 
@@ -431,10 +429,10 @@ class SignUpActivity : AppCompatActivity() {
         gender = editGender.text.toString()
 
 
-        Log.d(WSY, "가입 버튼 눌렀을 때" + nickname + ", " + age + ", " + gender)
+        Logg.d("가입 버튼 눌렀을 때" + nickname + ", " + age + ", " + gender)
 
         if (textInputLayoutArray[0].error != "사용 가능한 닉네임입니다.") { //무조건 중복 확인 버튼을 눌러야만 회원가입 가능하게 함
-          Log.d("sujin", textInputLayoutArray[0].error.toString() + "if문 검사")
+          Logg.d(textInputLayoutArray[0].error.toString() + "if문 검사")
           Toast.makeText(this, "중복 확인을 해주세요.", Toast.LENGTH_LONG).show()
         } else {
           if (isInputCorrectData[0] && age!!.isNotEmpty() && gender!!.isNotEmpty()) {

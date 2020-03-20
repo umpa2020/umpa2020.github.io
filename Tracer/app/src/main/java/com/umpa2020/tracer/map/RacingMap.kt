@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.graphics.Color
 import android.location.Location
-import android.util.Log
 import android.view.View
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -21,6 +20,7 @@ import com.umpa2020.tracer.dataClass.UserState
 import com.umpa2020.tracer.locationBackground.LocationUpdatesComponent
 import com.umpa2020.tracer.main.trace.racing.ManageRacing
 import com.umpa2020.tracer.main.trace.racing.RankingRecodeRacingActivity
+import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.TTS
 import com.umpa2020.tracer.util.Wow
 import com.umpa2020.tracer.util.Wow.Companion.makingIcon
@@ -93,7 +93,7 @@ class RacingMap : OnMapReadyCallback {
 
     mMap.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
     // 마지막 위치 가져와서 카메라 설정
-    Log.d(TAG, "잘 가져왔니? " + LocationUpdatesComponent.getLastLocat().toString())
+    Logg.d("잘 가져왔니? " + LocationUpdatesComponent.getLastLocat().toString())
     val lat = LocationUpdatesComponent.getLastLocat().latitude
     val lng = LocationUpdatesComponent.getLastLocat().longitude
 
@@ -258,8 +258,8 @@ class RacingMap : OnMapReadyCallback {
     val lng = location.longitude
     val alt = location.altitude
     val speed = location.speed
-    Log.d("createData", "HI")
-    Log.d("createData", userState.toString())
+    Logg.d("HI")
+    Logg.d(userState.toString())
     currentLocation = LatLng(lat, lng)
     when (userState) {
       UserState.BEFORERACING -> { //경기 시작전
@@ -414,7 +414,7 @@ class RacingMap : OnMapReadyCallback {
   }
 
   fun print_log(text: String) {
-    Log.d(TAG, text.toString())
+    Logg.d(text)
   }
 
 }
