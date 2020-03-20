@@ -6,8 +6,8 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class RouteDataTwo(
-    //var latlngs: ArrayList<ArrayList<LatLng>> = arrayListOf()
-    var index: Int? = 0,
-    var latlngs: MutableList<LatLng> = mutableListOf()
-    //var routeDataOne: RouteDataOne? = null
+  //var latlngs: ArrayList<ArrayList<LatLng>> = arrayListOf()
+  var index: Int? = 0,
+  var latlngs: MutableList<LatLng> = mutableListOf()
+  //var routeDataOne: RouteDataOne? = null
 ) : Parcelable
