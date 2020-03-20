@@ -1,33 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical"
+  tools:context=".main.profile.ProfileRecordActivity">
+
+  <Toolbar
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".main.profile.ProfileRecordActivity">
+    android:layout_height="50dp"
+    android:layout_alignParentTop="true"
+    android:background="@color/white"
+    android:elevation="1dp">
 
-    <Toolbar
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentTop="true"
-        android:elevation="1dp"
-        android:background="@color/white">
+    <TextView
+      style="@style/appBarText"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginRight="12dp"
+      android:gravity="center"
+      android:text="나의 활동"></TextView>
+  </Toolbar>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="12dp"
-            android:gravity="center"
-            android:text="나의 활동"
-            style="@style/appBarText">
-        </TextView>
-    </Toolbar>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/profileRecyclerRecord">
-    </androidx.recyclerview.widget.RecyclerView>
+  <androidx.recyclerview.widget.RecyclerView
+    android:id="@+id/profileRecyclerRecord"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"></androidx.recyclerview.widget.RecyclerView>
 
 </LinearLayout>
