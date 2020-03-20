@@ -32,12 +32,12 @@ object Logg {
     Log.w(tag(), "" + msg)
   }
 
-  fun w(e: Throwable) {
-    Log.w(tag(), "" + e.localizedMessage)
+  fun w(e: Throwable?) {
+    Log.w(tag(), "" + e?.localizedMessage)
   }
 
-  fun w(e: Exception) {
-    Log.w(tag(), "" + e.localizedMessage)
+  fun w(e: Exception?) {
+    Log.w(tag(), "" + e?.localizedMessage)
   }
 
   fun e(msg: String?) {
