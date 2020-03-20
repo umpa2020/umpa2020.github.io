@@ -19,119 +19,119 @@ import java.util.*
 
 
 class RunningSaveActivity : AppCompatActivity() {
-    var switch = 0
+  var switch = 0
 
-    lateinit var infoData: InfoData
-    lateinit var routeData: RouteData
-    lateinit var map: ViewerMap
+  lateinit var infoData: InfoData
+  lateinit var routeData: RouteData
+  lateinit var map: ViewerMap
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(com.umpa2020.tracer.R.layout.activity_running_save)
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setContentView(com.umpa2020.tracer.R.layout.activity_running_save)
 
-        infoData = intent.getParcelableExtra("Info Data")
-        routeData = intent.getParcelableExtra("Route Data")
+    infoData = intent.getParcelableExtra("Info Data")
+    routeData = intent.getParcelableExtra("Route Data")
 
-        val smf = supportFragmentManager.findFragmentById(com.umpa2020.tracer.R.id.map_viewer) as SupportMapFragment
-        map = ViewerMap(smf, this, routeData)
-        distance_tv.text = String.format("%.2f", infoData.distance!! / 1000)
-        val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
-        formatter.setTimeZone(TimeZone.getTimeZone("UTC"))
+    val smf = supportFragmentManager.findFragmentById(com.umpa2020.tracer.R.id.map_viewer) as SupportMapFragment
+    map = ViewerMap(smf, this, routeData)
+    distance_tv.text = String.format("%.2f", infoData.distance!! / 1000)
+    val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
+    formatter.setTimeZone(TimeZone.getTimeZone("UTC"))
 
-        time_tv.text = formatter.format(Date(infoData.time!!))
+    time_tv.text = formatter.format(Date(infoData.time!!))
 
-        speed_tv.text = String.format("%.2f", infoData.speed.average())
-        if (infoData.privacy == Privacy.PUBLIC) {
-            racingRadio.isChecked = false
-            racingRadio.isEnabled = false
-            publicRadio.isChecked = true
+    speed_tv.text = String.format("%.2f", infoData.speed.average())
+    if (infoData.privacy == Privacy.PUBLIC) {
+      racingRadio.isChecked = false
+      racingRadio.isEnabled = false
+      publicRadio.isChecked = true
+    }
+    var chart = Chart(routeData.altitude, infoData.speed, chart)
+    chart.setChart()
+  }
+
+  fun onClick(view: View) {
+    if (switch == 0) {
+      when (view.id) {
+        com.umpa2020.tracer.R.id.save_btn -> {
+          if (mapTitleEdit.text.toString() == "") {
+            mapTitleEdit.hint = "제목을 설정해주세요"
+            mapTitleEdit.setHintTextColor(Color.RED)
+          } else if (mapExplanationEdit.text.toString() == "") {
+            mapExplanationEdit.hint = "맵 설명을 작성해주세요"
+            mapExplanationEdit.setHintTextColor(Color.RED)
+          } else {
+            map.CaptureMapScreen()
+            switch++
+          }
         }
-        var chart = Chart(routeData.altitude, infoData.speed, chart)
-        chart.setChart()
+      }
+    }
+  }
+
+  fun save(imgPath: String) {
+
+    // 타임스탭프 찍는 코드
+    val dt = Date()
+    val full_sdf = SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.getDefault())
+
+    val date = full_sdf.parse(dt.toString())
+    val timestamp = date!!.time
+
+
+    // 인포데이터에 필요한 내용을 저장하고
+    infoData.makersNickname = UserInfo.nickname
+    infoData.mapImage = imgPath
+    infoData.mapTitle = mapTitleEdit.text.toString() + "||" + timestamp.toString()
+    infoData.mapExplanation = mapExplanationEdit.text.toString()
+    infoData.makersNickname = UserInfo.nickname
+    infoData.execute = 0
+    infoData.likes = 0
+
+    when (privacyRadioGroup.checkedRadioButtonId) {
+      com.umpa2020.tracer.R.id.racingRadio -> infoData.privacy = Privacy.RACING
+      com.umpa2020.tracer.R.id.publicRadio -> infoData.privacy = Privacy.PUBLIC
+      com.umpa2020.tracer.R.id.privateRadio -> infoData.privacy = Privacy.PRIVATE
     }
 
-    fun onClick(view: View) {
-        if (switch == 0) {
-            when (view.id) {
-                com.umpa2020.tracer.R.id.save_btn -> {
-                    if (mapTitleEdit.text.toString() == "") {
-                        mapTitleEdit.hint = "제목을 설정해주세요"
-                        mapTitleEdit.setHintTextColor(Color.RED)
-                    } else if (mapExplanationEdit.text.toString() == "") {
-                        mapExplanationEdit.hint = "맵 설명을 작성해주세요"
-                        mapExplanationEdit.setHintTextColor(Color.RED)
-                    } else {
-                        map.CaptureMapScreen()
-                        switch++
-                    }
-                }
-            }
-        }
+    // 맵 타이틀과, 랭킹 중복 방지를 위해서 시간 값을 넣어서 중복 방지
+
+
+    // db에 그려진 맵 저장하는 스레드 - 여기서는 실제 그려진 것 보다 후 보정을 통해서
+    // 간략화 된 맵을 업로드 합니다.
+    val db = FirebaseFirestore.getInstance()
+
+    // InfoData class upload to database 참조 - 루트를 제외한 맵 정보 기술
+    db.collection("mapInfo").document(infoData.mapTitle!!).set(infoData)
+
+    // RouteData class upload to database 참조 - 루트 정보만 표기 (위도경도, 고도, 마커의 위도경도)
+    var routeDataOne = RouteDataOne(routeData.altitude, routeData.markerlatlngs)
+
+    db.collection("mapRoute").document(infoData.mapTitle!!).set(routeDataOne)
+    for (index in routeData.latlngs.indices) {
+      var routeDataTwo = RouteDataTwo(index, routeData.latlngs[index])
+      db.collection("mapRoute").document(infoData.mapTitle!!)
+        //.collection("routes").add(routeDataTwo)
+        .collection("routes").document(index.toString()).set(routeDataTwo)
     }
 
-    fun save(imgPath: String) {
+    //TODO: 랭킹 부분 구현 필요 레이싱에도 같은 구조 필요
+    val rankingData = RankingData(UserInfo.nickname, UserInfo.nickname, infoData.time, 1)
+    db.collection("rankingMap").document(infoData.mapTitle!!).set(rankingData)
+    db.collection("rankingMap").document(infoData.mapTitle!!).collection("ranking")
+      .document(UserInfo.autoLoginKey + timestamp).set(rankingData)
 
-        // 타임스탭프 찍는 코드
-        val dt = Date()
-        val full_sdf = SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.getDefault())
+    // db에 원하는 경로 및, 문서로 업로드
 
-        val date = full_sdf.parse(dt.toString())
-        val timestamp = date!!.time
-
-
-        // 인포데이터에 필요한 내용을 저장하고
-        infoData.makersNickname = UserInfo.nickname
-        infoData.mapImage = imgPath
-        infoData.mapTitle = mapTitleEdit.text.toString() + "||" + timestamp.toString()
-        infoData.mapExplanation = mapExplanationEdit.text.toString()
-        infoData.makersNickname = UserInfo.nickname
-        infoData.execute = 0
-        infoData.likes = 0
-
-        when (privacyRadioGroup.checkedRadioButtonId) {
-            com.umpa2020.tracer.R.id.racingRadio -> infoData.privacy = Privacy.RACING
-            com.umpa2020.tracer.R.id.publicRadio -> infoData.privacy = Privacy.PUBLIC
-            com.umpa2020.tracer.R.id.privateRadio -> infoData.privacy = Privacy.PRIVATE
-        }
-
-        // 맵 타이틀과, 랭킹 중복 방지를 위해서 시간 값을 넣어서 중복 방지
-
-
-        // db에 그려진 맵 저장하는 스레드 - 여기서는 실제 그려진 것 보다 후 보정을 통해서
-        // 간략화 된 맵을 업로드 합니다.
-        val db = FirebaseFirestore.getInstance()
-
-        // InfoData class upload to database 참조 - 루트를 제외한 맵 정보 기술
-        db.collection("mapInfo").document(infoData.mapTitle!!).set(infoData)
-
-        // RouteData class upload to database 참조 - 루트 정보만 표기 (위도경도, 고도, 마커의 위도경도)
-        var routeDataOne = RouteDataOne(routeData.altitude, routeData.markerlatlngs)
-
-        db.collection("mapRoute").document(infoData.mapTitle!!).set(routeDataOne)
-        for (index in routeData.latlngs.indices) {
-            var routeDataTwo = RouteDataTwo(index, routeData.latlngs[index])
-            db.collection("mapRoute").document(infoData.mapTitle!!)
-                //.collection("routes").add(routeDataTwo)
-                .collection("routes").document(index.toString()).set(routeDataTwo)
-        }
-
-        //TODO: 랭킹 부분 구현 필요 레이싱에도 같은 구조 필요
-        val rankingData = RankingData(UserInfo.nickname, UserInfo.nickname, infoData.time, 1)
-        db.collection("rankingMap").document(infoData.mapTitle!!).set(rankingData)
-        db.collection("rankingMap").document(infoData.mapTitle!!).collection("ranking")
-            .document(UserInfo.autoLoginKey+timestamp).set(rankingData)
-
-        // db에 원하는 경로 및, 문서로 업로드
-
-        // storage에 이미지 업로드 모든 맵 이미지는 mapimage/maptitle로 업로드가 된다.
-        val storage = FirebaseStorage.getInstance("gs://tracer-9070d.appspot.com/")
-        val mapImageRef = storage.reference.child("mapImage").child(infoData.mapTitle!!)
-        var uploadTask = mapImageRef.putFile(Uri.fromFile(File(imgPath)))
-        uploadTask.addOnFailureListener {
-        }.addOnSuccessListener {
-            finish()
-        }
-
-        // 위에 지정한 스레드 스타트
+    // storage에 이미지 업로드 모든 맵 이미지는 mapimage/maptitle로 업로드가 된다.
+    val storage = FirebaseStorage.getInstance("gs://tracer-9070d.appspot.com/")
+    val mapImageRef = storage.reference.child("mapImage").child(infoData.mapTitle!!)
+    var uploadTask = mapImageRef.putFile(Uri.fromFile(File(imgPath)))
+    uploadTask.addOnFailureListener {
+    }.addOnSuccessListener {
+      finish()
     }
+
+    // 위에 지정한 스레드 스타트
+  }
 }

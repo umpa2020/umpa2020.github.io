@@ -29,120 +29,120 @@ import kotlinx.android.synthetic.main.activity_running.*
  */
 class RunningMap(smf: SupportMapFragment/*, var context: Context*/) : OnMapReadyCallback {
 
-    lateinit var mMap: GoogleMap    //racingMap 인스턴스
-    var TAG = "WSY"       //로그용 태그
+  lateinit var mMap: GoogleMap    //racingMap 인스턴스
+  var TAG = "WSY"       //로그용 태그
 
-    var previousLocation: LatLng = LatLng(0.0, 0.0)          //이전위치
-    var currentLocation: LatLng = LatLng(0.0, 0.0)              //현재위치
+  var previousLocation: LatLng = LatLng(0.0, 0.0)          //이전위치
+  var currentLocation: LatLng = LatLng(0.0, 0.0)              //현재위치
 
-    var latlngs: MutableList<LatLng> = mutableListOf()   //움직인 점들의 집합 나중에 저장될 점들 집합
-    var routes: MutableList<MutableList<LatLng>> = mutableListOf()
-    var altitude: MutableList<Double> = mutableListOf(.0)
-    var speeds: MutableList<Double> = mutableListOf(.0)
-    var distance = 0.0
-    var userState: UserState? = null
-    var markers: MutableList<LatLng> = mutableListOf()
-    var markerCount = 0
+  var latlngs: MutableList<LatLng> = mutableListOf()   //움직인 점들의 집합 나중에 저장될 점들 집합
+  var routes: MutableList<MutableList<LatLng>> = mutableListOf()
+  var altitude: MutableList<Double> = mutableListOf(.0)
+  var speeds: MutableList<Double> = mutableListOf(.0)
+  var distance = 0.0
+  var userState: UserState? = null
+  var markers: MutableList<LatLng> = mutableListOf()
+  var markerCount = 0
 
-    var cameraFlag = false
+  var cameraFlag = false
 
-    var cpOption = MarkerOptions()
+  var cpOption = MarkerOptions()
 
-    var currentMarker: Marker? = null
+  var currentMarker: Marker? = null
 
 
-    lateinit var myIcon: BitmapDescriptor
+  lateinit var myIcon: BitmapDescriptor
 
-    //Running
-    init {
-        userState = UserState.PAUSED
-        smf.getMapAsync(this)
-        //createMyIcon()
+  //Running
+  init {
+    userState = UserState.PAUSED
+    smf.getMapAsync(this)
+    //createMyIcon()
+  }
+
+  override fun onMapReady(googleMap: GoogleMap) {
+    mMap = googleMap
+    mMap.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
+
+    // 마지막 위치 가져와서 카메라 설정
+    Log.d(TAG, "잘 가져왔니? " + LocationUpdatesComponent.lastLocation.toString())
+    val lat = LocationUpdatesComponent.lastLocation!!.latitude
+    var lng = LocationUpdatesComponent.lastLocation!!.longitude
+    currentLocation = LatLng(lat, lng)
+    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 17F))   //화면이동
+  }
+
+  /**
+   *
+   */
+  fun startTracking() {
+    // setStartIcon()  // 마지막 현재 위치에 아이콘 설정
+
+    mMap.addCircle(
+      CircleOptions()
+        .center(currentLocation)
+        .radius(2.0)
+        .strokeWidth(5f)
+        .strokeColor(Color.WHITE)
+        .fillColor(Color.GREEN)
+        .zIndex(6f)
+    )
+
+    userState = UserState.RUNNING
+  }
+
+  fun stopTracking(routeData: RouteData, infoData: InfoData) {
+    userState = UserState.PAUSED
+
+    mMap.addCircle(
+      CircleOptions()
+        .center(currentLocation)
+        .radius(2.0)
+        .strokeWidth(5f)
+        .strokeColor(Color.WHITE)
+        .fillColor(Color.RED)
+    )
+
+    print_log("Stop")
+    if (latlngs.size > 0) {
+      routes.add(PolyUtil.simplify(latlngs, 10.0).toMutableList())
     }
-
-    override fun onMapReady(googleMap: GoogleMap) {
-        mMap = googleMap
-        mMap.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
-
-        // 마지막 위치 가져와서 카메라 설정
-        Log.d(TAG, "잘 가져왔니? " + LocationUpdatesComponent.lastLocation.toString())
-        val lat =  LocationUpdatesComponent.lastLocation!!.latitude
-        var lng =  LocationUpdatesComponent.lastLocation!!.longitude
-        currentLocation = LatLng(lat, lng)
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 17F))   //화면이동
+    markers.add(currentLocation)
+    var arrLatLng: MutableList<MutableList<LatLng>> = mutableListOf()
+    var cpLatLag: MutableList<LatLng> = mutableListOf()
+    for (i in routes.indices) {
+      var latlngs: MutableList<LatLng> = mutableListOf()
+      for (j in routes[i].indices) {
+        latlngs.add(LatLng(routes[i][j].latitude, routes[i][j].longitude))
+      }
+      arrLatLng.add(latlngs)
+      cpLatLag.add(LatLng(markers[i].latitude, markers[i].longitude))
     }
+    cpLatLag.add(LatLng(markers[markers.size - 1].latitude, markers[markers.size - 1].longitude))
+    routeData.latlngs = arrLatLng
+    routeData.markerlatlngs = cpLatLag
 
-    /**
-     *
-     */
-    fun startTracking() {
-       // setStartIcon()  // 마지막 현재 위치에 아이콘 설정
+    routeData.altitude = altitude
 
-        mMap.addCircle(
-            CircleOptions()
-                .center(currentLocation)
-                .radius(2.0)
-                .strokeWidth(5f)
-                .strokeColor(Color.WHITE)
-                .fillColor(Color.GREEN)
-                .zIndex(6f)
-        )
+    //TODO: speed
+    infoData.speed = speeds
+  }
 
-        userState = UserState.RUNNING
-    }
+  fun pauseTracking() {
+    print_log("pause")
+    //  stopLocationUpdates() // 위치 업데이트 중지
+    userState = UserState.PAUSED
+    print_log("Set UserState PAUSED")
+  }
 
-    fun stopTracking(routeData: RouteData, infoData: InfoData) {
-        userState = UserState.PAUSED
+  fun restartTracking() {
+    //  startLocationUpdates()
+  }
 
-        mMap.addCircle(
-            CircleOptions()
-                .center(currentLocation)
-                .radius(2.0)
-                .strokeWidth(5f)
-                .strokeColor(Color.WHITE)
-                .fillColor(Color.RED)
-        )
-
-        print_log("Stop")
-        if (latlngs.size > 0) {
-            routes.add(PolyUtil.simplify(latlngs, 10.0).toMutableList())
-        }
-        markers.add(currentLocation)
-        var arrLatLng: MutableList<MutableList<LatLng>> = mutableListOf()
-        var cpLatLag: MutableList<LatLng> = mutableListOf()
-        for (i in routes.indices) {
-            var latlngs: MutableList<LatLng> = mutableListOf()
-            for (j in routes[i].indices) {
-                latlngs.add(LatLng(routes[i][j].latitude, routes[i][j].longitude))
-            }
-            arrLatLng.add(latlngs)
-            cpLatLag.add(LatLng(markers[i].latitude, markers[i].longitude))
-        }
-        cpLatLag.add(LatLng(markers[markers.size - 1].latitude, markers[markers.size - 1].longitude))
-        routeData.latlngs = arrLatLng
-        routeData.markerlatlngs = cpLatLag
-
-        routeData.altitude = altitude
-
-        //TODO: speed
-        infoData.speed = speeds
-    }
-
-    fun pauseTracking() {
-        print_log("pause")
-        //  stopLocationUpdates() // 위치 업데이트 중지
-        userState = UserState.PAUSED
-        print_log("Set UserState PAUSED")
-    }
-
-    fun restartTracking() {
-        //  startLocationUpdates()
-    }
-
-    /**
-     *  내 아이콘 만들기 메소드
-     *  위치 관련 정보 넣는거 없이 순수 아이콘 생성.
-     */
+  /**
+   *  내 아이콘 만들기 메소드
+   *  위치 관련 정보 넣는거 없이 순수 아이콘 생성.
+   */
 //    private fun createMyIcon() {
 //
 //        val circleDrawable = context.getDrawable(R.drawable.ic_racer_marker)
@@ -164,111 +164,110 @@ class RunningMap(smf: SupportMapFragment/*, var context: Context*/) : OnMapReady
 //        myIcon = BitmapDescriptorFactory.fromBitmap(bitmap)
 //    }
 
-    /**
-     *  start Icon 설정
-     *  현재 위치의 마지막 지점에 설정.
-     */
-    private fun setStartIcon() {
-        cpOption.title("StartPoint")
+  /**
+   *  start Icon 설정
+   *  현재 위치의 마지막 지점에 설정.
+   */
+  private fun setStartIcon() {
+    cpOption.title("StartPoint")
 
-        cpOption.position(previousLocation)
-        markerCount++
-        markers.add(previousLocation)
+    cpOption.position(previousLocation)
+    markerCount++
+    markers.add(previousLocation)
 
-        cpOption.icon(makingIcon(R.drawable.ic_racing_startpoint, App.instance))
-        mMap.addMarker(cpOption)
+    cpOption.icon(makingIcon(R.drawable.ic_racing_startpoint, App.instance))
+    mMap.addMarker(cpOption)
+  }
+
+  var location = null
+
+  /**
+   *  서비스에서 데이터 받아오는 부분
+   */
+  fun setLocation(location: Location) {
+    if (userState == UserState.RUNNING)
+      createData(location)
+    else
+      currentLocation = LatLng(location!!.latitude, location!!.longitude)
+
+    if (!cameraFlag) {
+      mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 17F))   //화면이동
+      cameraFlag = true
     }
-
-    var location = null
-
-    /**
-     *  서비스에서 데이터 받아오는 부분
-     */
-    fun setLocation(location: Location) {
-        if (userState == UserState.RUNNING)
-            createData(location)
-        else
-            currentLocation = LatLng(location!!.latitude, location!!.longitude)
-
-        if(!cameraFlag) {
-            mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 17F))   //화면이동
-            cameraFlag = true
-        }
 
 //        setMyIconToMap()
-        previousLocation = currentLocation                              //현재위치를 이전위치로 변경
-    }
+    previousLocation = currentLocation                              //현재위치를 이전위치로 변경
+  }
 
-    // 이 데이터 받아서 처리
-    // Location[fused 37.619672,127.059084 hAcc=15 et=+5d2h34m37s51ms alt=53.5 vel=0.0014348121 bear=219.74748 vAcc=2 sAcc=??? bAcc=??? {Bundle[mParcelledData.dataSize=52]}]
+  // 이 데이터 받아서 처리
+  // Location[fused 37.619672,127.059084 hAcc=15 et=+5d2h34m37s51ms alt=53.5 vel=0.0014348121 bear=219.74748 vAcc=2 sAcc=??? bAcc=??? {Bundle[mParcelledData.dataSize=52]}]
 
-    private fun createData(location: Location) {
-        val lat = location.latitude
-        val lng = location.longitude
-        val alt = location.altitude
-        val speed = location.speed
+  private fun createData(location: Location) {
+    val lat = location.latitude
+    val lng = location.longitude
+    val alt = location.altitude
+    val speed = location.speed
 
-        currentLocation = LatLng(lat, lng)
+    currentLocation = LatLng(lat, lng)
 
-        if (previousLocation.latitude == currentLocation.latitude && previousLocation.longitude == currentLocation.longitude) {
-            return  //움직임이 없다면 추가안함
-        } else if (false) { //비정상적인 움직임일 경우 + finish에 도착한 경우
-        } else {
-            latlngs.add(currentLocation)    //위 조건들을 통과하면 점 추가
-            altitude.add(alt)
-            speeds.add(speed.toDouble())
+    if (previousLocation.latitude == currentLocation.latitude && previousLocation.longitude == currentLocation.longitude) {
+      return  //움직임이 없다면 추가안함
+    } else if (false) { //비정상적인 움직임일 경우 + finish에 도착한 경우
+    } else {
+      latlngs.add(currentLocation)    //위 조건들을 통과하면 점 추가
+      altitude.add(alt)
+      speeds.add(speed.toDouble())
 
-            getDistance()
+      getDistance()
 
-            // 속도 UI 스레드
-            (App.instance.currentActivity() as Activity).runOnUiThread{
-                print_log("속도 : " + speed.toString())
-                (App.instance.currentActivity() as RunningActivity).runningSpeedTextView.text =
-                    String.format("%.2f km/h", speed)
-            }
+      // 속도 UI 스레드
+      (App.instance.currentActivity() as Activity).runOnUiThread {
+        print_log("속도 : " + speed.toString())
+        (App.instance.currentActivity() as RunningActivity).runningSpeedTextView.text =
+          String.format("%.2f km/h", speed)
+      }
 
-            // 위치가 계속 업데이트 되어야해서 여기에 선언
-            createPolyline()  // 이전 위치, 현재 위치로 폴리라인 형성
+      // 위치가 계속 업데이트 되어야해서 여기에 선언
+      createPolyline()  // 이전 위치, 현재 위치로 폴리라인 형성
 
 
+      // 100m마다 체크 포인트 찍는거
+      if (distance.toInt() / AppConstant.WAYPOINT_DISTANCE >= markerCount) {    //100m마다
+        cpOption.position(currentLocation)
+        if (distance > 0)
+          markerCount = distance.toInt() / AppConstant.WAYPOINT_DISTANCE
+        cpOption.title(markerCount.toString())
+        cpOption.icon(makingIcon(R.drawable.ic_checkpoint_red, App.instance))
+        mMap.addMarker(cpOption) // 이게 기본 마커 찍나? => start지점 찍으려는거 같은데
+        markers.add(currentLocation)
+        markerCount++
+        routes.add(PolyUtil.simplify(latlngs, 10.0).toMutableList())
+        print_log(routes[routes.size - 1].toString())
+        latlngs.clear()
+        latlngs.add(currentLocation)
+      }
+    }// if 문 끝
+  }
 
-            // 100m마다 체크 포인트 찍는거
-            if (distance.toInt() / AppConstant.WAYPOINT_DISTANCE >= markerCount) {    //100m마다
-                cpOption.position(currentLocation)
-                if (distance > 0)
-                    markerCount = distance.toInt() / AppConstant.WAYPOINT_DISTANCE
-                cpOption.title(markerCount.toString())
-                cpOption.icon(makingIcon(R.drawable.ic_checkpoint_red, App.instance))
-                mMap.addMarker(cpOption) // 이게 기본 마커 찍나? => start지점 찍으려는거 같은데
-                markers.add(currentLocation)
-                markerCount++
-                routes.add(PolyUtil.simplify(latlngs, 10.0).toMutableList())
-                print_log(routes[routes.size - 1].toString())
-                latlngs.clear()
-                latlngs.add(currentLocation)
-            }
-        }// if 문 끝
-    }
+  /**
+   *    이전 위치( previousLocation ), 현재 위치( currentLocation )로 폴리라인 추가.
+   *    맵에 폴리라인 추가
+   *    => TODO: 추후 그리는 후 처리 필요
+   */
+  private fun createPolyline() {
+    print_log("폴리라인")
+    mMap.addPolyline(
+      PolylineOptions().add(
+        previousLocation,
+        currentLocation
+      )
+    )
+  }
 
-    /**
-     *    이전 위치( previousLocation ), 현재 위치( currentLocation )로 폴리라인 추가.
-     *    맵에 폴리라인 추가
-     *    => TODO: 추후 그리는 후 처리 필요
-     */
-    private fun createPolyline() {
-        print_log("폴리라인")
-        mMap.addPolyline(
-            PolylineOptions().add(
-                previousLocation,
-                currentLocation
-            )
-        )
-    }
-
-    /**
-     *   내 위치 마커로 계속 업데이트
-     *   현재 위치(currentLocation)
-     */
+  /**
+   *   내 위치 마커로 계속 업데이트
+   *   현재 위치(currentLocation)
+   */
 //    private fun setMyIconToMap() {
 //        if (currentMarker != null) currentMarker!!.remove() // 이전 마커 지워주는 행동
 //
@@ -291,14 +290,14 @@ class RunningMap(smf: SupportMapFragment/*, var context: Context*/) : OnMapReady
 ////        )
 //    }
 
-    fun getDistance() {
+  fun getDistance() {
 
-        // 이전 위치, 현재 위치로 거리 계산
-        distance += SphericalUtil.computeDistanceBetween(previousLocation, currentLocation)
-    }
+    // 이전 위치, 현재 위치로 거리 계산
+    distance += SphericalUtil.computeDistanceBetween(previousLocation, currentLocation)
+  }
 
-    fun print_log(text: String) {
-        Log.d(TAG, text.toString())
-    }
+  fun print_log(text: String) {
+    Log.d(TAG, text.toString())
+  }
 
 }
