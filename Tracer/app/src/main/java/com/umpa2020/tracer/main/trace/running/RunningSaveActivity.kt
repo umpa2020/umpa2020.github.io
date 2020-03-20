@@ -36,7 +36,7 @@ class RunningSaveActivity : AppCompatActivity() {
     map = ViewerMap(smf, this, routeData)
     distance_tv.text = String.format("%.2f", infoData.distance!! / 1000)
     val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
-    formatter.setTimeZone(TimeZone.getTimeZone("UTC"))
+    formatter.timeZone = TimeZone.getTimeZone("UTC")
 
     time_tv.text = formatter.format(Date(infoData.time!!))
 

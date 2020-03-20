@@ -406,7 +406,7 @@ class RacingMap : OnMapReadyCallback {
       currentLocation = LatLng(location.latitude, location.longitude)
 
     if (!cameraFlag) {
-      mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 17F))   //화면이동
+      mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 17F))   //화면이동
       cameraFlag = true
     }
 

@@ -41,7 +41,7 @@ class RankingMapDetailActivity : AppCompatActivity() {
     val progressbar = ProgressBar(this)
     progressbar.show()
 
-    val intent = getIntent()
+    val intent = intent
     //전달 받은 값으로 Title 설정
     var mapTitle = intent.extras?.getString("MapTitle").toString()
     var cutted = mapTitle.split("||")
@@ -143,7 +143,7 @@ class RankingMapDetailActivity : AppCompatActivity() {
                       rankingDetailMapDetail.text = infoData.mapExplanation
                       rankingDetailDistance.text = String.format("%.2f", infoData.distance!! / 1000)
                       val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
-                      formatter.setTimeZone(TimeZone.getTimeZone("UTC"))
+                      formatter.timeZone = TimeZone.getTimeZone("UTC")
                       rankingDetailTime.text = formatter.format(Date(infoData.time!!))
                       rankingDetailSpeed.text = String.format("%.2f", infoData.speed.average())
                       var chart = Chart(routeData.altitude, infoData.speed, rankingDetailChart)

@@ -66,7 +66,7 @@ class RankRecyclerViewAdapterMap(val mdata: ArrayList<InfoData>, val nearMaps: A
 
   //여기서 item을 textView에 옮겨줌
 
-  inner class mViewHolder(view: View) : RecyclerView.ViewHolder(view!!) {
+  inner class mViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     var rank = view.rankingFragmentCountTextView
     var maptitle = view.rankingFragmentMapTitleTextView
     var distance = view.rankingFragmentDistanceTextView

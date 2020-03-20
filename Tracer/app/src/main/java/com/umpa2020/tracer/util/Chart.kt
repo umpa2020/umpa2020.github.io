@@ -52,7 +52,7 @@ class Chart {
     lineDataSet.setDrawCircles(false)
     lineDataSet.setDrawCircleHole(false)
     lineDataSet.axisDependency = YAxis.AxisDependency.LEFT
-    lineDataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER)
+    lineDataSet.mode = LineDataSet.Mode.CUBIC_BEZIER
     speedsData.addDataSet(lineDataSet)
 
     // 고도 셋팅
