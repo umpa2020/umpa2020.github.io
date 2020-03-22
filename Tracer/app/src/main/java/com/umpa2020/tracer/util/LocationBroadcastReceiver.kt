@@ -14,6 +14,6 @@ class LocationBroadcastReceiver(val map: TraceMap) : BroadcastReceiver() {
         val message = intent?.getParcelableExtra<Location>("message")
         Log.d("$TAG receiver", "Got message : $message")
         var currentLocation = message as Location
-        map.display(currentLocation)
+        map.work(currentLocation)
     }
 }

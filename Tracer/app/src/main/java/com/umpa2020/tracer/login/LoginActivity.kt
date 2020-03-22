@@ -187,7 +187,7 @@ class LoginActivity : AppCompatActivity() {
                     // 2. 로그아웃을 했을 경우 회원 정보를 받은 기록이 있는지 판단하고 있으면 메인 화면으로
                     //    이때 db에서 값을 가져와야겠지??
                 } else {
-                    // If sign in fails, display a message to the user.
+                    // If sign in fails, work a message to the user.
                     Log.w(WSY, "signInWithCredential:failure", task.exception)
                     // Snackbar.make(main_layout, "Authentication Failed.", Snackbar.LENGTH_SHORT).show()
                     //   updateUI(null)

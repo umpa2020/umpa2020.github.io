@@ -5,10 +5,13 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
 import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.constant.UserState
+import com.umpa2020.tracer.dataClass.RouteGPX
+import io.jenetics.jpx.WayPoint
+import java.lang.StringBuilder
 
-abstract class TraceMap {
-    abstract fun display(location: Location)
-   fun start(){
+interface TraceMap {
+    fun work(location: Location)
+    fun start(){
        userState=UserState.RUNNING
    }
    fun pause(){
@@ -18,16 +21,23 @@ abstract class TraceMap {
    fun restart(){
        userState=UserState.RUNNING
    }
-   fun stop(){
+   fun stop():RouteGPX{
        userState=UserState.STOP
+       return RouteGPX("","",wpList,tpList)
    }
-    lateinit var mMap: GoogleMap
-    var testString=""
-    var TAG = "TraceMap"       //로그용 태그
-    var privacy=Privacy.RACING
-    var distance=0.0
-    var time=0.0
-    var previousLocation: LatLng = LatLng(0.0, 0.0)          //이전위치
-    var currentLocation: LatLng = LatLng(37.619742, 127.060836)              //현재위치
-    var userState: UserState = UserState.NORMAL       //사용자의 현재상태 달리기전 or 달리는중 등 자세한내용은 enum참고
+    var mMap: GoogleMap
+    var testString: String
+    var TAG :String      //로그용 태그
+    var privacy:Privacy
+    var distance:Double
+    var time:Double
+    var previousLocation: LatLng          //이전위치
+    var currentLocation: LatLng           //현재위치
+    var altitude:Double
+    var speed:Double
+    var userState: UserState     //사용자의 현재상태 달리기전 or 달리는중 등 자세한내용은 enum참고
+    var moving:Boolean      //사용자가 현재 움직이는 중인지
+    var tpList: MutableList<WayPoint>   //track point list
+    var wpList: MutableList<WayPoint>   //way point list
+
 }

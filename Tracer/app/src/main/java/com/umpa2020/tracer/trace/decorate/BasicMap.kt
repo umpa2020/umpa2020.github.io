@@ -8,13 +8,31 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.umpa2020.tracer.constant.Privacy
+import com.umpa2020.tracer.constant.UserState
+import io.jenetics.jpx.WayPoint
 
-class BasicMap (val smf: SupportMapFragment, val context: Context):OnMapReadyCallback, TraceMap(){
-    override fun display(location: Location) {
+class BasicMap(val smf: SupportMapFragment, val context: Context) : OnMapReadyCallback, TraceMap {
+    override lateinit var mMap: GoogleMap
+    override var testString: String = ""
+    override var TAG = "TraceMap"       //로그용 태그
+    override var privacy = Privacy.RACING
+    override var distance = 0.0
+    override var time = 0.0
+    override var previousLocation = LatLng(0.0, 0.0)          //이전위치
+    override var currentLocation = LatLng(37.619742, 127.060836)              //현재위치
+    override var altitude=0.0
+    override var speed=0.0
+    override var userState = UserState.NORMAL       //사용자의 현재상태 달리기전 or 달리는중 등 자세한내용은 enum참고
+    override var moving = false
+    override var tpList: MutableList<WayPoint> = mutableListOf()
+    override var wpList: MutableList<WayPoint> = mutableListOf()
+
+    override fun work(location: Location) {
         setLocation(location)
     }
 
-    init{
+    init {
         smf.getMapAsync(this)
     }
 
@@ -25,13 +43,21 @@ class BasicMap (val smf: SupportMapFragment, val context: Context):OnMapReadyCal
 
     }
 
-    fun setLocation(location: Location) {
-        super.testString+="B"
-        Log.d(TAG, super.testString)
+    private fun setLocation(location: Location) {//현재위치를 이전위치로 변경
+        testString += "B"
+        Log.d(TAG, testString)
         val lat = location.latitude
         val lng = location.longitude
+        previousLocation = currentLocation
         currentLocation = LatLng(lat, lng)
-        previousLocation = currentLocation                              //현재위치를 이전위치로 변경
-        mMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 16F))
+        if (previousLocation.latitude == currentLocation.latitude
+            && previousLocation.longitude == currentLocation.longitude
+        ) {
+            moving = false
+        } else if (false) { //비정상적인 움직임일 경우 + finish에 도착한 경우
+        } else {
+            moving = true
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 16F))
+        }
     }
 }

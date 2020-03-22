@@ -1,10 +1,9 @@
 package com.umpa2020.tracer.trace.decorate
 
 import android.location.Location
-import com.umpa2020.tracer.trace.decorate.TraceMap
 
-abstract class MapDecorator(var decoratedMap: TraceMap): TraceMap() {
-    override fun display(location: Location) {
-        decoratedMap.display(location)
+abstract class MapDecorator(private val decoratedMap: TraceMap): TraceMap by decoratedMap {
+    override fun work(location: Location) {
+        decoratedMap.work(location)
     }
 }
