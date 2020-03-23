@@ -7,17 +7,23 @@ import android.os.Handler
 import android.os.Message
 import android.os.Messenger
 import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.animation.AlphaAnimation
+import android.widget.CompoundButton
+import android.widget.RadioGroup
+import android.widget.SeekBar
 import android.widget.Toast
-import android.widget.Toolbar
 import androidx.fragment.app.Fragment
+import com.firebase.ui.auth.AuthUI.getApplicationContext
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.locationBackground.LocationBackgroundService
 import com.umpa2020.tracer.main.MainActivity.Companion.MESSENGER_INTENT_KEY
 import com.umpa2020.tracer.main.MainActivity.Companion.WSY
 import com.umpa2020.tracer.network.getRanking
 import kotlinx.android.synthetic.main.fragment_ranking.view.*
-import kotlinx.android.synthetic.main.fragment_ranking.view.test_button1 as test_button11
+
 
 /**
  * main 화면의 ranking tab
@@ -39,23 +45,71 @@ class RankingFragment : Fragment() {
 
     mHandler = IncomingMessageHandler()
 
-
     //getRanking().getExcuteDESCENDING(context!!, view, location)
 
-    /**
-     * 수진이가 xml 만들어주면 해당 기능 붙히기
-     */
-    view.test_button11.setOnClickListener {
-      getRanking().getExcuteDESCENDING(context!!, view, location)
-    }
 
+    /*
     view.test_button3.setOnClickListener {
       getRanking().getFilterRange(view, location)
     }
 
-    var toolbar: Toolbar = view.findViewById(R.id.rankingToolBar)
-    toolbar.inflateMenu(R.menu.ranking_menu)
-    setHasOptionsMenu(true)
+     */
+
+
+    //필터 버튼 누르면 레이아웃 보임
+    view.rankingToolBarTuneButton.setOnClickListener{
+      appearAnimation()
+    }
+
+    //필터 레이아웃 밖 영역 클릭하면 사라짐
+    view.disappearLayout.setOnClickListener{
+      disappearAnimation()
+    }
+
+
+    //전체 삭제 누를 때
+    view.allDeleteButton.setOnClickListener {
+      view.tuneRadioBtnExecute.isChecked = false
+      view.tuneRadioBtnLike.isChecked = false
+      view.progressTextView.text = "0"
+      view.seekBar.progress = 0
+    }
+
+    //적용 버튼 누를때
+    view.applyButton.setOnClickListener{
+      var tuneDistance = Integer.parseInt(view.progressTextView.text.toString())
+      Log.d("test", tuneDistance.toString())
+
+      //실행순 버튼에 체크가 되어 있을 경우
+      if(view.tuneRadioBtnExecute.isChecked){
+        getRanking().getExcuteDESCENDING(context!!, view, location)
+      }
+
+      else{
+        //TODO 좋아요 버튼 누를 때 실행되는 코드 추가
+      }
+
+      //TODO : tuneDistance에 거리 값 넣어놨으니 이대로 필터 적용
+
+      disappearAnimation()
+    }
+
+    view.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+      override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
+        view.progressTextView.text = i.toString()
+
+        if(i==100){
+          view.progressTextView.text = "100+"
+        }
+      }
+      override fun onStartTrackingTouch(seekBar: SeekBar) {}
+
+      override fun onStopTrackingTouch(seekBar: SeekBar) {}
+    })
+
+
+
+
     return view
   }
 
@@ -87,21 +141,31 @@ class RankingFragment : Fragment() {
     }
   }
 
-  //액션버튼 메뉴 액션바에 집어 넣기
-  override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-    inflater.inflate(R.menu.ranking_menu, menu)
-    super.onCreateOptionsMenu(menu, inflater)
+  /**
+   * 레이아웃이 스르륵 보이는 함수
+   */
+
+  private fun appearAnimation(){
+    val animate = AlphaAnimation(0f,1f) //투명도 변화
+    animate.duration = 500
+    animate.fillAfter = true
+    view!!.tuneLinearLayout.visibility = View.VISIBLE
+    view!!.tuneLinearLayout.startAnimation(animate)
   }
 
-  //액션버튼 클릭 했을 때
-  override fun onOptionsItemSelected(item: MenuItem): Boolean {
-    return (when (item.itemId) {
-      R.id.rankingMenuSearch -> {
-        Toast.makeText(context, "클릭", Toast.LENGTH_SHORT).show()
-        true
-      }
-      else ->
-        super.onOptionsItemSelected(item)
-    })
+  /**
+   * 레이아웃이 스르륵 사라지는 함수
+   */
+  private fun disappearAnimation(){
+    val animate = AlphaAnimation(1f,0f)
+    animate.duration = 500
+    animate.fillAfter = true
+    view!!.tuneLinearLayout.visibility = View.GONE
+    view!!.tuneLinearLayout.startAnimation(animate)
   }
+
+
+
+
+
 }
