@@ -2,18 +2,24 @@ package com.umpa2020.tracer.main.ranking
 
 import android.content.Context
 import android.content.Intent
+import android.os.Handler
+import android.os.Looper
+import android.os.Message
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.InfoData
+import com.umpa2020.tracer.dataClass.LikeMapsData
 import com.umpa2020.tracer.network.Likes
 import com.umpa2020.tracer.util.PrettyDistance
 import kotlinx.android.synthetic.main.recycler_rankfragment_item.view.*
 
 class RankRecyclerViewAdapterMap(val mdata: ArrayList<InfoData>, val mode: String) : RecyclerView.Adapter<RankRecyclerViewAdapterMap.mViewHolder>() {
   var context: Context? = null
+  val GETLIKES = 50
+  var likeMapsDatas = arrayListOf<LikeMapsData>()
 
   //생성된 뷰 홀더에 데이터를 바인딩 해줌.
   override fun onBindViewHolder(holder: mViewHolder, position: Int) {
@@ -28,8 +34,10 @@ class RankRecyclerViewAdapterMap(val mdata: ArrayList<InfoData>, val mode: Strin
     holder.distance.text = PrettyDistance().convertPretty(singleItem.distance!!)
     if (mode.equals("execute")) {
       holder.execute.text = singleItem.execute.toString()
-    }
-    else if (mode.equals("likes")) {
+    } else if (mode.equals("likes")) {
+
+
+      holder.heart.setImageResource(R.drawable.ic_favorite_border_black_24dp)
       holder.execute.text = singleItem.likes.toString()
     }
 
@@ -57,6 +65,18 @@ class RankRecyclerViewAdapterMap(val mdata: ArrayList<InfoData>, val mode: Strin
 
     holder.heart.setOnClickListener {
       Likes().setLikes(singleItem.mapTitle!!)
+    }
+
+    val mHandler = object : Handler(Looper.getMainLooper()) {
+      override fun handleMessage(msg: Message) {
+        when (msg.what) {
+          GETLIKES -> {
+            likeMapsDatas = msg.obj as ArrayList<LikeMapsData>
+            //adpater 추가
+            
+          }
+        }
+      }
     }
   }
 
