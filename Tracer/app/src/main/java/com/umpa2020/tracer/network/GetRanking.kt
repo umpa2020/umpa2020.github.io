@@ -80,10 +80,9 @@ class GetRanking {
                 break
               }
               infoDatas.sortByDescending { infoData -> infoData.execute }
-              view.rank_recycler_map.adapter = RankRecyclerViewAdapterMap(infoDatas, mode)
+              view.rank_recycler_map.adapter = RankRecyclerViewAdapterMap(infoDatas, mode, progressbar)
             }
         }
-        progressbar.dismiss()
       }
       .addOnFailureListener { exception ->
       }
@@ -146,11 +145,10 @@ class GetRanking {
                 } else if (mode.equals("likes")) {
                   infoDatas.sortByDescending { infoData -> infoData.likes }
                 }
-                view.rank_recycler_map.adapter = RankRecyclerViewAdapterMap(infoDatas, mode)
+                view.rank_recycler_map.adapter = RankRecyclerViewAdapterMap(infoDatas, mode, progressbar)
               }
           }
         }
-        progressbar.dismiss()
       }
       .addOnFailureListener { exception ->
       }

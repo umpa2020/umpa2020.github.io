@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,9 +14,10 @@ import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.LikeMapsData
 import com.umpa2020.tracer.network.Likes
 import com.umpa2020.tracer.util.PrettyDistance
+import com.umpa2020.tracer.util.ProgressBar
 import kotlinx.android.synthetic.main.recycler_rankfragment_item.view.*
 
-class RankRecyclerViewAdapterMap(val mdata: ArrayList<InfoData>, val mode: String) : RecyclerView.Adapter<RankRecyclerViewAdapterMap.mViewHolder>() {
+class RankRecyclerViewAdapterMap(val mdata: ArrayList<InfoData>, val mode: String, val progressBar: ProgressBar) : RecyclerView.Adapter<RankRecyclerViewAdapterMap.mViewHolder>() {
   var context: Context? = null
   val GETLIKES = 50
   var likeMapsDatas = arrayListOf<LikeMapsData>()
@@ -26,6 +26,23 @@ class RankRecyclerViewAdapterMap(val mdata: ArrayList<InfoData>, val mode: Strin
   override fun onBindViewHolder(holder: mViewHolder, position: Int) {
     val singleItem = mdata[position]
     val ranking = position + 1
+    val mHandler = object : Handler(Looper.getMainLooper()) {
+      override fun handleMessage(msg: Message) {
+        when (msg.what) {
+          GETLIKES -> {
+            likeMapsDatas = msg.obj as ArrayList<LikeMapsData>
+            //adpater 추가
+            for (i in likeMapsDatas) {
+              if (i.mapTitle.equals(singleItem.mapTitle)) {
+                holder.heart.setImageResource(R.drawable.ic_favorite_red_24dp)
+                holder.heartswitch.text = "on"
+              }
+            }
+          }
+        }
+      }
+    }
+
 
     val cutted = singleItem.mapTitle!!.split("||")
     //데이터 바인딩
@@ -37,7 +54,6 @@ class RankRecyclerViewAdapterMap(val mdata: ArrayList<InfoData>, val mode: Strin
       holder.execute.text = singleItem.execute.toString()
     } else if (mode.equals("likes")) {
       Likes().getLikes(mHandler)
-      Log.d("ssmm11", "자 리사이클에서 받아온 거? i = $position : $likeMapsDatas")
       holder.heart.setImageResource(R.drawable.ic_favorite_border_black_24dp)
       holder.execute.text = singleItem.likes.toString()
     }
@@ -63,10 +79,27 @@ class RankRecyclerViewAdapterMap(val mdata: ArrayList<InfoData>, val mode: Strin
     }
 
     holder.heart.setOnClickListener {
-      Likes().setLikes(singleItem.mapTitle!!)
+      var likes = Integer.parseInt(holder.execute.text.toString())
+
+      if (holder.heartswitch.text.equals("off")) {
+        Likes().setLikes(singleItem.mapTitle!!, likes)
+        holder.heart.setImageResource(R.drawable.ic_favorite_red_24dp)
+        likes++
+        holder.execute.text = likes.toString()
+        holder.heartswitch.text = "on"
+      }
+      else {
+        Likes().setminusLikes(singleItem.mapTitle!!, likes)
+        holder.heart.setImageResource(R.drawable.ic_favorite_border_black_24dp)
+        likes--
+        holder.execute.text = likes.toString()
+        holder.heartswitch.text = "off"
+      }
     }
 
-
+    if (position == mdata.size-1) {
+      progressBar.dismiss()
+    }
   }
 
   //뷰 홀더 생성
@@ -84,24 +117,15 @@ class RankRecyclerViewAdapterMap(val mdata: ArrayList<InfoData>, val mode: Strin
 
   //여기서 item을 textView에 옮겨줌
 
-  inner class mViewHolder(view: View) : RecyclerView.ViewHolder(view!!) {
+  inner class mViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     var rank = view.rankingFragmentCountTextView
     var maptitle = view.rankingFragmentMapTitleTextView
     var distance = view.rankingFragmentDistanceTextView
     var execute = view.rankingFragmentExecuteTextView
     var heart = view.rankingFragmentHeartImageView
+    var heartswitch = view.rankingFragmentHeartSwitch
   }
 
-  val mHandler = object : Handler(Looper.getMainLooper()) {
-    override fun handleMessage(msg: Message) {
-      when (msg.what) {
-        GETLIKES -> {
-          likeMapsDatas = msg.obj as ArrayList<LikeMapsData>
-          //adpater 추가
 
-        }
-      }
-    }
-  }
 }
 

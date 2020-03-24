@@ -6,6 +6,7 @@
 
   <color name="black_overlay">#66000000</color>
 
+  <color name="blackAlpha">#66000000</color>
   <color name="black">#000000</color>
   <color name="rankBackgroudGray">#acacae</color>
   <color name="white">#ffffff</color>

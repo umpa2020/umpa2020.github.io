@@ -98,6 +98,8 @@ class RankingFragment : Fragment() {
     animate.duration = 500
     animate.fillAfter = true
     view!!.tuneLinearLayout.visibility = View.VISIBLE
+    view!!.filterLayout.visibility = View.VISIBLE
+    view!!.disappearLayout.visibility = View.VISIBLE
     view!!.tuneLinearLayout.startAnimation(animate)
   }
 
@@ -105,10 +107,13 @@ class RankingFragment : Fragment() {
    * 레이아웃이 스르륵 사라지는 함수
    */
   private fun disappearAnimation() {
+    view!!.tuneLinearLayout.visibility = View.GONE
+    view!!.filterLayout.visibility = View.GONE
+    view!!.disappearLayout.visibility = View.GONE
+
     val animate = AlphaAnimation(1f, 0f)
     animate.duration = 500
     animate.fillAfter = true
-    view!!.tuneLinearLayout.visibility = View.GONE
     view!!.tuneLinearLayout.startAnimation(animate)
   }
 
