@@ -98,7 +98,7 @@ class GetProfile {
     fun getMyRoute(mHandler: Handler) {
         val infoDatas: ArrayList<InfoData> = arrayListOf()
 
-        db.collection("mapInfo").whereEqualTo("makersNickname", "logintestjb").whereEqualTo("privacy", "RACING")
+        db.collection("mapInfo").whereEqualTo("makersNickname", UserInfo.nickname).whereEqualTo("privacy", "RACING")
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {

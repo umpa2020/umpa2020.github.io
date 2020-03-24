@@ -5,60 +5,61 @@ import android.app.Application
 import android.content.Context
 import android.os.Bundle
 
-class App: Application() {
-    companion object {
-        lateinit var instance: App
-            private set
-    }
-    private var activityCount = 0
-    private val activityLifecycleCallbacks = ActivityLifecycleCallbacks()
+class App : Application() {
+  companion object {
+    lateinit var instance: App
+      private set
+  }
 
-    override fun onCreate() {
-        super.onCreate()
-        instance = this
+  private var activityCount = 0
+  private val activityLifecycleCallbacks = ActivityLifecycleCallbacks()
 
-        registerActivityLifecycleCallbacks(activityLifecycleCallbacks)
-    }
+  override fun onCreate() {
+    super.onCreate()
+    instance = this
 
-    fun context(): Context = applicationContext
+    registerActivityLifecycleCallbacks(activityLifecycleCallbacks)
+  }
 
-    fun currentActivity(): Activity? = activityLifecycleCallbacks.currentActivity
+  fun context(): Context = applicationContext
 
-    inner class ActivityLifecycleCallbacks : Application.ActivityLifecycleCallbacks {
-        var currentActivity: Activity? = null
+  fun currentActivity(): Activity? = activityLifecycleCallbacks.currentActivity
 
-        override fun onActivityCreated(activity: Activity?, savedInstanceState: Bundle?) {
-            currentActivity = activity
-            activityCount++
-        }
+  inner class ActivityLifecycleCallbacks : Application.ActivityLifecycleCallbacks {
+    var currentActivity: Activity? = null
 
-        override fun onActivityStarted(activity: Activity?) {}
-        override fun onActivityResumed(activity: Activity?) {
-            currentActivity = activity
-        }
-
-        override fun onActivityPaused(activity: Activity?) {}
-        override fun onActivityStopped(activity: Activity?) {}
-        override fun onActivityDestroyed(activity: Activity?) {
-            activityCount--
-
-            // 앱을 완전히 종료할 때 구독 끊기
-            if (activityCount == 0) {
-                destroyAllRepository()
-            }
-        }
-
-        override fun onActivitySaveInstanceState(activity: Activity?, outState: Bundle?) {}
+    override fun onActivityCreated(activity: Activity?, savedInstanceState: Bundle?) {
+      currentActivity = activity
+      activityCount++
     }
 
-    fun destroyAllRepository() {
-       /* AreaRepository.instance.destroy()
-        NoticeRepository.instance.destroy()
-        UserRepository.instance.destroy()
-        QnaRepository.instance.destroy()
-        DrivingRepository.instance.destroy()
-        MapLocationRepository.instance.destroy()
-        AnalyticsManager.destroy()*/
+    override fun onActivityStarted(activity: Activity?) {}
+    override fun onActivityResumed(activity: Activity?) {
+      currentActivity = activity
     }
+
+    override fun onActivityPaused(activity: Activity?) {}
+    override fun onActivityStopped(activity: Activity?) {}
+    override fun onActivityDestroyed(activity: Activity?) {
+      activityCount--
+
+      // 앱을 완전히 종료할 때 구독 끊기
+      if (activityCount == 0) {
+        destroyAllRepository()
+      }
+    }
+
+    override fun onActivitySaveInstanceState(activity: Activity?, outState: Bundle?) {}
+  }
+
+  fun destroyAllRepository() {
+    /* AreaRepository.instance.destroy()
+     NoticeRepository.instance.destroy()
+     UserRepository.instance.destroy()
+     QnaRepository.instance.destroy()
+     DrivingRepository.instance.destroy()
+     MapLocationRepository.instance.destroy()
+     AnalyticsManager.destroy()*/
+  }
 
 }

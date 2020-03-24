@@ -21,150 +21,149 @@ import kotlinx.android.synthetic.main.fragment_ranking.view.*
  * 네트워크 접근 함수는 이 곳에 정의
  */
 class GetRanking {
-    lateinit var infoData: InfoData
-    lateinit var infoDatas: ArrayList<InfoData>
-    var nearMaps1: ArrayList<NearMap> = arrayListOf()
-    var nearMaps2: ArrayList<NearMap> = arrayListOf()
+  lateinit var infoData: InfoData
+  lateinit var infoDatas: ArrayList<InfoData>
+  var nearMaps1: ArrayList<NearMap> = arrayListOf()
+  var nearMaps2: ArrayList<NearMap> = arrayListOf()
 
-    var cur_loc = LatLng(0.0, 0.0)          //현재위치
-    var latLng = LatLng(0.0, 0.0)
+  var cur_loc = LatLng(0.0, 0.0)          //현재위치
+  var latLng = LatLng(0.0, 0.0)
 
-    /**
-     * 필터를 거치지 않고, 실행순으로 정렬되는 데이터를 가져오는 함수.
-     */
+  /**
+   * 필터를 거치지 않고, 실행순으로 정렬되는 데이터를 가져오는 함수.
+   */
 
-    fun getExcuteDESCENDING(context: Context, view: View, location: Location) {
-        val progressbar = ProgressBar(context)
-        progressbar.show()
+  fun getExcuteDESCENDING(context: Context, view: View, location: Location) {
+    val progressbar = ProgressBar(context)
+    progressbar.show()
 //결과로 가져온 location에서 정보추출 / 이건 위도 경도 형태로 받아오는 형식
-        //Location 형태로 받아오고 싶다면 아래처럼
-        //var getintentLocation = current
+    //Location 형태로 받아오고 싶다면 아래처럼
+    //var getintentLocation = current
 
-        val lat = location.latitude
-        val lng = location.longitude
-        cur_loc = LatLng(lat, lng)
+    val lat = location.latitude
+    val lng = location.longitude
+    cur_loc = LatLng(lat, lng)
 
-        nearMaps1.clear()
-        nearMaps2.clear()
+    nearMaps1.clear()
+    nearMaps2.clear()
 
-        //레이아웃 매니저 추가
-        view.rank_recycler_map.layoutManager = LinearLayoutManager(context)
+    //레이아웃 매니저 추가
+    view.rank_recycler_map.layoutManager = LinearLayoutManager(context)
 
-        val db = FirebaseFirestore.getInstance()
+    val db = FirebaseFirestore.getInstance()
 
-        db.collection("mapRoute")
+    db.collection("mapRoute")
+      .get()
+      .addOnSuccessListener { result ->
+        infoDatas = arrayListOf()
+
+        for (document in result) {
+          val receiveRouteDatas = document.get("markerlatlngs") as List<Object>
+
+          for (receiveRouteData in receiveRouteDatas) {
+            val location = receiveRouteData as Map<String, Any>
+            latLng = LatLng(
+              location["latitude"] as Double,
+              location["longitude"] as Double
+            )
+            nearMaps1.add(NearMap(document.id, SphericalUtil.computeDistanceBetween(cur_loc, latLng)))
+            break
+          }
+        }
+
+        for (nearmap in nearMaps1) {
+          db.collection("mapInfo").whereEqualTo("mapTitle", nearmap.mapTitle)
             .get()
-            .addOnSuccessListener { result ->
-                infoDatas = arrayListOf()
+            .addOnSuccessListener { result2 ->
 
-                for (document in result) {
-                    val receiveRouteDatas = document.get("markerlatlngs") as List<Object>
+              for (document2 in result2) {
+                infoData = document2.toObject(InfoData::class.java)
+                infoData.mapTitle = document2.id
+                infoDatas.add(infoData)
+                nearMaps2.add(nearmap)
+                break
+              }
 
-                    for (receiveRouteData in receiveRouteDatas) {
-                        val location = receiveRouteData as Map<String, Any>
-                        latLng = LatLng(
-                            location["latitude"] as Double,
-                            location["longitude"] as Double
-                        )
-                        nearMaps1.add(NearMap(document.id, SphericalUtil.computeDistanceBetween(cur_loc, latLng)))
-                        break
-                    }
-                }
-
-                for (nearmap in nearMaps1) {
-                    db.collection("mapInfo").whereEqualTo("mapTitle", nearmap.mapTitle)
-                        .get()
-                        .addOnSuccessListener { result2 ->
-
-                            for (document2 in result2) {
-                                infoData = document2.toObject(InfoData::class.java)
-                                infoData.mapTitle = document2.id
-                                infoDatas.add(infoData)
-                                nearMaps2.add(nearmap)
-                                break
-                            }
-
-                            infoDatas.sortByDescending { infoData -> infoData.execute }
-                            view.rank_recycler_map.adapter = RankRecyclerViewAdapterMap(infoDatas, nearMaps2)
-                        }
-                }
-                progressbar.dismiss()
+              infoDatas.sortByDescending { infoData -> infoData.execute }
+              view.rank_recycler_map.adapter = RankRecyclerViewAdapterMap(infoDatas, nearMaps2)
             }
-            .addOnFailureListener { exception ->
-            }
-    }
+        }
+        progressbar.dismiss()
+      }
+      .addOnFailureListener { exception ->
+      }
+  }
 
-    /**
-     * 현재 위치를 받아서 현재 위치와 필터에 적용한 위치 만큼 떨어져 있는 구간에서 실행순으로 정렬한 코드
-     */
+  /**
+   * 현재 위치를 받아서 현재 위치와 필터에 적용한 위치 만큼 떨어져 있는 구간에서 실행순으로 정렬한 코드
+   */
 
-    fun getFilterRange(view: View, location: Location) {
-        val progressbar = ProgressBar(App.instance.currentActivity() as Activity)
-        progressbar.show()
+  fun getFilterRange(view: View, location: Location) {
+    val progressbar = ProgressBar(App.instance.currentActivity() as Activity)
+    progressbar.show()
 
-        //결과로 가져온 location에서 정보추출 / 이건 위도 경도 형태로 받아오는 형식
-        //Location 형태로 받아오고 싶다면 아래처럼
-        //var getintentLocation = current
-        val lat = location.latitude
-        val lng = location.longitude
-        cur_loc = LatLng(lat, lng)
+    //결과로 가져온 location에서 정보추출 / 이건 위도 경도 형태로 받아오는 형식
+    //Location 형태로 받아오고 싶다면 아래처럼
+    //var getintentLocation = current
+    val lat = location.latitude
+    val lng = location.longitude
+    cur_loc = LatLng(lat, lng)
 
-        //레이아웃 매니저 추가
-        view.rank_recycler_map.layoutManager = LinearLayoutManager(App.instance.currentActivity() as Activity)
+    //레이아웃 매니저 추가
+    view.rank_recycler_map.layoutManager = LinearLayoutManager(App.instance.currentActivity() as Activity)
 
-        val db = FirebaseFirestore.getInstance()
+    val db = FirebaseFirestore.getInstance()
 
-        nearMaps1.clear()
-        nearMaps2.clear()
+    nearMaps1.clear()
+    nearMaps2.clear()
 
-        db.collection("mapRoute")
-            .get()
-            .addOnSuccessListener { result ->
-                infoDatas = arrayListOf()
+    db.collection("mapRoute")
+      .get()
+      .addOnSuccessListener { result ->
+        infoDatas = arrayListOf()
 
 
 
-                for (document in result) {
-                    val receiveRouteDatas = document.get("markerlatlngs") as List<Object>
+        for (document in result) {
+          val receiveRouteDatas = document.get("markerlatlngs") as List<Object>
 
-                    for (receiveRouteData in receiveRouteDatas) {
-                        val location = receiveRouteData as Map<String, Any>
-                        latLng = LatLng(
-                            location["latitude"] as Double,
-                            location["longitude"] as Double
-                        )
-                        nearMaps1.add(NearMap(document.id, SphericalUtil.computeDistanceBetween(cur_loc, latLng)))
-                        break
-                    }
+          for (receiveRouteData in receiveRouteDatas) {
+            val location = receiveRouteData as Map<String, Any>
+            latLng = LatLng(
+              location["latitude"] as Double,
+              location["longitude"] as Double
+            )
+            nearMaps1.add(NearMap(document.id, SphericalUtil.computeDistanceBetween(cur_loc, latLng)))
+            break
+          }
+        }
+
+        for (nearmap in nearMaps1) {
+          if (nearmap.distance < 5000) {
+            db.collection("mapInfo").whereEqualTo("mapTitle", nearmap.mapTitle)
+              .get()
+              .addOnSuccessListener { result2 ->
+
+                for (document2 in result2) {
+                  infoData = document2.toObject(InfoData::class.java)
+                  infoData.mapTitle = document2.id
+                  infoDatas.add(infoData)
+                  nearMaps2.add(nearmap)
+                  break
                 }
+                infoDatas.sortByDescending { infoData -> infoData.execute }
+                view.rank_recycler_map.adapter = RankRecyclerViewAdapterMap(infoDatas, nearMaps2)
+              }
+          } else {
+            view.rank_recycler_map.adapter = RankRecyclerViewAdapterMap(infoDatas, nearMaps2)
+          }
 
-                for (nearmap in nearMaps1) {
-                    if (nearmap.distance < 5000) {
-                        db.collection("mapInfo").whereEqualTo("mapTitle", nearmap.mapTitle)
-                            .get()
-                            .addOnSuccessListener { result2 ->
-
-                                for (document2 in result2) {
-                                    infoData = document2.toObject(InfoData::class.java)
-                                    infoData.mapTitle = document2.id
-                                    infoDatas.add(infoData)
-                                    nearMaps2.add(nearmap)
-                                    break
-                                }
-                                infoDatas.sortByDescending { infoData -> infoData.execute }
-                                view.rank_recycler_map.adapter = RankRecyclerViewAdapterMap(infoDatas, nearMaps2)
-                            }
-                    }
-                    else {
-                        view.rank_recycler_map.adapter = RankRecyclerViewAdapterMap(infoDatas, nearMaps2)
-                    }
-
-                }
-                progressbar.dismiss()
-            }
-            .addOnFailureListener { exception ->
-            }
-    }
+        }
+        progressbar.dismiss()
+      }
+      .addOnFailureListener { exception ->
+      }
+  }
 /*
     fun getFilterRangeReal(context: Context, view: View, location: Location) {
         val db = FirebaseFirestore.getInstance()
