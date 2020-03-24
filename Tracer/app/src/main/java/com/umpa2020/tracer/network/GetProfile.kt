@@ -28,13 +28,12 @@ import java.util.*
 class GetProfile {
     val MYROUTE = 60 // 마이 루트가 존재
     val MYROUTEFAIL = 70 // 마이 루트가 없을 경우
+    val db = FirebaseFirestore.getInstance()
 
     fun setProfile(view: View) {
         val progressbar = ProgressBar(App.instance.currentActivity() as Activity)
         progressbar.show()
         var profileImagePath = "init"
-
-        val db = FirebaseFirestore.getInstance()
 
         // 총 거리, 총 시간을 구하기 위해서 db에 접근하여 일단 먼저
         // 이용자가 뛴 다른 사람의 맵을 구함
@@ -97,10 +96,7 @@ class GetProfile {
     }
 
     fun getMyRoute(mHandler: Handler) {
-
-        var infoDatas: ArrayList<InfoData> = arrayListOf()
-
-        val db = FirebaseFirestore.getInstance()
+        val infoDatas: ArrayList<InfoData> = arrayListOf()
 
         db.collection("mapInfo").whereEqualTo("makersNickname", "logintestjb").whereEqualTo("privacy", "RACING")
             .get()
