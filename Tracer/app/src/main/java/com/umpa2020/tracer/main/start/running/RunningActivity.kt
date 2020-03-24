@@ -33,13 +33,13 @@ import hollowsoft.slidingdrawer.OnDrawerOpenListener
 import hollowsoft.slidingdrawer.OnDrawerScrollListener
 import hollowsoft.slidingdrawer.SlidingDrawer
 import kotlinx.android.synthetic.main.activity_running.*
+import org.w3c.dom.Text
 import java.text.SimpleDateFormat
 import java.util.*
 
 class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpenListener,
     OnDrawerCloseListener {
     var TAG = "RunningActivity"       //로그용 태그
-    lateinit var drawer: SlidingDrawer
     var B_RUNNIG = true
     var ns = NoticeState.NOTHING
     private var doubleBackToExitPressedOnce1 = false
@@ -88,27 +88,21 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
 
     private fun init() {
         val smf = supportFragmentManager.findFragmentById(R.id.map_viewer_running) as SupportMapFragment
-        //running map 선언 Polyline + Timer + Distance + Basic
+        //running traceMap 선언 Polyline + Timer + Distance + Basic
         traceMap = PolylineDecorator(
-            TimerDecorator(
-                DistanceDecorator(
-                    BasicMap(smf, this)
-                )
+            DistanceDecorator(
+                BasicMap(smf, this)
+
             )
         )
         locationBroadcastReceiver = LocationBroadcastReceiver(traceMap)
 
-        drawer = findViewById(R.id.drawer)
         drawer.setOnDrawerScrollListener(this)
         drawer.setOnDrawerOpenListener(this)
         drawer.setOnDrawerCloseListener(this)
 
         fabOpen = AnimationUtils.loadAnimation(applicationContext, R.anim.running_btn_open) // 애니매이션 초기화
-
         chronometer = runningTimerTextView
-        chronometer.base = SystemClock.elapsedRealtime()
-        chronometer.start()
-
     }
 
 
@@ -126,8 +120,8 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
     fun onClick(view: View) {
         when (view.id) {
             R.id.btn_start -> {
-                anim()
-                traceMap.start()
+                start()
+
             }
             R.id.btn_pause -> {
                 if (traceMap.privacy == Privacy.RACING) {
@@ -143,11 +137,18 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
             R.id.btn_stop -> {
                 val text = "종료를 원하시면 길게 눌러주세요"
                 val duration = Toast.LENGTH_LONG
-
                 val toast = Toast.makeText(applicationContext, text, duration)
                 toast.show()
             }
         }
+    }
+
+    private fun start() {
+        anim()
+        //TODO:chronometer 클래스화하기
+        chronometer.base = SystemClock.elapsedRealtime()
+        chronometer.start()
+        traceMap.start()
     }
 
     fun pause() {
@@ -171,7 +172,6 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
 
     private fun stop() {
         traceMap.stop()
-
         val routeGPX = traceMap.stop()
         val infoData = InfoData()
         infoData.distance = traceMap.distance
@@ -182,8 +182,8 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
         //formatter.timeZone = TimeZone.getTimeZone("UTC")
 
         val intent = Intent(this, RunningSaveActivity::class.java)
-        intent.putExtra("RouteGPX",routeGPX)
-        intent.putExtra("Info Data", infoData)
+        intent.putExtra("RouteGPX", routeGPX)
+        intent.putExtra("InfoData", infoData)
         startActivity(intent)
         finish()
     }

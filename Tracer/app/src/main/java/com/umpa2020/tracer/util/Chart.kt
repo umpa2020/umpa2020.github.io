@@ -17,7 +17,7 @@ class Chart {
         this.chart=chart
     }
 
-    fun setChart() {    //클래스로 따로 빼야할듯
+    fun setChart() {
         var lineChart = chart
         val alts = ArrayList<Entry>()
         val speeds = ArrayList<Entry>()

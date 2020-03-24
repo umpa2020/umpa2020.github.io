@@ -12,10 +12,16 @@ import com.umpa2020.tracer.constant.UserState
 import kotlinx.android.synthetic.main.activity_running.view.*
 import org.jetbrains.anko.runOnUiThread
 
-class DistanceDecorator(decoratedMap: TraceMap) : MapDecorator(decoratedMap) {
+class RacingDecorator(decoratedMap: TraceMap) : MapDecorator(decoratedMap) {
     override fun work(location: Location) {
         super.work(location)
         when (userState) {
+            UserState.NORMAL -> {
+                if(moving) calcDistance()
+            }
+            UserState.READYTORACING -> {
+                if(moving) calcDistance()
+            }
             UserState.RUNNING -> {
                 if(moving) calcDistance()
             }

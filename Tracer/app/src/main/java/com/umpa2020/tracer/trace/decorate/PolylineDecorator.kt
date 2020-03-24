@@ -4,10 +4,8 @@ import android.location.Location
 import android.util.Log
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
-import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.constant.UserState
-import com.umpa2020.tracer.util.Wow
 import io.jenetics.jpx.WayPoint
 
 class PolylineDecorator(decoratedMap: TraceMap) : MapDecorator(decoratedMap) {
@@ -23,21 +21,24 @@ class PolylineDecorator(decoratedMap: TraceMap) : MapDecorator(decoratedMap) {
     var markerCount = 0
     private fun polyLineMake() {
         Log.d(TAG, "making polyline $previousLocation $currentLocation")
+        //polyline 그리기
         mMap.addPolyline(
             PolylineOptions().add(
                 previousLocation,
                 currentLocation
             )
         )
-        tpList.add(
+        //tplist에 추가
+        trkList.add(
             WayPoint.builder()
                 .lat(currentLocation.latitude)
                 .lon(currentLocation.longitude)
-                .ele(altitude)
+                .ele(elevation)
                 .speed(speed)
                 .name("track point")
                 .build()
         )
+        //100m마다 waypoint 추가
         if (distance.toInt() / Constants.WPINTERVAL >= markerCount) {    //100m마다
             if (distance > 0)
                 markerCount = distance.toInt() / Constants.WPINTERVAL

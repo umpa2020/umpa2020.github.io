@@ -35,7 +35,7 @@ class GPXConverter {
         return Uri.EMPTY
     }
 
-    fun GpxToClass(path: Path):RouteGPX{
+    fun GpxToClass(path: String):RouteGPX{
         var gpx =GPX.read(path)
         return RouteGPX("test","Test",gpx.wayPoints,gpx.tracks[0].segments[0].points)
     }

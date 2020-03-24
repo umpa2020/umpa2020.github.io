@@ -15,6 +15,5 @@ data class InfoData (
     var time: Long? = null,
     var execute: Int? = null,
     var likes: Int? = null,
-    var privacy: Privacy = Privacy.PUBLIC,
-    var speed: MutableList<Double> = mutableListOf(.0) // 순간 속력
+    var privacy: Privacy = Privacy.PUBLIC
 ) : Parcelable

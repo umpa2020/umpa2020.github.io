@@ -8,11 +8,16 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Polyline
+import com.umpa2020.tracer.constant.MapCommand
 import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.constant.UserState
+import com.umpa2020.tracer.dataClass.RouteGPX
 import io.jenetics.jpx.WayPoint
 
 class BasicMap(val smf: SupportMapFragment, val context: Context) : OnMapReadyCallback, TraceMap {
+    override var routeGPX:RouteGPX?=null
+    override lateinit var loadTrack: Polyline
     override lateinit var mMap: GoogleMap
     override var testString: String = ""
     override var TAG = "TraceMap"       //로그용 태그
@@ -21,33 +26,35 @@ class BasicMap(val smf: SupportMapFragment, val context: Context) : OnMapReadyCa
     override var time = 0.0
     override var previousLocation = LatLng(0.0, 0.0)          //이전위치
     override var currentLocation = LatLng(37.619742, 127.060836)              //현재위치
-    override var altitude=0.0
+    override var elevation=0.0
     override var speed=0.0
     override var userState = UserState.NORMAL       //사용자의 현재상태 달리기전 or 달리는중 등 자세한내용은 enum참고
+    override var mapCommand=MapCommand.NOTHING
     override var moving = false
-    override var tpList: MutableList<WayPoint> = mutableListOf()
+    override var trkList: MutableList<WayPoint> = mutableListOf()
     override var wpList: MutableList<WayPoint> = mutableListOf()
-
     override fun work(location: Location) {
         setLocation(location)
     }
-
     init {
         smf.getMapAsync(this)
     }
 
-    override fun onMapReady(googleMap: GoogleMap) { //after the map is loaded
+    override fun onMapReady(googleMap: GoogleMap) { //after the traceMap is loaded
         Log.d(TAG, "onMapReady")
         mMap = googleMap //구글맵
         mMap.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
+        if(routeGPX!=null){
+            draw()
+        }
 
     }
 
     private fun setLocation(location: Location) {//현재위치를 이전위치로 변경
-        testString += "B"
-        Log.d(TAG, testString)
         val lat = location.latitude
         val lng = location.longitude
+        elevation=location.altitude
+        speed=location.speed.toDouble()
         previousLocation = currentLocation
         currentLocation = LatLng(lat, lng)
         if (previousLocation.latitude == currentLocation.latitude

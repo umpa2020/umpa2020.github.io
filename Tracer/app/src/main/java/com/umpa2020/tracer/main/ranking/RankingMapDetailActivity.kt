@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.Button
+import android.widget.Chronometer
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -31,7 +32,8 @@ class RankingMapDetailActivity : AppCompatActivity() {
     var dbMapTitle = ""
     var profileImagePath = ""
     var googletokenId = ""
-
+    lateinit var chronometer: Chronometer
+    var timeWhenStopped: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -92,7 +94,7 @@ class RankingMapDetailActivity : AppCompatActivity() {
                 for (document in result) {
                     if (document.id.equals(mapTitle)) {
                         // 1차원 배열인 고도는 그대로 받아오면 되고
-                        altitude = document.get("altitude") as List<Double>
+                        altitude = document.get("elevation") as List<Double>
 
                         // 마커의 LatLng 는 나눠서 넣어줘야함
                         var receiveMarkerDatas = document.get("markerlatlngs") as List<Object>
@@ -127,7 +129,7 @@ class RankingMapDetailActivity : AppCompatActivity() {
                                     }
                                     latLngs.add(routeArray)
                                 }
-                              //  routeData = RouteData(altitude, latLngs, markerlatlngs)
+                              //  routeData = RouteData(elevation, latLngs, markerlatlngs)
                                 // 단순 맵 정보 받아오는 부분
                                 db.collection("mapInfo").whereEqualTo("mapTitle", mapTitle)
                                     .get()
@@ -144,8 +146,8 @@ class RankingMapDetailActivity : AppCompatActivity() {
                                             val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
                                             formatter.setTimeZone(TimeZone.getTimeZone("UTC"))
                                             rankingDetailTime.text = formatter.format(Date(infoData.time!!))
-                                            rankingDetailSpeed.text = String.format("%.2f", infoData.speed.average())
-                                            /*var chart = Chart(routeData.altitude, infoData.speed, rankingDetailChart)
+                                            //rankingDetailSpeed.text = String.format("%.2f", infoData.speed.average())
+                                            /*var chart = Chart(routeData.elevation, infoData.speed, rankingDetailChart)
                                             chart.setChart()*/
                                         }
                                     }

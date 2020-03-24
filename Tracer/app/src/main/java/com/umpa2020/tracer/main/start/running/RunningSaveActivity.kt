@@ -1,18 +1,22 @@
 package com.umpa2020.tracer.main.start.running
 
 
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.dataClass.*
-import com.umpa2020.tracer.trace.map.ViewerMap
+import com.umpa2020.tracer.trace.decorate.BasicMap
+import com.umpa2020.tracer.trace.decorate.TraceMap
+import com.umpa2020.tracer.util.Chart
 import com.umpa2020.tracer.util.gpx.GPXConverter
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_running_save.*
@@ -26,32 +30,38 @@ class RunningSaveActivity : AppCompatActivity() {
 
     lateinit var infoData: InfoData
     lateinit var routeGPX: RouteGPX
-    lateinit var map: ViewerMap
+    lateinit var traceMap: TraceMap
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(com.umpa2020.tracer.R.layout.activity_running_save)
 
-        infoData = intent.getParcelableExtra("Info Data")
-        routeGPX = intent.getParcelableExtra("Route GPX")
-
+        infoData = intent.getParcelableExtra("InfoData")
+        routeGPX = intent.getParcelableExtra("RouteGPX")
+        val speedList = mutableListOf<Double>()
+        val elevationList = mutableListOf<Double>()
+        routeGPX.trkList.forEach {
+            speedList.add(it.speed.get().toDouble())
+            elevationList.add(it.elevation.get().toDouble())
+        }
         //TODO: 액티비티에 그리는 거 먼저
         val smf = supportFragmentManager.findFragmentById(com.umpa2020.tracer.R.id.map_viewer) as SupportMapFragment
-        map = ViewerMap(smf, this, routeGPX)
+        traceMap = BasicMap(smf, this)
+        traceMap.routeGPX = routeGPX
         distance_tv.text = String.format("%.2f", infoData.distance!! / 1000)
         val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
         formatter.timeZone = TimeZone.getTimeZone("UTC")
 
         time_tv.text = formatter.format(Date(infoData.time!!))
         //TODO:routeGPX 파싱해서 speed랑 고도 넣기
-        //speed_tv.text = String.format("%.2f", infoData.speed.average())
+        speed_tv.text = String.format("%.2f", speedList.average())
         if (infoData.privacy == Privacy.PUBLIC) {
             racingRadio.isChecked = false
             racingRadio.isEnabled = false
             publicRadio.isChecked = true
         }
-        //var chart = Chart(routeData.altitude, infoData.speed, chart)
-        // chart.setChart()
+        var myChart = Chart(elevationList, speedList, chart)
+        myChart.setChart()
     }
 
     fun onClick(view: View) {
@@ -65,7 +75,23 @@ class RunningSaveActivity : AppCompatActivity() {
                         mapExplanationEdit.hint = "맵 설명을 작성해주세요"
                         mapExplanationEdit.setHintTextColor(Color.RED)
                     } else {
-                        map.CaptureMapScreen()
+                        var callback = GoogleMap.SnapshotReadyCallback {
+                            try {
+                                val saveFolder = File(filesDir, "mapdata") // 저장 경로
+                                if (!saveFolder.exists()) {       //폴더 없으면 생성
+                                    saveFolder.mkdir()
+                                }
+                                val path = "racingMap" + saveFolder.list().size + ".bmp"        //파일명 생성하는건데 수정필요
+                                //비트맵 크기에 맞게 잘라야함
+                                val myfile = File(saveFolder, path)                //로컬에 파일저장
+                                val out = FileOutputStream(myfile)
+                                it.compress(Bitmap.CompressFormat.PNG, 90, out)
+                                save(myfile.path)
+                            } catch (e: Exception) {
+                                Log.d("Capture", e.toString())
+                            }
+                        }
+                        traceMap.captureMapScreen(callback)
                         switch++
                     }
                 }
@@ -77,9 +103,9 @@ class RunningSaveActivity : AppCompatActivity() {
         Log.d("Save", "Start Saving")
         // 타임스탭프 찍는 코드
         val dt = Date()
-        val full_sdf = SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.getDefault())
+        val fullSdf = SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.getDefault())
 
-        val date = full_sdf.parse(dt.toString())
+        val date = fullSdf.parse(dt.toString())
         val timestamp = date!!.time
 
 
@@ -104,7 +130,7 @@ class RunningSaveActivity : AppCompatActivity() {
         if (!saveFolder.exists()) {       //폴더 없으면 생성
             saveFolder.mkdir()
         }
-        var routeGpxFile=gpxConverter.classToGpx(routeGPX, saveFolder.path)
+        var routeGpxFile = gpxConverter.classToGpx(routeGPX, saveFolder.path)
         // storage에 이미지 업로드 모든 맵 이미지는 mapimage/maptitle로 업로드가 된다.
         val fstorage = FirebaseStorage.getInstance("gs://tracer-9070d.appspot.com/")
         Log.d("Save", "HI0?")
@@ -133,7 +159,7 @@ class RunningSaveActivity : AppCompatActivity() {
         val rankingData = RankingData(UserInfo.nickname, UserInfo.nickname, infoData.time)
         db.collection("rankingMap").document(infoData.mapTitle!!).set(rankingData)
         db.collection("rankingMap").document(infoData.mapTitle!!).collection("ranking")
-            .document(rankingData.makerNickname + "||" + full_sdf.format(dt)).set(rankingData)
+            .document(rankingData.makerNickname + "||" + fullSdf.format(dt)).set(rankingData)
 
         // db에 원하는 경로 및, 문서로 업로드
 

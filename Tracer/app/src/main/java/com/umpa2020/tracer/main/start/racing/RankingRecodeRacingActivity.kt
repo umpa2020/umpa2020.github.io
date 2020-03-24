@@ -3,43 +3,52 @@ package com.umpa2020.tracer.main.start.racing
 import android.content.pm.ActivityInfo
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.SystemClock
 import android.util.Log
 import android.view.View
+import android.widget.Chronometer
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.constant.UserState
+import com.umpa2020.tracer.trace.decorate.BasicMap
+import com.umpa2020.tracer.trace.decorate.PolylineDecorator
+import com.umpa2020.tracer.trace.decorate.TraceMap
 import hollowsoft.slidingdrawer.OnDrawerCloseListener
 import hollowsoft.slidingdrawer.OnDrawerOpenListener
 import hollowsoft.slidingdrawer.OnDrawerScrollListener
 import hollowsoft.slidingdrawer.SlidingDrawer
 import kotlinx.android.synthetic.main.activity_ranking_recode_racing.*
-/*
+import kotlinx.android.synthetic.main.activity_ranking_recode_racing.drawer
+import kotlinx.android.synthetic.main.activity_running.*
+
 class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpenListener,
     OnDrawerCloseListener {
     var TAG = "what u wanna say?~~!~!"       //로그용 태그
-    lateinit var manageRacing: ManageRacing
+    lateinit var traceMap: TraceMap
     lateinit var mapRouteGPX: RouteGPX
-    lateinit var drawer: SlidingDrawer
     lateinit var mapTitle: String
     lateinit var increaseExecuteThread: Thread
+    lateinit var chronometer: Chronometer
+    var timeWhenStopped: Long = 0
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
         setContentView(R.layout.activity_ranking_recode_racing)
 
-        mapRouteGPX = intent.getParcelableExtra("RouteGpx") as RouteGPX
-        mapTitle = intent.getStringExtra("maptitle")!!
+        mapRouteGPX = intent.getParcelableExtra("RouteGPX") as RouteGPX
+        mapTitle = mapRouteGPX.text
         init()
-        /*racingControlButton.setOnLongClickListener {
-            if (manageRacing.racingMap.userState == UserState.RACING) {
-                manageRacing.stopRacing(false)
+        racingControlButton.setOnLongClickListener {
+            if (traceMap.userState == UserState.RUNNING) {
+                traceMap.stop()
             }
             true
-        }*/
+        }
     }
 
     private fun increaseExecute(mapTitle: String) {
@@ -56,29 +65,28 @@ class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener,
         increaseExecuteThread.start()
     }
 
-    fun init() {
+    private fun init() {
         val smf = supportFragmentManager.findFragmentById(R.id.map_viewer) as SupportMapFragment
-        manageRacing = ManageRacing(smf, this, this, mapRouteGPX)
-
-        drawer = findViewById(R.id.drawer)
+        traceMap = PolylineDecorator(BasicMap(smf, this))
+        traceMap.routeGPX=mapRouteGPX
         drawer.setOnDrawerScrollListener(this)
         drawer.setOnDrawerOpenListener(this)
         drawer.setOnDrawerCloseListener(this)
+        chronometer = racingTimerTextView
     }
 
     fun onClick(view: View) {
         when (view.id) {
             R.id.racingControlButton -> {
-                when (manageRacing.racingMap.userState) {
-                    UserState.BEFORERACING -> {
+                when (traceMap.userState) {
+                    //TODO:notice " you should be in 200m"
+                    UserState.NORMAL -> {
+                        //200m 안으로 들어오세요!
                     }
                     UserState.READYTORACING -> {
-                        increaseExecute(mapTitle)
-                        manageRacing.startRacing(mapTitle)
-                        racingNotificationLayout.visibility = View.GONE
-                        racingControlButton.text = "Stop"
+                        start()
                     }
-                    UserState.RACING -> {
+                    UserState.RUNNING -> {
                         stop()
                     }
                 }
@@ -88,18 +96,18 @@ class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener,
             }
         }
     }
-
-    fun stop() {    //타이머 멈추는거 만들어야함
-        // Toast.makeText(this, "종료를 원하시면, 길게 눌러주세요", Toast.LENGTH_LONG).show()
+    fun start(){
+        increaseExecute(mapTitle)
+        racingNotificationLayout.visibility = View.GONE
+        racingControlButton.text = "Stop"
+        chronometer.base = SystemClock.elapsedRealtime()
+        chronometer.start()
+        traceMap.start()
     }
-
-    fun noticeMessage(text: String) {
-        if (text == "") {
-            racingNotificationLayout.visibility = View.GONE
-        } else {
-            racingNotificationLayout.visibility = View.VISIBLE
-            racingNotificationButton.text = text
-        }
+    fun stop() {    //TODO:타이머 멈추는거 만들어야함
+        traceMap.stop()
+        SystemClock.elapsedRealtime() - chronometer.base
+        // Toast.makeText(this, "종료를 원하시면, 길게 눌러주세요", Toast.LENGTH_LONG).show()
     }
 
     override fun onScrollStarted() {
@@ -120,4 +128,3 @@ class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener,
         Log.d(TAG, "onDrawerClosed()")
     }
 }
-*/

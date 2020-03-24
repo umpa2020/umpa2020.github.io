@@ -46,7 +46,7 @@ class RacingMap : OnMapReadyCallback {
     var alts = Vector<Double>()
     var speeds = Vector<Double>()
 
-    //map Route
+    //traceMap Route
     var route: MutableList<LatLng> = mutableListOf() //로드된 점들의 집합
     var wpList: MutableList<WayPoint> = mutableListOf()
     var wpMarkers = Vector<Marker>()
@@ -258,7 +258,7 @@ class RacingMap : OnMapReadyCallback {
                     for ((i, location) in it.locations.withIndex()) {
                         var lat = location.latitude
                         var lng = location.longitude
-                        var alt = location.altitude
+                        var alt = location.elevation
                         var speed = location.speed
                         cur_loc = LatLng(lat, lng)
                         when (userState) {

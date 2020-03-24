@@ -111,12 +111,12 @@ class RacingFinishActivity : AppCompatActivity() {
                                             makerData = document.toObject(InfoData::class.java)!!
                                             runOnUiThread {
                                                 makerLapTimeTextView.text = formatter.format(Date(makerData.time!!))
-                                                makerMaxSpeedTextView.text = PrettyDistance().convertPretty(makerData.speed.max()!!)
+                                            /*    makerMaxSpeedTextView.text = PrettyDistance().convertPretty(makerData.speed.max()!!)
                                                 makerAvgSpeedTextView.text = PrettyDistance().convertPretty(makerData.speed.average())
 
                                                 racerLapTimeTextView.text = formatter.format(Date(racerData.time!!))
                                                 racerMaxSpeedTextView.text = PrettyDistance().convertPretty(racerData.speed.max()!!)
-                                                racerAvgSpeedTextView.text = PrettyDistance().convertPretty(racerData.speed.average())
+                                                racerAvgSpeedTextView.text = PrettyDistance().convertPretty(racerData.speed.average())*/
 
                                             }
                                             progressbar.dismiss()
@@ -131,13 +131,13 @@ class RacingFinishActivity : AppCompatActivity() {
                 }
         } else {
             resultRankTextView.text = "실패"
-            makerLapTimeTextView.text = formatter.format(Date(makerData.time!!))
+           /* makerLapTimeTextView.text = formatter.format(Date(makerData.time!!))
             makerMaxSpeedTextView.text = PrettyDistance().convertPretty(makerData.speed.max()!!)
             makerAvgSpeedTextView.text = PrettyDistance().convertPretty(makerData.speed.average())
 
             racerLapTimeTextView.text = formatter.format(Date(racerData.time!!))
             racerMaxSpeedTextView.text = PrettyDistance().convertPretty(racerData.speed.max()!!)
-            racerAvgSpeedTextView.text = PrettyDistance().convertPretty(racerData.speed.average())
+            racerAvgSpeedTextView.text = PrettyDistance().convertPretty(racerData.speed.average())*/
 
             progressbar.dismiss()
 

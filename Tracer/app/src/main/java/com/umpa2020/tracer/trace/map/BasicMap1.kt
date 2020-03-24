@@ -20,7 +20,7 @@ class BasicMap : OnMapReadyCallback{
     }
 
     var lastLocat : Location? = null
-    override fun onMapReady(googleMap: GoogleMap) { //after the map is loaded
+    override fun onMapReady(googleMap: GoogleMap) { //after the traceMap is loaded
         Log.d("ssmm11", "onMapReady")
         mMap = googleMap //구글맵
         mMap!!.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
