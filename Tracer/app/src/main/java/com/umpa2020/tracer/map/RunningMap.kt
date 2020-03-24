@@ -188,10 +188,10 @@ class RunningMap(smf: SupportMapFragment/*, var context: Context*/) : OnMapReady
     if (userState == UserState.RUNNING)
       createData(location)
     else
-      currentLocation = LatLng(location!!.latitude, location!!.longitude)
+      currentLocation = LatLng(location.latitude, location.longitude)
 
     if (!cameraFlag) {
-      mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 17F))   //화면이동
+      mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 17F))   //화면이동
       cameraFlag = true
     }
 

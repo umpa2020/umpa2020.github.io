@@ -119,12 +119,12 @@ object LocationUpdatesComponent {
   var lastLocation: Location? = null
   private fun getLastLocation() {
     try {
-      fusedLocationClient!!.lastLocation // 마지막으로 알려진 위치 가져오기
+      fusedLocationClient.lastLocation // 마지막으로 알려진 위치 가져오기
         .addOnCompleteListener { task ->
           if (task.isSuccessful && task.result != null) {
             currentLocation = task.result!!
             lastLocation = task.result!!
-            Log.i("WSY", "getLastLocation " + currentLocation!!)
+            Log.i("WSY", "getLastLocation " + currentLocation)
             // getLastLocation Location[fused 37.619672,127.059084
             // hAcc=15 et=+5d2h34m37s51ms alt=53.5 vel=0.0014348121
             // bear=219.74748 vAcc=2 sAcc=??? bAcc=??? {Bundle[mParcelledData.dataSize=52]}]

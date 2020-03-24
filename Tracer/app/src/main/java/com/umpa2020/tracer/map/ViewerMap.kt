@@ -80,7 +80,7 @@ class ViewerMap : OnMapReadyCallback {
     }
     return routes
 
-    routes = routeData.latlngs!!
+    routes = routeData.latlngs
     return routes
   }
 
@@ -96,8 +96,8 @@ class ViewerMap : OnMapReadyCallback {
         )        //경로를 그릴 폴리라인 집합
     }
 
-    var min = LatLng(Wow.minDoubleLat(routeData.latlngs!!), Wow.minDoubleLng(routeData.latlngs!!))
-    var max = LatLng(Wow.maxDoubleLat(routeData.latlngs!!), Wow.maxDoubleLng(routeData.latlngs!!))
+    var min = LatLng(Wow.minDoubleLat(routeData.latlngs), Wow.minDoubleLng(routeData.latlngs))
+    var max = LatLng(Wow.maxDoubleLat(routeData.latlngs), Wow.maxDoubleLng(routeData.latlngs))
     print_log(min.toString() + max.toString())
     mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(LatLngBounds(min, max), 1080, 300, 50))
   }

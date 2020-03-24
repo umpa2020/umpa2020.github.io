@@ -40,7 +40,9 @@ class RankingFragment : Fragment() {
     view.disappearLayout.setOnClickListener {
       disappearAnimation()
     }
-
+    /**
+     * 수진이가 xml 만들어주면 해당 기능 붙히기
+     */
 
     //전체 삭제 누를 때
     view.allDeleteButton.setOnClickListener {
@@ -81,19 +83,15 @@ class RankingFragment : Fragment() {
 
       override fun onStopTrackingTouch(seekBar: SeekBar) {}
     })
-
     return view
-  }
 
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
   }
 
   /**
    * 레이아웃이 스르륵 보이는 함수
    */
 
-  private fun appearAnimation() {
+  fun appearAnimation() {
     val animate = AlphaAnimation(0f, 1f) //투명도 변화
     animate.duration = 500
     animate.fillAfter = true
@@ -106,7 +104,7 @@ class RankingFragment : Fragment() {
   /**
    * 레이아웃이 스르륵 사라지는 함수
    */
-  private fun disappearAnimation() {
+  fun disappearAnimation() {
     view!!.tuneLinearLayout.visibility = View.GONE
     view!!.filterLayout.visibility = View.GONE
     view!!.disappearLayout.visibility = View.GONE
@@ -116,5 +114,4 @@ class RankingFragment : Fragment() {
     animate.fillAfter = true
     view!!.tuneLinearLayout.startAnimation(animate)
   }
-
 }

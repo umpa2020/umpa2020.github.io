@@ -32,7 +32,7 @@ class NearRouteActivity : AppCompatActivity() {
     progressbar.show()
 
     //startFragment에서 넘긴 현재 위치를 intent로 받음
-    val intent = getIntent()
+    val intent = intent
     val current = intent.extras?.getParcelable<Location>("currentLocation")
 
 
@@ -40,7 +40,7 @@ class NearRouteActivity : AppCompatActivity() {
     //Location 형태로 받아오고 싶다면 아래처럼
     //var getintentLocation = current
     val lat = current!!.latitude
-    val lng = current!!.longitude
+    val lng = current.longitude
     cur_loc = LatLng(lat, lng)
 
 

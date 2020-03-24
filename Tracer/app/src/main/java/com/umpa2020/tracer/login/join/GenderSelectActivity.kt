@@ -18,11 +18,11 @@ class GenderSelectActivity : AppCompatActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+    requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     setContentView(R.layout.activity_gender_select)
 
     val titleText = app_toolbar.titleText
-    titleText.setText("성별을 선택하세요.")
+    titleText.text = "성별을 선택하세요."
   }
 
   fun onClick(v: View) {

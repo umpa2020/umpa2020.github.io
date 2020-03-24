@@ -37,10 +37,6 @@ class MainActivity : AppCompatActivity() {
     true
   }
 
-  override fun onResume() {
-    super.onResume()
-  }
-
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     Log.d("mainActivitiy", "Hello I'm New")

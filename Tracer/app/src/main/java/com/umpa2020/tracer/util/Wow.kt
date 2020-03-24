@@ -10,7 +10,7 @@ import com.google.maps.android.SphericalUtil
 import java.text.SimpleDateFormat
 import java.util.*
 
-class Wow() {
+class Wow {
   companion object {
     // array에서 max, min 받아와서 처리
     fun minDoubleLat(list: MutableList<MutableList<LatLng>>): Double {
@@ -75,7 +75,7 @@ class Wow() {
     // date formmatter
     fun milisecToString(milisec: Long): String {
       val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
-      formatter.setTimeZone(TimeZone.getTimeZone("UTC"))
+      formatter.timeZone = TimeZone.getTimeZone("UTC")
 
       return formatter.format(Date(milisec))
     }
@@ -90,10 +90,10 @@ class Wow() {
       var canvas = Canvas()
       var bitmap = Bitmap.createBitmap(
         circleDrawable!!.intrinsicWidth,
-        circleDrawable!!.intrinsicHeight,
+        circleDrawable.intrinsicHeight,
         Bitmap.Config.ARGB_8888
       )
-      canvas.setBitmap(bitmap);
+      canvas.setBitmap(bitmap)
       circleDrawable.setBounds(
         0,
         0,
