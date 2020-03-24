@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,8 +36,8 @@ class RankRecyclerViewAdapterMap(val mdata: ArrayList<InfoData>, val mode: Strin
     if (mode.equals("execute")) {
       holder.execute.text = singleItem.execute.toString()
     } else if (mode.equals("likes")) {
-
-
+      Likes().getLikes(mHandler)
+      Log.d("ssmm11", "자 리사이클에서 받아온 거? i = $position : $likeMapsDatas")
       holder.heart.setImageResource(R.drawable.ic_favorite_border_black_24dp)
       holder.execute.text = singleItem.likes.toString()
     }
@@ -59,25 +60,13 @@ class RankRecyclerViewAdapterMap(val mdata: ArrayList<InfoData>, val mode: Strin
       val nextIntent = Intent(context, RankRecyclerItemClickActivity::class.java)
       nextIntent.putExtra("MapTitle", singleItem.mapTitle) //mapTitle 정보 인텐트로 넘김
       context!!.startActivity(nextIntent)
-
-
     }
 
     holder.heart.setOnClickListener {
       Likes().setLikes(singleItem.mapTitle!!)
     }
 
-    val mHandler = object : Handler(Looper.getMainLooper()) {
-      override fun handleMessage(msg: Message) {
-        when (msg.what) {
-          GETLIKES -> {
-            likeMapsDatas = msg.obj as ArrayList<LikeMapsData>
-            //adpater 추가
-            
-          }
-        }
-      }
-    }
+
   }
 
   //뷰 홀더 생성
@@ -103,6 +92,16 @@ class RankRecyclerViewAdapterMap(val mdata: ArrayList<InfoData>, val mode: Strin
     var heart = view.rankingFragmentHeartImageView
   }
 
+  val mHandler = object : Handler(Looper.getMainLooper()) {
+    override fun handleMessage(msg: Message) {
+      when (msg.what) {
+        GETLIKES -> {
+          likeMapsDatas = msg.obj as ArrayList<LikeMapsData>
+          //adpater 추가
 
+        }
+      }
+    }
+  }
 }
 
