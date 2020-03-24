@@ -23,10 +23,6 @@ class NearRouteActivity : AppCompatActivity() {
   lateinit var locationCallback: LocationCallback
   var cur_loc = LatLng(0.0, 0.0)          //현재위치
   var nearMaps: ArrayList<NearMap> = arrayListOf()
-
-  lateinit var distanceArray: ArrayList<Double>
-  lateinit var mapTitleArray: ArrayList<String>
-
   var latLng = LatLng(0.0, 0.0)
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,7 +50,7 @@ class NearRouteActivity : AppCompatActivity() {
       .get()
       .addOnSuccessListener { result ->
         for (document in result) {
-          var receiveRouteDatas = document.get("markerlatlngs") as List<Object>
+          val receiveRouteDatas = document.get("markerlatlngs") as List<Object>
 
           for (receiveRouteData in receiveRouteDatas) {
             val location = receiveRouteData as Map<String, Any>
@@ -65,7 +61,7 @@ class NearRouteActivity : AppCompatActivity() {
             break
           }
           if (SphericalUtil.computeDistanceBetween(cur_loc, latLng) <= 20000) {
-            var nearMap = NearMap(document.id, SphericalUtil.computeDistanceBetween(cur_loc, latLng))
+            val nearMap = NearMap(document.id, SphericalUtil.computeDistanceBetween(cur_loc, latLng))
             nearMaps.add(nearMap)
           }
         }

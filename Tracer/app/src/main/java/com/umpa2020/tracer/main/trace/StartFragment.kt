@@ -20,6 +20,7 @@ import com.umpa2020.tracer.locationBackground.LocationBackgroundService
 import com.umpa2020.tracer.main.trace.racing.NearRouteActivity
 import com.umpa2020.tracer.main.trace.running.RunningActivity
 import com.umpa2020.tracer.map.BasicMap
+import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.fragment_start.view.*
 
 
@@ -118,6 +119,8 @@ class StartFragment : Fragment(), View.OnClickListener {
           curLoc = msg.obj as Location
           Log.d(WSY, "StartFragment : $curLoc")
           map.setLocation(curLoc)
+          UserInfo.rankingLatitude = curLoc.latitude
+          UserInfo.rankingLongitude = curLoc.longitude
           if (curLoc != null)
             lastLacation = curLoc
         }

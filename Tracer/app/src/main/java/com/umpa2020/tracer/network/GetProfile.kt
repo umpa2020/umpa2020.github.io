@@ -24,7 +24,7 @@ import java.util.*
  *
  */
 
-class getProfile {
+class GetProfile {
 
 
   fun setProfile(view: View) {
