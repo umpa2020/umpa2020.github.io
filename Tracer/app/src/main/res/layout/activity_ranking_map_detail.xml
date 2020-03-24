@@ -20,7 +20,7 @@
       android:layout_height="wrap_content"
       android:layout_marginRight="12dp"
       android:gravity="center"
-      android:text="맵 상세보기"></TextView>
+      android:text="@string/detailedmap"></TextView>
   </Toolbar>
 
   <ScrollView
@@ -84,7 +84,7 @@
         android:layout_marginTop="10dp"
         android:background="@color/lightgray"
         android:paddingLeft="20dp"
-        android:text="맵 이름"
+        android:text="@string/mapname"
         android:textColor="@android:color/black" />
 
 
@@ -106,7 +106,7 @@
         android:layout_below="@+id/rankingDetailMapTitle"
         android:background="@color/lightgray"
         android:paddingLeft="20dp"
-        android:text="맵 설명"
+        android:text="@string/mapdescription"
         android:textColor="@android:color/black" />
 
       <TextView
@@ -126,7 +126,7 @@
         android:layout_below="@+id/rankingDetailMapDetail"
         android:background="@color/lightgray"
         android:paddingLeft="20dp"
-        android:text="기록 분석"
+        android:text="@string/recordanalysis"
         android:textColor="@android:color/black" />
 
 
@@ -151,7 +151,7 @@
             style="@style/ListDetail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="거리 (km)" />
+            android:text="@string/distance" />
 
           <TextView
             android:id="@+id/rankingDetailDistance"
@@ -172,7 +172,7 @@
             style="@style/ListDetail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="시간" />
+            android:text="@string/time" />
 
           <TextView
             android:id="@+id/rankingDetailTime"
@@ -193,7 +193,7 @@
             style="@style/ListDetail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="속력 (km/h)" />
+            android:text="@string/speed" />
 
           <TextView
             android:id="@+id/rankingDetailSpeed"
@@ -212,7 +212,7 @@
         android:layout_below="@+id/rankingDetailInfoLinearLayout"
         android:background="@color/lightgray"
         android:paddingLeft="20dp"
-        android:text="루트 썸네일"
+        android:text="@string/thumbnail"
         android:textColor="@android:color/black" />
 
       <ImageView
@@ -232,7 +232,7 @@
         android:layout_below="@+id/rankingDetailGoogleMap"
         android:background="@color/lightgray"
         android:paddingLeft="20dp"
-        android:text="고도 / 속도 차트"
+        android:text="@string/altitude_sppedchart"
         android:textColor="@android:color/black" />
 
       <com.github.mikephil.charting.charts.LineChart
@@ -259,6 +259,6 @@
     android:layout_marginRight="20dp"
     android:layout_marginBottom="10dp"
     android:background="@drawable/button_background"
-    android:text="경기 시작" />
+    android:text="@string/matchstart" />
 
 </RelativeLayout>

@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="12dp"
         android:gravity="center"
-        android:text="맵 기록"></TextView>
+        android:text="@string/map_record"></TextView>
     </Toolbar>
 
     <RelativeLayout
@@ -53,7 +53,7 @@
         android:background="@drawable/button_background"
         android:gravity="center"
         android:onClick="onClick"
-        android:text="더 알아보기" />
+        android:text="@string/learn_more" />
     </RelativeLayout>
 
     <LinearLayout
@@ -98,7 +98,7 @@
       android:layout_marginLeft="20dp"
       android:layout_marginRight="20dp"
       android:gravity="center"
-      android:text="상위 플레이어" />
+      android:text="@string/top_player" />
 
     <TextView
       android:id="@+id/gubun2"
@@ -120,7 +120,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="0.5"
         android:gravity="center"
-        android:text="순위" />
+        android:text="@string/ranking" />
 
       <TextView
         style="@style/ListTitle"
@@ -129,7 +129,7 @@
         android:layout_marginLeft="10dp"
         android:layout_weight="2"
         android:gravity="center"
-        android:text="플레이어" />
+        android:text="@string/player" />
 
       <TextView
         style="@style/ListTitle"
@@ -137,7 +137,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="2"
         android:gravity="center"
-        android:text="랩 타임" />
+        android:text="@string/laptime" />
 
 
     </LinearLayout>

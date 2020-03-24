@@ -23,7 +23,7 @@
         android:layout_marginLeft="40dp"
         android:layout_marginRight="45dp"
         android:gravity="center"
-        android:text="랭킹">
+        android:text="@string/ranking">
 
       </TextView>
 
@@ -104,7 +104,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="2"
         android:gravity="center"
-        android:text="맵 이름" />
+        android:text="@string/mapname" />
 
       <TextView
         style="@style/ListTitle"
@@ -112,7 +112,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="2"
         android:gravity="center"
-        android:text="실행수" />
+        android:text="@string/numerofruns" />
     </LinearLayout>
 
     <TextView

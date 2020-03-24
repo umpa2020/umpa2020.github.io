@@ -19,7 +19,7 @@
       android:layout_height="wrap_content"
       android:layout_marginRight="12dp"
       android:gravity="center"
-      android:text="나의 루트"></TextView>
+      android:text="@string/my_route"></TextView>
   </Toolbar>
 
 
@@ -35,7 +35,7 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:gravity="center"
-    android:text="현재 저장된 루트가 없습니다."
+    android:text="@string/noroute"
     android:textSize="20dp"
     android:visibility="gone" />
 

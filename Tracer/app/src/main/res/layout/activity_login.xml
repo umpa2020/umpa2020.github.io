@@ -19,7 +19,7 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="30dp"
     android:layout_marginBottom="30dp"
-    android:text="구글 계정으로 로그인 하십시오."
+    android:text="@string/please_login"
     android:textColor="@color/white" />
 
   <com.google.android.gms.common.SignInButton

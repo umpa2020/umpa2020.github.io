@@ -39,7 +39,7 @@
         android:id="@+id/profileFragmentHistoryTextView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="떨어진 거리 표시"
+        android:text="@string/distance_display"
         android:textColor="#6799FF"
         android:textSize="15dp"
         android:textStyle="bold" />
