@@ -49,7 +49,7 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
     // 버튼 에니메이션
     private var fabOpen: Animation? = null // Floating Animation Button
 
-    lateinit var locationBroadcastReceiver: LocationBroadcastReceiver
+    private lateinit var locationBroadcastReceiver: LocationBroadcastReceiver
     private lateinit var traceMap: TraceMap
     override fun onBackPressed() {
         if (doubleBackToExitPressedOnce1) {

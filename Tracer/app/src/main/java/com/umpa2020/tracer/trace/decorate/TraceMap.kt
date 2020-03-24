@@ -21,7 +21,7 @@ interface TraceMap {
     fun work(location: Location)
     fun draw() {
         Log.d(TAG,"Map is draw")
-        var track = mutableListOf<LatLng>()
+       track=mutableListOf<LatLng>()
         routeGPX!!.trkList.forEach {
             track.add(LatLng(it.latitude.toDouble(), it.longitude.toDouble()))
         }
@@ -59,6 +59,8 @@ interface TraceMap {
         userState = UserState.STOP
         return RouteGPX("", "", wpList, trkList)
     }
+    var track:MutableList<LatLng>
+    var nextWP:Int
 
     var mMap: GoogleMap
     var testString: String

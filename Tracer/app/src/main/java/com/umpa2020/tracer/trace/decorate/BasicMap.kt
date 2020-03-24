@@ -17,6 +17,8 @@ import io.jenetics.jpx.WayPoint
 
 class BasicMap(val smf: SupportMapFragment, val context: Context) : OnMapReadyCallback, TraceMap {
     override var routeGPX:RouteGPX?=null
+    override var track:MutableList<LatLng> = mutableListOf()
+    override var nextWP:Int=0
     override lateinit var loadTrack: Polyline
     override lateinit var mMap: GoogleMap
     override var testString: String = ""
@@ -34,6 +36,7 @@ class BasicMap(val smf: SupportMapFragment, val context: Context) : OnMapReadyCa
     override var trkList: MutableList<WayPoint> = mutableListOf()
     override var wpList: MutableList<WayPoint> = mutableListOf()
     override fun work(location: Location) {
+        Log.d(TAG,"BasicMap")
         setLocation(location)
     }
     init {
@@ -45,6 +48,7 @@ class BasicMap(val smf: SupportMapFragment, val context: Context) : OnMapReadyCa
         mMap = googleMap //구글맵
         mMap.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
         if(routeGPX!=null){
+            nextWP=1
             draw()
         }
 

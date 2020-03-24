@@ -15,6 +15,7 @@ import org.jetbrains.anko.runOnUiThread
 class DistanceDecorator(decoratedMap: TraceMap) : MapDecorator(decoratedMap) {
     override fun work(location: Location) {
         super.work(location)
+        Log.d(TAG,"is it working?")
         when (userState) {
             UserState.RUNNING -> {
                 if(moving) calcDistance()

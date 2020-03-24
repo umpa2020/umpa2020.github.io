@@ -1,5 +1,6 @@
 package com.umpa2020.tracer.main.start.racing
 
+import android.content.IntentFilter
 import android.content.pm.ActivityInfo
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -7,6 +8,7 @@ import android.os.SystemClock
 import android.util.Log
 import android.view.View
 import android.widget.Chronometer
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -15,7 +17,9 @@ import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.constant.UserState
 import com.umpa2020.tracer.trace.decorate.BasicMap
 import com.umpa2020.tracer.trace.decorate.PolylineDecorator
+import com.umpa2020.tracer.trace.decorate.RacingDecorator
 import com.umpa2020.tracer.trace.decorate.TraceMap
+import com.umpa2020.tracer.util.LocationBroadcastReceiver
 import hollowsoft.slidingdrawer.OnDrawerCloseListener
 import hollowsoft.slidingdrawer.OnDrawerOpenListener
 import hollowsoft.slidingdrawer.OnDrawerScrollListener
@@ -34,6 +38,7 @@ class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener,
     lateinit var chronometer: Chronometer
     var timeWhenStopped: Long = 0
 
+    private lateinit var locationBroadcastReceiver: LocationBroadcastReceiver
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +48,7 @@ class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener,
         mapRouteGPX = intent.getParcelableExtra("RouteGPX") as RouteGPX
         mapTitle = mapRouteGPX.text
         init()
+        locationBroadcastReceiver = LocationBroadcastReceiver(traceMap)
         racingControlButton.setOnLongClickListener {
             if (traceMap.userState == UserState.RUNNING) {
                 traceMap.stop()
@@ -51,6 +57,16 @@ class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener,
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(locationBroadcastReceiver)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        LocalBroadcastManager.getInstance(this)
+            .registerReceiver(locationBroadcastReceiver, IntentFilter("custom-event-name"))
+    }
     private fun increaseExecute(mapTitle: String) {
 
         increaseExecuteThread = Thread(Runnable {
@@ -67,7 +83,7 @@ class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener,
 
     private fun init() {
         val smf = supportFragmentManager.findFragmentById(R.id.map_viewer) as SupportMapFragment
-        traceMap = PolylineDecorator(BasicMap(smf, this))
+        traceMap = RacingDecorator(PolylineDecorator(BasicMap(smf, this)))
         traceMap.routeGPX=mapRouteGPX
         drawer.setOnDrawerScrollListener(this)
         drawer.setOnDrawerOpenListener(this)
@@ -82,11 +98,14 @@ class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener,
                     //TODO:notice " you should be in 200m"
                     UserState.NORMAL -> {
                         //200m 안으로 들어오세요!
+                        Log.d(TAG,"NORMAL")
                     }
                     UserState.READYTORACING -> {
+                        Log.d(TAG,"READYTORACING")
                         start()
                     }
                     UserState.RUNNING -> {
+                        Log.d(TAG,"RUNNING")
                         stop()
                     }
                 }
