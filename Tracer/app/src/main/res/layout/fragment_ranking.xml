@@ -1,135 +1,132 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+  <LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <Toolbar
+      android:id="@+id/rankingToolBar"
+      android:layout_width="match_parent"
+      android:layout_height="50dp"
+      android:background="@color/white"
+      android:elevation="1dp">
+
+      <TextView
+        style="@style/appBarText"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="45dp"
+        android:gravity="center"
+        android:text="랭킹">
+
+      </TextView>
+
+
+    </Toolbar>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal">
 
-        <Toolbar
-            android:id="@+id/rankingToolBar"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:elevation="1dp"
-            android:background="@color/white">
+      <Button
+        android:id="@+id/test_button1"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:text="실행순"
+        android:textSize="12dp" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginRight="45dp"
-                android:layout_marginLeft="40dp"
-                android:gravity="center"
-                android:text="랭킹"
-                style="@style/appBarText">
+      <Button
+        android:id="@+id/test_button2"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:text="좋아요"
+        android:textSize="12dp" />
 
-            </TextView>
+      <Button
+        android:id="@+id/test_button3"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:text="작게"
+        android:textSize="12dp" />
 
-
-
-
-        </Toolbar>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:text="실행순"
-                android:textSize="12dp"
-                android:id="@+id/test_button1"
-                />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:text="좋아요"
-                android:textSize="12dp"
-                android:id="@+id/test_button2"
-                />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:text="작게"
-                android:textSize="12dp"
-                android:id="@+id/test_button3"
-                />
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:text="크게"
-                android:textSize="12dp"
-                android:id="@+id/test_button4"
-                />
-        </LinearLayout>
-
-        <!-- <TextView
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:id="@+id/rankingFragmentMonthTextView"
-              style="@style/blackBoldText20"
-              android:gravity="center"/>
-
-          <TextView
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:id="@+id/rankingFragmentPopularTextView"
-              android:text="월간인기차트"
-              android:textSize="18dp"
-              android:textColor="@color/black"
-              android:textStyle="bold"
-              android:gravity="center"/>-->
-
-        <LinearLayout
-            android:id="@+id/listTitleLinearLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/rankingFragmentMonthTextView"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:orientation="horizontal">
-
-            <TextView
-                style="@style/ListTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:gravity="center"
-                android:text="순위" />
-
-            <TextView
-                style="@style/ListTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:gravity="center"
-                android:text="맵 이름" />
-
-            <TextView
-                style="@style/ListTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:gravity="center"
-                android:text="실행수" />
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/divisionTextView"
-            style="@style/divisionTextView" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rank_recycler_map"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="20dp" />
-
-
+      <Button
+        android:id="@+id/test_button4"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:text="크게"
+        android:textSize="12dp" />
     </LinearLayout>
+
+    <!-- <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:id="@+id/rankingFragmentMonthTextView"
+          style="@style/blackBoldText20"
+          android:gravity="center"/>
+
+      <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:id="@+id/rankingFragmentPopularTextView"
+          android:text="월간인기차트"
+          android:textSize="18dp"
+          android:textColor="@color/black"
+          android:textStyle="bold"
+          android:gravity="center"/>-->
+
+    <LinearLayout
+      android:id="@+id/listTitleLinearLayout"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_below="@+id/rankingFragmentMonthTextView"
+      android:layout_marginLeft="20dp"
+      android:layout_marginRight="20dp"
+      android:orientation="horizontal">
+
+      <TextView
+        style="@style/ListTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5"
+        android:gravity="center"
+        android:text="순위" />
+
+      <TextView
+        style="@style/ListTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:gravity="center"
+        android:text="맵 이름" />
+
+      <TextView
+        style="@style/ListTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:gravity="center"
+        android:text="실행수" />
+    </LinearLayout>
+
+    <TextView
+      android:id="@+id/divisionTextView"
+      style="@style/divisionTextView" />
+
+    <androidx.recyclerview.widget.RecyclerView
+      android:id="@+id/rank_recycler_map"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_marginLeft="20dp"
+      android:layout_marginTop="5dp"
+      android:layout_marginRight="20dp" />
+
+
+  </LinearLayout>
 </RelativeLayout>

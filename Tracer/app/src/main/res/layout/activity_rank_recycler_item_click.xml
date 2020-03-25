@@ -1,159 +1,154 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.core.widget.NestedScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
 
-    <LinearLayout
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:descendantFocusability="blocksDescendants"
+    android:orientation="vertical">
+
+    <Toolbar
+      android:layout_width="match_parent"
+      android:layout_height="50dp"
+      android:layout_alignParentTop="true"
+      android:background="@color/white"
+      android:elevation="1dp">
+
+      <TextView
+        style="@style/appBarText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:descendantFocusability="blocksDescendants">
+        android:layout_marginRight="12dp"
+        android:gravity="center"
+        android:text="맵 기록"></TextView>
+    </Toolbar>
 
-        <Toolbar
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_alignParentTop="true"
-            android:elevation="1dp"
-            android:background="@color/white">
+    <RelativeLayout
+      android:id="@+id/RelativeLayout"
+      android:layout_width="match_parent"
+      android:layout_height="300dp"
+      android:layout_marginLeft="10dp"
+      android:layout_marginTop="10dp"
+      android:layout_marginRight="10dp">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="12dp"
-                android:gravity="center"
-                android:text="맵 기록"
-                style="@style/appBarText">
-            </TextView>
-        </Toolbar>
+      <ImageView
+        android:id="@+id/rankRoutePriview"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:background="#00000000"
+        android:scaleType="fitXY" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:id="@+id/RelativeLayout"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp">
+      <Button
+        android:id="@+id/rankRecyclerMoreButton"
+        style="@style/buttonText"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="15dp"
+        android:background="@drawable/button_background"
+        android:gravity="center"
+        android:onClick="onClick"
+        android:text="더 알아보기" />
+    </RelativeLayout>
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:background="#00000000"
-                android:scaleType="fitXY"
-                android:id="@+id/rankRoutePriview"/>
+    <LinearLayout
+      android:id="@+id/mapnamehorizontallayout"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_below="@+id/RelativeLayout"
+      android:layout_marginLeft="20dp"
+      android:layout_marginRight="20dp"
+      android:layout_marginBottom="5dp"
+      android:orientation="vertical">
 
-            <Button
-                android:id="@+id/rankRecyclerMoreButton"
-                android:layout_width="100dp"
-                android:layout_height="40dp"
-                android:background="@drawable/button_background"
-                android:text="더 알아보기"
-                style="@style/buttonText"
-                android:onClick="onClick"
-                android:gravity="center"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="15dp"
-                android:layout_marginBottom="15dp"
-                />
-        </RelativeLayout>
+      <TextView
+        android:id="@+id/rankRecyclerMapTitle"
+        style="@style/ListDetail1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/notosansmedium"
+        android:textSize="18dp" />
 
-        <LinearLayout
-            android:id="@+id/mapnamehorizontallayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_below="@+id/RelativeLayout"
-            android:layout_marginRight="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginBottom="5dp">
-
-            <TextView
-                android:id="@+id/rankRecyclerMapTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/notosansmedium"
-                style="@style/ListDetail1"
-                android:textSize="18dp"/>
-
-            <TextView android:id="@+id/rankRecyclerNickname"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/ListDetail1"/>
-
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/gubun1"
-            android:layout_below="@+id/mapnamehorizontallayout"
-            android:layout_marginTop="5dp"
-            style="@style/divisionTextView"
-            />
-
-
-        <TextView
-            android:gravity="center"
-            android:id="@+id/topplayertextview"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_below="@+id/gubun1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="상위 플레이어"
-            style="@style/ListDetail1"
-            />
-
-        <TextView
-            android:layout_below="@+id/topplayertextview"
-            android:id="@+id/gubun2"
-            style="@style/divisionTextView"/>
-
-        <LinearLayout
-            android:id="@+id/infolayout"
-            android:layout_below="@+id/gubun2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="순위"
-                android:gravity="center"
-                android:layout_weight="0.5"
-                style="@style/ListTitle"/>
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_weight="2"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:text="플레이어"
-                android:gravity="center"
-                style="@style/ListTitle"/>
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_weight="2"
-                android:layout_height="wrap_content"
-                android:text="랩 타임"
-                android:gravity="center"
-                style="@style/ListTitle"/>
-
-
-        </LinearLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_below="@+id/infolayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/rankRecyclerItemClickRecyclerView">
-        </androidx.recyclerview.widget.RecyclerView>
+      <TextView
+        android:id="@+id/rankRecyclerNickname"
+        style="@style/ListDetail1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
     </LinearLayout>
+
+    <TextView
+      android:id="@+id/gubun1"
+      style="@style/divisionTextView"
+      android:layout_below="@+id/mapnamehorizontallayout"
+      android:layout_marginTop="5dp" />
+
+
+    <TextView
+      android:id="@+id/topplayertextview"
+      style="@style/ListDetail1"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_below="@+id/gubun1"
+      android:layout_marginLeft="20dp"
+      android:layout_marginRight="20dp"
+      android:gravity="center"
+      android:text="상위 플레이어" />
+
+    <TextView
+      android:id="@+id/gubun2"
+      style="@style/divisionTextView"
+      android:layout_below="@+id/topplayertextview" />
+
+    <LinearLayout
+      android:id="@+id/infolayout"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_below="@+id/gubun2"
+      android:layout_marginLeft="20dp"
+      android:layout_marginRight="20dp"
+      android:orientation="horizontal">
+
+      <TextView
+        style="@style/ListTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5"
+        android:gravity="center"
+        android:text="순위" />
+
+      <TextView
+        style="@style/ListTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_weight="2"
+        android:gravity="center"
+        android:text="플레이어" />
+
+      <TextView
+        style="@style/ListTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:gravity="center"
+        android:text="랩 타임" />
+
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+      android:id="@+id/rankRecyclerItemClickRecyclerView"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_below="@+id/infolayout"
+      android:layout_marginLeft="20dp"
+      android:layout_marginRight="20dp"></androidx.recyclerview.widget.RecyclerView>
+
+  </LinearLayout>
 </androidx.core.widget.NestedScrollView>

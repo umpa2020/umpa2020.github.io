@@ -1,48 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical"
+  tools:context=".main.profile.ProfileRouteActivity">
+
+  <Toolbar
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".main.profile.ProfileRouteActivity"
-    android:orientation="vertical">
-
-    <Toolbar
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentTop="true"
-        android:elevation="1dp"
-        android:background="@color/white">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="12dp"
-            android:gravity="center"
-            android:text="나의 루트"
-            style="@style/appBarText">
-        </TextView>
-    </Toolbar>
-
-
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_marginTop="50dp"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/profileRecyclerRoute">
-    </androidx.recyclerview.widget.RecyclerView>
+    android:layout_height="50dp"
+    android:layout_alignParentTop="true"
+    android:background="@color/white"
+    android:elevation="1dp">
 
     <TextView
-        android:id="@+id/profileRecyclerRouteisEmpty"
-        android:visibility="gone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:text="현재 저장된 루트가 없습니다."
-        android:textSize="20dp"/>
+      style="@style/appBarText"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginRight="12dp"
+      android:gravity="center"
+      android:text="나의 루트"></TextView>
+  </Toolbar>
 
+
+  <androidx.recyclerview.widget.RecyclerView
+    android:id="@+id/profileRecyclerRoute"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="50dp"></androidx.recyclerview.widget.RecyclerView>
+
+  <TextView
+    android:id="@+id/profileRecyclerRouteisEmpty"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:text="현재 저장된 루트가 없습니다."
+    android:textSize="20dp"
+    android:visibility="gone" />
 
 
 </FrameLayout>

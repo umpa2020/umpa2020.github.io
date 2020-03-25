@@ -34,7 +34,7 @@ interface TraceMap {
                     .endCap(RoundCap())
             )        //경로를 그릴 폴리라인 집합
         //TODO:MINMAX 적용
-        mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(LatLngBounds(track.first(), track.last()), 1080, 300, 50))
+        //mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(LatLngBounds(track.first(), track.last()), 1080, 300, 50))
         mapCommand = MapCommand.NOTHING
     }
     fun captureMapScreen(callback:GoogleMap.SnapshotReadyCallback){

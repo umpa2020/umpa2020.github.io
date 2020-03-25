@@ -1,52 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="5dp"
-    android:orientation="horizontal">
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:layout_margin="5dp"
+  android:orientation="horizontal">
 
-    <ImageView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:id="@+id/nearRouteActivityRouteImage"
-        android:scaleType="fitXY"
-        android:background="#00000000"/>
+  <ImageView
+    android:id="@+id/nearRouteActivityRouteImage"
+    android:layout_width="100dp"
+    android:layout_height="100dp"
+    android:background="#00000000"
+    android:scaleType="fitXY" />
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical"
+    android:orientation="vertical"
+    android:paddingLeft="25dp">
+
+    <TextView
+      android:id="@+id/nearRouteActivityMapTitle"
+      style="@style/blackMediumText18"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:ellipsize="marquee"
+      android:gravity="center"
+      android:singleLine="true"
+      android:text="test" />
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:paddingLeft="25dp"
-        android:gravity="center_vertical">
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal">
 
-        <TextView
-            android:gravity="center"
-            android:id="@+id/nearRouteActivityMapTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:ellipsize="marquee"
-            style="@style/blackMediumText18"
-            android:text="test"
-            />
+      <TextView
+        android:id="@+id/nearRouteActivityDistanceAway"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/notosansmedium"
+        android:gravity="center"
+        android:text="test"
+        android:textColor="#6799FF"
+        android:textSize="17dp"
+        android:textStyle="bold" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:gravity="center"
-                android:id="@+id/nearRouteActivityDistanceAway"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="test"
-                android:textColor="#6799FF"
-                android:textStyle="bold"
-                android:fontFamily="@font/notosansmedium"
-                android:textSize="17dp"/>
-
-
-        </LinearLayout>
 
     </LinearLayout>
+
+  </LinearLayout>
 </LinearLayout>

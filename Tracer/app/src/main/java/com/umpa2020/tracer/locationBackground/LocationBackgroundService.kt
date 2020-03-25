@@ -18,137 +18,137 @@ import com.umpa2020.tracer.main.start.running.RunningActivity
  *  출처: https://fullstatck.tistory.com/23 [풀스택 엔지니어]
  */
 class LocationBackgroundService : IntentService("LocationBackgroundService"), LocationUpdatesComponent.ILocationProvider {
-    /**
-     * Activity와 Service 통신
-     *  1. Activity는 Service에 이벤트를 전달
-     *  2. Service는 이벤트를 받고 어떤 동작을 수행
-     *  3. Service는 Activity로 결과 이벤트를 전달
-     */
-    var notification: Notification? = null
+  /**
+   * Activity와 Service 통신
+   *  1. Activity는 Service에 이벤트를 전달
+   *  2. Service는 이벤트를 받고 어떤 동작을 수행
+   *  3. Service는 Activity로 결과 이벤트를 전달
+   */
+  var notification: Notification? = null
 
-    override fun onCreate() {
-        super.onCreate()
-        Log.i(TAG, "onCreate ")
-
-        /**
-         *  위치 관련 생성.
-         */
-
-        Log.d(TAG, this.toString())
-        LocationUpdatesComponent.setILocationProvider(this)
-        LocationUpdatesComponent.onCreate(this)
-        LocationUpdatesComponent.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-
-
-        notification = createNotification()
-        startForeground(1, notification)
-    }
-
-    // this makes service running continuously,,commenting this start command method service runs only once
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        Log.i(TAG, "onStartCommand Service started....")
-
-        if (intent != null) {
-            val action = intent.action
-            Log.i(TAG, "onStartCommand action $action")
-            when (action) {
-                ServiceStatus.START.name -> startService()
-                ServiceStatus.STOP.name -> stopService()
-            }
-        }
-        return START_STICKY
-    }
-
-
-    override fun onHandleIntent(intent: Intent?) {
-        Log.i(TAG, "onHandleIntent $intent")
-    }
+  override fun onCreate() {
+    super.onCreate()
+    Log.i(TAG, "onCreate ")
 
     /**
-     * send message by using messenger
-     *
-     * @param messageID
-     * 액티비티에 브로드캐스트를 이용해 message 보내기.
+     *  위치 관련 생성.
      */
-    private fun sendMessage(location: Location) {
-        Log.d(TAG,"sendMessage 실행")
-        try {
-            val intent = Intent("custom-event-name")
-            intent.putExtra("message", location)
-            Log.d(TAG, location.toString())
-            LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
 
-        } catch (e: RemoteException) {
-            Log.e(TAG, "Error passing service object back to activity.")
-        }
+    Log.d(TAG, this.toString())
+    LocationUpdatesComponent.setILocationProvider(this)
+    LocationUpdatesComponent.onCreate(this)
+    LocationUpdatesComponent.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
 
+
+    notification = createNotification()
+    startForeground(1, notification)
+  }
+
+  // this makes service running continuously,,commenting this start command method service runs only once
+  override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+    Log.i(TAG, "onStartCommand Service started....")
+
+    if (intent != null) {
+      val action = intent.action
+      Log.i(TAG, "onStartCommand action $action")
+      when (action) {
+        ServiceStatus.START.name -> startService()
+        ServiceStatus.STOP.name -> stopService()
+      }
+    }
+    return START_STICKY
+  }
+
+
+  override fun onHandleIntent(intent: Intent?) {
+    Log.i(TAG, "onHandleIntent $intent")
+  }
+
+  /**
+   * send message by using messenger
+   *
+   * @param messageID
+   * 액티비티에 브로드캐스트를 이용해 message 보내기.
+   */
+  private fun sendMessage(location: Location) {
+    Log.d(TAG,"sendMessage 실행")
+    try {
+      val intent = Intent("custom-event-name")
+      intent.putExtra("message", location)
+      Log.d(TAG, location.toString())
+      LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
+
+    } catch (e: RemoteException) {
+      Log.e(TAG, "Error passing service object back to activity.")
     }
 
+  }
 
-    /**
-     *  LocationComponent에서 locatoin결과 값 받아옴.
-     *  => 이걸 이제 액티비티 or 프래그먼트에 전달해주는 것.
-     */
-    //it의 경우는 함수의 변수가 한 개여야 만 허용.
-    //TODO: onLocationUpdated 로 변경
-    override fun onLocationUpdated(location: Location?) {
-        location?.let { sendMessage(it) }
+
+  /**
+   *  LocationComponent에서 locatoin결과 값 받아옴.
+   *  => 이걸 이제 액티비티 or 프래그먼트에 전달해주는 것.
+   */
+  //it의 경우는 함수의 변수가 한 개여야 만 허용.
+  //TODO: onLocationUpdated 로 변경
+  override fun onLocationUpdated(location: Location?) {
+    location?.let { sendMessage(it) }
+  }
+
+
+  /**
+   *  foreground에 알림창 만들기.
+   */
+  private fun createNotification(): Notification {
+    val notificationChannelId = LocationBackgroundService::class.java.simpleName
+
+    // depending on the Android API that we're dealing with we will have
+    // to use a specific method to create the notification
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+      val channel = NotificationChannel(
+        notificationChannelId,
+        "Notifications Channel",
+        NotificationManager.IMPORTANCE_HIGH
+      ).let {
+        it.description = "Background location service is getting location..."
+        it
+      }
+      notificationManager.createNotificationChannel(channel)
     }
 
-
-    /**
-     *  foreground에 알림창 만들기.
-     */
-    private fun createNotification(): Notification {
-        val notificationChannelId = LocationBackgroundService::class.java.simpleName
-
-        // depending on the Android API that we're dealing with we will have
-        // to use a specific method to create the notification
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            val channel = NotificationChannel(
-                notificationChannelId,
-                "Notifications Channel",
-                NotificationManager.IMPORTANCE_HIGH
-            ).let {
-                it.description = "Background location service is getting location..."
-                it
-            }
-            notificationManager.createNotificationChannel(channel)
-        }
-
-        val pendingIntent: PendingIntent = Intent(this, RunningActivity::class.java).let { notificationIntent ->
-            PendingIntent.getActivity(this, 0, notificationIntent, 0)
-        }
-
-        val builder: Notification.Builder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) Notification.Builder(
-            this,
-            notificationChannelId
-        ) else Notification.Builder(this)
-
-        return builder
-            .setContentTitle("GPS 활성화")
-            //  .setContentText("Background location service is getting location...")
-            .setContentIntent(pendingIntent)
-            .setSmallIcon(R.mipmap.ic_launcher_tracer)
-            .setTicker("Ticker text")
-            .build()
+    val pendingIntent: PendingIntent = Intent(this, RunningActivity::class.java).let { notificationIntent ->
+      PendingIntent.getActivity(this, 0, notificationIntent, 0)
     }
 
-    private fun startService() {
-        //hey request for location updates
-        LocationUpdatesComponent.onStart()
-        // Toast.makeText(this, "Service starting its task", Toast.LENGTH_SHORT).show()
-    }
+    val builder: Notification.Builder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) Notification.Builder(
+      this,
+      notificationChannelId
+    ) else Notification.Builder(this)
 
-    private fun stopService() {
-        LocationUpdatesComponent.onStop()
-        stopForeground(true)
-        stopSelf()
-    }
+    return builder
+      .setContentTitle("GPS 활성화")
+      //  .setContentText("Background location service is getting location...")
+      .setContentIntent(pendingIntent)
+      .setSmallIcon(R.mipmap.ic_launcher_tracer)
+      .setTicker("Ticker text")
+      .build()
+  }
 
-    companion object {
-        private val TAG = "LocationBackground"
-        const val LOCATION_MESSAGE = 999
-    }
+  private fun startService() {
+    //hey request for location updates
+    LocationUpdatesComponent.onStart()
+    // Toast.makeText(this, "Service starting its task", Toast.LENGTH_SHORT).show()
+  }
+
+  private fun stopService() {
+    LocationUpdatesComponent.onStop()
+    stopForeground(true)
+    stopSelf()
+  }
+
+  companion object {
+    private val TAG = "LocationBackground"
+    const val LOCATION_MESSAGE = 999
+  }
 }
