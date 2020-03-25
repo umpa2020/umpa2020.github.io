@@ -34,10 +34,6 @@ class GetRanking {
   fun getExcuteDESCENDING(context: Context, view: View, lat: Double, lng: Double, mode: String) {
     val progressbar = ProgressBar(context)
     progressbar.show()
-    //결과로 가져온 location에서 정보추출 / 이건 위도 경도 형태로 받아오는 형식
-    //Location 형태로 받아오고 싶다면 아래처럼
-    //var getintentLocation = current
-
     cur_loc = LatLng(lat, lng)
 
     nearMaps1.clear()
