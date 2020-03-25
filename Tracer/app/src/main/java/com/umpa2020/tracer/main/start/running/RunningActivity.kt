@@ -1,53 +1,56 @@
-package com.umpa2020.tracer.main.trace.running
+package com.umpa2020.tracer.main.start.running
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.ActivityInfo
-import android.location.Location
 import android.os.Bundle
-import android.os.Handler
-import android.os.Message
-import android.os.Messenger
+import android.os.SystemClock
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Button
+import android.widget.Chronometer
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.trace
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.maps.SupportMapFragment
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.NoticeState
-import com.umpa2020.tracer.dataClass.Privacy
-import com.umpa2020.tracer.locationBackground.LocationBackgroundService
+import com.umpa2020.tracer.constant.Privacy
+import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.main.MainActivity
-import com.umpa2020.tracer.main.MainActivity.Companion.WSY
+import com.umpa2020.tracer.trace.decorate.*
+import com.umpa2020.tracer.util.LocationBroadcastReceiver
 import hollowsoft.slidingdrawer.OnDrawerCloseListener
 import hollowsoft.slidingdrawer.OnDrawerOpenListener
 import hollowsoft.slidingdrawer.OnDrawerScrollListener
 import hollowsoft.slidingdrawer.SlidingDrawer
 import kotlinx.android.synthetic.main.activity_running.*
-import java.text.DateFormat
+import org.w3c.dom.Text
+import java.text.SimpleDateFormat
 import java.util.*
 
 class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpenListener,
   OnDrawerCloseListener {
-  var TAG = "WSY"       //로그용 태그
-  lateinit var manageRunning: ManageRunning
-  lateinit var drawer: SlidingDrawer
+  var TAG = "RunningActivity"       //로그용 태그
   var B_RUNNIG = true
   var ns = NoticeState.NOTHING
   private var doubleBackToExitPressedOnce1 = false
+  lateinit var chronometer: Chronometer
+  var timeWhenStopped: Long = 0
 
   // 버튼 에니메이션
   private var fabOpen: Animation? = null // Floating Animation Button
-  private var startButton: Button? = null
-  private var stopButton: Button? = null
-  private var pauseButton: Button? = null
 
+  private lateinit var locationBroadcastReceiver: LocationBroadcastReceiver
+  private lateinit var traceMap: TraceMap
   override fun onBackPressed() {
     if (doubleBackToExitPressedOnce1) {
       super.onBackPressed()
@@ -72,43 +75,34 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
 
     supportActionBar?.title = "RUNNING"
 
-
     init()
 
     btn_stop!!.setOnLongClickListener {
-      if (manageRunning.runningMap.distance < 200) {
+      if (traceMap.distance < 200) {
         showChoicePopup("거리가 200m 미만일때\n정지하시면 저장이 불가능합니다. \n\n정지하시겠습니까?", NoticeState.SIOP)
       } else
-        manageRunning.stopRunning()
+        stop()
       true
-    }
-
-    // 서비스로 값 전달.
-    mHandler = IncomingMessageHandler()
-
-    Log.d(WSY, "핸들러 생성?")
-    Intent(this, LocationBackgroundService::class.java).also {
-      val messengerIncoming = Messenger(mHandler)
-      it.putExtra(MESSENGER_INTENT_KEY, messengerIncoming)
-
-      startService(it)
     }
   }
 
   private fun init() {
     val smf = supportFragmentManager.findFragmentById(R.id.map_viewer) as SupportMapFragment
-    manageRunning = ManageRunning(smf, this)
+    //running traceMap 선언 Polyline + Timer + Distance + Basic
+    traceMap = PolylineDecorator(
+      DistanceDecorator(
+        BasicMap(smf, this)
 
-    drawer = findViewById(R.id.drawer)
+      )
+    )
+    locationBroadcastReceiver = LocationBroadcastReceiver(traceMap)
+
     drawer.setOnDrawerScrollListener(this)
     drawer.setOnDrawerOpenListener(this)
     drawer.setOnDrawerCloseListener(this)
 
     fabOpen = AnimationUtils.loadAnimation(applicationContext, R.anim.running_btn_open) // 애니매이션 초기화
-
-    startButton = findViewById(R.id.btn_start)
-    stopButton = findViewById(R.id.btn_stop)
-    pauseButton = findViewById(R.id.btn_pause)
+    chronometer = runningTimerTextView
   }
 
 
@@ -126,43 +120,72 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
   fun onClick(view: View) {
     when (view.id) {
       R.id.btn_start -> {
-        anim()
-        manageRunning.startRunning(this)
+        start()
+
       }
       R.id.btn_pause -> {
-        if (manageRunning.privacy == Privacy.RACING) {
-          //noticeMessage("일시정지를 하게 되면\n\n경쟁 모드 업로드가 불가합니다.\n\n일시정지를 하시겠습니까?", NoticeState.PAUSE)
+        if (traceMap.privacy == Privacy.RACING) {
           showChoicePopup("일시정지를 하게 되면\n경쟁 모드 업로드가 불가합니다.\n\n일시정지를 하시겠습니까?", NoticeState.PAUSE)
         } else {
           if (B_RUNNIG)
-            manageRunning.pauseRunning()
+            pause()
           else
             restart()
-
         }
 
       }
       R.id.btn_stop -> {
         val text = "종료를 원하시면 길게 눌러주세요"
         val duration = Toast.LENGTH_LONG
-
         val toast = Toast.makeText(applicationContext, text, duration)
         toast.show()
       }
     }
   }
 
+  private fun start() {
+    anim()
+    //TODO:chronometer 클래스화하기
+    chronometer.base = SystemClock.elapsedRealtime()
+    chronometer.start()
+    traceMap.start()
+  }
+
   fun pause() {
+    B_RUNNIG = false
+    timeWhenStopped = chronometer.base - SystemClock.elapsedRealtime()
+    chronometer.stop()
+    traceMap.pause()
     btn_pause.text = "재시작"
     //btn_pause.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_play_pressed, 0, 0, 0)
-    B_RUNNIG = false
+
   }
 
   private fun restart() { //TODO:Start with new polyline
     btn_pause.text = "일시정지"
     //btn_pause.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_pause_icon_pressed, 0, 0, 0)
     B_RUNNIG = true
-    manageRunning.restartRunning()
+    chronometer.base = SystemClock.elapsedRealtime() + timeWhenStopped
+    chronometer.start()
+    traceMap.restart()
+  }
+
+  private fun stop() {
+    traceMap.stop()
+    val routeGPX = traceMap.stop()
+    val infoData = InfoData()
+    infoData.distance = traceMap.distance
+    infoData.time = SystemClock.elapsedRealtime() - chronometer.base
+    infoData.privacy = traceMap.privacy
+
+    //val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
+    //formatter.timeZone = TimeZone.getTimeZone("UTC")
+
+    val intent = Intent(this, RunningSaveActivity::class.java)
+    intent.putExtra("RouteGPX", routeGPX)
+    intent.putExtra("InfoData", infoData)
+    startActivity(intent)
+    finish()
   }
 
   /**
@@ -186,23 +209,15 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
         }
         NoticeState.PAUSE -> {
           runningNotificationLayout.visibility = View.GONE
-          manageRunning.pauseRunning()
+          pause()
         }
         NoticeState.SIOP -> {
-          manageRunning.stopRunning()
-          val newIntent = Intent(this, MainActivity::class.java)
-          newIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-          newIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-          startActivity(newIntent)
+          stop()
         }
-
       }
-
       this.ns = NoticeState.NOTHING
       alertDialog.dismiss()
     }
-
-
     //No 기록용 버튼 눌렀을 때
     val recordButton = view.findViewById<Button>(com.umpa2020.tracer.R.id.runningActivityNoButton)
     recordButton.setOnClickListener {
@@ -222,30 +237,18 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
     Log.d("screen", "onStop()")
   }
 
+  override fun onResume() {
+    super.onResume()
+    // 브로드 캐스트 등록 - 전역 context로 수정해야함
+    LocalBroadcastManager.getInstance(this)
+      .registerReceiver(locationBroadcastReceiver, IntentFilter("custom-event-name"))
+  }
+
   override fun onPause() {
     super.onPause()
     Log.d("screen", "onPause()")
-  }
-
-
-  /**
-   *  백그라운드에서 메시지 받는 거
-   */
-  var mHandler: IncomingMessageHandler? = null
-  val MESSENGER_INTENT_KEY = "msg-intent-key"
-
-  inner class IncomingMessageHandler : Handler() {
-    override fun handleMessage(msg: Message) {
-      super.handleMessage(msg)
-      Log.d(WSY, "RunningActivity : $msg")
-      when (msg.what) {
-        LocationBackgroundService.LOCATION_MESSAGE -> {
-          val curLoc = msg.obj as Location
-          val currentDateTimeString = DateFormat.getDateTimeInstance().format(Date())
-          manageRunning.runningMap.setLocation(curLoc)
-        }
-      }
-    }
+    //        브로드 캐스트 해제 - 전역 context로 수정해야함
+    LocalBroadcastManager.getInstance(this).unregisterReceiver(locationBroadcastReceiver)
   }
 
   override fun onDestroy() {
@@ -271,10 +274,6 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
     //runningHandle.background = getDrawable(R.drawable.extend_selector)
     runningHandle.text = "▲"
     Log.d(TAG, "onDrawerClosed()")
-  }
-
-  fun print_log(text: String) {
-    Log.d(TAG, text.toString())
   }
 
 }

@@ -12,4 +12,6 @@ object UserInfo : KotprefModel() {
   var permission = 0 // 처음 권한을 받은 후에 서비스와 위치 값 갱신을 하기 위해서 미리 저장
   var lastLatitude by floatPref(0.0f)
   var lastLongitude by floatPref(0.0f)
+  var rankingLatitude = 0.0
+  var rankingLongitude = 0.0
 }

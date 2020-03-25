@@ -1,4 +1,4 @@
-package com.umpa2020.tracer.main.trace.racing
+package com.umpa2020.tracer.main.start.racing
 
 import android.content.Context
 import android.content.Intent
@@ -67,7 +67,7 @@ class NearRecyclerViewAdapter(private var datas: List<NearMap>) : RecyclerView.A
     }
   }
 
-  inner class MyViewHolder(view: View) : RecyclerView.ViewHolder(view!!) {
+  inner class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     var imageView = view.nearRouteActivityRouteImage
     var mapTitle = view.nearRouteActivityMapTitle
     var distance = view.nearRouteActivityDistanceAway

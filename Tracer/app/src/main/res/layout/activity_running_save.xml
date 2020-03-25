@@ -5,7 +5,7 @@
   android:layout_height="match_parent"
   android:layout_marginBottom="?actionBarSize"
   android:orientation="vertical"
-  tools:context=".main.trace.running.RunningSaveActivity">
+  tools:context=".main.start.racing.RacingFinishActivity">
 
   <Toolbar
     android:layout_width="match_parent"
@@ -282,4 +282,3 @@
 
 
 </RelativeLayout>
-
