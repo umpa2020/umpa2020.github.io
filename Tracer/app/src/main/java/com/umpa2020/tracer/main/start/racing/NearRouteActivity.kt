@@ -23,10 +23,6 @@ class NearRouteActivity : AppCompatActivity() {
   lateinit var locationCallback: LocationCallback
   var cur_loc = LatLng(0.0, 0.0)          //현재위치
   var nearMaps: ArrayList<NearMap> = arrayListOf()
-
-  lateinit var distanceArray: ArrayList<Double>
-  lateinit var mapTitleArray: ArrayList<String>
-
   var latLng = LatLng(0.0, 0.0)
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,7 +32,7 @@ class NearRouteActivity : AppCompatActivity() {
     progressbar.show()
 
     //startFragment에서 넘긴 현재 위치를 intent로 받음
-    val intent = getIntent()
+    val intent = intent
     val current = intent.extras?.getParcelable<Location>("currentLocation")
 
 
@@ -44,7 +40,7 @@ class NearRouteActivity : AppCompatActivity() {
     //Location 형태로 받아오고 싶다면 아래처럼
     //var getintentLocation = current
     val lat = current!!.latitude
-    val lng = current!!.longitude
+    val lng = current.longitude
     cur_loc = LatLng(lat, lng)
 
 
@@ -54,7 +50,7 @@ class NearRouteActivity : AppCompatActivity() {
       .get()
       .addOnSuccessListener { result ->
         for (document in result) {
-          var receiveRouteDatas = document.get("markerlatlngs") as List<Object>
+          val receiveRouteDatas = document.get("markerlatlngs") as List<Object>
 
           for (receiveRouteData in receiveRouteDatas) {
             val location = receiveRouteData as Map<String, Any>
@@ -65,7 +61,7 @@ class NearRouteActivity : AppCompatActivity() {
             break
           }
           if (SphericalUtil.computeDistanceBetween(cur_loc, latLng) <= 20000) {
-            var nearMap = NearMap(document.id, SphericalUtil.computeDistanceBetween(cur_loc, latLng))
+            val nearMap = NearMap(document.id, SphericalUtil.computeDistanceBetween(cur_loc, latLng))
             nearMaps.add(nearMap)
           }
         }

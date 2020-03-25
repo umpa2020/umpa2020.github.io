@@ -23,7 +23,7 @@ class RankRecyclerItemClickActivity : AppCompatActivity() {
 
     val progressbar = ProgressBar(this)
     progressbar.show()
-    val intent = getIntent()
+    val intent = intent
     //전달 받은 값으로 Title 설정
     var mapTitle = intent.extras?.getString("MapTitle").toString()
 
