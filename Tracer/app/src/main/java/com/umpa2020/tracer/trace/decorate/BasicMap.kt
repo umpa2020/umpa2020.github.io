@@ -8,8 +8,8 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.Polyline
-import com.umpa2020.tracer.constant.MapCommand
 import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.constant.UserState
 import com.umpa2020.tracer.dataClass.RouteGPX
@@ -17,6 +17,7 @@ import io.jenetics.jpx.WayPoint
 
 class BasicMap(val smf: SupportMapFragment, val context: Context) : OnMapReadyCallback, TraceMap {
     override var routeGPX:RouteGPX?=null
+    override var wayPoint:MutableList<Marker> = mutableListOf()
     override var track:MutableList<LatLng> = mutableListOf()
     override var nextWP:Int=0
     override lateinit var loadTrack: Polyline
@@ -31,7 +32,6 @@ class BasicMap(val smf: SupportMapFragment, val context: Context) : OnMapReadyCa
     override var elevation=0.0
     override var speed=0.0
     override var userState = UserState.NORMAL       //사용자의 현재상태 달리기전 or 달리는중 등 자세한내용은 enum참고
-    override var mapCommand=MapCommand.NOTHING
     override var moving = false
     override var trkList: MutableList<WayPoint> = mutableListOf()
     override var wpList: MutableList<WayPoint> = mutableListOf()

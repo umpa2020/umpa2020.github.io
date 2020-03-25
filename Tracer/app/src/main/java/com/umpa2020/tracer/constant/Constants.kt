@@ -19,5 +19,9 @@ class Constants {
         //경로이탈 카운트
         val DEVIATION_COUNT=30
         val WPINTERVAL = 100  //way point interval
+
+        //handler what
+        val INFOUPDATE = 1 //distance and speed update
+        val RACINGFINISH = 2 //Racing is finished
     }
 }

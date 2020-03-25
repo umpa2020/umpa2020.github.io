@@ -1,21 +1,14 @@
 package com.umpa2020.tracer.trace.decorate
 
-import android.graphics.Bitmap
 import android.graphics.Color
 import android.location.Location
 import android.util.Log
-import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.*
-import com.umpa2020.tracer.constant.MapCommand
 import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.constant.UserState
 import com.umpa2020.tracer.dataClass.RouteGPX
-import com.umpa2020.tracer.main.start.running.RunningSaveActivity
 import io.jenetics.jpx.WayPoint
-import java.io.File
-import java.io.FileOutputStream
-import javax.security.auth.callback.Callback
 
 interface TraceMap {
     fun work(location: Location)
@@ -33,9 +26,15 @@ interface TraceMap {
                     .startCap(RoundCap() as Cap)
                     .endCap(RoundCap())
             )        //경로를 그릴 폴리라인 집합
+        routeGPX!!.wptList.forEachIndexed{i, it ->
+            wayPoint.add(mMap.addMarker(
+                MarkerOptions()
+                    .position(LatLng(it.latitude.toDouble(),it.longitude.toDouble()))
+                    .title(i.toString())
+            ))
+        }
         //TODO:MINMAX 적용
         //mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(LatLngBounds(track.first(), track.last()), 1080, 300, 50))
-        mapCommand = MapCommand.NOTHING
     }
     fun captureMapScreen(callback:GoogleMap.SnapshotReadyCallback){
         mMap.snapshot(callback)
@@ -59,8 +58,7 @@ interface TraceMap {
         userState = UserState.STOP
         return RouteGPX("", "", wpList, trkList)
     }
-    var track:MutableList<LatLng>
-    var nextWP:Int
+
 
     var mMap: GoogleMap
     var testString: String
@@ -73,10 +71,14 @@ interface TraceMap {
     var elevation: Double
     var speed: Double
     var userState: UserState     //사용자의 현재상태 달리기전 or 달리는중 등 자세한내용은 enum참고
-    var mapCommand: MapCommand
     var moving: Boolean      //사용자가 현재 움직이는 중인지
     var trkList: MutableList<WayPoint>   //track point list
     var wpList: MutableList<WayPoint>   //way point list
+
+
     var routeGPX:RouteGPX?
     var loadTrack:Polyline
+    var wayPoint:MutableList<Marker>
+    var track:MutableList<LatLng>
+    var nextWP:Int
 }
