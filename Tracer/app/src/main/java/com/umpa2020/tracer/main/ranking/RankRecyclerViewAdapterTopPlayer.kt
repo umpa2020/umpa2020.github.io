@@ -1,7 +1,6 @@
 package com.umpa2020.tracer.main.ranking
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -65,7 +64,7 @@ class RankRecyclerViewAdapterTopPlayer(val mydata: ArrayList<RankingData>) : Rec
   //item 사이즈, 데이터의 전체 길이 반환
   override fun getItemCount(): Int {
     Logg.d( "데이터 크기 " + mydata.size.toString())
-    return mydata.size //TODO 갯수 조절 여기서
+    return mydata.size
   }
 
   //여기서 item을 textView에 옮겨줌

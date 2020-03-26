@@ -2,7 +2,6 @@ package com.umpa2020.tracer.main
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -98,6 +97,7 @@ class MainActivity : AppCompatActivity() {
    */
 
   private fun startStopServiceCommand(action: ServiceStatus) {
+    Logg.d("이건 실행되잖아?")
     Intent(applicationContext, LocationBackgroundService::class.java).also {
       it.action = action.name
       Logg.d(action.toString())

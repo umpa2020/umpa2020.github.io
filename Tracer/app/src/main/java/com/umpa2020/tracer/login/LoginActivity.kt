@@ -2,7 +2,6 @@ package com.umpa2020.tracer.login
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.chibatching.kotpref.Kotpref
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -129,6 +128,7 @@ class LoginActivity : AppCompatActivity() {
 
     // Credentail 구글 로그인에 성공했다는 인증서
     val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
+
     Logg.d( credential.toString())
 
     //인증서를 Firebase에 넘겨줌(구글 사용자가 등록)
@@ -154,6 +154,7 @@ class LoginActivity : AppCompatActivity() {
               } else {
                 for (document in result) {
                   // DocumentSnapshot{key=UserInfo/117635384468060774340, metadata=SnapshotMetadata{hasPendingWrites=false, isFromCache=false}, doc=null}
+
                   Logg.d( document.exists().toString()) // false
                   Logg.d( document.reference.toString()) // com.google.firebase.firestore.DocumentReference@aafeaf20
                   Logg.d( "Cached document data: ${document?.data}") // Cached document data: null

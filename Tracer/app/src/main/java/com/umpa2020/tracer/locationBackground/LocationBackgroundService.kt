@@ -10,6 +10,7 @@ import android.util.Log
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.location.LocationRequest
 import com.umpa2020.tracer.R
+import com.umpa2020.tracer.main.MainActivity.Companion.TAG
 import com.umpa2020.tracer.main.start.running.RunningActivity
 import com.umpa2020.tracer.util.Logg
 
@@ -90,7 +91,6 @@ class LocationBackgroundService : IntentService("LocationBackgroundService"), Lo
    *  => 이걸 이제 액티비티 or 프래그먼트에 전달해주는 것.
    */
   //it의 경우는 함수의 변수가 한 개여야 만 허용.
-  //TODO: onLocationUpdated 로 변경
   override fun onLocationUpdated(location: Location?) {
     location?.let { sendMessage(it) }
   }

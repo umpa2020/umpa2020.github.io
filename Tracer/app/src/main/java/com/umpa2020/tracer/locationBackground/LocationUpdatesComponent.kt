@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.location.Location
 import android.os.Looper
-import android.util.Log
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.model.LatLng
 import com.umpa2020.tracer.util.Logg
@@ -117,7 +116,7 @@ object LocationUpdatesComponent {
   var lastLocation : Location? = null
   private fun getLastLocation(){
     try{
-      fusedLocationClient!!.lastLocation // 마지막으로 알려진 위치 가져오기
+      fusedLocationClient.lastLocation // 마지막으로 알려진 위치 가져오기
         .addOnCompleteListener{task ->
           if (task.isSuccessful && task.result != null) {
             currentLocation = task.result!!

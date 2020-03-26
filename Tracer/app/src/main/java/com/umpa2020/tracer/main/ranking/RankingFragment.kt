@@ -2,14 +2,20 @@ package com.umpa2020.tracer.main.ranking
 
 import android.location.Location
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.os.Handler
+import android.os.Message
+import android.os.Messenger
+import android.view.*
 import android.view.animation.AlphaAnimation
 import android.widget.SeekBar
+import android.widget.Toast
+import android.widget.Toolbar
 import androidx.fragment.app.Fragment
 import com.umpa2020.tracer.R
+import com.umpa2020.tracer.locationBackground.LocationBackgroundService
+import com.umpa2020.tracer.main.MainActivity.Companion.MESSENGER_INTENT_KEY
 import com.umpa2020.tracer.network.GetRanking
+import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.fragment_ranking.view.*
 
@@ -73,7 +79,6 @@ class RankingFragment : Fragment() {
     view.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
       override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
         view.progressTextView.text = i.toString()
-
         if (i == 100) {
           view.progressTextView.text = "100+"
         }

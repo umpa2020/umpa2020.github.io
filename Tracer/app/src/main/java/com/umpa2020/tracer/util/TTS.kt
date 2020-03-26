@@ -2,7 +2,6 @@ package com.umpa2020.tracer.util
 
 import android.content.Context
 import android.speech.tts.TextToSpeech
-import android.util.Log
 import android.widget.Toast
 import java.util.*
 

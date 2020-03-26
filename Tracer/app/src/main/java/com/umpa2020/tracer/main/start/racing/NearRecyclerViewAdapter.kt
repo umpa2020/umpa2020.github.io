@@ -2,7 +2,6 @@ package com.umpa2020.tracer.main.start.racing
 
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -60,7 +59,6 @@ class NearRecyclerViewAdapter(private var datas: List<NearMap>) : RecyclerView.A
 
     //클릭하면 맵 상세보기 페이지로 이동
     holder.itemView.setOnClickListener {
-      //TODO 그 루트로 넘어가게 해야함
 
       val nextIntent = Intent(context, RankRecyclerItemClickActivity::class.java)
       nextIntent.putExtra("MapTitle", singleItem1.mapTitle) //mapTitle 정보 인텐트로 넘김

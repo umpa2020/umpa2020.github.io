@@ -11,6 +11,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.main.ranking.RankRecyclerItemClickActivity
+import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.PrettyDistance
 import kotlinx.android.synthetic.main.recycler_profilefragment_route_grid_image.view.*
 import java.text.SimpleDateFormat
@@ -71,7 +72,8 @@ class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) : Recycler
 
   //item 사이즈, 데이터의 전체 길이 반ㅎ환
   override fun getItemCount(): Int {
-    //TODO 갯수 조절 여기서
+    Logg.d("데이터 크기 " + mdata.size.toString())
+    //return 10 //TODO 갯수 조절 여기서
     return mdata.size
   }
 
