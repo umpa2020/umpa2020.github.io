@@ -13,6 +13,7 @@ import com.google.android.gms.maps.model.Polyline
 import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.constant.UserState
 import com.umpa2020.tracer.dataClass.RouteGPX
+import com.umpa2020.tracer.util.Logg
 import io.jenetics.jpx.WayPoint
 
 class BasicMap(val smf: SupportMapFragment, val context: Context) : OnMapReadyCallback, TraceMap {
@@ -43,7 +44,7 @@ class BasicMap(val smf: SupportMapFragment, val context: Context) : OnMapReadyCa
     }
 
     override fun onMapReady(googleMap: GoogleMap) { //after the traceMap is loaded
-        Log.d(TAG, "onMapReady")
+        Logg.d( "onMapReady")
         mMap = googleMap //구글맵
         mMap.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
         if(routeGPX!=null){

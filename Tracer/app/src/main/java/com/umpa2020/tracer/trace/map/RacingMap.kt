@@ -140,7 +140,7 @@ class RacingMap : OnMapReadyCallback {
                     }
                 }
                 .addOnFailureListener { exception ->
-                    Log.w("ssmm11", "Error getting documents.", exception)
+                    Logg.w("ssmm11", "Error getting documents.", exception)
                 }
             //전체 시간 / 체크포인트 개수 = 한체크포인트에서 머물 시간
             var sleepTime = ((time!!.toDouble() / wpList.size.toDouble())).roundToLong()

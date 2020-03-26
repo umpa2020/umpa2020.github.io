@@ -85,8 +85,8 @@ class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener,
 
       db.collection("mapInfo").document(mapTitle)
         .update("execute", FieldValue.increment(1))
-        .addOnSuccessListener { Log.d("ssmm11", "DocumentSnapshot successfully updated!") }
-        .addOnFailureListener { e -> Log.w("ssmm11", "Error updating document", e) }
+        .addOnSuccessListener { Logg.d( "DocumentSnapshot successfully updated!") }
+        .addOnFailureListener { e -> Logg.w("Error updating document$e") }
     })
 
     increaseExecuteThread.start()
@@ -132,14 +132,14 @@ class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener,
           //TODO:notice " you should be in 200m"
           UserState.NORMAL -> {
             //200m 안으로 들어오세요!
-            Log.d(TAG, "NORMAL")
+            Logg.d( "NORMAL")
           }
           UserState.READYTORACING -> {
-            Log.d(TAG, "READYTORACING")
+            Logg.d( "READYTORACING")
             start()
           }
           UserState.RUNNING -> {
-            Log.d(TAG, "RUNNING")
+            Logg.d( "RUNNING")
             stop(false)
           }
         }
@@ -180,20 +180,20 @@ class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener,
   }
 
   override fun onScrollStarted() {
-    Log.d(TAG, "onScrollStarted()")
+    Logg.d( "onScrollStarted()")
   }
 
   override fun onScrollEnded() {
-    Log.d(TAG, "onScrollEnded()")
+    Logg.d( "onScrollEnded()")
   }
 
   override fun onDrawerOpened() {
     racingHandle.text = "▼"
-    Log.d(TAG, "onDrawerOpened()")
+    Logg.d( "onDrawerOpened()")
   }
 
   override fun onDrawerClosed() {
     racingHandle.text = "▲"
-    Log.d(TAG, "onDrawerClosed()")
+    Logg.d( "onDrawerClosed()")
   }
 }

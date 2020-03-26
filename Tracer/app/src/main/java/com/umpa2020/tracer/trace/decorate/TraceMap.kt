@@ -8,12 +8,13 @@ import com.google.android.gms.maps.model.*
 import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.constant.UserState
 import com.umpa2020.tracer.dataClass.RouteGPX
+import com.umpa2020.tracer.util.Logg
 import io.jenetics.jpx.WayPoint
 
 interface TraceMap {
     fun work(location: Location)
     fun draw() {
-        Log.d(TAG,"Map is draw")
+        Logg.d("Map is draw")
        track=mutableListOf<LatLng>()
         routeGPX!!.trkList.forEach {
             track.add(LatLng(it.latitude.toDouble(), it.longitude.toDouble()))

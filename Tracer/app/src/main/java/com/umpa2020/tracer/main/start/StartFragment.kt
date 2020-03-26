@@ -20,6 +20,7 @@ import com.umpa2020.tracer.main.start.running.RunningActivity
 import com.umpa2020.tracer.trace.decorate.BasicMap
 import com.umpa2020.tracer.trace.decorate.TraceMap
 import com.umpa2020.tracer.util.LocationBroadcastReceiver
+import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.UserInfo
 import com.umpa2020.tracer.util.gpx.GPXConverter
 import kotlinx.android.synthetic.main.fragment_start.view.*
@@ -47,7 +48,7 @@ class StartFragment : Fragment(), View.OnClickListener {
             R.id.mainStartRacing -> {
                 val newIntent = Intent(activity, NearRouteActivity::class.java)
                 newIntent.putExtra("currentLocation", currentLocation) //curLoc 정보 인텐트로 넘김
-                Log.d("jsj", "mainStartRunning누르는 순간의 intent " + currentLocation.toString())
+                Logg.d( "mainStartRunning누르는 순간의 intent " + currentLocation.toString())
                 startActivity(newIntent)
             }
         }
@@ -60,10 +61,10 @@ class StartFragment : Fragment(), View.OnClickListener {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        Log.d(TAG, "onCreateView()")
+        Logg.d( "onCreateView()")
         val view = inflater.inflate(R.layout.fragment_start, container, false)
         view.test.setOnClickListener {
-            Log.d("ssmm11", "test 실행")
+            Logg.d( "test 실행")
             val storage = FirebaseStorage.getInstance("gs://tracer-9070d.appspot.com/")
             val routeRef = storage.reference.child("mapRoute").child("Sandiego||1585155309000")
             val localFile = File.createTempFile("routeGpx", "xml")
@@ -89,7 +90,7 @@ class StartFragment : Fragment(), View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d(TAG, "onViewCreated()")
+        Logg.d( "onViewCreated()")
 
 
         view.mainStartRunning.setOnClickListener(this)
@@ -112,7 +113,7 @@ class StartFragment : Fragment(), View.OnClickListener {
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.d("sss", "onDestroy()")
+        Logg.d("onDestroy()")
     }
 
 }

@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.RankingData
+import com.umpa2020.tracer.util.Logg
 import kotlinx.android.synthetic.main.recycler_rankfragment_topplayer_item.view.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -57,13 +58,13 @@ class RankRecyclerViewAdapterTopPlayer(val mydata: ArrayList<RankingData>) : Rec
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): myViewHolder {
     val view = LayoutInflater.from(parent.context).inflate(R.layout.recycler_rankfragment_topplayer_item, parent, false)
     context = parent.context
-    Log.d("rank", "onCreateViewHolder호출")
+    Logg.d("onCreateViewHolder호출")
     return myViewHolder(view) //view 객체는 한개의 리사이클러뷰가 디자인 되어 있는 레이아웃을 의미
   }
 
   //item 사이즈, 데이터의 전체 길이 반환
   override fun getItemCount(): Int {
-    Log.d("rank", "데이터 크기 " + mydata.size.toString())
+    Logg.d( "데이터 크기 " + mydata.size.toString())
     return mydata.size //TODO 갯수 조절 여기서
   }
 

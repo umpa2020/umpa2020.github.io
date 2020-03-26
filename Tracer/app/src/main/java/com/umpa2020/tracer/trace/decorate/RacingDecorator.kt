@@ -13,6 +13,7 @@ import com.umpa2020.tracer.constant.Constants.Companion.DEVIATION_DISTANCE
 import com.umpa2020.tracer.constant.Constants.Companion.INFOUPDATE
 import com.umpa2020.tracer.constant.Constants.Companion.RACINGFINISH
 import com.umpa2020.tracer.constant.UserState
+import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.MyHandler
 
 class RacingDecorator(decoratedMap: TraceMap) : MapDecorator(decoratedMap) {
@@ -24,15 +25,15 @@ class RacingDecorator(decoratedMap: TraceMap) : MapDecorator(decoratedMap) {
     myHandler.sendEmptyMessage(INFOUPDATE)
     when (userState) {
       UserState.NORMAL -> {
-        Log.d(TAG, "NORMAL")
+        Logg.d( "NORMAL")
         checkIsReady()
       }
       UserState.READYTORACING -> {
-        Log.d(TAG, "READYTORACING")
+        Logg.d( "READYTORACING")
         checkIsReadyToRacing()
       }
       UserState.RUNNING -> {
-        Log.d(TAG, "RUNNING")
+        Logg.d( "RUNNING")
         checkMarker()
         checkDeviation()
       }
@@ -107,8 +108,8 @@ class RacingDecorator(decoratedMap: TraceMap) : MapDecorator(decoratedMap) {
             )).roundToLong().toString() + "m")
     })*/
     //시작포인트에 10m이내로 들어오면 준비상태로 변경
-    Log.d(
-      TAG, SphericalUtil.computeDistanceBetween(
+    Logg.d(
+       SphericalUtil.computeDistanceBetween(
         currentLocation,
         LatLng(routeGPX!!.wptList[0].latitude.toDouble(), routeGPX!!.wptList[0].longitude.toDouble())
       ).toString()

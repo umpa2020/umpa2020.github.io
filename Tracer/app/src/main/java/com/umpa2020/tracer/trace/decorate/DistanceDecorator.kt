@@ -9,13 +9,14 @@ import android.widget.TextView
 import com.google.maps.android.SphericalUtil
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.UserState
+import com.umpa2020.tracer.util.Logg
 import kotlinx.android.synthetic.main.activity_running.view.*
 import org.jetbrains.anko.runOnUiThread
 
 class DistanceDecorator(decoratedMap: TraceMap) : MapDecorator(decoratedMap) {
     override fun work(location: Location) {
         super.work(location)
-        Log.d(TAG,"is it working?")
+        Logg.d("is it working?")
         when (userState) {
             UserState.RUNNING -> {
                 if(moving) calcDistance()

@@ -13,6 +13,7 @@ import com.umpa2020.tracer.locationBackground.ServiceStatus
 import com.umpa2020.tracer.main.profile.ProfileFragment
 import com.umpa2020.tracer.main.ranking.RankingFragment
 import com.umpa2020.tracer.main.start.StartFragment
+import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -38,7 +39,7 @@ class MainActivity : AppCompatActivity() {
   }
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    Log.d("mainActivitiy","Hello I'm New")
+    Logg.d("Hello I'm New")
     setContentView(R.layout.activity_main)
 
     startService()
@@ -62,7 +63,7 @@ class MainActivity : AppCompatActivity() {
         StartFragment()
       ).commit()
     }
-    Log.d("MainActivity","restart service")
+    Logg.d("restart service")
   }
 
 
@@ -99,7 +100,7 @@ class MainActivity : AppCompatActivity() {
   private fun startStopServiceCommand(action: ServiceStatus) {
     Intent(applicationContext, LocationBackgroundService::class.java).also {
       it.action = action.name
-      Log.d(TAG, action.toString())
+      Logg.d(action.toString())
       startService(it)
     }
   }

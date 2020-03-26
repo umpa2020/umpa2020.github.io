@@ -17,6 +17,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.login.join.SignUpActivity
 import com.umpa2020.tracer.main.MainActivity
+import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_login.*
@@ -90,9 +91,9 @@ class LoginActivity : AppCompatActivity() {
     if (requestCode == RC_SIGN_IN /*&&  resultCode == RESULT_OK*/) {
       try {
         // 구글 로그인에 성공했을때 넘어오는 토큰값을 가지고 있는 Task
-        Log.d(WSY, data.toString())
+        Logg.d( data.toString())
         val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-        Log.d(WSY, "여기까지 실행??")
+        Logg.d( "여기까지 실행??")
         // Google Sign In was successful, authenticate with Firebase
         // 구글 로그인 성공
         // ApiException 캐스팅
@@ -107,7 +108,7 @@ class LoginActivity : AppCompatActivity() {
         firebaseAuthWithGoogle(account!!)
       } catch (e: ApiException) {
         // Google Sign In failed, update UI appropriately
-        Log.w(WSY, "Google sign in failed", e)
+        Logg.w("Google sign in failed$e")
         // ...
       }
     }
@@ -120,28 +121,28 @@ class LoginActivity : AppCompatActivity() {
    *  Firebase 사용자 인증 정보로 교환하고 해당 정보를 사용해 Firebase 인증을 받습니다.
    */
   private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
-    Log.d(WSY, "firebaseAuthWithGoogle:" + acct.id!!) // firebaseAuthWithGoogle:117635384468060774340 => 계정 고유 번호 => 이것을 Shared에 저장하여 자동 로그인 구현
-    Log.d(WSY, acct.email!!)
+    Logg.d( "firebaseAuthWithGoogle:" + acct.id!!) // firebaseAuthWithGoogle:117635384468060774340 => 계정 고유 번호 => 이것을 Shared에 저장하여 자동 로그인 구현
+    Logg.d( acct.email!!)
 
     val uid = mAuth!!.uid.toString()
     val email = acct.email.toString()
 
     // Credentail 구글 로그인에 성공했다는 인증서
     val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
-    Log.d(WSY, credential.toString())
+    Logg.d( credential.toString())
 
     //인증서를 Firebase에 넘겨줌(구글 사용자가 등록)
     mAuth!!.signInWithCredential(credential)
       .addOnCompleteListener(this) { task ->
         if (task.isSuccessful) { // 성공하면
           // Sign in success, update UI with the signed-in user's information
-          Log.d(WSY, "signInWithCredential:success")
+          Logg.d( "signInWithCredential:success")
           // 로그인 성공
           mFirestoreDB!!.collection("userinfo").whereEqualTo("UID", uid).get()
             .addOnSuccessListener { result ->
               // Document found in the offline cache
               if (result.isEmpty) {
-                Log.d(WSY, "초기 가입인가")
+                Logg.d( "초기 가입인가")
                 val nextIntent = Intent(this@LoginActivity, SignUpActivity::class.java)
                 nextIntent.putExtra("user UID", mAuth!!.uid.toString())
                 nextIntent.putExtra("email", email)
@@ -153,13 +154,13 @@ class LoginActivity : AppCompatActivity() {
               } else {
                 for (document in result) {
                   // DocumentSnapshot{key=UserInfo/117635384468060774340, metadata=SnapshotMetadata{hasPendingWrites=false, isFromCache=false}, doc=null}
-                  Log.d(WSY, document.exists().toString()) // false
-                  Log.d(WSY, document.reference.toString()) // com.google.firebase.firestore.DocumentReference@aafeaf20
-                  Log.d(WSY, "Cached document data: ${document?.data}") // Cached document data: null
-                  Log.d(WSY, "기존 가입자 -> 메인으로") // 이 부분에 들어왔다는 것은 로그아웃 or 앱 삭제 후 재로그인일 테니깐 Shared에 다시 값 저장.
+                  Logg.d( document.exists().toString()) // false
+                  Logg.d( document.reference.toString()) // com.google.firebase.firestore.DocumentReference@aafeaf20
+                  Logg.d( "Cached document data: ${document?.data}") // Cached document data: null
+                  Logg.d( "기존 가입자 -> 메인으로") // 이 부분에 들어왔다는 것은 로그아웃 or 앱 삭제 후 재로그인일 테니깐 Shared에 다시 값 저장.
 
-                  Log.d(WSY, document.data.toString()) // {gender=Man, nickname=gfyhv, age=26}
-                  Log.d(WSY, document.data.get("nickname").toString())
+                  Logg.d( document.data.toString()) // {gender=Man, nickname=gfyhv, age=26}
+                  Logg.d( document.data.get("nickname").toString())
 
                   UserInfo.autoLoginKey = mAuth!!.uid.toString()
                   UserInfo.email = email
@@ -178,7 +179,7 @@ class LoginActivity : AppCompatActivity() {
           //    이때 db에서 값을 가져와야겠지??
         } else {
           // If sign in fails, display a message to the user.
-          Log.w(WSY, "signInWithCredential:failure", task.exception)
+          Logg.w( "signInWithCredential:failure"+ task.exception)
         }
       }
   }

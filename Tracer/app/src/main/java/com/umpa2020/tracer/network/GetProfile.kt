@@ -12,6 +12,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.InfoData
+import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.PrettyDistance
 import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
@@ -107,7 +108,7 @@ class GetProfile {
         for (document in result) {
           val data = document.toObject(InfoData::class.java)
           infoDatas.add(data)
-          Log.d("ssmm11", "in get profile (보내기 전)!~ > " + document.id)
+          Logg.d( "in get profile (보내기 전)!~ > " + document.id)
         }
         val msg: Message
 

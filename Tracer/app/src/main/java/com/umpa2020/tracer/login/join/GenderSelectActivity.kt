@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.umpa2020.tracer.R
+import com.umpa2020.tracer.util.Logg
 import kotlinx.android.synthetic.main.activity_gender_select.*
 import kotlinx.android.synthetic.main.signup_toolbar.view.*
 
@@ -63,8 +64,8 @@ class GenderSelectActivity : AppCompatActivity() {
           isMan = false
           isWoman = true
         }
-        Log.d(WSY, "남자 : " + isMan.toString())
-        Log.d(WSY, "여자 : " + isWoman.toString())
+        Logg.d( "남자 : " + isMan.toString())
+        Logg.d( "여자 : " + isWoman.toString())
       }
       R.id.woman -> {
         if (womanCheck.visibility == View.INVISIBLE && womanUnderline.visibility == View.INVISIBLE) {
@@ -86,8 +87,8 @@ class GenderSelectActivity : AppCompatActivity() {
           isWoman = false
           isMan = true
         }
-        Log.d(WSY, "여자 : " + isWoman.toString())
-        Log.d(WSY, "남자 : " + isMan.toString())
+        Logg.d("여자 : $isWoman")
+        Logg.d( "남자 : " + isMan.toString())
       }
 
     }

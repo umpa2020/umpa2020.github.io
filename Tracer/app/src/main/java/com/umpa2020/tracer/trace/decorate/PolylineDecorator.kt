@@ -6,6 +6,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
 import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.constant.UserState
+import com.umpa2020.tracer.util.Logg
 import io.jenetics.jpx.WayPoint
 
 class PolylineDecorator(decoratedMap: TraceMap) : MapDecorator(decoratedMap) {
@@ -20,7 +21,7 @@ class PolylineDecorator(decoratedMap: TraceMap) : MapDecorator(decoratedMap) {
 
     var markerCount = 0
     private fun polyLineMake() {
-        Log.d(TAG, "making polyline $previousLocation $currentLocation")
+        Logg.d( "making polyline $previousLocation $currentLocation")
         //polyline 그리기
         mMap.addPolyline(
             PolylineOptions().add(

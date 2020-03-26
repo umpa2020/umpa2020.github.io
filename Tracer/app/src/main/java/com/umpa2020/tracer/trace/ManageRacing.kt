@@ -116,7 +116,7 @@ class ManageRacing {
             newIntent.putExtra("Result", result)
             newIntent.putExtra("info Data", infoData)
             //    newIntent.putExtra("Maker Data", makerRouteData)
-            Log.d("ssmm11", "레이싱 끝!")
+            Logg.d( "레이싱 끝!")
             context.startActivity(newIntent)
             activity.finish()
 

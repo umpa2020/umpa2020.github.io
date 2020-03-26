@@ -12,6 +12,7 @@ import com.umpa2020.tracer.App
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.NearMap
 import com.umpa2020.tracer.main.ranking.RankRecyclerViewAdapterMap
+import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.ProgressBar
 import kotlinx.android.synthetic.main.fragment_ranking.view.*
 
@@ -60,7 +61,7 @@ class GetRanking {
             )
 
             nearMaps1.add(NearMap(document.id, SphericalUtil.computeDistanceBetween(cur_loc, latLng)))
-            Log.d("ssmm11", "infodata's distance = " + SphericalUtil.computeDistanceBetween(cur_loc, latLng))
+            Logg.d( "infodata's distance = " + SphericalUtil.computeDistanceBetween(cur_loc, latLng))
 
             break
           }
@@ -150,8 +151,8 @@ class GetRanking {
               }
           } else {
             nullSwitch++
-            Log.d("ssmm11", "null switch = " + nullSwitch.toString())
-            Log.d("ssmm11", "nearmaps = " + nearMaps1.size)
+            Logg.d( "null switch = " + nullSwitch.toString())
+            Logg.d( "nearmaps = " + nearMaps1.size)
             if (nullSwitch == nearMaps1.size) {
               view.rank_recycler_map.adapter = RankRecyclerViewAdapterMap(infoDatas, "null", progressbar)
               progressbar.dismiss()

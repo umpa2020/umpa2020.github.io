@@ -17,6 +17,7 @@ import com.umpa2020.tracer.dataClass.*
 import com.umpa2020.tracer.trace.decorate.BasicMap
 import com.umpa2020.tracer.trace.decorate.TraceMap
 import com.umpa2020.tracer.util.Chart
+import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.gpx.GPXConverter
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_running_save.*
@@ -88,7 +89,7 @@ class RunningSaveActivity : AppCompatActivity() {
                 it.compress(Bitmap.CompressFormat.PNG, 90, out)
                 save(myfile.path)
               } catch (e: Exception) {
-                Log.d("Capture", e.toString())
+                Logg.d(e.toString())
               }
             }
             traceMap.captureMapScreen(callback)
@@ -100,7 +101,7 @@ class RunningSaveActivity : AppCompatActivity() {
   }
 
   fun save(imgPath: String) {
-    Log.d("Save", "Start Saving")
+    Logg.d( "Start Saving")
     // 타임스탭프 찍는 코드
     val dt = Date()
     val fullSdf = SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.getDefault())
@@ -133,19 +134,19 @@ class RunningSaveActivity : AppCompatActivity() {
     var routeGpxFile = gpxConverter.classToGpx(routeGPX, saveFolder.path)
     // storage에 이미지 업로드 모든 맵 이미지는 mapimage/maptitle로 업로드가 된다.
     val fstorage = FirebaseStorage.getInstance("gs://tracer-9070d.appspot.com/")
-    Log.d("Save", "HI0?")
+    Logg.d( "HI0?")
     val fRef = fstorage.reference.child("mapRoute").child(infoData.mapTitle!!)
 
-    Log.d("Save", "HI1?")
+    Logg.d("HI1?")
     var fuploadTask = fRef.putFile(routeGpxFile)
 
-    Log.d("Save", "HI2?")
+    Logg.d("HI2?")
     fuploadTask.addOnFailureListener {
-      Log.d("Save", "Success")
+      Logg.d( "Success")
     }.addOnSuccessListener {
-      Log.d("Save", "Fail : $it")
+      Logg.d( "Fail : $it")
     }
-    Log.d("Save", "HI3?")
+    Logg.d( "HI3?")
     // db에 그려진 맵 저장하는 스레드 - 여기서는 실제 그려진 것 보다 후 보정을 통해서
     // 간략화 된 맵을 업로드 합니다.
     val db = FirebaseFirestore.getInstance()
@@ -168,7 +169,7 @@ class RunningSaveActivity : AppCompatActivity() {
     val mapImageRef = storage.reference.child("mapImage").child(infoData.mapTitle!!)
     var uploadTask = mapImageRef.putFile(Uri.fromFile(File(imgPath)))
     uploadTask.addOnFailureListener {
-      Log.d("ssmm11", "스토리지 실패 = " + it.toString())
+      Logg.d( "스토리지 실패 = " + it.toString())
     }.addOnSuccessListener {
       finish()
     }

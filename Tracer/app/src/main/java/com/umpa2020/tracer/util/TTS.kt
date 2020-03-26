@@ -33,7 +33,7 @@ class TTS {
 
     fun speech(sentence: String) {
       textToSpeech.speak(sentence, TextToSpeech.QUEUE_FLUSH, null, null)
-      Log.d("TTS", sentence)
+      Logg.d(sentence)
     }
   }
 }
