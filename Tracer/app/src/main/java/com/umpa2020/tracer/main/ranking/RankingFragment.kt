@@ -29,7 +29,7 @@ class RankingFragment : Fragment() {
     //TODO: activity Created 로 이전
     val view: View = inflater.inflate(R.layout.fragment_ranking, container, false)
 
-    GetRanking().getExcuteDESCENDING(context!!, view, UserInfo.rankingLatitude, UserInfo.rankingLongitude, "execute")
+    GetRanking().getExcuteDESCENDING(context!!, view, UserInfo.rankingLatLng, "execute")
 
     //필터 버튼 누르면 레이아웃 보임
     view.rankingToolBarTuneButton.setOnClickListener {
@@ -59,10 +59,10 @@ class RankingFragment : Fragment() {
       //실행순 버튼에 체크가 되어 있을 경우
       if (view.tuneRadioBtnExecute.isChecked) {
         view.rankingfiltermode.text = "실행수"
-        GetRanking().getFilterRange(view, UserInfo.rankingLatitude, UserInfo.rankingLongitude, tuneDistance, "execute")
+        GetRanking().getFilterRange(view, UserInfo.rankingLatLng, tuneDistance, "execute")
       } else {
         view.rankingfiltermode.text = "좋아요"
-        GetRanking().getFilterRange(view, UserInfo.rankingLatitude, UserInfo.rankingLongitude, tuneDistance, "likes")
+        GetRanking().getFilterRange(view, UserInfo.rankingLatLng, tuneDistance, "likes")
       }
 
       //TODO : tuneDistance에 거리 값 넣어놨으니 이대로 필터 적용

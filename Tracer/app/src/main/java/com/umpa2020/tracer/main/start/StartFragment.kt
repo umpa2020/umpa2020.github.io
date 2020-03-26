@@ -1,7 +1,5 @@
 package com.umpa2020.tracer.main.start
 
-import android.content.BroadcastReceiver
-import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.location.Location
@@ -11,27 +9,21 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.trace
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.bumptech.glide.Glide
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.R
-import com.umpa2020.tracer.dataClass.testdata
-import com.umpa2020.tracer.trace.decorate.BasicMap
 import com.umpa2020.tracer.main.start.racing.NearRouteActivity
 import com.umpa2020.tracer.main.start.racing.RankingRecodeRacingActivity
 import com.umpa2020.tracer.main.start.running.RunningActivity
+import com.umpa2020.tracer.trace.decorate.BasicMap
 import com.umpa2020.tracer.trace.decorate.TraceMap
 import com.umpa2020.tracer.util.LocationBroadcastReceiver
 import com.umpa2020.tracer.util.UserInfo
 import com.umpa2020.tracer.util.gpx.GPXConverter
-import io.jenetics.jpx.GPX
 import kotlinx.android.synthetic.main.fragment_start.view.*
 import java.io.File
-import java.nio.file.Path
 
 
 class StartFragment : Fragment(), View.OnClickListener {
@@ -113,8 +105,7 @@ class StartFragment : Fragment(), View.OnClickListener {
 
     override fun onPause() {
         super.onPause()
-        Log.d("sss", "onPause()")
-
+        UserInfo.rankingLatLng = traceMap.currentLocation
         //        브로드 캐스트 해제 - 전역 context로 수정해야함
         LocalBroadcastManager.getInstance(this.requireContext()).unregisterReceiver(locationBroadcastReceiver)
     }

@@ -2,6 +2,7 @@ package com.umpa2020.tracer.network
 
 import android.app.Activity
 import android.content.Context
+import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.maps.model.LatLng
@@ -31,14 +32,10 @@ class GetRanking {
    * 필터를 거치지 않고, 실행순으로 정렬되는 데이터를 가져오는 함수.
    */
 
-  fun getExcuteDESCENDING(context: Context, view: View, lat: Double, lng: Double, mode: String) {
+  fun getExcuteDESCENDING(context: Context, view: View, latlng: LatLng, mode: String) {
     val progressbar = ProgressBar(context)
     progressbar.show()
-    //결과로 가져온 location에서 정보추출 / 이건 위도 경도 형태로 받아오는 형식
-    //Location 형태로 받아오고 싶다면 아래처럼
-    //var getintentLocation = current
-
-    cur_loc = LatLng(lat, lng)
+    cur_loc = latlng
 
     nearMaps1.clear()
 
@@ -61,7 +58,10 @@ class GetRanking {
               location["latitude"] as Double,
               location["longitude"] as Double
             )
+
             nearMaps1.add(NearMap(document.id, SphericalUtil.computeDistanceBetween(cur_loc, latLng)))
+            Log.d("ssmm11", "infodata's distance = " + SphericalUtil.computeDistanceBetween(cur_loc, latLng))
+
             break
           }
         }
@@ -75,6 +75,7 @@ class GetRanking {
                 infoData = document2.toObject(InfoData::class.java)
                 infoData.mapTitle = document2.id
                 infoData.distance = nearmap.distance
+
                 infoDatas.add(infoData)
                 break
               }
@@ -91,14 +92,14 @@ class GetRanking {
    * 현재 위치를 받아서 현재 위치와 필터에 적용한 위치 만큼 떨어져 있는 구간에서 실행순으로 정렬한 코드
    */
 
-  fun getFilterRange(view: View, lat: Double, lng: Double, distance: Int, mode: String) {
+  fun getFilterRange(view: View, latlng: LatLng, distance: Int, mode: String) {
     val progressbar = ProgressBar(App.instance.currentActivity() as Activity)
     progressbar.show()
 
     //결과로 가져온 location에서 정보추출 / 이건 위도 경도 형태로 받아오는 형식
     //Location 형태로 받아오고 싶다면 아래처럼
     //var getintentLocation = current
-    cur_loc = LatLng(lat, lng)
+    cur_loc = latlng
 
     //레이아웃 매니저 추가
     view.rank_recycler_map.layoutManager = LinearLayoutManager(App.instance.currentActivity() as Activity)
@@ -125,7 +126,8 @@ class GetRanking {
             break
           }
         }
-
+        var nullSwitch = 0 // 필터에 맞는 랭킹이 없을 경우 거르기 위해서
+        //TODO: 필터에 맞는 경우가 없으면 없다는 페이지 추가
         for (nearmap in nearMaps1) {
           if (nearmap.distance < distance * 1000) {
             db.collection("mapInfo").whereEqualTo("mapTitle", nearmap.mapTitle)
@@ -146,10 +148,19 @@ class GetRanking {
                 }
                 view.rank_recycler_map.adapter = RankRecyclerViewAdapterMap(infoDatas, mode, progressbar)
               }
+          } else {
+            nullSwitch++
+            Log.d("ssmm11", "null switch = " + nullSwitch.toString())
+            Log.d("ssmm11", "nearmaps = " + nearMaps1.size)
+            if (nullSwitch == nearMaps1.size) {
+              view.rank_recycler_map.adapter = RankRecyclerViewAdapterMap(infoDatas, "null", progressbar)
+              progressbar.dismiss()
+            }
           }
         }
       }
       .addOnFailureListener { exception ->
       }
   }
+
 }
