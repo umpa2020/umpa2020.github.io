@@ -1,0 +1,85 @@
+<resources>
+  <string name="app_name">Tracer</string>
+
+  <!-- TODO: Remove or change this placeholder text -->
+  <string name="hello_blank_fragment">Hello blank fragment</string>
+
+  <!-- 회원가입 string-->
+  <string name="join_name">Join</string>
+  <string name="email">E-mail</string>
+  <string name="password">Password</string>
+  <string name="passwordCheck">PasswordCheck</string>
+  <string name="nickname">Nickname</string>
+  <string name="age">Age</string>
+  <string name="gender">Gender</string>
+
+  <string name="error_discorrent_email">Please check your email.</string>
+  <string name="txtInputInfoPWD">8 or more characters including uppercase, lowercase, numbers, and special characters in English</string>
+  <string name="txtInputInfoNick">3-12 characters including uppercase, lowercase and numbers in English</string>
+  <string name="txtInputInfoPWCHECK">Please check your password.</string>
+  <string name="txtInputInfoEmail">This is not an exact email.</string>
+  <string name="txtInputInfoAge">Please enter your age.</string>
+  <string name="txtInputInfoGender">Please select a gender.</string>
+
+  <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyAymdWK_9DnHXKY19cuUvg0oMo_FItNvQ0</string>
+  <string name="man">Man</string>
+  <string name="woman">Woman</string>
+  <string name="next">Next</string>
+  <string name="please_login">Please login with your Google account.</string>
+  <string name="near_route">Near Route</string>
+  <string name="race">Race</string>
+  <string name="start">Start</string>
+  <string name="my_activity">My Activity</string>
+  <string name="my_route">My Route</string>
+  <string name="race_result">Race Result</string>
+  <string name="record">Record</string>
+  <string name="my">My</string>
+  <string name="maker">Maker</string>
+  <string name="ranking">Ranking</string>
+  <string name="player">Player</string>
+  <string name="laptime">Lap Time</string>
+  <string name="map_record">Map Record</string>
+  <string name="learn_more">Learn More</string>
+  <string name="top_player">Top Player</string>
+  <string name="detailedmap">Detailed Map</string>
+  <string name="mapname">Map Name</string>
+  <string name="mapdescription">Map Description</string>
+  <string name="recordanalysis">Record Analysis</string>
+  <string name="distance">Distance (km)</string>
+  <string name="time">Time</string>
+  <string name="speed">Speed (km/h)</string>
+  <string name="thumbnail">Route Thumbnail</string>
+  <string name="altitude_sppedchart">Altitude / Speed Chart</string>
+  <string name="matchstart">Match Start</string>
+  <string name="rankingrecords">For ranking records</string>
+  <string name="creatroute">Create Route</string>
+  <string name="stop">Stop</string>
+  <string name="pause">Pause</string>
+  <string name="activities">Activity content</string>
+  <string name="mapresult">Map Result</string>
+  <string name="mapinformation">Map information record</string>
+  <string name="competition">Competition</string>
+  <string name="public_">Public</string>
+  <string name="private_">Private</string>
+  <string name="saveactivity">Save Activity</string>
+  <string name="signup">Sign Up</string>
+  <string name="selcetimage">Please select\na profile image</string>
+  <string name="nick_name">Nickname</string>
+  <string name="age_">Age</string>
+  <string name="gender_">Gender</string>
+  <string name="sign_up">Sign Up</string>
+  <string name="map_title">Map Title</string>
+  <string name="text">Text</string>
+  <string name="profile">Profile</string>
+  <string name="mystats">My Stats</string>
+  <string name="total_distance">Total Distance</string>
+  <string name="total_time">Total Time</string>
+  <string name="numerofruns">Number Of Runs</string>
+  <string name="runningmode">Running</string>
+  <string name="racingmode">Racing</string>
+  <string name="distance_display">Distance display</string>
+  <string name="yes">Yes</string>
+  <string name="no">No</string>
+  <string name="noroute">There are currently no saved routes.</string>
+
+</resources>

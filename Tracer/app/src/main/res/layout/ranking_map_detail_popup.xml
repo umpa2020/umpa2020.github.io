@@ -56,7 +56,7 @@
       android:layout_width="130dp"
       android:layout_height="wrap_content"
       android:background="@drawable/button_background"
-      android:text="랭킹 기록용"
+      android:text="@string/rankingrecords"
       android:textColor="@color/white"
       android:textSize="15dp" />
 
