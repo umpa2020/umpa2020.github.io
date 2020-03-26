@@ -16,5 +16,7 @@ data class InfoData (
     var time: Long? = null,
     var execute: Int? = null,
     var likes: Int? = null,
-    var privacy: Privacy = Privacy.PUBLIC
+    var privacy: Privacy = Privacy.PUBLIC,
+    var startLatitude: Double? = null,
+    var startLongitude: Double? = null
 ) : Parcelable

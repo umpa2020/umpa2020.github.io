@@ -2,7 +2,6 @@ package com.umpa2020.tracer.network
 
 import android.app.Activity
 import android.content.Context
-import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.maps.model.LatLng
@@ -12,7 +11,6 @@ import com.umpa2020.tracer.App
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.NearMap
 import com.umpa2020.tracer.main.ranking.RankRecyclerViewAdapterMap
-import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.ProgressBar
 import kotlinx.android.synthetic.main.fragment_ranking.view.*
 
@@ -29,6 +27,8 @@ class FBRanking {
   var cur_loc = LatLng(0.0, 0.0)          //현재위치
   var latLng = LatLng(0.0, 0.0)
 
+  val db = FirebaseFirestore.getInstance()
+
   /**
    * 필터를 거치지 않고, 실행순으로 정렬되는 데이터를 가져오는 함수.
    */
@@ -37,55 +37,25 @@ class FBRanking {
     val progressbar = ProgressBar(context)
     progressbar.show()
     cur_loc = latlng
-
     nearMaps1.clear()
 
     //레이아웃 매니저 추가
     view.rank_recycler_map.layoutManager = LinearLayoutManager(context)
 
-    val db = FirebaseFirestore.getInstance()
 
-    db.collection("mapRoute")
+    db.collection("mapInfo")
       .get()
       .addOnSuccessListener { result ->
         infoDatas = arrayListOf()
 
         for (document in result) {
-          val receiveRouteDatas = document.get("markerlatlngs") as List<*>
-
-          for (receiveRouteData in receiveRouteDatas) {
-            val location = receiveRouteData as Map<*, *>
-            latLng = LatLng(
-              location["latitude"] as Double,
-              location["longitude"] as Double
-            )
-
-            nearMaps1.add(NearMap(document.id, SphericalUtil.computeDistanceBetween(cur_loc, latLng)))
-            Logg.d( "infodata's distance = " + SphericalUtil.computeDistanceBetween(cur_loc, latLng))
-
-            break
-          }
+          infoData = document.toObject(InfoData::class.java)
+          infoData.mapTitle = document.id
+          infoData.distance = SphericalUtil.computeDistanceBetween(cur_loc, LatLng(infoData.startLatitude!!, infoData.startLongitude!!))
+          infoDatas.add(infoData)
         }
-
-        for (nearmap in nearMaps1) {
-          db.collection("mapInfo").whereEqualTo("mapTitle", nearmap.mapTitle)
-            .get()
-            .addOnSuccessListener { result2 ->
-
-              for (document2 in result2) {
-                infoData = document2.toObject(InfoData::class.java)
-                infoData.mapTitle = document2.id
-                infoData.distance = nearmap.distance
-
-                infoDatas.add(infoData)
-                break
-              }
-              infoDatas.sortByDescending { infoData -> infoData.execute }
-              view.rank_recycler_map.adapter = RankRecyclerViewAdapterMap(infoDatas, mode, progressbar)
-            }
-        }
-      }
-      .addOnFailureListener {
+        infoDatas.sortByDescending { infoData -> infoData.execute }
+        view.rank_recycler_map.adapter = RankRecyclerViewAdapterMap(infoDatas, mode, progressbar)
       }
   }
 
@@ -105,63 +75,26 @@ class FBRanking {
     //레이아웃 매니저 추가
     view.rank_recycler_map.layoutManager = LinearLayoutManager(App.instance.currentActivity() as Activity)
 
-    val db = FirebaseFirestore.getInstance()
-
     nearMaps1.clear()
 
-    db.collection("mapRoute")
+    db.collection("mapInfo")
       .get()
       .addOnSuccessListener { result ->
         infoDatas = arrayListOf()
 
         for (document in result) {
-          val receiveRouteDatas = document.get("markerlatlngs") as List<*>
-
-          for (receiveRouteData in receiveRouteDatas) {
-            val location = receiveRouteData as Map<*, *>
-            latLng = LatLng(
-              location["latitude"] as Double,
-              location["longitude"] as Double
-            )
-            nearMaps1.add(NearMap(document.id, SphericalUtil.computeDistanceBetween(cur_loc, latLng)))
-            break
-          }
+          infoData = document.toObject(InfoData::class.java)
+          infoData.mapTitle = document.id
+          infoData.distance = SphericalUtil.computeDistanceBetween(cur_loc, LatLng(infoData.startLatitude!!, infoData.startLongitude!!))
+          if (infoData.distance!! < distance * 1000)
+            infoDatas.add(infoData)
         }
-        var nullSwitch = 0 // 필터에 맞는 랭킹이 없을 경우 거르기 위해서
-        //TODO: 필터에 맞는 경우가 없으면 없다는 페이지 추가
-        for (nearmap in nearMaps1) {
-          if (nearmap.distance < distance * 1000) {
-            db.collection("mapInfo").whereEqualTo("mapTitle", nearmap.mapTitle)
-              .get()
-              .addOnSuccessListener { result2 ->
-
-                for (document2 in result2) {
-                  infoData = document2.toObject(InfoData::class.java)
-                  infoData.mapTitle = document2.id
-                  infoData.distance = nearmap.distance
-                  infoDatas.add(infoData)
-                  break
-                }
-                if (mode.equals("execute")) {
-                  infoDatas.sortByDescending { infoData -> infoData.execute }
-                } else if (mode.equals("likes")) {
-                  infoDatas.sortByDescending { infoData -> infoData.likes }
-                }
-                view.rank_recycler_map.adapter = RankRecyclerViewAdapterMap(infoDatas, mode, progressbar)
-              }
-          } else {
-            nullSwitch++
-            Logg.d( "null switch = " + nullSwitch.toString())
-            Logg.d( "nearmaps = " + nearMaps1.size)
-            if (nullSwitch == nearMaps1.size) {
-              view.rank_recycler_map.adapter = RankRecyclerViewAdapterMap(infoDatas, "null", progressbar)
-              progressbar.dismiss()
-            }
-          }
+        if (mode.equals("execute")) {
+          infoDatas.sortByDescending { infoData -> infoData.execute }
+        } else if (mode.equals("likes")) {
+          infoDatas.sortByDescending { infoData -> infoData.likes }
         }
-      }
-      .addOnFailureListener {
+        view.rank_recycler_map.adapter = RankRecyclerViewAdapterMap(infoDatas, mode, progressbar)
       }
   }
-
 }
