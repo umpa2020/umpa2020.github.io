@@ -11,6 +11,7 @@ data class InfoData (
     var mapTitle: String? = null,
     var mapExplanation: String? = null,
     var mapImage: String? = null,
+    var routeGPXPath: String? = null,
     var distance: Double? = null,
     var time: Long? = null,
     var execute: Int? = null,

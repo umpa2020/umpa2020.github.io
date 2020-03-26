@@ -5,7 +5,6 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.GoogleMap
@@ -13,15 +12,18 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.constant.Privacy
-import com.umpa2020.tracer.dataClass.*
+import com.umpa2020.tracer.dataClass.InfoData
+import com.umpa2020.tracer.dataClass.RankingData
+import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.trace.decorate.BasicMap
 import com.umpa2020.tracer.trace.decorate.TraceMap
 import com.umpa2020.tracer.util.Chart
 import com.umpa2020.tracer.util.Logg
-import com.umpa2020.tracer.util.gpx.GPXConverter
 import com.umpa2020.tracer.util.UserInfo
+import com.umpa2020.tracer.util.gpx.GPXConverter
 import kotlinx.android.synthetic.main.activity_running_save.*
-import java.io.*
+import java.io.File
+import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -37,8 +39,8 @@ class RunningSaveActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(com.umpa2020.tracer.R.layout.activity_running_save)
 
-    infoData = intent.getParcelableExtra("InfoData")
-    routeGPX = intent.getParcelableExtra("RouteGPX")
+    infoData = intent.getParcelableExtra("InfoData")!!
+    routeGPX = intent.getParcelableExtra("RouteGPX")!!
     val speedList = mutableListOf<Double>()
     val elevationList = mutableListOf<Double>()
     routeGPX.trkList.forEach {
@@ -80,7 +82,7 @@ class RunningSaveActivity : AppCompatActivity() {
                 if (!saveFolder.exists()) {       //폴더 없으면 생성
                   saveFolder.mkdir()
                 }
-                val path = "racingMap" + saveFolder.list().size + ".bmp"        //파일명 생성하는건데 수정필요
+                val path = "racingMap" + saveFolder.list()!!.size + ".bmp"        //파일명 생성하는건데 수정필요
                 //비트맵 크기에 맞게 잘라야함
                 val myfile = File(saveFolder, path)                //로컬에 파일저장
                 val out = FileOutputStream(myfile)
@@ -124,19 +126,20 @@ class RunningSaveActivity : AppCompatActivity() {
     }
 
     // 맵 타이틀과, 랭킹 중복 방지를 위해서 시간 값을 넣어서 중복 방지
-    var gpxConverter = GPXConverter()
-    var saveFolder = File(baseContext.filesDir, "routeGPX") // 저장 경로
+    val gpxConverter = GPXConverter()
+    val saveFolder = File(baseContext.filesDir, "routeGPX") // 저장 경로
     if (!saveFolder.exists()) {       //폴더 없으면 생성
       saveFolder.mkdir()
     }
-    var routeGpxFile = gpxConverter.classToGpx(routeGPX, saveFolder.path)
+    val routeGpxFile = gpxConverter.classToGpx(routeGPX, saveFolder.path)
     // storage에 이미지 업로드 모든 맵 이미지는 mapimage/maptitle로 업로드가 된다.
     val fstorage = FirebaseStorage.getInstance("gs://tracer-9070d.appspot.com/")
     Logg.d( "HI0?")
     val fRef = fstorage.reference.child("mapRoute").child(infoData.mapTitle!!)
+    infoData.routeGPXPath = fRef.path
 
     Logg.d("HI1?")
-    var fuploadTask = fRef.putFile(routeGpxFile)
+    val fuploadTask = fRef.putFile(routeGpxFile)
 
     Logg.d("HI2?")
     fuploadTask.addOnFailureListener {
@@ -163,7 +166,7 @@ class RunningSaveActivity : AppCompatActivity() {
     // storage에 이미지 업로드 모든 맵 이미지는 mapimage/maptitle로 업로드가 된다.
     val storage = FirebaseStorage.getInstance("gs://tracer-9070d.appspot.com/")
     val mapImageRef = storage.reference.child("mapImage").child(infoData.mapTitle!!)
-    var uploadTask = mapImageRef.putFile(Uri.fromFile(File(imgPath)))
+    val uploadTask = mapImageRef.putFile(Uri.fromFile(File(imgPath)))
     uploadTask.addOnFailureListener {
       Logg.d( "스토리지 실패 = " + it.toString())
     }.addOnSuccessListener {
