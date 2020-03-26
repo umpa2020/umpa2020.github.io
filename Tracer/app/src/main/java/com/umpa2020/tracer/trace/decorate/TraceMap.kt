@@ -58,7 +58,9 @@ interface TraceMap {
         userState = UserState.STOP
         return RouteGPX("", "", wpList, trkList)
     }
-
+    fun WayPoint.toLatLng():LatLng{
+        return LatLng(latitude.toDouble(),longitude.toDouble())
+    }
 
     var mMap: GoogleMap
     var testString: String

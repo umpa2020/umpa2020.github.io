@@ -196,7 +196,7 @@ class SignUpActivity : AppCompatActivity() {
   private fun typingListener() {
     //Nickname
     val disposableNick = RxTextView.textChanges(inputDataField[0])
-      .map { t -> t.isEmpty() || !Pattern.matches(Constants.NICKNAME_RULS, t) }
+      .map { t -> t.isEmpty() || !Pattern.matches(Constants.NICKNAME_RULE, t) }
       .subscribe({ it ->
         //inputDataField[2].setText("")
         reactiveInputTextViewData(0, it)
@@ -205,7 +205,7 @@ class SignUpActivity : AppCompatActivity() {
       }
 
     val disposableAge = RxTextView.textChanges(inputDataField[1])
-      .map { t -> t.isEmpty() || Pattern.matches(Constants.AGE_RULS, t) }
+      .map { t -> t.isEmpty() || Pattern.matches(Constants.AGE_RULE, t) }
       .subscribe({ it ->
         //inputDataField[2].setText("")
         reactiveInputTextViewData(1, it)
@@ -214,7 +214,7 @@ class SignUpActivity : AppCompatActivity() {
       }
 
     val disposableGender = RxTextView.textChanges(inputDataField[2])
-      .map { t -> t.isEmpty() || Pattern.matches(Constants.GENDER_RULS, t) }
+      .map { t -> t.isEmpty() || Pattern.matches(Constants.GENDER_RULE, t) }
       .subscribe({ it ->
         //inputDataField[2].setText("")
         Log.d(WSY, "성별 : " + it.toString())
