@@ -2,7 +2,6 @@ package com.umpa2020.tracer.util
 
 import android.content.Context
 import android.speech.tts.TextToSpeech
-import android.util.Log
 import android.widget.Toast
 import java.util.*
 
@@ -33,7 +32,7 @@ class TTS {
 
     fun speech(sentence: String) {
       textToSpeech.speak(sentence, TextToSpeech.QUEUE_FLUSH, null, null)
-      Log.d("TTS", sentence)
+      Logg.d(sentence)
     }
   }
 }

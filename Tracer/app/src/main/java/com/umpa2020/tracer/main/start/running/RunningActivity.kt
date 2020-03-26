@@ -28,6 +28,7 @@ import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.trace.decorate.*
 import com.umpa2020.tracer.util.LocationBroadcastReceiver
+import com.umpa2020.tracer.util.Logg
 import hollowsoft.slidingdrawer.OnDrawerCloseListener
 import hollowsoft.slidingdrawer.OnDrawerOpenListener
 import hollowsoft.slidingdrawer.OnDrawerScrollListener
@@ -234,7 +235,7 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
   // 화면 안보일
   override fun onStop() {
     super.onStop()
-    Log.d("screen", "onStop()")
+    Logg.d("onStop()")
   }
 
   override fun onResume() {
@@ -253,27 +254,27 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
 
   override fun onDestroy() {
     super.onDestroy()
-    Log.d("screen", "onDestroy()")
+    Logg.d("onDestroy()")
   }
 
   override fun onScrollStarted() {
-    Log.d(TAG, "onScrollStarted()")
+    Logg.d("onScrollStarted()")
   }
 
   override fun onScrollEnded() {
-    Log.d(TAG, "onScrollEnded()")
+    Logg.d("onScrollEnded()")
   }
 
   override fun onDrawerOpened() {
     //runningHandle.background = getDrawable(R.drawable.close_selector)
     runningHandle.text = "▼"
-    Log.d(TAG, "onDrawerOpened()")
+    Logg.d("onDrawerOpened()")
   }
 
   override fun onDrawerClosed() {
     //runningHandle.background = getDrawable(R.drawable.extend_selector)
     runningHandle.text = "▲"
-    Log.d(TAG, "onDrawerClosed()")
+    Logg.d("onDrawerClosed()")
   }
 
 }

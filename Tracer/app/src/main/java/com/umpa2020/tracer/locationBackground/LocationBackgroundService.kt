@@ -10,7 +10,9 @@ import android.util.Log
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.location.LocationRequest
 import com.umpa2020.tracer.R
+import com.umpa2020.tracer.main.MainActivity.Companion.TAG
 import com.umpa2020.tracer.main.start.running.RunningActivity
+import com.umpa2020.tracer.util.Logg
 
 /**
  *  IntentService : 오래걸리지만 메인스레드와 관련이 없는 작업을할 때 주로 이용한다.
@@ -28,13 +30,13 @@ class LocationBackgroundService : IntentService("LocationBackgroundService"), Lo
 
   override fun onCreate() {
     super.onCreate()
-    Log.i(TAG, "onCreate ")
+    Logg.i( "onCreate ")
 
     /**
      *  위치 관련 생성.
      */
 
-    Log.d(TAG, this.toString())
+    Logg.d(this.toString())
     LocationUpdatesComponent.setILocationProvider(this)
     LocationUpdatesComponent.onCreate(this)
     LocationUpdatesComponent.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
@@ -46,11 +48,12 @@ class LocationBackgroundService : IntentService("LocationBackgroundService"), Lo
 
   // this makes service running continuously,,commenting this start command method service runs only once
   override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-    Log.i(TAG, "onStartCommand Service started....")
+
+    Logg.i("onStartCommand Service started....")
 
     if (intent != null) {
       val action = intent.action
-      Log.i(TAG, "onStartCommand action $action")
+      Logg.i("onStartCommand action $action")
       when (action) {
         ServiceStatus.START.name -> startService()
         ServiceStatus.STOP.name -> stopService()
@@ -61,7 +64,7 @@ class LocationBackgroundService : IntentService("LocationBackgroundService"), Lo
 
 
   override fun onHandleIntent(intent: Intent?) {
-    Log.i(TAG, "onHandleIntent $intent")
+    Logg.i("onHandleIntent $intent")
   }
 
   /**
@@ -78,7 +81,7 @@ class LocationBackgroundService : IntentService("LocationBackgroundService"), Lo
       LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
 
     } catch (e: RemoteException) {
-      Log.e(TAG, "Error passing service object back to activity.")
+      Logg.e("Error passing service object back to activity.")
     }
 
   }
