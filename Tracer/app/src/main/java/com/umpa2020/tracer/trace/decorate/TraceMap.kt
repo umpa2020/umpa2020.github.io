@@ -2,7 +2,6 @@ package com.umpa2020.tracer.trace.decorate
 
 import android.graphics.Color
 import android.location.Location
-import android.util.Log
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.*
 import com.umpa2020.tracer.constant.Privacy
@@ -15,7 +14,7 @@ interface TraceMap {
     fun work(location: Location)
     fun draw() {
         Logg.d("Map is draw")
-       track=mutableListOf<LatLng>()
+        track = mutableListOf<LatLng>()
         routeGPX!!.trkList.forEach {
             track.add(LatLng(it.latitude.toDouble(), it.longitude.toDouble()))
         }
@@ -23,21 +22,40 @@ interface TraceMap {
             mMap.addPolyline(
                 PolylineOptions()
                     .addAll(track)
-                    .color(Color.GREEN)
+                    .color(Color.RED)
                     .startCap(RoundCap() as Cap)
                     .endCap(RoundCap())
             )        //경로를 그릴 폴리라인 집합
-        routeGPX!!.wptList.forEachIndexed{i, it ->
-            wayPoint.add(mMap.addMarker(
-                MarkerOptions()
-                    .position(LatLng(it.latitude.toDouble(),it.longitude.toDouble()))
-                    .title(i.toString())
-            ))
+        routeGPX!!.wptList.forEachIndexed { i, it ->
+            val icon = when (i) {
+                0 -> {
+                    BitmapDescriptorFactory
+                        .defaultMarker(BitmapDescriptorFactory.HUE_ROSE)
+                }
+                routeGPX!!.wptList.size - 1 -> {
+                    BitmapDescriptorFactory
+                        .defaultMarker(BitmapDescriptorFactory.HUE_RED)
+                }
+                else -> {
+                    BitmapDescriptorFactory
+                        .defaultMarker(BitmapDescriptorFactory.HUE_GREEN)
+
+                }
+            }
+            markerList.add(
+                mMap.addMarker(
+                    MarkerOptions()
+                        .position(LatLng(it.latitude.toDouble(), it.longitude.toDouble()))
+                        .title(it.name.toString())
+                        .icon(icon)
+                )
+            )
         }
         //TODO:MINMAX 적용
         //mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(LatLngBounds(track.first(), track.last()), 1080, 300, 50))
     }
-    fun captureMapScreen(callback:GoogleMap.SnapshotReadyCallback){
+
+    fun captureMapScreen(callback: GoogleMap.SnapshotReadyCallback) {
         mMap.snapshot(callback)
     }
 
@@ -57,10 +75,12 @@ interface TraceMap {
 
     fun stop(): RouteGPX {
         userState = UserState.STOP
+        work(Location(""))
         return RouteGPX("", "", wpList, trkList)
     }
-    fun WayPoint.toLatLng():LatLng{
-        return LatLng(latitude.toDouble(),longitude.toDouble())
+
+    fun WayPoint.toLatLng(): LatLng {
+        return LatLng(latitude.toDouble(), longitude.toDouble())
     }
 
     var mMap: GoogleMap
@@ -79,9 +99,9 @@ interface TraceMap {
     var wpList: MutableList<WayPoint>   //way point list
 
 
-    var routeGPX:RouteGPX?
-    var loadTrack:Polyline
-    var wayPoint:MutableList<Marker>
-    var track:MutableList<LatLng>
-    var nextWP:Int
+    var routeGPX: RouteGPX?
+    var loadTrack: Polyline
+    var markerList: MutableList<Marker>
+    var track: MutableList<LatLng>
+    var nextWP: Int
 }

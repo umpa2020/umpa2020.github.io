@@ -18,7 +18,7 @@ import io.jenetics.jpx.WayPoint
 
 class BasicMap(val smf: SupportMapFragment, val context: Context) : OnMapReadyCallback, TraceMap {
     override var routeGPX:RouteGPX?=null
-    override var wayPoint:MutableList<Marker> = mutableListOf()
+    override var markerList:MutableList<Marker> = mutableListOf()
     override var track:MutableList<LatLng> = mutableListOf()
     override var nextWP:Int=0
     override lateinit var loadTrack: Polyline
@@ -37,6 +37,16 @@ class BasicMap(val smf: SupportMapFragment, val context: Context) : OnMapReadyCa
     override var trkList: MutableList<WayPoint> = mutableListOf()
     override var wpList: MutableList<WayPoint> = mutableListOf()
     override fun work(location: Location) {
+        if (userState==UserState.STOP){
+            wpList.removeAt(wpList.size-1)
+            wpList.add(WayPoint.builder()
+                .lat(currentLocation.latitude)
+                .lon(currentLocation.longitude)
+                .name("Finish")
+                .desc("Finish~!@!~!@")
+                .build())
+            return
+        }
         setLocation(location)
     }
     init {
@@ -65,7 +75,7 @@ class BasicMap(val smf: SupportMapFragment, val context: Context) : OnMapReadyCa
             && previousLocation.longitude == currentLocation.longitude
         ) {
             moving = false
-        } else if (false) { //비정상적인 움직임일 경우 + finish에 도착한 경우
+        } else if (false) { //TODO:비정상적인 움직임일 경우 + finish에 도착한 경우
         } else {
             moving = true
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 16F))
