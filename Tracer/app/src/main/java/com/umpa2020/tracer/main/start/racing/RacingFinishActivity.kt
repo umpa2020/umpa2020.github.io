@@ -10,6 +10,7 @@ import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.RanMapsData
 import com.umpa2020.tracer.dataClass.RankingData
+import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.main.ranking.RankRecyclerViewAdapterTopPlayer
 import com.umpa2020.tracer.util.PrettyDistance
@@ -37,6 +38,8 @@ class RacingFinishActivity : AppCompatActivity() {
     racerData = intent.getParcelableExtra("InfoData") as InfoData
     val result = intent.extras!!.getBoolean("Result")
     val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
+    val routeGPX = intent.getParcelableExtra<RouteGPX>("RouteGPX")
+    val speeds = routeGPX!!.getSpeed()
 
     if (result) { // 성공인 경우
       // 현재 달린 사람의 Maptitle로 메이커의 infoData를 다운 받아옴
@@ -48,7 +51,7 @@ class RacingFinishActivity : AppCompatActivity() {
           val ranMapsData = RanMapsData(racerData.mapTitle, racerData.distance, racerData.time)
           db.collection("userinfo").document(UserInfo.autoLoginKey).collection("user ran these maps").add(ranMapsData)
 
-          var rankingData = RankingData(racerData.makersNickname, UserInfo.nickname, racerData.time, 1)
+          val rankingData = RankingData(racerData.makersNickname, UserInfo.nickname, racerData.time, 1)
 
           // 랭킹 맵에서
           db.collection("rankingMap").document(racerData.mapTitle!!).collection("ranking").whereEqualTo("bestTime", 1)
@@ -79,12 +82,12 @@ class RacingFinishActivity : AppCompatActivity() {
                     .get()
                     .addOnSuccessListener { result ->
                       var index = 1
-                      for (document in result) {
-                        if (document.get("challengerNickname") == UserInfo.nickname && document.get("challengerTime").toString().equals(racerData.time.toString())) {
+                      for (document2 in result) {
+                        if (document2.get("challengerNickname") == UserInfo.nickname && document2.get("challengerTime").toString().equals(racerData.time.toString())) {
                           resultRankTextView.text = "" + index + "등"
                         }
                         var recycleRankingData: RankingData
-                        recycleRankingData = document.toObject(RankingData::class.java)
+                        recycleRankingData = document2.toObject(RankingData::class.java)
                         if (recycleRankingData.bestTime == 1) {
                           //최대 10위까지만 띄우기
                           if (arrRankingData.size > 10)
@@ -102,14 +105,13 @@ class RacingFinishActivity : AppCompatActivity() {
 
 //                      makerData = document.toObject(InfoData::class.java)!!
                       runOnUiThread {
-                        makerLapTimeTextView.text = formatter.format(Date(makerData.time!!))
-                       // makerMaxSpeedTextView.text = PrettyDistance().convertPretty(makerData.speed.max()!!)
-                       // makerAvgSpeedTextView.text = PrettyDistance().convertPretty(makerData.speed.average())
+                        makerLapTimeTextView.text = formatter.format(Date(racerData.time!!))
+                        makerMaxSpeedTextView.text = PrettyDistance().convertPretty(speeds.max()!!)
+                        makerAvgSpeedTextView.text = PrettyDistance().convertPretty(speeds.average())
 
                         racerLapTimeTextView.text = formatter.format(Date(racerData.time!!))
-                       // racerMaxSpeedTextView.text = PrettyDistance().convertPretty(racerData.speed.max()!!)
-                       // racerAvgSpeedTextView.text = PrettyDistance().convertPretty(racerData.speed.average())
-
+                        racerMaxSpeedTextView.text = PrettyDistance().convertPretty(speeds.max()!!)
+                        racerAvgSpeedTextView.text = PrettyDistance().convertPretty(speeds.average())
                       }
                       progressbar.dismiss()
                     }
@@ -123,24 +125,29 @@ class RacingFinishActivity : AppCompatActivity() {
         }
     } else {
       resultRankTextView.text = "실패"
-     // makerLapTimeTextView.text = formatter.format(Date(makerData.time!!))
-     // makerMaxSpeedTextView.text = PrettyDistance().convertPretty(makerData.speed.max()!!)
-     // makerAvgSpeedTextView.text = PrettyDistance().convertPretty(makerData.speed.average())
+      makerLapTimeTextView.text = formatter.format(Date(racerData.time!!))
+      makerMaxSpeedTextView.text = PrettyDistance().convertPretty(speeds.max()!!)
+      makerAvgSpeedTextView.text = PrettyDistance().convertPretty(speeds.average())
 
-      //racerLapTimeTextView.text = formatter.format(Date(racerData.time!!))
-     // racerMaxSpeedTextView.text = PrettyDistance().convertPretty(racerData.speed.max()!!)
-     // racerAvgSpeedTextView.text = PrettyDistance().convertPretty(racerData.speed.average())
+      racerLapTimeTextView.text = formatter.format(Date(racerData.time!!))
+      racerMaxSpeedTextView.text = PrettyDistance().convertPretty(speeds.max()!!)
+      racerAvgSpeedTextView.text = PrettyDistance().convertPretty(speeds.average())
 
       progressbar.dismiss()
-
-
     }
 
     OKButton.setOnClickListener {
-      var intent = Intent(this, MainActivity::class.java)
+      val intent = Intent(this, MainActivity::class.java)
       intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
       startActivity(intent)
     }
+  }
 
+  private fun RouteGPX.getSpeed(): MutableList<Double> {
+    val speeds = mutableListOf<Double>()
+    trkList.forEach {
+      speeds.add(it.speed.get().toDouble())
+    }
+    return speeds
   }
 }
