@@ -11,7 +11,7 @@ class OtherPlayerDecorator(decoratedMap: TraceMap) : MapDecorator(decoratedMap) 
     Log.d(TAG,"is it working?")
     when (userState) {
       UserState.RUNNING -> {
-        if(moving) calcDistance()
+        //if(moving) calcDistance()
       }
     }
   }
