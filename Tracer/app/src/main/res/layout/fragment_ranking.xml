@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
   android:layout_height="match_parent">
 
   <LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical">
 
     <Toolbar
@@ -16,70 +16,30 @@
       android:background="@color/white"
       android:elevation="1dp">
 
+
       <TextView
         style="@style/appBarText"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="45dp"
+        android:layout_gravity="center"
         android:gravity="center"
         android:text="@string/ranking">
 
       </TextView>
 
+      <Button
+        android:id="@+id/rankingToolBarTuneButton"
+        android:layout_marginTop="10dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@drawable/ic_tune"
+        android:layout_marginRight="15dp"
+        android:layout_gravity="right"
+        android:stateListAnimator="@null" />
 
     </Toolbar>
-
-    <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:orientation="horizontal">
-
-      <Button
-        android:id="@+id/test_button1"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:text="실행순"
-        android:textSize="12dp" />
-
-      <Button
-        android:id="@+id/test_button2"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:text="좋아요"
-        android:textSize="12dp" />
-
-      <Button
-        android:id="@+id/test_button3"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:text="작게"
-        android:textSize="12dp" />
-
-      <Button
-        android:id="@+id/test_button4"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:text="크게"
-        android:textSize="12dp" />
-    </LinearLayout>
-
-    <!-- <TextView
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:id="@+id/rankingFragmentMonthTextView"
-          style="@style/blackBoldText20"
-          android:gravity="center"/>
-
-      <TextView
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:id="@+id/rankingFragmentPopularTextView"
-          android:text="월간인기차트"
-          android:textSize="18dp"
-          android:textColor="@color/black"
-          android:textStyle="bold"
-          android:gravity="center"/>-->
 
     <LinearLayout
       android:id="@+id/listTitleLinearLayout"
@@ -102,7 +62,7 @@
         style="@style/ListTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="2"
+        android:layout_weight="3"
         android:gravity="center"
         android:text="@string/mapname" />
 
@@ -111,6 +71,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="2"
+        android:layout_marginRight="10dp"
+        android:gravity="center"
+        android:text="주변" />
+
+      <TextView
+        style="@style/ListTitle"
+        android:id="@+id/rankingfiltermode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.5"
         android:gravity="center"
         android:text="@string/numerofruns" />
     </LinearLayout>
@@ -129,4 +99,174 @@
 
 
   </LinearLayout>
-</RelativeLayout>
+
+  <!--필터 적용 레이아웃-->
+  <LinearLayout
+    android:visibility="gone"
+    android:layout_marginTop="50dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/tuneLinearLayout"
+    android:orientation="vertical"
+    android:animateLayoutChanges="true"
+    >
+
+    <LinearLayout
+      android:id="@+id/filterLayout"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:paddingBottom="20dp"
+      android:background="@color/white"
+      android:orientation="vertical">
+
+      <TextView
+        android:paddingTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="정렬 기준"
+        style="@style/tuneText"/>
+
+      <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+          android:layout_width="100dp"
+          android:layout_height="40dp"
+          android:gravity="center"
+          android:background="@drawable/filter_button"
+          android:button="@null"
+          android:checked="true"
+          android:padding="5dp"
+          android:text="실행순"
+          android:textColor="@drawable/tune_text_selector"
+          android:id="@+id/tuneRadioBtnExecute"/>
+
+        <RadioButton
+          android:layout_marginLeft="10dp"
+          android:layout_width="100dp"
+          android:layout_height="40dp"
+          android:gravity="center"
+          android:background="@drawable/filter_button"
+          android:button="@null"
+          android:padding="5dp"
+          android:text="좋아요순"
+          android:textColor="@drawable/tune_text_selector"
+          android:id="@+id/tuneRadioBtnLike"/>
+
+      </RadioGroup>
+
+      <LinearLayout
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="거리"
+          android:layout_weight="1"
+          style="@style/tuneText"/>
+
+        <TextView
+          android:id="@+id/progressTextView"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="10"
+          style="@style/tuneText"
+          android:textColor="@color/red"/>
+
+        <TextView
+          android:layout_marginLeft="5dp"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="km"
+          android:textSize="16dp"/>
+
+      </LinearLayout>
+
+      <SeekBar
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:id="@+id/seekBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="100"
+        android:progress="10"
+        />
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp">
+        <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="0"/>
+
+        <View
+          android:layout_width="0dp"
+          android:layout_height="0dp"
+          android:layout_weight="1"/>
+
+        <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="100+"/>
+
+      </LinearLayout>
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp">
+        <Button
+          android:background="@drawable/button_empty_background"
+          style="@style/buttonTextRedText"
+          android:id="@+id/allDeleteButton"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="전체 삭제"/>
+
+        <View
+          android:layout_width="0dp"
+          android:layout_height="0dp"
+          android:layout_weight="1"/>
+
+        <Button
+          android:background="@drawable/button_background"
+          style="@style/buttonText"
+          android:id="@+id/applyButton"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="적용하기"/>
+      </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+      android:orientation="vertical"
+      android:id="@+id/disappearLayout"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:background="@color/blackAlpha">
+
+    </LinearLayout>
+  </LinearLayout>
+
+
+</FrameLayout>

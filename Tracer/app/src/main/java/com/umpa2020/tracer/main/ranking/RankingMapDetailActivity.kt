@@ -15,17 +15,16 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.InfoData
-import com.umpa2020.tracer.dataClass.RouteData
-import com.umpa2020.tracer.main.trace.racing.RankingRecodeRacingActivity
+import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.util.Chart
 import com.umpa2020.tracer.util.ProgressBar
 import kotlinx.android.synthetic.main.activity_ranking_map_detail.*
 import java.text.SimpleDateFormat
 import java.util.*
-
+/*
 class RankingMapDetailActivity : AppCompatActivity() {
   var infoData = InfoData()
-  var routeData = RouteData()
+  var routeData = RouteGPX()
 
   var altitude: List<Double> = listOf()
   var latLngs: MutableList<MutableList<LatLng>> = mutableListOf()
@@ -41,7 +40,7 @@ class RankingMapDetailActivity : AppCompatActivity() {
     val progressbar = ProgressBar(this)
     progressbar.show()
 
-    val intent = getIntent()
+    val intent = intent
     //전달 받은 값으로 Title 설정
     var mapTitle = intent.extras?.getString("MapTitle").toString()
     var cutted = mapTitle.split("||")
@@ -143,7 +142,7 @@ class RankingMapDetailActivity : AppCompatActivity() {
                       rankingDetailMapDetail.text = infoData.mapExplanation
                       rankingDetailDistance.text = String.format("%.2f", infoData.distance!! / 1000)
                       val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
-                      formatter.setTimeZone(TimeZone.getTimeZone("UTC"))
+                      formatter.timeZone = TimeZone.getTimeZone("UTC")
                       rankingDetailTime.text = formatter.format(Date(infoData.time!!))
                       rankingDetailSpeed.text = String.format("%.2f", infoData.speed.average())
                       var chart = Chart(routeData.altitude, infoData.speed, rankingDetailChart)
@@ -226,4 +225,4 @@ class RankingMapDetailActivity : AppCompatActivity() {
     alertDialog.show() //팝업 띄우기
 
   }
-}
+}*/

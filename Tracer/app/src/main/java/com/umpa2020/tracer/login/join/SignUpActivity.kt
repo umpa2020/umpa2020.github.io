@@ -28,8 +28,8 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.umpa2020.tracer.R
+import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.main.MainActivity
-import com.umpa2020.tracer.util.Constants
 import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
 import io.reactivex.disposables.CompositeDisposable
@@ -79,7 +79,7 @@ class SignUpActivity : AppCompatActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+    requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
     setContentView(R.layout.activity_sign_up)
 
     progressbar = ProgressBar(this)
@@ -265,7 +265,7 @@ class SignUpActivity : AppCompatActivity() {
 //
       if (resultCode == RESULT_OK) {
         try {
-          val inputStream = intentData!!.data?.let { getContentResolver().openInputStream(it) }
+          val inputStream = intentData!!.data?.let { contentResolver.openInputStream(it) }
 
           // 프로필 사진을 비트맵으로 변환
           options = BitmapFactory.Options()
@@ -280,7 +280,7 @@ class SignUpActivity : AppCompatActivity() {
         }
       } else if (resultCode == RESULT_CANCELED) {
         //사진 선택 취소
-        Toast.makeText(this, "사진 선택 취소", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "사진 선택 취소", Toast.LENGTH_LONG).show()
       }
     }
   }

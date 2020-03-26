@@ -23,7 +23,7 @@ class RankRecyclerItemClickActivity : AppCompatActivity() {
 
     val progressbar = ProgressBar(this)
     progressbar.show()
-    val intent = getIntent()
+    val intent = intent
     //전달 받은 값으로 Title 설정
     var mapTitle = intent.extras?.getString("MapTitle").toString()
 
@@ -79,9 +79,9 @@ class RankRecyclerItemClickActivity : AppCompatActivity() {
       }
 
     rankRecyclerMoreButton.setOnClickListener {
-      val nextIntent = Intent(this, RankingMapDetailActivity::class.java)
+     /* val nextIntent = Intent(this, RankingMapDetailActivity::class.java)
       nextIntent.putExtra("MapTitle", mapTitle)
-      startActivity(nextIntent)
+      startActivity(nextIntent)*/
     }
   }
 }

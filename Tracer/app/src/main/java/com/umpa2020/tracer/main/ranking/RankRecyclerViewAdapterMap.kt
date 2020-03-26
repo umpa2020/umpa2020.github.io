@@ -2,31 +2,61 @@ package com.umpa2020.tracer.main.ranking
 
 import android.content.Context
 import android.content.Intent
+import android.os.Handler
+import android.os.Looper
+import android.os.Message
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.InfoData
-import com.umpa2020.tracer.dataClass.NearMap
+import com.umpa2020.tracer.dataClass.LikeMapsData
+import com.umpa2020.tracer.network.Likes
 import com.umpa2020.tracer.util.PrettyDistance
+import com.umpa2020.tracer.util.ProgressBar
 import kotlinx.android.synthetic.main.recycler_rankfragment_item.view.*
 
-class RankRecyclerViewAdapterMap(val mdata: ArrayList<InfoData>, val nearMaps: ArrayList<NearMap>) : RecyclerView.Adapter<RankRecyclerViewAdapterMap.mViewHolder>() {
+class RankRecyclerViewAdapterMap(val mdata: ArrayList<InfoData>, val mode: String, val progressBar: ProgressBar) : RecyclerView.Adapter<RankRecyclerViewAdapterMap.mViewHolder>() {
   var context: Context? = null
+  val GETLIKES = 50
+  var likeMapsDatas = arrayListOf<LikeMapsData>()
 
   //생성된 뷰 홀더에 데이터를 바인딩 해줌.
   override fun onBindViewHolder(holder: mViewHolder, position: Int) {
     val singleItem = mdata[position]
-    var ranking = position + 1
+    val ranking = position + 1
+    val mHandler = object : Handler(Looper.getMainLooper()) {
+      override fun handleMessage(msg: Message) {
+        when (msg.what) {
+          GETLIKES -> {
+            likeMapsDatas = msg.obj as ArrayList<LikeMapsData>
+            //adpater 추가
+            for (i in likeMapsDatas) {
+              if (i.mapTitle.equals(singleItem.mapTitle)) {
+                holder.heart.setImageResource(R.drawable.ic_favorite_red_24dp)
+                holder.heartswitch.text = "on"
+              }
+            }
+          }
+        }
+      }
+    }
 
-    var cutted = singleItem.mapTitle!!.split("||")
+
+    val cutted = singleItem.mapTitle!!.split("||")
     //데이터 바인딩
     holder.rank.text = ranking.toString()
 
     holder.maptitle.text = cutted[0]
-    holder.distance.text = PrettyDistance().convertPretty(nearMaps[position].distance)
-    holder.execute.text = singleItem.execute.toString()
+    holder.distance.text = PrettyDistance().convertPretty(singleItem.distance!!)
+    if (mode.equals("execute")) {
+      holder.execute.text = singleItem.execute.toString()
+    } else if (mode.equals("likes")) {
+      Likes().getLikes(mHandler)
+      holder.heart.setImageResource(R.drawable.ic_favorite_border_black_24dp)
+      holder.execute.text = singleItem.likes.toString()
+    }
 
     //ranking에 따라 트로피 색 바뀌게 하는 부분
     if (ranking == 1) {
@@ -46,8 +76,29 @@ class RankRecyclerViewAdapterMap(val mdata: ArrayList<InfoData>, val nearMaps: A
       val nextIntent = Intent(context, RankRecyclerItemClickActivity::class.java)
       nextIntent.putExtra("MapTitle", singleItem.mapTitle) //mapTitle 정보 인텐트로 넘김
       context!!.startActivity(nextIntent)
+    }
 
+    holder.heart.setOnClickListener {
+      var likes = Integer.parseInt(holder.execute.text.toString())
 
+      if (holder.heartswitch.text.equals("off")) {
+        Likes().setLikes(singleItem.mapTitle!!, likes)
+        holder.heart.setImageResource(R.drawable.ic_favorite_red_24dp)
+        likes++
+        holder.execute.text = likes.toString()
+        holder.heartswitch.text = "on"
+      }
+      else {
+        Likes().setminusLikes(singleItem.mapTitle!!, likes)
+        holder.heart.setImageResource(R.drawable.ic_favorite_border_black_24dp)
+        likes--
+        holder.execute.text = likes.toString()
+        holder.heartswitch.text = "off"
+      }
+    }
+
+    if (position == mdata.size-1) {
+      progressBar.dismiss()
     }
   }
 
@@ -66,11 +117,13 @@ class RankRecyclerViewAdapterMap(val mdata: ArrayList<InfoData>, val nearMaps: A
 
   //여기서 item을 textView에 옮겨줌
 
-  inner class mViewHolder(view: View) : RecyclerView.ViewHolder(view!!) {
+  inner class mViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     var rank = view.rankingFragmentCountTextView
     var maptitle = view.rankingFragmentMapTitleTextView
     var distance = view.rankingFragmentDistanceTextView
     var execute = view.rankingFragmentExecuteTextView
+    var heart = view.rankingFragmentHeartImageView
+    var heartswitch = view.rankingFragmentHeartSwitch
   }
 
 

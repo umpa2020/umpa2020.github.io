@@ -1,4 +1,4 @@
-package com.umpa2020.tracer.main.trace.racing
+package com.umpa2020.tracer.main.start.racing
 
 import android.content.Intent
 import android.os.Bundle
@@ -34,7 +34,7 @@ class RacingFinishActivity : AppCompatActivity() {
     progressbar.show()
 
     // Racing Activity 에서 넘겨준 infoData를 받아서 활용
-    racerData = intent.getParcelableExtra("info Data") as InfoData
+    racerData = intent.getParcelableExtra("InfoData") as InfoData
     val result = intent.extras!!.getBoolean("Result")
     val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
 
@@ -101,15 +101,15 @@ class RacingFinishActivity : AppCompatActivity() {
                       //adpater 추가
                       resultPlayerRankingRecycler.adapter = RankRecyclerViewAdapterTopPlayer(arrRankingData)
 
-                      makerData = document.toObject(InfoData::class.java)!!
+//                      makerData = document.toObject(InfoData::class.java)!!
                       runOnUiThread {
                         makerLapTimeTextView.text = formatter.format(Date(makerData.time!!))
-                        makerMaxSpeedTextView.text = PrettyDistance().convertPretty(makerData.speed.max()!!)
-                        makerAvgSpeedTextView.text = PrettyDistance().convertPretty(makerData.speed.average())
+                       // makerMaxSpeedTextView.text = PrettyDistance().convertPretty(makerData.speed.max()!!)
+                       // makerAvgSpeedTextView.text = PrettyDistance().convertPretty(makerData.speed.average())
 
                         racerLapTimeTextView.text = formatter.format(Date(racerData.time!!))
-                        racerMaxSpeedTextView.text = PrettyDistance().convertPretty(racerData.speed.max()!!)
-                        racerAvgSpeedTextView.text = PrettyDistance().convertPretty(racerData.speed.average())
+                       // racerMaxSpeedTextView.text = PrettyDistance().convertPretty(racerData.speed.max()!!)
+                       // racerAvgSpeedTextView.text = PrettyDistance().convertPretty(racerData.speed.average())
 
                       }
                       progressbar.dismiss()
@@ -124,13 +124,13 @@ class RacingFinishActivity : AppCompatActivity() {
         }
     } else {
       resultRankTextView.text = "실패"
-      makerLapTimeTextView.text = formatter.format(Date(makerData.time!!))
-      makerMaxSpeedTextView.text = PrettyDistance().convertPretty(makerData.speed.max()!!)
-      makerAvgSpeedTextView.text = PrettyDistance().convertPretty(makerData.speed.average())
+     // makerLapTimeTextView.text = formatter.format(Date(makerData.time!!))
+     // makerMaxSpeedTextView.text = PrettyDistance().convertPretty(makerData.speed.max()!!)
+     // makerAvgSpeedTextView.text = PrettyDistance().convertPretty(makerData.speed.average())
 
-      racerLapTimeTextView.text = formatter.format(Date(racerData.time!!))
-      racerMaxSpeedTextView.text = PrettyDistance().convertPretty(racerData.speed.max()!!)
-      racerAvgSpeedTextView.text = PrettyDistance().convertPretty(racerData.speed.average())
+      //racerLapTimeTextView.text = formatter.format(Date(racerData.time!!))
+     // racerMaxSpeedTextView.text = PrettyDistance().convertPretty(racerData.speed.max()!!)
+     // racerAvgSpeedTextView.text = PrettyDistance().convertPretty(racerData.speed.average())
 
       progressbar.dismiss()
 
