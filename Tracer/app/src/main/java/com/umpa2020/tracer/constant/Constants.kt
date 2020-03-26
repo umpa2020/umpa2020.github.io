@@ -13,7 +13,7 @@ class Constants {
     const val AGE_RULE = "^(?=.*\\d).{1,2}\$"
 
     //체크포인트에 도착 범위(단위 : 미터)
-    const val NEAR_DISTANCE = 10
+    const val ARRIVE_BOUNDARY = 10
     //경로이탈 범위(단위 : 미터)
     const val DEVIATION_DISTANCE = 20.0
     //경로이탈 카운트

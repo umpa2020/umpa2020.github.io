@@ -64,7 +64,7 @@ class StartFragment : Fragment(), View.OnClickListener {
         view.test.setOnClickListener {
             Logg.d( "test 실행")
             val storage = FirebaseStorage.getInstance("gs://tracer-9070d.appspot.com/")
-            val routeRef = storage.reference.child("mapRoute").child("Sandiego||1585155309000")
+            val routeRef = storage.reference.child("mapRoute").child( "ZXCZXC||1585238332000")
             val localFile = File.createTempFile("routeGpx", "xml")
 
             routeRef.getFile(Uri.fromFile(localFile)).addOnSuccessListener {

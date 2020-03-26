@@ -1,13 +1,12 @@
 package com.umpa2020.tracer.trace.decorate
 
 import android.location.Location
-import android.os.Message
-import android.util.Log
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.maps.android.PolyUtil
 import com.google.maps.android.SphericalUtil
+import com.umpa2020.tracer.constant.Constants.Companion.ARRIVE_BOUNDARY
 import com.umpa2020.tracer.constant.Constants.Companion.DEVIATION
 import com.umpa2020.tracer.constant.Constants.Companion.DEVIATION_DISTANCE
 import com.umpa2020.tracer.constant.Constants.Companion.INFOUPDATE
@@ -25,20 +24,19 @@ class RacingDecorator(decoratedMap: TraceMap) : MapDecorator(decoratedMap) {
     myHandler.sendEmptyMessage(INFOUPDATE)
     when (userState) {
       UserState.NORMAL -> {
-        Logg.d( "NORMAL")
+        Logg.d("NORMAL")
         checkIsReady()
       }
       UserState.READYTORACING -> {
-        Logg.d( "READYTORACING")
+        Logg.d("READYTORACING")
         checkIsReadyToRacing()
       }
       UserState.RUNNING -> {
-        Logg.d( "RUNNING")
+        Logg.d("RUNNING")
         checkMarker()
         checkDeviation()
       }
       else -> {
-
       }
     }
   }
@@ -46,17 +44,17 @@ class RacingDecorator(decoratedMap: TraceMap) : MapDecorator(decoratedMap) {
   private fun checkMarker() {
     if (SphericalUtil.computeDistanceBetween(
         currentLocation,
-        wayPoint[nextWP].position
-      ) < 10
+        markerList[nextWP].position
+      ) < ARRIVE_BOUNDARY
     ) {
-      wayPoint[nextWP].remove()
-      wayPoint[nextWP] = mMap.addMarker(
+      markerList[nextWP].remove()
+      markerList[nextWP] = mMap.addMarker(
         MarkerOptions()
-          .position(wayPoint[nextWP].position)
-          .title(wayPoint[nextWP].title)
+          .position(markerList[nextWP].position)
+          .title(markerList[nextWP].title)
           .icon(
             BitmapDescriptorFactory
-              .defaultMarker(BitmapDescriptorFactory.HUE_GREEN)
+              .defaultMarker(BitmapDescriptorFactory.HUE_BLUE)
           )
       )
       nextWP++
@@ -78,10 +76,10 @@ class RacingDecorator(decoratedMap: TraceMap) : MapDecorator(decoratedMap) {
       if (deviationFlag) {
         deviationFlag = false
         deviationCount = 0
-        }
+      }
     } else {//경로 이탈이면
       deviationCount++
-      myHandler.sendMessage(myHandler.obtainMessage(DEVIATION,deviationCount))
+      myHandler.sendMessage(myHandler.obtainMessage(DEVIATION, deviationCount))
     }
   }
 
@@ -89,10 +87,23 @@ class RacingDecorator(decoratedMap: TraceMap) : MapDecorator(decoratedMap) {
     if (SphericalUtil.computeDistanceBetween(
         currentLocation,
         LatLng(routeGPX!!.wptList[0].latitude.toDouble(), routeGPX!!.wptList[0].longitude.toDouble())
-      ) > 10
+      ) > ARRIVE_BOUNDARY
     ) {
       userState = UserState.BEFORERACING
+      markerList.first().remove()
+      markerList[0] = mMap.addMarker(MarkerOptions()
+        .position(markerList.first().position)
+        .title(markerList.first().title)
+        .icon( BitmapDescriptorFactory
+          .defaultMarker(BitmapDescriptorFactory.HUE_ROSE)))
     } else {
+      markerList.first().remove()
+      markerList[0] = mMap.addMarker(MarkerOptions()
+        .position(markerList.first().position)
+        .title(markerList.first().title)
+        .icon( BitmapDescriptorFactory
+          .defaultMarker(BitmapDescriptorFactory.HUE_BLUE)))
+
       /*(context as Activity).runOnUiThread(Runnable {
           (context as Activity).racingNotificationButton.text =
               "시작을 원하시면 START를 누르세요"
@@ -112,7 +123,7 @@ class RacingDecorator(decoratedMap: TraceMap) : MapDecorator(decoratedMap) {
     })*/
     //시작포인트에 10m이내로 들어오면 준비상태로 변경
     Logg.d(
-       SphericalUtil.computeDistanceBetween(
+      SphericalUtil.computeDistanceBetween(
         currentLocation,
         LatLng(routeGPX!!.wptList[0].latitude.toDouble(), routeGPX!!.wptList[0].longitude.toDouble())
       ).toString()
