@@ -25,7 +25,6 @@ class FBRanking {
   var nearMaps1: ArrayList<NearMap> = arrayListOf()
 
   var cur_loc = LatLng(0.0, 0.0)          //현재위치
-  var latLng = LatLng(0.0, 0.0)
 
   val db = FirebaseFirestore.getInstance()
 
