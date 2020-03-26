@@ -97,7 +97,6 @@ class MainActivity : AppCompatActivity() {
    */
 
   private fun startStopServiceCommand(action: ServiceStatus) {
-    Log.d(TAG, "이건 실행되잖아?")
     Intent(applicationContext, LocationBackgroundService::class.java).also {
       it.action = action.name
       Log.d(TAG, action.toString())

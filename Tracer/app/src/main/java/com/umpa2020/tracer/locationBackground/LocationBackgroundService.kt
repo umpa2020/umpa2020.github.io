@@ -71,7 +71,6 @@ class LocationBackgroundService : IntentService("LocationBackgroundService"), Lo
    * 액티비티에 브로드캐스트를 이용해 message 보내기.
    */
   private fun sendMessage(location: Location) {
-    Log.d(TAG,"sendMessage 실행")
     try {
       val intent = Intent("custom-event-name")
       intent.putExtra("message", location)

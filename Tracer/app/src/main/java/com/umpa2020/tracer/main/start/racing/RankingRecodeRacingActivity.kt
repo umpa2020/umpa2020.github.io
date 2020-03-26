@@ -16,6 +16,8 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
+import com.umpa2020.tracer.constant.Constants
+import com.umpa2020.tracer.constant.Constants.Companion.DEVIATION
 import com.umpa2020.tracer.constant.Constants.Companion.INFOUPDATE
 import com.umpa2020.tracer.constant.Constants.Companion.RACINGFINISH
 import com.umpa2020.tracer.dataClass.RouteGPX
@@ -89,22 +91,27 @@ class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener,
 
     increaseExecuteThread.start()
   }
-
+//경로이탈 되는지 확인
   var mHandler = Handler(App.instance.mainLooper) {
     when (it.what) {
       INFOUPDATE -> {
         racingDistanceTextView.text = traceMap.distance.toString()
         racingSpeedTextView.text = traceMap.speed.toString()
-        true
       }
       RACINGFINISH -> {
         stop(true)
-        true
+      }
+      DEVIATION->{
+        Logg.d((it.obj as Int).toString())
+        //TODO:pop up 노티스
+        if (it.obj as Int > Constants.DEVIATION_COUNT) {
+          stop(false)
+        }
       }
       else -> {
-        true
       }
     }
+    true
   }
 
   private fun init() {

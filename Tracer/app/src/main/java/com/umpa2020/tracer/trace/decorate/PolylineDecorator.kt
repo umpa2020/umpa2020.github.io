@@ -11,7 +11,6 @@ import io.jenetics.jpx.WayPoint
 class PolylineDecorator(decoratedMap: TraceMap) : MapDecorator(decoratedMap) {
     override fun work(location: Location) {
         super.work(location)
-        Log.d(TAG,"PolylineDecorator")
         when (userState) {
             UserState.RUNNING -> {
                 if (moving) polyLineMake()

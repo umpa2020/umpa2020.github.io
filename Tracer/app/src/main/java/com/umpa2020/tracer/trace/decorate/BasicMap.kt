@@ -36,7 +36,6 @@ class BasicMap(val smf: SupportMapFragment, val context: Context) : OnMapReadyCa
     override var trkList: MutableList<WayPoint> = mutableListOf()
     override var wpList: MutableList<WayPoint> = mutableListOf()
     override fun work(location: Location) {
-        Log.d(TAG,"BasicMap")
         setLocation(location)
     }
     init {

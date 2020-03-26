@@ -1,12 +1,15 @@
 package com.umpa2020.tracer.trace.decorate
 
 import android.location.Location
+import android.os.Message
 import android.util.Log
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.maps.android.PolyUtil
 import com.google.maps.android.SphericalUtil
+import com.umpa2020.tracer.constant.Constants.Companion.DEVIATION
+import com.umpa2020.tracer.constant.Constants.Companion.DEVIATION_DISTANCE
 import com.umpa2020.tracer.constant.Constants.Companion.INFOUPDATE
 import com.umpa2020.tracer.constant.Constants.Companion.RACINGFINISH
 import com.umpa2020.tracer.constant.UserState
@@ -14,9 +17,10 @@ import com.umpa2020.tracer.util.MyHandler
 
 class RacingDecorator(decoratedMap: TraceMap) : MapDecorator(decoratedMap) {
   var myHandler = MyHandler.myHandler!!
+  var deviationFlag = false
+  var deviationCount = 0
   override fun work(location: Location) {
     super.work(location)
-    Log.d(TAG, "RacingDecorator")
     myHandler.sendEmptyMessage(INFOUPDATE)
     when (userState) {
       UserState.NORMAL -> {
@@ -42,13 +46,15 @@ class RacingDecorator(decoratedMap: TraceMap) : MapDecorator(decoratedMap) {
       ) < 10
     ) {
       wayPoint[nextWP].remove()
-      wayPoint[nextWP]=mMap.addMarker(
+      wayPoint[nextWP] = mMap.addMarker(
         MarkerOptions()
           .position(wayPoint[nextWP].position)
           .title(wayPoint[nextWP].title)
           .icon(
             BitmapDescriptorFactory
-              .defaultMarker(BitmapDescriptorFactory.HUE_GREEN)))
+              .defaultMarker(BitmapDescriptorFactory.HUE_GREEN)
+          )
+      )
       nextWP++
       if (nextWP == routeGPX!!.wptList.size) {
         myHandler.sendEmptyMessage(RACINGFINISH)
@@ -62,22 +68,16 @@ class RacingDecorator(decoratedMap: TraceMap) : MapDecorator(decoratedMap) {
         currentLocation,
         track,
         false,
-        20.0
+        DEVIATION_DISTANCE
       )
     ) {//경로 안에 있으면
-      /*
-      if (manageRacing.noticeState == NoticeState.DEVIATION) {
-          manageRacing.noticeState = NoticeState.NOTHING
-          countDeviation = 0
-          manageRacing.deviation(countDeviation)
-      }*/
+      if (deviationFlag) {
+        deviationFlag = false
+        deviationCount = 0
+        }
     } else {//경로 이탈이면
-      /*
-      manageRacing.deviation(++countDeviation)
-      if (countDeviation > 30) {
-          manageRacing.stopRacing(false)
-      }*/
-
+      deviationCount++
+      myHandler.sendMessage(myHandler.obtainMessage(DEVIATION,deviationCount))
     }
   }
 
