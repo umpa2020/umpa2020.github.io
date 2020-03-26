@@ -25,7 +25,7 @@ import java.util.*
  *
  */
 
-class GetProfile {
+class FBProfile {
   val MYROUTE = 60 // 마이 루트가 존재
   val MYROUTEFAIL = 70 // 마이 루트가 없을 경우
 

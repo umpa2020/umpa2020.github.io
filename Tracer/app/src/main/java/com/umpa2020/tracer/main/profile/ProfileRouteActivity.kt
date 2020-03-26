@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.InfoData
-import com.umpa2020.tracer.network.GetProfile
+import com.umpa2020.tracer.network.FBProfile
 import com.umpa2020.tracer.util.ProgressBar
 import kotlinx.android.synthetic.main.activity_profile_route.*
 
@@ -30,7 +30,7 @@ class ProfileRouteActivity : AppCompatActivity() {
     progressbar.show()
 
     // 마이 루트에 필요한 내용을 받아옴
-    GetProfile().getMyRoute(mHandler)
+    FBProfile().getMyRoute(mHandler)
   }
 
   val mHandler = object : Handler(Looper.getMainLooper()) {

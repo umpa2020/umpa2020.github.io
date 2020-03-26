@@ -21,7 +21,7 @@ import kotlinx.android.synthetic.main.fragment_ranking.view.*
  * 랭킹 네트워크 클래스 - 랭킹에 관련한
  * 네트워크 접근 함수는 이 곳에 정의
  */
-class GetRanking {
+class FBRanking {
   lateinit var infoData: InfoData
   lateinit var infoDatas: ArrayList<InfoData>
   var nearMaps1: ArrayList<NearMap> = arrayListOf()
@@ -51,10 +51,10 @@ class GetRanking {
         infoDatas = arrayListOf()
 
         for (document in result) {
-          val receiveRouteDatas = document.get("markerlatlngs") as List<Object>
+          val receiveRouteDatas = document.get("markerlatlngs") as List<*>
 
           for (receiveRouteData in receiveRouteDatas) {
-            val location = receiveRouteData as Map<String, Any>
+            val location = receiveRouteData as Map<*, *>
             latLng = LatLng(
               location["latitude"] as Double,
               location["longitude"] as Double
@@ -85,7 +85,7 @@ class GetRanking {
             }
         }
       }
-      .addOnFailureListener { exception ->
+      .addOnFailureListener {
       }
   }
 
@@ -115,10 +115,10 @@ class GetRanking {
         infoDatas = arrayListOf()
 
         for (document in result) {
-          val receiveRouteDatas = document.get("markerlatlngs") as List<Object>
+          val receiveRouteDatas = document.get("markerlatlngs") as List<*>
 
           for (receiveRouteData in receiveRouteDatas) {
-            val location = receiveRouteData as Map<String, Any>
+            val location = receiveRouteData as Map<*, *>
             latLng = LatLng(
               location["latitude"] as Double,
               location["longitude"] as Double
@@ -160,7 +160,7 @@ class GetRanking {
           }
         }
       }
-      .addOnFailureListener { exception ->
+      .addOnFailureListener {
       }
   }
 

@@ -14,6 +14,9 @@ class OtherPlayerDecorator(decoratedMap: TraceMap) : MapDecorator(decoratedMap) 
       UserState.RUNNING -> {
         //if(moving) calcDistance()
       }
+      else -> {
+
+      }
     }
   }
 }

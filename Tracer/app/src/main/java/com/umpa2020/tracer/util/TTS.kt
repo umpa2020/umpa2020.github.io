@@ -12,7 +12,7 @@ class TTS {
       textToSpeech = TextToSpeech(context, TextToSpeech.OnInitListener {
         @Override
         fun onInit(status: Int) {
-          if (status === TextToSpeech.SUCCESS) {
+          if (status == TextToSpeech.SUCCESS) {
             //사용할 언어를 설정
             val result = textToSpeech.setLanguage(Locale.KOREA)
             //언어 데이터가 없거나 혹은 언어가 지원하지 않으면...

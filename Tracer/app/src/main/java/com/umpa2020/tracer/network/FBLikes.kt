@@ -11,7 +11,7 @@ import com.umpa2020.tracer.util.UserInfo
  * 사용법 - Likes().관련기능함수()
  */
 
-class Likes {
+class FBLikes {
   val GETLIKES = 50
   val db = FirebaseFirestore.getInstance()
 

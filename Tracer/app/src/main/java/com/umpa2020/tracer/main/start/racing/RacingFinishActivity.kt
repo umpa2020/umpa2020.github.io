@@ -38,7 +38,6 @@ class RacingFinishActivity : AppCompatActivity() {
     val result = intent.extras!!.getBoolean("Result")
     val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
 
-    //TODO:NETWORK DB작업 클래스화 (안정화 되면 진행 예정..)
     if (result) { // 성공인 경우
       // 현재 달린 사람의 Maptitle로 메이커의 infoData를 다운 받아옴
       val db = FirebaseFirestore.getInstance()

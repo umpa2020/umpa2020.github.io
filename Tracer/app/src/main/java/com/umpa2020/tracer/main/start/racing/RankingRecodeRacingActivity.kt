@@ -142,6 +142,9 @@ class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener,
             Logg.d( "RUNNING")
             stop(false)
           }
+          else -> {
+
+          }
         }
       }
       R.id.racingNotificationButton -> {

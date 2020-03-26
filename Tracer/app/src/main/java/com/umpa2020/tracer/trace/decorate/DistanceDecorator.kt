@@ -21,6 +21,7 @@ class DistanceDecorator(decoratedMap: TraceMap) : MapDecorator(decoratedMap) {
             UserState.RUNNING -> {
                 if(moving) calcDistance()
             }
+            else -> {}
         }
     }
     private fun calcDistance() {

@@ -45,7 +45,6 @@ class RunningSaveActivity : AppCompatActivity() {
       speedList.add(it.speed.get().toDouble())
       elevationList.add(it.elevation.get().toDouble())
     }
-    //TODO: 액티비티에 그리는 거 먼저
     val smf = supportFragmentManager.findFragmentById(com.umpa2020.tracer.R.id.map_viewer) as SupportMapFragment
     traceMap = BasicMap(smf, this)
     traceMap.routeGPX = routeGPX
@@ -54,14 +53,13 @@ class RunningSaveActivity : AppCompatActivity() {
     formatter.timeZone = TimeZone.getTimeZone("UTC")
 
     time_tv.text = formatter.format(Date(infoData.time!!))
-    //TODO:routeGPX 파싱해서 speed랑 고도 넣기
     speed_tv.text = String.format("%.2f", speedList.average())
     if (infoData.privacy == Privacy.PUBLIC) {
       racingRadio.isChecked = false
       racingRadio.isEnabled = false
       publicRadio.isChecked = true
     }
-    var myChart = Chart(elevationList, speedList, chart)
+    val myChart = Chart(elevationList, speedList, chart)
     myChart.setChart()
   }
 
@@ -76,7 +74,7 @@ class RunningSaveActivity : AppCompatActivity() {
             mapExplanationEdit.hint = "맵 설명을 작성해주세요"
             mapExplanationEdit.setHintTextColor(Color.RED)
           } else {
-            var callback = GoogleMap.SnapshotReadyCallback {
+            val callback = GoogleMap.SnapshotReadyCallback {
               try {
                 val saveFolder = File(filesDir, "mapdata") // 저장 경로
                 if (!saveFolder.exists()) {       //폴더 없으면 생성
@@ -155,8 +153,6 @@ class RunningSaveActivity : AppCompatActivity() {
     //TODO: routeGPX 파일로 스토리지에 업로드 후 경로 infoData에 넣어서 set
     db.collection("mapInfo").document(infoData.mapTitle!!).set(infoData)
 
-
-    //TODO: 랭킹 부분 구현 필요 레이싱에도 같은 구조 필요
     val rankingData = RankingData(UserInfo.nickname, UserInfo.nickname, infoData.time)
     db.collection("rankingMap").document(infoData.mapTitle!!).set(rankingData)
     db.collection("rankingMap").document(infoData.mapTitle!!).collection("ranking")

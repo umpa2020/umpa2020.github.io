@@ -20,13 +20,13 @@ class GPXConverter {
             track.addSegment(TrackSegment.of(routeGPX.trkList))
             gpxBuilder.addTrack(track.build())
             routeGPX.wptList.forEach{ gpxBuilder.addWayPoint(it)}
-            var gpx = gpxBuilder.build()
-            var saveFolder = File(folderPath) // 저장 경로
+            val gpx = gpxBuilder.build()
+            val saveFolder = File(folderPath) // 저장 경로
             if (!saveFolder.exists()) {       //폴더 없으면 생성
                 saveFolder.mkdir()
             }
-            var path = "route" + saveFolder.list().size + ".gpx"
-            var myfile = File(saveFolder, path)         //로컬에 파일저장
+            val path = "route" + saveFolder.list()!!.size + ".gpx"
+            val myfile = File(saveFolder, path)         //로컬에 파일저장
             GPX.write(gpx, (myfile.path))
             Logg.d("start upload gpx")
             return Uri.fromFile(myfile)
@@ -37,7 +37,7 @@ class GPXConverter {
     }
 
     fun GpxToClass(path: String):RouteGPX{
-        var gpx =GPX.read(path)
+        val gpx =GPX.read(path)
         return RouteGPX("test","Test",gpx.wayPoints,gpx.tracks[0].segments[0].points)
     }
 }

@@ -16,6 +16,9 @@ class PolylineDecorator(decoratedMap: TraceMap) : MapDecorator(decoratedMap) {
             UserState.RUNNING -> {
                 if (moving) polyLineMake()
             }
+            else -> {
+
+            }
         }
     }
 
@@ -53,7 +56,6 @@ class PolylineDecorator(decoratedMap: TraceMap) : MapDecorator(decoratedMap) {
                     .build()
             )
             markerCount++
-            //TODO:tempTPList Simplify
         }
     }
 }

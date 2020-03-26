@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.LikeMapsData
-import com.umpa2020.tracer.network.Likes
+import com.umpa2020.tracer.network.FBLikes
 import com.umpa2020.tracer.util.PrettyDistance
 import com.umpa2020.tracer.util.ProgressBar
 import kotlinx.android.synthetic.main.recycler_rankfragment_item.view.*
@@ -53,7 +53,7 @@ class RankRecyclerViewAdapterMap(val mdata: ArrayList<InfoData>, val mode: Strin
     if (mode.equals("execute")) {
       holder.execute.text = singleItem.execute.toString()
     } else if (mode.equals("likes")) {
-      Likes().getLikes(mHandler)
+      FBLikes().getLikes(mHandler)
       holder.heart.setImageResource(R.drawable.ic_favorite_border_black_24dp)
       holder.execute.text = singleItem.likes.toString()
     }
@@ -82,14 +82,14 @@ class RankRecyclerViewAdapterMap(val mdata: ArrayList<InfoData>, val mode: Strin
       var likes = Integer.parseInt(holder.execute.text.toString())
 
       if (holder.heartswitch.text.equals("off")) {
-        Likes().setLikes(singleItem.mapTitle!!, likes)
+        FBLikes().setLikes(singleItem.mapTitle!!, likes)
         holder.heart.setImageResource(R.drawable.ic_favorite_red_24dp)
         likes++
         holder.execute.text = likes.toString()
         holder.heartswitch.text = "on"
       }
       else {
-        Likes().setminusLikes(singleItem.mapTitle!!, likes)
+        FBLikes().setminusLikes(singleItem.mapTitle!!, likes)
         holder.heart.setImageResource(R.drawable.ic_favorite_border_black_24dp)
         likes--
         holder.execute.text = likes.toString()
@@ -111,7 +111,7 @@ class RankRecyclerViewAdapterMap(val mdata: ArrayList<InfoData>, val mode: Strin
 
   //item 사이즈, 데이터의 전체 길이 반ㅎ환
   override fun getItemCount(): Int {
-    //return 10 //TODO 갯수 조절 여기서
+    //return 10
     return mdata.size
   }
 

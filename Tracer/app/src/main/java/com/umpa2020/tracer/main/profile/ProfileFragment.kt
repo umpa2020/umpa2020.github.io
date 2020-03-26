@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.umpa2020.tracer.R
-import com.umpa2020.tracer.network.GetProfile
+import com.umpa2020.tracer.network.FBProfile
 import com.umpa2020.tracer.util.UserInfo
 
 /**
@@ -31,7 +31,7 @@ class ProfileFragment : Fragment() {
     /**
      * 프로필 이미지랑 총 시간,거리 셋팅을 하는 함수
      */
-    GetProfile().setProfile(view)
+    FBProfile().setProfile(view)
 
     // 나의 활동 액티비티
     val routeTextView = view.findViewById<TextView>(R.id.profileRouteTextView)

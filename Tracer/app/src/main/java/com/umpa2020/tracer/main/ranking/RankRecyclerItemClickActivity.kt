@@ -30,7 +30,6 @@ class RankRecyclerItemClickActivity : AppCompatActivity() {
     val cutted = mapTitle.split("||")
     rankRecyclerMapTitle.text = cutted[0]
 
-    //TODO:ImageView 에 이미지 박는 코드 (firebase)
 
     val imageView = rankRoutePriview
 

@@ -37,6 +37,9 @@ class RacingDecorator(decoratedMap: TraceMap) : MapDecorator(decoratedMap) {
         checkMarker()
         checkDeviation()
       }
+      else -> {
+
+      }
     }
   }
 

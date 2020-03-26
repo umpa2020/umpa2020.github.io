@@ -2,20 +2,12 @@ package com.umpa2020.tracer.main.ranking
 
 import android.location.Location
 import android.os.Bundle
-import android.os.Handler
-import android.os.Message
-import android.os.Messenger
 import android.view.*
 import android.view.animation.AlphaAnimation
 import android.widget.SeekBar
-import android.widget.Toast
-import android.widget.Toolbar
 import androidx.fragment.app.Fragment
 import com.umpa2020.tracer.R
-import com.umpa2020.tracer.locationBackground.LocationBackgroundService
-import com.umpa2020.tracer.main.MainActivity.Companion.MESSENGER_INTENT_KEY
-import com.umpa2020.tracer.network.GetRanking
-import com.umpa2020.tracer.util.Logg
+import com.umpa2020.tracer.network.FBRanking
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.fragment_ranking.view.*
 
@@ -30,12 +22,9 @@ class RankingFragment : Fragment() {
     inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
   ): View? {
     // Inflate the layout for this fragment
-    //TODO: return inflate~~~
-    //TODO: Thread 사용하지 말고, 클래스로 빼서 getInfos 처럼 하면 배열이 받아온다는 걸 미리 알 수 있게
-    //TODO: activity Created 로 이전
     val view: View = inflater.inflate(R.layout.fragment_ranking, container, false)
 
-    GetRanking().getExcuteDESCENDING(context!!, view, UserInfo.rankingLatLng, "execute")
+    FBRanking().getExcuteDESCENDING(context!!, view, UserInfo.rankingLatLng, "execute")
 
     //필터 버튼 누르면 레이아웃 보임
     view.rankingToolBarTuneButton.setOnClickListener {
@@ -65,14 +54,11 @@ class RankingFragment : Fragment() {
       //실행순 버튼에 체크가 되어 있을 경우
       if (view.tuneRadioBtnExecute.isChecked) {
         view.rankingfiltermode.text = "실행수"
-        GetRanking().getFilterRange(view, UserInfo.rankingLatLng, tuneDistance, "execute")
+        FBRanking().getFilterRange(view, UserInfo.rankingLatLng, tuneDistance, "execute")
       } else {
         view.rankingfiltermode.text = "좋아요"
-        GetRanking().getFilterRange(view, UserInfo.rankingLatLng, tuneDistance, "likes")
+        FBRanking().getFilterRange(view, UserInfo.rankingLatLng, tuneDistance, "likes")
       }
-
-      //TODO : tuneDistance에 거리 값 넣어놨으니 이대로 필터 적용
-
       disappearAnimation()
     }
 
