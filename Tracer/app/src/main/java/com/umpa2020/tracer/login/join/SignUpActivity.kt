@@ -28,8 +28,8 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.umpa2020.tracer.R
+import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.main.MainActivity
-import com.umpa2020.tracer.util.Constants
 import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
 import io.reactivex.disposables.CompositeDisposable

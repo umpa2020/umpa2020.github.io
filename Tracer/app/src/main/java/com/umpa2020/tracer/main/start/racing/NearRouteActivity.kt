@@ -1,4 +1,4 @@
-package com.umpa2020.tracer.main.trace.racing
+package com.umpa2020.tracer.main.start.racing
 
 import android.location.Location
 import android.os.Bundle

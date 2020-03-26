@@ -15,17 +15,16 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.InfoData
-import com.umpa2020.tracer.dataClass.RouteData
-import com.umpa2020.tracer.main.trace.racing.RankingRecodeRacingActivity
+import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.util.Chart
 import com.umpa2020.tracer.util.ProgressBar
 import kotlinx.android.synthetic.main.activity_ranking_map_detail.*
 import java.text.SimpleDateFormat
 import java.util.*
-
+/*
 class RankingMapDetailActivity : AppCompatActivity() {
   var infoData = InfoData()
-  var routeData = RouteData()
+  var routeData = RouteGPX()
 
   var altitude: List<Double> = listOf()
   var latLngs: MutableList<MutableList<LatLng>> = mutableListOf()
@@ -226,4 +225,4 @@ class RankingMapDetailActivity : AppCompatActivity() {
     alertDialog.show() //팝업 띄우기
 
   }
-}
+}*/

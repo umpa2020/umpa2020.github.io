@@ -27,7 +27,6 @@ class Chart {
       alts.add(Entry(index.toFloat(), altsData[index].toFloat()))
       speeds.add(Entry(index.toFloat(), speedsData[index].toFloat()))
     }
-
     val xAxis = lineChart.xAxis
     xAxis.isEnabled = false
     val yLAxis = lineChart.axisLeft

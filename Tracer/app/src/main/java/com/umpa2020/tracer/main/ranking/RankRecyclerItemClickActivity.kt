@@ -78,9 +78,9 @@ class RankRecyclerItemClickActivity : AppCompatActivity() {
       }
 
     rankRecyclerMoreButton.setOnClickListener {
-      val nextIntent = Intent(this, RankingMapDetailActivity::class.java)
+     /* val nextIntent = Intent(this, RankingMapDetailActivity::class.java)
       nextIntent.putExtra("MapTitle", mapTitle)
-      startActivity(nextIntent)
+      startActivity(nextIntent)*/
     }
   }
 }
