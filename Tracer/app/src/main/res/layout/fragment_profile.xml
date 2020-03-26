@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="12dp"
         android:gravity="center"
-        android:text="프로필">
+        android:text="@string/profile">
 
       </TextView>
     </Toolbar>
@@ -67,7 +67,7 @@
       android:layout_marginRight="20dp"
       android:background="@drawable/textlines"
       android:padding="10dp"
-      android:text="내 통계" />
+      android:text="@string/mystats" />
 
     <LinearLayout
       android:id="@+id/rankingDetailInfoLinearLayout"
@@ -90,7 +90,7 @@
           style="@style/ListDetail"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="총 거리" />
+          android:text="@string/total_distance" />
 
         <TextView
           android:id="@+id/profileFragmentTotalDistance"
@@ -112,7 +112,7 @@
           style="@style/ListDetail"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="총 주행시간" />
+          android:text="@string/total_time" />
 
         <TextView
           android:id="@+id/profileFragmentTotalTime"
@@ -138,7 +138,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:padding="10dp"
-        android:text="나의 루트" />
+        android:text="@string/my_route" />
 
       <TextView
         android:layout_width="wrap_content"

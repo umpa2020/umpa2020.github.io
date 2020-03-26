@@ -21,7 +21,7 @@
       android:layout_height="wrap_content"
       android:layout_marginRight="12dp"
       android:gravity="center"
-      android:text="경기 결과"></TextView>
+      android:text="@string/race_result"></TextView>
   </Toolbar>
 
   <androidx.core.widget.NestedScrollView
@@ -68,7 +68,7 @@
           android:layout_height="wrap_content"
           android:fontFamily="@font/notosansmedium"
           android:gravity="center"
-          android:text="기록"
+          android:text="@string/record"
           android:textSize="18dp" />
 
         <TextView
@@ -99,7 +99,7 @@
             android:layout_weight="1"
             android:fontFamily="@font/notosansmedium"
             android:gravity="center"
-            android:text="나"
+            android:text="@string/my"
             android:textSize="15dp" />
 
           <TextView
@@ -108,7 +108,7 @@
             android:layout_weight="1"
             android:fontFamily="@font/notosansmedium"
             android:gravity="center"
-            android:text="게시자"
+            android:text="@string/maker"
             android:textSize="15dp" />
         </LinearLayout>
 
@@ -248,7 +248,7 @@
           android:layout_height="wrap_content"
           android:fontFamily="@font/notosansmedium"
           android:gravity="center"
-          android:text="랭킹"
+          android:text="@string/ranking"
           android:textSize="18dp" />
 
         <TextView
@@ -272,7 +272,7 @@
             android:layout_weight="1"
             android:fontFamily="@font/notosansmedium"
             android:gravity="center"
-            android:text="플레이어"
+            android:text="@string/player"
             android:textSize="16dp" />
 
           <TextView
@@ -281,7 +281,7 @@
             android:layout_weight="1"
             android:fontFamily="@font/notosansmedium"
             android:gravity="center"
-            android:text="랩 타임"
+            android:text="@string/laptime"
             android:textSize="16dp" />
         </LinearLayout>
 

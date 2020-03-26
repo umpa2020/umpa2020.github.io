@@ -6,6 +6,7 @@
 
   <color name="black_overlay">#66000000</color>
 
+  <color name="blackAlpha">#66000000</color>
   <color name="black">#000000</color>
   <color name="rankBackgroudGray">#acacae</color>
   <color name="white">#ffffff</color>
@@ -13,6 +14,7 @@
   <color name="gray">#BDBDBD</color>
 
   <color name="red">#de2018</color>
+  <color name="lightRed">#eb4b43</color>
   <color name="yellowGreen">#4B8A08</color>
   <color name="lightgray">#f7f7f7</color>
 </resources>

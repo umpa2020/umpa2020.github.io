@@ -5,7 +5,7 @@
   android:layout_height="match_parent"
   android:layout_marginBottom="?actionBarSize"
   android:orientation="vertical"
-  tools:context=".main.trace.running.RunningSaveActivity">
+  tools:context=".main.start.racing.RacingFinishActivity">
 
   <Toolbar
     android:layout_width="match_parent"
@@ -20,7 +20,7 @@
       android:layout_height="wrap_content"
       android:layout_marginRight="12dp"
       android:gravity="center"
-      android:text="활동 내용"></TextView>
+      android:text="@string/activities"></TextView>
   </Toolbar>
 
   <ScrollView
@@ -59,7 +59,7 @@
         android:layout_margin="5dp"
         android:fontFamily="@font/notosansmedium"
         android:gravity="center"
-        android:text="맵 결과" />
+        android:text="@string/mapresult" />
 
       <TextView
         android:id="@+id/line2"
@@ -93,7 +93,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/notosansmedium"
             android:gravity="center"
-            android:text="거리 (km)"
+            android:text="@string/distance"
             android:textSize="15dp" />
 
           <TextView
@@ -120,7 +120,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/notosansmedium"
             android:gravity="center"
-            android:text="시간"
+            android:text="@string/time"
             android:textSize="15dp" />
 
           <TextView
@@ -145,7 +145,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/notosansmedium"
             android:gravity="center"
-            android:text="속력 (km/h)"
+            android:text="@string/speed"
             android:textSize="15dp" />
 
           <TextView
@@ -189,7 +189,7 @@
         android:layout_margin="5dp"
         android:fontFamily="@font/notosansmedium"
         android:gravity="center"
-        android:text="맵 정보 기록" />
+        android:text="@string/mapinformation" />
 
       <TextView
         android:id="@+id/line4"
@@ -210,7 +210,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:fontFamily="@font/notosansmedium"
-        android:hint="맵 제목" />
+        android:hint="@string/map_title" />
 
       <EditText
         android:id="@+id/mapExplanationEdit"
@@ -221,7 +221,7 @@
         android:layout_marginRight="20dp"
         android:fontFamily="@font/notosansmedium"
         android:gravity="top"
-        android:hint="Text" />
+        android:hint="@string/text" />
 
       <LinearLayout
         android:layout_width="match_parent"
@@ -245,7 +245,7 @@
             android:layout_weight="1"
             android:checked="true"
             android:fontFamily="@font/notosansmedium"
-            android:text="경쟁" />
+            android:text="@string/competition" />
 
           <RadioButton
             android:id="@+id/publicRadio"
@@ -253,7 +253,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:fontFamily="@font/notosansmedium"
-            android:text="공개" />
+            android:text="@string/public_" />
 
           <RadioButton
             android:id="@+id/privateRadio"
@@ -261,7 +261,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:fontFamily="@font/notosansmedium"
-            android:text="비공개" />
+            android:text="@string/private_" />
         </RadioGroup>
       </LinearLayout>
     </RelativeLayout>
@@ -278,8 +278,7 @@
     android:layout_marginBottom="20dp"
     android:background="@drawable/button_background"
     android:onClick="onClick"
-    android:text="활동 저장" />
+    android:text="@string/saveactivity" />
 
 
 </RelativeLayout>
-

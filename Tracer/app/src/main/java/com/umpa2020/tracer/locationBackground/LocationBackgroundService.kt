@@ -5,13 +5,13 @@ import android.content.Context
 import android.content.Intent
 import android.location.Location
 import android.os.Build
-import android.os.Message
-import android.os.Messenger
 import android.os.RemoteException
+import android.util.Log
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.location.LocationRequest
 import com.umpa2020.tracer.R
-import com.umpa2020.tracer.main.MainActivity.Companion.MESSENGER_INTENT_KEY
-import com.umpa2020.tracer.main.trace.running.RunningActivity
+import com.umpa2020.tracer.main.MainActivity.Companion.TAG
+import com.umpa2020.tracer.main.start.running.RunningActivity
 import com.umpa2020.tracer.util.Logg
 
 /**
@@ -26,8 +26,6 @@ class LocationBackgroundService : IntentService("LocationBackgroundService"), Lo
    *  2. Service는 이벤트를 받고 어떤 동작을 수행
    *  3. Service는 Activity로 결과 이벤트를 전달
    */
-  private var mActivityMessenger: Messenger? = null
-
   var notification: Notification? = null
 
   override fun onCreate() {
@@ -50,15 +48,8 @@ class LocationBackgroundService : IntentService("LocationBackgroundService"), Lo
 
   // this makes service running continuously,,commenting this start command method service runs only once
   override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-    Logg.i("onStartCommand Service started....")
-    if (intent != null) {
-      mActivityMessenger = intent.getParcelableExtra(MESSENGER_INTENT_KEY)
-    }
 
-    var test = intent!!.getStringExtra("test")
-    if (test != null) {
-      Logg.d("중간 요청 성공?: $test")
-    }
+    Logg.i("onStartCommand Service started....")
 
     if (intent != null) {
       val action = intent.action
@@ -80,26 +71,21 @@ class LocationBackgroundService : IntentService("LocationBackgroundService"), Lo
    * send message by using messenger
    *
    * @param messageID
-   * 액티비티에 message 보내기.
+   * 액티비티에 브로드캐스트를 이용해 message 보내기.
    */
-  private fun sendMessage(messageID: Int, location: Location) {
-    // If this service is launched by the JobScheduler, there's no callback Messenger. It
-    // only exists when the BackgroundLocationActivity calls startService() with the callback in the Intent.
-    if (mActivityMessenger == null) {
-      Logg.d("Service is bound, not started. There's no callback to send a message to.")
-      return
-    }
-    val m = Message.obtain()
-    m.what = messageID
-    m.obj = location
+  private fun sendMessage(location: Location) {
     try {
-      mActivityMessenger!!.send(m)
-      // Toast.makeText(applicationContext, "zzz"+"$location", Toast.LENGTH_SHORT).show()
+      val intent = Intent("custom-event-name")
+      intent.putExtra("message", location)
+      Log.d(TAG, location.toString())
+      LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
+
     } catch (e: RemoteException) {
       Logg.e("Error passing service object back to activity.")
     }
 
   }
+
 
   /**
    *  LocationComponent에서 locatoin결과 값 받아옴.
@@ -107,8 +93,8 @@ class LocationBackgroundService : IntentService("LocationBackgroundService"), Lo
    */
   //it의 경우는 함수의 변수가 한 개여야 만 허용.
   //TODO: onLocationUpdated 로 변경
-  override fun onLocationUpdate(location: Location?) {
-    location?.let { sendMessage(LOCATION_MESSAGE, it) }
+  override fun onLocationUpdated(location: Location?) {
+    location?.let { sendMessage(it) }
   }
 
 
@@ -164,7 +150,7 @@ class LocationBackgroundService : IntentService("LocationBackgroundService"), Lo
   }
 
   companion object {
-    private val TAG = "zzz"
+    private val TAG = "LocationBackground"
     const val LOCATION_MESSAGE = 999
   }
 }

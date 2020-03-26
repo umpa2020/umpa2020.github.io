@@ -10,7 +10,6 @@ import com.umpa2020.tracer.util.Logg
 
 object LocationUpdatesComponent {
   private var iLocationProvider: ILocationProvider? = null
-
   /**
    * Provides access to the Fused Location Provider API.
    */
@@ -34,14 +33,13 @@ object LocationUpdatesComponent {
    *  이전 위치
    */
   var previousLocation: LatLng = LatLng(0.0, 0.0)          //이전위치
-
   /**
    * create first time to initialize the location components
    *
    * @param context
    */
 
-  fun setILocationProvider(iLocationProvider: ILocationProvider) {
+  fun setILocationProvider(iLocationProvider: ILocationProvider){
     LocationUpdatesComponent.iLocationProvider = iLocationProvider
   }
 
@@ -61,7 +59,6 @@ object LocationUpdatesComponent {
       }
     }
   }
-
   /**
    * start location updates
    */
@@ -101,11 +98,11 @@ object LocationUpdatesComponent {
    *  정확도 설정이 없으면 PRIORITY_BALANCED_POWER_ACCURACY이 기본 값(102)
    *  PRIORITY_HIGH_ACCURACY의 값은 100
    */
-  fun setPriority(priority: Int) {
+  fun setPriority(priority : Int){
     locationRequest.priority = priority
   }
 
-  fun getLastLocat(): Location {
+  fun getLastLocat() : Location{
     return lastLocation!!
   }
 
@@ -116,11 +113,11 @@ object LocationUpdatesComponent {
    *
    *  마지막 위치를 가져와서 UI 설정. 시작 마커, 현재 자신의 위치 마커
    */
-  var lastLocation: Location? = null
-  private fun getLastLocation() {
-    try {
+  var lastLocation : Location? = null
+  private fun getLastLocation(){
+    try{
       fusedLocationClient!!.lastLocation // 마지막으로 알려진 위치 가져오기
-        .addOnCompleteListener { task ->
+        .addOnCompleteListener{task ->
           if (task.isSuccessful && task.result != null) {
             currentLocation = task.result!!
             lastLocation = task.result!!
@@ -187,19 +184,18 @@ object LocationUpdatesComponent {
 
   private fun onNewLocation(location: Location?) {
     currentLocation = location!!
-    iLocationProvider!!.onLocationUpdate(currentLocation)
+    iLocationProvider!!.onLocationUpdated(currentLocation)
   }
 
   /**
    * implements this interface to get call back of location changes
    */
   interface ILocationProvider {
-    fun onLocationUpdate(location: Location?)
+    fun onLocationUpdated(location: Location?)
   }
 
 
   private val WSY = "WSY"
-
   /**
    * The desired interval for location updates. Inexact. Updates may be more or less frequent.
    */

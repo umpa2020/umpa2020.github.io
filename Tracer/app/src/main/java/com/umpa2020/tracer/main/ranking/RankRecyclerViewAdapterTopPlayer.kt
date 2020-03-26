@@ -69,7 +69,7 @@ class RankRecyclerViewAdapterTopPlayer(val mydata: ArrayList<RankingData>) : Rec
 
   //여기서 item을 textView에 옮겨줌
 
-  inner class myViewHolder(view: View) : RecyclerView.ViewHolder(view!!) {
+  inner class myViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     var rank = view.rankRecyclerItemClickCountTextView
     var maptitle = view.rankRecyclerItemClickChallengerNicknameTextView
     var time = view.rankRecyclerItemClickTimeTextView

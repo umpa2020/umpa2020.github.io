@@ -22,5 +22,67 @@
   <string name="txtInputInfoGender">성별을 선택하세요.</string>
 
   <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyAymdWK_9DnHXKY19cuUvg0oMo_FItNvQ0</string>
+  <string name="man">남성</string>
+  <string name="woman">여성</string>
+  <string name="next">다음</string>
+  <string name="please_login">구글 계정으로 로그인 하십시오.</string>
+  <string name="near_route">주변 루트</string>
+  <string name="race">경기</string>
+  <string name="start">시작</string>
+  <string name="my_activity">나의 활동</string>
+  <string name="my_route">나의 루트</string>
+  <string name="race_result">경기 결과</string>
+  <string name="record">기록</string>
+  <string name="my">나</string>
+  <string name="maker">게시자</string>
+  <string name="ranking">랭킹</string>
+  <string name="player">플레이어</string>
+  <string name="laptime">랩 타임</string>
+  <string name="map_record">맵 기록</string>
+  <string name="learn_more">더 알아보기</string>
+  <string name="top_player">상위 플레이어</string>
+  <string name="detailedmap">맵 상세보기</string>
+  <string name="mapname">맵 이름</string>
+  <string name="mapdescription">맵 설명</string>
+  <string name="recordanalysis">기록 분석</string>
+  <string name="distance">거리 (km)</string>
+  <string name="time">시간</string>
+  <string name="speed">속력 (km/h)</string>
+  <string name="thumbnail">루트 썸네일</string>
+  <string name="altitude_sppedchart">고도 / 속도 차트</string>
+  <string name="matchstart">경기 시작</string>
+  <string name="rankingrecords">랭킹 기록용</string>
+  <string name="creatroute">루트 만들기</string>
+  <string name="stop">정지</string>
+  <string name="pause">일시정지</string>
+  <string name="activities">활동 내용</string>
+  <string name="mapresult">맵 결과</string>
+  <string name="mapinformation">맵 정보 기록</string>
+  <string name="competition">경쟁</string>
+  <string name="public_">공개</string>
+  <string name="private_">비공개</string>
+  <string name="saveactivity">활동 저장</string>
+  <string name="signup">회원가입</string>
+  <string name="selcetimage">프로필 이미지를\n선택해주세요</string>
+  <string name="nick_name">닉네임</string>
+  <string name="age_">나이</string>
+  <string name="gender_">성별</string>
+  <string name="sign_up">회원가입</string>
+  <string name="map_title">맵 제목</string>
+  <string name="text">Text</string>
+  <string name="profile">프로필</string>
+  <string name="mystats">내 통계</string>
+  <string name="total_distance">총 거리</string>
+  <string name="total_time">총 주행시간</string>
+  <string name="numerofruns">실행수</string>
+  <string name="runningmode">러닝 모드</string>
+  <string name="racingmode">레이싱 모드</string>
+  <string name="distance_display">떨어진 거리 표시</string>
+  <string name="yes">예</string>
+  <string name="no">아니오</string>
+  <string name="noroute">현재 저장된 루트가 없습니다.</string>
+
+    <!-- firebase string-->
+    <string name="google_storage_bucket_string" >gs://tracer-9070d.appspot.com/</string>
 
 </resources>

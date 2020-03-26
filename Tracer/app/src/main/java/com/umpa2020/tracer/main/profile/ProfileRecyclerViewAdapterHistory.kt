@@ -38,12 +38,11 @@ class ProfileRecyclerViewAdapterHistory(private var datas: ArrayList<HistoryData
       val nextIntent = Intent(context, RankRecyclerItemClickActivity::class.java)
       nextIntent.putExtra("MapTitle",  singleItem1.mapTitle) //mapTitle 정보 인텐트로 넘김
       context!!.startActivity(nextIntent)
-
        */
     }
   }
 
-  inner class MyViewHolder(view: View) : RecyclerView.ViewHolder(view!!) {
+  inner class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     var mapTitle = view.profileFragmentHistoryTextView1
     var testvalues = view.profileFragmentHistoryTextView2
   }

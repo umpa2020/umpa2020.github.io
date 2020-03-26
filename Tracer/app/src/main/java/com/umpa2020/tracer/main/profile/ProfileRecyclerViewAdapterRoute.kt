@@ -25,12 +25,15 @@ class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) : Recycler
 
     val singleItem = mdata[position]
 
-    var cutted = singleItem.mapTitle!!.split("||")
+    val cutted = singleItem.mapTitle!!.split("||")
     //데이터 바인딩
     // glide imageview 소스
 
     //TODO: Network class 테이블에 맞게 클래스 다 만들어 놓기
     // app.getString   google_storage_bucket
+    // string에 저장해서 사용 해보았으나
+    // Please use a gs:// URL for your Firebase Storage bucket. 에러가 뜨면서 실행이 안되는 문제..
+    //val storage = FirebaseStorage.getInstance(R.string.google_storage_bucket_string.toString()) // debug용, release용 구분
     val storage = FirebaseStorage.getInstance("gs://tracer-9070d.appspot.com/") // debug용, release용 구분
     val mapImageRef = storage.reference.child("mapImage").child(singleItem.mapTitle!!)
     mapImageRef.downloadUrl.addOnCompleteListener { task ->
@@ -40,14 +43,13 @@ class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) : Recycler
           .load(task.result)
           .override(1024, 980)
           .into(holder.image)
-      } else {
       }
     }
 
     holder.maptitle.text = cutted[0]
     holder.distance.text = PrettyDistance().convertPretty(singleItem.distance!!)
     val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
-    formatter.setTimeZone(TimeZone.getTimeZone("UTC"))
+    formatter.timeZone = TimeZone.getTimeZone("UTC")
     holder.time.text = formatter.format(Date(singleItem.time!!))
 
     // 아마 이 부분에서 터질건데 이거는 예전 데이터 지우면 해결
@@ -76,8 +78,7 @@ class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) : Recycler
   }
 
   //여기서 item을 textView에 옮겨줌
-
-  inner class mViewHolder(view: View) : RecyclerView.ViewHolder(view!!) {
+  inner class mViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     var image = view.profileFragmentRouteGridImage
     var maptitle = view.profileFragmentGridMapTitle
     var nickname = view.profileFragmentNickname

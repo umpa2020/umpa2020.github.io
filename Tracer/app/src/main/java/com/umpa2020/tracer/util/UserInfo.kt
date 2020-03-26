@@ -1,6 +1,7 @@
 package com.umpa2020.tracer.util
 
 import com.chibatching.kotpref.KotprefModel
+import com.google.android.gms.maps.model.LatLng
 
 /**
  *  Shared에 저장된 UserInfo
@@ -12,4 +13,5 @@ object UserInfo : KotprefModel() {
   var permission = 0 // 처음 권한을 받은 후에 서비스와 위치 값 갱신을 하기 위해서 미리 저장
   var lastLatitude by floatPref(0.0f)
   var lastLongitude by floatPref(0.0f)
+  var rankingLatLng = LatLng(0.0, 0.0)
 }

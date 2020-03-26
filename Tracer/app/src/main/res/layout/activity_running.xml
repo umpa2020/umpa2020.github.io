@@ -6,7 +6,7 @@
   android:layout_height="match_parent"
   android:orientation="vertical"
   android:weightSum="100"
-  tools:context=".main.trace.running.RunningActivity">
+  tools:context=".main.start.running.RunningActivity">
 
   <LinearLayout
     android:layout_width="match_parent"
@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="12dp"
         android:gravity="center"
-        android:text="루트 만들기"></TextView>
+        android:text="@string/creatroute"></TextView>
     </Toolbar>
 
     <fragment
@@ -202,7 +202,7 @@
       android:background="@drawable/button_background"
       android:gravity="center"
       android:onClick="onClick"
-      android:text="시작" />
+      android:text="@string/start" />
 
     <LinearLayout
       android:layout_width="wrap_content"
@@ -217,7 +217,7 @@
         android:background="@drawable/button_background"
         android:gravity="center"
         android:onClick="onClick"
-        android:text="정지"
+        android:text="@string/stop"
         android:visibility="invisible" />
 
       <Button
@@ -229,7 +229,7 @@
         android:background="@drawable/button_empty_background"
         android:gravity="center"
         android:onClick="onClick"
-        android:text="일시정지"
+        android:text="@string/pause"
         android:visibility="invisible" />
     </LinearLayout>
   </FrameLayout>

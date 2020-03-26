@@ -36,7 +36,7 @@
       android:layout_width="130dp"
       android:layout_height="wrap_content"
       android:background="@drawable/button_empty_background"
-      android:text="예"
+      android:text="@string/yes"
       android:textSize="15dp" />
 
     <Button
@@ -46,7 +46,7 @@
       android:layout_height="wrap_content"
       android:layout_marginLeft="20dp"
       android:background="@drawable/button_background"
-      android:text="아니오"
+      android:text="@string/no"
       android:textColor="@color/white"
       android:textSize="15dp" />
 

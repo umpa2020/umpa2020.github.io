@@ -57,7 +57,7 @@
       android:background="@drawable/button_empty_background"
       android:gravity="center"
       android:onClick="onClick"
-      android:text="러닝 모드" />
+      android:text="@string/runningmode" />
 
     <Button
       android:id="@+id/mainStartRacing"
@@ -68,7 +68,7 @@
       android:background="@drawable/button_background"
       android:gravity="center"
       android:onClick="onClick"
-      android:text="레이싱 모드" />
+      android:text="@string/racingmode" />
 
     <Button
       android:id="@+id/test"

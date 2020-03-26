@@ -6,13 +6,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.umpa2020.tracer.R
+import com.umpa2020.tracer.util.TTS
 import com.umpa2020.tracer.locationBackground.LocationBackgroundService
 import com.umpa2020.tracer.locationBackground.ServiceStatus
 import com.umpa2020.tracer.main.profile.ProfileFragment
 import com.umpa2020.tracer.main.ranking.RankingFragment
-import com.umpa2020.tracer.main.trace.StartFragment
+import com.umpa2020.tracer.main.start.StartFragment
 import com.umpa2020.tracer.util.Logg
-import com.umpa2020.tracer.util.TTS
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -36,16 +36,13 @@ class MainActivity : AppCompatActivity() {
 
     true
   }
-
-  override fun onResume() {
-    super.onResume()
-  }
-
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     Logg.d("Hello I'm New")
     setContentView(R.layout.activity_main)
+
     startService()
+
     bottom_navigation.selectedItemId = R.id.navigation_start
     supportFragmentManager.beginTransaction().replace(
       R.id.container,
