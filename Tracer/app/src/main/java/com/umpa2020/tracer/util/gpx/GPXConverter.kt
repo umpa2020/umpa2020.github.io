@@ -10,6 +10,7 @@ import io.jenetics.jpx.*
 import java.io.File;
 import java.lang.Exception
 import java.nio.file.Path;
+import javax.xml.parsers.DocumentBuilder
 
 class GPXConverter {
     fun classToGpx(routeGPX: RouteGPX, folderPath: String): Uri {
@@ -20,6 +21,7 @@ class GPXConverter {
             track.addSegment(TrackSegment.of(routeGPX.trkList))
             gpxBuilder.addTrack(track.build())
             routeGPX.wptList.forEach{ gpxBuilder.addWayPoint(it)}
+            gpxBuilder.
             val gpx = gpxBuilder.build()
             val saveFolder = File(folderPath) // 저장 경로
             if (!saveFolder.exists()) {       //폴더 없으면 생성

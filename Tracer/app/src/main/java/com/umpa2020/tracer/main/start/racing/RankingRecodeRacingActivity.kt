@@ -163,9 +163,9 @@ class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener,
   }
 
   fun stop(result: Boolean) {
-    traceMap.stop()
 
     timeWhenStopped = chronometer.base - SystemClock.elapsedRealtime()
+    traceMap.stop(SystemClock.elapsedRealtime() - chronometer.base)
     chronometer.stop()
 
     var infoData = InfoData()

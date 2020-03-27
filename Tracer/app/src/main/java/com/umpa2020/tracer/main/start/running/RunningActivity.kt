@@ -177,8 +177,7 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
   }
 
   private fun stop() {
-    traceMap.stop()
-    val routeGPX = traceMap.stop()
+    val routeGPX = traceMap.stop(SystemClock.elapsedRealtime() - chronometer.base)
     val infoData = InfoData()
     infoData.distance = traceMap.distance
     infoData.time = SystemClock.elapsedRealtime() - chronometer.base
