@@ -29,6 +29,7 @@ import com.jakewharton.rxbinding2.widget.RxTextView
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.main.MainActivity
+import com.umpa2020.tracer.util.ChoicePopup
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
@@ -465,35 +466,21 @@ class SignUpActivity : AppCompatActivity() {
   /**
   기본 이미지로 설정할건지 물어보는 팝업
    **/
-  fun showSettingPopup() {
-    val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-    val view = inflater.inflate(R.layout.sign_up_activity_yesnopopup, null)
-    val textView: TextView = view.findViewById(R.id.signUpActivityPopUpTextView)
-    textView.text = "기본 이미지로 설정하시겠습니까?"
-
-    val alertDialog = AlertDialog.Builder(this) //alertDialog 생성
-      .setTitle("선택해주세요.")
-      .create()
-
-    //Yes 버튼 눌렀을 때
-    val yesButton = view.findViewById<Button>(R.id.signUpActivityYesButton)
-    yesButton.setOnClickListener {
-      //기본 이미지로 설정
-      basicBitmapImg = BitmapFactory.decodeResource(resources, R.drawable.basic_profile)
-      signUp(basicBitmapImg!!, nickname!!, age!!, gender!!)
-      alertDialog.dismiss()
-      progressbar.show() //기본이미지로 회원가입이 바로 진행되도록 프로그레스바 띄움
-    }
-
-    //No 버튼 눌렀을 때
-    val noButton = view.findViewById<Button>(R.id.signUpActivityNoButton)
-    noButton.setOnClickListener {
-      //갤러리에서 원하는 프로필 이미지 선택할 수 있도록 권한체크
-      alertDialog.dismiss()
-      checkSelfPermission()
-    }
-
-    alertDialog.setView(view)
-    alertDialog.show() //팝업 띄우기
+  private fun showSettingPopup() {
+    val popUp = ChoicePopup(this, "선택해주세요.",
+      "기본 이미지로 설정하시겠습니까",
+      View.OnClickListener {
+        //Yes 버튼 눌렀을 때
+        //기본 이미지로 설정
+        basicBitmapImg = BitmapFactory.decodeResource(resources, R.drawable.basic_profile)
+        signUp(basicBitmapImg!!, nickname!!, age!!, gender!!)
+        progressbar.show() //기본이미지로 회원가입이 바로 진행되도록 프로그레스바 띄움
+      },
+      View.OnClickListener {
+        // No 버튼 눌렀을 때
+        //갤러리에서 원하는 프로필 이미지 선택할 수 있도록 권한체크
+        checkSelfPermission()
+      })
+    popUp.show()
   }
 }
