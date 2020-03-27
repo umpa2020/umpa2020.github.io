@@ -1,6 +1,5 @@
 package com.umpa2020.tracer.main.start.racing
 
-import android.location.Location
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -11,6 +10,7 @@ import com.google.maps.android.SphericalUtil
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.NearMap
+import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.ProgressBar
 import kotlinx.android.synthetic.main.activity_near_route.*
 
@@ -33,17 +33,9 @@ class NearRouteActivity : AppCompatActivity() {
 
     //startFragment에서 넘긴 현재 위치를 intent로 받음
     val intent = intent
-    val current = intent.extras?.getParcelable<Location>("currentLocation")
+    val cur_loc = intent.extras?.getParcelable<LatLng>("currentLocation")
 
-
-    //결과로 가져온 location에서 정보추출 / 이건 위도 경도 형태로 받아오는 형식
-    //Location 형태로 받아오고 싶다면 아래처럼
-    //var getintentLocation = current
-    val lat = current!!.latitude
-    val lng = current.longitude
-    cur_loc = LatLng(lat, lng)
-
-
+    Logg.d("ssmm11"+cur_loc.toString())
     val db = FirebaseFirestore.getInstance()
 
     db.collection("mapRoute")

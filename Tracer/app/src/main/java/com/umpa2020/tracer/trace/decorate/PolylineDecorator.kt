@@ -22,7 +22,7 @@ class PolylineDecorator(decoratedMap: TraceMap) : MapDecorator(decoratedMap) {
         }
     }
 
-    var markerCount = 0
+    var markerCount = -1
     private fun polyLineMake() {
         Logg.d( "making polyline $previousLocation $currentLocation")
         //polyline 그리기
@@ -43,9 +43,8 @@ class PolylineDecorator(decoratedMap: TraceMap) : MapDecorator(decoratedMap) {
                 .build()
         )
         //100m마다 waypoint 추가
-        if (distance.toInt() / Constants.WPINTERVAL >= markerCount) {    //100m마다
-            if (distance > 0)
-                markerCount = distance.toInt() / Constants.WPINTERVAL
+        if (distance.toInt() / Constants.WPINTERVAL >= markerCount) {
+            if (distance > 0) markerCount = distance.toInt() / Constants.WPINTERVAL
             mMap.addMarker(MarkerOptions().position(currentLocation).title(markerCount.toString()))
             wpList.add(
                 WayPoint.builder()

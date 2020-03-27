@@ -5,7 +5,6 @@ import android.content.IntentFilter
 import android.location.Location
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -47,8 +46,7 @@ class StartFragment : Fragment(), View.OnClickListener {
 
             R.id.mainStartRacing -> {
                 val newIntent = Intent(activity, NearRouteActivity::class.java)
-                newIntent.putExtra("currentLocation", currentLocation) //curLoc 정보 인텐트로 넘김
-                Logg.d( "mainStartRunning누르는 순간의 intent " + currentLocation.toString())
+                newIntent.putExtra("currentLocation", traceMap.currentLocation) //curLoc 정보 인텐트로 넘김
                 startActivity(newIntent)
             }
         }
@@ -66,11 +64,11 @@ class StartFragment : Fragment(), View.OnClickListener {
         view.test.setOnClickListener {
             Logg.d( "test 실행")
             val storage = FirebaseStorage.getInstance("gs://tracer-9070d.appspot.com/")
-            val routeRef = storage.reference.child("mapRoute").child("Sandiego||1585155309000")
+            val routeRef = storage.reference.child("mapRoute").child( "ZXCZXC||1585238332000")
             val localFile = File.createTempFile("routeGpx", "xml")
 
             routeRef.getFile(Uri.fromFile(localFile)).addOnSuccessListener {
-                var routeGPX=GPXConverter().GpxToClass(localFile.path)
+                val routeGPX=GPXConverter().GpxToClass(localFile.path)
                 val intent=Intent(context,RankingRecodeRacingActivity::class.java)
                 intent.putExtra("RouteGPX",routeGPX)
                 startActivity(intent)
