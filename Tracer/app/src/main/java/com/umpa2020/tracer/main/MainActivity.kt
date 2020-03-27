@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
     Logg.d("Hello I'm New")
     setContentView(R.layout.activity_main)
 
-    startService()
+    startService() // 서비스 시작.
 
     bottom_navigation.selectedItemId = R.id.navigation_start
     supportFragmentManager.beginTransaction().replace(
@@ -97,7 +97,7 @@ class MainActivity : AppCompatActivity() {
    */
 
   private fun startStopServiceCommand(action: ServiceStatus) {
-    Logg.d("이건 실행되잖아?")
+    Logg.i("startStopServiceCommand")
     Intent(applicationContext, LocationBackgroundService::class.java).also {
       it.action = action.name
       Logg.d(action.toString())
@@ -107,7 +107,6 @@ class MainActivity : AppCompatActivity() {
 
   companion object {
     val TAG = "service"
-    val WSY = "WSY"
     private const val REQUEST_PERMISSIONS_REQUEST_CODE = 34
     const val MESSENGER_INTENT_KEY = "msg-intent-key"
   }

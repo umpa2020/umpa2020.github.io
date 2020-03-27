@@ -99,10 +99,10 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
     traceMap = PolylineDecorator(
       DistanceDecorator(
         BasicMap(smf, this)
-
       )
     )
-    locationBroadcastReceiver = LocationBroadcastReceiver(traceMap)
+
+    locationBroadcastReceiver = LocationBroadcastReceiver(traceMap) // 브로드 캐스트 선언.
 
     drawer.setOnDrawerScrollListener(this)
     drawer.setOnDrawerOpenListener(this)
