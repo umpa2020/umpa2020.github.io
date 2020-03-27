@@ -21,12 +21,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.trace
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.NoticeState
 import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.trace.decorate.*
+import com.umpa2020.tracer.util.ChoicePopup
 import com.umpa2020.tracer.util.LocationBroadcastReceiver
 import com.umpa2020.tracer.util.Logg
 import hollowsoft.slidingdrawer.OnDrawerCloseListener
@@ -80,7 +82,11 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
 
     btn_stop!!.setOnLongClickListener {
       if (traceMap.distance < 200) {
-        showChoicePopup("거리가 200m 미만일때\n정지하시면 저장이 불가능합니다. \n\n정지하시겠습니까?", NoticeState.SIOP)
+         var a=ChoicePopup(this,"거리가 200m 미만일때\n정지하시면 저장이 불가능합니다. \n\n정지하시겠습니까?",
+          View.OnClickListener { stop() },
+          View.OnClickListener {  })
+        a.show()
+        //showChoicePopup("거리가 200m 미만일때\n정지하시면 저장이 불가능합니다. \n\n정지하시겠습니까?", NoticeState.SIOP)
       } else
         stop()
       true
@@ -93,10 +99,10 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
     traceMap = PolylineDecorator(
       DistanceDecorator(
         BasicMap(smf, this)
-
       )
     )
-    locationBroadcastReceiver = LocationBroadcastReceiver(traceMap)
+
+    locationBroadcastReceiver = LocationBroadcastReceiver(traceMap) // 브로드 캐스트 선언.
 
     drawer.setOnDrawerScrollListener(this)
     drawer.setOnDrawerOpenListener(this)
@@ -172,12 +178,13 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
   }
 
   private fun stop() {
-    traceMap.stop()
-    val routeGPX = traceMap.stop()
+    val routeGPX = traceMap.stop(SystemClock.elapsedRealtime() - chronometer.base)
     val infoData = InfoData()
     infoData.distance = traceMap.distance
     infoData.time = SystemClock.elapsedRealtime() - chronometer.base
     infoData.privacy = traceMap.privacy
+    infoData.startLatitude = traceMap.trkList.first().latitude.toDouble()
+    infoData.startLongitude = traceMap.trkList.first().longitude.toDouble()
 
     //val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
     //formatter.timeZone = TimeZone.getTimeZone("UTC")
@@ -254,27 +261,27 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
 
   override fun onDestroy() {
     super.onDestroy()
-    Logg.d( "onDestroy()")
+    Logg.d("onDestroy()")
   }
 
   override fun onScrollStarted() {
-    Logg.d( "onScrollStarted()")
+    Logg.d("onScrollStarted()")
   }
 
   override fun onScrollEnded() {
-    Logg.d( "onScrollEnded()")
+    Logg.d("onScrollEnded()")
   }
 
   override fun onDrawerOpened() {
     //runningHandle.background = getDrawable(R.drawable.close_selector)
     runningHandle.text = "▼"
-    Logg.d( "onDrawerOpened()")
+    Logg.d("onDrawerOpened()")
   }
 
   override fun onDrawerClosed() {
     //runningHandle.background = getDrawable(R.drawable.extend_selector)
     runningHandle.text = "▲"
-    Logg.d( "onDrawerClosed()")
+    Logg.d("onDrawerClosed()")
   }
 
 }

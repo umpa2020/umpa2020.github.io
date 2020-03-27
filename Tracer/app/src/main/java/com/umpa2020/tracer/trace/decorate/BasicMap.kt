@@ -2,7 +2,6 @@ package com.umpa2020.tracer.trace.decorate
 
 import android.content.Context
 import android.location.Location
-import android.util.Log
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -36,7 +35,9 @@ class BasicMap(val smf: SupportMapFragment, val context: Context) : OnMapReadyCa
     override var moving = false
     override var trkList: MutableList<WayPoint> = mutableListOf()
     override var wpList: MutableList<WayPoint> = mutableListOf()
+
     override fun work(location: Location) {
+        //TODO: 레이싱일 때, 실행되면 안됨
         if (userState==UserState.STOP){
             wpList.removeAt(wpList.size-1)
             wpList.add(WayPoint.builder()

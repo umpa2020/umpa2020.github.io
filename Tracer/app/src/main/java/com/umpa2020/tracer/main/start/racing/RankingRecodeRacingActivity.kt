@@ -3,13 +3,12 @@ package com.umpa2020.tracer.main.start.racing
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.ActivityInfo
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.SystemClock
-import android.util.Log
 import android.view.View
 import android.widget.Chronometer
+import androidx.appcompat.app.AppCompatActivity
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.firebase.firestore.FieldValue
@@ -20,9 +19,9 @@ import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.constant.Constants.Companion.DEVIATION
 import com.umpa2020.tracer.constant.Constants.Companion.INFOUPDATE
 import com.umpa2020.tracer.constant.Constants.Companion.RACINGFINISH
-import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.constant.UserState
 import com.umpa2020.tracer.dataClass.InfoData
+import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.trace.decorate.BasicMap
 import com.umpa2020.tracer.trace.decorate.PolylineDecorator
 import com.umpa2020.tracer.trace.decorate.RacingDecorator
@@ -33,10 +32,7 @@ import com.umpa2020.tracer.util.MyHandler
 import hollowsoft.slidingdrawer.OnDrawerCloseListener
 import hollowsoft.slidingdrawer.OnDrawerOpenListener
 import hollowsoft.slidingdrawer.OnDrawerScrollListener
-import hollowsoft.slidingdrawer.SlidingDrawer
 import kotlinx.android.synthetic.main.activity_ranking_recode_racing.*
-import kotlinx.android.synthetic.main.activity_ranking_recode_racing.drawer
-import kotlinx.android.synthetic.main.activity_running.*
 
 class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpenListener,
   OnDrawerCloseListener {
@@ -54,9 +50,9 @@ class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener,
     super.onCreate(savedInstanceState)
     requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
     setContentView(R.layout.activity_ranking_recode_racing)
-  
+
     mapRouteGPX = intent.getParcelableExtra("RouteGPX") as RouteGPX
-    mapTitle = mapRouteGPX.text
+    mapTitle = intent.getStringExtra("mapTitle")
     init()
     locationBroadcastReceiver = LocationBroadcastReceiver(traceMap)
     racingControlButton.setOnLongClickListener {
@@ -85,13 +81,14 @@ class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener,
 
       db.collection("mapInfo").document(mapTitle)
         .update("execute", FieldValue.increment(1))
-        .addOnSuccessListener { Logg.d( "DocumentSnapshot successfully updated!") }
+        .addOnSuccessListener { Logg.d("DocumentSnapshot successfully updated!") }
         .addOnFailureListener { e -> Logg.w("Error updating document$e") }
     })
 
     increaseExecuteThread.start()
   }
-//경로이탈 되는지 확인
+
+  //경로이탈 되는지 확인
   var mHandler = Handler(App.instance.mainLooper) {
     when (it.what) {
       INFOUPDATE -> {
@@ -101,7 +98,7 @@ class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener,
       RACINGFINISH -> {
         stop(true)
       }
-      DEVIATION->{
+      DEVIATION -> {
         Logg.d((it.obj as Int).toString())
         //TODO:pop up 노티스
         if (it.obj as Int > Constants.DEVIATION_COUNT) {
@@ -132,14 +129,14 @@ class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener,
           //TODO:notice " you should be in 200m"
           UserState.NORMAL -> {
             //200m 안으로 들어오세요!
-            Logg.d( "NORMAL")
+            Logg.d("NORMAL")
           }
           UserState.READYTORACING -> {
-            Logg.d( "READYTORACING")
+            Logg.d("READYTORACING")
             start()
           }
           UserState.RUNNING -> {
-            Logg.d( "RUNNING")
+            Logg.d("RUNNING")
             stop(false)
           }
           else -> {
@@ -163,40 +160,44 @@ class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener,
   }
 
   fun stop(result: Boolean) {
-    traceMap.stop()
 
+    val routeGPX = traceMap.stop(SystemClock.elapsedRealtime() - chronometer.base)
     timeWhenStopped = chronometer.base - SystemClock.elapsedRealtime()
+    traceMap.stop(SystemClock.elapsedRealtime() - chronometer.base)
     chronometer.stop()
 
-    var infoData = InfoData()
+    val infoData = InfoData()
     infoData.time = SystemClock.elapsedRealtime() - chronometer.base
     infoData.mapTitle = mapTitle
-    //  infoData.distance = calcLeftDistance()
+    // TODO: 거리 계산 해야함!!!
+    infoData.distance = 10.0000
+    //infoData.distance = calcLeftDistance()
 
     val newIntent = Intent(this, RacingFinishActivity::class.java)
     newIntent.putExtra("Result", result)
     newIntent.putExtra("InfoData", infoData)
     newIntent.putExtra("MapRouteGPX", mapRouteGPX)
+    newIntent.putExtra("RouteGPX", routeGPX)
 
     startActivity(newIntent)
     finish()
   }
 
   override fun onScrollStarted() {
-    Logg.d( "onScrollStarted()")
+    Logg.d("onScrollStarted()")
   }
 
   override fun onScrollEnded() {
-    Logg.d( "onScrollEnded()")
+    Logg.d("onScrollEnded()")
   }
 
   override fun onDrawerOpened() {
     racingHandle.text = "▼"
-    Logg.d( "onDrawerOpened()")
+    Logg.d("onDrawerOpened()")
   }
 
   override fun onDrawerClosed() {
     racingHandle.text = "▲"
-    Logg.d( "onDrawerClosed()")
+    Logg.d("onDrawerClosed()")
   }
 }

@@ -10,7 +10,6 @@ import com.google.maps.android.SphericalUtil
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.NearMap
-import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.ProgressBar
 import kotlinx.android.synthetic.main.activity_near_route.*
 
@@ -35,33 +34,31 @@ class NearRouteActivity : AppCompatActivity() {
     val intent = intent
     val cur_loc = intent.extras?.getParcelable<LatLng>("currentLocation")
 
-    Logg.d("ssmm11"+cur_loc.toString())
     val db = FirebaseFirestore.getInstance()
 
-    db.collection("mapRoute")
+    /**
+     * mapInfo 에 저장된 맵의 첫 시작 위치와
+     * 현재 위치의 거리를 구해서 20km 미만이면
+     * 가까운 순서대로 정렬하여 구현한다.
+     */
+    db.collection("mapInfo")
       .get()
       .addOnSuccessListener { result ->
         for (document in result) {
-          val receiveRouteDatas = document.get("markerlatlngs") as List<Object>
+          val infoData = document.toObject(InfoData::class.java)
+          latLng = LatLng(
+            infoData.startLatitude!!,
+            infoData.startLongitude!!
+          )
 
-          for (receiveRouteData in receiveRouteDatas) {
-            val location = receiveRouteData as Map<String, Any>
-            latLng = LatLng(
-              location["latitude"] as Double,
-              location["longitude"] as Double
-            )
-            break
-          }
           if (SphericalUtil.computeDistanceBetween(cur_loc, latLng) <= 20000) {
             val nearMap = NearMap(document.id, SphericalUtil.computeDistanceBetween(cur_loc, latLng))
             nearMaps.add(nearMap)
           }
         }
-        near_recycler_map.adapter = NearRecyclerViewAdapter(nearMaps.sortedWith(compareBy({ it.distance })))
+        near_recycler_map.adapter = NearRecyclerViewAdapter(nearMaps.sortedWith(compareBy { it.distance }))
         near_recycler_map.layoutManager = LinearLayoutManager(this)
         progressbar.dismiss()
-      }
-      .addOnFailureListener { exception ->
       }
   }
 }
