@@ -12,8 +12,8 @@ import kotlinx.android.synthetic.main.running_activity_yesnopopup.*
 class ChoicePopup(context: Context, val text: String, val yes: View.OnClickListener, val no: View.OnClickListener) : Dialog(context) {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    requestWindowFeature(Window.FEATURE_NO_TITLE)
-    setContentView(R.layout.running_activity_yesnopopup)
+    requestWindowFeature(Window.FEATURE_NO_TITLE);
+    setContentView(R.layout.running_activity_yesnopopup);
     runningActivityPopUpTextView.text = text
     runningActivityYesButton.setOnClickListener(yes)
     runningActivityNoButton.setOnClickListener(no)
