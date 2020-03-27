@@ -3,7 +3,6 @@ package com.umpa2020.tracer.network
 import android.app.Activity
 import android.os.Handler
 import android.os.Message
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import com.bumptech.glide.Glide
@@ -43,7 +42,6 @@ class FBProfile {
       .addOnSuccessListener { result ->
         var sumDistance = 0.0
         var sumTime = 0.0
-
         for (document in result) {
           sumDistance += document.get("distance") as Double
           sumTime += document.get("time") as Long
@@ -98,7 +96,7 @@ class FBProfile {
 
   fun getMyRoute(mHandler: Handler) {
 
-    var infoDatas: ArrayList<InfoData> = arrayListOf()
+    val infoDatas: ArrayList<InfoData> = arrayListOf()
 
     val db = FirebaseFirestore.getInstance()
 
