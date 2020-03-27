@@ -161,7 +161,7 @@ class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener,
 
   fun stop(result: Boolean) {
 
-    val routeGPX = traceMap.stop()
+    val routeGPX = traceMap.stop(SystemClock.elapsedRealtime() - chronometer.base)
     timeWhenStopped = chronometer.base - SystemClock.elapsedRealtime()
     traceMap.stop(SystemClock.elapsedRealtime() - chronometer.base)
     chronometer.stop()
