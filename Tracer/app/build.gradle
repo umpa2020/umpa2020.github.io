@@ -5,7 +5,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'com.google.gms.google-services'
-
+apply plugin: 'kotlin-kapt'
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
@@ -131,5 +131,7 @@ dependencies {
     implementation files('libs\\org.motechproject.com.bea.xml.stream-1.2.0.jar')
     implementation 'javax.xml.stream:stax-api:1.0'
 
+    //data binding for custom dialog
+    kapt 'com.android.databinding:compiler:3.1.4'
 
 }
