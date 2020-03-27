@@ -21,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.trace
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.NoticeState
 import com.umpa2020.tracer.constant.Privacy
@@ -182,12 +183,13 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
   }
 
   private fun stop() {
-    traceMap.stop()
-    val routeGPX = traceMap.stop()
+    val routeGPX = traceMap.stop(SystemClock.elapsedRealtime() - chronometer.base)
     val infoData = InfoData()
     infoData.distance = traceMap.distance
     infoData.time = SystemClock.elapsedRealtime() - chronometer.base
     infoData.privacy = traceMap.privacy
+    infoData.startLatitude = traceMap.trkList.first().latitude.toDouble()
+    infoData.startLongitude = traceMap.trkList.first().longitude.toDouble()
 
     //val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
     //formatter.timeZone = TimeZone.getTimeZone("UTC")

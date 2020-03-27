@@ -75,10 +75,10 @@ interface TraceMap {
     userState = UserState.RUNNING
   }
 
-  fun stop(): RouteGPX {
+  fun stop(record:Long): RouteGPX {
     userState = UserState.STOP
     work(Location(""))
-    return RouteGPX("", "", wpList, trkList)
+  return RouteGPX(record.toString(), "", wpList, trkList)
   }
 
   fun WayPoint.toLatLng(): LatLng {

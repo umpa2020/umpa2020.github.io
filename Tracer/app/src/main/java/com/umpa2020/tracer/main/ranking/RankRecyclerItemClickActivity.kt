@@ -10,6 +10,7 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.RankingData
+import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.ProgressBar
 import kotlinx.android.synthetic.main.activity_rank_recycler_item_click.*
 
@@ -60,6 +61,7 @@ class RankRecyclerItemClickActivity : AppCompatActivity() {
           rankingData = document.toObject(RankingData::class.java)
           arrRankingData.add(rankingData)
         }
+        Logg.d("ssmm11, arrRanking = $arrRankingData")
         //레이아웃 매니저 추가
         rankRecyclerItemClickRecyclerView.layoutManager = LinearLayoutManager(this)
         //adpater 추가
@@ -77,9 +79,9 @@ class RankRecyclerItemClickActivity : AppCompatActivity() {
       }
 
     rankRecyclerMoreButton.setOnClickListener {
-     /* val nextIntent = Intent(this, RankingMapDetailActivity::class.java)
+      val nextIntent = Intent(this, RankingMapDetailActivity::class.java)
       nextIntent.putExtra("MapTitle", mapTitle)
-      startActivity(nextIntent)*/
+      startActivity(nextIntent)
     }
   }
 }

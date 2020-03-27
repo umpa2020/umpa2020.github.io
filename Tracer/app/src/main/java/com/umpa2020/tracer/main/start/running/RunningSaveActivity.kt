@@ -102,13 +102,12 @@ class RunningSaveActivity : AppCompatActivity() {
 
   fun save(imgPath: String) {
     Logg.d( "Start Saving")
-    // 타임스탭프 찍는 코드
+    // 타임스탬프 찍는 코드
     val dt = Date()
     val fullSdf = SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.getDefault())
 
     val date = fullSdf.parse(dt.toString())
     val timestamp = date!!.time
-
 
     // 인포데이터에 필요한 내용을 저장하고
     infoData.makersNickname = UserInfo.nickname
@@ -156,10 +155,10 @@ class RunningSaveActivity : AppCompatActivity() {
     //TODO: routeGPX 파일로 스토리지에 업로드 후 경로 infoData에 넣어서 set
     db.collection("mapInfo").document(infoData.mapTitle!!).set(infoData)
 
-    val rankingData = RankingData(UserInfo.nickname, UserInfo.nickname, infoData.time)
+    val rankingData = RankingData(UserInfo.nickname, UserInfo.nickname, infoData.time, 1)
     db.collection("rankingMap").document(infoData.mapTitle!!).set(rankingData)
     db.collection("rankingMap").document(infoData.mapTitle!!).collection("ranking")
-      .document(rankingData.makerNickname + "||" + fullSdf.format(dt)).set(rankingData)
+      .document(rankingData.makerNickname + "||" + timestamp).set(rankingData)
 
     // db에 원하는 경로 및, 문서로 업로드
 

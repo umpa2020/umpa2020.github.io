@@ -10,6 +10,7 @@ import io.jenetics.jpx.*
 import java.io.File;
 import java.lang.Exception
 import java.nio.file.Path;
+import javax.xml.parsers.DocumentBuilder
 
 class GPXConverter {
     fun classToGpx(routeGPX: RouteGPX, folderPath: String): Uri {
