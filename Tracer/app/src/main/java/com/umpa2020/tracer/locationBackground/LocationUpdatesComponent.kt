@@ -122,11 +122,7 @@ object LocationUpdatesComponent {
             currentLocation = task.result!!
             lastLocation = task.result!!
             Logg.i( "getLastLocation $currentLocation" )
-            // getLastLocation Location[fused 37.619672,127.059084
-            // hAcc=15 et=+5d2h34m37s51ms alt=53.5 vel=0.0014348121
-            // bear=219.74748 vAcc=2 sAcc=??? bAcc=??? {Bundle[mParcelledData.dataSize=52]}]
 
-            //                                Toast.makeText(getApplicationContext(), "" + mLocation, Toast.LENGTH_SHORT).show();
             onNewLocation(currentLocation)
           } else {
             Logg.w( "Failed to get location.")
@@ -195,7 +191,6 @@ object LocationUpdatesComponent {
   }
 
 
-  private val WSY = "WSY"
   /**
    * The desired interval for location updates. Inexact. Updates may be more or less frequent.
    */

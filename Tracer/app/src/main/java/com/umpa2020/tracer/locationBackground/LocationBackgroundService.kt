@@ -46,7 +46,8 @@ class LocationBackgroundService : IntentService("LocationBackgroundService"), Lo
     startForeground(1, notification)
   }
 
-  // this makes service running continuously,,commenting this start command method service runs only once
+  // this makes service running continuously,commenting this start command method service runs only once
+  // action에 따른 service 실행 유무
   override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
     Logg.i( "onStartCommand Service started....")
 
@@ -82,7 +83,6 @@ class LocationBackgroundService : IntentService("LocationBackgroundService"), Lo
     } catch (e: RemoteException) {
       Logg.e( "Error passing service object back to activity.")
     }
-
   }
 
 
@@ -144,7 +144,7 @@ class LocationBackgroundService : IntentService("LocationBackgroundService"), Lo
   private fun stopService() {
     LocationUpdatesComponent.onStop()
     stopForeground(true)
-    stopSelf()
+    stopSelf() // 이건 뭐지??
   }
 
   companion object {
