@@ -41,7 +41,6 @@ class FBRanking {
     //레이아웃 매니저 추가
     view.rank_recycler_map.layoutManager = LinearLayoutManager(context)
 
-
     db.collection("mapInfo")
       .get()
       .addOnSuccessListener { result ->
@@ -50,10 +49,12 @@ class FBRanking {
         for (document in result) {
           infoData = document.toObject(InfoData::class.java)
           infoData.mapTitle = document.id
+
           infoData.distance = SphericalUtil.computeDistanceBetween(cur_loc, LatLng(infoData.startLatitude!!, infoData.startLongitude!!))
           infoDatas.add(infoData)
         }
         infoDatas.sortByDescending { infoData -> infoData.execute }
+
         view.rank_recycler_map.adapter = RankRecyclerViewAdapterMap(infoDatas, mode, progressbar)
       }
   }

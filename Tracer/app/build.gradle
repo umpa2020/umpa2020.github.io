@@ -18,12 +18,32 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
+        def flavor="debug"
+        if(flavor == "debug"){
+            println "dededede"
+            copy {
+                from 'src/debug'
+                include '*.json'
+                into '.'
+            }
+        }else{
+            println "rererer"
+            copy {
+                from 'src/release'
+                include '*.json'
+                into '.'
+            }
+        }
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-    compileOptions{
+    compileOptions {
         targetCompatibility = "8"
         sourceCompatibility = "8"
     }
