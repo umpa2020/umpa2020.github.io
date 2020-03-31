@@ -26,6 +26,7 @@ import com.umpa2020.tracer.trace.decorate.BasicMap
 import com.umpa2020.tracer.trace.decorate.PolylineDecorator
 import com.umpa2020.tracer.trace.decorate.RacingDecorator
 import com.umpa2020.tracer.trace.decorate.TraceMap
+import com.umpa2020.tracer.util.ChoicePopup
 import com.umpa2020.tracer.util.LocationBroadcastReceiver
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.MyHandler
@@ -54,9 +55,21 @@ class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener,
     mapRouteGPX = intent.getParcelableExtra("RouteGPX") as RouteGPX
     mapTitle = intent.getStringExtra("mapTitle")
     init()
-    locationBroadcastReceiver = LocationBroadcastReceiver(traceMap)
+
+    locationBroadcastReceiver = LocationBroadcastReceiver(traceMap) // 브로드 캐스트 선언
     racingControlButton.setOnLongClickListener {
       if (traceMap.userState == UserState.RUNNING) {
+        val popUp = ChoicePopup(this, "선택해주세요.",
+          "지금 정지하시면 저장이 불가능합니다. \n\n정지하시겠습니까?",
+          View.OnClickListener {
+            // yes 버튼 눌렀을 때 해당 액티비티 재시작.
+            finish()
+            val intent = Intent(this, RankingRecodeRacingActivity::class.java)
+            startActivity(intent)
+          },
+          View.OnClickListener { })
+        popUp.show()
+      }else{
         stop(true)
       }
       true
