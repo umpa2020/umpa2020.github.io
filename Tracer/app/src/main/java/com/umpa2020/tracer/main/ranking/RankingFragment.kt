@@ -2,7 +2,9 @@ package com.umpa2020.tracer.main.ranking
 
 import android.location.Location
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
 import android.widget.SeekBar
 import androidx.fragment.app.Fragment

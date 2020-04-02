@@ -97,7 +97,12 @@ class RankRecyclerViewAdapterMap(val mdata: ArrayList<InfoData>, val mode: Strin
       }
     }
 
-    if (position == mdata.size-1) {
+    // 정보를 다 표현하면 dismiss
+    // > 5를 한 이유는 recyclerview 특성 상 모든 정보를 한 번에 담는게 아니라
+    // 스크롤이 내려가면 달게 posiotion이 증가 되어서 mdata.size 까지
+    // 도달하지 못하는 경우가 있음
+    // 추후에 코드 정리 할 예정 - 정빈
+    if (position == mdata.size-1 || position > 5) {
       progressBar.dismiss()
     }
   }

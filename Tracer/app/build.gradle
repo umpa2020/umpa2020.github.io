@@ -110,14 +110,14 @@ dependencies {
 
   // 맵 달릴때 정확히 뭔진 모르겠으나 윤권이가 알듯 ㅎ
   implementation 'com.github.moraisigor:slidingdrawer:1.7.1'
-  implementation 'androidx.fragment:fragment-ktx:1.2.1'
+  implementation 'androidx.fragment:fragment-ktx:1.2.3'
 
   // chart 그리는 gradle
   implementation 'com.github.PhilJay:MPAndroidChart:v3.0.2'
 
 
   implementation 'com.firebaseui:firebase-ui-auth:4.3.1' // firebaseUi google 로그인
-  implementation 'com.google.firebase:firebase-auth:19.2.0' // firebase auth 설정 - 로그인 시 필요
+  implementation 'com.google.firebase:firebase-auth:19.3.0' // firebase auth 설정 - 로그인 시 필요
   implementation 'com.google.android.gms:play-services-auth:17.0.0' // firebase google 로그인 설정
 
 
@@ -146,16 +146,16 @@ dependencies {
   implementation 'com.android.support:design:29.0.0'
 
   // WorkManager에 종속성을 추가 - 백그라운드 작업에 사용
-  implementation "androidx.work:work-runtime-ktx:2.2.0"
+  implementation "androidx.work:work-runtime-ktx:2.3.4"
 
   //noinspection GradleCompatible
   implementation 'com.android.support:appcompat-v7:26.1.0' // 툴바 사용
 
   //coordinatorlayout
-  implementation "androidx.coordinatorlayout:coordinatorlayout:1.0.0"
+  implementation "androidx.coordinatorlayout:coordinatorlayout:1.1.0"
   //GPX
   implementation "io.jenetics:jpx:1.7.0"
-  implementation files('libs\\org.motechproject.com.bea.xml.stream-1.2.0.jar')
+  implementation files('libs/org.motechproject.com.bea.xml.stream-1.2.0.jar')
   implementation 'javax.xml.stream:stax-api:1.0'
 
   //data binding for custom dialog

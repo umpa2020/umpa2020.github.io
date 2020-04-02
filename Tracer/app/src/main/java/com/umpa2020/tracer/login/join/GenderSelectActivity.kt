@@ -63,8 +63,8 @@ class GenderSelectActivity : AppCompatActivity() {
           isMan = false
           isWoman = true
         }
-        Logg.d( "남자 : " + isMan.toString())
-        Logg.d( "여자 : " + isWoman.toString())
+        Logg.d("남자 : " + isMan.toString())
+        Logg.d("여자 : " + isWoman.toString())
       }
       R.id.woman -> {
         if (womanCheck.visibility == View.INVISIBLE && womanUnderline.visibility == View.INVISIBLE) {
@@ -87,7 +87,7 @@ class GenderSelectActivity : AppCompatActivity() {
           isMan = true
         }
         Logg.d("여자 : $isWoman")
-        Logg.d( "남자 : " + isMan.toString())
+        Logg.d("남자 : " + isMan.toString())
       }
 
     }
