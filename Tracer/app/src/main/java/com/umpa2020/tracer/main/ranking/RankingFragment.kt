@@ -26,7 +26,7 @@ class RankingFragment : Fragment() {
     // Inflate the layout for this fragment
     val view: View = inflater.inflate(R.layout.fragment_ranking, container, false)
 
-    FBRanking().getExcuteDESCENDING(context!!, view, UserInfo.rankingLatLng, "execute")
+    FBRanking().getExcuteDESCENDING(requireContext(), view, UserInfo.rankingLatLng, "execute")
 
     //필터 버튼 누르면 레이아웃 보임
     view.rankingToolBarTuneButton.setOnClickListener {
@@ -88,23 +88,23 @@ class RankingFragment : Fragment() {
     val animate = AlphaAnimation(0f, 1f) //투명도 변화
     animate.duration = 500
     animate.fillAfter = true
-    view!!.tuneLinearLayout.visibility = View.VISIBLE
-    view!!.filterLayout.visibility = View.VISIBLE
-    view!!.disappearLayout.visibility = View.VISIBLE
-    view!!.tuneLinearLayout.startAnimation(animate)
+    requireView().tuneLinearLayout.visibility = View.VISIBLE
+    requireView().filterLayout.visibility = View.VISIBLE
+    requireView().disappearLayout.visibility = View.VISIBLE
+    requireView().tuneLinearLayout.startAnimation(animate)
   }
 
   /**
    * 레이아웃이 스르륵 사라지는 함수
    */
   fun disappearAnimation() {
-    view!!.tuneLinearLayout.visibility = View.GONE
-    view!!.filterLayout.visibility = View.GONE
-    view!!.disappearLayout.visibility = View.GONE
+    requireView().tuneLinearLayout.visibility = View.GONE
+    requireView().filterLayout.visibility = View.GONE
+    requireView().disappearLayout.visibility = View.GONE
 
     val animate = AlphaAnimation(1f, 0f)
     animate.duration = 500
     animate.fillAfter = true
-    view!!.tuneLinearLayout.startAnimation(animate)
+    requireView().tuneLinearLayout.startAnimation(animate)
   }
 }

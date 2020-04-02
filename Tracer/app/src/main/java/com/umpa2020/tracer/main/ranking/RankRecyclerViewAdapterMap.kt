@@ -43,7 +43,6 @@ class RankRecyclerViewAdapterMap(val mdata: ArrayList<InfoData>, val mode: Strin
       }
     }
 
-
     val cutted = singleItem.mapTitle!!.split("||")
     //데이터 바인딩
     holder.rank.text = ranking.toString()
@@ -87,8 +86,7 @@ class RankRecyclerViewAdapterMap(val mdata: ArrayList<InfoData>, val mode: Strin
         likes++
         holder.execute.text = likes.toString()
         holder.heartswitch.text = "on"
-      }
-      else {
+      } else {
         FBLikes().setminusLikes(singleItem.mapTitle!!, likes)
         holder.heart.setImageResource(R.drawable.ic_favorite_border_black_24dp)
         likes--
@@ -102,7 +100,7 @@ class RankRecyclerViewAdapterMap(val mdata: ArrayList<InfoData>, val mode: Strin
     // 스크롤이 내려가면 달게 posiotion이 증가 되어서 mdata.size 까지
     // 도달하지 못하는 경우가 있음
     // 추후에 코드 정리 할 예정 - 정빈
-    if (position == mdata.size-1 || position > 5) {
+    if (position == mdata.size - 1 || position > 5) {
       progressBar.dismiss()
     }
   }
