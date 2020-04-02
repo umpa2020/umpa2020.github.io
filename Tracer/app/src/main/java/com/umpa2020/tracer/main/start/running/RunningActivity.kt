@@ -76,6 +76,8 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
     requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     setContentView(R.layout.activity_running)
 
+
+    
     supportActionBar?.title = "RUNNING"
 
     init()
