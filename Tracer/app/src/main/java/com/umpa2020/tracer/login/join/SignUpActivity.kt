@@ -91,7 +91,7 @@ class SignUpActivity : AppCompatActivity() {
     editNickname.addTextChangedListener(object : TextWatcher {
       override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
         flag = 3
-        Logg.d( flag.toString())
+        Logg.d(flag.toString())
       }
 
       override fun afterTextChanged(p0: Editable?) {
@@ -157,7 +157,7 @@ class SignUpActivity : AppCompatActivity() {
       for (i in 0 until length - 1) {
         if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
           // 동의
-          Logg.d( "권한 허용 : " + permissions[i])
+          Logg.d("권한 허용 : " + permissions[i])
           goToAlbum()
         }
       }
@@ -218,7 +218,7 @@ class SignUpActivity : AppCompatActivity() {
       .map { t -> t.isEmpty() || Pattern.matches(Constants.GENDER_RULE, t) }
       .subscribe({ it ->
         //inputDataField[2].setText("")
-        Logg.d( "성별 : " + it.toString())
+        Logg.d("성별 : " + it.toString())
         reactiveInputTextViewData(2, it)
       }) {
         //Error Block
@@ -295,7 +295,7 @@ class SignUpActivity : AppCompatActivity() {
     for (check in isInputCorrectData) {
       if (!check) {
         isSuccess = false
-        Logg.d( "입력 상황 : " + check.toString())
+        Logg.d("입력 상황 : " + check.toString())
         return
       }
     }
@@ -312,9 +312,9 @@ class SignUpActivity : AppCompatActivity() {
   // 서버로의 회원가입 진행
   private fun signUp(bitmapImg: Bitmap, nickname: String, age: String, gender: String) {
     if (flag == 1) {// false이면 닉네임 체크가 안된 것. 그러면 실행되면 안돼
-      val dt = Date().time
-      uploadProfileImage(bitmapImg, nickname, dt.toString())
-      uploadUserInfo(nickname, age, gender, dt.toString())
+      val timestamp = Date().time
+      uploadProfileImage(bitmapImg, nickname, timestamp.toString())
+      uploadUserInfo(nickname, age, gender, timestamp.toString())
     } else if (flag == 3) {
       textInputLayoutArray[0].setErrorTextColor(resources.getColorStateList(R.color.red, null))
       textInputLayoutArray[0].error = "중복 확인을 해주십시오."
@@ -333,10 +333,10 @@ class SignUpActivity : AppCompatActivity() {
     mFirestoreDB!!.collection("userinfo").whereEqualTo("nickname", nickname).get()
       .addOnSuccessListener { documents ->
         for (document in documents) {
-          Logg.d( document.id)
-          Logg.d( document.exists().toString())
+          Logg.d(document.id)
+          Logg.d(document.exists().toString())
           if (document.exists()) {
-            Logg.d( "${document.id} => ${document.data}")
+            Logg.d("${document.id} => ${document.data}")
             textInputLayoutArray[0].setErrorTextColor(resources.getColorStateList(R.color.red, null))
             textInputLayoutArray[0].error = "이미 사용중인 닉네임입니다."
             flag = 2 // flag = false로 하여 addOnCompleteListener의 if문이 실행 안되게 하기
@@ -344,7 +344,7 @@ class SignUpActivity : AppCompatActivity() {
         }
       }
       .addOnFailureListener { exception ->
-        Logg.w( "Error getting documents: "+ exception)
+        Logg.w("Error getting documents: " + exception)
       }
       .addOnCompleteListener {
         if (flag == 3) {
@@ -357,10 +357,10 @@ class SignUpActivity : AppCompatActivity() {
     flag = 3 // 비동기라서 이건 무조건 실행. 하지만 firebase보단 항상 먼저 실행됨.
   }
 
-  private fun uploadProfileImage(bitmapImg: Bitmap, nickname: String, dt: String) {
+  private fun uploadProfileImage(bitmapImg: Bitmap, nickname: String, timestamp: String) {
     // 현재 날짜를 프로필 이름으로 nickname/Profile/현재날짜(영어).jpg 경로 만들기
 
-    val profileRef = mStorageReference!!.child("Profile").child(uid!!).child(dt + ".jpg")
+    val profileRef = mStorageReference!!.child("Profile").child(uid!!).child(timestamp + ".jpg")
     // 이미지
     val bitmap = bitmapImg
     val baos = ByteArrayOutputStream()
@@ -392,7 +392,7 @@ class SignUpActivity : AppCompatActivity() {
       "profileImagePath" to dt + ".jpg"
     )
     mFirestoreDB!!.collection("userinfo").document(uid!!).set(data)
-      .addOnSuccessListener { Logg.d( "DocumentSnapshot successfully written!") }
+      .addOnSuccessListener { Logg.d("DocumentSnapshot successfully written!") }
       .addOnFailureListener { e -> Logg.w("Error writing document$e") }
 
   }
@@ -457,11 +457,8 @@ class SignUpActivity : AppCompatActivity() {
             }
           }
         }
-
       }
-
     }
-
   }
 
   /**

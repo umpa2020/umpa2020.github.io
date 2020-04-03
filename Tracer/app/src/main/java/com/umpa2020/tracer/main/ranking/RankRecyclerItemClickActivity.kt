@@ -1,15 +1,21 @@
 package com.umpa2020.tracer.main.ranking
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.os.Message
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import com.google.firebase.storage.FirebaseStorage
+import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.RankingData
+import com.umpa2020.tracer.network.FBLikes
+import com.umpa2020.tracer.network.FBMapImage
+import com.umpa2020.tracer.network.FBProfile
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.ProgressBar
 import kotlinx.android.synthetic.main.activity_rank_recycler_item_click.*
@@ -17,12 +23,13 @@ import kotlinx.android.synthetic.main.activity_rank_recycler_item_click.*
 class RankRecyclerItemClickActivity : AppCompatActivity() {
   var arrRankingData: ArrayList<RankingData> = arrayListOf()
   var rankingData = RankingData()
+  val GETLIKE = 51
+  var likes = 0
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_rank_recycler_item_click)
-
-    val progressbar = ProgressBar(this)
+    val progressbar = ProgressBar(App.instance.currentActivity() as Activity)
     progressbar.show()
     val intent = intent
     //전달 받은 값으로 Title 설정
@@ -31,22 +38,54 @@ class RankRecyclerItemClickActivity : AppCompatActivity() {
     val cutted = mapTitle.split("||")
     rankRecyclerMapTitle.text = cutted[0]
 
-
+    // 맵 이미지 DB에서 받아와서 설정
     val imageView = rankRoutePriview
+    FBMapImage().getMapImage(imageView, mapTitle)
 
-    val storage = FirebaseStorage.getInstance("gs://tracer-9070d.appspot.com/")
-    val mapImageRef = storage.reference.child("mapImage").child(mapTitle)
-    mapImageRef.downloadUrl.addOnCompleteListener { task ->
-      if (task.isSuccessful) {
-        // Glide 이용하여 이미지뷰에 로딩
-        Glide.with(this@RankRecyclerItemClickActivity)
-          .load(task.result)
-          .override(1024, 980)
-          .into(imageView)
-        progressbar.dismiss()
+    /**
+     * 먼저 현재 사용자가 좋아요를 눌렀는지 서버에서 받아온 뒤,
+     * 핸들러로 값을 받아 화면에 표시한 후,
+     * (이 작업이 조금 오래걸려서 프로그래스바를 여기서 dismiss)
+     */
+    val mHandler = object : Handler(Looper.getMainLooper()) {
+      override fun handleMessage(msg: Message) {
+        when (msg.what) {
+          GETLIKE -> {
+            val getlike = msg.obj as Boolean
+            likes = msg.arg1
+            progressbar.dismiss()
 
+            //adpater 추가
+            if (getlike) {
+              rankRecyclerHeart.setImageResource(R.drawable.ic_favorite_red_24dp)
+              rankRecyclerHeartSwitch.text = "on"
+            } else {
+              rankRecyclerHeart.setImageResource(R.drawable.ic_favorite_border_black_24dp)
+              rankRecyclerHeartSwitch.text = "off"
+            }
+          }
+        }
       }
     }
+
+    // 위의 핸들로 코드 사용
+    FBLikes().getLike(mapTitle, mHandler)
+
+    // 분기에 따라서 OnclickListener를 나눈다.
+    rankRecyclerHeart.setOnClickListener {
+      if (rankRecyclerHeartSwitch.text == "off") {
+        FBLikes().setLikes(mapTitle, likes)
+        rankRecyclerHeart.setImageResource(R.drawable.ic_favorite_red_24dp)
+        rankRecyclerHeartSwitch.text = "on"
+        likes++
+      } else if (rankRecyclerHeartSwitch.text == "on") {
+        FBLikes().setminusLikes(mapTitle, likes)
+        rankRecyclerHeart.setImageResource(R.drawable.ic_favorite_border_black_24dp)
+        rankRecyclerHeartSwitch.text = "off"
+        likes--
+      }
+    }
+
 
     val db = FirebaseFirestore.getInstance()
 
@@ -74,7 +113,9 @@ class RankRecyclerItemClickActivity : AppCompatActivity() {
       .get()
       .addOnSuccessListener { result ->
         for (document in result) {
+          // 해당 맵의 메이커 닉네임, 프로필 이미지 주소를 받아온다.
           rankRecyclerNickname.text = document.get("makersNickname") as String
+          FBProfile().getProfileImage(rankRecyclerProfileImage, rankRecyclerNickname.text.toString())
         }
       }
 

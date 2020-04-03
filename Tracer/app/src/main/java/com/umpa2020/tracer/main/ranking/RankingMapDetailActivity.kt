@@ -10,8 +10,6 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.bumptech.glide.Glide
-import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.App
@@ -20,10 +18,11 @@ import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.main.start.racing.RankingRecodeRacingActivity
 import com.umpa2020.tracer.main.start.running.RunningActivity
+import com.umpa2020.tracer.network.FBMapImage
+import com.umpa2020.tracer.network.FBProfile
 import com.umpa2020.tracer.util.Chart
 import com.umpa2020.tracer.util.ChoicePopup
 import com.umpa2020.tracer.util.Logg
-import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.gpx.GPXConverter
 import kotlinx.android.synthetic.main.activity_ranking_map_detail.*
 import java.io.File
@@ -31,67 +30,29 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class RankingMapDetailActivity : AppCompatActivity() {
-  var infoData = InfoData()
   lateinit var routeGPX: RouteGPX
-
-  var altitude: List<Double> = listOf()
-  var latLngs: MutableList<MutableList<LatLng>> = mutableListOf()
-  var markerlatlngs: MutableList<LatLng> = mutableListOf()
   var dbMapTitle = ""
-  var profileImagePath = ""
-  var uid = ""
 
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_ranking_map_detail)
-    val progressbar = ProgressBar(this)
-    progressbar.show()
 
     val intent = intent
     //전달 받은 값으로 Title 설정
     val mapTitle = intent.extras?.getString("MapTitle").toString()
     val cutted = mapTitle.split("||")
     rankingDetailMapTitle.text = cutted[0]
+    rankingDetailDate.text = cutted[1]
 
     val db = FirebaseFirestore.getInstance()
-    var makersNickname = ""
-
     db.collection("mapInfo").whereEqualTo("mapTitle", mapTitle)
       .get()
       .addOnSuccessListener { result ->
         for (document in result) {
-          makersNickname = document.get("makersNickname") as String
+          FBProfile().getProfileImage(rankingDetailProfileImage, document.get("makersNickname") as String)
+          break
         }
-        // storage 에 올린 경로를 db에 저장해두었으니 다시 역 추적 하여 프로필 이미지 반영
-        db.collection("userinfo").whereEqualTo("nickname", makersNickname)
-          .get()
-          .addOnSuccessListener { result ->
-            for (document in result) {
-              profileImagePath = document.get("profileImagePath") as String
-              uid = document.get("UID") as String
-            }
-            // glide imageview 소스
-            // 프사 설정하는 코드 db -> imageView glide
-            val imageView = rankingDetailProfileImage
-
-            val storage = FirebaseStorage.getInstance("gs://tracer-9070d.appspot.com/")
-
-            val mapImageRef = storage.reference.child("Profile").child(uid).child(profileImagePath)
-            mapImageRef.downloadUrl.addOnCompleteListener { task ->
-              if (task.isSuccessful) {
-                // Glide 이용하여 이미지뷰에 로딩
-                Glide.with(this@RankingMapDetailActivity)
-                  .load(task.result)
-                  .override(1024, 980)
-                  .into(imageView)
-                progressbar.dismiss()
-
-              }
-            }
-          }
-          .addOnFailureListener { exception ->
-          }
       }
 
     db.collection("mapInfo")
@@ -135,23 +96,7 @@ class RankingMapDetailActivity : AppCompatActivity() {
             }
           }
         }
-
-        // glide imageview 소스
-        val imageView = rankingDetailGoogleMap
-
-        val storage = FirebaseStorage.getInstance("gs://tracer-9070d.appspot.com/")
-        val mapImageRef = storage.reference.child("mapImage").child(mapTitle)
-
-        mapImageRef.downloadUrl.addOnCompleteListener { task ->
-          if (task.isSuccessful) {
-            // Glide 이용하여 이미지뷰에 로딩
-            Glide.with(this@RankingMapDetailActivity)
-              .load(task.result)
-              .override(1024, 980)
-              .into(imageView)
-          }
-        }
-
+        FBMapImage().getMapImage(rankingDetailGoogleMap, mapTitle)
 
         //버튼 누르면 연습용, 랭킹 기록용 선택 팝업 띄우기
         rankingDetailRaceButton.setOnClickListener {

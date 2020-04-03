@@ -1,10 +1,12 @@
 package com.umpa2020.tracer.main.start.running
 
+import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.os.SystemClock
+import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
@@ -16,6 +18,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.dataClass.InfoData
+import com.umpa2020.tracer.dataClass.NoticeState
 import com.umpa2020.tracer.trace.decorate.BasicMap
 import com.umpa2020.tracer.trace.decorate.DistanceDecorator
 import com.umpa2020.tracer.trace.decorate.PolylineDecorator
@@ -47,13 +50,9 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
       super.onBackPressed()
       return
     }
-
     this.doubleBackToExitPressedOnce1 = true
-
-
     val text = "뒤로 버튼을 한번 더 누르면 종료됩니다."
     val duration = Toast.LENGTH_LONG
-
     val toast = Toast.makeText(applicationContext, text, duration)
     toast.show()
 
@@ -63,6 +62,8 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
     super.onCreate(savedInstanceState)
     requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     setContentView(R.layout.activity_running)
+
+
 
     supportActionBar?.title = "RUNNING"
 
@@ -86,7 +87,7 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
         stopPopup!!.show()
         //showChoicePopup("거리가 200m 미만일때\n정지하시면 저장이 불가능합니다. \n\n정지하시겠습니까?", NoticeState.STOP)
       } else
-        stop() // runningSaveActivity로 이동.
+        stop()
       true
     }
   }

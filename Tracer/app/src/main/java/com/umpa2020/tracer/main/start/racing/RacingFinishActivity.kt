@@ -71,11 +71,7 @@ class RacingFinishActivity : AppCompatActivity() {
               }
 
               // 타임스탬프
-              val dt = Date()
-              val full_sdf = SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.getDefault())
-
-              val date = full_sdf.parse(dt.toString())
-              val timestamp = date!!.time
+              val timestamp = Date().time
 
               // 랭킹의 내용을 가져와서 마지막 페이지 구성
               db.collection("rankingMap").document(racerData.mapTitle!!).collection("ranking")

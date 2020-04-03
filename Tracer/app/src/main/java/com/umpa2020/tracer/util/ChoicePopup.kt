@@ -2,14 +2,9 @@ package com.umpa2020.tracer.util
 
 import android.app.Dialog
 import android.content.Context
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.service.autofill.TextValueSanitizer
-import android.text.Layout
 import android.view.View
 import android.view.Window
-import android.widget.TextView
-import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import kotlinx.android.synthetic.main.running_activity_yesnopopup.*
 

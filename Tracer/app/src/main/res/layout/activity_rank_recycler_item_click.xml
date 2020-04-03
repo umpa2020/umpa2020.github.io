@@ -2,6 +2,7 @@
 
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
   android:layout_height="match_parent">
 
   <LinearLayout
@@ -56,11 +57,10 @@
         android:text="@string/learn_more" />
     </RelativeLayout>
 
-    <LinearLayout
+    <RelativeLayout
       android:id="@+id/mapnamehorizontallayout"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_below="@+id/RelativeLayout"
       android:layout_marginLeft="20dp"
       android:layout_marginRight="20dp"
       android:layout_marginBottom="5dp"
@@ -71,16 +71,51 @@
         style="@style/ListDetail1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="312312mkfds"
+
         android:fontFamily="@font/notosansmedium"
-        android:textSize="18dp" />
+        android:textSize="18sp" />
+
+      <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/rankRecyclerProfileImage"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/ic_profile_logo"
+        android:layout_below="@id/rankRecyclerMapTitle"
+        app:civ_border_color="@color/gray"
+        app:civ_border_width="2dp" />
+
 
       <TextView
         android:id="@+id/rankRecyclerNickname"
         style="@style/ListDetail1"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="312312mkfds"
+        android:layout_toRightOf="@+id/rankRecyclerProfileImage"
+        android:layout_alignBottom="@id/rankRecyclerProfileImage"
+        android:layout_marginLeft="10dp"
+        android:textSize="18sp" />
 
-    </LinearLayout>
+      <ImageView
+        android:id="@+id/rankRecyclerHeart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="15dp"
+        android:src="@drawable/ic_favorite_border_black_24dp" />
+
+      <TextView
+        android:id="@+id/rankRecyclerHeartSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="off"
+        android:visibility="gone"/>
+
+    </RelativeLayout>
+
 
     <TextView
       android:id="@+id/gubun1"

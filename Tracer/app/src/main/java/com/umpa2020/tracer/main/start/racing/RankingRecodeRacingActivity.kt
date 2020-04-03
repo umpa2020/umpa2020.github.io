@@ -26,7 +26,6 @@ import com.umpa2020.tracer.trace.decorate.BasicMap
 import com.umpa2020.tracer.trace.decorate.PolylineDecorator
 import com.umpa2020.tracer.trace.decorate.RacingDecorator
 import com.umpa2020.tracer.trace.decorate.TraceMap
-import com.umpa2020.tracer.util.ChoicePopup
 import com.umpa2020.tracer.util.LocationBroadcastReceiver
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.MyHandler
@@ -57,8 +56,7 @@ class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener,
     mapRouteGPX = intent.getParcelableExtra("RouteGPX") as RouteGPX
     mapTitle = intent.getStringExtra("mapTitle")
     init()
-
-    locationBroadcastReceiver = LocationBroadcastReceiver(traceMap) // 브로드 캐스트 선언
+    locationBroadcastReceiver = LocationBroadcastReceiver(traceMap)
     racingControlButton.setOnLongClickListener {
       if (traceMap.userState == UserState.RUNNING) {
         stopPopup = ChoicePopup(this, "선택해주세요.",
