@@ -82,18 +82,13 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
 
     btn_stop!!.setOnLongClickListener {
       if (traceMap.distance < 200) {
-         val popUp = ChoicePopup(this,"선택해주세요.",
-           "거리가 200m 미만일때\n정지하시면 저장이 불가능합니다. \n\n정지하시겠습니까?",
-          View.OnClickListener { // yes 버튼 눌렀을 때 해당 액티비티 재시작.
-            finish()
-            val intent = Intent(this, RunningActivity::class.java)
-            startActivity(intent)
-          },
+         var a=ChoicePopup(this,"거리가 200m 미만일때\n정지하시면 저장이 불가능합니다. \n\n정지하시겠습니까?",
+          View.OnClickListener { stop() },
           View.OnClickListener {  })
-        popUp.show()
+        a.show()
         //showChoicePopup("거리가 200m 미만일때\n정지하시면 저장이 불가능합니다. \n\n정지하시겠습니까?", NoticeState.SIOP)
       } else
-        stop() // runningSaveActivity로 이동.
+        stop()
       true
     }
   }
