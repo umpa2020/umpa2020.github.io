@@ -50,8 +50,10 @@ class RankRecyclerViewAdapterMap(val mdata: ArrayList<InfoData>, val mode: Strin
     holder.maptitle.text = cutted[0]
     holder.distance.text = PrettyDistance().convertPretty(singleItem.distance!!)
     if (mode.equals("execute")) {
+      holder.heart.visibility = View.GONE
       holder.execute.text = singleItem.execute.toString()
     } else if (mode.equals("likes")) {
+      holder.heart.visibility = View.VISIBLE
       FBLikes().getLikes(mHandler)
       holder.heart.setImageResource(R.drawable.ic_favorite_border_black_24dp)
       holder.execute.text = singleItem.likes.toString()

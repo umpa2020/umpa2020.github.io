@@ -23,6 +23,7 @@ import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.gpx.GPXConverter
 import kotlinx.android.synthetic.main.activity_ranking_map_detail.*
 import java.io.File
+import java.sql.Timestamp
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -40,7 +41,11 @@ class RankingMapDetailActivity : AppCompatActivity() {
     val mapTitle = intent.extras?.getString("MapTitle").toString()
     val cutted = mapTitle.split("||")
     rankingDetailMapTitle.text = cutted[0]
-    rankingDetailDate.text = cutted[1]
+    //TODO : 날짜로 바꿔야함 (한국 시간만 해결하면 됨)
+    val timestamp = Timestamp(cutted[1].toLong())
+    val date = Date(timestamp.time)
+    rankingDetailDate.text = date.toString()
+
 
     val db = FirebaseFirestore.getInstance()
     db.collection("mapInfo").whereEqualTo("mapTitle", mapTitle)
@@ -76,7 +81,7 @@ class RankingMapDetailActivity : AppCompatActivity() {
               dbMapTitle = document.id
               Logg.d("ssmm11 dbMaptitle = $dbMapTitle")
 
-              rankingDetailDate.text = cutted[1]
+
               // ui 스레드 따로 빼주기
               runOnUiThread {
                 rankingDetailNickname.text = infoData.makersNickname
