@@ -1,13 +1,11 @@
 package com.umpa2020.tracer.main.start.running
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.os.SystemClock
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.Animation
@@ -18,27 +16,24 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.trace
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
 import com.umpa2020.tracer.R
-import com.umpa2020.tracer.dataClass.NoticeState
 import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.dataClass.InfoData
-import com.umpa2020.tracer.main.MainActivity
-import com.umpa2020.tracer.trace.decorate.*
+import com.umpa2020.tracer.dataClass.NoticeState
+import com.umpa2020.tracer.trace.decorate.BasicMap
+import com.umpa2020.tracer.trace.decorate.DistanceDecorator
+import com.umpa2020.tracer.trace.decorate.PolylineDecorator
+import com.umpa2020.tracer.trace.decorate.TraceMap
 import com.umpa2020.tracer.util.ChoicePopup
 import com.umpa2020.tracer.util.LocationBroadcastReceiver
 import com.umpa2020.tracer.util.Logg
 import hollowsoft.slidingdrawer.OnDrawerCloseListener
 import hollowsoft.slidingdrawer.OnDrawerOpenListener
 import hollowsoft.slidingdrawer.OnDrawerScrollListener
-import hollowsoft.slidingdrawer.SlidingDrawer
 import kotlinx.android.synthetic.main.activity_running.*
-import org.w3c.dom.Text
-import java.text.SimpleDateFormat
-import java.util.*
+
 
 class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpenListener,
   OnDrawerCloseListener {
@@ -59,13 +54,9 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
       super.onBackPressed()
       return
     }
-
     this.doubleBackToExitPressedOnce1 = true
-
-
     val text = "뒤로 버튼을 한번 더 누르면 종료됩니다."
     val duration = Toast.LENGTH_LONG
-
     val toast = Toast.makeText(applicationContext, text, duration)
     toast.show()
 
@@ -76,15 +67,17 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
     requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     setContentView(R.layout.activity_running)
 
+
+
     supportActionBar?.title = "RUNNING"
 
     init()
 
     btn_stop!!.setOnLongClickListener {
-      if (traceMap.distance < 0) {
-         val a=ChoicePopup(this,"거리가 200m 미만일때\n정지하시면 저장이 불가능합니다. \n\n정지하시겠습니까?",
+      if (traceMap.distance < 200) {
+        val a = ChoicePopup(this, "거리가 200m 미만일때\n정지하시면 저장이 불가능합니다. \n\n정지하시겠습니까?",
           View.OnClickListener { stop() },
-          View.OnClickListener {  })
+          View.OnClickListener { })
         a.show()
         //showChoicePopup("거리가 200m 미만일때\n정지하시면 저장이 불가능합니다. \n\n정지하시겠습니까?", NoticeState.SIOP)
       } else
