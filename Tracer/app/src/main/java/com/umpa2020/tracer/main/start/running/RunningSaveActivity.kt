@@ -15,8 +15,7 @@ import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.RankingData
 import com.umpa2020.tracer.dataClass.RouteGPX
-import com.umpa2020.tracer.trace.decorate.BasicMap
-import com.umpa2020.tracer.trace.decorate.TraceMap
+import com.umpa2020.tracer.trace.TraceMap
 import com.umpa2020.tracer.util.Chart
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.UserInfo
@@ -39,6 +38,9 @@ class RunningSaveActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(com.umpa2020.tracer.R.layout.activity_running_save)
 
+    val smf = supportFragmentManager.findFragmentById(com.umpa2020.tracer.R.id.map_viewer) as SupportMapFragment
+    traceMap = TraceMap(smf,this)
+    traceMap.drawRoute(routeGPX)
     infoData = intent.getParcelableExtra("InfoData")!!
     routeGPX = intent.getParcelableExtra("RouteGPX")!!
     val speedList = mutableListOf<Double>()
@@ -47,9 +49,6 @@ class RunningSaveActivity : AppCompatActivity() {
       speedList.add(it.speed.get().toDouble())
       elevationList.add(it.elevation.get().toDouble())
     }
-    val smf = supportFragmentManager.findFragmentById(com.umpa2020.tracer.R.id.map_viewer) as SupportMapFragment
-    traceMap = BasicMap(smf, this)
-    traceMap.routeGPX = routeGPX
     distance_tv.text = String.format("%.2f", infoData.distance!! / 1000)
     val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
     formatter.timeZone = TimeZone.getTimeZone("UTC")

@@ -22,10 +22,12 @@ import com.umpa2020.tracer.constant.Constants.Companion.RACINGFINISH
 import com.umpa2020.tracer.constant.UserState
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.RouteGPX
+import com.umpa2020.tracer.main.start.BaseActivity
+import com.umpa2020.tracer.trace.TraceMap
 import com.umpa2020.tracer.trace.decorate.BasicMap
 import com.umpa2020.tracer.trace.decorate.PolylineDecorator
 import com.umpa2020.tracer.trace.decorate.RacingDecorator
-import com.umpa2020.tracer.trace.decorate.TraceMap
+import com.umpa2020.tracer.util.ChoicePopup
 import com.umpa2020.tracer.util.LocationBroadcastReceiver
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.MyHandler
@@ -34,10 +36,9 @@ import hollowsoft.slidingdrawer.OnDrawerOpenListener
 import hollowsoft.slidingdrawer.OnDrawerScrollListener
 import kotlinx.android.synthetic.main.activity_ranking_recode_racing.*
 
-class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpenListener,
+class RankingRecodeRacingActivity : BaseActivity(), OnDrawerScrollListener, OnDrawerOpenListener,
   OnDrawerCloseListener {
   var TAG = "what u wanna say?~~!~!"       //로그용 태그
-  lateinit var traceMap: TraceMap
   lateinit var mapRouteGPX: RouteGPX
   lateinit var mapTitle: String
   lateinit var increaseExecuteThread: Thread
@@ -45,6 +46,8 @@ class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener,
   var timeWhenStopped: Long = 0
 
   private lateinit var locationBroadcastReceiver: LocationBroadcastReceiver
+
+  var stopPopup : ChoicePopup? = null
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -56,8 +59,20 @@ class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener,
     init()
     //locationBroadcastReceiver = LocationBroadcastReceiver(traceMap)
     racingControlButton.setOnLongClickListener {
-      if (traceMap.userState == UserState.RUNNING) {
-        stop(true)
+      if (userState == UserState.RUNNING) {
+        stopPopup = ChoicePopup(this, "선택해주세요.",
+          "지금 정지하시면 저장이 불가능합니다. \n\n정지하시겠습니까?",
+          "예","아니오",
+          View.OnClickListener {
+            // yes 버튼 눌렀을 때 해당 액티비티 재시작.
+            finish()
+          },
+          View.OnClickListener {
+            stopPopup!!.dismiss()
+          })
+        stopPopup!!.show()
+      }else{
+        //stop(true)
       }
       true
     }
@@ -92,17 +107,17 @@ class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener,
   var mHandler = Handler(App.instance.mainLooper) {
     when (it.what) {
       INFOUPDATE -> {
-        racingDistanceTextView.text = traceMap.distance.toString()
-        racingSpeedTextView.text = traceMap.speed.toString()
+        racingDistanceTextView.text = distance.toString()
+        racingSpeedTextView.text = speed.toString()
       }
       RACINGFINISH -> {
-        stop(true)
+       // stop(true)
       }
       DEVIATION -> {
         Logg.d((it.obj as Int).toString())
         //TODO:pop up 노티스
         if (it.obj as Int > Constants.DEVIATION_COUNT) {
-          stop(false)
+          //stop(false)
         }
       }
       else -> {
@@ -114,8 +129,8 @@ class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener,
   private fun init() {
     MyHandler.myHandler = mHandler
     val smf = supportFragmentManager.findFragmentById(R.id.map_viewer) as SupportMapFragment
-    traceMap = RacingDecorator(PolylineDecorator(BasicMap(smf, this)))
-    traceMap.routeGPX = mapRouteGPX
+    traceMap = TraceMap(smf, this)
+    routeGPX = mapRouteGPX
     drawer.setOnDrawerScrollListener(this)
     drawer.setOnDrawerOpenListener(this)
     drawer.setOnDrawerCloseListener(this)
@@ -125,7 +140,7 @@ class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener,
   fun onClick(view: View) {
     when (view.id) {
       R.id.racingControlButton -> {
-        when (traceMap.userState) {
+        when (userState) {
           //TODO:notice " you should be in 200m"
           UserState.NORMAL -> {
             //200m 안으로 들어오세요!
@@ -137,7 +152,7 @@ class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener,
           }
           UserState.RUNNING -> {
             Logg.d("RUNNING")
-            stop(false)
+            //stop(false)
           }
           else -> {
 
@@ -149,7 +164,7 @@ class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener,
       }
     }
   }
-
+/*
   fun start() {
     increaseExecute(mapTitle)
     racingNotificationLayout.visibility = View.GONE
@@ -157,8 +172,8 @@ class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener,
     chronometer.base = SystemClock.elapsedRealtime()
     chronometer.start()
     traceMap.start()
-  }
-
+  }*/
+/*
   fun stop(result: Boolean) {
 
     val routeGPX = traceMap.stop(SystemClock.elapsedRealtime() - chronometer.base)
@@ -181,7 +196,7 @@ class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener,
 
     startActivity(newIntent)
     finish()
-  }
+  }*/
 
   override fun onScrollStarted() {
     Logg.d("onScrollStarted()")

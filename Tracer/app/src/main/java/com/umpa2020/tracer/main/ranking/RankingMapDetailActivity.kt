@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
@@ -16,9 +17,11 @@ import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.main.start.racing.RankingRecodeRacingActivity
+import com.umpa2020.tracer.main.start.running.RunningActivity
 import com.umpa2020.tracer.network.FBMapImage
 import com.umpa2020.tracer.network.FBProfile
 import com.umpa2020.tracer.util.Chart
+import com.umpa2020.tracer.util.ChoicePopup
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.gpx.GPXConverter
 import kotlinx.android.synthetic.main.activity_ranking_map_detail.*
@@ -105,23 +108,11 @@ class RankingMapDetailActivity : AppCompatActivity() {
   }
 
   // 팝업 띄우는 함수
+  var runningSelectPopup : ChoicePopup? = null // 전역으로 선언하지 않으면 리스너에서 dismiss 사용 불가.
   private fun showPopup() {
-    val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-    val view = inflater.inflate(R.layout.ranking_map_detail_popup, null)
-    val textView: TextView = view.findViewById(R.id.rankingMapDetailPopUpTextView)
-    textView.text = "어떤 유형으로 경기하시겠습니까?"
 
-    val textView1: TextView = view.findViewById(R.id.rankingMapDetailPopUpTextView1)
+
     //TODO. 연습용 만들면 밑의 주석 지워서 사용
-    //textView1.text = "연습용 : 루트 연습용(랭킹 등록 불가능)" +
-    //        "\n랭킹 기록용 : 랭킹 등록 가능"
-
-    textView1.text = "랭킹 기록용 : 랭킹 등록 가능"
-
-    val alertDialog = AlertDialog.Builder(this) //alertDialog 생성
-      .setTitle("유형을 선택해주세요.")
-      .create()
-
     /*
     //연습용 버튼 눌렀을 때
     val practiceButton = view.findViewById<Button>(R.id.rankingMapDetailPracticeButton)
@@ -133,20 +124,22 @@ class RankingMapDetailActivity : AppCompatActivity() {
     }
 
      */
+    runningSelectPopup = ChoicePopup(this,"유형을 선택해주세요.",
+      "어떤 유형으로 경기하시겠습니까? \n\n랭킹 기록용 : 랭킹 등록 가능",
+      "기록용","",
+      View.OnClickListener {
+        //랭킹 기록용 버튼 눌렀을 때
+        val intent = Intent(App.instance.context(), RankingRecodeRacingActivity::class.java)
+        intent.putExtra("RouteGPX", routeGPX)
+        intent.putExtra("mapTitle", dbMapTitle)
 
-
-    //랭킹 기록용 버튼 눌렀을 때
-    val recordButton = view.findViewById<Button>(R.id.rankingMapDetailRecordButton)
-    recordButton.setOnClickListener {
-      val intent = Intent(App.instance.context(), RankingRecodeRacingActivity::class.java)
-      intent.putExtra("RouteGPX", routeGPX)
-      intent.putExtra("mapTitle", dbMapTitle)
-
-      startActivity(intent)
-    }
-
-    alertDialog.setView(view)
-    alertDialog.show() //팝업 띄우기
+        startActivity(intent)
+        finish()
+      },
+      View.OnClickListener {
+        runningSelectPopup!!.dismiss()
+      })
+    runningSelectPopup!!.show()
 
   }
 }

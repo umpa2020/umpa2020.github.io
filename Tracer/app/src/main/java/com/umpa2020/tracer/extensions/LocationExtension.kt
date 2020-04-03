@@ -10,3 +10,17 @@ fun Location.toLatLng():LatLng{
 fun WayPoint.toLatLng(): LatLng {
   return LatLng(latitude.toDouble(), longitude.toDouble())
 }
+
+fun MutableList<LatLng>.getMinMax(): Pair<LatLng, LatLng> {
+  var minlat = first().latitude
+  var maxlat = first().latitude
+  var minlon = first().longitude
+  var maxlon = first().longitude
+  forEach {
+    if (it.latitude < minlat) minlat = it.latitude
+    else if (it.latitude > maxlat) maxlat = it.latitude
+    if (it.longitude < minlat) minlon = it.longitude
+    else if (it.longitude > maxlat) maxlon = it.longitude
+  }
+  return Pair(LatLng(minlat,minlon), LatLng(maxlat,maxlon))
+}
