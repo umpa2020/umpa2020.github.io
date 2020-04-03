@@ -27,13 +27,13 @@ import java.util.*
 class FBProfile {
   val MYROUTE = 60 // 마이 루트가 존재
   val MYROUTEFAIL = 70 // 마이 루트가 없을 경우
+  val db = FirebaseFirestore.getInstance()
+  var profileImagePath = "init"
 
   fun setProfile(view: View) {
     val progressbar = ProgressBar(App.instance.currentActivity() as Activity)
     progressbar.show()
-    var profileImagePath = "init"
 
-    val db = FirebaseFirestore.getInstance()
 
     // 총 거리, 총 시간을 구하기 위해서 db에 접근하여 일단 먼저
     // 이용자가 뛴 다른 사람의 맵을 구함
@@ -94,11 +94,42 @@ class FBProfile {
       }
   }
 
+  fun getProfileImage(imageView: ImageView, nickname: String) {
+    val progressbar = ProgressBar(App.instance.currentActivity() as Activity)
+    progressbar.show()
+    var uid = "init"
+    // storage 에 올린 경로를 db에 저장해두었으니 다시 역 추적 하여 프로필 이미지 반영
+    db.collection("userinfo").whereEqualTo("nickname", nickname)
+      .get()
+      .addOnSuccessListener { result ->
+        for (document in result) {
+          profileImagePath = document.get("profileImagePath") as String
+          uid = document.get("UID") as String
+        }
+        // glide imageview 소스
+        // 프사 설정하는 코드 db -> imageView glide
+
+        val storage = FirebaseStorage.getInstance("gs://tracer-9070d.appspot.com/")
+        val profileRef = storage.reference.child("Profile").child(uid).child(profileImagePath)
+
+        profileRef.downloadUrl.addOnCompleteListener { task ->
+          if (task.isSuccessful) {
+            // Glide 이용하여 이미지뷰에 로딩
+            Glide.with(imageView)
+              .load(task.result)
+              .override(1024, 980)
+              .into(imageView)
+            progressbar.dismiss()
+          }
+        }
+      }
+      .addOnFailureListener { exception ->
+      }
+  }
+
   fun getMyRoute(mHandler: Handler) {
 
     val infoDatas: ArrayList<InfoData> = arrayListOf()
-
-    val db = FirebaseFirestore.getInstance()
 
     db.collection("mapInfo").whereEqualTo("makersNickname", UserInfo.nickname).whereEqualTo("privacy", "RACING")
       .get()

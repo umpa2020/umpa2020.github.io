@@ -75,7 +75,7 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
 
     btn_stop!!.setOnLongClickListener {
       if (traceMap.distance < 200) {
-        var a = ChoicePopup(this, "거리가 200m 미만일때\n정지하시면 저장이 불가능합니다. \n\n정지하시겠습니까?",
+        val a = ChoicePopup(this, "거리가 200m 미만일때\n정지하시면 저장이 불가능합니다. \n\n정지하시겠습니까?",
           View.OnClickListener { stop() },
           View.OnClickListener { })
         a.show()
@@ -95,7 +95,7 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
       )
     )
 
-   locationBroadcastReceiver = LocationBroadcastReceiver(traceMap) // 브로드 캐스트 선언.
+    locationBroadcastReceiver = LocationBroadcastReceiver(traceMap) // 브로드 캐스트 선언.
 
     drawer.setOnDrawerScrollListener(this)
     drawer.setOnDrawerOpenListener(this)

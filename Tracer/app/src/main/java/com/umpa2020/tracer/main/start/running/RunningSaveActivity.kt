@@ -103,11 +103,7 @@ class RunningSaveActivity : AppCompatActivity() {
   fun save(imgPath: String) {
     Logg.d( "Start Saving")
     // 타임스탬프 찍는 코드
-    val dt = Date()
-    val fullSdf = SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.getDefault())
-
-    val date = fullSdf.parse(dt.toString())
-    val timestamp = date!!.time
+    val timestamp = Date().time
 
     // 인포데이터에 필요한 내용을 저장하고
     infoData.makersNickname = UserInfo.nickname
