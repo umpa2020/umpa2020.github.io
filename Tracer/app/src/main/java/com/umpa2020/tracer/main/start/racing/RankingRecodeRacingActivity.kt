@@ -54,7 +54,7 @@ class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener,
     mapRouteGPX = intent.getParcelableExtra("RouteGPX") as RouteGPX
     mapTitle = intent.getStringExtra("mapTitle")
     init()
-    locationBroadcastReceiver = LocationBroadcastReceiver(traceMap)
+    //locationBroadcastReceiver = LocationBroadcastReceiver(traceMap)
     racingControlButton.setOnLongClickListener {
       if (traceMap.userState == UserState.RUNNING) {
         stop(true)

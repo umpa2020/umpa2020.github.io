@@ -5,6 +5,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.PolylineOptions
 import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.util.Logg
 
@@ -25,7 +26,14 @@ class TraceMap( smf: SupportMapFragment, context: Context): OnMapReadyCallback {
 
   }
 
-  fun drawPolyLine(preLoc: LatLng, curLoc:LatLng){
-
+  fun drawPolyLine(preLoc: LatLng, curLoc:LatLng) {
+    Logg.d("making polyline $preLoc $curLoc")
+    //polyline 그리기
+    mMap.addPolyline(
+      PolylineOptions().add(
+        preLoc,
+        curLoc
+      )
+    )
   }
 }

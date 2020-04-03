@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.ActivityInfo
+import android.location.Location
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.LayoutInflater
@@ -15,29 +16,30 @@ import android.widget.Chronometer
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.MarkerOptions
 import com.umpa2020.tracer.R
+import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.constant.Privacy
+import com.umpa2020.tracer.constant.UserState
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.NoticeState
-import com.umpa2020.tracer.trace.decorate.BasicMap
-import com.umpa2020.tracer.trace.decorate.DistanceDecorator
-import com.umpa2020.tracer.trace.decorate.PolylineDecorator
-import com.umpa2020.tracer.trace.decorate.TraceMap
+import com.umpa2020.tracer.dataClass.RouteGPX
+import com.umpa2020.tracer.main.start.BaseActivity
+import com.umpa2020.tracer.trace.TraceMap
 import com.umpa2020.tracer.util.ChoicePopup
 import com.umpa2020.tracer.util.LocationBroadcastReceiver
 import com.umpa2020.tracer.util.Logg
 import hollowsoft.slidingdrawer.OnDrawerCloseListener
 import hollowsoft.slidingdrawer.OnDrawerOpenListener
 import hollowsoft.slidingdrawer.OnDrawerScrollListener
+import io.jenetics.jpx.WayPoint
 import kotlinx.android.synthetic.main.activity_running.*
 
 
-class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpenListener,
+class RunningActivity : BaseActivity(), OnDrawerScrollListener, OnDrawerOpenListener,
   OnDrawerCloseListener {
-  var TAG = "RunningActivity"       //로그용 태그
   var B_RUNNIG = true
   var ns = NoticeState.NOTHING
   private var doubleBackToExitPressedOnce1 = false
@@ -48,7 +50,6 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
   private var fabOpen: Animation? = null // Floating Animation Button
 
   private lateinit var locationBroadcastReceiver: LocationBroadcastReceiver
-  private lateinit var traceMap: TraceMap
   override fun onBackPressed() {
     if (doubleBackToExitPressedOnce1) {
       super.onBackPressed()
@@ -67,14 +68,12 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
     requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     setContentView(R.layout.activity_running)
 
-
-
     supportActionBar?.title = "RUNNING"
 
     init()
 
     btn_stop!!.setOnLongClickListener {
-      if (traceMap.distance < 200) {
+      if (distance < 200) {
         val a = ChoicePopup(this, "거리가 200m 미만일때\n정지하시면 저장이 불가능합니다. \n\n정지하시겠습니까?",
           View.OnClickListener { stop() },
           View.OnClickListener { })
@@ -89,13 +88,9 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
   private fun init() {
     val smf = supportFragmentManager.findFragmentById(R.id.map_viewer) as SupportMapFragment
     //running traceMap 선언 Polyline + Timer + Distance + Basic
-    traceMap = PolylineDecorator(
-      DistanceDecorator(
-        BasicMap(smf, this)
-      )
-    )
+    traceMap = TraceMap(smf, this)
 
-    locationBroadcastReceiver = LocationBroadcastReceiver(traceMap) // 브로드 캐스트 선언.
+    locationBroadcastReceiver = LocationBroadcastReceiver(this) // 브로드 캐스트 선언.
 
     drawer.setOnDrawerScrollListener(this)
     drawer.setOnDrawerOpenListener(this)
@@ -106,17 +101,6 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
   }
 
 
-  /**
-   *  버튼 하나에서 두개로 퍼지는 애니메니션
-   */
-  private fun anim() {
-    btn_start.visibility = View.INVISIBLE
-    btn_stop.startAnimation(fabOpen)
-    btn_pause.startAnimation(fabOpen)
-    btn_stop.isClickable = true
-    btn_pause.isClickable = true
-  }
-
   fun onClick(view: View) {
     when (view.id) {
       R.id.btn_start -> {
@@ -124,7 +108,7 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
 
       }
       R.id.btn_pause -> {
-        if (traceMap.privacy == Privacy.RACING) {
+        if (privacy == Privacy.RACING) {
           showChoicePopup("일시정지를 하게 되면\n경쟁 모드 업로드가 불가합니다.\n\n일시정지를 하시겠습니까?", NoticeState.PAUSE)
         } else {
           if (B_RUNNIG)
@@ -143,41 +127,42 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
     }
   }
 
-  private fun start() {
+  override fun start() {
+    super.start()
     anim()
     //TODO:chronometer 클래스화하기
     chronometer.base = SystemClock.elapsedRealtime()
     chronometer.start()
-    traceMap.start()
   }
 
-  fun pause() {
+  override fun pause() {
+    super.pause()
     B_RUNNIG = false
     timeWhenStopped = chronometer.base - SystemClock.elapsedRealtime()
     chronometer.stop()
-    traceMap.pause()
     btn_pause.text = "재시작"
     //btn_pause.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_play_pressed, 0, 0, 0)
 
   }
 
-  private fun restart() { //TODO:Start with new polyline
+  override fun restart() { //TODO:Start with new polyline
+    super.restart()
     btn_pause.text = "일시정지"
     //btn_pause.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_pause_icon_pressed, 0, 0, 0)
     B_RUNNIG = true
     chronometer.base = SystemClock.elapsedRealtime() + timeWhenStopped
     chronometer.start()
-    traceMap.restart()
   }
 
-  private fun stop() {
-    val routeGPX = traceMap.stop(SystemClock.elapsedRealtime() - chronometer.base)
+  override fun stop() {
     val infoData = InfoData()
-    infoData.distance = traceMap.distance
+    infoData.distance = distance
     infoData.time = SystemClock.elapsedRealtime() - chronometer.base
-    infoData.privacy = traceMap.privacy
-    infoData.startLatitude = traceMap.trkList.first().latitude.toDouble()
-    infoData.startLongitude = traceMap.trkList.first().longitude.toDouble()
+    infoData.privacy = privacy
+    infoData.startLatitude = trkList.first().latitude.toDouble()
+    infoData.startLongitude = trkList.first().longitude.toDouble()
+    val routeGPX = RouteGPX(infoData.time.toString(), "", wpList, trkList)
+
 
     //val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
     //formatter.timeZone = TimeZone.getTimeZone("UTC")
@@ -188,6 +173,28 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
     startActivity(intent)
     finish()
   }
+
+  override fun updateLocation(curLoc: Location) {
+    super.updateLocation(curLoc)
+    runningDistanceTextView.text=distance.toString()
+    //100m마다 waypoint 추가
+    if (userState == UserState.RUNNING) {
+      if (distance.toInt() / Constants.WPINTERVAL >= markerCount) {
+        if (distance > 0) markerCount = distance.toInt() / Constants.WPINTERVAL
+        traceMap.mMap.addMarker(MarkerOptions().position(currentLatLng).title(markerCount.toString()))
+        wpList.add(
+          WayPoint.builder()
+            .lat(currentLatLng.latitude)
+            .lon(currentLatLng.longitude)
+            .name("WayPoint")
+            .desc("wayway...")
+            .build()
+        )
+        markerCount++
+      }
+    }
+  }
+
 
   /**
    * 팝업 띄우는 함수
@@ -277,4 +284,14 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
     Logg.d("onDrawerClosed()")
   }
 
+  /**
+   *  버튼 하나에서 두개로 퍼지는 애니메니션
+   */
+  private fun anim() {
+    btn_start.visibility = View.INVISIBLE
+    btn_stop.startAnimation(fabOpen)
+    btn_pause.startAnimation(fabOpen)
+    btn_stop.isClickable = true
+    btn_pause.isClickable = true
+  }
 }
