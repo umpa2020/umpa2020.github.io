@@ -75,7 +75,6 @@ class SignUpActivity : AppCompatActivity() {
   private var uid: String? = null
   private var email: String? = null
 
-  var timestamp: Long = 0
   private lateinit var progressbar: ProgressBar
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -85,6 +84,7 @@ class SignUpActivity : AppCompatActivity() {
 
     progressbar = ProgressBar(this)
 
+    Logg.i("test")
     editNickname.requestFocus()
     init()
 
@@ -179,7 +179,7 @@ class SignUpActivity : AppCompatActivity() {
       temp += Manifest.permission.READ_EXTERNAL_STORAGE + " "
     }
 
-    Logg.d( temp)
+    Logg.d(temp)
     if (!TextUtils.isEmpty(temp)) {
       // 권한 요청
       ActivityCompat.requestPermissions(this, temp.trim().split(" ").toTypedArray(), 1)
@@ -432,16 +432,17 @@ class SignUpActivity : AppCompatActivity() {
         gender = editGender.text.toString()
 
 
-        Logg.d("가입 버튼 눌렀을 때$nickname, $age, $gender")
+        Logg.d("가입 버튼 눌렀을 때 : $nickname, $age, $gender")
 
         if (textInputLayoutArray[0].error != "사용 가능한 닉네임입니다.") { //무조건 중복 확인 버튼을 눌러야만 회원가입 가능하게 함
           Logg.d(textInputLayoutArray[0].error.toString() + "if문 검사")
           Toast.makeText(this, "중복 확인을 해주세요.", Toast.LENGTH_LONG).show()
-        } else {
+        } else { // 중복 확인 통과
+          Logg.d(isInputCorrectData[0].toString() + ", "+  age!!.isNotEmpty().toString() +", "+ gender!!.isNotEmpty().toString())
           if (isInputCorrectData[0] && age!!.isNotEmpty() && gender!!.isNotEmpty()) {
             if (bitmapImg == null) // 프로필 이미지를 설정하지 않았을 때 = 사용자 입장에서 프로필 버튼을 누르지 않았음
             {
-              showSettingPopup() //팝업창으로 물어봄
+              basicProfileSettingPopup() //팝업창으로 물어봄
             } else { // 프로필 이미지 있는 경우 설정한 프로필로 가입하기
               signUp(bitmapImg!!, nickname!!, age!!, gender!!)
               progressbar.show() //메인창으로 넘어가기 전까지 프로그래스 바 띄움
@@ -466,9 +467,11 @@ class SignUpActivity : AppCompatActivity() {
   /**
   기본 이미지로 설정할건지 물어보는 팝업
    **/
-  private fun showSettingPopup() {
-    val popUp = ChoicePopup(this, "선택해주세요.",
+  var basicProfilePopUp : ChoicePopup? = null
+  private fun basicProfileSettingPopup() {
+    basicProfilePopUp = ChoicePopup(this, "선택해주세요.",
       "기본 이미지로 설정하시겠습니까",
+      "예","아니오",
       View.OnClickListener {
         //Yes 버튼 눌렀을 때
         //기본 이미지로 설정
@@ -479,8 +482,9 @@ class SignUpActivity : AppCompatActivity() {
       View.OnClickListener {
         // No 버튼 눌렀을 때
         //갤러리에서 원하는 프로필 이미지 선택할 수 있도록 권한체크
-        checkSelfPermission()
+//        checkSelfPermission()
+        basicProfilePopUp!!.dismiss()
       })
-    popUp.show()
+    basicProfilePopUp!!.show()
   }
 }

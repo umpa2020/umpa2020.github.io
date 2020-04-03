@@ -1,53 +1,41 @@
 package com.umpa2020.tracer.main.start.running
 
-import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.os.SystemClock
-import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.Button
 import android.widget.Chronometer
-import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.trace
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
 import com.umpa2020.tracer.R
-import com.umpa2020.tracer.dataClass.NoticeState
 import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.dataClass.InfoData
-import com.umpa2020.tracer.main.MainActivity
-import com.umpa2020.tracer.trace.decorate.*
+import com.umpa2020.tracer.trace.decorate.BasicMap
+import com.umpa2020.tracer.trace.decorate.DistanceDecorator
+import com.umpa2020.tracer.trace.decorate.PolylineDecorator
+import com.umpa2020.tracer.trace.decorate.TraceMap
 import com.umpa2020.tracer.util.ChoicePopup
 import com.umpa2020.tracer.util.LocationBroadcastReceiver
 import com.umpa2020.tracer.util.Logg
 import hollowsoft.slidingdrawer.OnDrawerCloseListener
 import hollowsoft.slidingdrawer.OnDrawerOpenListener
 import hollowsoft.slidingdrawer.OnDrawerScrollListener
-import hollowsoft.slidingdrawer.SlidingDrawer
 import kotlinx.android.synthetic.main.activity_running.*
-import org.w3c.dom.Text
-import java.text.SimpleDateFormat
-import java.util.*
 
 class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpenListener,
   OnDrawerCloseListener {
   var TAG = "RunningActivity"       //로그용 태그
   var B_RUNNIG = true
-  var ns = NoticeState.NOTHING
   private var doubleBackToExitPressedOnce1 = false
   lateinit var chronometer: Chronometer
   var timeWhenStopped: Long = 0
+  var stopPopup: ChoicePopup? = null // 리스너 안에서 dismiss()를 호출하기 위해서 전역으로 선언
 
   // 버튼 에니메이션
   private var fabOpen: Animation? = null // Floating Animation Button
@@ -80,18 +68,23 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
 
     init()
 
+    /**
+    Stop 팝업 띄우기
+     */
     btn_stop!!.setOnLongClickListener {
       if (traceMap.distance < 200) {
-         val popUp = ChoicePopup(this,"선택해주세요.",
-           "거리가 200m 미만일때\n정지하시면 저장이 불가능합니다. \n\n정지하시겠습니까?",
-          View.OnClickListener { // yes 버튼 눌렀을 때 해당 액티비티 재시작.
-            finish()
-            val intent = Intent(this, RunningActivity::class.java)
-            startActivity(intent)
+        stopPopup = ChoicePopup(this, "선택해주세요.",
+          "거리가 200m 미만일때\n정지하시면 저장이 불가능합니다. \n\n정지하시겠습니까?",
+          "예","아니오",
+          View.OnClickListener {
+            // yes 버튼 눌렀을 때 해당 액티비티 재시작.
+            finish() // 액티비티가 끝나버리므로 dismiss()가 필요없다.
           },
-          View.OnClickListener {  })
-        popUp.show()
-        //showChoicePopup("거리가 200m 미만일때\n정지하시면 저장이 불가능합니다. \n\n정지하시겠습니까?", NoticeState.SIOP)
+          View.OnClickListener {
+            stopPopup!!.dismiss()
+          })
+        stopPopup!!.show()
+        //showChoicePopup("거리가 200m 미만일때\n정지하시면 저장이 불가능합니다. \n\n정지하시겠습니까?", NoticeState.STOP)
       } else
         stop() // runningSaveActivity로 이동.
       true
@@ -137,7 +130,9 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
       }
       R.id.btn_pause -> {
         if (traceMap.privacy == Privacy.RACING) {
-          showChoicePopup("일시정지를 하게 되면\n경쟁 모드 업로드가 불가합니다.\n\n일시정지를 하시겠습니까?", NoticeState.PAUSE)
+          showPausePopup(
+            "일시정지를 하게 되면\n경쟁 모드 업로드가 불가합니다.\n\n일시정지를 하시겠습니까?"
+          )
         } else {
           if (B_RUNNIG)
             pause()
@@ -163,14 +158,13 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
     traceMap.start()
   }
 
-  fun pause() {
+  private fun pause() {
     B_RUNNIG = false
     timeWhenStopped = chronometer.base - SystemClock.elapsedRealtime()
     chronometer.stop()
     traceMap.pause()
     btn_pause.text = "재시작"
     //btn_pause.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_play_pressed, 0, 0, 0)
-
   }
 
   private fun restart() { //TODO:Start with new polyline
@@ -180,6 +174,7 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
     chronometer.base = SystemClock.elapsedRealtime() + timeWhenStopped
     chronometer.start()
     traceMap.restart()
+    traceMap.privacy = Privacy.RACING
   }
 
   private fun stop() {
@@ -202,46 +197,26 @@ class RunningActivity : AppCompatActivity(), OnDrawerScrollListener, OnDrawerOpe
   }
 
   /**
-   * 팝업 띄우는 함수
+   * 일시정지 팝업 띄우는 함수
    * */
-  private fun showChoicePopup(text: String, ns: NoticeState) {
-    val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-    val view = inflater.inflate(R.layout.running_activity_yesnopopup, null)
-    val textView: TextView = view.findViewById(R.id.runningActivityPopUpTextView)
-    textView.text = text
+  private var pausePopup: ChoicePopup? = null
 
-    val alertDialog = AlertDialog.Builder(this) //alertDialog 생성
-      .setTitle("선택해주세요.")
-      .create()
-
-    //Yes 버튼 눌렀을 때
-    val yesButton = view.findViewById<Button>(R.id.runningActivityYesButton)
-    yesButton.setOnClickListener {
-      when (ns) {
-        NoticeState.NOTHING -> {
-        }
-        NoticeState.PAUSE -> {
-          runningNotificationLayout.visibility = View.GONE
-          pause()
-        }
-        NoticeState.SIOP -> {
-          stop()
-        }
-      }
-      this.ns = NoticeState.NOTHING
-      alertDialog.dismiss()
-    }
-    //No 기록용 버튼 눌렀을 때
-    val recordButton = view.findViewById<Button>(com.umpa2020.tracer.R.id.runningActivityNoButton)
-    recordButton.setOnClickListener {
-      this.ns = NoticeState.NOTHING
-      alertDialog.dismiss()
-    }
-
-    alertDialog.setView(view)
-    alertDialog.show() //팝업 띄우기
-
-    this.ns = ns
+  private fun showPausePopup(text: String) {
+    pausePopup = ChoicePopup(this,
+      "선택해주세요.",
+      text,
+      "예","아니오",
+      View.OnClickListener {
+        //Yes 버튼 눌렀을 때
+        runningNotificationLayout.visibility = View.GONE
+        pausePopup!!.dismiss()
+        pause()
+      },
+      View.OnClickListener {
+        // No 버튼 눌렀을 때
+        pausePopup!!.dismiss()
+      })
+    pausePopup!!.show()
   }
 
   // 화면 안보일

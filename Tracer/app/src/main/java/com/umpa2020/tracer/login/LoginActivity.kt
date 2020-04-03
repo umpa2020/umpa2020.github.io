@@ -23,9 +23,6 @@ import kotlinx.android.synthetic.main.activity_login.*
 
 
 class LoginActivity : AppCompatActivity() {
-  val WSY = "WSY"
-
-
   // firebase Auth
   private var mAuth: FirebaseAuth? = null
   private var mGoogleSignInClient: GoogleSignInClient? = null

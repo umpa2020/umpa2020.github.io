@@ -47,6 +47,8 @@ class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener,
 
   private lateinit var locationBroadcastReceiver: LocationBroadcastReceiver
 
+  var stopPopup : ChoicePopup? = null
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
@@ -59,16 +61,17 @@ class RankingRecodeRacingActivity : AppCompatActivity(), OnDrawerScrollListener,
     locationBroadcastReceiver = LocationBroadcastReceiver(traceMap) // 브로드 캐스트 선언
     racingControlButton.setOnLongClickListener {
       if (traceMap.userState == UserState.RUNNING) {
-        val popUp = ChoicePopup(this, "선택해주세요.",
+        stopPopup = ChoicePopup(this, "선택해주세요.",
           "지금 정지하시면 저장이 불가능합니다. \n\n정지하시겠습니까?",
+          "예","아니오",
           View.OnClickListener {
             // yes 버튼 눌렀을 때 해당 액티비티 재시작.
             finish()
-            val intent = Intent(this, RankingRecodeRacingActivity::class.java)
-            startActivity(intent)
           },
-          View.OnClickListener { })
-        popUp.show()
+          View.OnClickListener {
+            stopPopup!!.dismiss()
+          })
+        stopPopup!!.show()
       }else{
         stop(true)
       }
