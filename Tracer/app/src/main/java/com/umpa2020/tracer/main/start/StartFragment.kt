@@ -65,13 +65,14 @@ class StartFragment : Fragment(), OnMapReadyCallback,View.OnClickListener {
     view.test.setOnClickListener {
       Logg.d("test 실행")
       val storage = FirebaseStorage.getInstance("gs://tracer-9070d.appspot.com/")
-      val routeRef = storage.reference.child("mapRoute").child("ZXCZXC||1585238332000")
+      val routeRef = storage.reference.child("mapRoute").child("Short SanDiego route||1586002359186")
       val localFile = File.createTempFile("routeGpx", "xml")
 
       routeRef.getFile(Uri.fromFile(localFile)).addOnSuccessListener {
         val routeGPX = GPXConverter().GpxToClass(localFile.path)
         val intent = Intent(context, RankingRecodeRacingActivity::class.java)
         intent.putExtra("RouteGPX", routeGPX)
+        intent.putExtra("mapTitle", "Short SanDiego route||1586002359186")
         startActivity(intent)
       }
       routeRef.downloadUrl.addOnCompleteListener { task ->

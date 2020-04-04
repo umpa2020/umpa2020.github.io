@@ -94,8 +94,6 @@ class RunningActivity : BaseActivity(), OnDrawerScrollListener, OnDrawerOpenList
     //running traceMap 선언 Polyline + Timer + Distance + Basic
     smf.getMapAsync(this)
 
-    locationBroadcastReceiver = LocationBroadcastReceiver(this) // 브로드 캐스트 선언.
-
     drawer.setOnDrawerScrollListener(this)
     drawer.setOnDrawerOpenListener(this)
     drawer.setOnDrawerCloseListener(this)
@@ -143,6 +141,15 @@ class RunningActivity : BaseActivity(), OnDrawerScrollListener, OnDrawerOpenList
     //TODO:chronometer 클래스화하기
     chronometer.base = SystemClock.elapsedRealtime()
     chronometer.start()
+    traceMap.mMap.addMarker(MarkerOptions().position(currentLatLng).title("Start"))
+    wpList.add(
+      WayPoint.builder()
+        .lat(currentLatLng.latitude)
+        .lon(currentLatLng.longitude)
+        .name("Start")
+        .desc("Start Description")
+        .build()
+    )
   }
 
   override fun pause() {
@@ -164,6 +171,15 @@ class RunningActivity : BaseActivity(), OnDrawerScrollListener, OnDrawerOpenList
   }
 
   override fun stop() {
+    super.stop()
+    wpList.add(
+      WayPoint.builder()
+        .lat(currentLatLng.latitude)
+        .lon(currentLatLng.longitude)
+        .name("Finish")
+        .desc("Finish Description")
+        .build()
+    )
     val infoData = InfoData()
     infoData.distance = distance
     infoData.time = SystemClock.elapsedRealtime() - chronometer.base
@@ -226,31 +242,6 @@ class RunningActivity : BaseActivity(), OnDrawerScrollListener, OnDrawerOpenList
         pausePopup!!.dismiss()
       })
     pausePopup!!.show()
-  }
-
-  // 화면 안보일
-  override fun onStop() {
-    super.onStop()
-    Logg.d("onStop()")
-  }
-
-  override fun onResume() {
-    super.onResume()
-    // 브로드 캐스트 등록 - 전역 context로 수정해야함
-    LocalBroadcastManager.getInstance(this)
-      .registerReceiver(locationBroadcastReceiver, IntentFilter("custom-event-name"))
-  }
-
-  override fun onPause() {
-    super.onPause()
-    Logg.d("onPause()")
-    //        브로드 캐스트 해제 - 전역 context로 수정해야함
-    LocalBroadcastManager.getInstance(this).unregisterReceiver(locationBroadcastReceiver)
-  }
-
-  override fun onDestroy() {
-    super.onDestroy()
-    Logg.d("onDestroy()")
   }
 
   override fun onScrollStarted() {

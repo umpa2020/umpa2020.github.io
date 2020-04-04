@@ -1,28 +1,24 @@
 package com.umpa2020.tracer.main.start
 
+import android.content.IntentFilter
 import android.location.Location
+import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.Polyline
 import com.google.maps.android.SphericalUtil
 import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.constant.UserState
-import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.extensions.toLatLng
 import com.umpa2020.tracer.trace.TraceMap
+import com.umpa2020.tracer.util.LocationBroadcastReceiver
 import com.umpa2020.tracer.util.Logg
 import io.jenetics.jpx.WayPoint
 
 open class BaseActivity : AppCompatActivity(), OnMapReadyCallback {
-  var routeGPX: RouteGPX? = null
-  var markerList: MutableList<Marker> = mutableListOf()
-  var track: MutableList<LatLng> = mutableListOf()
-  var nextWP: Int = 0
-  lateinit var loadTrack: Polyline
   lateinit var traceMap: TraceMap
   var privacy = Privacy.RACING
   var distance = 0.0
@@ -35,7 +31,9 @@ open class BaseActivity : AppCompatActivity(), OnMapReadyCallback {
   var moving = false
   var trkList: MutableList<WayPoint> = mutableListOf()
   var wpList: MutableList<WayPoint> = mutableListOf()
-  var markerCount = -1
+  var markerCount = 1
+
+  private lateinit var locationBroadcastReceiver: LocationBroadcastReceiver
 
   override fun onMapReady(googleMap: GoogleMap) {
     Logg.d("onMapReady")
@@ -104,5 +102,21 @@ open class BaseActivity : AppCompatActivity(), OnMapReadyCallback {
       traceMap.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 16F))
     }
     return moving
+  }
+
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+
+    locationBroadcastReceiver = LocationBroadcastReceiver(this)
+  }
+  override fun onPause() {
+    super.onPause()
+    LocalBroadcastManager.getInstance(this).unregisterReceiver(locationBroadcastReceiver)
+  }
+
+  override fun onResume() {
+    super.onResume()
+    LocalBroadcastManager.getInstance(this)
+      .registerReceiver(locationBroadcastReceiver, IntentFilter("custom-event-name"))
   }
 }
