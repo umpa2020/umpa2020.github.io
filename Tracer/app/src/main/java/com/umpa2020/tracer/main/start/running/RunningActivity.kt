@@ -1,7 +1,6 @@
 package com.umpa2020.tracer.main.start.running
 
 import android.content.Intent
-import android.content.IntentFilter
 import android.content.pm.ActivityInfo
 import android.location.Location
 import android.os.Bundle
@@ -11,7 +10,6 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Chronometer
 import android.widget.Toast
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.MarkerOptions
@@ -21,8 +19,7 @@ import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.constant.UserState
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.RouteGPX
-import com.umpa2020.tracer.main.start.BaseActivity
-import com.umpa2020.tracer.trace.TraceMap
+import com.umpa2020.tracer.main.start.BaseRunningActivity
 import com.umpa2020.tracer.util.ChoicePopup
 import com.umpa2020.tracer.util.LocationBroadcastReceiver
 import com.umpa2020.tracer.util.Logg
@@ -32,12 +29,11 @@ import hollowsoft.slidingdrawer.OnDrawerScrollListener
 import io.jenetics.jpx.WayPoint
 import kotlinx.android.synthetic.main.activity_running.*
 
-class RunningActivity : BaseActivity(), OnDrawerScrollListener, OnDrawerOpenListener,
+class RunningActivity : BaseRunningActivity(), OnDrawerScrollListener, OnDrawerOpenListener,
   OnDrawerCloseListener {
   var B_RUNNIG = true
   lateinit var chronometer: Chronometer
   var timeWhenStopped: Long = 0
-  var stopPopup: ChoicePopup? = null // 리스너 안에서 dismiss()를 호출하기 위해서 전역으로 선언
 
   // 버튼 에니메이션
   private var fabOpen: Animation? = null // Floating Animation Button
@@ -59,7 +55,7 @@ class RunningActivity : BaseActivity(), OnDrawerScrollListener, OnDrawerOpenList
      */
     btn_stop!!.setOnLongClickListener {
       if (distance < 200) {
-        stopPopup = ChoicePopup(this, "선택해주세요.",
+        noticePopup = ChoicePopup(this, "선택해주세요.",
           "거리가 200m 미만일때\n정지하시면 저장이 불가능합니다. \n\n정지하시겠습니까?",
           "예","아니오",
           View.OnClickListener {
@@ -67,9 +63,9 @@ class RunningActivity : BaseActivity(), OnDrawerScrollListener, OnDrawerOpenList
             finish() // 액티비티가 끝나버리므로 dismiss()가 필요없다.
           },
           View.OnClickListener {
-            stopPopup!!.dismiss()
+            noticePopup.dismiss()
           })
-        stopPopup!!.show()
+        noticePopup.show()
         //showChoicePopup("거리가 200m 미만일때\n정지하시면 저장이 불가능합니다. \n\n정지하시겠습니까?", NoticeState.STOP)
       } else
         stop()
@@ -209,27 +205,22 @@ class RunningActivity : BaseActivity(), OnDrawerScrollListener, OnDrawerOpenList
   }
 
 
-  /**
-   * 일시정지 팝업 띄우는 함수
-   * */
-  private var pausePopup: ChoicePopup? = null
-
   private fun showPausePopup(text: String) {
-    pausePopup = ChoicePopup(this,
+    noticePopup = ChoicePopup(this,
       "선택해주세요.",
       text,
       "예","아니오",
       View.OnClickListener {
         //Yes 버튼 눌렀을 때
         runningNotificationLayout.visibility = View.GONE
-        pausePopup!!.dismiss()
+        noticePopup.dismiss()
         pause()
       },
       View.OnClickListener {
         // No 버튼 눌렀을 때
-        pausePopup!!.dismiss()
+        noticePopup.dismiss()
       })
-    pausePopup!!.show()
+    noticePopup.show()
   }
 
   override fun onScrollStarted() {

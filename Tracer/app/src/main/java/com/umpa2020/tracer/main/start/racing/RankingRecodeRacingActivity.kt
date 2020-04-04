@@ -25,7 +25,7 @@ import com.umpa2020.tracer.constant.UserState
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.extensions.toLatLng
-import com.umpa2020.tracer.main.start.BaseActivity
+import com.umpa2020.tracer.main.start.BaseRunningActivity
 import com.umpa2020.tracer.trace.TraceMap
 import com.umpa2020.tracer.util.ChoicePopup
 import com.umpa2020.tracer.util.Logg
@@ -36,7 +36,7 @@ import io.jenetics.jpx.WayPoint
 import kotlinx.android.synthetic.main.activity_ranking_recode_racing.*
 import kotlin.math.roundToLong
 
-class RankingRecodeRacingActivity : BaseActivity(), OnDrawerScrollListener, OnDrawerOpenListener,
+class RankingRecodeRacingActivity : BaseRunningActivity(), OnDrawerScrollListener, OnDrawerOpenListener,
   OnDrawerCloseListener {
   var TAG = "what u wanna say?~~!~!"       //로그용 태그
   lateinit var mapRouteGPX: RouteGPX
