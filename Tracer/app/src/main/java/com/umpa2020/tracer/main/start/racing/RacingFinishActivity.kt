@@ -44,6 +44,7 @@ class RacingFinishActivity : AppCompatActivity() {
     val racerSpeeds = routeGPX!!.getSpeed()
     val makerSpeeds = mapRouteGPX!!.getSpeed()
 
+    
     //TODO: 실패이든 성공이든 maker의 infodata를 받아와야함
     if (result) { // 성공인 경우
       // 현재 달린 사람의 Maptitle로 메이커의 infoData를 다운 받아옴
