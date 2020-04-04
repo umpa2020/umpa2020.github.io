@@ -183,12 +183,11 @@
     android:gravity="center"
     android:visibility="visible">
 
-    <Button
-      android:id="@+id/racingNotificationButton"
+    <TextView
+      android:id="@+id/racingNotificationTextView"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:background="#00000000"
-      android:clickable="false"
       android:fontFamily="@font/notosansmedium"
       android:textColor="@color/white"
       android:textSize="20dp" />

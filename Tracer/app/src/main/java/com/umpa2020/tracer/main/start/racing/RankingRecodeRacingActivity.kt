@@ -7,15 +7,20 @@ import android.os.Bundle
 import android.os.SystemClock
 import android.view.View
 import android.widget.Chronometer
+import android.widget.Toast
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.*
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Polyline
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.maps.android.PolyUtil
 import com.google.maps.android.SphericalUtil
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants
+import com.umpa2020.tracer.constant.Constants.Companion.ARRIVE_BOUNDARY
+import com.umpa2020.tracer.constant.Constants.Companion.DEVIATION_COUNT
 import com.umpa2020.tracer.constant.UserState
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.RouteGPX
@@ -40,7 +45,6 @@ class RankingRecodeRacingActivity : BaseActivity(), OnDrawerScrollListener, OnDr
   lateinit var chronometer: Chronometer
   var timeWhenStopped: Long = 0
   var racingResult = true
-  var deviationFlag = false
   var deviationCount = 0
   var stopPopup: ChoicePopup? = null
 
@@ -81,7 +85,7 @@ class RankingRecodeRacingActivity : BaseActivity(), OnDrawerScrollListener, OnDr
     super.onMapReady(googleMap)
     traceMap = TraceMap(googleMap)
     traceMap.mMap.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
-    traceMap.drawRoute(track,mapRouteGPX.wptList)
+    traceMap.drawRoute(track, mapRouteGPX.wptList)
   }
 
   private fun increaseExecute(mapTitle: String) {
@@ -112,20 +116,20 @@ class RankingRecodeRacingActivity : BaseActivity(), OnDrawerScrollListener, OnDr
     mapRouteGPX.trkList.forEach {
       track.add(LatLng(it.latitude.toDouble(), it.longitude.toDouble()))
     }
-    wptList=mapRouteGPX.wptList
+    wptList = mapRouteGPX.wptList
   }
 
   fun onClick(view: View) {
     when (view.id) {
       R.id.racingControlButton -> {
         when (userState) {
-          //TODO:notice " you should be in 200m"
           UserState.NORMAL -> {
-            //200m 안으로 들어오세요!
+            Toast.makeText(this,"시작포인트 "+ARRIVE_BOUNDARY+"m 안에서만 시작할 수 있습니다",Toast.LENGTH_LONG).show()
             Logg.d("NORMAL")
           }
           UserState.READYTORACING -> {
             Logg.d("READYTORACING")
+            racingNotificationLayout.visibility = View.GONE
             start()
           }
           UserState.RUNNING -> {
@@ -180,8 +184,7 @@ class RankingRecodeRacingActivity : BaseActivity(), OnDrawerScrollListener, OnDr
     val infoData = InfoData()
     infoData.time = SystemClock.elapsedRealtime() - chronometer.base
     infoData.mapTitle = mapTitle
-    // TODO: 거리 계산 해야함!!!
-    infoData.distance = 10.0000
+    infoData.distance = distance
     //infoData.distance = calcLeftDistance()
     val routeGPX = RouteGPX(infoData.time.toString(), "", wpList, trkList)
 
@@ -201,7 +204,7 @@ class RankingRecodeRacingActivity : BaseActivity(), OnDrawerScrollListener, OnDr
         wptList[nextWP].toLatLng()
       ) < Constants.ARRIVE_BOUNDARY
     ) {
-      traceMap.changeMarkerColor(nextWP,BitmapDescriptorFactory.HUE_BLUE)
+      traceMap.changeMarkerColor(nextWP, BitmapDescriptorFactory.HUE_BLUE)
       nextWP++
       if (nextWP == mapRouteGPX.wptList.size) {
         stop()
@@ -210,6 +213,12 @@ class RankingRecodeRacingActivity : BaseActivity(), OnDrawerScrollListener, OnDr
   }
 
   private fun checkDeviation() {
+    Logg.d(PolyUtil.isLocationOnPath(
+      currentLatLng,
+      track,
+      false,
+      Constants.DEVIATION_DISTANCE
+    ).toString())
     //경로이탈검사
     if (PolyUtil.isLocationOnPath(
         currentLatLng,
@@ -217,15 +226,22 @@ class RankingRecodeRacingActivity : BaseActivity(), OnDrawerScrollListener, OnDr
         false,
         Constants.DEVIATION_DISTANCE
       )
-    ) {//경로 안에 있으면
-      if (deviationFlag) {
-        deviationFlag = false
-        deviationCount = 0
-      }
-    } else {//경로 이탈이면
+    ) {
+      deviationCount = 0
+      racingNotificationLayout.visibility = View.GONE
+    } else {
       deviationCount++
-      //TODO : notice deviation
+      notice("경로이탈 " + deviationCount.toString() + "\n(주의)경로이탈이 "+DEVIATION_COUNT+"초 이상이되면 랭킹등록을 못합니다.")
+      if(deviationCount>DEVIATION_COUNT){
+        racingResult=false
+        stop()
+      }
     }
+  }
+
+  fun notice(str: String) {
+    racingNotificationLayout.visibility = View.VISIBLE
+    racingNotificationTextView.text = str
   }
 
   private fun checkIsReadyToRacing() {
@@ -233,32 +249,34 @@ class RankingRecodeRacingActivity : BaseActivity(), OnDrawerScrollListener, OnDr
         currentLatLng, mapRouteGPX.wptList[0].toLatLng()
       ) > Constants.ARRIVE_BOUNDARY
     ) {
-      userState = UserState.BEFORERACING
-      traceMap.changeMarkerColor(0,BitmapDescriptorFactory.HUE_ROSE)
-    } else {
-      traceMap.changeMarkerColor(0,BitmapDescriptorFactory.HUE_BLUE)
-      racingNotificationButton.text = "시작을 원하시면 START를 누르세요"
+      userState = UserState.NORMAL
+      traceMap.changeMarkerColor(0, BitmapDescriptorFactory.HUE_ROSE)
+      notice(
+        "시작 포인트로 이동하십시오.\n시작포인트까지 남은거리\n"
+          + (SphericalUtil.computeDistanceBetween(
+          currentLatLng,
+          wptList[0].toLatLng()
+        )).roundToLong().toString() + "m"
+      )
     }
   }
 
+  //시작포인트에 10m이내로 들어오면 준비상태로 변경
   private fun checkIsReady() {
-    racingNotificationButton.text =
-      ("시작 포인트로 이동하십시오.\n시작포인트까지 남은거리\n"
-        + (SphericalUtil.computeDistanceBetween(
-        currentLatLng,
-        wptList[0].toLatLng()
-      )).roundToLong().toString() + "m")
-    //시작포인트에 10m이내로 들어오면 준비상태로 변경
-    Logg.d(
-      SphericalUtil.computeDistanceBetween(
-        currentLatLng, mapRouteGPX.wptList[0].toLatLng()
-      ).toString()
-    )
     if (SphericalUtil.computeDistanceBetween(
-        currentLatLng,mapRouteGPX.wptList[0].toLatLng()
-      ) <= 10
+        currentLatLng, mapRouteGPX.wptList[0].toLatLng()
+      ) <= ARRIVE_BOUNDARY
     ) {
+      notice("시작을 원하시면 START를 누르세요")
+      traceMap.changeMarkerColor(0, BitmapDescriptorFactory.HUE_BLUE)
       userState = UserState.READYTORACING
+    } else {
+      racingNotificationTextView.text =
+        ("시작 포인트로 이동하십시오.\n시작포인트까지 남은거리\n"
+          + (SphericalUtil.computeDistanceBetween(
+          currentLatLng,
+          wptList[0].toLatLng()
+        )).roundToLong().toString() + "m")
     }
   }
 
