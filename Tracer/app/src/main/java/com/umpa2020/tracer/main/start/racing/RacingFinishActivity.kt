@@ -153,4 +153,6 @@ class RacingFinishActivity : AppCompatActivity() {
     }
     return speeds
   }
+
+
 }

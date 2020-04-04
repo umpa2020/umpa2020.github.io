@@ -3,6 +3,7 @@ package com.umpa2020.tracer.main.start
 import android.content.IntentFilter
 import android.location.Location
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -14,6 +15,7 @@ import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.constant.UserState
 import com.umpa2020.tracer.extensions.toLatLng
 import com.umpa2020.tracer.trace.TraceMap
+import com.umpa2020.tracer.util.ChoicePopup
 import com.umpa2020.tracer.util.LocationBroadcastReceiver
 import com.umpa2020.tracer.util.Logg
 import io.jenetics.jpx.WayPoint
@@ -38,7 +40,8 @@ open class BaseActivity : AppCompatActivity(), OnMapReadyCallback {
   override fun onMapReady(googleMap: GoogleMap) {
     Logg.d("onMapReady")
     traceMap = TraceMap(googleMap) //구글맵
-     }
+  }
+
   open fun updateLocation(curLoc: Location) {
     if (setLocation(curLoc)) {
       when (userState) {
@@ -89,7 +92,7 @@ open class BaseActivity : AppCompatActivity(), OnMapReadyCallback {
     userState = UserState.STOP
   }
 
-  fun setLocation(location: Location) :Boolean {//현재위치를 이전위치로 변경
+  fun setLocation(location: Location): Boolean {//현재위치를 이전위치로 변경
     elevation = location.altitude
     speed = location.speed.toDouble()
     previousLatLng = currentLatLng
@@ -109,6 +112,7 @@ open class BaseActivity : AppCompatActivity(), OnMapReadyCallback {
 
     locationBroadcastReceiver = LocationBroadcastReceiver(this)
   }
+
   override fun onPause() {
     super.onPause()
     LocalBroadcastManager.getInstance(this).unregisterReceiver(locationBroadcastReceiver)
@@ -118,5 +122,27 @@ open class BaseActivity : AppCompatActivity(), OnMapReadyCallback {
     super.onResume()
     LocalBroadcastManager.getInstance(this)
       .registerReceiver(locationBroadcastReceiver, IntentFilter("custom-event-name"))
+  }
+
+  lateinit var noticePopup: ChoicePopup
+  override fun onBackPressed() {
+    when (userState) {
+      UserState.RUNNING, UserState.PAUSED -> {
+        noticePopup = ChoicePopup(this, "선택해주세요.",
+          "지금 정지하시면 저장이 불가능합니다. \n\n정지하시겠습니까?",
+          "예", "아니오",
+          View.OnClickListener {
+            // yes 버튼 눌렀을 때 해당 액티비티 재시작.
+            finish()
+          },
+          View.OnClickListener {
+            noticePopup!!.dismiss()
+          })
+        noticePopup!!.show()
+      }
+      else -> {
+        super.onBackPressed()
+      }
+    }
   }
 }

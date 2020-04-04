@@ -46,7 +46,6 @@ class RankingRecodeRacingActivity : BaseActivity(), OnDrawerScrollListener, OnDr
   var timeWhenStopped: Long = 0
   var racingResult = true
   var deviationCount = 0
-  var stopPopup: ChoicePopup? = null
 
   var wptList: MutableList<WayPoint> = mutableListOf()
   var track: MutableList<LatLng> = mutableListOf()
@@ -63,7 +62,7 @@ class RankingRecodeRacingActivity : BaseActivity(), OnDrawerScrollListener, OnDr
     init()
     racingControlButton.setOnLongClickListener {
       if (userState == UserState.RUNNING) {
-        stopPopup = ChoicePopup(this, "선택해주세요.",
+        noticePopup = ChoicePopup(this, "선택해주세요.",
           "지금 정지하시면 저장이 불가능합니다. \n\n정지하시겠습니까?",
           "예", "아니오",
           View.OnClickListener {
@@ -71,9 +70,9 @@ class RankingRecodeRacingActivity : BaseActivity(), OnDrawerScrollListener, OnDr
             finish()
           },
           View.OnClickListener {
-            stopPopup!!.dismiss()
+            noticePopup!!.dismiss()
           })
-        stopPopup!!.show()
+        noticePopup!!.show()
       } else {
         //stop(true)
       }
@@ -124,7 +123,7 @@ class RankingRecodeRacingActivity : BaseActivity(), OnDrawerScrollListener, OnDr
       R.id.racingControlButton -> {
         when (userState) {
           UserState.NORMAL -> {
-            Toast.makeText(this,"시작포인트 "+ARRIVE_BOUNDARY+"m 안에서만 시작할 수 있습니다",Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "시작포인트 " + ARRIVE_BOUNDARY + "m 안에서만 시작할 수 있습니다", Toast.LENGTH_LONG).show()
             Logg.d("NORMAL")
           }
           UserState.READYTORACING -> {
@@ -213,12 +212,14 @@ class RankingRecodeRacingActivity : BaseActivity(), OnDrawerScrollListener, OnDr
   }
 
   private fun checkDeviation() {
-    Logg.d(PolyUtil.isLocationOnPath(
-      currentLatLng,
-      track,
-      false,
-      Constants.DEVIATION_DISTANCE
-    ).toString())
+    Logg.d(
+      PolyUtil.isLocationOnPath(
+        currentLatLng,
+        track,
+        false,
+        Constants.DEVIATION_DISTANCE
+      ).toString()
+    )
     //경로이탈검사
     if (PolyUtil.isLocationOnPath(
         currentLatLng,
@@ -231,9 +232,9 @@ class RankingRecodeRacingActivity : BaseActivity(), OnDrawerScrollListener, OnDr
       racingNotificationLayout.visibility = View.GONE
     } else {
       deviationCount++
-      notice("경로이탈 " + deviationCount.toString() + "\n(주의)경로이탈이 "+DEVIATION_COUNT+"초 이상이되면 랭킹등록을 못합니다.")
-      if(deviationCount>DEVIATION_COUNT){
-        racingResult=false
+      notice("경로이탈 " + deviationCount.toString() + "\n(주의)경로이탈이 " + DEVIATION_COUNT + "초 이상이되면 랭킹등록을 못합니다.")
+      if (deviationCount > DEVIATION_COUNT) {
+        racingResult = false
         stop()
       }
     }
