@@ -126,7 +126,7 @@ class RankingMapDetailActivity : AppCompatActivity() {
         val intent = Intent(App.instance.context(), RankingRecodeRacingActivity::class.java)
         intent.putExtra("RouteGPX", routeGPX)
         intent.putExtra("mapTitle", dbMapTitle)
-
+        noticePopup.dismiss()
         startActivity(intent)
         finish()
       },

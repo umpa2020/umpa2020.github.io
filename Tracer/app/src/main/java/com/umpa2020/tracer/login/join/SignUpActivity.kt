@@ -475,6 +475,7 @@ class SignUpActivity : AppCompatActivity() {
         //기본 이미지로 설정
         basicBitmapImg = BitmapFactory.decodeResource(resources, R.drawable.basic_profile)
         signUp(basicBitmapImg!!, nickname!!, age!!, gender!!)
+        noticePopup.dismiss()
         progressbar.show() //기본이미지로 회원가입이 바로 진행되도록 프로그레스바 띄움
       },
       View.OnClickListener {
