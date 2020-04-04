@@ -1,14 +1,11 @@
 package com.umpa2020.tracer.main.start.racing
 
-import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.os.Handler
-import android.os.SystemClock
 import android.view.View
 import android.widget.Chronometer
-import androidx.appcompat.app.AppCompatActivity
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.firebase.firestore.FieldValue
@@ -20,17 +17,13 @@ import com.umpa2020.tracer.constant.Constants.Companion.DEVIATION
 import com.umpa2020.tracer.constant.Constants.Companion.INFOUPDATE
 import com.umpa2020.tracer.constant.Constants.Companion.RACINGFINISH
 import com.umpa2020.tracer.constant.UserState
-import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.main.start.BaseActivity
 import com.umpa2020.tracer.trace.TraceMap
-import com.umpa2020.tracer.trace.decorate.BasicMap
-import com.umpa2020.tracer.trace.decorate.PolylineDecorator
-import com.umpa2020.tracer.trace.decorate.RacingDecorator
 import com.umpa2020.tracer.util.ChoicePopup
 import com.umpa2020.tracer.util.LocationBroadcastReceiver
 import com.umpa2020.tracer.util.Logg
-import com.umpa2020.tracer.util.MyHandler
+import com.umpa2020.tracer.trace.MyHandler
 import hollowsoft.slidingdrawer.OnDrawerCloseListener
 import hollowsoft.slidingdrawer.OnDrawerOpenListener
 import hollowsoft.slidingdrawer.OnDrawerScrollListener
@@ -43,7 +36,6 @@ class RankingRecodeRacingActivity : BaseActivity(), OnDrawerScrollListener, OnDr
   lateinit var mapTitle: String
   lateinit var increaseExecuteThread: Thread
   lateinit var chronometer: Chronometer
-  var timeWhenStopped: Long = 0
 
   private lateinit var locationBroadcastReceiver: LocationBroadcastReceiver
 
@@ -129,7 +121,7 @@ class RankingRecodeRacingActivity : BaseActivity(), OnDrawerScrollListener, OnDr
   private fun init() {
     MyHandler.myHandler = mHandler
     val smf = supportFragmentManager.findFragmentById(R.id.map_viewer) as SupportMapFragment
-    traceMap = TraceMap(smf, this)
+   // traceMap = TraceMap()
     routeGPX = mapRouteGPX
     drawer.setOnDrawerScrollListener(this)
     drawer.setOnDrawerOpenListener(this)

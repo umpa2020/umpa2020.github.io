@@ -3,6 +3,8 @@ package com.umpa2020.tracer.main.start
 import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.Polyline
@@ -12,16 +14,15 @@ import com.umpa2020.tracer.constant.UserState
 import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.extensions.toLatLng
 import com.umpa2020.tracer.trace.TraceMap
+import com.umpa2020.tracer.util.Logg
 import io.jenetics.jpx.WayPoint
 
-open class BaseActivity : AppCompatActivity() {
+open class BaseActivity : AppCompatActivity(), OnMapReadyCallback {
   var routeGPX: RouteGPX? = null
   var markerList: MutableList<Marker> = mutableListOf()
   var track: MutableList<LatLng> = mutableListOf()
   var nextWP: Int = 0
   lateinit var loadTrack: Polyline
-
-
   lateinit var traceMap: TraceMap
   var privacy = Privacy.RACING
   var distance = 0.0
@@ -36,6 +37,10 @@ open class BaseActivity : AppCompatActivity() {
   var wpList: MutableList<WayPoint> = mutableListOf()
   var markerCount = -1
 
+  override fun onMapReady(googleMap: GoogleMap) {
+    Logg.d("onMapReady")
+    traceMap = TraceMap(googleMap) //구글맵
+     }
   open fun updateLocation(curLoc: Location) {
     if (setLocation(curLoc)) {
       when (userState) {

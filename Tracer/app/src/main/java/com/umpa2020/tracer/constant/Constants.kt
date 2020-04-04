@@ -24,5 +24,6 @@ class Constants {
     const val INFOUPDATE = 1 //distance and speed update
     const val RACINGFINISH = 2 //Racing is finished
     const val DEVIATION = 3 //racer deviate the track
+    const val MAPISREADY=4 //on map ready call back
   }
 }

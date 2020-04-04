@@ -1,22 +1,18 @@
 package com.umpa2020.tracer.main.start.running
 
-import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.ActivityInfo
 import android.location.Location
 import android.os.Bundle
 import android.os.SystemClock
-import android.os.Trace
-import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Chronometer
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.MarkerOptions
 import com.umpa2020.tracer.R
@@ -24,7 +20,6 @@ import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.constant.UserState
 import com.umpa2020.tracer.dataClass.InfoData
-import com.umpa2020.tracer.dataClass.NoticeState
 import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.main.start.BaseActivity
 import com.umpa2020.tracer.trace.TraceMap
@@ -97,7 +92,7 @@ class RunningActivity : BaseActivity(), OnDrawerScrollListener, OnDrawerOpenList
   private fun init() {
     val smf = supportFragmentManager.findFragmentById(R.id.map_viewer) as SupportMapFragment
     //running traceMap 선언 Polyline + Timer + Distance + Basic
-    traceMap = TraceMap(smf, this)
+    smf.getMapAsync(this)
 
     locationBroadcastReceiver = LocationBroadcastReceiver(this) // 브로드 캐스트 선언.
 
@@ -109,6 +104,10 @@ class RunningActivity : BaseActivity(), OnDrawerScrollListener, OnDrawerOpenList
     chronometer = runningTimerTextView
   }
 
+  override fun onMapReady(googleMap: GoogleMap) {
+    super.onMapReady(googleMap)
+    traceMap.mMap.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
+  }
 
   fun onClick(view: View) {
     when (view.id) {

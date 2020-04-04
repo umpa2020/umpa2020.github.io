@@ -12,6 +12,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.R
@@ -27,7 +29,7 @@ import kotlinx.android.synthetic.main.fragment_start.view.*
 import java.io.File
 
 
-class StartFragment : Fragment(), View.OnClickListener {
+class StartFragment : Fragment(), OnMapReadyCallback,View.OnClickListener {
   val TAG = "StartFragment"
 
   lateinit var traceMap: TraceMap
@@ -36,7 +38,7 @@ class StartFragment : Fragment(), View.OnClickListener {
   lateinit var currentLocation: Location
 
   lateinit var locationBroadcastReceiver: BroadcastReceiver
-
+  var moveCamera=true
   override fun onClick(v: View) {
     when (v.id) {
 
@@ -55,8 +57,6 @@ class StartFragment : Fragment(), View.OnClickListener {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-
-
   }
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -82,18 +82,20 @@ class StartFragment : Fragment(), View.OnClickListener {
       }
     }
     val smf = childFragmentManager.findFragmentById(R.id.map_viewer_start) as SupportMapFragment
-    traceMap = TraceMap(smf,context!!)
+    smf.getMapAsync(this)
     locationBroadcastReceiver = object : BroadcastReceiver(){
       override fun onReceive(context: Context?, intent: Intent?) {
         val message = intent?.getParcelableExtra<Location>("message")
         currentLocation = message as Location
-        work()
+        if(moveCamera) traceMap.moveCamera(currentLocation.toLatLng())
       }
     }
     return view
   }
-  fun work(){
-
+  override fun onMapReady(googleMap: GoogleMap) {
+    Logg.d("onMapReady")
+    traceMap = TraceMap(googleMap) //구글맵
+    traceMap.mMap.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
   }
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)

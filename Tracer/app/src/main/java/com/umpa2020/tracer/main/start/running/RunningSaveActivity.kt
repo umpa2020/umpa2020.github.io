@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -27,7 +28,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class RunningSaveActivity : AppCompatActivity() {
+class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback {
   var switch = 0
 
   lateinit var infoData: InfoData
@@ -37,10 +38,9 @@ class RunningSaveActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(com.umpa2020.tracer.R.layout.activity_running_save)
-
     val smf = supportFragmentManager.findFragmentById(com.umpa2020.tracer.R.id.map_viewer) as SupportMapFragment
-    traceMap = TraceMap(smf,this)
-    traceMap.drawRoute(routeGPX)
+    smf.getMapAsync(this)
+
     infoData = intent.getParcelableExtra("InfoData")!!
     routeGPX = intent.getParcelableExtra("RouteGPX")!!
     val speedList = mutableListOf<Double>()
@@ -168,5 +168,12 @@ class RunningSaveActivity : AppCompatActivity() {
     }
 
     // 위에 지정한 스레드 스타트
+  }
+
+  override fun onMapReady(googleMap: GoogleMap) {
+    Logg.d("onMapReady")
+    traceMap = TraceMap(googleMap) //구글맵
+    traceMap.mMap.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
+    traceMap.drawRoute(routeGPX)
   }
 }
