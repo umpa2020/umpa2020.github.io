@@ -127,10 +127,6 @@ class RunningActivity : BaseRunningActivity(), OnDrawerScrollListener, OnDrawerO
     infoData.startLongitude = trkList.first().longitude.toDouble()
     val routeGPX = RouteGPX(infoData.time.toString(), "", wpList, trkList)
 
-
-    //val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
-    //formatter.timeZone = TimeZone.getTimeZone("UTC")
-
     val intent = Intent(this, RunningSaveActivity::class.java)
     intent.putExtra("RouteGPX", routeGPX)
     intent.putExtra("InfoData", infoData)

@@ -129,6 +129,7 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
 
   open fun stop() {
     userState = UserState.STOP
+    chronometer.stop()
   }
 
   fun notice(str: String) {

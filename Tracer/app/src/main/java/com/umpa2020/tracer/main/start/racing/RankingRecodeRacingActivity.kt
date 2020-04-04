@@ -32,7 +32,6 @@ import kotlinx.android.synthetic.main.activity_ranking_recode_racing.*
 import kotlin.math.roundToLong
 
 class RankingRecodeRacingActivity : BaseRunningActivity(){
-  var TAG = "what u wanna say?~~!~!"       //로그용 태그
   lateinit var mapRouteGPX: RouteGPX
   lateinit var mapTitle: String
   lateinit var increaseExecuteThread: Thread
@@ -172,7 +171,6 @@ class RankingRecodeRacingActivity : BaseRunningActivity(){
 
   override fun stop() {
     super.stop()
-    chronometer.stop()
 
     val infoData = InfoData()
     infoData.time = SystemClock.elapsedRealtime() - chronometer.base
