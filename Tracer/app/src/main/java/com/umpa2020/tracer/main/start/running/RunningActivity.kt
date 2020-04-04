@@ -35,7 +35,6 @@ import kotlinx.android.synthetic.main.activity_running.*
 class RunningActivity : BaseActivity(), OnDrawerScrollListener, OnDrawerOpenListener,
   OnDrawerCloseListener {
   var B_RUNNIG = true
-  private var doubleBackToExitPressedOnce1 = false
   lateinit var chronometer: Chronometer
   var timeWhenStopped: Long = 0
   var stopPopup: ChoicePopup? = null // 리스너 안에서 dismiss()를 호출하기 위해서 전역으로 선언
@@ -44,6 +43,7 @@ class RunningActivity : BaseActivity(), OnDrawerScrollListener, OnDrawerOpenList
   private var fabOpen: Animation? = null // Floating Animation Button
 
   private lateinit var locationBroadcastReceiver: LocationBroadcastReceiver
+
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
