@@ -44,18 +44,6 @@ class RunningActivity : BaseActivity(), OnDrawerScrollListener, OnDrawerOpenList
   private var fabOpen: Animation? = null // Floating Animation Button
 
   private lateinit var locationBroadcastReceiver: LocationBroadcastReceiver
-  override fun onBackPressed() {
-    if (doubleBackToExitPressedOnce1) {
-      super.onBackPressed()
-      return
-    }
-    this.doubleBackToExitPressedOnce1 = true
-    val text = "뒤로 버튼을 한번 더 누르면 종료됩니다."
-    val duration = Toast.LENGTH_LONG
-    val toast = Toast.makeText(applicationContext, text, duration)
-    toast.show()
-
-  }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
