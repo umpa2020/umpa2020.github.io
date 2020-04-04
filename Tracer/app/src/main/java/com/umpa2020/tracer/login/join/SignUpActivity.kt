@@ -12,12 +12,13 @@ import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
-import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.*
-import androidx.appcompat.app.AlertDialog
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -464,9 +465,9 @@ class SignUpActivity : AppCompatActivity() {
   /**
   기본 이미지로 설정할건지 물어보는 팝업
    **/
-  var basicProfilePopUp : ChoicePopup? = null
+  lateinit var noticePopup : ChoicePopup
   private fun basicProfileSettingPopup() {
-    basicProfilePopUp = ChoicePopup(this, "선택해주세요.",
+    noticePopup = ChoicePopup(this, "선택해주세요.",
       "기본 이미지로 설정하시겠습니까",
       "예","아니오",
       View.OnClickListener {
@@ -480,8 +481,8 @@ class SignUpActivity : AppCompatActivity() {
         // No 버튼 눌렀을 때
         //갤러리에서 원하는 프로필 이미지 선택할 수 있도록 권한체크
 //        checkSelfPermission()
-        basicProfilePopUp!!.dismiss()
+        noticePopup.dismiss()
       })
-    basicProfilePopUp!!.show()
+    noticePopup.show()
   }
 }

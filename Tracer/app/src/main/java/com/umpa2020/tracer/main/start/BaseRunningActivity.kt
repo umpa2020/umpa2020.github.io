@@ -20,7 +20,7 @@ import com.umpa2020.tracer.util.LocationBroadcastReceiver
 import com.umpa2020.tracer.util.Logg
 import io.jenetics.jpx.WayPoint
 
-open class BaseActivity : AppCompatActivity(), OnMapReadyCallback {
+open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback {
   lateinit var traceMap: TraceMap
   var privacy = Privacy.RACING
   var distance = 0.0
