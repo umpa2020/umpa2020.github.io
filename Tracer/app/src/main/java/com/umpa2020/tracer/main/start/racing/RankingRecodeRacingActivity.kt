@@ -46,7 +46,7 @@ class RankingRecodeRacingActivity : BaseActivity(), OnDrawerScrollListener, OnDr
   var timeWhenStopped: Long = 0
   var racingResult = true
   var deviationCount = 0
-  var stopPopup: ChoicePopup? = null
+  var noticePopup: ChoicePopup? = null
 
   var wptList: MutableList<WayPoint> = mutableListOf()
   var track: MutableList<LatLng> = mutableListOf()
@@ -63,7 +63,7 @@ class RankingRecodeRacingActivity : BaseActivity(), OnDrawerScrollListener, OnDr
     init()
     racingControlButton.setOnLongClickListener {
       if (userState == UserState.RUNNING) {
-        stopPopup = ChoicePopup(this, "선택해주세요.",
+        noticePopup = ChoicePopup(this, "선택해주세요.",
           "지금 정지하시면 저장이 불가능합니다. \n\n정지하시겠습니까?",
           "예", "아니오",
           View.OnClickListener {
@@ -71,9 +71,9 @@ class RankingRecodeRacingActivity : BaseActivity(), OnDrawerScrollListener, OnDr
             finish()
           },
           View.OnClickListener {
-            stopPopup!!.dismiss()
+            noticePopup!!.dismiss()
           })
-        stopPopup!!.show()
+        noticePopup!!.show()
       } else {
         //stop(true)
       }
@@ -280,6 +280,25 @@ class RankingRecodeRacingActivity : BaseActivity(), OnDrawerScrollListener, OnDr
     }
   }
 
+  override fun onBackPressed() {
+    when(userState){
+      UserState.RUNNING,UserState.PAUSED->{
+        noticePopup = ChoicePopup(this, "선택해주세요.",
+          "지금 정지하시면 저장이 불가능합니다. \n\n정지하시겠습니까?",
+          "예", "아니오",
+          View.OnClickListener {
+            // yes 버튼 눌렀을 때 해당 액티비티 재시작.
+            finish()
+          },
+          View.OnClickListener {
+            noticePopup!!.dismiss()
+          })
+        noticePopup!!.show()
+      }
+      else->{ }
+    }
+
+  }
   override fun onScrollStarted() {
     Logg.d("onScrollStarted()")
   }
