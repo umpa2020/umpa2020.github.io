@@ -21,9 +21,9 @@
         style="@style/appBarText"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_gravity="center"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="45dp"
-        android:layout_gravity="center"
         android:gravity="center"
         android:text="@string/ranking">
 
@@ -31,12 +31,12 @@
 
       <Button
         android:id="@+id/rankingToolBarTuneButton"
-        android:layout_marginTop="10dp"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:background="@drawable/ic_tune"
-        android:layout_marginRight="15dp"
         android:layout_gravity="right"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="15dp"
+        android:background="@drawable/ic_tune"
         android:stateListAnimator="@null" />
 
     </Toolbar>
@@ -70,14 +70,14 @@
         style="@style/ListTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="2"
         android:layout_marginRight="10dp"
+        android:layout_weight="2"
         android:gravity="center"
         android:text="주변" />
 
       <TextView
-        style="@style/ListTitle"
         android:id="@+id/rankingfiltermode"
+        style="@style/ListTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1.5"
@@ -89,6 +89,7 @@
       android:id="@+id/divisionTextView"
       style="@style/divisionTextView" />
 
+
     <androidx.recyclerview.widget.RecyclerView
       android:id="@+id/rank_recycler_map"
       android:layout_width="match_parent"
@@ -96,174 +97,183 @@
       android:layout_marginLeft="20dp"
       android:layout_marginTop="5dp"
       android:layout_marginRight="20dp" />
-
-
   </LinearLayout>
+
+  <TextView
+    android:id="@+id/rankingRecyclerRouteisEmpty"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:text="@string/noroute"
+    android:textSize="20dp"
+    android:visibility="gone" />
 
   <!--필터 적용 레이아웃-->
   <LinearLayout
-    android:visibility="gone"
-    android:layout_marginTop="50dp"
+    android:id="@+id/tuneLinearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/tuneLinearLayout"
-    android:orientation="vertical"
+    android:layout_marginTop="50dp"
     android:animateLayoutChanges="true"
-    >
+    android:orientation="vertical"
+    android:visibility="gone">
 
     <LinearLayout
       android:id="@+id/filterLayout"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:paddingBottom="20dp"
       android:background="@color/white"
-      android:orientation="vertical">
+      android:orientation="vertical"
+      android:paddingBottom="20dp">
 
       <TextView
-        android:paddingTop="10dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginBottom="5dp"
+        style="@style/tuneText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="정렬 기준"
-        style="@style/tuneText"/>
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="5dp"
+        android:paddingTop="10dp"
+        android:text="정렬 기준" />
 
       <RadioGroup
         android:id="@+id/radioGroup"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
         android:orientation="horizontal">
 
         <RadioButton
+          android:id="@+id/tuneRadioBtnExecute"
           android:layout_width="100dp"
           android:layout_height="40dp"
-          android:gravity="center"
           android:background="@drawable/filter_button"
           android:button="@null"
           android:checked="true"
+          android:gravity="center"
           android:padding="5dp"
           android:text="실행순"
-          android:textColor="@drawable/tune_text_selector"
-          android:id="@+id/tuneRadioBtnExecute"/>
+          android:textColor="@drawable/tune_text_selector" />
 
         <RadioButton
-          android:layout_marginLeft="10dp"
+          android:id="@+id/tuneRadioBtnLike"
           android:layout_width="100dp"
           android:layout_height="40dp"
-          android:gravity="center"
+          android:layout_marginLeft="10dp"
           android:background="@drawable/filter_button"
           android:button="@null"
+          android:gravity="center"
           android:padding="5dp"
           android:text="좋아요순"
-          android:textColor="@drawable/tune_text_selector"
-          android:id="@+id/tuneRadioBtnLike"/>
+          android:textColor="@drawable/tune_text_selector" />
 
       </RadioGroup>
 
       <LinearLayout
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="5dp"
-        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="5dp"
         android:orientation="horizontal">
+
         <TextView
+          style="@style/tuneText"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="거리"
           android:layout_weight="1"
-          style="@style/tuneText"/>
+          android:text="거리" />
 
         <TextView
           android:id="@+id/progressTextView"
+          style="@style/tuneText"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:text="10"
-          style="@style/tuneText"
-          android:textColor="@color/red"/>
+          android:textColor="@color/red" />
 
         <TextView
-          android:layout_marginLeft="5dp"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
+          android:layout_marginLeft="5dp"
           android:text="km"
-          android:textSize="16dp"/>
+          android:textSize="16dp" />
 
       </LinearLayout>
 
       <SeekBar
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
         android:id="@+id/seekBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="20dp"
         android:max="100"
-        android:progress="10"
-        />
+        android:progress="10" />
 
       <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginLeft="20dp">
+        android:orientation="horizontal">
+
         <TextView
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="0"/>
+          android:text="0" />
 
         <View
           android:layout_width="0dp"
           android:layout_height="0dp"
-          android:layout_weight="1"/>
+          android:layout_weight="1" />
 
         <TextView
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="100+"/>
+          android:text="100+" />
 
       </LinearLayout>
 
       <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginRight="20dp"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp">
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp"
+        android:orientation="horizontal">
+
         <Button
-          android:background="@drawable/button_empty_background"
-          style="@style/buttonTextRedText"
           android:id="@+id/allDeleteButton"
+          style="@style/buttonTextRedText"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="전체 삭제"/>
+          android:background="@drawable/button_empty_background"
+          android:text="전체 삭제" />
 
         <View
           android:layout_width="0dp"
           android:layout_height="0dp"
-          android:layout_weight="1"/>
+          android:layout_weight="1" />
 
         <Button
-          android:background="@drawable/button_background"
-          style="@style/buttonText"
           android:id="@+id/applyButton"
+          style="@style/buttonText"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="적용하기"/>
+          android:background="@drawable/button_background"
+          android:text="적용하기" />
       </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
-      android:orientation="vertical"
       android:id="@+id/disappearLayout"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:background="@color/blackAlpha">
+      android:background="@color/blackAlpha"
+      android:orientation="vertical">
 
     </LinearLayout>
   </LinearLayout>

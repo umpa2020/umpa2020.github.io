@@ -51,7 +51,6 @@ class FBProfile {
           .get()
           .addOnSuccessListener { result2 ->
             for (document2 in result2) {
-
               sumDistance += document2.get("distance") as Double
               sumTime += document2.get("time") as Long
             }
@@ -88,6 +87,9 @@ class FBProfile {
               .into(imageView)
             progressbar.dismiss()
           }
+          else {
+            progressbar.dismiss()
+          }
         }
       }
       .addOnFailureListener { exception ->
@@ -121,6 +123,9 @@ class FBProfile {
               .into(imageView)
             progressbar.dismiss()
           }
+          else {
+            progressbar.dismiss()
+          }
         }
       }
       .addOnFailureListener { exception ->
@@ -128,9 +133,7 @@ class FBProfile {
   }
 
   fun getMyRoute(mHandler: Handler) {
-
     val infoDatas: ArrayList<InfoData> = arrayListOf()
-
     db.collection("mapInfo").whereEqualTo("makersNickname", UserInfo.nickname).whereEqualTo("privacy", "RACING")
       .get()
       .addOnSuccessListener { result ->
