@@ -39,11 +39,12 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(com.umpa2020.tracer.R.layout.activity_running_save)
+    infoData = intent.getParcelableExtra("InfoData")!!
+    routeGPX = intent.getParcelableExtra("RouteGPX")!!
+    loadRoute()
     val smf = supportFragmentManager.findFragmentById(com.umpa2020.tracer.R.id.map_viewer) as SupportMapFragment
     smf.getMapAsync(this)
 
-    infoData = intent.getParcelableExtra("InfoData")!!
-    routeGPX = intent.getParcelableExtra("RouteGPX")!!
     val speedList = mutableListOf<Double>()
     val elevationList = mutableListOf<Double>()
     routeGPX.trkList.forEach {
