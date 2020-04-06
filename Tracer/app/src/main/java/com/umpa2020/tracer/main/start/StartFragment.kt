@@ -7,6 +7,9 @@ import android.content.IntentFilter
 import android.location.Location
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.os.Message
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,14 +18,20 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.R
+import com.umpa2020.tracer.dataClass.NearMap
 import com.umpa2020.tracer.extensions.toLatLng
-import com.umpa2020.tracer.main.start.racing.NearRouteActivity
+import com.umpa2020.tracer.main.ranking.RankingMapDetailActivity
 import com.umpa2020.tracer.main.start.racing.RankingRecodeRacingActivity
 import com.umpa2020.tracer.main.start.running.RunningActivity
+import com.umpa2020.tracer.network.FBMap
 import com.umpa2020.tracer.trace.TraceMap
 import com.umpa2020.tracer.util.Logg
+import com.umpa2020.tracer.util.PrettyDistance
 import com.umpa2020.tracer.util.UserInfo
 import com.umpa2020.tracer.util.gpx.GPXConverter
 import kotlinx.android.synthetic.main.fragment_start.view.*
@@ -33,12 +42,17 @@ class StartFragment : Fragment(), OnMapReadyCallback,View.OnClickListener {
   val TAG = "StartFragment"
 
   lateinit var traceMap: TraceMap
-//    var mHandler: IncomingMessageHandler? = null
 
   lateinit var currentLocation: Location
 
   lateinit var locationBroadcastReceiver: BroadcastReceiver
+  var routeMarkers = mutableListOf<Marker>()
+  // 처음 화면 시작에서 주변 route 마커 찍어주기 위함
+  val STRAT_FRAGMENT_NEARMAP = 30
+  val NEARMAPFALSE = 41
+  var nearMaps: ArrayList<NearMap> = arrayListOf()
   var moveCamera=true
+
   override fun onClick(v: View) {
     when (v.id) {
 
@@ -48,15 +62,56 @@ class StartFragment : Fragment(), OnMapReadyCallback,View.OnClickListener {
       }
 
       R.id.mainStartRacing -> {
-        val newIntent = Intent(activity, NearRouteActivity::class.java)
-        newIntent.putExtra("currentLocation", currentLocation) //curLoc 정보 인텐트로 넘김
-        startActivity(newIntent)
+        val bound = traceMap.mMap.projection.visibleRegion.latLngBounds
+
+        val mHandler = object : Handler(Looper.getMainLooper()) {
+          override fun handleMessage(msg: Message) {
+            when (msg.what) {
+              STRAT_FRAGMENT_NEARMAP -> {
+                nearMaps = msg.obj as ArrayList<NearMap>
+                Logg.d("ssmm11 nearMaps = $nearMaps")
+                val icon =
+                  BitmapDescriptorFactory
+                    .defaultMarker(BitmapDescriptorFactory.HUE_ROSE)
+
+                routeMarkers.forEach {
+                  it.remove()
+                }
+                routeMarkers.clear()
+                nearMaps.forEach {
+                  val mapTitle = it.mapTitle.split("||")
+                  //데이터 바인딩
+                  routeMarkers.add(
+                    traceMap.mMap.addMarker(
+                      MarkerOptions()
+                        .position(it.latLng)
+                        .title(mapTitle[0])
+                        .snippet(PrettyDistance().convertPretty(it.distance))
+                        .icon(icon)
+                    )
+                  )
+                  //TODO: 윈도우 커스터마이즈
+                  routeMarkers.last().tag = it.mapTitle
+
+                  traceMap.mMap.setOnInfoWindowClickListener { it2 ->
+                    val intent = Intent(activity, RankingMapDetailActivity::class.java)
+                    intent.putExtra("MapTitle", it2.tag.toString())
+                    startActivity(intent)
+                  }
+                }
+              }
+              NEARMAPFALSE -> {
+                // 빈 상태
+              }
+            }
+          }
+        }
+        FBMap().getNearMap(bound.southwest, bound.northeast, mHandler)
+        /*val newIntent = Intent(activity, NearRouteActivity::class.java)
+        newIntent.putExtra("currentLocation", currentLocation.toLatLng()) //curLoc 정보 인텐트로 넘김
+        startActivity(newIntent)*/
       }
     }
-  }
-
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
   }
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -75,13 +130,10 @@ class StartFragment : Fragment(), OnMapReadyCallback,View.OnClickListener {
         intent.putExtra("mapTitle", "Short SanDiego route||1586002359186")
         startActivity(intent)
       }
-      routeRef.downloadUrl.addOnCompleteListener { task ->
-        if (task.isSuccessful) {
-
-        } else {
-        }
+      routeRef.downloadUrl.addOnCompleteListener {
       }
     }
+
     val smf = childFragmentManager.findFragmentById(R.id.map_viewer_start) as SupportMapFragment
     smf.getMapAsync(this)
     locationBroadcastReceiver = object : BroadcastReceiver(){
@@ -93,15 +145,16 @@ class StartFragment : Fragment(), OnMapReadyCallback,View.OnClickListener {
     }
     return view
   }
+
   override fun onMapReady(googleMap: GoogleMap) {
     Logg.d("onMapReady")
     traceMap = TraceMap(googleMap) //구글맵
     traceMap.mMap.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
   }
+
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     Logg.d("onViewCreated()")
-
 
     view.mainStartRunning.setOnClickListener(this)
     view.mainStartRacing.setOnClickListener(this)
@@ -125,5 +178,4 @@ class StartFragment : Fragment(), OnMapReadyCallback,View.OnClickListener {
     super.onDestroy()
     Logg.d("onDestroy()")
   }
-
 }
