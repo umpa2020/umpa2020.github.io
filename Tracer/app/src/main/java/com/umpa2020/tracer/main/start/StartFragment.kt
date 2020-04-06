@@ -15,6 +15,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.Marker
@@ -36,7 +38,7 @@ import kotlinx.android.synthetic.main.fragment_start.view.*
 import java.io.File
 
 
-class StartFragment : Fragment(), View.OnClickListener {
+class StartFragment : Fragment(), OnMapReadyCallback,View.OnClickListener {
   val TAG = "StartFragment"
 
   lateinit var traceMap: TraceMap
@@ -49,7 +51,7 @@ class StartFragment : Fragment(), View.OnClickListener {
   val STRAT_FRAGMENT_NEARMAP = 30
   val NEARMAPFALSE = 41
   var nearMaps: ArrayList<NearMap> = arrayListOf()
-
+  var moveCamera=true
 
   override fun onClick(v: View) {
     when (v.id) {
@@ -118,13 +120,14 @@ class StartFragment : Fragment(), View.OnClickListener {
     view.test.setOnClickListener {
       Logg.d("test 실행")
       val storage = FirebaseStorage.getInstance("gs://tracer-9070d.appspot.com/")
-      val routeRef = storage.reference.child("mapRoute").child("ZXCZXC||1585238332000")
+      val routeRef = storage.reference.child("mapRoute").child("Short SanDiego route||1586002359186")
       val localFile = File.createTempFile("routeGpx", "xml")
 
       routeRef.getFile(Uri.fromFile(localFile)).addOnSuccessListener {
         val routeGPX = GPXConverter().GpxToClass(localFile.path)
         val intent = Intent(context, RankingRecodeRacingActivity::class.java)
         intent.putExtra("RouteGPX", routeGPX)
+        intent.putExtra("mapTitle", "Short SanDiego route||1586002359186")
         startActivity(intent)
       }
       routeRef.downloadUrl.addOnCompleteListener {
@@ -132,20 +135,21 @@ class StartFragment : Fragment(), View.OnClickListener {
     }
 
     val smf = childFragmentManager.findFragmentById(R.id.map_viewer_start) as SupportMapFragment
-    traceMap = TraceMap(smf, requireContext())
-    locationBroadcastReceiver = object : BroadcastReceiver() {
+    smf.getMapAsync(this)
+    locationBroadcastReceiver = object : BroadcastReceiver(){
       override fun onReceive(context: Context?, intent: Intent?) {
         val message = intent?.getParcelableExtra<Location>("message")
         currentLocation = message as Location
-
-        work()
+        if(moveCamera) traceMap.moveCamera(currentLocation.toLatLng())
       }
     }
     return view
   }
 
-  fun work() {
-
+  override fun onMapReady(googleMap: GoogleMap) {
+    Logg.d("onMapReady")
+    traceMap = TraceMap(googleMap) //구글맵
+    traceMap.mMap.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

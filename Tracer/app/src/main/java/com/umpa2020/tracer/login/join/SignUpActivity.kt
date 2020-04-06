@@ -12,12 +12,13 @@ import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
-import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.*
-import androidx.appcompat.app.AlertDialog
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -29,6 +30,7 @@ import com.jakewharton.rxbinding2.widget.RxTextView
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.main.MainActivity
+import com.umpa2020.tracer.util.ChoicePopup
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
@@ -74,7 +76,6 @@ class SignUpActivity : AppCompatActivity() {
   private var uid: String? = null
   private var email: String? = null
 
-  var timestamp: Long = 0
   private lateinit var progressbar: ProgressBar
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -84,6 +85,7 @@ class SignUpActivity : AppCompatActivity() {
 
     progressbar = ProgressBar(this)
 
+    Logg.i("test")
     editNickname.requestFocus()
     init()
 
@@ -431,16 +433,17 @@ class SignUpActivity : AppCompatActivity() {
         gender = editGender.text.toString()
 
 
-        Logg.d("가입 버튼 눌렀을 때$nickname, $age, $gender")
+        Logg.d("가입 버튼 눌렀을 때 : $nickname, $age, $gender")
 
         if (textInputLayoutArray[0].error != "사용 가능한 닉네임입니다.") { //무조건 중복 확인 버튼을 눌러야만 회원가입 가능하게 함
           Logg.d(textInputLayoutArray[0].error.toString() + "if문 검사")
           Toast.makeText(this, "중복 확인을 해주세요.", Toast.LENGTH_LONG).show()
-        } else {
+        } else { // 중복 확인 통과
+          Logg.d(isInputCorrectData[0].toString() + ", "+  age!!.isNotEmpty().toString() +", "+ gender!!.isNotEmpty().toString())
           if (isInputCorrectData[0] && age!!.isNotEmpty() && gender!!.isNotEmpty()) {
             if (bitmapImg == null) // 프로필 이미지를 설정하지 않았을 때 = 사용자 입장에서 프로필 버튼을 누르지 않았음
             {
-              showSettingPopup() //팝업창으로 물어봄
+              basicProfileSettingPopup() //팝업창으로 물어봄
             } else { // 프로필 이미지 있는 경우 설정한 프로필로 가입하기
               signUp(bitmapImg!!, nickname!!, age!!, gender!!)
               progressbar.show() //메인창으로 넘어가기 전까지 프로그래스 바 띄움
@@ -462,35 +465,25 @@ class SignUpActivity : AppCompatActivity() {
   /**
   기본 이미지로 설정할건지 물어보는 팝업
    **/
-  fun showSettingPopup() {
-    val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-    val view = inflater.inflate(R.layout.sign_up_activity_yesnopopup, null)
-    val textView: TextView = view.findViewById(R.id.signUpActivityPopUpTextView)
-    textView.text = "기본 이미지로 설정하시겠습니까?"
-
-    val alertDialog = AlertDialog.Builder(this) //alertDialog 생성
-      .setTitle("선택해주세요.")
-      .create()
-
-    //Yes 버튼 눌렀을 때
-    val yesButton = view.findViewById<Button>(R.id.signUpActivityYesButton)
-    yesButton.setOnClickListener {
-      //기본 이미지로 설정
-      basicBitmapImg = BitmapFactory.decodeResource(resources, R.drawable.basic_profile)
-      signUp(basicBitmapImg!!, nickname!!, age!!, gender!!)
-      alertDialog.dismiss()
-      progressbar.show() //기본이미지로 회원가입이 바로 진행되도록 프로그레스바 띄움
-    }
-
-    //No 버튼 눌렀을 때
-    val noButton = view.findViewById<Button>(R.id.signUpActivityNoButton)
-    noButton.setOnClickListener {
-      //갤러리에서 원하는 프로필 이미지 선택할 수 있도록 권한체크
-      alertDialog.dismiss()
-      checkSelfPermission()
-    }
-
-    alertDialog.setView(view)
-    alertDialog.show() //팝업 띄우기
+  lateinit var noticePopup : ChoicePopup
+  private fun basicProfileSettingPopup() {
+    noticePopup = ChoicePopup(this, "선택해주세요.",
+      "기본 이미지로 설정하시겠습니까",
+      "예","아니오",
+      View.OnClickListener {
+        //Yes 버튼 눌렀을 때
+        //기본 이미지로 설정
+        basicBitmapImg = BitmapFactory.decodeResource(resources, R.drawable.basic_profile)
+        signUp(basicBitmapImg!!, nickname!!, age!!, gender!!)
+        noticePopup.dismiss()
+        progressbar.show() //기본이미지로 회원가입이 바로 진행되도록 프로그레스바 띄움
+      },
+      View.OnClickListener {
+        // No 버튼 눌렀을 때
+        //갤러리에서 원하는 프로필 이미지 선택할 수 있도록 권한체크
+//        checkSelfPermission()
+        noticePopup.dismiss()
+      })
+    noticePopup.show()
   }
 }
