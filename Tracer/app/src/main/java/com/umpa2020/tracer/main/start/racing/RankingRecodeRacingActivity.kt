@@ -26,6 +26,7 @@ import com.umpa2020.tracer.trace.decorate.BasicMap
 import com.umpa2020.tracer.trace.decorate.PolylineDecorator
 import com.umpa2020.tracer.trace.decorate.RacingDecorator
 import com.umpa2020.tracer.trace.decorate.TraceMap
+import com.umpa2020.tracer.util.ChoicePopup
 import com.umpa2020.tracer.util.LocationBroadcastReceiver
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.MyHandler

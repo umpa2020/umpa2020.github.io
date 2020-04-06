@@ -56,6 +56,7 @@ class LoginActivity : AppCompatActivity() {
 
     //  Configure Google Sign In
     // 구글 로그인 옵션
+    // GoogleSignInOptions 옵션을 관리해주는 클래스로 API 키값과 요청할 값이 저장되어 있다
     val googleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
       .requestIdToken(getString(R.string.default_web_client_id))
       .requestEmail()

@@ -313,7 +313,7 @@ class SignUpActivity : AppCompatActivity() {
   private fun signUp(bitmapImg: Bitmap, nickname: String, age: String, gender: String) {
     if (flag == 1) {// false이면 닉네임 체크가 안된 것. 그러면 실행되면 안돼
       val timestamp = Date().time
-      uploadProfileImage(bitmapImg, nickname, timestamp.toString())
+      uploadProfileImage(bitmapImg, nickname, age, gender, timestamp.toString())
       uploadUserInfo(nickname, age, gender, timestamp.toString())
     } else if (flag == 3) {
       textInputLayoutArray[0].setErrorTextColor(resources.getColorStateList(R.color.red, null))
@@ -357,7 +357,7 @@ class SignUpActivity : AppCompatActivity() {
     flag = 3 // 비동기라서 이건 무조건 실행. 하지만 firebase보단 항상 먼저 실행됨.
   }
 
-  private fun uploadProfileImage(bitmapImg: Bitmap, nickname: String, timestamp: String) {
+  private fun uploadProfileImage(bitmapImg: Bitmap, nickname: String, age: String, gender: String, timestamp: String) {
     // 현재 날짜를 프로필 이름으로 nickname/Profile/현재날짜(영어).jpg 경로 만들기
 
     val profileRef = mStorageReference!!.child("Profile").child(uid!!).child(timestamp + ".jpg")
@@ -375,6 +375,8 @@ class SignUpActivity : AppCompatActivity() {
       UserInfo.autoLoginKey = uid!!
       UserInfo.email = email!!
       UserInfo.nickname = nickname // Shared에 nickname저장.
+      UserInfo.age = age
+      UserInfo.gender = gender
       val nextIntent = Intent(this@SignUpActivity, MainActivity::class.java)
       startActivity(nextIntent)
       progressbar.dismiss()
@@ -438,7 +440,7 @@ class SignUpActivity : AppCompatActivity() {
           Logg.d(textInputLayoutArray[0].error.toString() + "if문 검사")
           Toast.makeText(this, "중복 확인을 해주세요.", Toast.LENGTH_LONG).show()
         } else { // 중복 확인 통과
-          Logg.d(isInputCorrectData[0].toString() + ", "+  age!!.isNotEmpty().toString() +", "+ gender!!.isNotEmpty().toString())
+          Logg.d(isInputCorrectData[0].toString() + ", " + age!!.isNotEmpty().toString() + ", " + gender!!.isNotEmpty().toString())
           if (isInputCorrectData[0] && age!!.isNotEmpty() && gender!!.isNotEmpty()) {
             if (bitmapImg == null) // 프로필 이미지를 설정하지 않았을 때 = 사용자 입장에서 프로필 버튼을 누르지 않았음
             {
@@ -464,11 +466,12 @@ class SignUpActivity : AppCompatActivity() {
   /**
   기본 이미지로 설정할건지 물어보는 팝업
    **/
-  var basicProfilePopUp : ChoicePopup? = null
+  var basicProfilePopUp: ChoicePopup? = null
+
   private fun basicProfileSettingPopup() {
     basicProfilePopUp = ChoicePopup(this, "선택해주세요.",
       "기본 이미지로 설정하시겠습니까",
-      "예","아니오",
+      "예", "아니오",
       View.OnClickListener {
         //Yes 버튼 눌렀을 때
         //기본 이미지로 설정

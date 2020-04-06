@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- TODO : 파일명 변경 -->
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:gravity="center"
@@ -7,6 +9,12 @@
 
   <TextView
     android:id="@+id/runningActivityPopUpTitle"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:layout_marginTop="10dp"/>
+
+  <View
     android:layout_width="match_parent"
     android:layout_height="1dp"
     android:layout_marginLeft="10dp"
@@ -17,7 +25,7 @@
   <TextView
     android:id="@+id/runningActivityPopUpTextView"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="0dp"
     android:layout_marginTop="20dp"
     android:layout_weight="1"
     android:fontFamily="@font/notosansmedium"
@@ -25,8 +33,9 @@
 
 
   <LinearLayout
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:gravity="center"
     android:layout_marginTop="20dp"
     android:layout_marginBottom="20dp"
     android:orientation="horizontal">
@@ -34,22 +43,22 @@
     <Button
       android:id="@+id/runningActivityYesButton"
       style="@style/ListTitle"
-      android:layout_width="130dp"
+      android:layout_width="120dp"
       android:layout_height="wrap_content"
       android:background="@drawable/button_empty_background"
       android:text="@string/yes"
-      android:textSize="15dp" />
+      android:textSize="15sp" />
 
     <Button
       android:id="@+id/runningActivityNoButton"
       style="@style/ListTitle"
-      android:layout_width="130dp"
+      android:layout_width="120dp"
       android:layout_height="wrap_content"
-      android:layout_marginLeft="20dp"
+      android:layout_marginStart="20dp"
       android:background="@drawable/button_background"
       android:text="@string/no"
       android:textColor="@color/white"
-      android:textSize="15dp" />
+      android:textSize="15sp" />
 
   </LinearLayout>
 

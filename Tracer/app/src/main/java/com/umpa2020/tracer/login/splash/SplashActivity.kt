@@ -103,7 +103,7 @@ class SplashActivity : AppCompatActivity() {
       /**
        *  // 로그인 고유 값이 있으면 --> 회원가입 진행 끝났다고 생각하고 일단ㄱㄱ -> 수정해야함
        */
-      if (!UserInfo.autoLoginKey.equals("")) { // 로그인 고유 값이 있으면 --> 회원가입 진행 끝났다고 생각하고 일단ㄱㄱ -> 수정해야함
+      if (!UserInfo.autoLoginKey.equals(" ")) { // 로그인 고유 값이 있으면 --> 회원가입 진행 끝났다고 생각하고 일단ㄱㄱ -> 수정해야함
         // main으로
         var nextIntent = Intent(this@SplashActivity, MainActivity::class.java)
         startActivity(nextIntent)

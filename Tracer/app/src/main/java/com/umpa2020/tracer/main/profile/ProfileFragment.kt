@@ -11,6 +11,8 @@ import androidx.fragment.app.Fragment
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.network.FBProfile
 import com.umpa2020.tracer.util.UserInfo
+import kotlinx.android.synthetic.main.fragment_profile.*
+import kotlinx.android.synthetic.main.fragment_profile.view.*
 
 /**
  * A simple [Fragment] subclass.
@@ -33,9 +35,14 @@ class ProfileFragment : Fragment() {
      */
     FBProfile().setProfile(view)
 
+    view.appSettingButton.setOnClickListener{
+      val nextIntent = Intent(activity, AppSettingActivity::class.java)
+      startActivity(nextIntent)
+    }
+
     // 나의 활동 액티비티
-    val routeTextView = view.findViewById<TextView>(R.id.profileRouteTextView)
-    routeTextView.setOnClickListener {
+//    val routeTextView = view.findViewById<TextView>(R.id.profileRouteTextView)
+    view.profileRouteTextView.setOnClickListener {
       val nextIntent = Intent(activity, ProfileRouteActivity::class.java)
       startActivity(nextIntent)
     }
@@ -50,4 +57,16 @@ class ProfileFragment : Fragment() {
 
     return view
   }
+
+//  fun onClick(view: View) {
+//    when (view.id) {
+//      R.id.appSettingButton -> {
+//
+//      }
+//      R.id.profileRouteTextView -> {
+//        val nextIntent = Intent(activity, ProfileRouteActivity::class.java)
+//        startActivity(nextIntent)
+//      }
+//    }
+//  }
 }
