@@ -24,11 +24,11 @@ class MyInformationActivity : AppCompatActivity() {
     setContentView(R.layout.activity_my_information)
 
     // 프로필 이미지 서버에서 가져와서 화면에 설정
-    FBProfile().getProfileImage(profileImage,UserInfo.nickname)
+    FBProfile().getProfileImage(profileImage, UserInfo.nickname)
 
     // TODO : 프로필 이미지 변경.
     // Shared에 저장된 유저 정보 설정정
-   emailTextView.text = UserInfo.email
+    emailTextView.text = UserInfo.email
     nickNameTextView.text = UserInfo.nickname
     ageTextView.text = UserInfo.age
     genderTextView.text = UserInfo.gender
@@ -43,7 +43,7 @@ class MyInformationActivity : AppCompatActivity() {
         Logg.i("앨범으로")
         goToAlbum()
       }
-      R.id.profileChangeButton->{
+      R.id.profileChangeButton -> {
         // TODO: 서버로 변경된 프로필 이미지 전송
         Logg.i("서버로 변경된 프로필 이미지 전송")
       }
@@ -89,7 +89,7 @@ class MyInformationActivity : AppCompatActivity() {
     }
   }
 
-  companion object{
+  companion object {
     // 카메라 requestCode
     private val PICK_FROM_ALBUM = 1
   }

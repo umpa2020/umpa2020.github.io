@@ -12,8 +12,8 @@ import com.umpa2020.tracer.constant.Constants.Companion.DEVIATION_DISTANCE
 import com.umpa2020.tracer.constant.Constants.Companion.INFOUPDATE
 import com.umpa2020.tracer.constant.Constants.Companion.RACINGFINISH
 import com.umpa2020.tracer.constant.UserState
+import com.umpa2020.tracer.trace.MyHandler
 import com.umpa2020.tracer.util.Logg
-import com.umpa2020.tracer.util.MyHandler
 
 class RacingDecorator(decoratedMap: TraceMap) : MapDecorator(decoratedMap) {
   var myHandler = MyHandler.myHandler!!

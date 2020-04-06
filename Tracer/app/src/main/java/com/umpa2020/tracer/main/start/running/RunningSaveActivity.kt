@@ -8,15 +8,16 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.RankingData
 import com.umpa2020.tracer.dataClass.RouteGPX
-import com.umpa2020.tracer.trace.decorate.BasicMap
-import com.umpa2020.tracer.trace.decorate.TraceMap
+import com.umpa2020.tracer.trace.TraceMap
 import com.umpa2020.tracer.util.Chart
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.UserInfo
@@ -28,7 +29,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class RunningSaveActivity : AppCompatActivity() {
+class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback {
   var switch = 0
 
   lateinit var infoData: InfoData
@@ -38,18 +39,18 @@ class RunningSaveActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(com.umpa2020.tracer.R.layout.activity_running_save)
-
     infoData = intent.getParcelableExtra("InfoData")!!
     routeGPX = intent.getParcelableExtra("RouteGPX")!!
+    loadRoute()
+    val smf = supportFragmentManager.findFragmentById(com.umpa2020.tracer.R.id.map_viewer) as SupportMapFragment
+    smf.getMapAsync(this)
+
     val speedList = mutableListOf<Double>()
     val elevationList = mutableListOf<Double>()
     routeGPX.trkList.forEach {
       speedList.add(it.speed.get().toDouble())
       elevationList.add(it.elevation.get().toDouble())
     }
-    val smf = supportFragmentManager.findFragmentById(com.umpa2020.tracer.R.id.map_viewer) as SupportMapFragment
-    traceMap = BasicMap(smf, this)
-    traceMap.routeGPX = routeGPX
     distance_tv.text = String.format("%.2f", infoData.distance!! / 1000)
     val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
     formatter.timeZone = TimeZone.getTimeZone("UTC")
@@ -169,5 +170,17 @@ class RunningSaveActivity : AppCompatActivity() {
     }
 
     // 위에 지정한 스레드 스타트
+  }
+  var track: MutableList<LatLng> = mutableListOf()
+  fun loadRoute() {
+    routeGPX.trkList.forEach {
+      track.add(LatLng(it.latitude.toDouble(), it.longitude.toDouble()))
+    }
+  }
+  override fun onMapReady(googleMap: GoogleMap) {
+    Logg.d("onMapReady")
+    traceMap = TraceMap(googleMap) //구글맵
+    traceMap.mMap.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
+    traceMap.drawRoute(track,routeGPX.wptList)
   }
 }

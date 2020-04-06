@@ -73,7 +73,7 @@
   <string name="total_time">총 주행시간</string>
   <string name="numerofruns">실행수</string>
   <string name="runningmode">러닝 모드</string>
-  <string name="racingmode">레이싱 모드</string>
+  <string name="re_search_this_area">현 지도에서 검색</string>
   <string name="distance_display">떨어진 거리 표시</string>
   <string name="yes">예</string>
   <string name="no">아니오</string>

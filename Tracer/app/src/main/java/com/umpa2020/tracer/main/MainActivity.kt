@@ -2,21 +2,24 @@ package com.umpa2020.tracer.main
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.umpa2020.tracer.R
-import com.umpa2020.tracer.util.TTS
 import com.umpa2020.tracer.locationBackground.LocationBackgroundService
 import com.umpa2020.tracer.locationBackground.ServiceStatus
 import com.umpa2020.tracer.main.profile.ProfileFragment
 import com.umpa2020.tracer.main.ranking.RankingFragment
 import com.umpa2020.tracer.main.start.StartFragment
 import com.umpa2020.tracer.util.Logg
+import com.umpa2020.tracer.util.TTS
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
+  private var doubleBackToExitPressedOnce1 = false
 
   //bottomNavigation 아이템 선택 리스너
   private val navListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
@@ -36,6 +39,7 @@ class MainActivity : AppCompatActivity() {
 
     true
   }
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     Logg.d("Hello I'm New")
@@ -109,5 +113,15 @@ class MainActivity : AppCompatActivity() {
     val TAG = "service"
     private const val REQUEST_PERMISSIONS_REQUEST_CODE = 34
     const val MESSENGER_INTENT_KEY = "msg-intent-key"
+  }
+
+  override fun onBackPressed() {
+    if (doubleBackToExitPressedOnce1) {
+      super.onBackPressed()
+      return
+    }
+    this.doubleBackToExitPressedOnce1 = true
+    Toast.makeText(applicationContext, "뒤로 버튼을 한번 더 누르면 종료됩니다.", Toast.LENGTH_LONG).show()
+    Handler().postDelayed({doubleBackToExitPressedOnce1=false},3000)
   }
 }
