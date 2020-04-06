@@ -1,6 +1,7 @@
 package com.umpa2020.tracer.network
 
 import android.app.Activity
+import android.graphics.Bitmap
 import android.os.Handler
 import android.os.Message
 import android.view.View
@@ -16,6 +17,7 @@ import com.umpa2020.tracer.util.PrettyDistance
 import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.fragment_profile.view.*
+import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -130,6 +132,32 @@ class FBProfile {
       }
       .addOnFailureListener { exception ->
       }
+  }
+
+  /**
+   * 사진 변경 시, 해당 사진을 storage에 업로드하고
+   * 그 경로를 db에 update하는 함수
+   */
+  private fun changeProfileImage(bitmapImg: Bitmap) {
+    val dt = Date()
+    // 현재 날짜를 프로필 이름으로 nickname/Profile/현재날짜(영어).jpg 경로 만들기
+
+    val mStorage = FirebaseStorage.getInstance()
+    val mStorageReference = mStorage.reference
+
+    val profileRef = mStorageReference.child("Profile").child(UserInfo.autoLoginKey).child("${dt.time}.jpg")
+    // 이미지
+    val baos = ByteArrayOutputStream()
+    bitmapImg.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+    val imageData = baos.toByteArray()
+    val uploadTask = profileRef.putBytes(imageData)
+    uploadTask.addOnFailureListener {
+    }.addOnSuccessListener {
+      val mFirestoreDB = FirebaseFirestore.getInstance()
+
+      mFirestoreDB.collection("userinfo").document(UserInfo.autoLoginKey)
+        .update("profileImagePath", "${dt.time}.jpg")
+    }
   }
 
   fun getMyRoute(mHandler: Handler) {
