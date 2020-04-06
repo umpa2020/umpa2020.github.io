@@ -107,9 +107,7 @@ class StartFragment : Fragment(), OnMapReadyCallback,View.OnClickListener {
           }
         }
         FBMap().getNearMap(bound.southwest, bound.northeast, mHandler)
-        /*val newIntent = Intent(activity, NearRouteActivity::class.java)
-        newIntent.putExtra("currentLocation", currentLocation.toLatLng()) //curLoc 정보 인텐트로 넘김
-        startActivity(newIntent)*/
+
       }
     }
   }

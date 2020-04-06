@@ -25,7 +25,7 @@ class RacingFinishActivity : AppCompatActivity() {
   var activity = this
   lateinit var racerData: InfoData
   var arrRankingData: ArrayList<RankingData> = arrayListOf()
-  lateinit var makerData:InfoData
+  lateinit var makerData: InfoData
 
 
   var MapTitle = ""
@@ -44,100 +44,85 @@ class RacingFinishActivity : AppCompatActivity() {
     val racerSpeeds = routeGPX!!.getSpeed()
     val makerSpeeds = mapRouteGPX!!.getSpeed()
 
-    
+    // 타임스탬프
+    val timestamp = Date().time
+
+
     //TODO: 실패이든 성공이든 maker의 infodata를 받아와야함
-    if (result) { // 성공인 경우
-      // 현재 달린 사람의 Maptitle로 메이커의 infoData를 다운 받아옴
-      val db = FirebaseFirestore.getInstance()
-      db.collection("mapInfo").document(racerData.mapTitle!!)
-        .get()
-        .addOnSuccessListener { document ->
-          makerData = document.toObject(InfoData::class.java)!!
-          val ranMapsData = RanMapsData(racerData.mapTitle, racerData.distance, racerData.time)
-          db.collection("userinfo").document(UserInfo.autoLoginKey).collection("user ran these maps").add(ranMapsData)
+    // 현재 달린 사람의 Maptitle로 메이커의 infoData를 다운 받아옴
+    val db = FirebaseFirestore.getInstance()
+    db.collection("mapInfo").document(racerData.mapTitle!!)
+      .get()
+      .addOnSuccessListener { document ->
+        makerData = document.toObject(InfoData::class.java)!!
+        val ranMapsData = RanMapsData(racerData.mapTitle, racerData.distance, racerData.time)
+        db.collection("userinfo").document(UserInfo.autoLoginKey).collection("user ran these maps").add(ranMapsData)
+      }
 
-          val rankingData = RankingData(racerData.makersNickname, UserInfo.nickname, racerData.time, 1)
-
-          // 랭킹 맵에서
-          db.collection("rankingMap").document(racerData.mapTitle!!).collection("ranking").whereEqualTo("bestTime", 1)
-            .whereEqualTo("challengerNickname", UserInfo.nickname).get()
-            .addOnSuccessListener { result ->
-              for (document in result) {
-                if (racerData.time!!.toLong() < document.get("challengerTime") as Long) {
-                  db.collection("rankingMap").document(racerData.mapTitle!!).collection("ranking").document(document.id).update("bestTime", 0)
-
-                } else {
-                  rankingData.bestTime = 0
-                }
-                break
-              }
-
-              // 타임스탬프
-              val timestamp = Date().time
-
-              // 랭킹의 내용을 가져와서 마지막 페이지 구성
+    if (result) {
+      val rankingData = RankingData(racerData.makersNickname, UserInfo.nickname, racerData.time, 1)
+      // 랭킹 맵에서
+      db.collection("rankingMap").document(racerData.mapTitle!!).collection("ranking").whereEqualTo("bestTime", 1)
+        .whereEqualTo("challengerNickname", UserInfo.nickname).get()
+        .addOnSuccessListener { result ->
+          for (document in result) {
+            if (racerData.time!!.toLong() < document.get("challengerTime") as Long) {
               db.collection("rankingMap").document(racerData.mapTitle!!).collection("ranking")
-                .document(UserInfo.autoLoginKey + timestamp).set(rankingData)
-                .addOnSuccessListener {
-                  db.collection("rankingMap").document(racerData.mapTitle!!).collection("ranking").orderBy("challengerTime", Query.Direction.ASCENDING)
-                    .get()
-                    .addOnSuccessListener { result ->
-                      var index = 1
-                      for (document2 in result) {
-                        if (document2.get("challengerNickname") == UserInfo.nickname && document2.get("challengerTime").toString().equals(racerData.time.toString())) {
-                          resultRankTextView.text = "" + index + "등"
-                        }
-                        var recycleRankingData: RankingData
-                        recycleRankingData = document2.toObject(RankingData::class.java)
-                        if (recycleRankingData.bestTime == 1) {
-                          //최대 10위까지만 띄우기
-                          if (arrRankingData.size > 10)
-                            break
-
-                          arrRankingData.add(recycleRankingData)
-
-                        }
-                        index++
-                      }
-                      //레이아웃 매니저 추가
-                      resultPlayerRankingRecycler.layoutManager = LinearLayoutManager(this)
-                      //adpater 추가
-                      resultPlayerRankingRecycler.adapter = RankRecyclerViewAdapterTopPlayer(arrRankingData)
-
-                      runOnUiThread {
-                        Logg.d("makerData.time = ${makerData.time}")
-                        Logg.d("makerData.time = ${racerData.time}")
-
-                        makerLapTimeTextView.text = formatter.format(Date(makerData.time!!))
-                        makerMaxSpeedTextView.text = PrettyDistance().convertPretty(makerSpeeds.max()!!)
-                        makerAvgSpeedTextView.text = PrettyDistance().convertPretty(makerSpeeds.average())
-
-                        racerLapTimeTextView.text = formatter.format(Date(racerData.time!!))
-                        racerMaxSpeedTextView.text = PrettyDistance().convertPretty(racerSpeeds.max()!!)
-                        racerAvgSpeedTextView.text = PrettyDistance().convertPretty(racerSpeeds.average())
-                      }
-                      progressbar.dismiss()
-                    }
-                    .addOnFailureListener { exception ->
-                    }
-                }
+                .document(document.id).update("bestTime", 0)
+            } else {
+              rankingData.bestTime = 0
             }
+            break
+          }
         }
+      db.collection("rankingMap").document(racerData.mapTitle!!).collection("ranking")
+        .document(UserInfo.autoLoginKey + timestamp).set(rankingData)
 
-        .addOnFailureListener { exception ->
-        }
-    } else {
-      resultRankTextView.text = "실패"
-      makerLapTimeTextView.text = formatter.format(Date(makerData.time!!))
-      makerMaxSpeedTextView.text = PrettyDistance().convertPretty(makerSpeeds.max()!!)
-      makerAvgSpeedTextView.text = PrettyDistance().convertPretty(makerSpeeds.average())
-
-      racerLapTimeTextView.text = formatter.format(Date(racerData.time!!))
-      racerMaxSpeedTextView.text = PrettyDistance().convertPretty(racerSpeeds.max()!!)
-      racerAvgSpeedTextView.text = PrettyDistance().convertPretty(racerSpeeds.average())
-
-      progressbar.dismiss()
     }
+
+
+
+    // 랭킹의 내용을 가져와서 마지막 페이지 구성
+    db.collection("rankingMap").document(racerData.mapTitle!!).collection("ranking").orderBy("challengerTime", Query.Direction.ASCENDING)
+      .get()
+      .addOnSuccessListener { result ->
+        var index = 1
+        for (document2 in result) {
+          if (document2.get("challengerNickname") == UserInfo.nickname && document2.get("challengerTime").toString() == racerData.time.toString()) {
+            resultRankTextView.text = "" + index + "등"
+          }
+          val recycleRankingData: RankingData = document2.toObject(RankingData::class.java)
+          if (recycleRankingData.bestTime == 1) {
+            //최대 10위까지만 띄우기
+            if (arrRankingData.size > 10)
+              break
+
+            arrRankingData.add(recycleRankingData)
+
+          }
+          index++
+        }
+        //레이아웃 매니저 추가
+        resultPlayerRankingRecycler.layoutManager = LinearLayoutManager(this)
+        //adpater 추가
+        resultPlayerRankingRecycler.adapter = RankRecyclerViewAdapterTopPlayer(arrRankingData)
+
+        runOnUiThread {
+          Logg.d("makerData.time = ${makerData.time}")
+          Logg.d("makerData.time = ${racerData.time}")
+
+          makerLapTimeTextView.text = formatter.format(Date(makerData.time!!))
+          makerMaxSpeedTextView.text = PrettyDistance().convertPretty(makerSpeeds.max()!!)
+          makerAvgSpeedTextView.text = PrettyDistance().convertPretty(makerSpeeds.average())
+
+          racerLapTimeTextView.text = formatter.format(Date(racerData.time!!))
+          racerMaxSpeedTextView.text = PrettyDistance().convertPretty(racerSpeeds.max()!!)
+          racerAvgSpeedTextView.text = PrettyDistance().convertPretty(racerSpeeds.average())
+        }
+        progressbar.dismiss()
+      }
+      .addOnFailureListener {
+      }
 
     OKButton.setOnClickListener {
       val intent = Intent(this, MainActivity::class.java)
