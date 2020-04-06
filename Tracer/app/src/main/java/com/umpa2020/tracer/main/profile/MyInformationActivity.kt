@@ -46,6 +46,9 @@ class MyInformationActivity : AppCompatActivity() {
       R.id.profileChangeButton -> {
         // TODO: 서버로 변경된 프로필 이미지 전송
         Logg.i("서버로 변경된 프로필 이미지 전송")
+
+        FBProfile().changeProfileImage(bitmapImg!!)
+        finish()
       }
     }
   }

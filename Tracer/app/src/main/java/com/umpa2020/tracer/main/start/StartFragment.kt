@@ -169,7 +169,7 @@ class StartFragment : Fragment(), OnMapReadyCallback,View.OnClickListener {
 
   override fun onPause() {
     super.onPause()
-    UserInfo.rankingLatLng = currentLocation.toLatLng()
+//    UserInfo.rankingLatLng = currentLocation.toLatLng()
     //        브로드 캐스트 해제 - 전역 context로 수정해야함
     LocalBroadcastManager.getInstance(this.requireContext()).unregisterReceiver(locationBroadcastReceiver)
   }
