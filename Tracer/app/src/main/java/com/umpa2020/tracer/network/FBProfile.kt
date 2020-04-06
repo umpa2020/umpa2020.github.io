@@ -88,8 +88,7 @@ class FBProfile {
               .override(1024, 980)
               .into(imageView)
             progressbar.dismiss()
-          }
-          else {
+          } else {
             progressbar.dismiss()
           }
         }
@@ -124,8 +123,7 @@ class FBProfile {
               .override(1024, 980)
               .into(imageView)
             progressbar.dismiss()
-          }
-          else {
+          } else {
             progressbar.dismiss()
           }
         }
@@ -138,7 +136,10 @@ class FBProfile {
    * 사진 변경 시, 해당 사진을 storage에 업로드하고
    * 그 경로를 db에 update하는 함수
    */
-  private fun changeProfileImage(bitmapImg: Bitmap) {
+  fun changeProfileImage(bitmapImg: Bitmap) {
+//    val progressbar = ProgressBar(App.instance.currentActivity() as Activity)
+//    progressbar.show()
+
     val dt = Date()
     // 현재 날짜를 프로필 이름으로 nickname/Profile/현재날짜(영어).jpg 경로 만들기
 
@@ -150,14 +151,20 @@ class FBProfile {
     val baos = ByteArrayOutputStream()
     bitmapImg.compress(Bitmap.CompressFormat.JPEG, 100, baos)
     val imageData = baos.toByteArray()
-    val uploadTask = profileRef.putBytes(imageData)
-    uploadTask.addOnFailureListener {
-    }.addOnSuccessListener {
-      val mFirestoreDB = FirebaseFirestore.getInstance()
 
-      mFirestoreDB.collection("userinfo").document(UserInfo.autoLoginKey)
-        .update("profileImagePath", "${dt.time}.jpg")
-    }
+    // storage에 이미지 올리는 거
+    val uploadTask = profileRef.putBytes(imageData)
+    uploadTask
+      .addOnCompleteListener {
+        if (it.isSuccessful) {
+          val mFirestoreDB = FirebaseFirestore.getInstance()
+
+          mFirestoreDB.collection("userinfo").document(UserInfo.autoLoginKey)
+            .update("profileImagePath", "${dt.time}.jpg")
+        }
+//        progressbar.dismiss()
+      }
+
   }
 
   fun getMyRoute(mHandler: Handler) {
@@ -168,7 +175,7 @@ class FBProfile {
         for (document in result) {
           val data = document.toObject(InfoData::class.java)
           infoDatas.add(data)
-          Logg.d( "in get profile (보내기 전)!~ > " + document.id)
+          Logg.d("in get profile (보내기 전)!~ > " + document.id)
         }
         val msg: Message
 

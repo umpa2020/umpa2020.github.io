@@ -78,6 +78,10 @@
   <string name="yes">예</string>
   <string name="no">아니오</string>
   <string name="noroute">현재 저장된 루트가 없습니다.</string>
+  <string name="profile_information">내 정보</string>
+  <string name="profile_image_change">프로필 이미지 변경</string>
+  <string name="email_">이메일</string>
+  <string name="confirmation">확인</string>
 
   <!-- firebase string-->
   <string name="google_storage_bucket_string">gs://tracer-9070d.appspot.com/</string>

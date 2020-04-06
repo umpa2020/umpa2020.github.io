@@ -39,6 +39,7 @@ class RankingMapDetailActivity : AppCompatActivity() {
     val cutted = mapTitle.split("||")
     rankingDetailMapTitle.text = cutted[0]
     //TODO : 날짜로 바꿔야함 (한국 시간만 해결하면 됨)
+    // TODO : 메인에서 마커 클릭하면 여기서 어플 터짐
     val timestamp = Timestamp(cutted[1].toLong())
     val date = Date(timestamp.time)
     rankingDetailDate.text = date.toString()
