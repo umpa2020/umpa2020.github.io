@@ -34,5 +34,11 @@ class Constants {
 
     //animation duration
     const val ANIMATION_DURATION_TIME = 500L
+
+    // ProfileFragment id
+    const val PROFILE_FRAGMENT_ID = 2131296382
+
+    // BaseRunningActivity 일시정지 애니메이션 상수
+    const val PUASE_ANIMATION_DURATION_TIME = 1300L
   }
 }

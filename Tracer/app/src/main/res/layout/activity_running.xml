@@ -22,27 +22,15 @@
       android:layout_height="wrap_content"
       android:layout_marginEnd="12dp"
       android:gravity="center"
-      android:text="@string/creatroute"/>
+      android:text="@string/creatroute" />
   </Toolbar>
-  <TextView
-    android:id="@+id/runningPauseNotificationTextView"
-    android:layout_width="match_parent"
-    android:layout_height="30dp"
-    android:layout_below="@+id/runningActivityToolBar"
-    android:layout_centerHorizontal="true"
-    android:background="#990044FF"
-    android:visibility="invisible"
-    android:fontFamily="@font/notosansmedium"
-    android:gravity="center"
-    android:textColor="@color/white"
-    android:textSize="10sp" />
 
   <fragment
-    android:layout_below="@+id/runningActivityToolBar"
     android:id="@+id/map_viewer"
     android:name="com.google.android.gms.maps.SupportMapFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_below="@+id/runningActivityToolBar"
     tools:context=".fragment.MapFragment" />
 
 
@@ -152,6 +140,15 @@
     </LinearLayout>
   </hollowsoft.slidingdrawer.SlidingDrawer>
 
+  <TextView
+    android:id="@+id/runningPauseNotificationTextView"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:background="#990044FF"
+    android:fontFamily="@font/notosansmedium"
+    android:gravity="center"
+    android:textColor="@color/white"
+    android:textSize="20sp" />
 
   <TextView
     android:id="@+id/runningNotificationTextView"
@@ -160,8 +157,8 @@
     android:layout_below="@id/runningActivityToolBar"
     android:layout_centerHorizontal="true"
     android:layout_marginLeft="20dp"
-    android:layout_marginRight="20dp"
     android:layout_marginTop="50dp"
+    android:layout_marginRight="20dp"
     android:background="#990044FF"
     android:fontFamily="@font/notosansmedium"
     android:gravity="center"

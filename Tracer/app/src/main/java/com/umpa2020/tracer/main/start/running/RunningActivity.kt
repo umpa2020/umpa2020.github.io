@@ -41,6 +41,7 @@ class RunningActivity : BaseRunningActivity(), OnDrawerScrollListener, OnDrawerO
     supportActionBar?.title = "RUNNING"
     init()
     notice("시작버튼을 누르면 러닝이 시작됩니다")
+    pauseNotice("기록 측정 중지")
   }
 
   override fun init() {
@@ -52,6 +53,7 @@ class RunningActivity : BaseRunningActivity(), OnDrawerScrollListener, OnDrawerO
     pauseButton = runningPauseButton
     chronometer = runningTimerTextView
     notificationTextView = runningNotificationTextView
+    pauseNotificationTextView = runningPauseNotificationTextView
     drawerHandle=runningHandle
     drawer = runningDrawer
     /**
