@@ -16,7 +16,6 @@ import com.umpa2020.tracer.network.FBMapImage
 import com.umpa2020.tracer.network.FBProfile
 import com.umpa2020.tracer.util.Chart
 import com.umpa2020.tracer.util.ChoicePopup
-import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.gpx.GPXConverter
 import kotlinx.android.synthetic.main.activity_ranking_map_detail.*
 import java.io.File
@@ -106,7 +105,8 @@ class RankingMapDetailActivity : AppCompatActivity() {
   }
 
   // 팝업 띄우는 함수
-  lateinit var noticePopup : ChoicePopup // 전역으로 선언하지 않으면 리스너에서 dismiss 사용 불가.
+  lateinit var noticePopup: ChoicePopup // 전역으로 선언하지 않으면 리스너에서 dismiss 사용 불가.
+
   private fun showPopup() {
 
 
@@ -122,9 +122,9 @@ class RankingMapDetailActivity : AppCompatActivity() {
     }
 
      */
-    noticePopup = ChoicePopup(this,"유형을 선택해주세요.",
+    noticePopup = ChoicePopup(this, "유형을 선택해주세요.",
       "어떤 유형으로 경기하시겠습니까? \n\n랭킹 기록용 : 랭킹 등록 가능",
-      "기록용","",
+      "기록용", "",
       View.OnClickListener {
         //랭킹 기록용 버튼 눌렀을 때
         val intent = Intent(App.instance.context(), RankingRecodeRacingActivity::class.java)

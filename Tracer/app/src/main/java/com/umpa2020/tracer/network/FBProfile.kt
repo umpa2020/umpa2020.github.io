@@ -88,8 +88,7 @@ class FBProfile {
               .override(1024, 980)
               .into(imageView)
             progressbar.dismiss()
-          }
-          else {
+          } else {
             progressbar.dismiss()
           }
         }
@@ -124,8 +123,7 @@ class FBProfile {
               .override(1024, 980)
               .into(imageView)
             progressbar.dismiss()
-          }
-          else {
+          } else {
             progressbar.dismiss()
           }
         }
@@ -168,7 +166,7 @@ class FBProfile {
         for (document in result) {
           val data = document.toObject(InfoData::class.java)
           infoDatas.add(data)
-          Logg.d( "in get profile (보내기 전)!~ > " + document.id)
+          Logg.d("in get profile (보내기 전)!~ > " + document.id)
         }
         val msg: Message
 
