@@ -4,7 +4,8 @@
   android:layout_height="wrap_content"
   android:background="@color/white"
   android:minHeight="?attr/actionBarSize"
-  android:theme="?attr/actionBarTheme">
+  android:theme="?attr/actionBarTheme"
+  android:elevation="1dp">
 
   <ImageView
     android:id="@+id/backImageBtn"
@@ -19,6 +20,5 @@
     android:id="@+id/titleText"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:textColor="@color/black"
-    android:textSize="18dp" />
+    style="@style/appBarText"/>
 </androidx.appcompat.widget.Toolbar>

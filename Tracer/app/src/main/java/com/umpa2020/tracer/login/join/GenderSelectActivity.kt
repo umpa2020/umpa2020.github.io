@@ -5,6 +5,8 @@ import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import com.jakewharton.rxbinding2.widget.color
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.util.Logg
 import kotlinx.android.synthetic.main.activity_gender_select.*
@@ -22,7 +24,7 @@ class GenderSelectActivity : AppCompatActivity() {
     setContentView(R.layout.activity_gender_select)
 
     val titleText = app_toolbar.titleText
-    titleText.text = "성별을 선택하세요."
+    titleText.text = getString(R.string.txtInputInfoGender)
   }
 
   fun onClick(v: View) {
@@ -44,7 +46,8 @@ class GenderSelectActivity : AppCompatActivity() {
         }
       }
       R.id.man -> {
-
+        manTextView.setTextColor(resources.getColor(R.color.red))
+        womanTextView.setTextColor(resources.getColor(R.color.rankBackgroudGray))
         if (manCheck.visibility == View.INVISIBLE && manUnderline.visibility == View.INVISIBLE) {
           manCheck.visibility = View.VISIBLE
           manUnderline.visibility = View.VISIBLE
@@ -67,6 +70,8 @@ class GenderSelectActivity : AppCompatActivity() {
         Logg.d("여자 : " + isWoman.toString())
       }
       R.id.woman -> {
+        manTextView.setTextColor(resources.getColor(R.color.rankBackgroudGray))
+        womanTextView.setTextColor(resources.getColor(R.color.red))
         if (womanCheck.visibility == View.INVISIBLE && womanUnderline.visibility == View.INVISIBLE) {
           womanCheck.visibility = View.VISIBLE
           womanUnderline.visibility = View.VISIBLE
