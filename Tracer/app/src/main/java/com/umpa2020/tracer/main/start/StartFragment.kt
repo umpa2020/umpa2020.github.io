@@ -1,5 +1,6 @@
 package com.umpa2020.tracer.main.start
 
+import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -25,6 +26,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.storage.FirebaseStorage
+import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.NearMap
 import com.umpa2020.tracer.extensions.toLatLng
@@ -35,6 +37,8 @@ import com.umpa2020.tracer.network.FBMap
 import com.umpa2020.tracer.trace.TraceMap
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.PrettyDistance
+import com.umpa2020.tracer.util.ProgressBar
+import com.umpa2020.tracer.util.UserInfo
 import com.umpa2020.tracer.util.gpx.GPXConverter
 import kotlinx.android.synthetic.main.fragment_start.*
 import kotlinx.android.synthetic.main.fragment_start.view.*
@@ -45,7 +49,6 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
   val TAG = "StartFragment"
 
   lateinit var traceMap: TraceMap
-
   lateinit var currentLocation: Location
 
   lateinit var locationBroadcastReceiver: BroadcastReceiver
@@ -56,6 +59,8 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
   val NEARMAPFALSE = 41
   var nearMaps: ArrayList<NearMap> = arrayListOf()
   var wedgedCamera = true
+
+
 
   override fun onClick(v: View) {
     when (v.id) {
@@ -151,6 +156,9 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
   }
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    val progressbar = ProgressBar(App.instance.currentActivity() as Activity)
+    progressbar.show()
+
     Logg.d("onCreateView()")
     val view = inflater.inflate(R.layout.fragment_start, container, false)
     view.test.setOnClickListener {
@@ -177,6 +185,9 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
         val message = intent?.getParcelableExtra<Location>("message")
         currentLocation = message as Location
         if (wedgedCamera) traceMap.moveCamera(currentLocation.toLatLng())
+        if (progressbar.isShowing) {
+          progressbar.dismiss()
+        }
       }
     }
     return view
@@ -216,7 +227,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
 
   override fun onPause() {
     super.onPause()
-//    UserInfo.rankingLatLng = currentLocation.toLatLng()
+    UserInfo.rankingLatLng = currentLocation.toLatLng()
     //        브로드 캐스트 해제 - 전역 context로 수정해야함
     LocalBroadcastManager.getInstance(this.requireContext()).unregisterReceiver(locationBroadcastReceiver)
   }

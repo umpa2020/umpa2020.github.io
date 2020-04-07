@@ -32,7 +32,6 @@ class NearRecyclerViewAdapter(private var datas: List<NearMap>, private val prog
     Logg.d("리사이클러뷰가 불러짐")
     val singleItem1 = datas[position]
 
-
     val cutted = singleItem1.mapTitle.split("||")
     //데이터 바인딩
     holder.mapTitle.text = cutted[0]
