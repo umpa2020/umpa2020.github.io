@@ -78,6 +78,18 @@
   <string name="yes">예</string>
   <string name="no">아니오</string>
   <string name="noroute">현재 저장된 루트가 없습니다.</string>
+  <string name="profile_information">내 정보</string>
+  <string name="profile_image_change">프로필 이미지 변경</string>
+  <string name="email_">이메일</string>
+  <string name="confirmation">확인</string>
+  <string name="picture_select_cancel">사진 선택 취소</string>
+  <string name="check_duplicates">중복 확인을 해주십시오.</string>
+  <string name="nickname_already_using">이미 사용중인 닉네임입니다.</string>
+  <string name="nickname_available">사용 가능한 닉네임입니다.</string>
+  <string name="check_duplicates1">중복 확인을 해주세요.</string>
+  <string name="please_select">선택해주세요.</string>
+  <string name="set_default_image">Would you like to set it as the default image?</string>
+  <string name="gps_activation">GPS 활성화</string>
   <!-- firebase string-->
   <string name="google_storage_bucket_string" >gs://tracer-9070d.appspot.com/</string>
   <string name="serachHint">장소나 주소를 검색해주세요</string>

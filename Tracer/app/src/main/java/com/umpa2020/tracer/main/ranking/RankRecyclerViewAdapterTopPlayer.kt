@@ -1,6 +1,7 @@
 package com.umpa2020.tracer.main.ranking
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,9 +9,11 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.RankingData
+import com.umpa2020.tracer.extensions.MM_SS
+import com.umpa2020.tracer.extensions.format
+import com.umpa2020.tracer.main.profile.ProfileActivity
 import com.umpa2020.tracer.util.Logg
 import kotlinx.android.synthetic.main.recycler_rankfragment_topplayer_item.view.*
-import java.text.SimpleDateFormat
 import java.util.*
 
 class RankRecyclerViewAdapterTopPlayer(val mydata: ArrayList<RankingData>) : RecyclerView.Adapter<RankRecyclerViewAdapterTopPlayer.myViewHolder>() {
@@ -20,12 +23,11 @@ class RankRecyclerViewAdapterTopPlayer(val mydata: ArrayList<RankingData>) : Rec
   override fun onBindViewHolder(holder: myViewHolder, position: Int) {
     val singleItem1 = mydata[position]
     var ranking = position + 1
-    val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
 
     //데이터 바인딩
     holder.rank.text = ranking.toString()
     holder.maptitle.text = singleItem1.challengerNickname
-    holder.time.text = formatter.format(Date(singleItem1.challengerTime!!))
+    holder.time.text = singleItem1.challengerTime!!.toLong().format(MM_SS)
 
     //ranking에 따라 트로피 색 바뀌게 하는 부분
     if (ranking == 1) {
@@ -43,13 +45,9 @@ class RankRecyclerViewAdapterTopPlayer(val mydata: ArrayList<RankingData>) : Rec
     //클릭하면 맵 상세보기 페이지로 이동
     holder.itemView.setOnClickListener {
       //TODO 상대방 프로필 넘어가게 해야함
-      /*
-      val nextIntent = Intent(context, RankRecyclerItemClickActivity::class.java)
-      nextIntent.putExtra("MapTitle",  holder.maptitle.text.toString()) //mapTitle 정보 인텐트로 넘김
+      val nextIntent = Intent(context, ProfileActivity::class.java)
+      //nextIntent.putExtra("MapTitle",  holder.maptitle.text.toString()) //mapTitle 정보 인텐트로 넘김
       context!!.startActivity(nextIntent)
-      */
-
-      Toast.makeText(context!!, "상대방 프로필 넘어가면 됨", Toast.LENGTH_SHORT).show()
     }
   }
 

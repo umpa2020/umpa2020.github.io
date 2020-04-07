@@ -6,6 +6,7 @@ import android.location.Location
 import android.os.Looper
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.model.LatLng
+import com.umpa2020.tracer.constant.Constants.Companion.LOCATION_INTERAL
 import com.umpa2020.tracer.util.Logg
 
 object LocationUpdatesComponent {
@@ -89,7 +90,7 @@ object LocationUpdatesComponent {
     locationRequest = LocationRequest.create() // 위치 요청
     locationRequest.run {
       priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-      interval = 1000 // 위치 받아오는 주기, setinterval() 메서드를 사용하여 앱을 위해 위치를 연산하는 간격을 지정합니다.
+      interval = LOCATION_INTERAL.toLong() // 위치 받아오는 주기, setinterval() 메서드를 사용하여 앱을 위해 위치를 연산하는 간격을 지정합니다.
     }
   }
 

@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.umpa2020.tracer.R
+import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.locationBackground.LocationBackgroundService
 import com.umpa2020.tracer.locationBackground.ServiceStatus
 import com.umpa2020.tracer.main.profile.ProfileFragment
@@ -86,7 +87,8 @@ class MainActivity : AppCompatActivity() {
     Logg.d("onStart()")
     Logg.d(selectedFragment.toString())
     Logg.d(selectedFragment!!.id.toString())
-    if (selectedFragment!!.id ==  2131296382) { //  ProfileFragment id = 2131296382
+
+    if (selectedFragment!!.id ==  Constants.PROFILE_FRAGMENT_ID) { //  ProfileFragment id = 2131296382
       Logg.d(selectedFragment!!.id.toString())
       Logg.i("누구냐!")
       supportFragmentManager.beginTransaction().detach(selectedFragment!!).attach(selectedFragment!!).commit()

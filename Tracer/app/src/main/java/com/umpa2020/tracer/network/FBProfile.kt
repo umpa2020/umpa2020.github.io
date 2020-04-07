@@ -12,13 +12,14 @@ import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.InfoData
+import com.umpa2020.tracer.extensions.MM_SS
+import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.PrettyDistance
 import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.fragment_profile.view.*
 import java.io.ByteArrayOutputStream
-import java.text.SimpleDateFormat
 import java.util.*
 
 /**
@@ -59,9 +60,8 @@ class FBProfile {
 
             // 총 거리와 시간을 띄워줌
             view.profileFragmentTotalDistance.text = PrettyDistance().convertPretty(sumDistance)
-            val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
-            formatter.timeZone = TimeZone.getTimeZone("UTC")
-            view.profileFragmentTotalTime.text = formatter.format(Date(sumTime.toLong()))
+
+            view.profileFragmentTotalTime.text =sumTime.toLong().format(MM_SS)
 
           }
       }

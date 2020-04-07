@@ -2,6 +2,8 @@ package com.umpa2020.tracer.main.start.running
 
 import android.content.Intent
 import android.content.pm.ActivityInfo
+import android.graphics.Color
+import android.graphics.drawable.BitmapDrawable
 import android.location.Location
 import android.os.Bundle
 import android.os.SystemClock
@@ -9,6 +11,8 @@ import android.view.View
 import android.widget.Toast
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.MarkerOptions
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants
@@ -18,11 +22,15 @@ import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.main.start.BaseRunningActivity
 import com.umpa2020.tracer.util.ChoicePopup
+import com.umpa2020.tracer.util.Logg
+import com.umpa2020.tracer.util.Wow
 import hollowsoft.slidingdrawer.OnDrawerCloseListener
 import hollowsoft.slidingdrawer.OnDrawerOpenListener
 import hollowsoft.slidingdrawer.OnDrawerScrollListener
 import io.jenetics.jpx.WayPoint
 import kotlinx.android.synthetic.main.activity_running.*
+import javax.security.auth.callback.Callback
+
 
 class RunningActivity : BaseRunningActivity(), OnDrawerScrollListener, OnDrawerOpenListener, OnDrawerCloseListener {
 
@@ -32,7 +40,11 @@ class RunningActivity : BaseRunningActivity(), OnDrawerScrollListener, OnDrawerO
     setContentView(R.layout.activity_running)
     supportActionBar?.title = "RUNNING"
     init()
+
+    // TODO : 여기 밑에 있는 함수가 init()가 실행되야 가능한데 아애 init()에 넣어두는건?
+    // TODO : 그래서 RankingRecodeRacingActivity init()에서는 그렇게 해봄
     notice("시작버튼을 누르면 러닝이 시작됩니다")
+    pauseNotice("기록 측정 중지")
   }
 
   override fun init() {
@@ -44,6 +56,7 @@ class RunningActivity : BaseRunningActivity(), OnDrawerScrollListener, OnDrawerO
     pauseButton = runningPauseButton
     chronometer = runningTimerTextView
     notificationTextView = runningNotificationTextView
+    pauseNotificationTextView = runningPauseNotificationTextView
     drawerHandle=runningHandle
     drawer = runningDrawer
     /**
@@ -96,9 +109,30 @@ class RunningActivity : BaseRunningActivity(), OnDrawerScrollListener, OnDrawerO
     }
   }
 
+  var cameraZoomSize = 0.0f
   override fun start() {
     super.start()
-    traceMap.mMap.addMarker(MarkerOptions().position(currentLatLng).title("Start"))
+
+//    traceMap.mMap.addMarker(MarkerOptions()
+//      .zIndex(3.4f)
+//      .position(currentLatLng)
+//      .title("Start")
+//      .icon( Wow.makingIcon(R.drawable.ic_start_merker,this)))
+
+    traceMap.mMap.setOnCameraMoveListener {
+      Logg.i(traceMap.mMap.cameraPosition.zoom.toString())
+      cameraZoomSize = traceMap.mMap.cameraPosition.zoom
+    }
+
+    traceMap.mMap.addCircle(CircleOptions()
+      .center(currentLatLng)
+      .radius(30.0-cameraZoomSize)
+      .strokeWidth(15f)
+      .strokeColor(Color.WHITE)
+      .fillColor(Color.GREEN)
+    )
+
+
     wpList.add(
       WayPoint.builder()
         .lat(currentLatLng.latitude)

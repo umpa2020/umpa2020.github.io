@@ -11,6 +11,8 @@ import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.RouteGPX
+import com.umpa2020.tracer.extensions.MM_SS
+import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.main.start.racing.RankingRecodeRacingActivity
 import com.umpa2020.tracer.network.FBMapImage
 import com.umpa2020.tracer.network.FBProfile
@@ -20,8 +22,6 @@ import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.gpx.GPXConverter
 import kotlinx.android.synthetic.main.activity_ranking_map_detail.*
 import java.io.File
-import java.text.SimpleDateFormat
-import java.util.*
 
 class RankingMapDetailActivity : AppCompatActivity() {
   lateinit var routeGPX: RouteGPX
@@ -40,12 +40,9 @@ class RankingMapDetailActivity : AppCompatActivity() {
     //TODO : 날짜로 바꿔야함 (한국 시간만 해결하면 됨)
     // TODO : 메인에서 마커 클릭하면 여기서 어플 터짐
     Logg.d(cutted[1])
-    val date = Date(cutted[1].toLong())
-    val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss",Locale.getDefault())
-    val formattedDate = sdf.format(date)
-    println(formattedDate)
 
-    rankingDetailDate.text = formattedDate
+
+    rankingDetailDate.text = cutted[1].toLong().format("yyyy-MM-dd HH:mm:ss")
 
 
     val db = FirebaseFirestore.getInstance()
@@ -87,9 +84,7 @@ class RankingMapDetailActivity : AppCompatActivity() {
                 rankingDetailNickname.text = infoData.makersNickname
                 rankingDetailMapDetail.text = infoData.mapExplanation
                 rankingDetailDistance.text = String.format("%.2f", infoData.distance!! / 1000)
-                val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
-                formatter.timeZone = TimeZone.getTimeZone("UTC")
-                rankingDetailTime.text = formatter.format(Date(infoData.time!!))
+                rankingDetailTime.text = infoData.time!!.format(MM_SS)
                 rankingDetailSpeed.text = String.format("%.2f", speedList.average())
                 val chart = Chart(elevationList, speedList, rankingDetailChart)
                 chart.setChart()
