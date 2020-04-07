@@ -3,21 +3,23 @@ package com.umpa2020.tracer.main.profile
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.os.Message
 import android.provider.MediaStore
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.network.FBProfile
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_my_information.*
-import kotlinx.android.synthetic.main.activity_my_information.profileImage
-import kotlinx.android.synthetic.main.activity_sign_up.*
 
 class MyInformationActivity : AppCompatActivity() {
+  val CHANGEPROFILE = 110 // 프로필 사진 체인지
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -46,9 +48,19 @@ class MyInformationActivity : AppCompatActivity() {
       R.id.profileChangeButton -> {
         // TODO: 서버로 변경된 프로필 이미지 전송
         Logg.i("서버로 변경된 프로필 이미지 전송")
-
-        FBProfile().changeProfileImage(bitmapImg!!)
-        finish()
+        val mHandler = object : Handler(Looper.getMainLooper()) {
+          override fun handleMessage(msg: Message) {
+            when (msg.what) {
+              CHANGEPROFILE -> {
+                val changeFinished = msg.obj as Boolean
+                if (changeFinished) {
+                  finish()
+                }
+              }
+            }
+          }
+        }
+        FBProfile().changeProfileImage(bitmapImg!!, mHandler)
       }
     }
   }

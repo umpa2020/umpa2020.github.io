@@ -103,7 +103,6 @@ class SplashActivity : AppCompatActivity() {
        *  // 로그인 고유 값이 있으면 --> 회원가입 진행 끝났다고 생각하고 일단ㄱㄱ -> 수정해야함
        */
 
-      // 로그아웃의 경우 autoLoginKey 가 " " 공백 하나로 담겨져 있고,
       // 앱 설치시에는 isEmpty() 즉, 값이 없다.
       if (UserInfo.autoLoginKey.isEmpty()) { // 로그인 고유 값이 있으면 --> 회원가입 진행 끝났다고 생각하고 일단ㄱㄱ -> 수정해야함
         val nextIntent = Intent(this@SplashActivity, LoginActivity::class.java)

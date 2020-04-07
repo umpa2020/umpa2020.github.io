@@ -1,25 +1,14 @@
 package com.umpa2020.tracer.main.profile
 
-import android.app.Activity
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.provider.MediaStore
 import android.view.View
-import android.widget.ImageView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.auth.FirebaseAuth
-import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.util.ChoicePopup
-import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.UserInfo
-import kotlinx.android.synthetic.main.activity_sign_up.*
-import kotlin.system.exitProcess
 
 
 class AppSettingActivity : AppCompatActivity() {
@@ -54,11 +43,11 @@ class AppSettingActivity : AppCompatActivity() {
     noticePopup = ChoicePopup(this, "선택해주세요.", "로그아웃하시겠습니까?", "예", "아니오",
       View.OnClickListener {
         // 예
-        UserInfo.autoLoginKey = " "
-        UserInfo.email = " "
-        UserInfo.nickname = " "
-        UserInfo.age = " "
-        UserInfo.gender = " "
+        UserInfo.autoLoginKey = ""
+        UserInfo.email = ""
+        UserInfo.nickname = ""
+        UserInfo.age = ""
+        UserInfo.gender = ""
         //TODO : 이건 정빈이가 추가한거 같은데 삭제 하니깐 약간 어플이 꼬이는거 같아서 물어보고 삭제하든가 하기
 //        UserInfo.permission = 0
 //        UserInfo.rankingLatLng = LatLng(0.0, 0.0)
