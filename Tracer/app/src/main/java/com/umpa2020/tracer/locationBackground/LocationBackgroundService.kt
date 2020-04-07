@@ -6,11 +6,9 @@ import android.content.Intent
 import android.location.Location
 import android.os.Build
 import android.os.RemoteException
-import android.util.Log
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.location.LocationRequest
 import com.umpa2020.tracer.R
-import com.umpa2020.tracer.main.MainActivity.Companion.TAG
 import com.umpa2020.tracer.main.start.running.RunningActivity
 import com.umpa2020.tracer.util.Logg
 
@@ -77,7 +75,7 @@ class LocationBackgroundService : IntentService("LocationBackgroundService"), Lo
     try {
       val intent = Intent("custom-event-name")
       intent.putExtra("message", location)
-      Logg.d( location.toString())
+//      Logg.d( location.toString())
       LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
 
     } catch (e: RemoteException) {

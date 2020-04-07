@@ -20,7 +20,6 @@ import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.gpx.GPXConverter
 import kotlinx.android.synthetic.main.activity_ranking_map_detail.*
 import java.io.File
-import java.sql.Timestamp
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -40,9 +39,13 @@ class RankingMapDetailActivity : AppCompatActivity() {
     rankingDetailMapTitle.text = cutted[0]
     //TODO : 날짜로 바꿔야함 (한국 시간만 해결하면 됨)
     // TODO : 메인에서 마커 클릭하면 여기서 어플 터짐
-    val timestamp = Timestamp(cutted[1].toLong())
-    val date = Date(timestamp.time)
-    rankingDetailDate.text = date.toString()
+    Logg.d(cutted[1])
+    val date = Date(cutted[1].toLong())
+    val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss",Locale.getDefault())
+    val formattedDate = sdf.format(date)
+    println(formattedDate)
+
+    rankingDetailDate.text = formattedDate
 
 
     val db = FirebaseFirestore.getInstance()
@@ -77,7 +80,6 @@ class RankingMapDetailActivity : AppCompatActivity() {
 
               // 실행 수 및 db에 있는 맵타이틀을 알기위해서 (구분 시간 값 포함)
               dbMapTitle = document.id
-              Logg.d("ssmm11 dbMaptitle = $dbMapTitle")
 
 
               // ui 스레드 따로 빼주기
@@ -108,7 +110,8 @@ class RankingMapDetailActivity : AppCompatActivity() {
   }
 
   // 팝업 띄우는 함수
-  lateinit var noticePopup : ChoicePopup // 전역으로 선언하지 않으면 리스너에서 dismiss 사용 불가.
+  lateinit var noticePopup: ChoicePopup // 전역으로 선언하지 않으면 리스너에서 dismiss 사용 불가.
+
   private fun showPopup() {
 
 
@@ -124,9 +127,9 @@ class RankingMapDetailActivity : AppCompatActivity() {
     }
 
      */
-    noticePopup = ChoicePopup(this,"유형을 선택해주세요.",
+    noticePopup = ChoicePopup(this, "유형을 선택해주세요.",
       "어떤 유형으로 경기하시겠습니까? \n\n랭킹 기록용 : 랭킹 등록 가능",
-      "기록용","",
+      "기록용", "",
       View.OnClickListener {
         //랭킹 기록용 버튼 눌렀을 때
         val intent = Intent(App.instance.context(), RankingRecodeRacingActivity::class.java)

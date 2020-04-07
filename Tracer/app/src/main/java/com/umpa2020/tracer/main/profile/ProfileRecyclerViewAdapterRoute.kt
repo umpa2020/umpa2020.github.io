@@ -14,6 +14,7 @@ import com.umpa2020.tracer.main.ranking.RankRecyclerItemClickActivity
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.PrettyDistance
 import kotlinx.android.synthetic.main.recycler_profilefragment_route_grid_image.view.*
+import java.sql.Timestamp
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -33,7 +34,7 @@ class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) : Recycler
     // app.getString   google_storage_bucket
     // string에 저장해서 사용 해보았으나
     // Please use a gs:// URL for your Firebase Storage bucket. 에러가 뜨면서 실행이 안되는 문제..
-   // val storage = FirebaseStorage.getInstance(R.string.google_storage_bucket_string.toString()) // debug용, release용 구분
+    // val storage = FirebaseStorage.getInstance(R.string.google_storage_bucket_string.toString()) // debug용, release용 구분
     val storage = FirebaseStorage.getInstance("gs://tracer-9070d.appspot.com/") // debug용, release용 구분
     val mapImageRef = storage.reference.child("mapImage").child(singleItem.mapTitle!!)
     mapImageRef.downloadUrl.addOnCompleteListener { task ->
@@ -51,6 +52,11 @@ class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) : Recycler
     val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
     formatter.timeZone = TimeZone.getTimeZone("UTC")
     holder.time.text = formatter.format(Date(singleItem.time!!))
+    holder.likes.text = singleItem.likes.toString()
+    holder.excutes.text = singleItem.execute.toString()
+    val timestamp = Timestamp(cutted[1].toLong())
+    val date = Date(timestamp.time)
+    holder.date.text = date.toString()
 
     // 아마 이 부분에서 터질건데 이거는 예전 데이터 지우면 해결
     //holder.nickname.text = singleItem.makersNickname
@@ -79,11 +85,14 @@ class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) : Recycler
 
   //여기서 item을 textView에 옮겨줌
   inner class mViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    var date = view.profileFragmentGridMapDate
     var image = view.profileFragmentRouteGridImage
     var maptitle = view.profileFragmentGridMapTitle
     //var nickname = view.profileFragmentNickname
     var distance = view.profileFragmentDistance
     var time = view.profileFragmentTime
+    var likes = view.profileFragmentLike
+    var excutes = view.profileFragmentExecutes
   }
 }
 

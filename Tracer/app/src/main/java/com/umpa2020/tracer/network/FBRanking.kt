@@ -8,6 +8,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.maps.android.SphericalUtil
 import com.umpa2020.tracer.App
+import com.umpa2020.tracer.constant.Constants.Companion.MAX_DISTANCE
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.NearMap
 import com.umpa2020.tracer.main.ranking.RankRecyclerViewAdapterMap
@@ -89,9 +90,14 @@ class FBRanking {
           infoData = document.toObject(InfoData::class.java)
           infoData.mapTitle = document.id
           infoData.distance = SphericalUtil.computeDistanceBetween(cur_loc, LatLng(infoData.startLatitude!!, infoData.startLongitude!!))
-          if (infoData.distance!! < distance * 1000)
+          if (distance != MAX_DISTANCE) {
+            if (infoData.distance!! < distance * 1000)
+              infoDatas.add(infoData)
+          } else {
             infoDatas.add(infoData)
+          }
         }
+
         if (mode.equals("execute")) {
           infoDatas.sortByDescending { infoData -> infoData.execute }
         } else if (mode.equals("likes")) {
@@ -99,6 +105,9 @@ class FBRanking {
         }
         if (infoDatas.isEmpty()) {
           view.rankingRecyclerRouteisEmpty.visibility = View.VISIBLE
+          progressbar.dismiss()
+        } else {
+          view.rankingRecyclerRouteisEmpty.visibility = View.GONE
           progressbar.dismiss()
         }
         view.rank_recycler_map.adapter = RankRecyclerViewAdapterMap(infoDatas, mode, progressbar)

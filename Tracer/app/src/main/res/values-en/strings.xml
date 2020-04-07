@@ -80,4 +80,5 @@
   <string name="noroute">There are currently no saved routes.</string>
   <!-- firebase string-->
   <string name="google_storage_bucket_string" >gs://tracer-9070d.appspot.com/</string>
+  <string name="serachHint">Search for a place or address</string>
 </resources>

@@ -61,7 +61,7 @@ class RankRecyclerViewAdapterTopPlayer(val mydata: ArrayList<RankingData>) : Rec
 
   //item 사이즈, 데이터의 전체 길이 반환
   override fun getItemCount(): Int {
-    Logg.d( "데이터 크기 " + mydata.size.toString())
+    Logg.d("데이터 크기 " + mydata.size.toString())
     return mydata.size
   }
 
