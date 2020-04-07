@@ -43,7 +43,6 @@ class FBMap {
           mHandler.obtainMessage(STRAT_FRAGMENT_NEARMAP)
         }
         msg.obj = nearMaps
-        Logg.d("ssmm11 msg.obj = ${msg.obj}")
         mHandler.sendMessage(msg)
 
       }

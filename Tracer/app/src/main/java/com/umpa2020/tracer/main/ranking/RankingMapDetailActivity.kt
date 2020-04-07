@@ -76,7 +76,6 @@ class RankingMapDetailActivity : AppCompatActivity() {
 
               // 실행 수 및 db에 있는 맵타이틀을 알기위해서 (구분 시간 값 포함)
               dbMapTitle = document.id
-              Logg.d("ssmm11 dbMaptitle = $dbMapTitle")
 
 
               // ui 스레드 따로 빼주기
