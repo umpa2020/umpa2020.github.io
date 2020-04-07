@@ -13,5 +13,5 @@ object UserInfo : KotprefModel() {
   var age by stringPref()
   var gender by stringPref()
   var permission = 0 // 처음 권한을 받은 후에 서비스와 위치 값 갱신을 하기 위해서 미리 저장
-  var rankingLatLng = LatLng(0.0, 0.0)
+  var rankingLatLng: LatLng? = null
 }
