@@ -4,6 +4,18 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent">
 
+  <Button
+    android:id="@+id/mainStartRacing"
+    style="@style/buttonTextRedText"
+    android:layout_width="150dp"
+    android:layout_height="40dp"
+    android:layout_marginTop="70dp"
+    android:background="@drawable/button_empty_background"
+    android:layout_centerHorizontal="true"
+    android:onClick="onClick"
+    android:textSize="12sp"
+    android:text="@string/re_search_this_area" />
+
   <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -34,15 +46,18 @@
       android:id="@+id/map_viewer_start"
       class="com.google.android.gms.maps.SupportMapFragment"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
+      android:layout_height="match_parent"
       android:layout_centerInParent="true"
       tools:context=".fragment.StartFragment" />
 
+
+
   </LinearLayout>
+
 
   <LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:layout_alignParentBottom="true"
     android:layout_gravity="bottom"
     android:layout_marginBottom="30dp"
@@ -53,29 +68,19 @@
       style="@style/buttonTextRedText"
       android:layout_width="100dp"
       android:layout_height="40dp"
-      android:layout_margin="10dp"
+      android:layout_gravity="bottom"
       android:background="@drawable/button_empty_background"
       android:gravity="center"
       android:onClick="onClick"
       android:text="@string/runningmode" />
 
-    <Button
-      android:id="@+id/mainStartRacing"
-      style="@style/buttonText"
-      android:layout_width="100dp"
-      android:layout_height="40dp"
-      android:layout_margin="10dp"
-      android:background="@drawable/button_background"
-      android:gravity="center"
-      android:onClick="onClick"
-      android:text="@string/racingmode" />
 
     <Button
       android:id="@+id/test"
       style="@style/buttonText"
       android:layout_width="100dp"
       android:layout_height="40dp"
-      android:layout_margin="10dp"
+      android:layout_gravity="bottom"
       android:background="@drawable/button_background"
       android:gravity="center"
       android:onClick="onClick"

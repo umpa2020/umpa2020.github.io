@@ -1,6 +1,7 @@
 package com.umpa2020.tracer.network
 
 import android.app.Activity
+import android.graphics.Bitmap
 import android.os.Handler
 import android.os.Message
 import android.view.View
@@ -16,6 +17,7 @@ import com.umpa2020.tracer.util.PrettyDistance
 import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.fragment_profile.view.*
+import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -51,7 +53,6 @@ class FBProfile {
           .get()
           .addOnSuccessListener { result2 ->
             for (document2 in result2) {
-
               sumDistance += document2.get("distance") as Double
               sumTime += document2.get("time") as Long
             }
@@ -87,6 +88,8 @@ class FBProfile {
               .override(1024, 980)
               .into(imageView)
             progressbar.dismiss()
+          } else {
+            progressbar.dismiss()
           }
         }
       }
@@ -120,6 +123,8 @@ class FBProfile {
               .override(1024, 980)
               .into(imageView)
             progressbar.dismiss()
+          } else {
+            progressbar.dismiss()
           }
         }
       }
@@ -127,17 +132,50 @@ class FBProfile {
       }
   }
 
+  /**
+   * 사진 변경 시, 해당 사진을 storage에 업로드하고
+   * 그 경로를 db에 update하는 함수
+   */
+  fun changeProfileImage(bitmapImg: Bitmap) {
+//    val progressbar = ProgressBar(App.instance.currentActivity() as Activity)
+//    progressbar.show()
+
+    val dt = Date()
+    // 현재 날짜를 프로필 이름으로 nickname/Profile/현재날짜(영어).jpg 경로 만들기
+
+    val mStorage = FirebaseStorage.getInstance()
+    val mStorageReference = mStorage.reference
+
+    val profileRef = mStorageReference.child("Profile").child(UserInfo.autoLoginKey).child("${dt.time}.jpg")
+    // 이미지
+    val baos = ByteArrayOutputStream()
+    bitmapImg.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+    val imageData = baos.toByteArray()
+
+    // storage에 이미지 올리는 거
+    val uploadTask = profileRef.putBytes(imageData)
+    uploadTask
+      .addOnCompleteListener {
+        if (it.isSuccessful) {
+          val mFirestoreDB = FirebaseFirestore.getInstance()
+
+          mFirestoreDB.collection("userinfo").document(UserInfo.autoLoginKey)
+            .update("profileImagePath", "${dt.time}.jpg")
+        }
+//        progressbar.dismiss()
+      }
+
+  }
+
   fun getMyRoute(mHandler: Handler) {
-
     val infoDatas: ArrayList<InfoData> = arrayListOf()
-
     db.collection("mapInfo").whereEqualTo("makersNickname", UserInfo.nickname).whereEqualTo("privacy", "RACING")
       .get()
       .addOnSuccessListener { result ->
         for (document in result) {
           val data = document.toObject(InfoData::class.java)
           infoDatas.add(data)
-          Logg.d( "in get profile (보내기 전)!~ > " + document.id)
+          Logg.d("in get profile (보내기 전)!~ > " + document.id)
         }
         val msg: Message
 
