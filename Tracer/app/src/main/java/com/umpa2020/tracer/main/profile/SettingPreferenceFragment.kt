@@ -1,0 +1,86 @@
+package com.umpa2020.tracer.main.profile
+
+import android.app.Activity
+import android.content.Intent
+import android.os.Bundle
+import android.view.View
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.preference.PreferenceFragmentCompat
+import com.google.firebase.auth.FirebaseAuth
+import com.umpa2020.tracer.App
+import com.umpa2020.tracer.R
+import com.umpa2020.tracer.util.ChoicePopup
+import com.umpa2020.tracer.util.UserInfo
+
+class SettingPreferenceFragment : PreferenceFragmentCompat() {
+  // firebase Auth
+  private var mAuth: FirebaseAuth? = null
+
+  override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+    setPreferencesFromResource(R.xml.fragment_setting_preference, rootKey)
+    mAuth = FirebaseAuth.getInstance() // FirebaseAuth를 사용하기 위해서 인스턴스를 꼭 받아오기
+
+  }
+
+  /**
+   * preference 클릭할 때
+   */
+  override fun onPreferenceTreeClick(preference: androidx.preference.Preference?): Boolean {
+    //내 정보 눌렀을 때
+    if (preference?.key.equals("myInformation")) {
+      Toast.makeText(context, "myInformation", Toast.LENGTH_LONG).show()
+      val intent = Intent(context, MyInformationActivity::class.java)
+      startActivity(intent)
+    }
+
+    //로그아웃 눌렀을 때
+    if (preference?.key.equals("logout")) {
+      Toast.makeText(context, "logout", Toast.LENGTH_LONG).show()
+      logOut()
+    }
+
+    //회원 탈퇴 눌렀을 때
+    if (preference?.key.equals("unregister")) {
+      Toast.makeText(context, "unregister", Toast.LENGTH_LONG).show()
+      //TODO. 회원 탈퇴 기능 만들기
+    }
+    return super.onPreferenceTreeClick(preference)
+  }
+
+  var noticePopup: ChoicePopup? = null
+
+  // TODO : 로그아웃하고 새로 로그인할 때 구글 계정 선택하는 팝업을 띄우고 싶은데 해결 못함. LoginActivity에서 건들여야 할듯
+  private fun logOut() {
+    // Shared의 정보 삭제
+    noticePopup = ChoicePopup(requireContext(), "선택해주세요.", "로그아웃하시겠습니까?", "예", "아니오",
+      View.OnClickListener {
+        // 예
+        UserInfo.autoLoginKey = ""
+        UserInfo.email = ""
+        UserInfo.nickname = ""
+        UserInfo.age = ""
+        UserInfo.gender = ""
+        //TODO : 이건 정빈이가 추가한거 같은데 삭제 하니깐 약간 어플이 꼬이는거 같아서 물어보고 삭제하든가 하기
+//        UserInfo.permission = 0
+//        UserInfo.rankingLatLng = LatLng(0.0, 0.0)
+
+        noticePopup!!.dismiss()
+        // 어플 재 시작
+        ActivityCompat.finishAffinity(App.instance.currentActivity() as Activity)
+        val intent = context?.packageManager?.getLaunchIntentForPackage(requireContext().packageName)
+        intent!!.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
+
+      },
+      View.OnClickListener {
+        // 아니오
+        noticePopup!!.dismiss()
+      }
+    )
+    noticePopup!!.show()
+  }
+
+
+}

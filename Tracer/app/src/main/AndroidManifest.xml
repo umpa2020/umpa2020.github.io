@@ -33,6 +33,7 @@
     tools:ignore="GoogleAppIndexingWarning">
     <activity android:name=".main.profile.MyInformationActivity"></activity>
     <activity android:name=".main.profile.AppSettingActivity" />
+    <activity android:name=".main.profile.PreferenceActivity" />
     <activity android:name=".main.profile.ProfileRecordActivity" />
     <activity android:name=".main.profile.ProfileRouteActivity" />
     <activity android:name=".main.profile.ProfileActivity"/>
