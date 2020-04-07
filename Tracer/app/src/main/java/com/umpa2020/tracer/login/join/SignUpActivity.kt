@@ -43,6 +43,7 @@ import java.util.regex.Pattern
 class SignUpActivity : AppCompatActivity() {
 
   private var WSY = "WSY"
+  var success_request = 0
 
   // 여러 디스포저블 객체를 관리할 수 있는 CompositeDisposable 객체를 초기화 합니다.
   internal val viewDisposables = CompositeDisposable()
@@ -153,9 +154,10 @@ class SignUpActivity : AppCompatActivity() {
 
   override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
     super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-    if (requestCode == 1) {
+    success_request = requestCode
+    if (requestCode == success_request) {
       var length = permissions.size
-      for (i in 0 until length - 1) {
+      for (i in 0 until length - success_request) {
         if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
           // 동의
           Logg.d("권한 허용 : " + permissions[i])
