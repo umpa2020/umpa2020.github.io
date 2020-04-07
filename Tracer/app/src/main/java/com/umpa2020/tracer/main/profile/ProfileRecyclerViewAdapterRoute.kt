@@ -10,12 +10,13 @@ import com.bumptech.glide.Glide
 import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.InfoData
+import com.umpa2020.tracer.extensions.MM_SS
+import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.main.ranking.RankRecyclerItemClickActivity
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.PrettyDistance
 import kotlinx.android.synthetic.main.recycler_profilefragment_route_grid_image.view.*
 import java.sql.Timestamp
-import java.text.SimpleDateFormat
 import java.util.*
 
 class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) : RecyclerView.Adapter<ProfileRecyclerViewAdapterRoute.mViewHolder>() {
@@ -49,9 +50,7 @@ class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) : Recycler
 
     holder.maptitle.text = cutted[0]
     holder.distance.text = PrettyDistance().convertPretty(singleItem.distance!!)
-    val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
-    formatter.timeZone = TimeZone.getTimeZone("UTC")
-    holder.time.text = formatter.format(Date(singleItem.time!!))
+    holder.time.text = singleItem.time!!.format(MM_SS)
     holder.likes.text = singleItem.likes.toString()
     holder.excutes.text = singleItem.execute.toString()
     val timestamp = Timestamp(cutted[1].toLong())
@@ -88,6 +87,7 @@ class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) : Recycler
     var date = view.profileFragmentGridMapDate
     var image = view.profileFragmentRouteGridImage
     var maptitle = view.profileFragmentGridMapTitle
+
     //var nickname = view.profileFragmentNickname
     var distance = view.profileFragmentDistance
     var time = view.profileFragmentTime

@@ -11,6 +11,8 @@ import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.RankingData
 import com.umpa2020.tracer.dataClass.RouteGPX
+import com.umpa2020.tracer.extensions.MM_SS
+import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.main.ranking.RankRecyclerViewAdapterTopPlayer
 import com.umpa2020.tracer.network.FBRacing
@@ -18,7 +20,6 @@ import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.PrettyDistance
 import com.umpa2020.tracer.util.ProgressBar
 import kotlinx.android.synthetic.main.activity_racing_finish.*
-import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -99,7 +100,6 @@ class RacingFinishActivity : AppCompatActivity() {
   }
 
   private fun setUiData(racerSpeeds: MutableList<Double>, makerSpeeds: MutableList<Double>, resultRankText: Int) {
-    val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
 
     if (resultRankText == 0) {
       resultRankTextView.text = "실패"
@@ -108,11 +108,11 @@ class RacingFinishActivity : AppCompatActivity() {
       resultRankTextView.text = "$resultRankText 등"
     }
 
-    makerLapTimeTextView.text = formatter.format(Date(makerData.time!!))
+    makerLapTimeTextView.text =makerData.time!!.format(MM_SS)
     makerMaxSpeedTextView.text = PrettyDistance().convertPretty(makerSpeeds.max()!!)
     makerAvgSpeedTextView.text = PrettyDistance().convertPretty(makerSpeeds.average())
 
-    racerLapTimeTextView.text = formatter.format(Date(racerData.time!!))
+    racerLapTimeTextView.text =racerData.time!!.format(MM_SS)
     racerMaxSpeedTextView.text = PrettyDistance().convertPretty(racerSpeeds.max()!!)
     racerAvgSpeedTextView.text = PrettyDistance().convertPretty(racerSpeeds.average())
     progressbar.dismiss()

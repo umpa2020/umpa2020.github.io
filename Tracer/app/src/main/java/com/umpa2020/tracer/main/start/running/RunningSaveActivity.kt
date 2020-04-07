@@ -17,6 +17,8 @@ import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.RankingData
 import com.umpa2020.tracer.dataClass.RouteGPX
+import com.umpa2020.tracer.extensions.MM_SS
+import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.trace.TraceMap
 import com.umpa2020.tracer.util.Chart
 import com.umpa2020.tracer.util.Logg
@@ -25,7 +27,6 @@ import com.umpa2020.tracer.util.gpx.GPXConverter
 import kotlinx.android.synthetic.main.activity_running_save.*
 import java.io.File
 import java.io.FileOutputStream
-import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -52,10 +53,8 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback {
       elevationList.add(it.elevation.get().toDouble())
     }
     distance_tv.text = String.format("%.2f", infoData.distance!! / 1000)
-    val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
-    formatter.timeZone = TimeZone.getTimeZone("UTC")
 
-    time_tv.text = formatter.format(Date(infoData.time!!))
+    time_tv.text = infoData.time!!.format(MM_SS)
     speed_tv.text = String.format("%.2f", speedList.average())
     if (infoData.privacy == Privacy.PUBLIC) {
       racingRadio.isChecked = false
