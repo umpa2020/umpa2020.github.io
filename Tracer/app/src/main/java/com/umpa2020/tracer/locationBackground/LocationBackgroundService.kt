@@ -125,7 +125,7 @@ class LocationBackgroundService : IntentService("LocationBackgroundService"), Lo
     ) else Notification.Builder(this)
 
     return builder
-      .setContentTitle("GPS 활성화")
+      .setContentTitle(getString(R.string.gps_activation))
       //  .setContentText("Background location service is getting location...")
       .setContentIntent(pendingIntent)
       .setSmallIcon(R.mipmap.ic_launcher_tracer)
