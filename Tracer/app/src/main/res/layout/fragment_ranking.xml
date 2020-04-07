@@ -21,8 +21,6 @@
         style="@style/appBarText"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="45dp"
         android:layout_gravity="center"
         android:gravity="center"
         android:text="@string/ranking">
@@ -181,7 +179,7 @@
           android:id="@+id/progressTextView"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="10"
+          android:text="100+"
           style="@style/tuneText"
           android:textColor="@color/red"/>
 
@@ -202,7 +200,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:max="100"
-        android:progress="10"
+        android:min="1"
+        android:progress="100"
         />
 
       <LinearLayout
@@ -214,7 +213,7 @@
         <TextView
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="0"/>
+          android:text="1"/>
 
         <View
           android:layout_width="0dp"

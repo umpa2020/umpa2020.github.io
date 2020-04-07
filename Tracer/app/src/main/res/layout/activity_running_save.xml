@@ -3,7 +3,6 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:layout_marginBottom="?actionBarSize"
   android:orientation="vertical"
   tools:context=".main.start.racing.RacingFinishActivity">
 
@@ -229,7 +228,7 @@
         android:layout_below="@id/mapExplanationEdit"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginBottom="?actionBarSize"
+        android:layout_marginBottom="80dp"
         android:gravity="center">
 
         <RadioGroup

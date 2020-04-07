@@ -6,35 +6,31 @@
   android:layout_height="match_parent"
   android:orientation="vertical">
 
-  <LinearLayout
+  <Toolbar
+    android:id="@+id/rankingRecordActivityToolBar"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_height="50dp"
+    android:layout_alignParentTop="true"
+    android:background="@color/white"
+    android:elevation="1dp">
 
-    <Toolbar
+    <TextView
+      style="@style/appBarText"
       android:layout_width="match_parent"
-      android:layout_height="50dp"
-      android:layout_alignParentTop="true"
-      android:background="@color/white"
-      android:elevation="1dp">
+      android:layout_height="wrap_content"
+      android:layout_marginRight="12dp"
+      android:gravity="center"
+      android:text="@string/rankingrecords"></TextView>
+  </Toolbar>
 
-      <TextView
-        style="@style/appBarText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="12dp"
-        android:gravity="center"
-        android:text="@string/rankingrecords"></TextView>
-    </Toolbar>
-
-    <fragment
-      android:id="@+id/map_viewer"
-      android:name="com.google.android.gms.maps.SupportMapFragment"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:layout_centerInParent="true"
-      tools:context=".fragment.MapFragment" />
-  </LinearLayout>
+  <fragment
+    android:layout_below="@+id/rankingRecordActivityToolBar"
+    android:id="@+id/map_viewer"
+    android:name="com.google.android.gms.maps.SupportMapFragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_centerInParent="true"
+    tools:context=".fragment.MapFragment" />
 
   <hollowsoft.slidingdrawer.SlidingDrawer
     android:id="@+id/racingDrawer"
@@ -42,7 +38,7 @@
     android:layout_height="150dp"
     android:layout_alignParentBottom="true"
     android:layout_marginTop="10dp"
-    android:layout_marginBottom="55dp"
+    android:layout_marginBottom="70dp"
     layout:content="@+id/content"
     layout:handle="@+id/racingHandle">
 
@@ -196,19 +192,15 @@
     </LinearLayout>
   </FrameLayout>
 
-  <View
-    android:id="@+id/yamae1"
-    android:layout_width="0dp"
-    android:layout_height="80dp" />
-
   <TextView
     android:id="@+id/racingNotificationTextView"
     android:layout_width="match_parent"
     android:layout_height="150dp"
-    android:layout_below="@id/yamae1"
+    android:layout_below="@id/rankingRecordActivityToolBar"
     android:layout_centerHorizontal="true"
     android:layout_marginLeft="20dp"
     android:layout_marginRight="20dp"
+    android:layout_marginTop="50dp"
     android:background="#990044FF"
     android:fontFamily="@font/notosansmedium"
     android:gravity="center"
