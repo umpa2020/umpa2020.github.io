@@ -40,6 +40,9 @@ class RunningActivity : BaseRunningActivity(), OnDrawerScrollListener, OnDrawerO
     setContentView(R.layout.activity_running)
     supportActionBar?.title = "RUNNING"
     init()
+
+    // TODO : 여기 밑에 있는 함수가 init()가 실행되야 가능한데 아애 init()에 넣어두는건?
+    // TODO : 그래서 RankingRecodeRacingActivity init()에서는 그렇게 해봄
     notice("시작버튼을 누르면 러닝이 시작됩니다")
     pauseNotice("기록 측정 중지")
   }
