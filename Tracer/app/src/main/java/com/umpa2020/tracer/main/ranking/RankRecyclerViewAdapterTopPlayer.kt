@@ -9,10 +9,11 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.RankingData
+import com.umpa2020.tracer.extensions.MM_SS
+import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.main.profile.ProfileActivity
 import com.umpa2020.tracer.util.Logg
 import kotlinx.android.synthetic.main.recycler_rankfragment_topplayer_item.view.*
-import java.text.SimpleDateFormat
 import java.util.*
 
 class RankRecyclerViewAdapterTopPlayer(val mydata: ArrayList<RankingData>) : RecyclerView.Adapter<RankRecyclerViewAdapterTopPlayer.myViewHolder>() {
@@ -22,12 +23,11 @@ class RankRecyclerViewAdapterTopPlayer(val mydata: ArrayList<RankingData>) : Rec
   override fun onBindViewHolder(holder: myViewHolder, position: Int) {
     val singleItem1 = mydata[position]
     var ranking = position + 1
-    val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
 
     //데이터 바인딩
     holder.rank.text = ranking.toString()
     holder.maptitle.text = singleItem1.challengerNickname
-    holder.time.text = formatter.format(Date(singleItem1.challengerTime!!))
+    holder.time.text = singleItem1.challengerTime!!.toLong().format(MM_SS)
 
     //ranking에 따라 트로피 색 바뀌게 하는 부분
     if (ranking == 1) {
