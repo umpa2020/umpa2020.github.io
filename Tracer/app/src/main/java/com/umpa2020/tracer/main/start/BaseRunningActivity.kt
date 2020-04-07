@@ -5,7 +5,7 @@ import android.location.Location
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.View
-import android.view.animation.AnimationUtils
+import android.view.animation.*
 import android.widget.Button
 import android.widget.Chronometer
 import android.widget.TextView
@@ -17,6 +17,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.SphericalUtil
 import com.umpa2020.tracer.R
+import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.constant.UserState
 import com.umpa2020.tracer.extensions.toLatLng
@@ -30,6 +31,7 @@ import hollowsoft.slidingdrawer.OnDrawerScrollListener
 import hollowsoft.slidingdrawer.SlidingDrawer
 import io.jenetics.jpx.WayPoint
 import kotlinx.android.synthetic.main.activity_ranking_recode_racing.*
+
 
 open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDrawerScrollListener, OnDrawerOpenListener,
   OnDrawerCloseListener {
@@ -52,20 +54,23 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
   lateinit var stopButton: Button
   lateinit var pauseButton: Button
   lateinit var notificationTextView: TextView
+  lateinit var pauseNotificationTextView: TextView
   lateinit var drawerHandle: Button
   lateinit var drawer: SlidingDrawer
   private var wedgedCamera = false
   lateinit var locationBroadcastReceiver: LocationBroadcastReceiver
 
-  open fun init(){
+  open fun init() {
     drawer.setOnDrawerScrollListener(this)
     drawer.setOnDrawerOpenListener(this)
     drawer.setOnDrawerCloseListener(this)
   }
+
   override fun onMapReady(googleMap: GoogleMap) {
     Logg.d("onMapReady")
     traceMap = TraceMap(googleMap) //구글맵
     traceMap.mMap.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
+
     traceMap.mMap.setOnCameraMoveListener {
       wedgedCamera=false
     }
@@ -116,27 +121,43 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     notificationTextView.visibility = View.GONE
   }
 
+  var flag = true
   open fun pause() {
+    Logg.i("일시 정지")
+
     privacy = Privacy.PUBLIC
     userState = UserState.PAUSED
     timeWhenStopped = chronometer.base - SystemClock.elapsedRealtime()
     chronometer.stop()
     pauseButton.text = "재시작"
+
+    pauseNotificationTextView.visibility = View.VISIBLE
+    appearAnimation()
     //TODO:이거머에염?
     //btn_pause.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_play_pressed, 0, 0, 0)
   }
 
   open fun restart() {
+
     userState = UserState.RUNNING
     pauseButton.text = "일시정지"
     //btn_pause.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_pause_icon_pressed, 0, 0, 0)
     chronometer.base = SystemClock.elapsedRealtime() + timeWhenStopped
+
     chronometer.start()
+
+    pauseNotificationTextView.visibility = View.INVISIBLE
+    disappearAnimation()
   }
 
   open fun stop() {
     userState = UserState.STOP
     chronometer.stop()
+  }
+
+  fun pauseNotice(str: String) {
+    pauseNotificationTextView.visibility = View.INVISIBLE
+    pauseNotificationTextView.text = str
   }
 
   fun notice(str: String) {
@@ -154,7 +175,9 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     } else if (false) { //TODO:비정상적인 움직임일 경우 + finish에 도착한 경우
     } else {
       moving = true
+
       if(wedgedCamera) traceMap.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 16F))
+
     }
     return moving
   }
@@ -215,6 +238,50 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
         noticePopup.dismiss()
       })
     noticePopup.show()
+  }
+
+  /**
+   * 레이아웃이 스르륵 보이는 함수
+   */
+
+  fun appearAnimation() {
+    Logg.i("일시정지 애니메이션")
+
+    val height = pauseNotificationTextView.height.toFloat()
+    Logg.i(height.toString())
+
+    val translationAnimation1 = TranslateAnimation(0f,0f,0f,height)
+    val alphaAnimate = AlphaAnimation(0f, 1f) //투명도 변화
+    alphaAnimate.duration = Constants.PUASE_ANIMATION_DURATION_TIME
+    alphaAnimate.repeatMode = Animation.REVERSE
+    alphaAnimate.repeatCount = Animation.INFINITE
+
+
+    val animationSet = AnimationSet(true)
+    animationSet.addAnimation(translationAnimation1)
+    animationSet.addAnimation(alphaAnimate)
+
+    // https://medium.com/@gus0000123/android-animation-interpolar-%EA%B5%AC%ED%98%84%ED%95%98%EA%B8%B0-8d228f4fc3c3
+    animationSet.interpolator = AccelerateDecelerateInterpolator()
+    animationSet.fillAfter = true
+    animationSet.fillBefore = true
+    animationSet.duration = Constants.PUASE_ANIMATION_DURATION_TIME
+
+    pauseNotificationTextView.animation = animationSet
+  }
+
+  /**
+   * 레이아웃이 스르륵 사라지는 함수
+   */
+  fun disappearAnimation() {
+    val height = pauseNotificationTextView.height.toFloat()
+//    pauseNotificationTextView.clearAnimation() // 일시정지 애니메이션 종료
+    Logg.i("재시작 애니메이션")
+    Logg.i(height.toString())
+    
+    val translationAnimation1 = TranslateAnimation(0f,0f,height,0f)
+    translationAnimation1.duration = Constants.PUASE_ANIMATION_DURATION_TIME
+    pauseNotificationTextView.startAnimation(translationAnimation1)
   }
 
   /**

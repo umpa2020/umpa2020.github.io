@@ -191,6 +191,15 @@
         android:visibility="invisible" />
     </LinearLayout>
   </FrameLayout>
+  <TextView
+    android:id="@+id/racingPauseNotificationTextView"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:background="#990044FF"
+    android:fontFamily="@font/notosansmedium"
+    android:gravity="center"
+    android:textColor="@color/white"
+    android:textSize="20sp" />
 
   <TextView
     android:id="@+id/racingNotificationTextView"
