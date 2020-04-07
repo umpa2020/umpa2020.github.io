@@ -284,7 +284,7 @@ class SignUpActivity : AppCompatActivity() {
         }
       } else if (resultCode == RESULT_CANCELED) {
         //사진 선택 취소
-        Toast.makeText(this, "사진 선택 취소", Toast.LENGTH_LONG).show()
+        Toast.makeText(this, getString(R.string.picture_select_cancel), Toast.LENGTH_LONG).show()
       }
     }
   }
@@ -320,7 +320,7 @@ class SignUpActivity : AppCompatActivity() {
       uploadUserInfo(nickname, age, gender, timestamp.toString())
     } else if (flag == 3) {
       textInputLayoutArray[0].setErrorTextColor(resources.getColorStateList(R.color.red, null))
-      textInputLayoutArray[0].error = "중복 확인을 해주십시오."
+      textInputLayoutArray[0].error = getString(R.string.check_duplicates)
       flag = 3
     }
   }
@@ -341,7 +341,7 @@ class SignUpActivity : AppCompatActivity() {
           if (document.exists()) {
             Logg.d("${document.id} => ${document.data}")
             textInputLayoutArray[0].setErrorTextColor(resources.getColorStateList(R.color.red, null))
-            textInputLayoutArray[0].error = "이미 사용중인 닉네임입니다."
+            textInputLayoutArray[0].error = getString(R.string.nickname_already_using)
             flag = 2 // flag = false로 하여 addOnCompleteListener의 if문이 실행 안되게 하기
           }
         }
@@ -352,7 +352,7 @@ class SignUpActivity : AppCompatActivity() {
       .addOnCompleteListener {
         if (flag == 3) {
           textInputLayoutArray[0].setErrorTextColor(resources.getColorStateList(R.color.yellowGreen, null))
-          textInputLayoutArray[0].error = "사용 가능한 닉네임입니다."
+          textInputLayoutArray[0].error = getString(R.string.nickname_available)
 
           flag = 1
         }
@@ -439,9 +439,9 @@ class SignUpActivity : AppCompatActivity() {
 
         Logg.d("가입 버튼 눌렀을 때 : $nickname, $age, $gender")
 
-        if (textInputLayoutArray[0].error != "사용 가능한 닉네임입니다.") { //무조건 중복 확인 버튼을 눌러야만 회원가입 가능하게 함
+        if (textInputLayoutArray[0].error != getString(R.string.nickname_available)) { //무조건 중복 확인 버튼을 눌러야만 회원가입 가능하게 함
           Logg.d(textInputLayoutArray[0].error.toString() + "if문 검사")
-          Toast.makeText(this, "중복 확인을 해주세요.", Toast.LENGTH_LONG).show()
+          Toast.makeText(this, getString(R.string.check_duplicates1), Toast.LENGTH_LONG).show()
         } else { // 중복 확인 통과
           Logg.d(isInputCorrectData[0].toString() + ", " + age!!.isNotEmpty().toString() + ", " + gender!!.isNotEmpty().toString())
           if (isInputCorrectData[0] && age!!.isNotEmpty() && gender!!.isNotEmpty()) {
@@ -472,9 +472,9 @@ class SignUpActivity : AppCompatActivity() {
 
   lateinit var noticePopup : ChoicePopup
   private fun basicProfileSettingPopup() {
-    noticePopup = ChoicePopup(this, "선택해주세요.",
-      "기본 이미지로 설정하시겠습니까",
-      "예", "아니오",
+    noticePopup = ChoicePopup(this, getString(R.string.please_select),
+      getString(R.string.set_default_image),
+      getString(R.string.yes), getString(R.string.no),
       View.OnClickListener {
         //Yes 버튼 눌렀을 때
         //기본 이미지로 설정
