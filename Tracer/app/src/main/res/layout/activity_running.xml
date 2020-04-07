@@ -29,12 +29,18 @@
         android:text="@string/creatroute"></TextView>
     </Toolbar>
 
-    <fragment
-      android:id="@+id/map_viewer"
-      android:name="com.google.android.gms.maps.SupportMapFragment"
+    <FrameLayout
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      tools:context=".fragment.MapFragment" />
+      android:layout_height="wrap_content">
+
+
+      <fragment
+        android:id="@+id/map_viewer"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:context=".fragment.MapFragment" />
+    </FrameLayout>
 
   </LinearLayout>
 

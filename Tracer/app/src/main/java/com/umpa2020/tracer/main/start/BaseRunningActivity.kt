@@ -52,9 +52,10 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
   lateinit var stopButton: Button
   lateinit var pauseButton: Button
   lateinit var notificationTextView: TextView
+  lateinit var pauseNotificationTextView : TextView
   lateinit var drawerHandle: Button
   lateinit var drawer: SlidingDrawer
-
+  private var wedgedCamera = false
   lateinit var locationBroadcastReceiver: LocationBroadcastReceiver
 
   open fun init(){
@@ -66,6 +67,7 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     Logg.d("onMapReady")
     traceMap = TraceMap(googleMap) //구글맵
     traceMap.mMap.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
+
   }
 
   open fun updateLocation(curLoc: Location) {
@@ -124,6 +126,7 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     pauseButton.text = "일시정지"
     //btn_pause.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_pause_icon_pressed, 0, 0, 0)
     chronometer.base = SystemClock.elapsedRealtime() + timeWhenStopped
+    //pauseNotificationTextView.visibility = View.GONE
     chronometer.start()
   }
 
@@ -131,7 +134,10 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     userState = UserState.STOP
     chronometer.stop()
   }
-
+  fun pauseNotice(str : String){
+    pauseNotificationTextView.visibility = View.INVISIBLE
+    pauseNotificationTextView.text = str
+  }
   fun notice(str: String) {
     notificationTextView.visibility = View.VISIBLE
     notificationTextView.text = str
@@ -147,7 +153,7 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     } else if (false) { //TODO:비정상적인 움직임일 경우 + finish에 도착한 경우
     } else {
       moving = true
-      traceMap.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 16F))
+      if(wedgedCamera) traceMap.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 16F))
     }
     return moving
   }
@@ -199,7 +205,9 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
       "예", "아니오",
       View.OnClickListener {
         //Yes 버튼 눌렀을 때
+        pauseNotice("기록 측정 중지")
         notificationTextView.visibility = View.GONE
+        pauseNotificationTextView.visibility = View.VISIBLE
         noticePopup.dismiss()
         pause()
       },
