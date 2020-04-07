@@ -40,5 +40,11 @@ class Constants {
 
     // BaseRunningActivity 일시정지 애니메이션 상수
     const val PUASE_ANIMATION_DURATION_TIME = 1300L
+
+    //위치 받아오는 주기
+    const val LOCATION_INTERAL = 1000
+    //REQUEST 성공
+    const val SUCCESS_REQUEST = 1
+
   }
 }

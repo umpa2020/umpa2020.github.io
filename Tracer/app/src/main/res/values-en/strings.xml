@@ -11,7 +11,7 @@
   <string name="gender">Gender</string>
 
   <string name="error_discorrent_email">Please check your email.</string>
-  <string name="txtInputInfoPWD">8 or more characters including uppercase, lowercase, numbers, and special characters in English</string>
+  <string name="txtInputInfoPWD">8 characters including a number and a lowercase letter.</string>
   <string name="txtInputInfoNick">3-12 characters including uppercase, lowercase and numbers in English</string>
   <string name="txtInputInfoPWCHECK">Please check your password.</string>
   <string name="txtInputInfoEmail">This is not an exact email.</string>
@@ -78,6 +78,20 @@
   <string name="yes">Yes</string>
   <string name="no">No</string>
   <string name="noroute">There are currently no saved routes.</string>
+  <string name="profile_information">My Profile</string>
+  <string name="profile_image_change">Image Change</string>
+  <string name="email_">EMAIL</string>
+  <string name="confirmation">Confirmation</string>
+  <string name="picture_select_cancel">Deselect photos</string>
+  <string name="check_duplicates">Please check for duplicates.</string>
+  <string name="nickname_already_using">this nickname is already using.</string>
+  <string name="nickname_available">Available nickname.</string>
+  <string name="check_duplicates1">Please double-check.</string>
+  <string name="please_select">Please select.</string>
+  <string name="set_default_image">Would you like to set it as the default image?</string>
+  <string name="gps_activation">GPS activation</string>
+
   <!-- firebase string-->
   <string name="google_storage_bucket_string" >gs://tracer-9070d.appspot.com/</string>
+  <string name="serachHint">Search for a place or address</string>
 </resources>

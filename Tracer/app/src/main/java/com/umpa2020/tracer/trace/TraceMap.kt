@@ -15,6 +15,7 @@ class TraceMap(val mMap: GoogleMap) {
   }
 
   lateinit var loadTrack: Polyline
+
   var markerList = mutableListOf<Marker>()
   fun drawRoute(track: MutableList<LatLng>, wptList: MutableList<WayPoint>) {
     Logg.d("Map is draw")

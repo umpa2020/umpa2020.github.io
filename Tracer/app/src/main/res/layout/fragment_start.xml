@@ -5,7 +5,8 @@
   android:layout_height="match_parent">
 
   <Button
-    android:id="@+id/mainStartRacing"
+    android:visibility="gone"
+    android:id="@+id/mainStartSearchAreaButton"
     style="@style/buttonTextRedText"
     android:layout_width="150dp"
     android:layout_height="40dp"
@@ -26,20 +27,60 @@
       android:layout_height="50dp"
       android:layout_alignParentTop="true"
       android:background="@color/white"
-      android:elevation="1dp">
+      android:elevation="1dp"
+      android:contentInsetStart="0dp">
 
-      <TextView
+      <RelativeLayout
+        android:visibility="visible"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginRight="12dp"
-        android:fontFamily="@font/godoroundedl"
-        android:gravity="center"
-        android:text="Tracer"
-        android:textColor="@color/red"
-        android:textSize="40dp"
-        android:textStyle="bold">
+        android:orientation="horizontal">
 
-      </TextView>
+        <TextView
+          android:id="@+id/mainStartLogoTextView"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:fontFamily="@font/godoroundedl"
+          android:gravity="center"
+          android:text="Tracer"
+          android:textColor="@color/red"
+          android:textSize="40dp"
+          android:layout_centerInParent="true"
+          android:textStyle="bold">
+
+        </TextView>
+        <LinearLayout
+          android:id="@+id/mainStartSearchLayout"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:visibility="gone"
+          android:layout_toStartOf="@id/mainStartSearchButton">
+          <Button
+            android:id="@+id/mainStartBackButton"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:onClick="onClick"
+            android:background="@drawable/ic_arrow_back_red_34dp"/>
+          <EditText
+            android:id="@+id/mainStartSearchTextView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="left"
+            android:hint="@string/serachHint" />
+        </LinearLayout>
+        <Button
+          android:id="@+id/mainStartSearchButton"
+          android:layout_alignParentEnd="true"
+          android:layout_centerVertical="true"
+          android:layout_width="30dp"
+          android:layout_height="30dp"
+          android:layout_marginStart="10dp"
+          android:layout_marginEnd="10dp"
+          android:onClick="onClick"
+          android:background="@drawable/ic_search_red_24dp"/>
+      </RelativeLayout>
     </Toolbar>
 
     <fragment

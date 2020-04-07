@@ -71,6 +71,13 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     traceMap = TraceMap(googleMap) //구글맵
     traceMap.mMap.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
 
+    traceMap.mMap.setOnCameraMoveListener {
+      wedgedCamera=false
+    }
+    traceMap.mMap.setOnMyLocationButtonClickListener {
+      wedgedCamera=true
+      true
+    }
   }
 
   open fun updateLocation(curLoc: Location) {
@@ -168,7 +175,9 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     } else if (false) { //TODO:비정상적인 움직임일 경우 + finish에 도착한 경우
     } else {
       moving = true
-      if (wedgedCamera) traceMap.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 16F))
+
+      if(wedgedCamera) traceMap.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 16F))
+
     }
     return moving
   }

@@ -25,16 +25,16 @@ import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.extensions.toLatLng
 import com.umpa2020.tracer.main.start.BaseRunningActivity
+import com.umpa2020.tracer.network.FBMap
 import com.umpa2020.tracer.util.ChoicePopup
 import com.umpa2020.tracer.util.Logg
 import io.jenetics.jpx.WayPoint
 import kotlinx.android.synthetic.main.activity_ranking_recode_racing.*
 import kotlin.math.roundToLong
 
-class RankingRecodeRacingActivity : BaseRunningActivity(){
+class RankingRecodeRacingActivity : BaseRunningActivity() {
   lateinit var mapRouteGPX: RouteGPX
   lateinit var mapTitle: String
-  lateinit var increaseExecuteThread: Thread
   var racingResult = true
   var deviationCount = 0
 
@@ -47,7 +47,7 @@ class RankingRecodeRacingActivity : BaseRunningActivity(){
     requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
     setContentView(R.layout.activity_ranking_recode_racing)
     mapRouteGPX = intent.getParcelableExtra("RouteGPX") as RouteGPX
-    mapTitle = intent.getStringExtra("mapTitle")
+    mapTitle = intent.getStringExtra("mapTitle")!!
     init()
   }
 
@@ -56,19 +56,6 @@ class RankingRecodeRacingActivity : BaseRunningActivity(){
     traceMap.drawRoute(track, mapRouteGPX.wptList)
   }
 
-  private fun increaseExecute(mapTitle: String) {
-
-    increaseExecuteThread = Thread(Runnable {
-      val db = FirebaseFirestore.getInstance()
-
-      db.collection("mapInfo").document(mapTitle)
-        .update("execute", FieldValue.increment(1))
-        .addOnSuccessListener { Logg.d("DocumentSnapshot successfully updated!") }
-        .addOnFailureListener { e -> Logg.w("Error updating document$e") }
-    })
-
-    increaseExecuteThread.start()
-  }
 
   override fun init() {
     loadRoute()
@@ -80,8 +67,8 @@ class RankingRecodeRacingActivity : BaseRunningActivity(){
     pauseButton = racingPauseButton
     chronometer = racingTimerTextView
     notificationTextView = racingNotificationTextView
-    drawerHandle=racingHandle
-    drawer=racingDrawer
+    drawerHandle = racingHandle
+    drawer = racingDrawer
     stopButton.setOnLongClickListener {
       noticePopup = ChoicePopup(this, "선택해주세요.",
         "지금 정지하시면 저장이 불가능합니다. \n\n정지하시겠습니까?",
@@ -161,12 +148,15 @@ class RankingRecodeRacingActivity : BaseRunningActivity(){
         checkMarker()
         checkDeviation()
       }
+      else -> {
+
+      }
     }
   }
 
   override fun start() {
     super.start()
-    increaseExecute(mapTitle)
+    FBMap().increaseExecute(mapTitle)
   }
 
   override fun stop() {
