@@ -16,10 +16,10 @@ import com.umpa2020.tracer.network.FBMapImage
 import com.umpa2020.tracer.network.FBProfile
 import com.umpa2020.tracer.util.Chart
 import com.umpa2020.tracer.util.ChoicePopup
+import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.gpx.GPXConverter
 import kotlinx.android.synthetic.main.activity_ranking_map_detail.*
 import java.io.File
-import java.sql.Timestamp
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -39,9 +39,13 @@ class RankingMapDetailActivity : AppCompatActivity() {
     rankingDetailMapTitle.text = cutted[0]
     //TODO : 날짜로 바꿔야함 (한국 시간만 해결하면 됨)
     // TODO : 메인에서 마커 클릭하면 여기서 어플 터짐
-    val timestamp = Timestamp(cutted[1].toLong())
-    val date = Date(timestamp.time)
-    rankingDetailDate.text = date.toString()
+    Logg.d(cutted[1])
+    val date = Date(cutted[1].toLong())
+    val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss",Locale.getDefault())
+    val formattedDate = sdf.format(date)
+    println(formattedDate)
+
+    rankingDetailDate.text = formattedDate
 
 
     val db = FirebaseFirestore.getInstance()

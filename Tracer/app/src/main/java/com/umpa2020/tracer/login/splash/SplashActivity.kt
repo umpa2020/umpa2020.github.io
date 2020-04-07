@@ -105,18 +105,13 @@ class SplashActivity : AppCompatActivity() {
 
       // 로그아웃의 경우 autoLoginKey 가 " " 공백 하나로 담겨져 있고,
       // 앱 설치시에는 isEmpty() 즉, 값이 없다.
-      if (UserInfo.autoLoginKey == " " || UserInfo.autoLoginKey.isEmpty()) {
-        // shared에 로그인 ID 고유값이 없으면 초기 가입자 or (로그아웃 or 앱 삭제 후 재 로그인)
-        // mFirestoreDB!!.collection("userinfo").
-        Logg.d("ssmm11 if")
-
+      if (UserInfo.autoLoginKey.isEmpty()) { // 로그인 고유 값이 있으면 --> 회원가입 진행 끝났다고 생각하고 일단ㄱㄱ -> 수정해야함
         val nextIntent = Intent(this@SplashActivity, LoginActivity::class.java)
         startActivity(nextIntent)
         finish()
       } else {
-        // 로그인 고유 값이 있으면 --> 회원가입 진행 끝났다고 생각하고 일단ㄱㄱ -> 수정해야함
+        // shared에 로그인 ID 고유값이 없으면 초기 가입자 or (로그아웃 or 앱 삭제 후 재 로그인)
         // main으로
-        Logg.d("ssmm11 else")
 
         val nextIntent = Intent(this@SplashActivity, MainActivity::class.java)
         startActivity(nextIntent)
