@@ -45,7 +45,7 @@
       <Button
         android:id="@+id/rankRecyclerMoreButton"
         style="@style/buttonText"
-        android:layout_width="100dp"
+        android:layout_width="120dp"
         android:layout_height="40dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
@@ -71,8 +71,6 @@
         style="@style/ListDetail1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="312312mkfds"
-
         android:fontFamily="@font/notosansmedium"
         android:textSize="18sp" />
 
@@ -92,7 +90,6 @@
         style="@style/ListDetail1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="312312mkfds"
         android:layout_toRightOf="@+id/rankRecyclerProfileImage"
         android:layout_alignBottom="@id/rankRecyclerProfileImage"
         android:layout_marginLeft="10dp"
