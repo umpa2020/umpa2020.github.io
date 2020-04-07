@@ -3,6 +3,7 @@ package com.umpa2020.tracer.main
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.os.PersistableBundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -21,9 +22,9 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() {
   private var doubleBackToExitPressedOnce1 = false
 
+  var selectedFragment: Fragment? = null//선택된 프래그먼트 저장하는 변수
   //bottomNavigation 아이템 선택 리스너
   private val navListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
-    var selectedFragment: Fragment? = null//선택된 프래그먼트 저장하는 변수
 
     when (item.itemId) { //선택된 메뉴에 따라서 선택된 프래그 먼트 설정
       R.id.navigation_start -> selectedFragment = StartFragment()
@@ -31,6 +32,7 @@ class MainActivity : AppCompatActivity() {
       R.id.navigation_ranking -> selectedFragment = RankingFragment()
     }
 
+    Logg.i("프래그먼트 개수 : " + supportFragmentManager.backStackEntryCount.toString())
     //동적으로 프래그먼트 교체
     supportFragmentManager.beginTransaction().replace(
       R.id.container,
@@ -52,6 +54,7 @@ class MainActivity : AppCompatActivity() {
       R.id.container,
       StartFragment()
     ).commit()
+    selectedFragment = StartFragment()
     TTS.set(applicationContext)
 
     //선택한 메뉴로 프래그먼트 바꿈
@@ -69,6 +72,31 @@ class MainActivity : AppCompatActivity() {
     Logg.d("restart service")
   }
 
+//  override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
+//    if (selectedFragment != null) {
+//      supportFragmentManager.putFragment(outState, KEY_FRAGMENT, currentFragment);
+//    }
+//    outState.putString(KEY_LIST_NAME, currentListName);
+//    super.onSaveInstanceState(outState, outPersistentState)
+//
+//  }
+
+  override fun onStart() {
+    super.onStart()
+    Logg.d("onStart()")
+    Logg.d(selectedFragment.toString())
+    Logg.d(selectedFragment!!.id.toString())
+    if (selectedFragment!!.id ==  2131296382) { //  ProfileFragment id = 2131296382
+      Logg.d(selectedFragment!!.id.toString())
+      Logg.i("누구냐!")
+      supportFragmentManager.beginTransaction().detach(selectedFragment!!).attach(selectedFragment!!).commit()
+    }
+  }
+
+  override fun onStop() {
+    super.onStop()
+
+  }
 
   override fun onDestroy() {
     super.onDestroy()
@@ -122,6 +150,6 @@ class MainActivity : AppCompatActivity() {
     }
     this.doubleBackToExitPressedOnce1 = true
     Toast.makeText(applicationContext, "뒤로 버튼을 한번 더 누르면 종료됩니다.", Toast.LENGTH_LONG).show()
-    Handler().postDelayed({doubleBackToExitPressedOnce1=false},3000)
+    Handler().postDelayed({ doubleBackToExitPressedOnce1 = false }, 3000)
   }
 }

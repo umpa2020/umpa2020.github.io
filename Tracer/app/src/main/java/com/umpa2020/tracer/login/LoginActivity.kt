@@ -56,6 +56,7 @@ class LoginActivity : AppCompatActivity() {
 
     //  Configure Google Sign In
     // 구글 로그인 옵션
+    // GoogleSignInOptions 옵션을 관리해주는 클래스로 API 키값과 요청할 값이 저장되어 있다
     val googleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
       .requestIdToken(getString(R.string.default_web_client_id))
       .requestEmail()
@@ -116,7 +117,7 @@ class LoginActivity : AppCompatActivity() {
     Logg.d("firebaseAuthWithGoogle:" + acct.id!!) // firebaseAuthWithGoogle:117635384468060774340 => 계정 고유 번호 => 이것을 Shared에 저장하여 자동 로그인 구현
     Logg.d(acct.email!!)
 
-    val uid = mAuth!!.uid.toString()
+    var uid = mAuth!!.uid.toString()
     val email = acct.email.toString()
 
     // Credentail 구글 로그인에 성공했다는 인증서
@@ -131,6 +132,7 @@ class LoginActivity : AppCompatActivity() {
           // Sign in success, update UI with the signed-in user's information
           Logg.d("signInWithCredential:success")
           // 로그인 성공
+          uid = mAuth!!.uid.toString()
           mFirestoreDB!!.collection("userinfo").whereEqualTo("UID", uid).get()
             .addOnSuccessListener { result ->
               // Document found in the offline cache
@@ -158,7 +160,9 @@ class LoginActivity : AppCompatActivity() {
 
                   UserInfo.autoLoginKey = mAuth!!.uid.toString()
                   UserInfo.email = email
-                  UserInfo.nickname = document.data.get("nickname").toString() // Shared에 nickname저장.
+                  UserInfo.nickname = document.data["nickname"].toString() // Shared에 nickname저장.
+                  UserInfo.age = document.data["age"].toString()
+                  UserInfo.gender = document.data["gender"].toString()
 
                   val nextIntent = Intent(this@LoginActivity, MainActivity::class.java)
                   startActivity(nextIntent)

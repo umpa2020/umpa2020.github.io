@@ -54,7 +54,10 @@ class FBRanking {
           infoDatas.add(infoData)
         }
         infoDatas.sortByDescending { infoData -> infoData.execute }
-
+        if (infoDatas.isEmpty()) {
+          view.rankingRecyclerRouteisEmpty.visibility = View.VISIBLE
+          progressbar.dismiss()
+        }
         view.rank_recycler_map.adapter = RankRecyclerViewAdapterMap(infoDatas, mode, progressbar)
       }
   }
@@ -93,6 +96,10 @@ class FBRanking {
           infoDatas.sortByDescending { infoData -> infoData.execute }
         } else if (mode.equals("likes")) {
           infoDatas.sortByDescending { infoData -> infoData.likes }
+        }
+        if (infoDatas.isEmpty()) {
+          view.rankingRecyclerRouteisEmpty.visibility = View.VISIBLE
+          progressbar.dismiss()
         }
         view.rank_recycler_map.adapter = RankRecyclerViewAdapterMap(infoDatas, mode, progressbar)
       }

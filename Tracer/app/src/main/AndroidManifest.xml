@@ -9,19 +9,17 @@
   정보 액세스 권한을 요청
   대부분의 경우 대략적 위치 정보 액세스 권한을 요청하고 사용 가능한 위치 제공자로부터 상당히 정확한 위치 정보를 가져올 수 있습니다
   다음은 대략적 위치 정보 액세스 권한을 요청하는 방법
-  -->
+    -->
   <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
   <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
   <!--
 앱이 Android 10 이상을 타겟팅하는 경우 앱이 백그라운드에 있는 동안 정기 위치 업데이트를 받으려면
    앱의 manifest 파일에 ACCESS_BACKGROUND_LOCATION 권한을 선언하고 사용자 권한을 수신해야 합니다.
-  -->
-  <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
-  <!-- 카메라 권한 -->
+    -->
+  <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" /> <!-- 카메라 권한 -->
   <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
   <uses-permission android:name="android.permission.CAMERA" />
-  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-  <!-- foreground service -->
+  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- foreground service -->
   <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
   <application
@@ -33,30 +31,34 @@
     android:supportsRtl="true"
     android:theme="@style/AppTheme"
     tools:ignore="GoogleAppIndexingWarning">
-    <activity android:name="com.umpa2020.tracer.main.profile.ProfileRecordActivity" />
-    <activity android:name="com.umpa2020.tracer.main.profile.ProfileRouteActivity" />
+    <activity android:name=".main.profile.MyInformationActivity"></activity>
+    <activity android:name=".main.profile.AppSettingActivity" />
+    <activity android:name=".main.profile.ProfileRecordActivity" />
+    <activity android:name=".main.profile.ProfileRouteActivity" />
+
     <service
-      android:name="com.umpa2020.tracer.locationBackground.LocationBackgroundService"
+      android:name=".locationBackground.LocationBackgroundService"
       android:exported="false" />
 
-    <activity android:name="com.umpa2020.tracer.main.start.racing.RacingFinishActivity" />
-    <activity android:name="com.umpa2020.tracer.main.start.racing.RankingRecodeRacingActivity" />
-    <activity android:name="com.umpa2020.tracer.main.start.racing.NearRouteActivity" />
-    <activity android:name="com.umpa2020.tracer.login.join.GenderSelectActivity" />
-    <activity android:name="com.umpa2020.tracer.login.join.SignUpActivity" />
-    <activity android:name="com.umpa2020.tracer.login.splash.SplashActivity">
+    <activity android:name=".main.start.racing.RacingFinishActivity" />
+    <activity android:name=".main.start.racing.RankingRecodeRacingActivity" />
+    <activity android:name=".main.start.racing.NearRouteActivity" />
+    <activity android:name=".login.join.GenderSelectActivity" />
+    <activity android:name=".login.join.SignUpActivity" />
+    <activity android:name=".login.splash.SplashActivity">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
 
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
     </activity>
-    <activity android:name="com.umpa2020.tracer.main.ranking.RankRecyclerItemClickActivity" />
-    <activity android:name="com.umpa2020.tracer.main.ranking.RankingMapDetailActivity" />
-    <activity android:name="com.umpa2020.tracer.main.start.running.RunningSaveActivity" />
-    <activity android:name="com.umpa2020.tracer.main.start.running.RunningActivity" />
-    <activity android:name="com.umpa2020.tracer.main.MainActivity" />
-    <activity android:name="com.umpa2020.tracer.login.LoginActivity" />
+    <activity android:name=".main.ranking.RankRecyclerItemClickActivity" />
+    <activity android:name=".main.ranking.RankingMapDetailActivity" />
+    <activity android:name=".main.start.running.RunningSaveActivity" />
+    <activity android:name=".main.start.running.RunningActivity" />
+    <activity android:name=".main.MainActivity" />
+    <activity android:name=".login.LoginActivity" />
+
     <meta-data
       android:name="com.google.android.geo.API_KEY"
       android:value="@string/google_maps_key" />

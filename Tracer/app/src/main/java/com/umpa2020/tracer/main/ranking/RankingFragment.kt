@@ -51,6 +51,7 @@ class RankingFragment : Fragment() {
 
     //적용 버튼 누를때
     view.applyButton.setOnClickListener {
+      //TODO : "100+" 값이 들어와서 오류남. 슬라이드에서 값 빼는 걸로 대체 or "100+"을 split해서 해결
       val tuneDistance = Integer.parseInt(view.progressTextView.text.toString())
 
       //실행순 버튼에 체크가 되어 있을 경우
