@@ -69,7 +69,6 @@ class StartFragment : Fragment(), OnMapReadyCallback,View.OnClickListener {
             when (msg.what) {
               STRAT_FRAGMENT_NEARMAP -> {
                 nearMaps = msg.obj as ArrayList<NearMap>
-                Logg.d("ssmm11 nearMaps = $nearMaps")
                 val icon =
                   BitmapDescriptorFactory
                     .defaultMarker(BitmapDescriptorFactory.HUE_ROSE)
@@ -107,9 +106,7 @@ class StartFragment : Fragment(), OnMapReadyCallback,View.OnClickListener {
           }
         }
         FBMap().getNearMap(bound.southwest, bound.northeast, mHandler)
-        /*val newIntent = Intent(activity, NearRouteActivity::class.java)
-        newIntent.putExtra("currentLocation", currentLocation.toLatLng()) //curLoc 정보 인텐트로 넘김
-        startActivity(newIntent)*/
+
       }
     }
   }

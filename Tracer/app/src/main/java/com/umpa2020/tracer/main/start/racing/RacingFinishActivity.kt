@@ -2,142 +2,86 @@ package com.umpa2020.tracer.main.start.racing
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.os.Message
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.InfoData
-import com.umpa2020.tracer.dataClass.RanMapsData
 import com.umpa2020.tracer.dataClass.RankingData
 import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.main.ranking.RankRecyclerViewAdapterTopPlayer
+import com.umpa2020.tracer.network.FBRacing
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.PrettyDistance
 import com.umpa2020.tracer.util.ProgressBar
-import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_racing_finish.*
 import java.text.SimpleDateFormat
 import java.util.*
 
+
+/* 핸들러로 받아서 사용할 것
+//레이아웃 매니저 추가
+
+ */
+
 class RacingFinishActivity : AppCompatActivity() {
+  val GETMAKERDATA = 100
+  val GETRACING = 101
+
   var activity = this
   lateinit var racerData: InfoData
+  lateinit var makerData: InfoData
   var arrRankingData: ArrayList<RankingData> = arrayListOf()
-  lateinit var makerData:InfoData
-
-
-  var MapTitle = ""
+  lateinit var progressbar: ProgressBar
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_racing_finish)
-    val progressbar = ProgressBar(this)
+
+    progressbar = ProgressBar(this)
     progressbar.show()
 
     // Racing Activity 에서 넘겨준 infoData를 받아서 활용
     racerData = intent.getParcelableExtra("InfoData") as InfoData
     val result = intent.extras!!.getBoolean("Result")
-    val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
     val routeGPX = intent.getParcelableExtra<RouteGPX>("RouteGPX")
     val mapRouteGPX = intent.getParcelableExtra<RouteGPX>("MapRouteGPX")
     val racerSpeeds = routeGPX!!.getSpeed()
     val makerSpeeds = mapRouteGPX!!.getSpeed()
+    Logg.d("ssmm11 reuslt = $result")
 
-    
-    //TODO: 실패이든 성공이든 maker의 infodata를 받아와야함
-    if (result) { // 성공인 경우
-      // 현재 달린 사람의 Maptitle로 메이커의 infoData를 다운 받아옴
-      val db = FirebaseFirestore.getInstance()
-      db.collection("mapInfo").document(racerData.mapTitle!!)
-        .get()
-        .addOnSuccessListener { document ->
-          makerData = document.toObject(InfoData::class.java)!!
-          val ranMapsData = RanMapsData(racerData.mapTitle, racerData.distance, racerData.time)
-          db.collection("userinfo").document(UserInfo.autoLoginKey).collection("user ran these maps").add(ranMapsData)
+    val mHandler = object : Handler(Looper.getMainLooper()) {
+      override fun handleMessage(msg: Message) {
+        when (msg.what) {
+          GETMAKERDATA -> {
+            makerData = msg.obj as InfoData
+          }
 
-          val rankingData = RankingData(racerData.makersNickname, UserInfo.nickname, racerData.time, 1)
+          GETRACING -> {
+            arrRankingData = msg.obj as ArrayList<RankingData>
+            val resultRankText = msg.arg1
+            setUiData(racerSpeeds, makerSpeeds, resultRankText)
 
-          // 랭킹 맵에서
-          db.collection("rankingMap").document(racerData.mapTitle!!).collection("ranking").whereEqualTo("bestTime", 1)
-            .whereEqualTo("challengerNickname", UserInfo.nickname).get()
-            .addOnSuccessListener { result ->
-              for (document in result) {
-                if (racerData.time!!.toLong() < document.get("challengerTime") as Long) {
-                  db.collection("rankingMap").document(racerData.mapTitle!!).collection("ranking").document(document.id).update("bestTime", 0)
-
-                } else {
-                  rankingData.bestTime = 0
-                }
-                break
-              }
-
-              // 타임스탬프
-              val timestamp = Date().time
-
-              // 랭킹의 내용을 가져와서 마지막 페이지 구성
-              db.collection("rankingMap").document(racerData.mapTitle!!).collection("ranking")
-                .document(UserInfo.autoLoginKey + timestamp).set(rankingData)
-                .addOnSuccessListener {
-                  db.collection("rankingMap").document(racerData.mapTitle!!).collection("ranking").orderBy("challengerTime", Query.Direction.ASCENDING)
-                    .get()
-                    .addOnSuccessListener { result ->
-                      var index = 1
-                      for (document2 in result) {
-                        if (document2.get("challengerNickname") == UserInfo.nickname && document2.get("challengerTime").toString().equals(racerData.time.toString())) {
-                          resultRankTextView.text = "" + index + "등"
-                        }
-                        var recycleRankingData: RankingData
-                        recycleRankingData = document2.toObject(RankingData::class.java)
-                        if (recycleRankingData.bestTime == 1) {
-                          //최대 10위까지만 띄우기
-                          if (arrRankingData.size > 10)
-                            break
-
-                          arrRankingData.add(recycleRankingData)
-
-                        }
-                        index++
-                      }
-                      //레이아웃 매니저 추가
-                      resultPlayerRankingRecycler.layoutManager = LinearLayoutManager(this)
-                      //adpater 추가
-                      resultPlayerRankingRecycler.adapter = RankRecyclerViewAdapterTopPlayer(arrRankingData)
-
-                      runOnUiThread {
-                        Logg.d("makerData.time = ${makerData.time}")
-                        Logg.d("makerData.time = ${racerData.time}")
-
-                        makerLapTimeTextView.text = formatter.format(Date(makerData.time!!))
-                        makerMaxSpeedTextView.text = PrettyDistance().convertPretty(makerSpeeds.max()!!)
-                        makerAvgSpeedTextView.text = PrettyDistance().convertPretty(makerSpeeds.average())
-
-                        racerLapTimeTextView.text = formatter.format(Date(racerData.time!!))
-                        racerMaxSpeedTextView.text = PrettyDistance().convertPretty(racerSpeeds.max()!!)
-                        racerAvgSpeedTextView.text = PrettyDistance().convertPretty(racerSpeeds.average())
-                      }
-                      progressbar.dismiss()
-                    }
-                    .addOnFailureListener { exception ->
-                    }
-                }
-            }
+            // Recycler view adpater 추가
+            resultPlayerRankingRecycler.layoutManager = LinearLayoutManager(baseContext)
+            resultPlayerRankingRecycler.adapter = RankRecyclerViewAdapterTopPlayer(arrRankingData)
+          }
         }
-
-        .addOnFailureListener { exception ->
-        }
-    } else {
-      resultRankTextView.text = "실패"
-      makerLapTimeTextView.text = formatter.format(Date(makerData.time!!))
-      makerMaxSpeedTextView.text = PrettyDistance().convertPretty(makerSpeeds.max()!!)
-      makerAvgSpeedTextView.text = PrettyDistance().convertPretty(makerSpeeds.average())
-
-      racerLapTimeTextView.text = formatter.format(Date(racerData.time!!))
-      racerMaxSpeedTextView.text = PrettyDistance().convertPretty(racerSpeeds.max()!!)
-      racerAvgSpeedTextView.text = PrettyDistance().convertPretty(racerSpeeds.average())
-
-      progressbar.dismiss()
+      }
     }
+
+    // 메이커 인포데이터를 가져오는 함수
+    FBRacing().getMakerData(racerData, mHandler)
+
+
+    // 유저 인포에 해당 유저가 이 맵을 뛰었다는
+    // 히스토리를 더하는 함수
+    FBRacing().setUserInfoRacing(racerData)
+
+
+    FBRacing().setRankingData(result, racerData, mHandler)
 
     OKButton.setOnClickListener {
       val intent = Intent(this, MainActivity::class.java)
@@ -154,5 +98,23 @@ class RacingFinishActivity : AppCompatActivity() {
     return speeds
   }
 
+  private fun setUiData(racerSpeeds: MutableList<Double>, makerSpeeds: MutableList<Double>, resultRankText: Int) {
+    val formatter = SimpleDateFormat("mm:ss", Locale.KOREA)
 
+    if (resultRankText == 0) {
+      resultRankTextView.text = "실패"
+    }
+    else {
+      resultRankTextView.text = "$resultRankText 등"
+    }
+
+    makerLapTimeTextView.text = formatter.format(Date(makerData.time!!))
+    makerMaxSpeedTextView.text = PrettyDistance().convertPretty(makerSpeeds.max()!!)
+    makerAvgSpeedTextView.text = PrettyDistance().convertPretty(makerSpeeds.average())
+
+    racerLapTimeTextView.text = formatter.format(Date(racerData.time!!))
+    racerMaxSpeedTextView.text = PrettyDistance().convertPretty(racerSpeeds.max()!!)
+    racerAvgSpeedTextView.text = PrettyDistance().convertPretty(racerSpeeds.average())
+    progressbar.dismiss()
+  }
 }

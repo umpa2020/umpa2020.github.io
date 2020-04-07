@@ -33,7 +33,7 @@ class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) : Recycler
     // app.getString   google_storage_bucket
     // string에 저장해서 사용 해보았으나
     // Please use a gs:// URL for your Firebase Storage bucket. 에러가 뜨면서 실행이 안되는 문제..
-   // val storage = FirebaseStorage.getInstance(R.string.google_storage_bucket_string.toString()) // debug용, release용 구분
+    // val storage = FirebaseStorage.getInstance(R.string.google_storage_bucket_string.toString()) // debug용, release용 구분
     val storage = FirebaseStorage.getInstance("gs://tracer-9070d.appspot.com/") // debug용, release용 구분
     val mapImageRef = storage.reference.child("mapImage").child(singleItem.mapTitle!!)
     mapImageRef.downloadUrl.addOnCompleteListener { task ->
