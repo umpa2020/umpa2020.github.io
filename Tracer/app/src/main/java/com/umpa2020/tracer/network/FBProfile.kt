@@ -137,9 +137,6 @@ class FBProfile {
    * 그 경로를 db에 update하는 함수
    */
   fun changeProfileImage(bitmapImg: Bitmap) {
-//    val progressbar = ProgressBar(App.instance.currentActivity() as Activity)
-//    progressbar.show()
-
     val dt = Date()
     // 현재 날짜를 프로필 이름으로 nickname/Profile/현재날짜(영어).jpg 경로 만들기
 
@@ -162,7 +159,6 @@ class FBProfile {
           mFirestoreDB.collection("userinfo").document(UserInfo.autoLoginKey)
             .update("profileImagePath", "${dt.time}.jpg")
         }
-//        progressbar.dismiss()
       }
 
   }
@@ -175,7 +171,7 @@ class FBProfile {
         for (document in result) {
           val data = document.toObject(InfoData::class.java)
           infoDatas.add(data)
-          Logg.d("in get profile (보내기 전)!~ > " + document.id)
+          Logg.d("ssmm11 infodata = $data / " + document.id)
         }
         val msg: Message
 
