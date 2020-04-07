@@ -34,5 +34,10 @@ class Constants {
 
     //animation duration
     const val ANIMATION_DURATION_TIME = 500L
+
+    //위치 받아오는 주기
+    const val LOCATION_INTERAL = 1000
+    //REQUEST 성공
+    const val SUCCESS_REQUEST = 1
   }
 }
