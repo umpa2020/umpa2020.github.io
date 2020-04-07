@@ -4,13 +4,19 @@ import android.location.Location
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
 import android.widget.SeekBar
 import androidx.fragment.app.Fragment
 import com.umpa2020.tracer.R
+import com.umpa2020.tracer.constant.Constants.Companion.ANIMATION_DURATION_TIME
+import com.umpa2020.tracer.constant.Constants.Companion.MAX_DISTANCE
+import com.umpa2020.tracer.constant.Constants.Companion.MAX_SEEKERBAR
 import com.umpa2020.tracer.network.FBRanking
 import com.umpa2020.tracer.util.UserInfo
+import kotlinx.android.synthetic.main.fragment_ranking.*
 import kotlinx.android.synthetic.main.fragment_ranking.view.*
 
 
@@ -19,6 +25,7 @@ import kotlinx.android.synthetic.main.fragment_ranking.view.*
  */
 class RankingFragment : Fragment() {
   lateinit var location: Location
+  var distance = 0
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -30,16 +37,15 @@ class RankingFragment : Fragment() {
 
     //필터 버튼 누르면 레이아웃 보임
     view.rankingToolBarTuneButton.setOnClickListener {
-      appearAnimation()
+      if(view.tuneLinearLayout.visibility == GONE){
+        appearAnimation()
+      }
     }
 
     //필터 레이아웃 밖 영역 클릭하면 사라짐
     view.disappearLayout.setOnClickListener {
       disappearAnimation()
     }
-    /**
-     * 수진이가 xml 만들어주면 해당 기능 붙히기
-     */
 
     //전체 삭제 누를 때
     view.allDeleteButton.setOnClickListener {
@@ -51,7 +57,7 @@ class RankingFragment : Fragment() {
 
     //적용 버튼 누를때
     view.applyButton.setOnClickListener {
-      val tuneDistance = Integer.parseInt(view.progressTextView.text.toString())
+      val tuneDistance = distance
 
       //실행순 버튼에 체크가 되어 있을 경우
       if (view.tuneRadioBtnExecute.isChecked) {
@@ -66,9 +72,11 @@ class RankingFragment : Fragment() {
 
     view.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
       override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
-        view.progressTextView.text = i.toString()
-        if (i == 100) {
+        distance = i
+        view.progressTextView.text = distance.toString()
+        if (i == MAX_SEEKERBAR) {
           view.progressTextView.text = "100+"
+          distance = MAX_DISTANCE
         }
       }
 
@@ -86,7 +94,7 @@ class RankingFragment : Fragment() {
 
   fun appearAnimation() {
     val animate = AlphaAnimation(0f, 1f) //투명도 변화
-    animate.duration = 500
+    animate.duration = ANIMATION_DURATION_TIME
     animate.fillAfter = true
     requireView().tuneLinearLayout.visibility = View.VISIBLE
     requireView().filterLayout.visibility = View.VISIBLE
@@ -103,7 +111,7 @@ class RankingFragment : Fragment() {
     requireView().disappearLayout.visibility = View.GONE
 
     val animate = AlphaAnimation(1f, 0f)
-    animate.duration = 500
+    animate.duration = ANIMATION_DURATION_TIME
     animate.fillAfter = true
     requireView().tuneLinearLayout.startAnimation(animate)
   }

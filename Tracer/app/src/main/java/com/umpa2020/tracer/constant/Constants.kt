@@ -25,5 +25,14 @@ class Constants {
     const val RACINGFINISH = 2 //Racing is finished
     const val DEVIATION = 3 //racer deviate the track
     const val MAPISREADY=4 //on map ready call back
+
+    //최대 거리
+    const val MAX_DISTANCE = 100000
+
+    //seekerBar Max
+    const val MAX_SEEKERBAR = 100
+
+    //animation duration
+    const val ANIMATION_DURATION_TIME = 500L
   }
 }
