@@ -59,7 +59,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
   val NEARMAPFALSE = 41
   var nearMaps: ArrayList<NearMap> = arrayListOf()
   var wedgedCamera = true
-
+  val progressbar = ProgressBar(App.instance.currentActivity() as Activity)
 
 
   override fun onClick(v: View) {
@@ -156,9 +156,6 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
   }
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-    val progressbar = ProgressBar(App.instance.currentActivity() as Activity)
-    progressbar.show()
-
     Logg.d("onCreateView()")
     val view = inflater.inflate(R.layout.fragment_start, container, false)
     view.test.setOnClickListener {
@@ -223,6 +220,8 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
     // 브로드 캐스트 등록 - 전역 context로 수정해야함
     LocalBroadcastManager.getInstance(this.requireContext())
       .registerReceiver(locationBroadcastReceiver, IntentFilter("custom-event-name"))
+
+    progressbar.show()
   }
 
   override fun onPause() {

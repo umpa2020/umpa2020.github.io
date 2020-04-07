@@ -12,7 +12,6 @@ import com.umpa2020.tracer.R
 import com.umpa2020.tracer.network.FBProfile
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.UserInfo
-import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.fragment_profile.view.*
 
 /**
@@ -32,11 +31,6 @@ class ProfileFragment : Fragment() {
     // 공유 프리페런스에 있는 닉네임을 반영
     val profileNickname = view.findViewById<TextView>(R.id.profileIdTextView)
     profileNickname.text = UserInfo.nickname
-
-    /**
-     * 프로필 이미지랑 총 시간,거리 셋팅을 하는 함수
-     */
-    FBProfile().setProfile(view)
 
     view.appSettingButton.setOnClickListener{
       val nextIntent = Intent(activity, AppSettingActivity::class.java)
@@ -73,6 +67,10 @@ class ProfileFragment : Fragment() {
 
   override fun onResume() {
     Logg.i("onResume()")
+    /**
+     * 프로필 이미지랑 총 시간,거리 셋팅을 하는 함수
+     */
+    FBProfile().setProfile(root)
     super.onResume()
   }
 

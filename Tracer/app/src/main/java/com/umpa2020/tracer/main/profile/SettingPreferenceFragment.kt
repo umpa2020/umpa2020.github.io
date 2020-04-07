@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
-import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.umpa2020.tracer.App
@@ -27,22 +26,22 @@ class SettingPreferenceFragment : PreferenceFragmentCompat() {
   /**
    * preference 클릭할 때
    */
-  override fun onPreferenceTreeClick(preference: Preference?): Boolean {
+  override fun onPreferenceTreeClick(preference: androidx.preference.Preference?): Boolean {
     //내 정보 눌렀을 때
-    if(preference?.key.equals("myInformation")){
+    if (preference?.key.equals("myInformation")) {
       Toast.makeText(context, "myInformation", Toast.LENGTH_LONG).show()
       val intent = Intent(context, MyInformationActivity::class.java)
       startActivity(intent)
     }
 
     //로그아웃 눌렀을 때
-    if(preference?.key.equals("logout")){
+    if (preference?.key.equals("logout")) {
       Toast.makeText(context, "logout", Toast.LENGTH_LONG).show()
       logOut()
     }
 
     //회원 탈퇴 눌렀을 때
-    if(preference?.key.equals("unregister")){
+    if (preference?.key.equals("unregister")) {
       Toast.makeText(context, "unregister", Toast.LENGTH_LONG).show()
       //TODO. 회원 탈퇴 기능 만들기
     }
@@ -73,7 +72,7 @@ class SettingPreferenceFragment : PreferenceFragmentCompat() {
         intent!!.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
-        
+
       },
       View.OnClickListener {
         // 아니오
