@@ -104,7 +104,7 @@ class RankRecyclerItemClickActivity : AppCompatActivity() {
         //레이아웃 매니저 추가
         rankRecyclerItemClickRecyclerView.layoutManager = LinearLayoutManager(this)
         //adpater 추가
-        rankRecyclerItemClickRecyclerView.adapter = RankRecyclerViewAdapterTopPlayer(arrRankingData)
+        rankRecyclerItemClickRecyclerView.adapter = RankRecyclerViewAdapterTopPlayer(arrRankingData, mapTitle)
       }
       .addOnFailureListener { exception ->
       }

@@ -28,6 +28,7 @@
   <string name="start">Start</string>
   <string name="my_activity">My Activity</string>
   <string name="my_route">My Route</string>
+  <string name="other_route">Route</string>
   <string name="race_result">Race Result</string>
   <string name="record">Record</string>
   <string name="my">My</string>
@@ -69,6 +70,7 @@
   <string name="text">Text</string>
   <string name="profile">Profile</string>
   <string name="mystats">My Stats</string>
+  <string name="otherstats">Stats</string>
   <string name="total_distance">Total Distance</string>
   <string name="total_time">Total Time</string>
   <string name="numerofruns">Number Of Runs</string>

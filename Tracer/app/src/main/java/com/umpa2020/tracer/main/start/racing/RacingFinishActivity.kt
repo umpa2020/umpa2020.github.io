@@ -67,7 +67,7 @@ class RacingFinishActivity : AppCompatActivity() {
 
             // Recycler view adpater 추가
             resultPlayerRankingRecycler.layoutManager = LinearLayoutManager(baseContext)
-            resultPlayerRankingRecycler.adapter = RankRecyclerViewAdapterTopPlayer(arrRankingData)
+            resultPlayerRankingRecycler.adapter = RankRecyclerViewAdapterTopPlayer(arrRankingData, racerData.mapTitle!!)
           }
         }
       }
