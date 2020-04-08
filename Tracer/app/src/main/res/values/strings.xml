@@ -109,6 +109,7 @@
   <string name="noticeSound">알림을 소리로 받습니다</string>
   <string name="noticeCheck">알림 여부</string>
 
+  <string name="pushthestartbutton">시작버튼을 누르면 러닝이 시작됩니다.</string>
 
 
 </resources>

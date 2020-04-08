@@ -71,7 +71,6 @@ class RankingRecodeRacingActivity : BaseRunningActivity() {
     pauseNotificationTextView = racingPauseNotificationTextView
     drawerHandle = racingHandle
     drawer = racingDrawer
-    pauseNotice("기록 측정 중지")
     stopButton.setOnLongClickListener {
       noticePopup = ChoicePopup(this, "선택해주세요.",
         "지금 정지하시면 저장이 불가능합니다. \n\n정지하시겠습니까?",

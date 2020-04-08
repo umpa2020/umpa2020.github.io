@@ -23,6 +23,7 @@ import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.main.start.BaseRunningActivity
 import com.umpa2020.tracer.util.ChoicePopup
 import com.umpa2020.tracer.util.Logg
+import com.umpa2020.tracer.util.TTS
 import com.umpa2020.tracer.util.Wow
 import hollowsoft.slidingdrawer.OnDrawerCloseListener
 import hollowsoft.slidingdrawer.OnDrawerOpenListener
@@ -44,7 +45,9 @@ class RunningActivity : BaseRunningActivity(), OnDrawerScrollListener, OnDrawerO
     // TODO : 여기 밑에 있는 함수가 init()가 실행되야 가능한데 아애 init()에 넣어두는건?
     // TODO : 그래서 RankingRecodeRacingActivity init()에서는 그렇게 해봄
     notice("시작버튼을 누르면 러닝이 시작됩니다")
-    pauseNotice("기록 측정 중지")
+    getString(R.string.pushthestartbutton)
+    TTS.speech("push the start button")
+
   }
 
   override fun init() {

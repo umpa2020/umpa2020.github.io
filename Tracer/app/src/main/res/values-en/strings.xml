@@ -108,4 +108,5 @@
   <string name="noticeSetting">Notification Settings</string>
   <string name="noticeSound">Receive notifications by sound</string>
   <string name="noticeCheck">Notification</string>
+  <string name="pushthestartbutton">push the start button</string>
 </resources>

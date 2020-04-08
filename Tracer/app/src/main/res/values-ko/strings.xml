@@ -94,6 +94,8 @@
   <string name="google_storage_bucket_string" >gs://tracer-9070d.appspot.com/</string>
   <string name="serachHint">장소나 주소를 검색해주세요</string>
 
+  <string name="pushthestartbutton">시작버튼을 누르면 러닝이 시작됩니다.</string>
+
   <!-- setting-->
   <string name="logout">로그아웃</string>
   <string name="my_information">내 정보</string>
