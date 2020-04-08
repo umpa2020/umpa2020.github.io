@@ -135,10 +135,7 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     chronometer.stop()
     pauseButton.text = "재시작"
 
-    pauseNotificationTextView.visibility = View.VISIBLE
-    appearAnimation()
-    //TODO:이거머에염?
-    //btn_pause.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_play_pressed, 0, 0, 0)
+    pauseNotice("기록 측정 중지")
   }
 
   open fun restart() {
@@ -160,8 +157,9 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
   }
 
   fun pauseNotice(str: String) {
-    pauseNotificationTextView.visibility = View.INVISIBLE
+    pauseNotificationTextView.visibility = View.VISIBLE
     pauseNotificationTextView.text = str
+    appearAnimation()
   }
 
   fun notice(str: String) {
@@ -255,7 +253,7 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
 
     val translationAnimation1 = TranslateAnimation(0f,0f,0f,height)
     val alphaAnimate = AlphaAnimation(0f, 1f) //투명도 변화
-    alphaAnimate.duration = Constants.PUASE_ANIMATION_DURATION_TIME
+    alphaAnimate.duration = Constants.PAUSE_ANIMATION_DURATION_TIME
     alphaAnimate.repeatMode = Animation.REVERSE
     alphaAnimate.repeatCount = Animation.INFINITE
 
@@ -268,9 +266,10 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     animationSet.interpolator = AccelerateDecelerateInterpolator()
     animationSet.fillAfter = true
     animationSet.fillBefore = true
-    animationSet.duration = Constants.PUASE_ANIMATION_DURATION_TIME
+    animationSet.duration = Constants.PAUSE_ANIMATION_DURATION_TIME
 
     pauseNotificationTextView.animation = animationSet
+    pauseNotificationTextView.animation.start()
   }
 
   /**
@@ -278,12 +277,13 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
    */
   fun disappearAnimation() {
     val height = pauseNotificationTextView.height.toFloat()
-//    pauseNotificationTextView.clearAnimation() // 일시정지 애니메이션 종료
-    Logg.i("재시작 애니메이션")
+    pauseNotificationTextView.clearAnimation() // 일시정지 애니메이션 종료
+    pauseNotificationTextView.ani
+    pauseNotificationTextView.visibility=View.GONE
+   Logg.i("재시작 애니메이션")
     Logg.i(height.toString())
-    
     val translationAnimation1 = TranslateAnimation(0f,0f,height,0f)
-    translationAnimation1.duration = Constants.PUASE_ANIMATION_DURATION_TIME
+    translationAnimation1.duration = Constants.PAUSE_ANIMATION_DURATION_TIME
     pauseNotificationTextView.startAnimation(translationAnimation1)
   }
 

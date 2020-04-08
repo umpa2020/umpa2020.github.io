@@ -39,7 +39,7 @@ class Constants {
     const val PROFILE_FRAGMENT_ID = 2131296382
 
     // BaseRunningActivity 일시정지 애니메이션 상수
-    const val PUASE_ANIMATION_DURATION_TIME = 1300L
+    const val PAUSE_ANIMATION_DURATION_TIME = 800L
 
     //위치 받아오는 주기
     const val LOCATION_INTERAL = 1000

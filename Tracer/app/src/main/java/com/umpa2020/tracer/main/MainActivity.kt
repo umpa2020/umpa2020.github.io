@@ -3,7 +3,6 @@ package com.umpa2020.tracer.main
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import android.os.PersistableBundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -16,7 +15,6 @@ import com.umpa2020.tracer.main.profile.ProfileFragment
 import com.umpa2020.tracer.main.ranking.RankingFragment
 import com.umpa2020.tracer.main.start.StartFragment
 import com.umpa2020.tracer.util.Logg
-import com.umpa2020.tracer.util.TTS
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -56,7 +54,6 @@ class MainActivity : AppCompatActivity() {
       StartFragment()
     ).commit()
     selectedFragment = StartFragment()
-    TTS.set(applicationContext)
 
     //선택한 메뉴로 프래그먼트 바꿈
     bottom_navigation.setOnNavigationItemSelectedListener(navListener)
