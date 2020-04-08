@@ -10,7 +10,7 @@ class FBMapImage {
   val db = FirebaseFirestore.getInstance()
 
   fun getMapImage(imageView: ImageView, mapTitle: String) {
-    val storage = FirebaseStorage.getInstance("gs://tracer-9070d.appspot.com/")
+    val storage = FirebaseStorage.getInstance()
     val mapImageRef = storage.reference.child("mapImage").child(mapTitle)
     mapImageRef.downloadUrl.addOnCompleteListener { task ->
       if (task.isSuccessful) {

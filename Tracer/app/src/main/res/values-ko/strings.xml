@@ -93,7 +93,7 @@
   <string name="set_default_image">Would you like to set it as the default image?</string>
   <string name="gps_activation">GPS 활성화</string>
   <!-- firebase string-->
-  <string name="google_storage_bucket_string" >gs://tracer-9070d.appspot.com/</string>
+  <string name="google_storage_bucket_string" >gs://tracer-release.appspot.com/</string>
   <string name="serachHint">장소나 주소를 검색해주세요</string>
 
 

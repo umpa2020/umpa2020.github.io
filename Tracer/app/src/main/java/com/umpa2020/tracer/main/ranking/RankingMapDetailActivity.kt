@@ -62,7 +62,7 @@ class RankingMapDetailActivity : AppCompatActivity() {
           if (document.id.equals(mapTitle)) {
             val infoData = document.toObject(InfoData::class.java)
 
-            val storage = FirebaseStorage.getInstance("gs://tracer-9070d.appspot.com/")
+            val storage = FirebaseStorage.getInstance()
             val routeRef = storage.reference.child("mapRoute").child(mapTitle)
             val localFile = File.createTempFile("routeGpx", "xml")
             routeRef.getFile(Uri.fromFile(localFile)).addOnSuccessListener {

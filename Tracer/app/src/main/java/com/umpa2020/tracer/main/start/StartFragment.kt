@@ -52,7 +52,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
   val TAG = "StartFragment"
 
   lateinit var traceMap: TraceMap
-  lateinit var currentLocation: Location
+  var currentLocation: Location?=null
 
   lateinit var locationBroadcastReceiver: BroadcastReceiver
   var routeMarkers = mutableListOf<Marker>()
@@ -80,7 +80,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
           mainStartSearchLayout.visibility = View.VISIBLE
         } else {
           search()
-          wedgedCamera=false
+          wedgedCamera = false
         }
       }
       R.id.mainStartBackButton -> {
@@ -88,7 +88,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
         mainStartSearchLayout.visibility = View.GONE
         // 키보드 숨기기
         (requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
-          .hideSoftInputFromWindow(mainStartSearchTextView.windowToken,0)
+          .hideSoftInputFromWindow(mainStartSearchTextView.windowToken, 0)
       }
     }
   }
@@ -98,9 +98,9 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
 
     val mHandler = object : Handler(Looper.getMainLooper()) {
       override fun handleMessage(msg: Message) {
-
         when (msg.what) {
           STRAT_FRAGMENT_NEARMAP -> {
+
             nearMaps = msg.obj as ArrayList<NearMap>
             Logg.d("ssmm11 nearMaps = $nearMaps")
             val icon =
@@ -123,6 +123,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
                     .icon(icon)
                 )
               )
+
               //TODO: 윈도우 커스터마이즈
               routeMarkers.last().tag = it.mapTitle
 
@@ -132,10 +133,12 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
                 startActivity(intent)
               }
             }
-            mainStartSearchAreaButton.visibility=View.GONE
+            mainStartSearchAreaButton.visibility = View.GONE
+            progressbar.dismiss()
           }
           NEARMAPFALSE -> {
             // 빈 상태
+            progressbar.dismiss()
           }
         }
       }
@@ -145,7 +148,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
 
   private fun search() {
     val geocoder = Geocoder(context)
-    if(mainStartSearchTextView.text.isEmpty()){
+    if (mainStartSearchTextView.text.isEmpty()) {
       Toast.makeText(context, "Please enter some address", Toast.LENGTH_SHORT).show()
       return
     }
@@ -162,7 +165,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
 
     // 키보드 숨기기
     (requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
-      .hideSoftInputFromWindow(mainStartSearchTextView.windowToken,0)
+      .hideSoftInputFromWindow(mainStartSearchTextView.windowToken, 0)
   }
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -170,7 +173,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
     val view = inflater.inflate(R.layout.fragment_start, container, false)
     view.test.setOnClickListener {
       Logg.d("test 실행")
-      val storage = FirebaseStorage.getInstance("gs://tracer-9070d.appspot.com/")
+      val storage = FirebaseStorage.getInstance()
       val routeRef = storage.reference.child("mapRoute").child("Short SanDiego route||1586002359186")
       val localFile = File.createTempFile("routeGpx", "xml")
 
@@ -185,7 +188,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
       }
     }
 
-    view.mainStartSearchTextView.setOnEditorActionListener( object : TextView.OnEditorActionListener{
+    view.mainStartSearchTextView.setOnEditorActionListener(object : TextView.OnEditorActionListener {
       override fun onEditorAction(p0: TextView?, p1: Int, p2: KeyEvent?): Boolean {
         Logg.i("엔터키 클릭")
         search()
@@ -199,7 +202,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
       override fun onReceive(context: Context?, intent: Intent?) {
         val message = intent?.getParcelableExtra<Location>("message")
         currentLocation = message as Location
-        if (wedgedCamera) traceMap.moveCamera(currentLocation.toLatLng())
+        if (wedgedCamera) traceMap.moveCamera(currentLocation!!.toLatLng())
         if (progressbar.isShowing) {
           searchThisArea()
           progressbar.dismiss()
@@ -214,11 +217,11 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
     traceMap = TraceMap(googleMap) //구글맵
     traceMap.mMap.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
     traceMap.mMap.setOnCameraMoveListener {
-      wedgedCamera=false
-      mainStartSearchAreaButton.visibility=View.VISIBLE
+      wedgedCamera = false
+      mainStartSearchAreaButton.visibility = View.VISIBLE
     }
     traceMap.mMap.setOnMyLocationButtonClickListener {
-      wedgedCamera=true
+      wedgedCamera = true
       true
     }
   }
@@ -244,7 +247,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
 
   override fun onPause() {
     super.onPause()
-    UserInfo.rankingLatLng = currentLocation.toLatLng()
+    UserInfo.rankingLatLng = currentLocation?.toLatLng()
     //        브로드 캐스트 해제 - 전역 context로 수정해야함
     LocalBroadcastManager.getInstance(this.requireContext()).unregisterReceiver(locationBroadcastReceiver)
   }
