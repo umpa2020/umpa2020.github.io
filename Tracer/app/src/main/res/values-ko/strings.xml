@@ -93,4 +93,5 @@
   <!-- firebase string-->
   <string name="google_storage_bucket_string" >gs://tracer-9070d.appspot.com/</string>
   <string name="serachHint">장소나 주소를 검색해주세요</string>
+  <string name="challenge">챌린지</string>
 </resources>
