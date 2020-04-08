@@ -34,67 +34,55 @@ class FBProfile {
   val db = FirebaseFirestore.getInstance()
   var profileImagePath = "init"
 
-  fun setProfile(view: View) {
+  /**
+   * 프로필 프래그먼트, 다른 사람 프로필 액티비티의
+   * 내용을 채워주는 함수,
+   * 받은 닉네임으로 uid를 db에서 찾아서
+   * 해당 사용자가 뛴 거리, 뛴
+   */
+
+  fun setProfile(view: View, nickname: String) {
     val progressbar = ProgressBar(App.instance.currentActivity() as Activity)
     progressbar.show()
 
-
-    // 총 거리, 총 시간을 구하기 위해서 db에 접근하여 일단 먼저
-    // 이용자가 뛴 다른 사람의 맵을 구함
-    db.collection("userinfo").document(UserInfo.autoLoginKey).collection("user ran these maps")
+    var uid = "init"
+    db.collection("userinfo").whereEqualTo("nickname", nickname)
       .get()
-      .addOnSuccessListener { result ->
-        var sumDistance = 0.0
-        var sumTime = 0.0
-        for (document in result) {
-          sumDistance += document.get("distance") as Double
-          sumTime += document.get("time") as Long
+      .addOnSuccessListener {
+        for (document in it) {
+          uid = document.get("UID") as String
+          break
         }
-        // 구하고 나서 이용자가 만든 맵의 거리와 시간을 더함
-        db.collection("mapInfo").whereEqualTo("makersNickname", UserInfo.nickname)
+        // 총 거리, 총 시간을 구하기 위해서 db에 접근하여 일단 먼저
+        // 이용자가 뛴 다른 사람의 맵을 구함
+        db.collection("userinfo").document(uid).collection("user ran these maps")
           .get()
-          .addOnSuccessListener { result2 ->
-            for (document2 in result2) {
-              sumDistance += document2.get("distance") as Double
-              sumTime += document2.get("time") as Long
+          .addOnSuccessListener { result ->
+            var sumDistance = 0.0
+            var sumTime = 0.0
+            for (document in result) {
+              sumDistance += document.get("distance") as Double
+              sumTime += document.get("time") as Long
             }
+            // 구하고 나서 이용자가 만든 맵의 거리와 시간을 더함
+            db.collection("mapInfo").whereEqualTo("makersNickname", nickname)
+              .get()
+              .addOnSuccessListener { result2 ->
+                for (document2 in result2) {
+                  sumDistance += document2.get("distance") as Double
+                  sumTime += document2.get("time") as Long
+                }
 
-            // 총 거리와 시간을 띄워줌
-            view.profileFragmentTotalDistance.text = PrettyDistance().convertPretty(sumDistance)
+                // 총 거리와 시간을 띄워줌
+                view.profileFragmentTotalDistance.text = PrettyDistance().convertPretty(sumDistance)
 
-            view.profileFragmentTotalTime.text = sumTime.toLong().format(MM_SS)
-
+                view.profileFragmentTotalTime.text = sumTime.toLong().format(MM_SS)
+                progressbar.dismiss()
+              }
           }
-      }
-
-    // storage 에 올린 경로를 db에 저장해두었으니 다시 역 추적 하여 프로필 이미지 반영
-    db.collection("userinfo").whereEqualTo("nickname", UserInfo.nickname)
-      .get()
-      .addOnSuccessListener { result ->
-        for (document in result) {
-          profileImagePath = document.get("profileImagePath") as String
-        }
-        // glide imageview 소스
-        // 프사 설정하는 코드 db -> imageView glide
         val imageView = view.findViewById<ImageView>(R.id.profileImageView)
 
-        val storage = FirebaseStorage.getInstance("gs://tracer-9070d.appspot.com/")
-        val profileRef = storage.reference.child("Profile").child(UserInfo.autoLoginKey).child(profileImagePath)
-
-        profileRef.downloadUrl.addOnCompleteListener { task ->
-          if (task.isSuccessful) {
-            // Glide 이용하여 이미지뷰에 로딩
-            Glide.with(view)
-              .load(task.result)
-              .override(1024, 980)
-              .into(imageView)
-            progressbar.dismiss()
-          } else {
-            progressbar.dismiss()
-          }
-        }
-      }
-      .addOnFailureListener { exception ->
+        getProfileImage(imageView, nickname)
       }
   }
 
@@ -173,9 +161,9 @@ class FBProfile {
 
   }
 
-  fun getMyRoute(mHandler: Handler) {
+  fun getRoute(mHandler: Handler, nickname: String) {
     val infoDatas: ArrayList<InfoData> = arrayListOf()
-    db.collection("mapInfo").whereEqualTo("makersNickname", UserInfo.nickname).whereEqualTo("privacy", "RACING")
+    db.collection("mapInfo").whereEqualTo("makersNickname", nickname).whereEqualTo("privacy", "RACING")
       .get()
       .addOnSuccessListener { result ->
         for (document in result) {
