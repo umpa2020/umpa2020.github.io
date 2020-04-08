@@ -16,6 +16,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.SphericalUtil
+import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.constant.Privacy
@@ -25,6 +26,7 @@ import com.umpa2020.tracer.trace.TraceMap
 import com.umpa2020.tracer.util.ChoicePopup
 import com.umpa2020.tracer.util.LocationBroadcastReceiver
 import com.umpa2020.tracer.util.Logg
+import com.umpa2020.tracer.util.Wow
 import hollowsoft.slidingdrawer.OnDrawerCloseListener
 import hollowsoft.slidingdrawer.OnDrawerOpenListener
 import hollowsoft.slidingdrawer.OnDrawerScrollListener
@@ -59,6 +61,8 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
   lateinit var drawer: SlidingDrawer
   private var wedgedCamera = true
   lateinit var locationBroadcastReceiver: LocationBroadcastReceiver
+  var unPassedIcon=Wow.makingIcon(R.drawable.ic_checkpoint_gray, App.instance.context())
+  var passedIcon=Wow.makingIcon(R.drawable.ic_checkpoint_red, App.instance.context())
 
   open fun init() {
     drawer.setOnDrawerScrollListener(this)
@@ -182,7 +186,6 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-
     locationBroadcastReceiver = LocationBroadcastReceiver(this)
   }
 

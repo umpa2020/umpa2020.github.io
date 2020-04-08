@@ -13,6 +13,7 @@ import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.network.FBProfile
 import com.umpa2020.tracer.util.ProgressBar
+import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_profile_route.*
 
 class ProfileRouteActivity : AppCompatActivity() {
@@ -29,10 +30,24 @@ class ProfileRouteActivity : AppCompatActivity() {
     // 프로그래스 바 띄우기
     progressbar.show()
 
+    val intent = intent
+    //전달 받은 값으로 Title 설정
+    val nickname = intent.extras?.getString("nickname").toString()
+
+    // 나의 루트가 아닌 다른 사람의 루트를 볼 경우
+    // 텍스트 변한
+    if (nickname != UserInfo.nickname) {
+      profileRouteMyRoute.text = getString(R.string.other_route)
+    }
+
     // 마이 루트에 필요한 내용을 받아옴
-    FBProfile().getMyRoute(mHandler)
+    FBProfile().getRoute(mHandler, nickname)
   }
 
+  /**
+   * 핸들러로 받아온 루트 데이터들을
+   * 리사이클러뷰에 띄워줌
+   */
   val mHandler = object : Handler(Looper.getMainLooper()) {
     override fun handleMessage(msg: Message) {
       when (msg.what) {

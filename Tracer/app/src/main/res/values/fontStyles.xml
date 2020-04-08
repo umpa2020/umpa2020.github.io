@@ -24,10 +24,10 @@
   </style>
 
   <style name="buttonText">
-    <item name="android:textSize">15dp</item>
-    <item name="android:textColor">#ffffff</item>
-    <item name="android:fontFamily">@font/notosansmedium</item>
-  </style>
+  <item name="android:textSize">15dp</item>
+  <item name="android:textColor">#ffffff</item>
+  <item name="android:fontFamily">@font/notosansmedium</item>
+</style>
 
   <style name="buttonTextRedText" parent="buttonText">
     <item name="android:textColor">@color/red</item>

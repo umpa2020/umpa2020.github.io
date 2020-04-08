@@ -23,7 +23,6 @@ class ProfileFragment : Fragment() {
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
     Logg.i("onCreateView()")
-    // Inflate the layout for this fragment
 
     val view = inflater.inflate(R.layout.fragment_profile, container, false)
     root = view
@@ -32,25 +31,24 @@ class ProfileFragment : Fragment() {
     val profileNickname = view.findViewById<TextView>(R.id.profileIdTextView)
     profileNickname.text = UserInfo.nickname
 
-    view.appSettingButton.setOnClickListener{
+    // 설정 버튼 누르면
+    view.appSettingButton.setOnClickListener {
       val nextIntent = Intent(activity, AppSettingActivity::class.java)
       startActivity(nextIntent)
     }
 
     // 나의 활동 액티비티
-//    val routeTextView = view.findViewById<TextView>(R.id.profileRouteTextView)
     view.profileRouteTextView.setOnClickListener {
       val nextIntent = Intent(activity, ProfileRouteActivity::class.java)
+      nextIntent.putExtra("nickname", UserInfo.nickname)
       startActivity(nextIntent)
     }
 
-/*
-        val recordTextView = view.findViewById<TextView>(R.id.profileRecordTextView)
-        recordTextView.setOnClickListener {
-            val nextIntent = Intent(activity, ProfileRecordActivity::class.java)
-            startActivity(nextIntent)
-        }
-*/
+    /*val recordTextView = view.findViewById<TextView>(R.id.profileRecordTextView)
+    recordTextView.setOnClickListener {
+      val nextIntent = Intent(activity, ProfileRecordActivity::class.java)
+      startActivity(nextIntent)
+    }*/
 
     return view
   }
@@ -69,8 +67,10 @@ class ProfileFragment : Fragment() {
     Logg.i("onResume()")
     /**
      * 프로필 이미지랑 총 시간,거리 셋팅을 하는 함수
+     * 프로필 변경을 하고 나오는 경우에도 적용된
+     * 사진을 바로 보기 위해 Resume에서 적용
      */
-    FBProfile().setProfile(root)
+    FBProfile().setProfile(root, UserInfo.nickname)
     super.onResume()
   }
 

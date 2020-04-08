@@ -183,6 +183,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
         currentLocation = message as Location
         if (wedgedCamera) traceMap.moveCamera(currentLocation.toLatLng())
         if (progressbar.isShowing) {
+          searchThisArea()
           progressbar.dismiss()
         }
       }
@@ -202,7 +203,6 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
       wedgedCamera=true
       true
     }
-    searchThisArea()
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

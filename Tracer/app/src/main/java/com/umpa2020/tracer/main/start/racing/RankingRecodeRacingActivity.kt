@@ -185,7 +185,7 @@ class RankingRecodeRacingActivity : BaseRunningActivity() {
     if (SphericalUtil.computeDistanceBetween(
         currentLatLng,
         wptList[nextWP].toLatLng()
-      ) < Constants.ARRIVE_BOUNDARY
+      ) < ARRIVE_BOUNDARY
     ) {
       traceMap.changeMarkerColor(nextWP, BitmapDescriptorFactory.HUE_BLUE)
       nextWP++

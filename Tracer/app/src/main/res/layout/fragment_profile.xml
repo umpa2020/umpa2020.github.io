@@ -12,28 +12,30 @@
     android:layout_height="50dp"
     android:background="@color/white"
     android:elevation="1dp">
+
     <TextView
       style="@style/appBarText"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="center"
-      android:text="@string/profile"/>
+      android:text="@string/profile" />
+
     <ImageView
       android:id="@+id/appSettingButton"
       android:layout_width="25dp"
       android:layout_height="25dp"
+      android:layout_gravity="right"
       android:layout_marginRight="15dp"
-      android:src = "@drawable/ic_gear"
+      android:src="@drawable/ic_gear"
       android:tint="@color/red"
-      tools:ignore="RtlHardcoded"
-      android:layout_gravity="right"/>
+      tools:ignore="RtlHardcoded" />
   </Toolbar>
 
   <LinearLayout
-    android:layout_below="@+id/profileFragmentToolBar"
     android:id="@+id/profileFragmentLinearLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_below="@+id/profileFragmentToolBar"
     android:layout_marginLeft="20dp"
     android:layout_marginRight="20dp"
     android:orientation="horizontal">
@@ -128,34 +130,34 @@
 
   <TextView
     android:id="@+id/divisionTextView1"
-    android:layout_below="@+id/rankingDetailInfoLinearLayout"
-    style="@style/divisionTextView" />
+    style="@style/divisionTextView"
+    android:layout_below="@+id/rankingDetailInfoLinearLayout" />
 
   <TextView
-    android:layout_below="@+id/divisionTextView1"
     android:id="@+id/profileRouteTextView"
     style="@style/ListDetail"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_below="@+id/divisionTextView1"
     android:layout_marginLeft="20dp"
     android:layout_marginRight="20dp"
     android:padding="10dp"
     android:text="@string/my_route" />
 
   <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:layout_alignBaseline="@+id/profileRouteTextView"
     android:layout_alignParentRight="true"
     android:layout_marginRight="20dp"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
     android:background="@drawable/ic_chevron_right_black_24dp"
     android:backgroundTint="@color/black"
     android:textSize="18dp" />
 
   <TextView
     android:id="@+id/divisionTextView2"
-    android:layout_below="@+id/profileRouteTextView"
-    style="@style/divisionTextView" />
+    style="@style/divisionTextView"
+    android:layout_below="@+id/profileRouteTextView" />
 
 
   <!--     <RelativeLayout

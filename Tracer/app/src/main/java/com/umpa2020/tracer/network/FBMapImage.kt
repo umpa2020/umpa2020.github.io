@@ -1,12 +1,10 @@
 package com.umpa2020.tracer.network
 
-import android.app.Activity
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.App
-import com.umpa2020.tracer.util.ProgressBar
 
 class FBMapImage {
   val db = FirebaseFirestore.getInstance()
@@ -21,7 +19,6 @@ class FBMapImage {
           .load(task.result)
           .override(1024, 980)
           .into(imageView)
-
       }
     }
   }
