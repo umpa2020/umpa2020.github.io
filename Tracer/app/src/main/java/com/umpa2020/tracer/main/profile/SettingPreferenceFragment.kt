@@ -7,6 +7,8 @@ import android.view.View
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.SwitchPreference
+import androidx.preference.SwitchPreferenceCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
@@ -20,6 +22,38 @@ class SettingPreferenceFragment : PreferenceFragmentCompat() {
   override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
     setPreferencesFromResource(R.xml.fragment_setting_preference, rootKey)
     mAuth = FirebaseAuth.getInstance() // FirebaseAuth를 사용하기 위해서 인스턴스를 꼭 받아오기
+
+
+    // TTS 스위치 버튼
+    val switchTTS: SwitchPreference? = findPreference("ttsNotificationSetting") as SwitchPreference?
+
+    // Switch preference change listener
+    switchTTS?.setOnPreferenceChangeListener{ preference, newValue ->
+      if (newValue == true){
+        Toast.makeText(activity,"enabled",Toast.LENGTH_LONG).show()
+      }else{
+        Toast.makeText(activity,"disabled",Toast.LENGTH_LONG).show()
+      }
+
+      true
+    }
+    
+    // 알람 스위치 버튼
+    val switchNotification: SwitchPreference? = findPreference("notificationSetting") as SwitchPreference?
+
+    // Switch preference change listener
+    switchNotification?.setOnPreferenceChangeListener{ preference, newValue ->
+      if (newValue == true){
+        //TODO 알람 ON 기능 추가
+        Toast.makeText(activity,"enabled",Toast.LENGTH_LONG).show()
+      }else{
+        //TODO 알람 OFF 기능 추가
+        Toast.makeText(activity,"disabled",Toast.LENGTH_LONG).show()
+      }
+
+      true
+    }
+
 
   }
 
