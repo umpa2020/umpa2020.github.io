@@ -36,7 +36,7 @@
     <activity android:name=".main.profile.PreferenceActivity" />
     <activity android:name=".main.profile.ProfileRecordActivity" />
     <activity android:name=".main.profile.ProfileRouteActivity" />
-    <activity android:name=".main.profile.ProfileActivity"/>
+    <activity android:name=".main.profile.OtherProfileActivity"/>
 
     <service
       android:name=".locationBackground.LocationBackgroundService"

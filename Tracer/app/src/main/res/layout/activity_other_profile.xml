@@ -16,13 +16,7 @@
       android:layout_height="50dp"
       android:background="@color/white"
       android:elevation="1dp">
-      <ImageView
-        android:id="@+id/appSettingButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="12dp"
-        android:src = "@drawable/ic_gear"
-        tools:ignore="RtlHardcoded" />
+
       <TextView
         style="@style/appBarText"
         android:layout_width="wrap_content"
@@ -70,7 +64,7 @@
       android:layout_marginRight="20dp"
       android:background="@drawable/textlines"
       android:padding="10dp"
-      android:text="@string/mystats" />
+      android:text="@string/otherstats" />
 
     <LinearLayout
       android:id="@+id/rankingDetailInfoLinearLayout"
@@ -134,19 +128,19 @@
       <TextView style="@style/divisionTextView" />
 
       <TextView
-        android:id="@+id/profileRouteTextView"
+        android:id="@+id/otherProfileRouteTextView"
         style="@style/ListDetail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:padding="10dp"
-        android:text="@string/my_route" />
+        android:text="@string/other_route" />
 
       <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@id/profileRouteTextView"
+        android:layout_alignEnd="@id/otherProfileRouteTextView"
         android:layout_centerVertical="true"
         android:paddingTop="5dp"
         android:background="@drawable/ic_chevron_right_black_24dp"
