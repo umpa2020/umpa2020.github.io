@@ -33,7 +33,7 @@ import io.jenetics.jpx.WayPoint
 import kotlinx.android.synthetic.main.activity_ranking_recode_racing.*
 import kotlin.math.roundToLong
 
-class RankingRecodeRacingActivity : BaseRunningActivity() {
+class RacingActivity : BaseRunningActivity() {
   lateinit var mapRouteGPX: RouteGPX
   lateinit var mapTitle: String
   var racingResult = true

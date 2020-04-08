@@ -1,4 +1,4 @@
-package com.umpa2020.tracer.main.profile
+package com.umpa2020.tracer.main.profile.history
 
 import android.content.Context
 import android.view.LayoutInflater

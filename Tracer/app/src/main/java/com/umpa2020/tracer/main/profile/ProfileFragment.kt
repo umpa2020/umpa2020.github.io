@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.umpa2020.tracer.R
+import com.umpa2020.tracer.main.profile.myroute.ProfileRouteActivity
+import com.umpa2020.tracer.main.profile.settting.AppSettingActivity
 import com.umpa2020.tracer.network.FBProfile
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.UserInfo

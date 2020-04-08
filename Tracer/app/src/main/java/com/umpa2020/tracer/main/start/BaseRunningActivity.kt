@@ -22,7 +22,7 @@ import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.constant.UserState
 import com.umpa2020.tracer.extensions.toLatLng
-import com.umpa2020.tracer.trace.TraceMap
+import com.umpa2020.tracer.map.TraceMap
 import com.umpa2020.tracer.util.ChoicePopup
 import com.umpa2020.tracer.util.LocationBroadcastReceiver
 import com.umpa2020.tracer.util.Logg

@@ -19,7 +19,7 @@ import com.umpa2020.tracer.dataClass.RankingData
 import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.extensions.MM_SS
 import com.umpa2020.tracer.extensions.format
-import com.umpa2020.tracer.trace.TraceMap
+import com.umpa2020.tracer.map.TraceMap
 import com.umpa2020.tracer.util.Chart
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.UserInfo

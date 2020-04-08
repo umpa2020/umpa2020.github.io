@@ -1,4 +1,4 @@
-package com.umpa2020.tracer.main.profile
+package com.umpa2020.tracer.main.profile.settting
 
 import android.app.Activity
 import android.content.Intent
@@ -8,7 +8,6 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreference
-import androidx.preference.SwitchPreferenceCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R

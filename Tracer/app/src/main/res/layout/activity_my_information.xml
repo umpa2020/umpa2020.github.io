@@ -7,7 +7,7 @@
   android:layout_height="match_parent"
   android:gravity="center"
   android:orientation="vertical"
-  tools:context=".main.profile.MyInformationActivity">
+  tools:context=".main.profile.settting.MyInformationActivity">
 
   <FrameLayout
     android:layout_width="match_parent"
@@ -21,14 +21,6 @@
       android:layout_height="wrap_content"
       android:background="@color/white"
       android:elevation="1dp" />
-
-    <TextView
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_gravity="center"
-      android:text="@string/profile_information"
-      android:textColor="@color/black"
-      android:textSize="20dp" />
   </FrameLayout>
 
   <LinearLayout

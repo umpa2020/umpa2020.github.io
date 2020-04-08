@@ -1,4 +1,4 @@
-package com.umpa2020.tracer.trace
+package com.umpa2020.tracer.map
 
 import android.graphics.Color
 import com.google.android.gms.maps.CameraUpdateFactory

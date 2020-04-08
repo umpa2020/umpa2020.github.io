@@ -1,4 +1,4 @@
-package com.umpa2020.tracer.main.profile
+package com.umpa2020.tracer.main.profile.myroute
 
 
 import android.os.Bundle
@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.umpa2020.tracer.R
+import com.umpa2020.tracer.main.profile.myroute.ProfileRecyclerViewAdapterRoute
 import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
 

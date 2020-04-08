@@ -34,10 +34,10 @@ import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.NearMap
 import com.umpa2020.tracer.extensions.toLatLng
 import com.umpa2020.tracer.main.ranking.RankingMapDetailActivity
-import com.umpa2020.tracer.main.start.racing.RankingRecodeRacingActivity
+import com.umpa2020.tracer.main.start.racing.RacingActivity
 import com.umpa2020.tracer.main.start.running.RunningActivity
 import com.umpa2020.tracer.network.FBMap
-import com.umpa2020.tracer.trace.TraceMap
+import com.umpa2020.tracer.map.TraceMap
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.PrettyDistance
 import com.umpa2020.tracer.util.ProgressBar
@@ -176,7 +176,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
 
       routeRef.getFile(Uri.fromFile(localFile)).addOnSuccessListener {
         val routeGPX = GPXConverter().GpxToClass(localFile.path)
-        val intent = Intent(context, RankingRecodeRacingActivity::class.java)
+        val intent = Intent(context, RacingActivity::class.java)
         intent.putExtra("RouteGPX", routeGPX)
         intent.putExtra("mapTitle", "Short SanDiego route||1586002359186")
         startActivity(intent)

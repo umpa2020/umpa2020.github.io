@@ -13,7 +13,7 @@ import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.extensions.MM_SS
 import com.umpa2020.tracer.extensions.format
-import com.umpa2020.tracer.main.start.racing.RankingRecodeRacingActivity
+import com.umpa2020.tracer.main.start.racing.RacingActivity
 import com.umpa2020.tracer.network.FBMapImage
 import com.umpa2020.tracer.network.FBProfile
 import com.umpa2020.tracer.util.Chart
@@ -127,7 +127,7 @@ class RankingMapDetailActivity : AppCompatActivity() {
       "기록용", "",
       View.OnClickListener {
         //랭킹 기록용 버튼 눌렀을 때
-        val intent = Intent(App.instance.context(), RankingRecodeRacingActivity::class.java)
+        val intent = Intent(App.instance.context(), RacingActivity::class.java)
         intent.putExtra("RouteGPX", routeGPX)
         intent.putExtra("mapTitle", dbMapTitle)
         noticePopup.dismiss()
