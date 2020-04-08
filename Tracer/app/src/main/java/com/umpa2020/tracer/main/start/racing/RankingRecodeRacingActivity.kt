@@ -28,6 +28,7 @@ import com.umpa2020.tracer.main.start.BaseRunningActivity
 import com.umpa2020.tracer.network.FBMap
 import com.umpa2020.tracer.util.ChoicePopup
 import com.umpa2020.tracer.util.Logg
+import com.umpa2020.tracer.util.TTS
 import io.jenetics.jpx.WayPoint
 import kotlinx.android.synthetic.main.activity_ranking_recode_racing.*
 import kotlin.math.roundToLong
@@ -50,6 +51,9 @@ class RankingRecodeRacingActivity : BaseRunningActivity() {
     mapTitle = intent.getStringExtra("mapTitle")!!
 
     init()
+
+    // 시작 포인트로 이동
+    TTS.speech(getString(R.string.goToStartPoint))
   }
 
   override fun onMapReady(googleMap: GoogleMap) {
@@ -159,10 +163,16 @@ class RankingRecodeRacingActivity : BaseRunningActivity() {
   override fun start() {
     super.start()
     FBMap().increaseExecute(mapTitle)
+
+    // 레이싱 시작 TTS
+    TTS.speech(getString(R.string.startRacing))
   }
 
   override fun stop() {
     super.stop()
+
+    // 레이싱 끝 TTS
+    TTS.speech(getString(R.string.finishRacing))
 
     val infoData = InfoData()
     infoData.time = SystemClock.elapsedRealtime() - chronometer.base

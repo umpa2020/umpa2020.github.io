@@ -10,9 +10,7 @@ object TTS {
 
   init {
     tts = TextToSpeech(App.instance.context(), TextToSpeech.OnInitListener {
-      @Override
-      fun onInit(status: Int) {
-        if (status == TextToSpeech.SUCCESS) {
+        if (it == TextToSpeech.SUCCESS) {
           //사용할 언어를 설정
           val result = tts.setLanguage(Locale.getDefault())
           //언어 데이터가 없거나 혹은 언어가 지원하지 않으면...
@@ -26,7 +24,6 @@ object TTS {
             tts.setSpeechRate(1.2f)
           }
         }
-      }
     })
   }
 

@@ -46,5 +46,8 @@ class Constants {
     //REQUEST 성공
     const val SUCCESS_REQUEST = 1
 
+    // 최소 정지 거리
+    const val MINIMUM_STOPPING_DISTANCE = 0
+
   }
 }

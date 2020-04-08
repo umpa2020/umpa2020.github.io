@@ -278,7 +278,6 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
   fun disappearAnimation() {
     val height = pauseNotificationTextView.height.toFloat()
     pauseNotificationTextView.clearAnimation() // 일시정지 애니메이션 종료
-    pauseNotificationTextView.ani
     pauseNotificationTextView.visibility=View.GONE
    Logg.i("재시작 애니메이션")
     Logg.i(height.toString())

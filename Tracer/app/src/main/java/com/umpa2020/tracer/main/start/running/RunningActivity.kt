@@ -42,9 +42,8 @@ class RunningActivity : BaseRunningActivity(), OnDrawerScrollListener, OnDrawerO
     // TODO : 여기 밑에 있는 함수가 init()가 실행되야 가능한데 아애 init()에 넣어두는건?
     // TODO : 그래서 RankingRecodeRacingActivity init()에서는 그렇게 해봄
     notice("시작버튼을 누르면 러닝이 시작됩니다")
-    getString(R.string.pushthestartbutton)
-    TTS.speech("push the start button")
 
+    TTS.speech(getString(R.string.pushthestartbutton))
   }
 
   override fun init() {
@@ -63,7 +62,7 @@ class RunningActivity : BaseRunningActivity(), OnDrawerScrollListener, OnDrawerO
     Stop 팝업 띄우기
      */
     stopButton.setOnLongClickListener {
-      if (distance < 200) {
+      if (distance < Constants.MINIMUM_STOPPING_DISTANCE) {
         noticePopup = ChoicePopup(this, "선택해주세요.",
           "거리가 200m 미만일때\n정지하시면 저장이 불가능합니다. \n\n정지하시겠습니까?",
           "예", "아니오",
@@ -118,6 +117,7 @@ class RunningActivity : BaseRunningActivity(), OnDrawerScrollListener, OnDrawerO
      .position(currentLatLng)
      .title("Start")
      .icon( Wow.makingIcon(R.drawable.ic_racing_startpoint,this)))
+    TTS.speech(getString(R.string.startRunning))
 
     traceMap.mMap.setOnCameraMoveListener {
       Logg.i(traceMap.mMap.cameraPosition.zoom.toString())
@@ -135,6 +135,10 @@ class RunningActivity : BaseRunningActivity(), OnDrawerScrollListener, OnDrawerO
 
   override fun stop() {
     super.stop()
+
+    // stop tts 설정
+    TTS.speech(getString(R.string.finishRunning))
+
     wpList.add(
       WayPoint.builder()
         .lat(currentLatLng.latitude)

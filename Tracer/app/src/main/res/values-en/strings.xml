@@ -110,5 +110,13 @@
   <string name="noticeSetting">Notification Settings</string>
   <string name="noticeSound">Receive notifications by sound</string>
   <string name="noticeCheck">Notification</string>
+
+  <!-- TTS -->
   <string name="pushthestartbutton">push the start button</string>
+  <string name="startRunning">"Let's start running"</string>
+  <string name="finishRunning">Finish the running</string>
+
+  <string name="goToStartPoint">Go to the starting point</string>
+  <string name="startRacing">"Let's start racing"</string>
+  <string name="finishRacing">Finish the racing</string>
 </resources>

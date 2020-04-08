@@ -12,9 +12,12 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -83,6 +86,9 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
       R.id.mainStartBackButton -> {
         mainStartLogoTextView.visibility = View.VISIBLE
         mainStartSearchLayout.visibility = View.GONE
+        // 키보드 숨기기
+        (requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
+          .hideSoftInputFromWindow(mainStartSearchTextView.windowToken,0)
       }
     }
   }
@@ -153,6 +159,10 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
       traceMap.moveCamera(LatLng(addressList[0].latitude, addressList[0].longitude))
       searchThisArea()
     }
+
+    // 키보드 숨기기
+    (requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
+      .hideSoftInputFromWindow(mainStartSearchTextView.windowToken,0)
   }
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -174,6 +184,14 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
       routeRef.downloadUrl.addOnCompleteListener {
       }
     }
+
+    view.mainStartSearchTextView.setOnEditorActionListener( object : TextView.OnEditorActionListener{
+      override fun onEditorAction(p0: TextView?, p1: Int, p2: KeyEvent?): Boolean {
+        Logg.i("엔터키 클릭")
+        search()
+        return true
+      }
+    })
 
     val smf = childFragmentManager.findFragmentById(R.id.map_viewer_start) as SupportMapFragment
     smf.getMapAsync(this)

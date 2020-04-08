@@ -15,6 +15,7 @@ import com.umpa2020.tracer.main.profile.ProfileFragment
 import com.umpa2020.tracer.main.ranking.RankingFragment
 import com.umpa2020.tracer.main.start.StartFragment
 import com.umpa2020.tracer.util.Logg
+import com.umpa2020.tracer.util.TTS
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -45,7 +46,7 @@ class MainActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     Logg.d("Hello I'm New")
     setContentView(R.layout.activity_main)
-
+    TTS.speech(" ")
     startService() // 서비스 시작.
 
     bottom_navigation.selectedItemId = R.id.navigation_start

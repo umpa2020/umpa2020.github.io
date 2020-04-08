@@ -111,7 +111,14 @@
   <string name="noticeSound">알림을 소리로 받습니다</string>
   <string name="noticeCheck">알림 여부</string>
 
+  <!-- TTS -->
   <string name="pushthestartbutton">시작버튼을 누르면 러닝이 시작됩니다.</string>
+  <string name="startRunning">러닝을 시작합니다</string>
+  <string name="finishRunning">러닝을 종료합니다</string>
+
+  <string name="goToStartPoint">시작 위치로 이동하세요</string>
+  <string name="startRacing">레이싱을 시작합니다</string>
+  <string name="finishRacing">레이싱을 종료합니다</string>
 
 
 </resources>
