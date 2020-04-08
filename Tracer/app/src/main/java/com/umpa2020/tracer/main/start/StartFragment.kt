@@ -98,7 +98,6 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
 
     val mHandler = object : Handler(Looper.getMainLooper()) {
       override fun handleMessage(msg: Message) {
-
         when (msg.what) {
           STRAT_FRAGMENT_NEARMAP -> {
 
@@ -139,6 +138,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
           }
           NEARMAPFALSE -> {
             // 빈 상태
+            progressbar.dismiss()
           }
         }
       }
@@ -205,6 +205,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
         if (wedgedCamera) traceMap.moveCamera(currentLocation!!.toLatLng())
         if (progressbar.isShowing) {
           searchThisArea()
+          progressbar.dismiss()
         }
       }
     }
