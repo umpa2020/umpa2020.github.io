@@ -60,7 +60,15 @@ class MyInformationActivity : AppCompatActivity() {
             }
           }
         }
-        FBProfile().changeProfileImage(bitmapImg!!, mHandler)
+
+        // TODO 이 로그 지우지마!!! - 정빈
+        Logg.d("ssmm11 bitmapImg = $bitmapImg")
+        if (bitmapImg != null) { // 사진을 고르면
+          FBProfile().changeProfileImage(bitmapImg!!, mHandler)
+        }
+        else { // 사진을 안고르면
+          finish()
+        }
       }
     }
   }

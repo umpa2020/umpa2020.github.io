@@ -97,17 +97,17 @@ class FBProfile {
         for (document in result) {
           profileImagePath = document.get("profileImagePath") as String
           uid = document.get("UID") as String
+          break
         }
         // glide imageview 소스
         // 프사 설정하는 코드 db -> imageView glide
-
-        val storage = FirebaseStorage.getInstance("gs://tracer-9070d.appspot.com/")
+        val storage = FirebaseStorage.getInstance()
         val profileRef = storage.reference.child("Profile").child(uid).child(profileImagePath)
 
         profileRef.downloadUrl.addOnCompleteListener { task ->
           if (task.isSuccessful) {
             // Glide 이용하여 이미지뷰에 로딩
-            Glide.with(imageView)
+            Glide.with(App.instance.currentActivity() as Activity)
               .load(task.result)
               .override(1024, 980)
               .into(imageView)
@@ -128,6 +128,7 @@ class FBProfile {
   fun changeProfileImage(bitmapImg: Bitmap, mHandler: Handler) {
     val progressbar = ProgressBar(App.instance.currentActivity() as Activity)
     progressbar.show()
+
     val dt = Date()
     // 현재 날짜를 프로필 이름으로 nickname/Profile/현재날짜(영어).jpg 경로 만들기
 

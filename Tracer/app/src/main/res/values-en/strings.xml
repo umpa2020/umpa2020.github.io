@@ -94,7 +94,7 @@
   <string name="gps_activation">GPS activation</string>
 
   <!-- firebase string-->
-  <string name="google_storage_bucket_string" >gs://tracer-9070d.appspot.com/</string>
+  <string name="google_storage_bucket_string" >gs://tracer-release.appspot.com/</string>
   <string name="serachHint">Search for a place or address</string>
 
   <!-- setting-->
