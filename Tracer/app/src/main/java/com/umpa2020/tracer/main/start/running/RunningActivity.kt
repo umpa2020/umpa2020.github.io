@@ -3,7 +3,6 @@ package com.umpa2020.tracer.main.start.running
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.graphics.Color
-import android.graphics.drawable.BitmapDrawable
 import android.location.Location
 import android.os.Bundle
 import android.os.SystemClock
@@ -11,7 +10,6 @@ import android.view.View
 import android.widget.Toast
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.MarkerOptions
 import com.umpa2020.tracer.R
@@ -29,7 +27,6 @@ import hollowsoft.slidingdrawer.OnDrawerOpenListener
 import hollowsoft.slidingdrawer.OnDrawerScrollListener
 import io.jenetics.jpx.WayPoint
 import kotlinx.android.synthetic.main.activity_running.*
-import javax.security.auth.callback.Callback
 
 
 class RunningActivity : BaseRunningActivity(), OnDrawerScrollListener, OnDrawerOpenListener, OnDrawerCloseListener {
@@ -57,7 +54,7 @@ class RunningActivity : BaseRunningActivity(), OnDrawerScrollListener, OnDrawerO
     chronometer = runningTimerTextView
     notificationTextView = runningNotificationTextView
     pauseNotificationTextView = runningPauseNotificationTextView
-    drawerHandle=runningHandle
+    drawerHandle = runningHandle
     drawer = runningDrawer
     /**
     Stop 팝업 띄우기
@@ -113,26 +110,16 @@ class RunningActivity : BaseRunningActivity(), OnDrawerScrollListener, OnDrawerO
   override fun start() {
     super.start()
 
-//    traceMap.mMap.addMarker(MarkerOptions()
-//      .zIndex(3.4f)
-//      .position(currentLatLng)
-//      .title("Start")
-//      .icon( Wow.makingIcon(R.drawable.ic_start_merker,this)))
+   traceMap.mMap.addMarker(MarkerOptions()
+     .zIndex(3.4f)
+     .position(currentLatLng)
+     .title("Start")
+     .icon( Wow.makingIcon(R.drawable.ic_racing_startpoint,this)))
 
     traceMap.mMap.setOnCameraMoveListener {
       Logg.i(traceMap.mMap.cameraPosition.zoom.toString())
       cameraZoomSize = traceMap.mMap.cameraPosition.zoom
     }
-
-    traceMap.mMap.addCircle(CircleOptions()
-      .center(currentLatLng)
-      .radius(30.0-cameraZoomSize)
-      .strokeWidth(15f)
-      .strokeColor(Color.WHITE)
-      .fillColor(Color.GREEN)
-    )
-
-
     wpList.add(
       WayPoint.builder()
         .lat(currentLatLng.latitude)
@@ -175,7 +162,12 @@ class RunningActivity : BaseRunningActivity(), OnDrawerScrollListener, OnDrawerO
     if (userState == UserState.RUNNING) {
       if (distance.toInt() / Constants.WPINTERVAL >= markerCount) {
         if (distance > 0) markerCount = distance.toInt() / Constants.WPINTERVAL
-        traceMap.mMap.addMarker(MarkerOptions().position(currentLatLng).title(markerCount.toString()))
+        traceMap.mMap.addMarker(
+          MarkerOptions()
+            .position(currentLatLng)
+            .title(markerCount.toString())
+            .icon(passedIcon)
+        )
         wpList.add(
           WayPoint.builder()
             .lat(currentLatLng.latitude)
