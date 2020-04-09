@@ -53,7 +53,7 @@
         android:layout_marginBottom="15dp"
         android:background="@drawable/button_background"
         android:gravity="center"
-        android:onClick="onClick"
+
         android:text="@string/learn_more" />
     </RelativeLayout>
 
@@ -191,6 +191,5 @@
       android:layout_below="@+id/infolayout"
       android:layout_marginLeft="20dp"
       android:layout_marginRight="20dp"></androidx.recyclerview.widget.RecyclerView>
-
   </LinearLayout>
 </androidx.core.widget.NestedScrollView>

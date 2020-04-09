@@ -22,6 +22,7 @@ class ProfileRouteActivity : AppCompatActivity() {
   val MYROUTEFAIL = 70
   lateinit var getinfoDatas: ArrayList<InfoData>
   val progressbar = ProgressBar(App.instance.currentActivity() as Activity)
+  var nickname = ""
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -32,16 +33,19 @@ class ProfileRouteActivity : AppCompatActivity() {
 
     val intent = intent
     //전달 받은 값으로 Title 설정
-    val nickname = intent.extras?.getString("nickname").toString()
+    nickname = intent.extras?.getString("nickname").toString()
 
     // 나의 루트가 아닌 다른 사람의 루트를 볼 경우
     // 텍스트 변한
     if (nickname != UserInfo.nickname) {
       profileRouteMyRoute.text = getString(R.string.other_route)
     }
+  }
 
+  override fun onResume() {
     // 마이 루트에 필요한 내용을 받아옴
     FBProfile().getRoute(mHandler, nickname)
+    super.onResume()
   }
 
   /**

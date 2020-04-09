@@ -156,7 +156,6 @@
       android:layout_margin="10dp"
       android:background="@drawable/button_background"
       android:gravity="center"
-      android:onClick="onClick"
       android:text="@string/start" />
 
   </LinearLayout>

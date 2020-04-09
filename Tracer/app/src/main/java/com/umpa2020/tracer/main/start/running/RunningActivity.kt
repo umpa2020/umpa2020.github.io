@@ -103,7 +103,7 @@ class RunningActivity : BaseRunningActivity(), OnDrawerScrollListener, OnDrawerO
         }
       }
       R.id.runningStopButton -> {
-        Toast.makeText(this, "종료를 원하시면 길게 눌러주세요", Toast.LENGTH_LONG).show()
+        Toast.makeText(this, getString(R.string.press_hold), Toast.LENGTH_LONG).show()
       }
     }
   }

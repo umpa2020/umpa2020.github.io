@@ -133,7 +133,7 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     userState = UserState.PAUSED
     timeWhenStopped = chronometer.base - SystemClock.elapsedRealtime()
     chronometer.stop()
-    pauseButton.text = "재시작"
+    pauseButton.text = getString(R.string.restart)
 
     pauseNotice("기록 측정 중지")
   }
@@ -141,7 +141,7 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
   open fun restart() {
 
     userState = UserState.RUNNING
-    pauseButton.text = "일시정지"
+    pauseButton.text = getString(R.string.pause)
     //btn_pause.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_pause_icon_pressed, 0, 0, 0)
     chronometer.base = SystemClock.elapsedRealtime() + timeWhenStopped
 

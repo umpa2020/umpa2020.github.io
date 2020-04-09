@@ -62,6 +62,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
   var nearMaps: ArrayList<NearMap> = arrayListOf()
   var wedgedCamera = true
   val progressBar = MyProgressBar()
+  var switch = 2
 
 
   override fun onClick(v: View) {
@@ -99,6 +100,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
       override fun handleMessage(msg: Message) {
         when (msg.what) {
           STRAT_FRAGMENT_NEARMAP -> {
+            mainStartSearchAreaButton.visibility = View.GONE
 
             nearMaps = msg.obj as ArrayList<NearMap>
             val icon =
@@ -131,16 +133,13 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
                 startActivity(intent)
               }
             }
-            mainStartSearchAreaButton.visibility = View.GONE
-            progressBar.progressBarDismiss()
-
           }
           NEARMAPFALSE -> {
-            progressBar.progressBarDismiss()
-            Toast.makeText(context,"검색결과가 없습니다",Toast.LENGTH_LONG).show()
+            Toast.makeText(context, getString(R.string.not_search), Toast.LENGTH_LONG).show()
             // 빈 상태
           }
         }
+        progressBar.progressBarDismiss()
       }
     }
     FBMap().getNearMap(bound.southwest, bound.northeast, mHandler)
@@ -149,7 +148,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
   private fun search() {
     val geocoder = Geocoder(context)
     if (mainStartSearchTextView.text.isEmpty()) {
-      "Please enter some address".show()
+      getString(R.string.enter_address).show()
       //Toast.makeText(context, "Please enter some address", Toast.LENGTH_SHORT).show()
       return
     }
@@ -157,7 +156,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
       geocoder.getFromLocationName(mainStartSearchTextView.text.toString(), 10)
     // 최대 검색 결과 개수
     if (addressList.size == 0) {
-      Toast.makeText(context, "Can't find location", Toast.LENGTH_SHORT).show()
+      Toast.makeText(context, getString(R.string.cannot_find), Toast.LENGTH_SHORT).show()
     } else {
       mainStartSearchTextView.setText(addressList[0].getAddressLine(0))
       traceMap.moveCamera(LatLng(addressList[0].latitude, addressList[0].longitude))
@@ -204,9 +203,10 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
         val message = intent?.getParcelableExtra<Location>("message")
         currentLocation = message as Location
         if (wedgedCamera) traceMap.moveCamera(currentLocation!!.toLatLng())
-        if (progressBar.mprogressBar.isShowing) {
+        if (progressBar.mprogressBar.isShowing && switch == 2) {
           searchThisArea()
           progressBar.progressBarDismiss()
+          switch--
         }
       }
     }

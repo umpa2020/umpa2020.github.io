@@ -123,8 +123,8 @@ class RankingMapDetailActivity : AppCompatActivity() {
 
      */
     noticePopup = ChoicePopup(this, getString(R.string.select_type),
-      "어떤 유형으로 경기하시겠습니까? \n\n랭킹 기록용 : 랭킹 등록 가능",
-      getString(R.string.recording), "",
+      getString(R.string.how_type),
+      getString(R.string.recording), getString(R.string.public1),
       View.OnClickListener {
         //랭킹 기록용 버튼 눌렀을 때
         val intent = Intent(App.instance.context(), RacingActivity::class.java)
