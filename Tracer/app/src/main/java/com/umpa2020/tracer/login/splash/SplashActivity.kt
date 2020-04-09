@@ -131,7 +131,7 @@ class SplashActivity : AppCompatActivity() {
               //권한 획득 실패
               Logg.d("reject Permission$i")
               Logg.d("reject Permission$permission")
-              Toast.makeText(this, "Sorry", Toast.LENGTH_SHORT).show()
+              Toast.makeText(this, getString(R.string.sorry), Toast.LENGTH_SHORT).show()
               finish()
             }
           }

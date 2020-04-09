@@ -1,10 +1,9 @@
-package com.umpa2020.tracer.main.profile
+package com.umpa2020.tracer.main.profile.history
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.HistoryData
@@ -32,7 +31,6 @@ class ProfileRecyclerViewAdapterHistory(private var datas: ArrayList<HistoryData
     //클릭하면 맵 상세보기 페이지로 이동
     holder.itemView.setOnClickListener {
       //TODO 히스토리 누르면 어케?
-      Toast.makeText(context!!, "누름", Toast.LENGTH_SHORT).show()
 
       /*
       val nextIntent = Intent(context, RankRecyclerItemClickActivity::class.java)

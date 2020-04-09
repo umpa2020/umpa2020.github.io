@@ -1,6 +1,7 @@
-package com.umpa2020.tracer.main.profile
+package com.umpa2020.tracer.main.profile.myroute
 
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
+import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
@@ -28,7 +30,7 @@ class ProfileUserRouteFragment : Fragment() {
     val mRecyclerView = view.findViewById<RecyclerView>(R.id.profileRrecyclerRoute)
     val mGridLayoutManager = GridLayoutManager(context, 3)
     mRecyclerView.layoutManager = mGridLayoutManager
-    val progressbar = ProgressBar(context!!)
+    val progressbar = ProgressBar(App.instance.currentActivity() as Activity)
     progressbar.show()
 
 

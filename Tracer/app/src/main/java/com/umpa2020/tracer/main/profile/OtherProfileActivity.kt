@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.umpa2020.tracer.R
+import com.umpa2020.tracer.main.profile.myroute.ProfileRouteActivity
 import com.umpa2020.tracer.network.FBProfile
 import kotlinx.android.synthetic.main.activity_other_profile.*
 import org.jetbrains.anko.contentView

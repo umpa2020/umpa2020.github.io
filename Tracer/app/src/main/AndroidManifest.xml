@@ -31,11 +31,10 @@
     android:supportsRtl="true"
     android:theme="@style/AppTheme"
     tools:ignore="GoogleAppIndexingWarning">
-    <activity android:name=".main.profile.MyInformationActivity"></activity>
-    <activity android:name=".main.profile.AppSettingActivity" />
-    <activity android:name=".main.profile.PreferenceActivity" />
+    <activity android:name=".main.profile.settting.MyInformationActivity"></activity>
+    <activity android:name=".main.profile.settting.AppSettingActivity" />
     <activity android:name=".main.profile.ProfileRecordActivity" />
-    <activity android:name=".main.profile.ProfileRouteActivity" />
+    <activity android:name=".main.profile.myroute.ProfileRouteActivity" />
     <activity android:name=".main.profile.OtherProfileActivity"/>
 
     <service
@@ -43,7 +42,7 @@
       android:exported="false" />
 
     <activity android:name="com.umpa2020.tracer.main.start.racing.RacingFinishActivity" />
-    <activity android:name="com.umpa2020.tracer.main.start.racing.RankingRecodeRacingActivity" />
+    <activity android:name="com.umpa2020.tracer.main.start.racing.RacingActivity" />
     <activity android:name="com.umpa2020.tracer.login.join.GenderSelectActivity" />
     <activity android:name="com.umpa2020.tracer.login.join.SignUpActivity" />
     <activity android:name="com.umpa2020.tracer.login.splash.SplashActivity">

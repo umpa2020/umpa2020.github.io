@@ -54,7 +54,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="0.5"
         android:gravity="center"
-        android:text="순위" />
+        android:text="@string/ranking1" />
 
       <TextView
         style="@style/ListTitle"
@@ -71,7 +71,7 @@
         android:layout_marginRight="10dp"
         android:layout_weight="2"
         android:gravity="center"
-        android:text="주변" />
+        android:text="@string/around" />
 
       <TextView
         android:id="@+id/rankingfiltermode"
@@ -132,7 +132,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginBottom="5dp"
         android:paddingTop="10dp"
-        android:text="정렬 기준" />
+        android:text="@string/sort" />
 
       <RadioGroup
         android:id="@+id/radioGroup"
@@ -151,7 +151,7 @@
           android:checked="true"
           android:gravity="center"
           android:padding="5dp"
-          android:text="실행순"
+          android:text="@string/execute_order"
           android:textColor="@drawable/tune_text_selector" />
 
         <RadioButton
@@ -163,7 +163,7 @@
           android:button="@null"
           android:gravity="center"
           android:padding="5dp"
-          android:text="좋아요순"
+          android:text="@string/like_order"
           android:textColor="@drawable/tune_text_selector" />
 
       </RadioGroup>
@@ -182,7 +182,7 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_weight="1"
-          android:text="거리" />
+          android:text="@string/distance" />
 
         <TextView
           android:id="@+id/progressTextView"
@@ -251,7 +251,7 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:background="@drawable/button_empty_background"
-          android:text="전체 삭제" />
+          android:text="@string/delete_all" />
 
         <View
           android:layout_width="0dp"
@@ -264,7 +264,7 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:background="@drawable/button_background"
-          android:text="적용하기" />
+          android:text="@string/apply" />
       </LinearLayout>
     </LinearLayout>
 

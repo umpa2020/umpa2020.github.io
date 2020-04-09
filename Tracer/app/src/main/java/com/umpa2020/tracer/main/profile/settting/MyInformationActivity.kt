@@ -1,4 +1,4 @@
-package com.umpa2020.tracer.main.profile
+package com.umpa2020.tracer.main.profile.settting
 
 import android.content.Intent
 import android.graphics.Bitmap
@@ -17,6 +17,7 @@ import com.umpa2020.tracer.network.FBProfile
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_my_information.*
+import kotlinx.android.synthetic.main.signup_toolbar.view.*
 
 class MyInformationActivity : AppCompatActivity() {
   val CHANGEPROFILE = 110 // 프로필 사진 체인지
@@ -24,7 +25,7 @@ class MyInformationActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_my_information)
-
+    app_toolbar.titleText.text=getString(R.string.my_information)
     // 프로필 이미지 서버에서 가져와서 화면에 설정
     FBProfile().getProfileImage(profileImage, UserInfo.nickname)
 
@@ -60,7 +61,15 @@ class MyInformationActivity : AppCompatActivity() {
             }
           }
         }
-        FBProfile().changeProfileImage(bitmapImg!!, mHandler)
+
+        // TODO 이 로그 지우지마!!! - 정빈
+        Logg.d("ssmm11 bitmapImg = $bitmapImg")
+        if (bitmapImg != null) { // 사진을 고르면
+          FBProfile().changeProfileImage(bitmapImg!!, mHandler)
+        }
+        else { // 사진을 안고르면
+          finish()
+        }
       }
     }
   }
@@ -99,7 +108,7 @@ class MyInformationActivity : AppCompatActivity() {
         }
       } else if (resultCode == RESULT_CANCELED) {
         //사진 선택 취소
-        Toast.makeText(this, "사진 선택 취소", Toast.LENGTH_LONG).show()
+        Toast.makeText(this, getString(R.string.deselect_photo), Toast.LENGTH_LONG).show()
       }
     }
   }

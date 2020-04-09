@@ -34,8 +34,8 @@ class RankRecyclerViewAdapterMap(val mdata: ArrayList<InfoData>, val mode: Strin
             //adpater 추가
             for (i in likeMapsDatas) {
               if (i.mapTitle.equals(singleItem.mapTitle)) {
-                holder.heart.setImageResource(R.drawable.ic_favorite_red_24dp)
-                holder.heartswitch.text = "on"
+                holder.modeIcon.setImageResource(R.drawable.ic_favorite_red_24dp)
+                holder.modeIcon.tag = R.drawable.ic_favorite_red_24dp
               }
             }
           }
@@ -50,13 +50,14 @@ class RankRecyclerViewAdapterMap(val mdata: ArrayList<InfoData>, val mode: Strin
     holder.maptitle.text = cutted[0]
     holder.distance.text = PrettyDistance().convertPretty(singleItem.distance!!)
     if (mode.equals("execute")) {
-      holder.heart.visibility = View.GONE
-      holder.execute.text = singleItem.execute.toString()
+      holder.modeIcon.setImageResource(R.drawable.ic_sneaker_for_running)
+      holder.modeIcon.tag = R.drawable.ic_sneaker_for_running
+      holder.modeNo.text = singleItem.execute.toString()
     } else if (mode.equals("likes")) {
-      holder.heart.visibility = View.VISIBLE
-      FBLikes().getLikes(mHandler)
-      holder.heart.setImageResource(R.drawable.ic_favorite_border_black_24dp)
-      holder.execute.text = singleItem.likes.toString()
+      FBLikes().getLikes(mHandler, "rank")
+      holder.modeIcon.setImageResource(R.drawable.ic_favorite_border_black_24dp)
+      holder.modeIcon.tag = R.drawable.ic_favorite_border_black_24dp
+      holder.modeNo.text = singleItem.likes.toString()
     }
 
     //ranking에 따라 트로피 색 바뀌게 하는 부분
@@ -79,24 +80,29 @@ class RankRecyclerViewAdapterMap(val mdata: ArrayList<InfoData>, val mode: Strin
       context!!.startActivity(nextIntent)
     }
 
-    holder.heart.setOnClickListener {
-      var likes = Integer.parseInt(holder.execute.text.toString())
+    holder.modeIcon.setOnClickListener {
+      var likes = Integer.parseInt(holder.modeNo.text.toString())
 
-      if (holder.heartswitch.text.equals("off")) {
-        FBLikes().setLikes(singleItem.mapTitle!!, likes)
-        holder.heart.setImageResource(R.drawable.ic_favorite_red_24dp)
-        likes++
-        holder.execute.text = likes.toString()
-        holder.heartswitch.text = "on"
-      } else {
-        FBLikes().setminusLikes(singleItem.mapTitle!!, likes)
-        holder.heart.setImageResource(R.drawable.ic_favorite_border_black_24dp)
-        likes--
-        holder.execute.text = likes.toString()
-        holder.heartswitch.text = "off"
+      when (holder.modeIcon.tag) {
+        R.drawable.ic_sneaker_for_running -> {
+
+        }
+        R.drawable.ic_favorite_border_black_24dp -> {
+          FBLikes().setLikes(singleItem.mapTitle!!, likes)
+          holder.modeIcon.setImageResource(R.drawable.ic_favorite_red_24dp)
+          holder.modeIcon.tag=R.drawable.ic_favorite_red_24dp
+          likes++
+          holder.modeNo.text = likes.toString()
+        }
+        R.drawable.ic_favorite_red_24dp -> {
+          FBLikes().setminusLikes(singleItem.mapTitle!!, likes)
+          holder.modeIcon.setImageResource(R.drawable.ic_favorite_border_black_24dp)
+          holder.modeIcon.tag=R.drawable.ic_favorite_border_black_24dp
+          likes--
+          holder.modeNo.text = likes.toString()
+        }
       }
     }
-
     // 정보를 다 표현하면 dismiss
     // > 5를 한 이유는 recyclerview 특성 상 모든 정보를 한 번에 담는게 아니라
     // 스크롤이 내려가면 달게 posiotion이 증가 되어서 mdata.size 까지
@@ -121,16 +127,12 @@ class RankRecyclerViewAdapterMap(val mdata: ArrayList<InfoData>, val mode: Strin
   }
 
   //여기서 item을 textView에 옮겨줌
-
   inner class mViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     var rank = view.rankingFragmentCountTextView
     var maptitle = view.rankingFragmentMapTitleTextView
     var distance = view.rankingFragmentDistanceTextView
-    var execute = view.rankingFragmentExecuteTextView
-    var heart = view.rankingFragmentHeartImageView
-    var heartswitch = view.rankingFragmentHeartSwitch
+    var modeNo = view.rankingFragmentModeTextView
+    var modeIcon = view.rankingFragmentModeImageView
   }
-
-
 }
 

@@ -4,7 +4,6 @@ import android.os.Handler
 import android.os.Message
 import com.google.firebase.firestore.FirebaseFirestore
 import com.umpa2020.tracer.dataClass.LikeMapsData
-import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.UserInfo
 
 /**
@@ -15,6 +14,8 @@ import com.umpa2020.tracer.util.UserInfo
 class FBLikes {
   val GETLIKES = 50
   val GETLIKE = 51
+  val GETPROFILELIKES = 110
+
   val db = FirebaseFirestore.getInstance()
 
   /**
@@ -23,7 +24,7 @@ class FBLikes {
    *
    * -> 리사이클러뷰에서 해당 유저가 좋아요한 맵에 대해서 이미지 작업을 한다.
    */
-  fun getLikes(mHandler: Handler) {
+  fun getLikes(mHandler: Handler, mode: String) {
     db.collection("userinfo").document(UserInfo.autoLoginKey).collection("user liked these maps")
       .get()
       .addOnSuccessListener { result ->
@@ -33,9 +34,17 @@ class FBLikes {
           val likeMapsData = LikeMapsData(document.get("mapTitle") as String, document.get("uid") as String)
           likeMapsDatas.add(likeMapsData)
         }
-        val msg: Message = mHandler.obtainMessage(GETLIKES)
-        msg.obj = likeMapsDatas
-        mHandler.sendMessage(msg)
+        if (mode == "rank") {
+          val msg: Message = mHandler.obtainMessage(GETLIKES)
+          msg.obj = likeMapsDatas
+          mHandler.sendMessage(msg)
+        }
+        else if (mode == "profile") {
+          val msg: Message = mHandler.obtainMessage(GETPROFILELIKES)
+          msg.obj = likeMapsDatas
+          mHandler.sendMessage(msg)
+        }
+
       }
   }
 
@@ -54,7 +63,6 @@ class FBLikes {
           .addOnSuccessListener { result ->
             for (document in result) {
               val buffer = document.get("likes")
-              Logg.d("ssmm11 buffer = $buffer")
               msg.arg1 = Integer.parseInt(buffer.toString())
               mHandler.sendMessage(msg)
             }

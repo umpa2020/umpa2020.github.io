@@ -188,7 +188,6 @@ class SignUpActivity : AppCompatActivity() {
       ActivityCompat.requestPermissions(this, temp.trim().split(" ").toTypedArray(), 1)
     } else {
       // 모든 허용 상태
-      //toast("권한을 모두 허용")
       goToAlbum()
     }
   }
@@ -284,6 +283,7 @@ class SignUpActivity : AppCompatActivity() {
         }
       } else if (resultCode == RESULT_CANCELED) {
         //사진 선택 취소
+
         Toast.makeText(this, getString(R.string.picture_select_cancel), Toast.LENGTH_LONG).show()
       }
     }

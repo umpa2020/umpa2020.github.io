@@ -23,6 +23,7 @@ import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.constant.UserState
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.RouteGPX
+import com.umpa2020.tracer.extensions.show
 import com.umpa2020.tracer.extensions.toLatLng
 import com.umpa2020.tracer.main.start.BaseRunningActivity
 import com.umpa2020.tracer.network.FBMap
@@ -33,7 +34,7 @@ import io.jenetics.jpx.WayPoint
 import kotlinx.android.synthetic.main.activity_ranking_recode_racing.*
 import kotlin.math.roundToLong
 
-class RankingRecodeRacingActivity : BaseRunningActivity() {
+class RacingActivity : BaseRunningActivity() {
   lateinit var mapRouteGPX: RouteGPX
   lateinit var mapTitle: String
   var racingResult = true
@@ -76,9 +77,9 @@ class RankingRecodeRacingActivity : BaseRunningActivity() {
     drawerHandle = racingHandle
     drawer = racingDrawer
     stopButton.setOnLongClickListener {
-      noticePopup = ChoicePopup(this, "선택해주세요.",
-        "지금 정지하시면 저장이 불가능합니다. \n\n정지하시겠습니까?",
-        "예", "아니오",
+      noticePopup = ChoicePopup(this, getString(R.string.please_select),
+        getString(R.string.cannot_save),
+        getString(R.string.yes), getString(R.string.no),
         View.OnClickListener {
           noticePopup.dismiss()
           finish()
@@ -103,7 +104,7 @@ class RankingRecodeRacingActivity : BaseRunningActivity() {
       R.id.racingStartButton -> {
         when (userState) {
           UserState.NORMAL -> {
-            Toast.makeText(this, "시작포인트 " + ARRIVE_BOUNDARY + "m 안에서만 시작할 수 있습니다", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, getString(R.string.startpoint) + ARRIVE_BOUNDARY + getString(R.string.only_start), Toast.LENGTH_LONG).show()
             Logg.d("NORMAL")
           }
           UserState.READYTORACING -> {
@@ -116,12 +117,14 @@ class RankingRecodeRacingActivity : BaseRunningActivity() {
         }
       }
       R.id.racingStopButton -> {
-        Toast.makeText(this, "종료를 원하시면 길게 눌러주세요", Toast.LENGTH_LONG).show()
+        //"종료를 원하시면 길게 눌러주세요".show()
+       // Toast.makeText(this, "종료를 원하시면 길게 눌러주세요", Toast.LENGTH_LONG).show()
+
       }
       R.id.racingPauseButton -> {
         if (privacy == Privacy.RACING) {
           showPausePopup(
-            "일시정지를 하게 되면\n랭킹등록이 불가합니다.\n\n일시정지를 하시겠습니까?"
+            getString(R.string.pause_notsave)
           )
         } else {
           if (userState == UserState.PAUSED)
@@ -226,7 +229,7 @@ class RankingRecodeRacingActivity : BaseRunningActivity() {
       notificationTextView.visibility = View.GONE
     } else {
       deviationCount++
-      notice("경로이탈 " + deviationCount.toString() + "\n(주의)경로이탈이 " + DEVIATION_COUNT + "초 이상이되면 랭킹등록을 못합니다.")
+      notice(getString(R.string.out_of_route) + deviationCount.toString() + getString(R.string.route_deviates) + DEVIATION_COUNT + getString(R.string.resgisration))
       if (deviationCount > DEVIATION_COUNT) {
         racingResult = false
         stop()
@@ -243,7 +246,7 @@ class RankingRecodeRacingActivity : BaseRunningActivity() {
       userState = UserState.NORMAL
       traceMap.changeMarkerColor(0, BitmapDescriptorFactory.HUE_ROSE)
       notice(
-        "시작 포인트로 이동하십시오.\n시작포인트까지 남은거리\n"
+        getString(R.string.move_startpoint)
           + (SphericalUtil.computeDistanceBetween(
           currentLatLng,
           wptList[0].toLatLng()
@@ -258,12 +261,12 @@ class RankingRecodeRacingActivity : BaseRunningActivity() {
         currentLatLng, mapRouteGPX.wptList[0].toLatLng()
       ) <= ARRIVE_BOUNDARY
     ) {
-      notice("시작을 원하시면 START를 누르세요")
+      notice(getString(R.string.want_start))
       traceMap.changeMarkerColor(0, BitmapDescriptorFactory.HUE_BLUE)
       userState = UserState.READYTORACING
     } else {
       notice(
-        "시작 포인트로 이동하십시오.\n시작포인트까지 남은거리\n"
+        getString(R.string.move_startpoint)
           + (SphericalUtil.computeDistanceBetween(
           currentLatLng,
           wptList[0].toLatLng()

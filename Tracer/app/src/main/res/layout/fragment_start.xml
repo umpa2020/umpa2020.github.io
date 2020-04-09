@@ -13,7 +13,6 @@
     android:layout_marginTop="70dp"
     android:background="@drawable/button_empty_background"
     android:layout_centerHorizontal="true"
-    android:onClick="onClick"
     android:textSize="12sp"
     android:text="@string/re_search_this_area" />
 
@@ -61,7 +60,6 @@
             android:layout_height="30dp"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
-            android:onClick="onClick"
             android:background="@drawable/ic_arrow_back_red_34dp"/>
           <EditText
             android:id="@+id/mainStartSearchTextView"
@@ -79,7 +77,6 @@
           android:layout_height="30dp"
           android:layout_marginStart="10dp"
           android:layout_marginEnd="10dp"
-          android:onClick="onClick"
           android:background="@drawable/ic_search_red_24dp"/>
       </RelativeLayout>
     </Toolbar>
@@ -113,11 +110,11 @@
       android:layout_gravity="bottom"
       android:background="@drawable/button_empty_background"
       android:gravity="center"
-      android:onClick="onClick"
       android:text="@string/runningmode" />
 
 
     <Button
+      android:visibility="gone"
       android:id="@+id/test"
       style="@style/buttonText"
       android:layout_width="100dp"
@@ -125,7 +122,6 @@
       android:layout_gravity="bottom"
       android:background="@drawable/button_background"
       android:gravity="center"
-      android:onClick="onClick"
       android:text="test" />
   </LinearLayout>
 </RelativeLayout>

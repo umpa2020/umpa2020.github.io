@@ -77,7 +77,7 @@
             style="@style/ListDetail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="거리 (km)" />
+            android:text="@string/Distance_km" />
 
           <TextView
             android:id="@+id/racingDistanceTextView"
@@ -102,7 +102,7 @@
             style="@style/ListDetail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="시간" />
+            android:text="@string/Time" />
 
           <Chronometer
             android:id="@+id/racingTimerTextView"
@@ -125,7 +125,7 @@
             style="@style/ListDetail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="속력 (km/h)" />
+            android:text="@string/speed_km" />
 
           <TextView
             android:id="@+id/racingSpeedTextView"
@@ -159,7 +159,6 @@
       android:layout_gravity="center"
       android:background="@drawable/button_background"
       android:gravity="center"
-      android:onClick="onClick"
       android:text="@string/start" />
 
     <LinearLayout
@@ -174,7 +173,6 @@
         android:layout_height="40dp"
         android:background="@drawable/button_background"
         android:gravity="center"
-        android:onClick="onClick"
         android:text="@string/stop"
         android:visibility="invisible" />
 
@@ -186,7 +184,7 @@
         android:layout_marginLeft="20dp"
         android:background="@drawable/button_empty_background"
         android:gravity="center"
-        android:onClick="onClick"
+
         android:text="@string/pause"
         android:visibility="invisible" />
     </LinearLayout>

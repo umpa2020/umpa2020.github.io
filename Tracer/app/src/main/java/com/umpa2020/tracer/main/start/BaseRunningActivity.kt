@@ -22,7 +22,7 @@ import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.constant.UserState
 import com.umpa2020.tracer.extensions.toLatLng
-import com.umpa2020.tracer.trace.TraceMap
+import com.umpa2020.tracer.map.TraceMap
 import com.umpa2020.tracer.util.ChoicePopup
 import com.umpa2020.tracer.util.LocationBroadcastReceiver
 import com.umpa2020.tracer.util.Logg
@@ -133,7 +133,7 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     userState = UserState.PAUSED
     timeWhenStopped = chronometer.base - SystemClock.elapsedRealtime()
     chronometer.stop()
-    pauseButton.text = "재시작"
+    pauseButton.text = getString(R.string.restart)
 
     pauseNotice("기록 측정 중지")
   }
@@ -141,7 +141,7 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
   open fun restart() {
 
     userState = UserState.RUNNING
-    pauseButton.text = "일시정지"
+    pauseButton.text = getString(R.string.pause)
     //btn_pause.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_pause_icon_pressed, 0, 0, 0)
     chronometer.base = SystemClock.elapsedRealtime() + timeWhenStopped
 
@@ -204,9 +204,9 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
   override fun onBackPressed() {
     when (userState) {
       UserState.RUNNING, UserState.PAUSED -> {
-        noticePopup = ChoicePopup(this, "선택해주세요.",
-          "지금 정지하시면 저장이 불가능합니다. \n\n정지하시겠습니까?",
-          "예", "아니오",
+        noticePopup = ChoicePopup(this, getString(R.string.please_select),
+          getString(R.string.stop_save),
+          getString(R.string.yes), getString(R.string.no),
           View.OnClickListener {
             noticePopup.dismiss()
             // yes 버튼 눌렀을 때 해당 액티비티 재시작.
@@ -225,9 +225,9 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
 
   fun showPausePopup(text: String) {
     noticePopup = ChoicePopup(this,
-      "선택해주세요.",
+      getString(R.string.please_select),
       text,
-      "예", "아니오",
+      getString(R.string.yes), getString(R.string.no),
       View.OnClickListener {
         //Yes 버튼 눌렀을 때
         notificationTextView.visibility = View.GONE

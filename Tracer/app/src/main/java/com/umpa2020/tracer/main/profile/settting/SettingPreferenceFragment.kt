@@ -1,14 +1,12 @@
-package com.umpa2020.tracer.main.profile
+package com.umpa2020.tracer.main.profile.settting
 
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreference
-import androidx.preference.SwitchPreferenceCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
@@ -30,9 +28,7 @@ class SettingPreferenceFragment : PreferenceFragmentCompat() {
     // Switch preference change listener
     switchTTS?.setOnPreferenceChangeListener{ preference, newValue ->
       if (newValue == true){
-        Toast.makeText(activity,"enabled",Toast.LENGTH_LONG).show()
       }else{
-        Toast.makeText(activity,"disabled",Toast.LENGTH_LONG).show()
       }
 
       true
@@ -45,10 +41,8 @@ class SettingPreferenceFragment : PreferenceFragmentCompat() {
     switchNotification?.setOnPreferenceChangeListener{ preference, newValue ->
       if (newValue == true){
         //TODO 알람 ON 기능 추가
-        Toast.makeText(activity,"enabled",Toast.LENGTH_LONG).show()
       }else{
         //TODO 알람 OFF 기능 추가
-        Toast.makeText(activity,"disabled",Toast.LENGTH_LONG).show()
       }
 
       true
@@ -63,20 +57,17 @@ class SettingPreferenceFragment : PreferenceFragmentCompat() {
   override fun onPreferenceTreeClick(preference: androidx.preference.Preference?): Boolean {
     //내 정보 눌렀을 때
     if (preference?.key.equals("myInformation")) {
-      Toast.makeText(context, "myInformation", Toast.LENGTH_LONG).show()
       val intent = Intent(context, MyInformationActivity::class.java)
       startActivity(intent)
     }
 
     //로그아웃 눌렀을 때
     if (preference?.key.equals("logout")) {
-      Toast.makeText(context, "logout", Toast.LENGTH_LONG).show()
       logOut()
     }
 
     //회원 탈퇴 눌렀을 때
     if (preference?.key.equals("unregister")) {
-      Toast.makeText(context, "unregister", Toast.LENGTH_LONG).show()
       //TODO. 회원 탈퇴 기능 만들기
     }
     return super.onPreferenceTreeClick(preference)
@@ -87,7 +78,7 @@ class SettingPreferenceFragment : PreferenceFragmentCompat() {
   // TODO : 로그아웃하고 새로 로그인할 때 구글 계정 선택하는 팝업을 띄우고 싶은데 해결 못함. LoginActivity에서 건들여야 할듯
   private fun logOut() {
     // Shared의 정보 삭제
-    noticePopup = ChoicePopup(requireContext(), "선택해주세요.", "로그아웃하시겠습니까?", "예", "아니오",
+    noticePopup = ChoicePopup(requireContext(), getString(R.string.please_select), getString(R.string.like_logout), getString(R.string.yes), getString(R.string.no),
       View.OnClickListener {
         // 예
         UserInfo.autoLoginKey = ""

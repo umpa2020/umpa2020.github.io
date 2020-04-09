@@ -19,7 +19,7 @@ import com.umpa2020.tracer.dataClass.RankingData
 import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.extensions.MM_SS
 import com.umpa2020.tracer.extensions.format
-import com.umpa2020.tracer.trace.TraceMap
+import com.umpa2020.tracer.map.TraceMap
 import com.umpa2020.tracer.util.Chart
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.UserInfo
@@ -128,7 +128,7 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback {
     }
     val routeGpxFile = gpxConverter.classToGpx(routeGPX, saveFolder.path)
     // storage에 이미지 업로드 모든 맵 이미지는 mapimage/maptitle로 업로드가 된다.
-    val fstorage = FirebaseStorage.getInstance("gs://tracer-9070d.appspot.com/")
+    val fstorage = FirebaseStorage.getInstance()
     Logg.d( "HI0?")
     val fRef = fstorage.reference.child("mapRoute").child(infoData.mapTitle!!)
     infoData.routeGPXPath = fRef.path
@@ -159,7 +159,7 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback {
     // db에 원하는 경로 및, 문서로 업로드
 
     // storage에 이미지 업로드 모든 맵 이미지는 mapimage/maptitle로 업로드가 된다.
-    val storage = FirebaseStorage.getInstance("gs://tracer-9070d.appspot.com/")
+    val storage = FirebaseStorage.getInstance()
     val mapImageRef = storage.reference.child("mapImage").child(infoData.mapTitle!!)
     val uploadTask = mapImageRef.putFile(Uri.fromFile(File(imgPath)))
     uploadTask.addOnFailureListener {

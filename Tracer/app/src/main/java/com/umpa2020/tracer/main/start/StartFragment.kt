@@ -1,6 +1,5 @@
 package com.umpa2020.tracer.main.start
 
-import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -29,18 +28,18 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.storage.FirebaseStorage
-import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.NearMap
+import com.umpa2020.tracer.extensions.show
 import com.umpa2020.tracer.extensions.toLatLng
 import com.umpa2020.tracer.main.ranking.RankingMapDetailActivity
-import com.umpa2020.tracer.main.start.racing.RankingRecodeRacingActivity
+import com.umpa2020.tracer.main.start.racing.RacingActivity
 import com.umpa2020.tracer.main.start.running.RunningActivity
+import com.umpa2020.tracer.map.TraceMap
 import com.umpa2020.tracer.network.FBMap
-import com.umpa2020.tracer.trace.TraceMap
 import com.umpa2020.tracer.util.Logg
+import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.PrettyDistance
-import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
 import com.umpa2020.tracer.util.gpx.GPXConverter
 import kotlinx.android.synthetic.main.fragment_start.*
@@ -52,7 +51,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
   val TAG = "StartFragment"
 
   lateinit var traceMap: TraceMap
-  lateinit var currentLocation: Location
+  var currentLocation: Location? = null
 
   lateinit var locationBroadcastReceiver: BroadcastReceiver
   var routeMarkers = mutableListOf<Marker>()
@@ -62,7 +61,8 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
   val NEARMAPFALSE = 41
   var nearMaps: ArrayList<NearMap> = arrayListOf()
   var wedgedCamera = true
-  val progressbar = ProgressBar(App.instance.currentActivity() as Activity)
+  val progressBar = MyProgressBar()
+  var switch = 2
 
 
   override fun onClick(v: View) {
@@ -80,7 +80,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
           mainStartSearchLayout.visibility = View.VISIBLE
         } else {
           search()
-          wedgedCamera=false
+          wedgedCamera = false
         }
       }
       R.id.mainStartBackButton -> {
@@ -88,7 +88,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
         mainStartSearchLayout.visibility = View.GONE
         // 키보드 숨기기
         (requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
-          .hideSoftInputFromWindow(mainStartSearchTextView.windowToken,0)
+          .hideSoftInputFromWindow(mainStartSearchTextView.windowToken, 0)
       }
     }
   }
@@ -98,11 +98,11 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
 
     val mHandler = object : Handler(Looper.getMainLooper()) {
       override fun handleMessage(msg: Message) {
-
         when (msg.what) {
           STRAT_FRAGMENT_NEARMAP -> {
+            mainStartSearchAreaButton.visibility = View.GONE
+
             nearMaps = msg.obj as ArrayList<NearMap>
-            Logg.d("ssmm11 nearMaps = $nearMaps")
             val icon =
               BitmapDescriptorFactory
                 .defaultMarker(BitmapDescriptorFactory.HUE_ROSE)
@@ -123,6 +123,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
                     .icon(icon)
                 )
               )
+
               //TODO: 윈도우 커스터마이즈
               routeMarkers.last().tag = it.mapTitle
 
@@ -132,12 +133,13 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
                 startActivity(intent)
               }
             }
-            mainStartSearchAreaButton.visibility=View.GONE
           }
           NEARMAPFALSE -> {
+            Toast.makeText(context, getString(R.string.not_search), Toast.LENGTH_LONG).show()
             // 빈 상태
           }
         }
+        progressBar.progressBarDismiss()
       }
     }
     FBMap().getNearMap(bound.southwest, bound.northeast, mHandler)
@@ -145,15 +147,16 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
 
   private fun search() {
     val geocoder = Geocoder(context)
-    if(mainStartSearchTextView.text.isEmpty()){
-      Toast.makeText(context, "Please enter some address", Toast.LENGTH_SHORT).show()
+    if (mainStartSearchTextView.text.isEmpty()) {
+      getString(R.string.enter_address).show()
+      //Toast.makeText(context, "Please enter some address", Toast.LENGTH_SHORT).show()
       return
     }
     val addressList =
       geocoder.getFromLocationName(mainStartSearchTextView.text.toString(), 10)
     // 최대 검색 결과 개수
     if (addressList.size == 0) {
-      Toast.makeText(context, "Can't find location", Toast.LENGTH_SHORT).show()
+      Toast.makeText(context, getString(R.string.cannot_find), Toast.LENGTH_SHORT).show()
     } else {
       mainStartSearchTextView.setText(addressList[0].getAddressLine(0))
       traceMap.moveCamera(LatLng(addressList[0].latitude, addressList[0].longitude))
@@ -162,7 +165,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
 
     // 키보드 숨기기
     (requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
-      .hideSoftInputFromWindow(mainStartSearchTextView.windowToken,0)
+      .hideSoftInputFromWindow(mainStartSearchTextView.windowToken, 0)
   }
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -170,13 +173,13 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
     val view = inflater.inflate(R.layout.fragment_start, container, false)
     view.test.setOnClickListener {
       Logg.d("test 실행")
-      val storage = FirebaseStorage.getInstance("gs://tracer-9070d.appspot.com/")
+      val storage = FirebaseStorage.getInstance()
       val routeRef = storage.reference.child("mapRoute").child("Short SanDiego route||1586002359186")
       val localFile = File.createTempFile("routeGpx", "xml")
 
       routeRef.getFile(Uri.fromFile(localFile)).addOnSuccessListener {
         val routeGPX = GPXConverter().GpxToClass(localFile.path)
-        val intent = Intent(context, RankingRecodeRacingActivity::class.java)
+        val intent = Intent(context, RacingActivity::class.java)
         intent.putExtra("RouteGPX", routeGPX)
         intent.putExtra("mapTitle", "Short SanDiego route||1586002359186")
         startActivity(intent)
@@ -185,7 +188,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
       }
     }
 
-    view.mainStartSearchTextView.setOnEditorActionListener( object : TextView.OnEditorActionListener{
+    view.mainStartSearchTextView.setOnEditorActionListener(object : TextView.OnEditorActionListener {
       override fun onEditorAction(p0: TextView?, p1: Int, p2: KeyEvent?): Boolean {
         Logg.i("엔터키 클릭")
         search()
@@ -199,10 +202,11 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
       override fun onReceive(context: Context?, intent: Intent?) {
         val message = intent?.getParcelableExtra<Location>("message")
         currentLocation = message as Location
-        if (wedgedCamera) traceMap.moveCamera(currentLocation.toLatLng())
-        if (progressbar.isShowing) {
+        if (wedgedCamera) traceMap.moveCamera(currentLocation!!.toLatLng())
+        if (progressBar.mprogressBar.isShowing && switch == 2) {
           searchThisArea()
-          progressbar.dismiss()
+          progressBar.progressBarDismiss()
+          switch--
         }
       }
     }
@@ -214,11 +218,11 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
     traceMap = TraceMap(googleMap) //구글맵
     traceMap.mMap.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
     traceMap.mMap.setOnCameraMoveListener {
-      wedgedCamera=false
-      mainStartSearchAreaButton.visibility=View.VISIBLE
+      wedgedCamera = false
+      mainStartSearchAreaButton.visibility = View.VISIBLE
     }
     traceMap.mMap.setOnMyLocationButtonClickListener {
-      wedgedCamera=true
+      wedgedCamera = true
       true
     }
   }
@@ -239,12 +243,12 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
     LocalBroadcastManager.getInstance(this.requireContext())
       .registerReceiver(locationBroadcastReceiver, IntentFilter("custom-event-name"))
 
-    progressbar.show()
+    progressBar.progressBarShow(2)
   }
 
   override fun onPause() {
     super.onPause()
-    UserInfo.rankingLatLng = currentLocation.toLatLng()
+    UserInfo.rankingLatLng = currentLocation?.toLatLng()
     //        브로드 캐스트 해제 - 전역 context로 수정해야함
     LocalBroadcastManager.getInstance(this.requireContext()).unregisterReceiver(locationBroadcastReceiver)
   }
