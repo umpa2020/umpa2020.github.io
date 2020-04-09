@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.HistoryData
+import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.recycler_profile_user_history_item.view.*
 
 class ProfileRecyclerViewAdapterHistory(private var datas: ArrayList<HistoryData>) : RecyclerView.Adapter<ProfileRecyclerViewAdapterHistory.MyViewHolder>() {
@@ -29,15 +30,17 @@ class ProfileRecyclerViewAdapterHistory(private var datas: ArrayList<HistoryData
     holder.testvalues.text = singleItem1.testvalues
 
     //클릭하면 맵 상세보기 페이지로 이동
-    holder.itemView.setOnClickListener {
-      //TODO 히스토리 누르면 어케?
+    holder.itemView.setOnClickListener(object : OnSingleClickListener{
+      override fun onSingleClick(v: View?) {
+        //TODO 히스토리 누르면 어케?
 
-      /*
-      val nextIntent = Intent(context, RankRecyclerItemClickActivity::class.java)
-      nextIntent.putExtra("MapTitle",  singleItem1.mapTitle) //mapTitle 정보 인텐트로 넘김
-      context!!.startActivity(nextIntent)
-       */
-    }
+        /*
+        val nextIntent = Intent(context, RankRecyclerItemClickActivity::class.java)
+        nextIntent.putExtra("MapTitle",  singleItem1.mapTitle) //mapTitle 정보 인텐트로 넘김
+        context!!.startActivity(nextIntent)
+         */
+      }
+    })
   }
 
   inner class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {

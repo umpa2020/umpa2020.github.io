@@ -84,7 +84,7 @@ class RankingFragment : Fragment(), OnSingleClickListener {
                 if (UserInfo.rankingLatLng != null) {
                     //실행순 버튼에 체크가 되어 있을 경우
                     if (requireView().tuneRadioBtnExecute.isChecked) {
-                        requireView().rankingfiltermode.text = "실행수"
+                        requireView().rankingfiltermode.text = getString(R.string.execute)
                         FBRanking().getFilterRange(
                             requireView(),
                             UserInfo.rankingLatLng!!,
@@ -92,7 +92,7 @@ class RankingFragment : Fragment(), OnSingleClickListener {
                             "execute"
                         )
                     } else {
-                        requireView().rankingfiltermode.text = "좋아요"
+                        requireView().rankingfiltermode.text =  getString(R.string.likes)
                         FBRanking().getFilterRange(
                             requireView(),
                             UserInfo.rankingLatLng!!,

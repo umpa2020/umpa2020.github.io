@@ -2,6 +2,7 @@ package com.umpa2020.tracer.util
 
 import android.os.SystemClock
 import android.view.View
+import androidx.recyclerview.widget.RecyclerView
 import com.umpa2020.tracer.constant.Constants
 
 

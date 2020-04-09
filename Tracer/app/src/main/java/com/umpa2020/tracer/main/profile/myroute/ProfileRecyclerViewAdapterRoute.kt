@@ -20,12 +20,12 @@ import com.umpa2020.tracer.extensions.prettyDistance
 import com.umpa2020.tracer.main.ranking.RankRecyclerItemClickActivity
 import com.umpa2020.tracer.network.FBLikes
 import com.umpa2020.tracer.util.Logg
-import kotlinx.android.synthetic.main.activity_ranking_map_detail.*
+import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.recycler_profilefragment_route_grid_image.view.*
-import java.sql.Timestamp
 import java.util.*
 
-class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) : RecyclerView.Adapter<ProfileRecyclerViewAdapterRoute.mViewHolder>() {
+class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) :
+  RecyclerView.Adapter<ProfileRecyclerViewAdapterRoute.mViewHolder>() {
   var context: Context? = null
   val GETPROFILELIKES = 110
   var likeMapsDatas = arrayListOf<LikeMapsData>()
@@ -87,40 +87,45 @@ class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) : Recycler
 
 
     //클릭하면 맵 상세보기 페이지로 이동
-    holder.itemView.setOnClickListener {
-      val nextIntent = Intent(context, RankRecyclerItemClickActivity::class.java)
-      nextIntent.putExtra("MapTitle", singleItem.mapTitle) //mapTitle 정보 인텐트로 넘김
-      context!!.startActivity(nextIntent)
-    }
 
-    holder.heart.setOnClickListener {
-      var likes = Integer.parseInt(holder.likes.text.toString())
-      Logg.d("ssmm11 눌림 tag = ${holder.heart.tag}")
-      when (holder.heart.tag) {
-        R.drawable.ic_sneaker_for_running -> {
+    holder.heart.setOnClickListener(object : OnSingleClickListener {
+      override fun onSingleClick(v: View?) {
+        var likes = Integer.parseInt(holder.likes.text.toString())
+        Logg.d("ssmm11 눌림 tag = ${holder.heart.tag}")
+        when (holder.heart.tag) {
+          R.drawable.ic_sneaker_for_running -> {
 
-        }
-        R.drawable.ic_favorite_border_black_24dp -> {
-          FBLikes().setLikes(singleItem.mapTitle!!, likes)
-          holder.heart.setImageResource(R.drawable.ic_favorite_red_24dp)
-          holder.heart.tag = R.drawable.ic_favorite_red_24dp
-          likes++
-          holder.likes.text = likes.toString()
-        }
-        R.drawable.ic_favorite_red_24dp -> {
-          FBLikes().setminusLikes(singleItem.mapTitle!!, likes)
-          holder.heart.setImageResource(R.drawable.ic_favorite_border_black_24dp)
-          holder.heart.tag = R.drawable.ic_favorite_border_black_24dp
-          likes--
-          holder.likes.text = likes.toString()
+          }
+          R.drawable.ic_favorite_border_black_24dp -> {
+            FBLikes().setLikes(singleItem.mapTitle!!, likes)
+            holder.heart.setImageResource(R.drawable.ic_favorite_red_24dp)
+            holder.heart.tag = R.drawable.ic_favorite_red_24dp
+            likes++
+            holder.likes.text = likes.toString()
+          }
+          R.drawable.ic_favorite_red_24dp -> {
+            FBLikes().setminusLikes(singleItem.mapTitle!!, likes)
+            holder.heart.setImageResource(R.drawable.ic_favorite_border_black_24dp)
+            holder.heart.tag = R.drawable.ic_favorite_border_black_24dp
+            likes--
+            holder.likes.text = likes.toString()
+          }
         }
       }
-    }
+    })
+    holder.itemView.setOnClickListener(object : OnSingleClickListener {
+      override fun onSingleClick(v: View?) {
+        val nextIntent = Intent(context, RankRecyclerItemClickActivity::class.java)
+        nextIntent.putExtra("MapTitle", singleItem.mapTitle) //mapTitle 정보 인텐트로 넘김
+        context!!.startActivity(nextIntent)
+      }
+    })
   }
 
   //뷰 홀더 생성
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): mViewHolder {
-    val view = LayoutInflater.from(parent.context).inflate(R.layout.recycler_profilefragment_route_grid_image, parent, false)
+    val view = LayoutInflater.from(parent.context)
+      .inflate(R.layout.recycler_profilefragment_route_grid_image, parent, false)
     context = parent.context
     return mViewHolder(view) //view 객체는 한개의 리사이클러뷰가 디자인 되어 있는 레이아웃을 의미
   }
