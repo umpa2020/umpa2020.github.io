@@ -30,6 +30,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.NearMap
+import com.umpa2020.tracer.extensions.show
 import com.umpa2020.tracer.extensions.toLatLng
 import com.umpa2020.tracer.main.ranking.RankingMapDetailActivity
 import com.umpa2020.tracer.main.start.racing.RacingActivity
@@ -148,7 +149,8 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
   private fun search() {
     val geocoder = Geocoder(context)
     if (mainStartSearchTextView.text.isEmpty()) {
-      Toast.makeText(context, "Please enter some address", Toast.LENGTH_SHORT).show()
+      "Please enter some address".show()
+      //Toast.makeText(context, "Please enter some address", Toast.LENGTH_SHORT).show()
       return
     }
     val addressList =

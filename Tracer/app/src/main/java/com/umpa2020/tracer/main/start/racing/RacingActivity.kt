@@ -23,6 +23,7 @@ import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.constant.UserState
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.RouteGPX
+import com.umpa2020.tracer.extensions.show
 import com.umpa2020.tracer.extensions.toLatLng
 import com.umpa2020.tracer.main.start.BaseRunningActivity
 import com.umpa2020.tracer.network.FBMap
@@ -116,7 +117,9 @@ class RacingActivity : BaseRunningActivity() {
         }
       }
       R.id.racingStopButton -> {
-        Toast.makeText(this, "종료를 원하시면 길게 눌러주세요", Toast.LENGTH_LONG).show()
+        //"종료를 원하시면 길게 눌러주세요".show()
+       // Toast.makeText(this, "종료를 원하시면 길게 눌러주세요", Toast.LENGTH_LONG).show()
+
       }
       R.id.racingPauseButton -> {
         if (privacy == Privacy.RACING) {
