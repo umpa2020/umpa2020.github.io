@@ -62,6 +62,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
   var nearMaps: ArrayList<NearMap> = arrayListOf()
   var wedgedCamera = true
   val progressBar = MyProgressBar()
+  var switch = 2
 
 
   override fun onClick(v: View) {
@@ -99,6 +100,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
       override fun handleMessage(msg: Message) {
         when (msg.what) {
           STRAT_FRAGMENT_NEARMAP -> {
+            mainStartSearchAreaButton.visibility = View.GONE
 
             nearMaps = msg.obj as ArrayList<NearMap>
             val icon =
@@ -131,16 +133,13 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
                 startActivity(intent)
               }
             }
-            mainStartSearchAreaButton.visibility = View.GONE
-            progressBar.progressBarDismiss()
-
           }
           NEARMAPFALSE -> {
-            progressBar.progressBarDismiss()
-            Toast.makeText(context,getString(R.string.not_search),Toast.LENGTH_LONG).show()
+            Toast.makeText(context, getString(R.string.not_search), Toast.LENGTH_LONG).show()
             // 빈 상태
           }
         }
+        progressBar.progressBarDismiss()
       }
     }
     FBMap().getNearMap(bound.southwest, bound.northeast, mHandler)
@@ -204,9 +203,10 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
         val message = intent?.getParcelableExtra<Location>("message")
         currentLocation = message as Location
         if (wedgedCamera) traceMap.moveCamera(currentLocation!!.toLatLng())
-        if (progressBar.mprogressBar.isShowing) {
+        if (progressBar.mprogressBar.isShowing && switch == 2) {
           searchThisArea()
           progressBar.progressBarDismiss()
+          switch--
         }
       }
     }
