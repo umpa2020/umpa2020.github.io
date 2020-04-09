@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreference
@@ -29,9 +28,7 @@ class SettingPreferenceFragment : PreferenceFragmentCompat() {
     // Switch preference change listener
     switchTTS?.setOnPreferenceChangeListener{ preference, newValue ->
       if (newValue == true){
-        Toast.makeText(activity,"enabled",Toast.LENGTH_LONG).show()
       }else{
-        Toast.makeText(activity,"disabled",Toast.LENGTH_LONG).show()
       }
 
       true
@@ -44,10 +41,8 @@ class SettingPreferenceFragment : PreferenceFragmentCompat() {
     switchNotification?.setOnPreferenceChangeListener{ preference, newValue ->
       if (newValue == true){
         //TODO 알람 ON 기능 추가
-        Toast.makeText(activity,"enabled",Toast.LENGTH_LONG).show()
       }else{
         //TODO 알람 OFF 기능 추가
-        Toast.makeText(activity,"disabled",Toast.LENGTH_LONG).show()
       }
 
       true
@@ -62,20 +57,17 @@ class SettingPreferenceFragment : PreferenceFragmentCompat() {
   override fun onPreferenceTreeClick(preference: androidx.preference.Preference?): Boolean {
     //내 정보 눌렀을 때
     if (preference?.key.equals("myInformation")) {
-      Toast.makeText(context, "myInformation", Toast.LENGTH_LONG).show()
       val intent = Intent(context, MyInformationActivity::class.java)
       startActivity(intent)
     }
 
     //로그아웃 눌렀을 때
     if (preference?.key.equals("logout")) {
-      Toast.makeText(context, "logout", Toast.LENGTH_LONG).show()
       logOut()
     }
 
     //회원 탈퇴 눌렀을 때
     if (preference?.key.equals("unregister")) {
-      Toast.makeText(context, "unregister", Toast.LENGTH_LONG).show()
       //TODO. 회원 탈퇴 기능 만들기
     }
     return super.onPreferenceTreeClick(preference)

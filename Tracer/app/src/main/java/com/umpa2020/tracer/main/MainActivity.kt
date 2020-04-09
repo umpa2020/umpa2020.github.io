@@ -3,7 +3,6 @@ package com.umpa2020.tracer.main
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -149,7 +148,6 @@ class MainActivity : AppCompatActivity() {
       return
     }
     this.doubleBackToExitPressedOnce1 = true
-    Toast.makeText(applicationContext, "뒤로 버튼을 한번 더 누르면 종료됩니다.", Toast.LENGTH_LONG).show()
     Handler().postDelayed({ doubleBackToExitPressedOnce1 = false }, 3000)
   }
 }
