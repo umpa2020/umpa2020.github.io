@@ -50,24 +50,24 @@
 
       <TextView
         style="@style/ListTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.5"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.7"
         android:gravity="center"
         android:text="@string/ranking1" />
 
       <TextView
         style="@style/ListTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
         android:layout_weight="3"
         android:gravity="center"
         android:text="@string/mapname" />
 
       <TextView
         style="@style/ListTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
         android:layout_marginRight="10dp"
         android:layout_weight="2"
         android:gravity="center"
@@ -76,8 +76,8 @@
       <TextView
         android:id="@+id/rankingfiltermode"
         style="@style/ListTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
         android:layout_weight="1.5"
         android:gravity="center"
         android:text="@string/numerofruns" />

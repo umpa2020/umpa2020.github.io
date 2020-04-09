@@ -8,5 +8,4 @@ fun String.show(){
   val duration = Toast.LENGTH_LONG
   val toast = Toast.makeText(App.instance.context(), text, duration)
   toast.show()
-
 }
