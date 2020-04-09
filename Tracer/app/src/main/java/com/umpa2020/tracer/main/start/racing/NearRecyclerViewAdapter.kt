@@ -11,6 +11,7 @@ import com.umpa2020.tracer.dataClass.NearMap
 import com.umpa2020.tracer.main.ranking.RankRecyclerItemClickActivity
 import com.umpa2020.tracer.network.FBMapImage
 import com.umpa2020.tracer.util.Logg
+import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.ProgressBar
 import kotlinx.android.synthetic.main.recycler_nearactivity_item.view.*
 
@@ -41,12 +42,14 @@ class NearRecyclerViewAdapter(private var datas: List<NearMap>, private val prog
     FBMapImage().getMapImage(holder.imageView, singleItem1.mapTitle)
 
     //클릭하면 맵 상세보기 페이지로 이동
-    holder.itemView.setOnClickListener {
+    holder.imageView.setOnClickListener(object : OnSingleClickListener{
+      override fun onSingleClick(v: View?) {
 
-      val nextIntent = Intent(context, RankRecyclerItemClickActivity::class.java)
-      nextIntent.putExtra("MapTitle", singleItem1.mapTitle) //mapTitle 정보 인텐트로 넘김
-      context!!.startActivity(nextIntent)
-    }
+        val nextIntent = Intent(context, RankRecyclerItemClickActivity::class.java)
+        nextIntent.putExtra("MapTitle", singleItem1.mapTitle) //mapTitle 정보 인텐트로 넘김
+        context!!.startActivity(nextIntent)
+      }
+    })
     Logg.d("ssmm11 position == $position / data.size - 1 = ${datas.size-1}")
 
     if (position == datas.size-1 || position > 4)

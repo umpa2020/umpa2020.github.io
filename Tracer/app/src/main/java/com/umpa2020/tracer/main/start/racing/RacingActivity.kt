@@ -23,15 +23,21 @@ import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.constant.UserState
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.RouteGPX
+import com.umpa2020.tracer.extensions.prettyDistance
 import com.umpa2020.tracer.extensions.show
 import com.umpa2020.tracer.extensions.toLatLng
 import com.umpa2020.tracer.main.start.BaseRunningActivity
 import com.umpa2020.tracer.network.FBMap
 import com.umpa2020.tracer.util.ChoicePopup
 import com.umpa2020.tracer.util.Logg
+import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.TTS
 import io.jenetics.jpx.WayPoint
 import kotlinx.android.synthetic.main.activity_ranking_recode_racing.*
+import kotlinx.android.synthetic.main.activity_ranking_recode_racing.racingDistanceTextView
+import kotlinx.android.synthetic.main.activity_ranking_recode_racing.racingHandle
+import kotlinx.android.synthetic.main.activity_ranking_recode_racing.racingSpeedTextView
+import kotlinx.android.synthetic.main.activity_ranking_recode_racing.racingTimerTextView
 import kotlin.math.roundToLong
 
 class RacingActivity : BaseRunningActivity() {
@@ -55,6 +61,10 @@ class RacingActivity : BaseRunningActivity() {
 
     // 시작 포인트로 이동
     TTS.speech(getString(R.string.goToStartPoint))
+
+    racingStartButton.setOnClickListener(this)
+    racingStopButton.setOnClickListener(this)
+    racingPauseButton.setOnClickListener(this)
   }
 
   override fun onMapReady(googleMap: GoogleMap) {
@@ -76,6 +86,8 @@ class RacingActivity : BaseRunningActivity() {
     pauseNotificationTextView = racingPauseNotificationTextView
     drawerHandle = racingHandle
     drawer = racingDrawer
+    speedTextView=racingSpeedTextView
+    distanceTextView=racingDistanceTextView
     stopButton.setOnLongClickListener {
       noticePopup = ChoicePopup(this, getString(R.string.please_select),
         getString(R.string.cannot_save),
@@ -99,8 +111,8 @@ class RacingActivity : BaseRunningActivity() {
     wptList = mapRouteGPX.wptList
   }
 
-  fun onClick(view: View) {
-    when (view.id) {
+  override fun onSingleClick(v: View?) {
+    when (v!!.id) {
       R.id.racingStartButton -> {
         when (userState) {
           UserState.NORMAL -> {
@@ -133,16 +145,12 @@ class RacingActivity : BaseRunningActivity() {
             pause()
         }
       }
-      R.id.racingNotificationButton -> {
-        notificationTextView.visibility = View.GONE
-      }
     }
   }
 
+
   override fun updateLocation(curLoc: Location) {
     super.updateLocation(curLoc)
-    racingDistanceTextView.text = distance.toString()
-    racingSpeedTextView.text = speed.toString()
     when (userState) {
       UserState.NORMAL -> {
         Logg.d("NORMAL")

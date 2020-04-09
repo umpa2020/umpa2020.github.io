@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.umpa2020.tracer.R
+import com.umpa2020.tracer.extensions.show
 import com.umpa2020.tracer.login.LoginActivity
 import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.util.Logg
@@ -131,7 +132,7 @@ class SplashActivity : AppCompatActivity() {
               //권한 획득 실패
               Logg.d("reject Permission$i")
               Logg.d("reject Permission$permission")
-              Toast.makeText(this, getString(R.string.sorry), Toast.LENGTH_SHORT).show()
+              getString(R.string.sorry).show()
               finish()
             }
           }

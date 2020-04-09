@@ -3,6 +3,7 @@ package com.umpa2020.tracer.main.profile.settting
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.os.SystemClock
 import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.preference.PreferenceFragmentCompat
@@ -10,6 +11,7 @@ import androidx.preference.SwitchPreference
 import com.google.firebase.auth.FirebaseAuth
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
+import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.util.ChoicePopup
 import com.umpa2020.tracer.util.UserInfo
 
@@ -56,10 +58,18 @@ class SettingPreferenceFragment : PreferenceFragmentCompat() {
    */
   override fun onPreferenceTreeClick(preference: androidx.preference.Preference?): Boolean {
     //내 정보 눌렀을 때
-    if (preference?.key.equals("myInformation")) {
-      val intent = Intent(context, MyInformationActivity::class.java)
-      startActivity(intent)
+    val currentClickTime = SystemClock.uptimeMillis()
+    val elapsedTime = currentClickTime - Constants.mLastClickTime
+    Constants.mLastClickTime = currentClickTime
+
+    // 중복클릭 아닌 경우
+    if (elapsedTime > Constants.MIN_CLICK_INTERVAL) {
+      if (preference?.key.equals("myInformation")) {
+        val intent = Intent(context, MyInformationActivity::class.java)
+        startActivity(intent)
+      }
     }
+
 
     //로그아웃 눌렀을 때
     if (preference?.key.equals("logout")) {

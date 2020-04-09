@@ -17,7 +17,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.maps.GoogleMap
@@ -30,6 +29,8 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.NearMap
+import com.umpa2020.tracer.extensions.gpxToClass
+import com.umpa2020.tracer.extensions.prettyDistance
 import com.umpa2020.tracer.extensions.show
 import com.umpa2020.tracer.extensions.toLatLng
 import com.umpa2020.tracer.main.ranking.RankingMapDetailActivity
@@ -39,15 +40,14 @@ import com.umpa2020.tracer.map.TraceMap
 import com.umpa2020.tracer.network.FBMap
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.MyProgressBar
-import com.umpa2020.tracer.util.PrettyDistance
+import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.UserInfo
-import com.umpa2020.tracer.util.gpx.GPXConverter
 import kotlinx.android.synthetic.main.fragment_start.*
 import kotlinx.android.synthetic.main.fragment_start.view.*
 import java.io.File
 
 
-class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
+class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
   val TAG = "StartFragment"
 
   lateinit var traceMap: TraceMap
@@ -62,11 +62,9 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
   var nearMaps: ArrayList<NearMap> = arrayListOf()
   var wedgedCamera = true
   val progressBar = MyProgressBar()
-  var switch = 2
-
-
-  override fun onClick(v: View) {
-    when (v.id) {
+  var firstFlag = true
+  override fun onSingleClick(v: View?) {
+    when (v!!.id) {
       R.id.mainStartRunning -> {
         val newIntent = Intent(activity, RunningActivity::class.java)
         startActivity(newIntent)
@@ -83,17 +81,26 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
           wedgedCamera = false
         }
       }
-      R.id.mainStartBackButton -> {
+      R.id.mainStartBackButton -> { // 검색창에서 뒤로가기 버튼
         mainStartLogoTextView.visibility = View.VISIBLE
         mainStartSearchLayout.visibility = View.GONE
         // 키보드 숨기기
         (requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
           .hideSoftInputFromWindow(mainStartSearchTextView.windowToken, 0)
+
+        // EditText 초기화
+        mainStartSearchTextView.setText("")
+
       }
     }
   }
 
+
+  /**
+   *  현재 맵 보이는 범위로 루트 검색
+   */
   private fun searchThisArea() {
+    progressBar.progressBarShow()
     val bound = traceMap.mMap.projection.visibleRegion.latLngBounds
 
     val mHandler = object : Handler(Looper.getMainLooper()) {
@@ -119,7 +126,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
                   MarkerOptions()
                     .position(it.latLng)
                     .title(mapTitle[0])
-                    .snippet(PrettyDistance().convertPretty(it.distance))
+                    .snippet(it.distance.prettyDistance())
                     .icon(icon)
                 )
               )
@@ -133,32 +140,41 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
                 startActivity(intent)
               }
             }
+
+            progressBar.progressBarDismiss()
           }
           NEARMAPFALSE -> {
-            Toast.makeText(context, getString(R.string.not_search), Toast.LENGTH_LONG).show()
-            // 빈 상태
+            getString(R.string.not_search).show()
+            progressBar.progressBarDismiss()
           }
         }
-        progressBar.progressBarDismiss()
       }
     }
     FBMap().getNearMap(bound.southwest, bound.northeast, mHandler)
   }
 
+  /**
+   *  검색 창에 입력한 장소 주소로 반환 및 검색창에 설정.
+   */
   private fun search() {
     val geocoder = Geocoder(context)
     if (mainStartSearchTextView.text.isEmpty()) {
       getString(R.string.enter_address).show()
-      //Toast.makeText(context, "Please enter some address", Toast.LENGTH_SHORT).show()
       return
     }
+
     val addressList =
       geocoder.getFromLocationName(mainStartSearchTextView.text.toString(), 10)
+
+    Logg.i(addressList.size.toString())
+    for (i in 0 until addressList.size)
+      Logg.i(addressList[i].toString())
+
     // 최대 검색 결과 개수
     if (addressList.size == 0) {
-      Toast.makeText(context, getString(R.string.cannot_find), Toast.LENGTH_SHORT).show()
+      getString(R.string.cannot_find).show()
     } else {
-      mainStartSearchTextView.setText(addressList[0].getAddressLine(0))
+      // mainStartSearchTextView.setText(addressList[0].getAddressLine(0))
       traceMap.moveCamera(LatLng(addressList[0].latitude, addressList[0].longitude))
       searchThisArea()
     }
@@ -168,17 +184,22 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
       .hideSoftInputFromWindow(mainStartSearchTextView.windowToken, 0)
   }
 
-  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+  override fun onCreateView(
+    inflater: LayoutInflater,
+    container: ViewGroup?,
+    savedInstanceState: Bundle?
+  ): View? {
     Logg.d("onCreateView()")
     val view = inflater.inflate(R.layout.fragment_start, container, false)
     view.test.setOnClickListener {
       Logg.d("test 실행")
       val storage = FirebaseStorage.getInstance()
-      val routeRef = storage.reference.child("mapRoute").child("Short SanDiego route||1586002359186")
+      val routeRef =
+        storage.reference.child("mapRoute").child("Short SanDiego route||1586002359186")
       val localFile = File.createTempFile("routeGpx", "xml")
 
       routeRef.getFile(Uri.fromFile(localFile)).addOnSuccessListener {
-        val routeGPX = GPXConverter().GpxToClass(localFile.path)
+        val routeGPX = localFile.path.gpxToClass()
         val intent = Intent(context, RacingActivity::class.java)
         intent.putExtra("RouteGPX", routeGPX)
         intent.putExtra("mapTitle", "Short SanDiego route||1586002359186")
@@ -188,13 +209,17 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
       }
     }
 
-    view.mainStartSearchTextView.setOnEditorActionListener(object : TextView.OnEditorActionListener {
-      override fun onEditorAction(p0: TextView?, p1: Int, p2: KeyEvent?): Boolean {
-        Logg.i("엔터키 클릭")
-        search()
-        return true
+    // 검색 창 키보드에서 엔터키 리스너
+    view.mainStartSearchTextView.setOnEditorActionListener(
+      object : TextView.OnEditorActionListener {
+        override fun onEditorAction(p0: TextView?, p1: Int, p2: KeyEvent?): Boolean {
+
+          Logg.i("엔터키 클릭")
+          search()
+          return true
+        }
       }
-    })
+    )
 
     val smf = childFragmentManager.findFragmentById(R.id.map_viewer_start) as SupportMapFragment
     smf.getMapAsync(this)
@@ -203,11 +228,11 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
         val message = intent?.getParcelableExtra<Location>("message")
         currentLocation = message as Location
         if (wedgedCamera) traceMap.moveCamera(currentLocation!!.toLatLng())
-        if (progressBar.mprogressBar.isShowing && switch == 2) {
-          searchThisArea()
-          progressBar.progressBarDismiss()
-          switch--
+        if(firstFlag) {
+            searchThisArea()
+            firstFlag=false
         }
+
       }
     }
     return view
@@ -242,15 +267,14 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
     // 브로드 캐스트 등록 - 전역 context로 수정해야함
     LocalBroadcastManager.getInstance(this.requireContext())
       .registerReceiver(locationBroadcastReceiver, IntentFilter("custom-event-name"))
-
-    progressBar.progressBarShow(2)
   }
 
   override fun onPause() {
     super.onPause()
     UserInfo.rankingLatLng = currentLocation?.toLatLng()
     //        브로드 캐스트 해제 - 전역 context로 수정해야함
-    LocalBroadcastManager.getInstance(this.requireContext()).unregisterReceiver(locationBroadcastReceiver)
+    LocalBroadcastManager.getInstance(this.requireContext())
+      .unregisterReceiver(locationBroadcastReceiver)
   }
 
   override fun onDestroy() {

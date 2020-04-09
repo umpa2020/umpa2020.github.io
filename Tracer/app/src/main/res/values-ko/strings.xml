@@ -45,7 +45,7 @@
   <string name="recordanalysis">기록 분석</string>
   <string name="distance">거리 (km)</string>
   <string name="time">시간</string>
-  <string name="speed">속력 (km/h)</string>
+  <string name="speed_with_unit">속력 (km/h)</string>
   <string name="thumbnail">루트 썸네일</string>
   <string name="altitude_sppedchart">고도 / 속도 차트</string>
   <string name="matchstart">경기 시작</string>
@@ -160,4 +160,6 @@
   <string name="route_deviates">\n(주의)경로이탈이</string>
   <string name="resgisration">초 이상이되면 랭킹등록을 못합니다.</string>
   <string name="out_of_route">\"경로이탈 \"</string>
+  <string name="altitude">고도</string>
+  <string name="speed">속도</string>
 </resources>

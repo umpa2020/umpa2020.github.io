@@ -13,13 +13,14 @@ import com.umpa2020.tracer.main.profile.myroute.ProfileRouteActivity
 import com.umpa2020.tracer.main.profile.settting.AppSettingActivity
 import com.umpa2020.tracer.network.FBProfile
 import com.umpa2020.tracer.util.Logg
+import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.fragment_profile.view.*
 
 /**
  * A simple [Fragment] subclass.
  */
-class ProfileFragment : Fragment() {
+class ProfileFragment : Fragment(), OnSingleClickListener {
   lateinit var root: View
   var bundle = Bundle()
 
@@ -34,17 +35,10 @@ class ProfileFragment : Fragment() {
     profileNickname.text = UserInfo.nickname
 
     // 설정 버튼 누르면
-    view.appSettingButton.setOnClickListener {
-      val nextIntent = Intent(activity, AppSettingActivity::class.java)
-      startActivity(nextIntent)
-    }
+    view.appSettingButton.setOnClickListener(this)
 
     // 나의 활동 액티비티
-    view.profileRouteTextView.setOnClickListener {
-      val nextIntent = Intent(activity, ProfileRouteActivity::class.java)
-      nextIntent.putExtra("nickname", UserInfo.nickname)
-      startActivity(nextIntent)
-    }
+    view.profileRouteTextView.setOnClickListener(this)
 
     /*val recordTextView = view.findViewById<TextView>(R.id.profileRecordTextView)
     recordTextView.setOnClickListener {
@@ -53,6 +47,21 @@ class ProfileFragment : Fragment() {
     }*/
 
     return view
+  }
+
+  override fun onSingleClick(v: View?) {
+    when(v!!.id){
+      R.id.appSettingButton->{  // 설정 버튼 누르면
+        val nextIntent = Intent(activity, AppSettingActivity::class.java)
+        startActivity(nextIntent)
+      }
+
+      R.id.profileRouteTextView->{ // 나의 활동 액티비티
+        val nextIntent = Intent(activity, ProfileRouteActivity::class.java)
+        nextIntent.putExtra("nickname", UserInfo.nickname)
+        startActivity(nextIntent)
+      }
+    }
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -86,15 +95,4 @@ class ProfileFragment : Fragment() {
     super.onStop()
   }
 
-  //  fun onClick(view: View) {
-//    when (view.id) {
-//      R.id.appSettingButton -> {
-//
-//      }
-//      R.id.profileRouteTextView -> {
-//        val nextIntent = Intent(activity, ProfileRouteActivity::class.java)
-//        startActivity(nextIntent)
-//      }
-//    }
-//  }
 }
