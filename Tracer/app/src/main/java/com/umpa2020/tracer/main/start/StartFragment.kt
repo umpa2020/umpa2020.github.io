@@ -36,8 +36,8 @@ import com.umpa2020.tracer.extensions.toLatLng
 import com.umpa2020.tracer.main.ranking.RankingMapDetailActivity
 import com.umpa2020.tracer.main.start.racing.RacingActivity
 import com.umpa2020.tracer.main.start.running.RunningActivity
-import com.umpa2020.tracer.network.FBMap
 import com.umpa2020.tracer.map.TraceMap
+import com.umpa2020.tracer.network.FBMap
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.PrettyDistance
 import com.umpa2020.tracer.util.ProgressBar
@@ -137,6 +137,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
             progressbar.dismiss()
           }
           NEARMAPFALSE -> {
+            Toast.makeText(context,"검색결과가 없습니다",Toast.LENGTH_LONG).show()
             // 빈 상태
             progressbar.dismiss()
           }
