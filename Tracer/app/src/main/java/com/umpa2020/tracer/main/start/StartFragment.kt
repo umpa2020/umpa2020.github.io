@@ -32,14 +32,18 @@ import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.NearMap
+import com.umpa2020.tracer.extensions.gpxToClass
+import com.umpa2020.tracer.extensions.prettyDistance
 import com.umpa2020.tracer.extensions.toLatLng
 import com.umpa2020.tracer.main.ranking.RankingMapDetailActivity
 import com.umpa2020.tracer.main.start.racing.RacingActivity
 import com.umpa2020.tracer.main.start.running.RunningActivity
 import com.umpa2020.tracer.map.TraceMap
 import com.umpa2020.tracer.network.FBMap
-import com.umpa2020.tracer.util.*
-import com.umpa2020.tracer.util.gpx.GPXConverter
+import com.umpa2020.tracer.util.Logg
+import com.umpa2020.tracer.util.OnSingleClickListener
+import com.umpa2020.tracer.util.ProgressBar
+import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.fragment_start.*
 import kotlinx.android.synthetic.main.fragment_start.view.*
 import java.io.File
@@ -121,7 +125,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
                   MarkerOptions()
                     .position(it.latLng)
                     .title(mapTitle[0])
-                    .snippet(PrettyDistance().convertPretty(it.distance))
+                    .snippet(it.distance.prettyDistance())
                     .icon(icon)
                 )
               )
@@ -192,7 +196,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
       val localFile = File.createTempFile("routeGpx", "xml")
 
       routeRef.getFile(Uri.fromFile(localFile)).addOnSuccessListener {
-        val routeGPX = GPXConverter().GpxToClass(localFile.path)
+        val routeGPX = localFile.path.gpxToClass()
         val intent = Intent(context, RacingActivity::class.java)
         intent.putExtra("RouteGPX", routeGPX)
         intent.putExtra("mapTitle", "Short SanDiego route||1586002359186")

@@ -45,7 +45,9 @@
   <string name="recordanalysis">기록 분석</string>
   <string name="distance">거리 (km)</string>
   <string name="time">시간</string>
-  <string name="speed">속력 (km/h)</string>
+  <string name="speed_with_unit">속력 (km/h)</string>
+
+  <string name="speed">속도</string>
   <string name="thumbnail">루트 썸네일</string>
   <string name="altitude_sppedchart">고도 / 속도 차트</string>
   <string name="matchstart">경기 시작</string>
@@ -92,7 +94,6 @@
   <string name="please_select">선택해주세요.</string>
   <string name="set_default_image">기본 이미지로 설정하시겠습니까?</string>
   <string name="gps_activation">GPS 활성화</string>
-
   <!-- firebase string-->
   <string name="google_storage_bucket_string">gs://tracer-release.appspot.com/</string>
   <string name="serachHint">장소나 주소를 검색해주세요</string>
@@ -119,6 +120,7 @@
   <string name="goToStartPoint">시작 위치로 이동하세요</string>
   <string name="startRacing">레이싱을 시작합니다</string>
   <string name="finishRacing">레이싱을 종료합니다</string>
+  <string name="altitude" >고도</string>
 
 
 </resources>

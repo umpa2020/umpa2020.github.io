@@ -18,6 +18,7 @@ import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.constant.UserState
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.RouteGPX
+import com.umpa2020.tracer.extensions.makingIcon
 import com.umpa2020.tracer.main.start.BaseRunningActivity
 import com.umpa2020.tracer.util.*
 import hollowsoft.slidingdrawer.OnDrawerCloseListener
@@ -55,6 +56,8 @@ class RunningActivity : BaseRunningActivity(),OnSingleClickListener, OnDrawerScr
     pauseNotificationTextView = runningPauseNotificationTextView
     drawerHandle = runningHandle
     drawer = runningDrawer
+    speedTextView=runningSpeedTextView
+    distanceTextView=runningDistanceTextView
     /**
     Stop 팝업 띄우기
      */
@@ -90,7 +93,7 @@ class RunningActivity : BaseRunningActivity(),OnSingleClickListener, OnDrawerScr
      .zIndex(3.4f)
      .position(currentLatLng)
      .title("Start")
-     .icon( Wow.makingIcon(R.drawable.ic_racing_startpoint,this)))
+     .icon( R.drawable.ic_racing_startpoint.makingIcon()))
     TTS.speech(getString(R.string.startRunning))
 
     traceMap.mMap.setOnCameraMoveListener {
@@ -138,7 +141,6 @@ class RunningActivity : BaseRunningActivity(),OnSingleClickListener, OnDrawerScr
 
   override fun updateLocation(curLoc: Location) {
     super.updateLocation(curLoc)
-    runningDistanceTextView.text = distance.toString()
     //WPINTERVAL마다 waypoint 추가
     if (userState == UserState.RUNNING) {
       if (distance.toInt() / Constants.WPINTERVAL >= markerCount) {

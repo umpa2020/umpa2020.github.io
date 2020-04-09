@@ -193,7 +193,7 @@
             style="@style/ListDetail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/speed" />
+            android:text="@string/speed_with_unit" />
 
           <TextView
             android:id="@+id/rankingDetailSpeed"

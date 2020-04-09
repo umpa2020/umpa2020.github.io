@@ -14,8 +14,8 @@ import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.extensions.MM_SS
 import com.umpa2020.tracer.extensions.format
+import com.umpa2020.tracer.extensions.prettyDistance
 import com.umpa2020.tracer.util.Logg
-import com.umpa2020.tracer.util.PrettyDistance
 import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.fragment_profile.view.*
@@ -74,7 +74,7 @@ class FBProfile {
                 }
 
                 // 총 거리와 시간을 띄워줌
-                view.profileFragmentTotalDistance.text = PrettyDistance().convertPretty(sumDistance)
+                view.profileFragmentTotalDistance.text = sumDistance.prettyDistance()
 
                 view.profileFragmentTotalTime.text = sumTime.toLong().format(MM_SS)
                 progressbar.dismiss()

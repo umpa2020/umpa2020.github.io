@@ -45,7 +45,7 @@
   <string name="recordanalysis">Record Analysis</string>
   <string name="distance">Distance (km)</string>
   <string name="time">Time</string>
-  <string name="speed">Speed (km/h)</string>
+  <string name="speed_with_unit">Speed (km/h)</string>
   <string name="thumbnail">Route Thumbnail</string>
   <string name="altitude_sppedchart">Altitude / Speed Chart</string>
   <string name="matchstart">Match Start</string>
@@ -119,4 +119,7 @@
   <string name="goToStartPoint">Go to the starting point</string>
   <string name="startRacing">"Let's start racing"</string>
   <string name="finishRacing">Finish the racing</string>
+  <string name="altitude" >altitude</string>
+
+  <string name="speed">speed</string>
 </resources>

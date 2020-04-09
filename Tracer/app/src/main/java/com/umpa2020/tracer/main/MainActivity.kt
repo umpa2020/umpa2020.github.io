@@ -3,6 +3,7 @@ package com.umpa2020.tracer.main
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.os.SystemClock
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -22,22 +23,28 @@ class MainActivity : AppCompatActivity() {
   private var doubleBackToExitPressedOnce1 = false
 
   var selectedFragment: Fragment? = null//선택된 프래그먼트 저장하는 변수
+
   //bottomNavigation 아이템 선택 리스너
   private val navListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
+    val currentClickTime = SystemClock.uptimeMillis()
+    val elapsedTime = currentClickTime - Constants.mLastClickTime
+    Constants.mLastClickTime = currentClickTime
 
-    when (item.itemId) { //선택된 메뉴에 따라서 선택된 프래그 먼트 설정
-      R.id.navigation_start -> selectedFragment = StartFragment()
-      R.id.navigation_profile -> selectedFragment = ProfileFragment()
-      R.id.navigation_ranking -> selectedFragment = RankingFragment()
+    // 중복클릭 아닌 경우
+    if (elapsedTime > Constants.MIN_CLICK_INTERVAL) {
+      when (item.itemId) { //선택된 메뉴에 따라서 선택된 프래그 먼트 설정
+        R.id.navigation_start -> selectedFragment = StartFragment()
+        R.id.navigation_profile -> selectedFragment = ProfileFragment()
+        R.id.navigation_ranking -> selectedFragment = RankingFragment()
+      }
+
+      Logg.i("프래그먼트 개수 : " + supportFragmentManager.backStackEntryCount.toString())
+      //동적으로 프래그먼트 교체
+      supportFragmentManager.beginTransaction().replace(
+        R.id.container,
+        selectedFragment!!
+      ).commit()
     }
-
-    Logg.i("프래그먼트 개수 : " + supportFragmentManager.backStackEntryCount.toString())
-    //동적으로 프래그먼트 교체
-    supportFragmentManager.beginTransaction().replace(
-      R.id.container,
-      selectedFragment!!
-    ).commit()
-
     true
   }
 
@@ -85,7 +92,7 @@ class MainActivity : AppCompatActivity() {
     Logg.d(selectedFragment.toString())
     Logg.d(selectedFragment!!.id.toString())
 
-    if (selectedFragment!!.id ==  Constants.PROFILE_FRAGMENT_ID) { //  ProfileFragment id = 2131296382
+    if (selectedFragment!!.id == Constants.PROFILE_FRAGMENT_ID) { //  ProfileFragment id = 2131296382
       Logg.d(selectedFragment!!.id.toString())
       Logg.i("누구냐!")
       supportFragmentManager.beginTransaction().detach(selectedFragment!!).attach(selectedFragment!!).commit()

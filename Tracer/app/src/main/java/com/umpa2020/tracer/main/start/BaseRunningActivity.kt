@@ -16,23 +16,25 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.SphericalUtil
-import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.constant.UserState
+import com.umpa2020.tracer.extensions.makingIcon
+import com.umpa2020.tracer.extensions.prettyDistance
+import com.umpa2020.tracer.extensions.prettySpeed
 import com.umpa2020.tracer.extensions.toLatLng
 import com.umpa2020.tracer.map.TraceMap
 import com.umpa2020.tracer.util.ChoicePopup
 import com.umpa2020.tracer.util.LocationBroadcastReceiver
 import com.umpa2020.tracer.util.Logg
-import com.umpa2020.tracer.util.Wow
 import hollowsoft.slidingdrawer.OnDrawerCloseListener
 import hollowsoft.slidingdrawer.OnDrawerOpenListener
 import hollowsoft.slidingdrawer.OnDrawerScrollListener
 import hollowsoft.slidingdrawer.SlidingDrawer
 import io.jenetics.jpx.WayPoint
 import kotlinx.android.synthetic.main.activity_ranking_recode_racing.*
+import kotlinx.android.synthetic.main.activity_running.*
 
 
 open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDrawerScrollListener, OnDrawerOpenListener,
@@ -57,12 +59,14 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
   lateinit var pauseButton: Button
   lateinit var notificationTextView: TextView
   lateinit var pauseNotificationTextView: TextView
+  lateinit var speedTextView: TextView
+  lateinit var distanceTextView: TextView
   lateinit var drawerHandle: Button
   lateinit var drawer: SlidingDrawer
   private var wedgedCamera = true
   lateinit var locationBroadcastReceiver: LocationBroadcastReceiver
-  var unPassedIcon=Wow.makingIcon(R.drawable.ic_checkpoint_gray, App.instance.context())
-  var passedIcon=Wow.makingIcon(R.drawable.ic_checkpoint_red, App.instance.context())
+  var unPassedIcon=R.drawable.ic_checkpoint_gray.makingIcon()
+  var passedIcon=R.drawable.ic_checkpoint_red.makingIcon()
 
   open fun init() {
     drawer.setOnDrawerScrollListener(this)
@@ -85,6 +89,8 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
   }
 
   open fun updateLocation(curLoc: Location) {
+    distanceTextView.text=distance.prettyDistance()
+    speedTextView.text=speed.prettySpeed()
     if (setLocation(curLoc)) {
       when (userState) {
         UserState.NORMAL -> {
