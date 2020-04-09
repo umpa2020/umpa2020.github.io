@@ -78,7 +78,7 @@
             style="@style/ListDetail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="거리 (km)" />
+            android:text="@string/Distance_km" />
 
           <TextView
             android:id="@+id/runningDistanceTextView"
@@ -103,7 +103,7 @@
             style="@style/ListDetail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="시간" />
+            android:text="@string/Time" />
 
           <Chronometer
             android:id="@+id/runningTimerTextView"
@@ -126,7 +126,7 @@
             style="@style/ListDetail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="속력 (km/h)" />
+            android:text="@string/speed_km" />
 
           <TextView
             android:id="@+id/runningSpeedTextView"

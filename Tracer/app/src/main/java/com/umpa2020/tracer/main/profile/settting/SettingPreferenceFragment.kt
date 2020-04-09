@@ -86,7 +86,7 @@ class SettingPreferenceFragment : PreferenceFragmentCompat() {
   // TODO : 로그아웃하고 새로 로그인할 때 구글 계정 선택하는 팝업을 띄우고 싶은데 해결 못함. LoginActivity에서 건들여야 할듯
   private fun logOut() {
     // Shared의 정보 삭제
-    noticePopup = ChoicePopup(requireContext(), "선택해주세요.", "로그아웃하시겠습니까?", "예", "아니오",
+    noticePopup = ChoicePopup(requireContext(), getString(R.string.please_select), getString(R.string.like_logout), getString(R.string.yes), getString(R.string.no),
       View.OnClickListener {
         // 예
         UserInfo.autoLoginKey = ""

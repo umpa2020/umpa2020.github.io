@@ -41,7 +41,7 @@ class RunningActivity : BaseRunningActivity(), OnDrawerScrollListener, OnDrawerO
 
     // TODO : 여기 밑에 있는 함수가 init()가 실행되야 가능한데 아애 init()에 넣어두는건?
     // TODO : 그래서 RankingRecodeRacingActivity init()에서는 그렇게 해봄
-    notice("시작버튼을 누르면 러닝이 시작됩니다")
+    notice(getString(R.string.start_running))
 
     TTS.speech(getString(R.string.pushthestartbutton))
   }
@@ -63,9 +63,9 @@ class RunningActivity : BaseRunningActivity(), OnDrawerScrollListener, OnDrawerO
      */
     stopButton.setOnLongClickListener {
       if (distance < Constants.MINIMUM_STOPPING_DISTANCE) {
-        noticePopup = ChoicePopup(this, "선택해주세요.",
-          "거리가 200m 미만일때\n정지하시면 저장이 불가능합니다. \n\n정지하시겠습니까?",
-          "예", "아니오",
+        noticePopup = ChoicePopup(this, getString(R.string.please_select),
+          getString(R.string.twohundred_save),
+          getString(R.string.yes), getString(R.string.no),
           View.OnClickListener {
             noticePopup.dismiss()
             // yes 버튼 눌렀을 때 해당 액티비티 재시작.
@@ -93,7 +93,7 @@ class RunningActivity : BaseRunningActivity(), OnDrawerScrollListener, OnDrawerO
       R.id.runningPauseButton -> {
         if (privacy == Privacy.RACING) {
           showPausePopup(
-            "일시정지를 하게 되면\n경쟁 모드 업로드가 불가합니다.\n\n일시정지를 하시겠습니까?"
+            getString(R.string.pause_mode)
           )
         } else {
           if (userState == UserState.PAUSED)

@@ -63,10 +63,10 @@ class RankingFragment : Fragment() {
       if (UserInfo.rankingLatLng != null) {
         //실행순 버튼에 체크가 되어 있을 경우
         if (view.tuneRadioBtnExecute.isChecked) {
-          view.rankingfiltermode.text = "실행수"
+          view.rankingfiltermode.text = getString(R.string.execute)
           FBRanking().getFilterRange(view, UserInfo.rankingLatLng!!, tuneDistance, "execute")
         } else {
-          view.rankingfiltermode.text = "좋아요"
+          view.rankingfiltermode.text = getString(R.string.likes)
           FBRanking().getFilterRange(view, UserInfo.rankingLatLng!!, tuneDistance, "likes")
         }
         disappearAnimation()
