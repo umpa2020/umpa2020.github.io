@@ -9,10 +9,12 @@ import androidx.core.content.ContextCompat
 import com.jakewharton.rxbinding2.widget.color
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.util.Logg
+import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.activity_gender_select.*
+import kotlinx.android.synthetic.main.signup_toolbar.*
 import kotlinx.android.synthetic.main.signup_toolbar.view.*
 
-class GenderSelectActivity : AppCompatActivity() {
+class GenderSelectActivity : AppCompatActivity(), OnSingleClickListener {
   val WSY = "WSY"
 
   var isMan = false
@@ -23,12 +25,17 @@ class GenderSelectActivity : AppCompatActivity() {
     requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     setContentView(R.layout.activity_gender_select)
 
+    backImageBtn.setOnClickListener(this)
+    nextButton.setOnClickListener(this)
+    man.setOnClickListener(this)
+    woman.setOnClickListener(this)
+
     val titleText = app_toolbar.titleText
     titleText.text = getString(R.string.txtInputInfoGender)
   }
 
-  fun onClick(v: View) {
-    when (v.id) {
+  override fun onSingleClick(v: View?) {
+    when (v!!.id) {
       R.id.backImageBtn -> {
         finish()
       }
@@ -46,8 +53,8 @@ class GenderSelectActivity : AppCompatActivity() {
         }
       }
       R.id.man -> {
-        manTextView.setTextColor(resources.getColor(R.color.red))
-        womanTextView.setTextColor(resources.getColor(R.color.rankBackgroudGray))
+        manTextView.setTextColor(resources.getColor(R.color.red,null))
+        womanTextView.setTextColor(resources.getColor(R.color.rankBackgroudGray,null))
         if (manCheck.visibility == View.INVISIBLE && manUnderline.visibility == View.INVISIBLE) {
           manCheck.visibility = View.VISIBLE
           manUnderline.visibility = View.VISIBLE

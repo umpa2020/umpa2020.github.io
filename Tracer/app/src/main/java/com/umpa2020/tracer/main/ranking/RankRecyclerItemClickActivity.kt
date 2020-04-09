@@ -22,7 +22,7 @@ import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.ProgressBar
 import kotlinx.android.synthetic.main.activity_rank_recycler_item_click.*
 
-class RankRecyclerItemClickActivity : AppCompatActivity(),OnSingleClickListener{
+class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener{
   var arrRankingData: ArrayList<RankingData> = arrayListOf()
   var rankingData = RankingData()
   val GETLIKE = 51

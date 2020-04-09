@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.umpa2020.tracer.R
@@ -17,6 +18,7 @@ import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.main.ranking.RankRecyclerViewAdapterTopPlayer
 import com.umpa2020.tracer.network.FBRacing
 import com.umpa2020.tracer.util.Logg
+import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.PrettyDistance
 import com.umpa2020.tracer.util.ProgressBar
 import kotlinx.android.synthetic.main.activity_racing_finish.*
@@ -28,7 +30,7 @@ import java.util.*
 
  */
 
-class RacingFinishActivity : AppCompatActivity() {
+class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
   val GETMAKERDATA = 100
   val GETRACING = 101
 
@@ -84,10 +86,16 @@ class RacingFinishActivity : AppCompatActivity() {
 
     FBRacing().setRankingData(result, racerData, mHandler)
 
-    OKButton.setOnClickListener {
-      val intent = Intent(this, MainActivity::class.java)
-      intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-      startActivity(intent)
+    OKButton.setOnClickListener(this)
+  }
+
+  override fun onSingleClick(v: View?) {
+    when(v!!.id){
+      R.id.OKButton->{
+        val intent = Intent(this, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+        startActivity(intent)
+      }
     }
   }
 
