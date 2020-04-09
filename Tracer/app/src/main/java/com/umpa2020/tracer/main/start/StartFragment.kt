@@ -136,6 +136,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
           }
           NEARMAPFALSE -> {
             progressBar.progressBarDismiss()
+            Toast.makeText(context,"검색결과가 없습니다",Toast.LENGTH_LONG).show()
             // 빈 상태
           }
         }

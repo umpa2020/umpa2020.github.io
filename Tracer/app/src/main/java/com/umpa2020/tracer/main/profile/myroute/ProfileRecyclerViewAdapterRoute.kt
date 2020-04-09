@@ -13,7 +13,6 @@ import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.extensions.MM_SS
 import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.main.ranking.RankRecyclerItemClickActivity
-import com.umpa2020.tracer.network.FBLikes
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.PrettyDistance
 import kotlinx.android.synthetic.main.recycler_profilefragment_route_grid_image.view.*
