@@ -251,7 +251,7 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:background="@drawable/button_empty_background"
-          android:text="전체 삭제" />
+          android:text="기본 값" />
 
         <View
           android:layout_width="0dp"

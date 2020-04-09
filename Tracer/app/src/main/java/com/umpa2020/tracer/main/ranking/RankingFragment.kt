@@ -48,12 +48,12 @@ class RankingFragment : Fragment() {
       disappearAnimation()
     }
 
-    //전체 삭제 누를 때
+    //기본 값 누를 때
     view.allDeleteButton.setOnClickListener {
-      view.tuneRadioBtnExecute.isChecked = false
+      view.tuneRadioBtnExecute.isChecked = true
       view.tuneRadioBtnLike.isChecked = false
-      view.progressTextView.text = "0"
-      view.seekBar.progress = 0
+      view.progressTextView.text = "100+"
+      view.seekBar.progress = MAX_DISTANCE
     }
 
     //적용 버튼 누를때
