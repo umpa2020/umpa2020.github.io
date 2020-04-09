@@ -102,7 +102,6 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
           STRAT_FRAGMENT_NEARMAP -> {
 
             nearMaps = msg.obj as ArrayList<NearMap>
-            Logg.d("ssmm11 nearMaps = $nearMaps")
             val icon =
               BitmapDescriptorFactory
                 .defaultMarker(BitmapDescriptorFactory.HUE_ROSE)

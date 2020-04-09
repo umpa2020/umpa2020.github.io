@@ -54,7 +54,6 @@ class FBLikes {
           .addOnSuccessListener { result ->
             for (document in result) {
               val buffer = document.get("likes")
-              Logg.d("ssmm11 buffer = $buffer")
               msg.arg1 = Integer.parseInt(buffer.toString())
               mHandler.sendMessage(msg)
             }
