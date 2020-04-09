@@ -13,6 +13,7 @@ import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.extensions.MM_SS
 import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.main.ranking.RankRecyclerItemClickActivity
+import com.umpa2020.tracer.network.FBLikes
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.PrettyDistance
 import kotlinx.android.synthetic.main.recycler_profilefragment_route_grid_image.view.*
@@ -93,6 +94,7 @@ class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) : Recycler
     var time = view.profileFragmentTime
     var likes = view.profileFragmentLike
     var excutes = view.profileFragmentExecutes
+    var heart = view.profileHeartImage
   }
 }
 

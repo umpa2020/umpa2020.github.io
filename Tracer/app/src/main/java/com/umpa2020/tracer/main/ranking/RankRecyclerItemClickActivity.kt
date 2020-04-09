@@ -55,6 +55,7 @@ class RankRecyclerItemClickActivity : AppCompatActivity() {
             likes = msg.arg1
             progressbar.dismiss()
 
+            rankRecyclerHeartCount.text = likes.toString()
             //adpater 추가
             if (getlike) {
               rankRecyclerHeart.setImageResource(R.drawable.ic_favorite_red_24dp)
@@ -68,7 +69,7 @@ class RankRecyclerItemClickActivity : AppCompatActivity() {
       }
     }
 
-    // 위의 핸들로 코드 사용
+    // 위의 핸들러 코드 사용
     FBLikes().getLike(mapTitle, mHandler)
 
     // 분기에 따라서 OnclickListener를 나눈다.
@@ -78,11 +79,13 @@ class RankRecyclerItemClickActivity : AppCompatActivity() {
         rankRecyclerHeart.setImageResource(R.drawable.ic_favorite_red_24dp)
         rankRecyclerHeartSwitch.text = "on"
         likes++
+        rankRecyclerHeartCount.text = likes.toString()
       } else if (rankRecyclerHeartSwitch.text == "on") {
         FBLikes().setminusLikes(mapTitle, likes)
         rankRecyclerHeart.setImageResource(R.drawable.ic_favorite_border_black_24dp)
         rankRecyclerHeartSwitch.text = "off"
         likes--
+        rankRecyclerHeartCount.text = likes.toString()
       }
     }
 

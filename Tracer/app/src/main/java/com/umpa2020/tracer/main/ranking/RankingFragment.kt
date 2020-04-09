@@ -25,6 +25,7 @@ import kotlinx.android.synthetic.main.fragment_ranking.view.*
 class RankingFragment : Fragment() {
   lateinit var location: LatLng
   var distance = MAX_DISTANCE
+  lateinit var root: View
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -32,10 +33,7 @@ class RankingFragment : Fragment() {
     // Inflate the layout for this fragment
     val view: View = inflater.inflate(R.layout.fragment_ranking, container, false)
 
-    if (UserInfo.rankingLatLng != null)  {
-      FBRanking().getExcuteDESCENDING(requireContext(), view, UserInfo.rankingLatLng!!, "execute")
-    }
-
+    root = view
     //필터 버튼 누르면 레이아웃 보임
     view.rankingToolBarTuneButton.setOnClickListener {
       if(view.tuneLinearLayout.visibility == GONE){
@@ -89,7 +87,13 @@ class RankingFragment : Fragment() {
       override fun onStopTrackingTouch(seekBar: SeekBar) {}
     })
     return view
+  }
 
+  override fun onResume() {
+    if (UserInfo.rankingLatLng != null)  {
+      FBRanking().getExcuteDESCENDING(requireContext(), root, UserInfo.rankingLatLng!!, "execute")
+    }
+    super.onResume()
   }
 
   /**
