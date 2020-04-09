@@ -244,7 +244,8 @@
             android:layout_weight="1"
             android:checked="true"
             android:fontFamily="@font/notosansmedium"
-            android:text="@string/competition" />
+            android:text="@string/competition"
+            android:textSize="12sp"/>
 
           <RadioButton
             android:id="@+id/publicRadio"
@@ -252,7 +253,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:fontFamily="@font/notosansmedium"
-            android:text="@string/public_" />
+            android:text="@string/public_"
+            android:textSize="12sp"/>
 
           <RadioButton
             android:id="@+id/privateRadio"
@@ -260,7 +262,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:fontFamily="@font/notosansmedium"
-            android:text="@string/private_" />
+            android:text="@string/private_"
+            android:textSize="12sp"/>
         </RadioGroup>
       </LinearLayout>
     </RelativeLayout>

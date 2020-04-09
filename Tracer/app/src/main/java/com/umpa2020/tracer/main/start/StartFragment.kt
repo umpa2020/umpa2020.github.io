@@ -1,6 +1,5 @@
 package com.umpa2020.tracer.main.start
 
-import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -29,18 +28,17 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.storage.FirebaseStorage
-import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.NearMap
 import com.umpa2020.tracer.extensions.toLatLng
 import com.umpa2020.tracer.main.ranking.RankingMapDetailActivity
 import com.umpa2020.tracer.main.start.racing.RacingActivity
 import com.umpa2020.tracer.main.start.running.RunningActivity
-import com.umpa2020.tracer.network.FBMap
 import com.umpa2020.tracer.map.TraceMap
+import com.umpa2020.tracer.network.FBMap
 import com.umpa2020.tracer.util.Logg
+import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.PrettyDistance
-import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
 import com.umpa2020.tracer.util.gpx.GPXConverter
 import kotlinx.android.synthetic.main.fragment_start.*
@@ -52,7 +50,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
   val TAG = "StartFragment"
 
   lateinit var traceMap: TraceMap
-  var currentLocation: Location?=null
+  var currentLocation: Location? = null
 
   lateinit var locationBroadcastReceiver: BroadcastReceiver
   var routeMarkers = mutableListOf<Marker>()
@@ -62,7 +60,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
   val NEARMAPFALSE = 41
   var nearMaps: ArrayList<NearMap> = arrayListOf()
   var wedgedCamera = true
-  val progressbar = ProgressBar(App.instance.currentActivity() as Activity)
+  val progressBar = MyProgressBar()
 
 
   override fun onClick(v: View) {
@@ -102,7 +100,6 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
           STRAT_FRAGMENT_NEARMAP -> {
 
             nearMaps = msg.obj as ArrayList<NearMap>
-            Logg.d("ssmm11 nearMaps = $nearMaps")
             val icon =
               BitmapDescriptorFactory
                 .defaultMarker(BitmapDescriptorFactory.HUE_ROSE)
@@ -134,11 +131,13 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
               }
             }
             mainStartSearchAreaButton.visibility = View.GONE
-            progressbar.dismiss()
+            progressBar.progressBarDismiss()
+
           }
           NEARMAPFALSE -> {
+            progressBar.progressBarDismiss()
+            Toast.makeText(context,"검색결과가 없습니다",Toast.LENGTH_LONG).show()
             // 빈 상태
-            progressbar.dismiss()
           }
         }
       }
@@ -203,9 +202,9 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
         val message = intent?.getParcelableExtra<Location>("message")
         currentLocation = message as Location
         if (wedgedCamera) traceMap.moveCamera(currentLocation!!.toLatLng())
-        if (progressbar.isShowing) {
+        if (progressBar.mprogressBar.isShowing) {
           searchThisArea()
-          progressbar.dismiss()
+          progressBar.progressBarDismiss()
         }
       }
     }
@@ -242,7 +241,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
     LocalBroadcastManager.getInstance(this.requireContext())
       .registerReceiver(locationBroadcastReceiver, IntentFilter("custom-event-name"))
 
-    progressbar.show()
+    progressBar.progressBarShow(2)
   }
 
   override fun onPause() {

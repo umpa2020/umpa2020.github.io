@@ -55,6 +55,7 @@ class RankRecyclerItemClickActivity : AppCompatActivity() {
             likes = msg.arg1
             progressbar.dismiss()
 
+            rankRecyclerHeartCount.text = likes.toString()
             //adpater 추가
             if (getlike) {
               rankRecyclerHeart.setImageResource(R.drawable.ic_favorite_red_24dp)
@@ -68,7 +69,7 @@ class RankRecyclerItemClickActivity : AppCompatActivity() {
       }
     }
 
-    // 위의 핸들로 코드 사용
+    // 위의 핸들러 코드 사용
     FBLikes().getLike(mapTitle, mHandler)
 
     // 분기에 따라서 OnclickListener를 나눈다.
@@ -78,11 +79,13 @@ class RankRecyclerItemClickActivity : AppCompatActivity() {
         rankRecyclerHeart.setImageResource(R.drawable.ic_favorite_red_24dp)
         rankRecyclerHeartSwitch.text = "on"
         likes++
+        rankRecyclerHeartCount.text = likes.toString()
       } else if (rankRecyclerHeartSwitch.text == "on") {
         FBLikes().setminusLikes(mapTitle, likes)
         rankRecyclerHeart.setImageResource(R.drawable.ic_favorite_border_black_24dp)
         rankRecyclerHeartSwitch.text = "off"
         likes--
+        rankRecyclerHeartCount.text = likes.toString()
       }
     }
 
@@ -91,11 +94,13 @@ class RankRecyclerItemClickActivity : AppCompatActivity() {
 
     // 베스트 타임이 랭킹 가지고 있는 것 중에서 이것이 베스트 타임인가를 나타내주는 1,0 값입니다.
     // 그래서 한 사용자의 베스트 타임만 가져오고 또 그것들 중에서 오름차순해서 순위 나타냄
+    Logg.d("ssmm11 maptitle = $mapTitle")
     db.collection("rankingMap").document(mapTitle).collection("ranking")
       .whereEqualTo("bestTime", 1)
       .orderBy("challengerTime", Query.Direction.ASCENDING)
       .get()
       .addOnSuccessListener { result ->
+        Logg.d("ssmm11 result is empty? = ${result.isEmpty}")
         for (document in result) {
           rankingData = document.toObject(RankingData::class.java)
           arrRankingData.add(rankingData)
@@ -107,6 +112,7 @@ class RankRecyclerItemClickActivity : AppCompatActivity() {
         rankRecyclerItemClickRecyclerView.adapter = RankRecyclerViewAdapterTopPlayer(arrRankingData, mapTitle)
       }
       .addOnFailureListener { exception ->
+        Logg.d("ssmm11 exception = ${exception.toString()}")
       }
 
     db.collection("mapInfo").whereEqualTo("mapTitle", mapTitle)
