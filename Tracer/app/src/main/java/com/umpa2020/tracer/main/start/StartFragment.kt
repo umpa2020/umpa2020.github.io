@@ -8,7 +8,10 @@ import android.content.IntentFilter
 import android.location.Geocoder
 import android.location.Location
 import android.net.Uri
-import android.os.*
+import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.os.Message
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -28,9 +31,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
-import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.dataClass.NearMap
-import com.umpa2020.tracer.extensions.single
 import com.umpa2020.tracer.extensions.toLatLng
 import com.umpa2020.tracer.main.ranking.RankingMapDetailActivity
 import com.umpa2020.tracer.main.start.racing.RacingActivity
@@ -44,7 +45,7 @@ import kotlinx.android.synthetic.main.fragment_start.view.*
 import java.io.File
 
 
-class StartFragment : Fragment(), OnMapReadyCallback {
+class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
   val TAG = "StartFragment"
 
   lateinit var traceMap: TraceMap
@@ -59,44 +60,38 @@ class StartFragment : Fragment(), OnMapReadyCallback {
   var nearMaps: ArrayList<NearMap> = arrayListOf()
   var wedgedCamera = true
   val progressbar = ProgressBar(App.instance.currentActivity() as Activity)
+  override fun onSingleClick(v: View?) {
+    when (v!!.id) {
+      R.id.mainStartRunning -> {
+        val newIntent = Intent(activity, RunningActivity::class.java)
+        startActivity(newIntent)
+      }
+      R.id.mainStartSearchAreaButton -> {
+        searchThisArea()
+      }
+      R.id.mainStartSearchButton -> {
+        if (mainStartLogoTextView.visibility == View.VISIBLE) {
+          mainStartLogoTextView.visibility = View.GONE
+          mainStartSearchLayout.visibility = View.VISIBLE
+        } else {
+          search()
+          wedgedCamera = false
+        }
+      }
+      R.id.mainStartBackButton -> { // 검색창에서 뒤로가기 버튼
+        mainStartLogoTextView.visibility = View.VISIBLE
+        mainStartSearchLayout.visibility = View.GONE
+        // 키보드 숨기기
+        (requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
+          .hideSoftInputFromWindow(mainStartSearchTextView.windowToken, 0)
 
-  fun onClick(v: View?) {
-    if (v!!.single()) {
-      when (v!!.id) {
-        R.id.mainStartRunning -> {
-          val newIntent = Intent(activity, RunningActivity::class.java)
-          startActivity(newIntent)
-        }
-        R.id.mainStartSearchAreaButton -> {
-          searchThisArea()
-        }
-        R.id.mainStartSearchButton -> {
-          if (mainStartLogoTextView.visibility == View.VISIBLE) {
-            mainStartLogoTextView.visibility = View.GONE
-            mainStartSearchLayout.visibility = View.VISIBLE
-          } else {
-            search()
-            wedgedCamera = false
-          }
-        }
-        R.id.mainStartBackButton -> { // 검색창에서 뒤로가기 버튼
-          mainStartLogoTextView.visibility = View.VISIBLE
-          mainStartSearchLayout.visibility = View.GONE
-          // 키보드 숨기기
-          (requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
-            .hideSoftInputFromWindow(mainStartSearchTextView.windowToken, 0)
+        // EditText 초기화
+        mainStartSearchTextView.setText("")
 
-          // EditText 초기화
-          mainStartSearchTextView.setText("")
-
-        }
       }
     }
   }
 
-//  override fun onClick(v: View) {
-//
-//  }
 
   /**
    *  현재 맵 보이는 범위로 루트 검색
@@ -253,10 +248,10 @@ class StartFragment : Fragment(), OnMapReadyCallback {
     super.onViewCreated(view, savedInstanceState)
     Logg.d("onViewCreated()")
 
-    /*  view.mainStartRunning.setOnClickListener(this)
-      view.mainStartSearchAreaButton.setOnClickListener(this)
-      view.mainStartSearchButton.setOnClickListener(this)
-      view.mainStartBackButton.setOnClickListener(this)*/
+    view.mainStartRunning.setOnClickListener(this)
+    view.mainStartSearchAreaButton.setOnClickListener(this)
+    view.mainStartSearchButton.setOnClickListener(this)
+    view.mainStartBackButton.setOnClickListener(this)
   }
 
   override fun onResume() {

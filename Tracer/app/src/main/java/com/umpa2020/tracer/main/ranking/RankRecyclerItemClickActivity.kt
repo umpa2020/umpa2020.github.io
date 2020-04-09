@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.FirebaseFirestore
@@ -17,23 +18,26 @@ import com.umpa2020.tracer.network.FBLikes
 import com.umpa2020.tracer.network.FBMapImage
 import com.umpa2020.tracer.network.FBProfile
 import com.umpa2020.tracer.util.Logg
+import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.ProgressBar
 import kotlinx.android.synthetic.main.activity_rank_recycler_item_click.*
 
-class RankRecyclerItemClickActivity : AppCompatActivity() {
+class RankRecyclerItemClickActivity : AppCompatActivity(),OnSingleClickListener{
   var arrRankingData: ArrayList<RankingData> = arrayListOf()
   var rankingData = RankingData()
   val GETLIKE = 51
   var likes = 0
-
+  var mapTitle=""
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_rank_recycler_item_click)
+    rankRecyclerMoreButton.setOnClickListener(this)
+    rankRecyclerHeart.setOnClickListener(this)
     val progressbar = ProgressBar(App.instance.currentActivity() as Activity)
     progressbar.show()
     val intent = intent
     //전달 받은 값으로 Title 설정
-    val mapTitle = intent.extras?.getString("MapTitle").toString()
+    mapTitle = intent.extras?.getString("MapTitle").toString()
 
     val cutted = mapTitle.split("||")
     rankRecyclerMapTitle.text = cutted[0]
@@ -71,22 +75,6 @@ class RankRecyclerItemClickActivity : AppCompatActivity() {
     // 위의 핸들로 코드 사용
     FBLikes().getLike(mapTitle, mHandler)
 
-    // 분기에 따라서 OnclickListener를 나눈다.
-    rankRecyclerHeart.setOnClickListener {
-      if (rankRecyclerHeartSwitch.text == "off") {
-        FBLikes().setLikes(mapTitle, likes)
-        rankRecyclerHeart.setImageResource(R.drawable.ic_favorite_red_24dp)
-        rankRecyclerHeartSwitch.text = "on"
-        likes++
-      } else if (rankRecyclerHeartSwitch.text == "on") {
-        FBLikes().setminusLikes(mapTitle, likes)
-        rankRecyclerHeart.setImageResource(R.drawable.ic_favorite_border_black_24dp)
-        rankRecyclerHeartSwitch.text = "off"
-        likes--
-      }
-    }
-
-
     val db = FirebaseFirestore.getInstance()
 
     // 베스트 타임이 랭킹 가지고 있는 것 중에서 이것이 베스트 타임인가를 나타내주는 1,0 값입니다.
@@ -122,10 +110,28 @@ class RankRecyclerItemClickActivity : AppCompatActivity() {
         }
       }
 
-    rankRecyclerMoreButton.setOnClickListener {
-      val nextIntent = Intent(this, RankingMapDetailActivity::class.java)
-      nextIntent.putExtra("MapTitle", mapTitle)
-      startActivity(nextIntent)
+  }
+
+  override fun onSingleClick(v: View?) {
+    when(v!!.id){
+      R.id.rankRecyclerMoreButton->{
+        val nextIntent = Intent(App.instance.context(), RankingMapDetailActivity::class.java)
+        nextIntent.putExtra("MapTitle", mapTitle)
+        startActivity(nextIntent)
+      }
+      R.id.rankRecyclerHeart->{
+        if (rankRecyclerHeartSwitch.text == "off") {
+          FBLikes().setLikes(mapTitle, likes)
+          rankRecyclerHeart.setImageResource(R.drawable.ic_favorite_red_24dp)
+          rankRecyclerHeartSwitch.text = "on"
+          likes++
+        } else if (rankRecyclerHeartSwitch.text == "on") {
+          FBLikes().setminusLikes(mapTitle, likes)
+          rankRecyclerHeart.setImageResource(R.drawable.ic_favorite_border_black_24dp)
+          rankRecyclerHeartSwitch.text = "off"
+          likes--
+        }
+      }
     }
   }
 }

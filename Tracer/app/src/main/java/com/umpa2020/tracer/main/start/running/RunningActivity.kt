@@ -19,10 +19,7 @@ import com.umpa2020.tracer.constant.UserState
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.main.start.BaseRunningActivity
-import com.umpa2020.tracer.util.ChoicePopup
-import com.umpa2020.tracer.util.Logg
-import com.umpa2020.tracer.util.TTS
-import com.umpa2020.tracer.util.Wow
+import com.umpa2020.tracer.util.*
 import hollowsoft.slidingdrawer.OnDrawerCloseListener
 import hollowsoft.slidingdrawer.OnDrawerOpenListener
 import hollowsoft.slidingdrawer.OnDrawerScrollListener
@@ -30,7 +27,7 @@ import io.jenetics.jpx.WayPoint
 import kotlinx.android.synthetic.main.activity_running.*
 
 
-class RunningActivity : BaseRunningActivity(), OnDrawerScrollListener, OnDrawerOpenListener, OnDrawerCloseListener {
+class RunningActivity : BaseRunningActivity(),OnSingleClickListener, OnDrawerScrollListener, OnDrawerOpenListener, OnDrawerCloseListener {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -83,29 +80,6 @@ class RunningActivity : BaseRunningActivity(), OnDrawerScrollListener, OnDrawerO
 
   override fun onMapReady(googleMap: GoogleMap) {
     super.onMapReady(googleMap)
-  }
-
-  fun onClick(view: View) {
-    when (view.id) {
-      R.id.runningStartButton -> {
-        start()
-      }
-      R.id.runningPauseButton -> {
-        if (privacy == Privacy.RACING) {
-          showPausePopup(
-            "일시정지를 하게 되면\n경쟁 모드 업로드가 불가합니다.\n\n일시정지를 하시겠습니까?"
-          )
-        } else {
-          if (userState == UserState.PAUSED)
-            restart()
-          else
-            pause()
-        }
-      }
-      R.id.runningStopButton -> {
-        Toast.makeText(this, "종료를 원하시면 길게 눌러주세요", Toast.LENGTH_LONG).show()
-      }
-    }
   }
 
   var cameraZoomSize = 0.0f
@@ -184,6 +158,29 @@ class RunningActivity : BaseRunningActivity(), OnDrawerScrollListener, OnDrawerO
             .build()
         )
         markerCount++
+      }
+    }
+  }
+
+  override fun onSingleClick(view: View?) {
+    when (view!!.id) {
+      R.id.runningStartButton -> {
+        start()
+      }
+      R.id.runningPauseButton -> {
+        if (privacy == Privacy.RACING) {
+          showPausePopup(
+            "일시정지를 하게 되면\n경쟁 모드 업로드가 불가합니다.\n\n일시정지를 하시겠습니까?"
+          )
+        } else {
+          if (userState == UserState.PAUSED)
+            restart()
+          else
+            pause()
+        }
+      }
+      R.id.runningStopButton -> {
+        Toast.makeText(this, "종료를 원하시면 길게 눌러주세요", Toast.LENGTH_LONG).show()
       }
     }
   }
