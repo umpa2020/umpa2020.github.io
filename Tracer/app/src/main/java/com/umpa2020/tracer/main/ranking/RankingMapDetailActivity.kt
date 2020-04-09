@@ -13,20 +13,20 @@ import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.extensions.MM_SS
 import com.umpa2020.tracer.extensions.format
+import com.umpa2020.tracer.extensions.gpxToClass
 import com.umpa2020.tracer.main.start.racing.RacingActivity
 import com.umpa2020.tracer.network.FBMapImage
 import com.umpa2020.tracer.network.FBProfile
 import com.umpa2020.tracer.util.Chart
 import com.umpa2020.tracer.util.ChoicePopup
 import com.umpa2020.tracer.util.Logg
-import com.umpa2020.tracer.util.gpx.GPXConverter
+import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.activity_ranking_map_detail.*
 import java.io.File
 
-class RankingMapDetailActivity : AppCompatActivity() {
+class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener {
   lateinit var routeGPX: RouteGPX
   var dbMapTitle = ""
-
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -66,7 +66,7 @@ class RankingMapDetailActivity : AppCompatActivity() {
             val routeRef = storage.reference.child("mapRoute").child(mapTitle)
             val localFile = File.createTempFile("routeGpx", "xml")
             routeRef.getFile(Uri.fromFile(localFile)).addOnSuccessListener {
-              routeGPX = GPXConverter().GpxToClass(localFile.path)
+              routeGPX = localFile.path.gpxToClass()
               // 1차원 배열인 고도는 그대로 받아오면 되고
               val speedList = mutableListOf<Double>()
               val elevationList = mutableListOf<Double>()
@@ -95,13 +95,16 @@ class RankingMapDetailActivity : AppCompatActivity() {
         }
         FBMapImage().getMapImage(rankingDetailGoogleMap, mapTitle)
 
-        //버튼 누르면 연습용, 랭킹 기록용 선택 팝업 띄우기
-        rankingDetailRaceButton.setOnClickListener {
-          showPopup()
-        }
+        rankingDetailRaceButton.setOnClickListener(this)
       }
+  }
 
-
+  override fun onSingleClick(v: View?) {
+    when(v!!.id){
+      R.id.rankingDetailRaceButton->{ //버튼 누르면 연습용, 랭킹 기록용 선택 팝업 띄우기
+        showPopup()
+      }
+    }
   }
 
   // 팝업 띄우는 함수

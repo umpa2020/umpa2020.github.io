@@ -12,8 +12,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.LikeMapsData
+import com.umpa2020.tracer.extensions.prettyDistance
 import com.umpa2020.tracer.network.FBLikes
-import com.umpa2020.tracer.util.PrettyDistance
 import com.umpa2020.tracer.util.ProgressBar
 import kotlinx.android.synthetic.main.recycler_rankfragment_item.view.*
 
@@ -48,7 +48,7 @@ class RankRecyclerViewAdapterMap(val mdata: ArrayList<InfoData>, val mode: Strin
     holder.rank.text = ranking.toString()
 
     holder.maptitle.text = cutted[0]
-    holder.distance.text = PrettyDistance().convertPretty(singleItem.distance!!)
+    holder.distance.text = singleItem.distance!!.prettyDistance()
     if (mode.equals("execute")) {
       holder.modeIcon.setImageResource(R.drawable.ic_sneaker_for_running)
       holder.modeIcon.tag = R.drawable.ic_sneaker_for_running

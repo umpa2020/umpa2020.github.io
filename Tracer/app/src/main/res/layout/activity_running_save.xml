@@ -144,7 +144,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/notosansmedium"
             android:gravity="center"
-            android:text="@string/speed"
+            android:text="@string/speed_with_unit"
             android:textSize="15dp" />
 
           <TextView

@@ -6,6 +6,8 @@ import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import com.umpa2020.tracer.App
+import com.umpa2020.tracer.R
 
 class Chart(val altsData: List<Double>, val speedsData: List<Double>, val chart: LineChart) {
 
@@ -33,7 +35,7 @@ class Chart(val altsData: List<Double>, val speedsData: List<Double>, val chart:
     yRAxis.axisMinimum = 0F
 
     // 속도 셋팅
-    val lineDataSet = LineDataSet(speeds, "속도")
+    val lineDataSet = LineDataSet(speeds, App.instance.context().getString(R.string.speed))
     lineDataSet.lineWidth = 1.5f
     lineDataSet.color = Color.parseColor("#FF0000FF") // 파랑
     lineDataSet.setDrawHorizontalHighlightIndicator(false)
@@ -45,7 +47,7 @@ class Chart(val altsData: List<Double>, val speedsData: List<Double>, val chart:
     lineDataSet.mode = LineDataSet.Mode.CUBIC_BEZIER
 
     // 고도 셋팅
-    val lineDataSet2 = LineDataSet(alts, "고도")
+    val lineDataSet2 = LineDataSet(alts, App.instance.context().getString(R.string.altitude))
     lineDataSet2.lineWidth = 1.5f
     lineDataSet2.color = Color.parseColor("#FFFF0000") // 빨강
     lineDataSet2.setDrawHorizontalHighlightIndicator(false)

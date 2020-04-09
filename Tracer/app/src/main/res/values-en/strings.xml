@@ -45,7 +45,7 @@
   <string name="recordanalysis">Record Analysis</string>
   <string name="distance">Distance (km)</string>
   <string name="time">Time</string>
-  <string name="speed">Speed (km/h)</string>
+  <string name="speed_with_unit">Speed (km/h)</string>
   <string name="thumbnail">Route Thumbnail</string>
   <string name="altitude_sppedchart">Altitude / Speed Chart</string>
   <string name="matchstart">Match Start</string>
@@ -160,4 +160,7 @@
   <string name="route_deviates">\n(Caution)If the route deviates more than</string>
   <string name="resgisration">seconds, ranking registration is not possible.</string>
   <string name="out_of_route">Out of route</string>
+  <string name="altitude" >altitude</string>
+
+  <string name="speed">speed</string>
 </resources>

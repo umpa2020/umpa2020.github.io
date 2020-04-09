@@ -49,5 +49,9 @@ class Constants {
     // 최소 정지 거리 m
     const val MINIMUM_STOPPING_DISTANCE = 200
 
+    //중복 클릭 방지 시간 설정 ( 해당 시간 이후에 다시 클릭 가능 )
+    const val MIN_CLICK_INTERVAL: Long = 600
+    var mLastClickTime: Long = 0
+
   }
 }

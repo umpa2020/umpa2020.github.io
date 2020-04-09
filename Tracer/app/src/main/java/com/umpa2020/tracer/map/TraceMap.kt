@@ -4,11 +4,10 @@ import android.graphics.Color
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.*
-import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.extensions.bounds
+import com.umpa2020.tracer.extensions.makingIcon
 import com.umpa2020.tracer.util.Logg
-import com.umpa2020.tracer.util.Wow
 import io.jenetics.jpx.WayPoint
 
 class TraceMap(val mMap: GoogleMap) {
@@ -18,7 +17,7 @@ class TraceMap(val mMap: GoogleMap) {
   }
 
   lateinit var loadTrack: Polyline
-  val passedIcon=Wow.makingIcon(R.drawable.ic_checkpoint_red,App.instance.context())
+  val passedIcon=R.drawable.ic_checkpoint_red.makingIcon()
   var markerList = mutableListOf<Marker>()
   fun drawRoute(track: MutableList<LatLng>, wptList: MutableList<WayPoint>) {
     Logg.d("Map is draw")
@@ -30,14 +29,14 @@ class TraceMap(val mMap: GoogleMap) {
           .startCap(RoundCap() as Cap)
           .endCap(RoundCap())
       )        //경로를 그릴 폴리라인 집합
-    val unPassedIcon=Wow.makingIcon(R.drawable.ic_checkpoint_gray,App.instance.context())
+    val unPassedIcon=R.drawable.ic_checkpoint_gray.makingIcon()
     wptList.forEachIndexed { i, it ->
       val icon = when (i) {
         0 -> {
-          Wow.makingIcon(R.drawable.ic_racing_startpoint, App.instance.context())
+          R.drawable.ic_racing_startpoint.makingIcon()
         }
         wptList.size - 1 -> {
-          Wow.makingIcon(R.drawable.ic_racing_finishpoint,App.instance.context())
+          R.drawable.ic_racing_finishpoint.makingIcon()
         }
         else -> {
           unPassedIcon
