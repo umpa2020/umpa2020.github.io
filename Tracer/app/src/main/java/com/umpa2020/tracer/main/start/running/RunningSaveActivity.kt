@@ -23,6 +23,7 @@ import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.map.TraceMap
 import com.umpa2020.tracer.util.Chart
 import com.umpa2020.tracer.util.Logg
+import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_running_save.*
 import java.io.File
@@ -30,7 +31,7 @@ import java.io.FileOutputStream
 import java.util.*
 
 
-class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback {
+class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleClickListener {
   var switch = 0
 
   lateinit var infoData: InfoData
@@ -65,9 +66,9 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback {
     myChart.setChart()
   }
 
-  fun onClick(view: View) {
+  override fun onSingleClick(v: View?) {
     if (switch == 0) {
-      when (view.id) {
+      when (v!!.id) {
         com.umpa2020.tracer.R.id.save_btn -> {
           if (mapTitleEdit.text.toString() == "") {
             mapTitleEdit.hint = "제목을 설정해주세요"
@@ -100,8 +101,9 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback {
     }
   }
 
+
   fun save(imgPath: String) {
-    Logg.d( "Start Saving")
+    Logg.d("Start Saving")
     // 타임스탬프 찍는 코드
     val timestamp = Date().time
 
@@ -128,7 +130,7 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback {
     val routeGpxFile = routeGPX.classToGpx(saveFolder.path)
     // storage에 이미지 업로드 모든 맵 이미지는 mapimage/maptitle로 업로드가 된다.
     val fstorage = FirebaseStorage.getInstance()
-    Logg.d( "HI0?")
+    Logg.d("HI0?")
     val fRef = fstorage.reference.child("mapRoute").child(infoData.mapTitle!!)
     infoData.routeGPXPath = fRef.path
 
@@ -137,11 +139,11 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback {
 
     Logg.d("HI2?")
     fuploadTask.addOnFailureListener {
-      Logg.d( "Success")
+      Logg.d("Success")
     }.addOnSuccessListener {
-      Logg.d( "Fail : $it")
+      Logg.d("Fail : $it")
     }
-    Logg.d( "HI3?")
+    Logg.d("HI3?")
     // db에 그려진 맵 저장하는 스레드 - 여기서는 실제 그려진 것 보다 후 보정을 통해서
     // 간략화 된 맵을 업로드 합니다.
     val db = FirebaseFirestore.getInstance()
@@ -162,23 +164,25 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback {
     val mapImageRef = storage.reference.child("mapImage").child(infoData.mapTitle!!)
     val uploadTask = mapImageRef.putFile(Uri.fromFile(File(imgPath)))
     uploadTask.addOnFailureListener {
-      Logg.d( "스토리지 실패 = " + it.toString())
+      Logg.d("스토리지 실패 = " + it.toString())
     }.addOnSuccessListener {
       finish()
     }
 
     // 위에 지정한 스레드 스타트
   }
+
   var track: MutableList<LatLng> = mutableListOf()
   fun loadRoute() {
     routeGPX.trkList.forEach {
       track.add(LatLng(it.latitude.toDouble(), it.longitude.toDouble()))
     }
   }
+
   override fun onMapReady(googleMap: GoogleMap) {
     Logg.d("onMapReady")
     traceMap = TraceMap(googleMap) //구글맵
     traceMap.mMap.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
-    traceMap.drawRoute(track,routeGPX.wptList)
+    traceMap.drawRoute(track, routeGPX.wptList)
   }
 }

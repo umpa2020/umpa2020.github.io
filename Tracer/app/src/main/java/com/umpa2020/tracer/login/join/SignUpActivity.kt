@@ -30,17 +30,15 @@ import com.jakewharton.rxbinding2.widget.RxTextView
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.main.MainActivity
-import com.umpa2020.tracer.util.ChoicePopup
-import com.umpa2020.tracer.util.Logg
-import com.umpa2020.tracer.util.ProgressBar
-import com.umpa2020.tracer.util.UserInfo
+import com.umpa2020.tracer.util.*
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_sign_up.*
+import kotlinx.android.synthetic.main.signup_toolbar.*
 import java.io.ByteArrayOutputStream
 import java.util.*
 import java.util.regex.Pattern
 
-class SignUpActivity : AppCompatActivity() {
+class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
 
   private var WSY = "WSY"
   var success_request = 0
@@ -70,8 +68,6 @@ class SignUpActivity : AppCompatActivity() {
   private var mStorage: FirebaseStorage? = null
   private var mStorageReference: StorageReference? = null
 
-  // 중복 확인 버튼
-  private var redundantCheckButton: Button? = null
 
   // 초기 가입자인 경우 LoginActivity에서 uid, email을 넘겨 받음
   private var uid: String? = null
@@ -104,6 +100,13 @@ class SignUpActivity : AppCompatActivity() {
 
       }
     })
+
+    backImageBtn.setOnClickListener(this)
+    editAge.setOnClickListener(this)
+    editGender.setOnClickListener(this)
+    profileImage.setOnClickListener(this)
+    redundantCheckButton.setOnClickListener(this)
+    sign_up_button.setOnClickListener(this)
   }
 
   private fun init() {
@@ -129,11 +132,6 @@ class SignUpActivity : AppCompatActivity() {
     inputInfoMessage = arrayOf(getString(R.string.txtInputInfoNick), getString(R.string.txtInputInfoAge), getString(R.string.txtInputInfoGender))
 
     typingListener()
-
-    /**
-     *  중복 확인 버튼 초기화
-     */
-    redundantCheckButton = redundantCheckButton
 
     /**
      *   초기 가입자인 경우 LoginActivity에서 uid, email을 넘겨 받음
@@ -401,8 +399,8 @@ class SignUpActivity : AppCompatActivity() {
 
   }
 
-  fun onClick(v: View) {
-    when (v.id) {
+  override fun onSingleClick(v: View?) {
+    when (v!!.id) {
       R.id.backImageBtn -> {
         finish()
       }

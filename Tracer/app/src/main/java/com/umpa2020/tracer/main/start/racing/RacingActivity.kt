@@ -29,12 +29,17 @@ import com.umpa2020.tracer.main.start.BaseRunningActivity
 import com.umpa2020.tracer.network.FBMap
 import com.umpa2020.tracer.util.ChoicePopup
 import com.umpa2020.tracer.util.Logg
+import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.TTS
 import io.jenetics.jpx.WayPoint
 import kotlinx.android.synthetic.main.activity_ranking_recode_racing.*
+import kotlinx.android.synthetic.main.activity_ranking_recode_racing.racingDistanceTextView
+import kotlinx.android.synthetic.main.activity_ranking_recode_racing.racingHandle
+import kotlinx.android.synthetic.main.activity_ranking_recode_racing.racingSpeedTextView
+import kotlinx.android.synthetic.main.activity_ranking_recode_racing.racingTimerTextView
 import kotlin.math.roundToLong
 
-class RacingActivity : BaseRunningActivity() {
+class RacingActivity : BaseRunningActivity(), OnSingleClickListener {
   lateinit var mapRouteGPX: RouteGPX
   lateinit var mapTitle: String
   var racingResult = true
@@ -55,6 +60,10 @@ class RacingActivity : BaseRunningActivity() {
 
     // 시작 포인트로 이동
     TTS.speech(getString(R.string.goToStartPoint))
+
+    racingStartButton.setOnClickListener(this)
+    racingStopButton.setOnClickListener(this)
+    racingPauseButton.setOnClickListener(this)
   }
 
   override fun onMapReady(googleMap: GoogleMap) {
@@ -101,8 +110,8 @@ class RacingActivity : BaseRunningActivity() {
     wptList = mapRouteGPX.wptList
   }
 
-  fun onClick(view: View) {
-    when (view.id) {
+  override fun onSingleClick(v: View?) {
+    when (v!!.id) {
       R.id.racingStartButton -> {
         when (userState) {
           UserState.NORMAL -> {
@@ -133,11 +142,9 @@ class RacingActivity : BaseRunningActivity() {
             pause()
         }
       }
-      R.id.racingNotificationButton -> {
-        notificationTextView.visibility = View.GONE
-      }
     }
   }
+
 
   override fun updateLocation(curLoc: Location) {
     super.updateLocation(curLoc)

@@ -15,11 +15,13 @@ import androidx.appcompat.app.AppCompatActivity
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.network.FBProfile
 import com.umpa2020.tracer.util.Logg
+import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_my_information.*
+import kotlinx.android.synthetic.main.signup_toolbar.*
 import kotlinx.android.synthetic.main.signup_toolbar.view.*
 
-class MyInformationActivity : AppCompatActivity() {
+class MyInformationActivity : AppCompatActivity(), OnSingleClickListener {
   val CHANGEPROFILE = 110 // 프로필 사진 체인지
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,10 +37,16 @@ class MyInformationActivity : AppCompatActivity() {
     nickNameTextView.text = UserInfo.nickname
     ageTextView.text = UserInfo.age
     genderTextView.text = UserInfo.gender
+
+
+    // 버튼 리스너 초기화
+    backImageBtn.setOnClickListener(this)
+    profileImage.setOnClickListener(this)
+    profileChangeButton.setOnClickListener(this)
   }
 
-  fun onClick(view: View) {
-    when (view.id) {
+  override fun onSingleClick(v: View?) {
+    when (v!!.id) {
       R.id.backImageBtn -> {
         finish()
       }
@@ -73,6 +81,7 @@ class MyInformationActivity : AppCompatActivity() {
       }
     }
   }
+
 
   /**
    * 카메라 접근 권한 and 앨범 접근

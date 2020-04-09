@@ -2,6 +2,7 @@ package com.umpa2020.tracer.login
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.chibatching.kotpref.Kotpref
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -17,12 +18,13 @@ import com.umpa2020.tracer.R
 import com.umpa2020.tracer.login.join.SignUpActivity
 import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.util.Logg
+import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_login.*
 
 
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : AppCompatActivity(), OnSingleClickListener {
   // firebase Auth
   private var mAuth: FirebaseAuth? = null
   private var mGoogleSignInClient: GoogleSignInClient? = null
@@ -66,8 +68,14 @@ class LoginActivity : AppCompatActivity() {
     Kotpref.init(this) // Kotpref 사용을 위한 singleton context 저장
 
     // 람다식으로 onClick 설정
-    googleSignInButton.setOnClickListener {
-      signIn()
+    googleSignInButton.setOnClickListener(this)
+  }
+
+  override fun onSingleClick(v: View?) {
+    when(v!!.id){
+      R.id.googleSignInButton->{
+        signIn()
+      }
     }
   }
 
