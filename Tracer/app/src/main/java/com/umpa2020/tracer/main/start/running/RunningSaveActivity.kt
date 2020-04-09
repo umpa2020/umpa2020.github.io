@@ -18,13 +18,13 @@ import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.RankingData
 import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.extensions.MM_SS
+import com.umpa2020.tracer.extensions.classToGpx
 import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.map.TraceMap
 import com.umpa2020.tracer.util.Chart
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.UserInfo
-import com.umpa2020.tracer.util.gpx.GPXConverter
 import kotlinx.android.synthetic.main.activity_running_save.*
 import java.io.File
 import java.io.FileOutputStream
@@ -123,12 +123,11 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
     }
 
     // 맵 타이틀과, 랭킹 중복 방지를 위해서 시간 값을 넣어서 중복 방지
-    val gpxConverter = GPXConverter()
     val saveFolder = File(baseContext.filesDir, "routeGPX") // 저장 경로
     if (!saveFolder.exists()) {       //폴더 없으면 생성
       saveFolder.mkdir()
     }
-    val routeGpxFile = gpxConverter.classToGpx(routeGPX, saveFolder.path)
+    val routeGpxFile = routeGPX.classToGpx(saveFolder.path)
     // storage에 이미지 업로드 모든 맵 이미지는 mapimage/maptitle로 업로드가 된다.
     val fstorage = FirebaseStorage.getInstance()
     Logg.d("HI0?")

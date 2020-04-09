@@ -12,6 +12,7 @@ import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.extensions.MM_SS
 import com.umpa2020.tracer.extensions.format
+import com.umpa2020.tracer.extensions.prettyDistance
 import com.umpa2020.tracer.main.ranking.RankRecyclerItemClickActivity
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.OnSingleClickListener
@@ -51,7 +52,7 @@ class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>)
     }
 
     holder.maptitle.text = cutted[0]
-    holder.distance.text = PrettyDistance().convertPretty(singleItem.distance!!)
+    holder.distance.text = singleItem.distance!!.prettyDistance()
     holder.time.text = singleItem.time!!.format(MM_SS)
     holder.likes.text = singleItem.likes.toString()
     holder.excutes.text = singleItem.execute.toString()

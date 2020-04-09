@@ -23,6 +23,7 @@ import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.constant.UserState
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.RouteGPX
+import com.umpa2020.tracer.extensions.prettyDistance
 import com.umpa2020.tracer.extensions.toLatLng
 import com.umpa2020.tracer.main.start.BaseRunningActivity
 import com.umpa2020.tracer.network.FBMap
@@ -84,6 +85,8 @@ class RacingActivity : BaseRunningActivity(), OnSingleClickListener {
     pauseNotificationTextView = racingPauseNotificationTextView
     drawerHandle = racingHandle
     drawer = racingDrawer
+    speedTextView=racingSpeedTextView
+    distanceTextView=racingDistanceTextView
     stopButton.setOnLongClickListener {
       noticePopup = ChoicePopup(this, "선택해주세요.",
         "지금 정지하시면 저장이 불가능합니다. \n\n정지하시겠습니까?",
@@ -145,8 +148,6 @@ class RacingActivity : BaseRunningActivity(), OnSingleClickListener {
 
   override fun updateLocation(curLoc: Location) {
     super.updateLocation(curLoc)
-    racingDistanceTextView.text = distance.toString()
-    racingSpeedTextView.text = speed.toString()
     when (userState) {
       UserState.NORMAL -> {
         Logg.d("NORMAL")

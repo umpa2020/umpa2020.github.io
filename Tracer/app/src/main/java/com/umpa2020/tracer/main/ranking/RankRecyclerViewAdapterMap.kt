@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.LikeMapsData
+import com.umpa2020.tracer.extensions.prettyDistance
 import com.umpa2020.tracer.network.FBLikes
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.OnSingleClickListener
@@ -52,7 +53,7 @@ class RankRecyclerViewAdapterMap(val mdata: ArrayList<InfoData>, val mode: Strin
     holder.rank.text = ranking.toString()
 
     holder.maptitle.text = cutted[0]
-    holder.distance.text = PrettyDistance().convertPretty(singleItem.distance!!)
+    holder.distance.text = singleItem.distance!!.prettyDistance()
     if (mode.equals("execute")) {
       holder.heart.visibility = View.GONE
       holder.execute.text = singleItem.execute.toString()

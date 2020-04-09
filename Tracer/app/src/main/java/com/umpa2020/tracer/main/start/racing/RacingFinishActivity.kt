@@ -14,6 +14,7 @@ import com.umpa2020.tracer.dataClass.RankingData
 import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.extensions.MM_SS
 import com.umpa2020.tracer.extensions.format
+import com.umpa2020.tracer.extensions.prettyDistance
 import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.main.ranking.RankRecyclerViewAdapterTopPlayer
 import com.umpa2020.tracer.network.FBRacing
@@ -117,12 +118,12 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
     }
 
     makerLapTimeTextView.text =makerData.time!!.format(MM_SS)
-    makerMaxSpeedTextView.text = PrettyDistance().convertPretty(makerSpeeds.max()!!)
-    makerAvgSpeedTextView.text = PrettyDistance().convertPretty(makerSpeeds.average())
+    makerMaxSpeedTextView.text = makerSpeeds.max()!!.prettyDistance()
+    makerAvgSpeedTextView.text = makerSpeeds.average().prettyDistance()
 
     racerLapTimeTextView.text =racerData.time!!.format(MM_SS)
-    racerMaxSpeedTextView.text = PrettyDistance().convertPretty(racerSpeeds.max()!!)
-    racerAvgSpeedTextView.text = PrettyDistance().convertPretty(racerSpeeds.average())
+    racerMaxSpeedTextView.text = racerSpeeds.max()!!.prettyDistance()
+    racerAvgSpeedTextView.text = racerSpeeds.average().prettyDistance()
     progressbar.dismiss()
   }
 }
