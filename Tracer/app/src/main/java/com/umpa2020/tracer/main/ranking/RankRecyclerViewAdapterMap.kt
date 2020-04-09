@@ -13,6 +13,8 @@ import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.LikeMapsData
 import com.umpa2020.tracer.network.FBLikes
+import com.umpa2020.tracer.util.Logg
+import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.PrettyDistance
 import com.umpa2020.tracer.util.ProgressBar
 import kotlinx.android.synthetic.main.recycler_rankfragment_item.view.*
@@ -22,8 +24,10 @@ class RankRecyclerViewAdapterMap(val mdata: ArrayList<InfoData>, val mode: Strin
   val GETLIKES = 50
   var likeMapsDatas = arrayListOf<LikeMapsData>()
 
+  //  var holder1 : mViewHolder? = null
   //생성된 뷰 홀더에 데이터를 바인딩 해줌.
   override fun onBindViewHolder(holder: mViewHolder, position: Int) {
+//    holder1 = holder
     val singleItem = mdata[position]
     val ranking = position + 1
     val mHandler = object : Handler(Looper.getMainLooper()) {
@@ -73,29 +77,43 @@ class RankRecyclerViewAdapterMap(val mdata: ArrayList<InfoData>, val mode: Strin
       holder.rank.setBackgroundResource(R.drawable.ic_4)
 
     //클릭하면 맵 상세보기 페이지로 이동
-    holder.itemView.setOnClickListener {
-      val nextIntent = Intent(context, RankRecyclerItemClickActivity::class.java)
-      nextIntent.putExtra("MapTitle", singleItem.mapTitle) //mapTitle 정보 인텐트로 넘김
-      context!!.startActivity(nextIntent)
-    }
+    // TODO : 나중에 혹시 몰라서 원래 이렇게 되어있었다는 걸 남겨둠.
+//    holder.itemView.setOnClickListener {
+////      Logg.i("맵 상세보기로")
+////      val nextIntent = Intent(context, RankRecyclerItemClickActivity::class.java)
+////      nextIntent.putExtra("MapTitle", singleItem.mapTitle) //mapTitle 정보 인텐트로 넘김
+////      context!!.startActivity(nextIntent)
+////    }
 
-    holder.heart.setOnClickListener {
-      var likes = Integer.parseInt(holder.execute.text.toString())
-
-      if (holder.heartswitch.text.equals("off")) {
-        FBLikes().setLikes(singleItem.mapTitle!!, likes)
-        holder.heart.setImageResource(R.drawable.ic_favorite_red_24dp)
-        likes++
-        holder.execute.text = likes.toString()
-        holder.heartswitch.text = "on"
-      } else {
-        FBLikes().setminusLikes(singleItem.mapTitle!!, likes)
-        holder.heart.setImageResource(R.drawable.ic_favorite_border_black_24dp)
-        likes--
-        holder.execute.text = likes.toString()
-        holder.heartswitch.text = "off"
+    holder.itemView.setOnClickListener(object : OnSingleClickListener {
+      override fun onSingleClick(v: View?) {
+        Logg.i("맵 상세보기로")
+        val nextIntent = Intent(context, RankRecyclerItemClickActivity::class.java)
+        nextIntent.putExtra("MapTitle", singleItem.mapTitle) //mapTitle 정보 인텐트로 넘김
+        context!!.startActivity(nextIntent)
       }
-    }
+    })
+
+    // 하트 클릭했을 시
+    holder.heart.setOnClickListener(object : OnSingleClickListener {
+      override fun onSingleClick(v: View?) {
+        var likes = Integer.parseInt(holder.execute.text.toString())
+
+        if (holder.heartswitch.text.equals("off")) {
+          FBLikes().setLikes(singleItem.mapTitle!!, likes)
+          holder.heart.setImageResource(R.drawable.ic_favorite_red_24dp)
+          likes++
+          holder.execute.text = likes.toString()
+          holder.heartswitch.text = "on"
+        } else {
+          FBLikes().setminusLikes(singleItem.mapTitle!!, likes)
+          holder.heart.setImageResource(R.drawable.ic_favorite_border_black_24dp)
+          likes--
+          holder.execute.text = likes.toString()
+          holder.heartswitch.text = "off"
+        }
+      }
+    })
 
     // 정보를 다 표현하면 dismiss
     // > 5를 한 이유는 recyclerview 특성 상 모든 정보를 한 번에 담는게 아니라

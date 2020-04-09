@@ -14,12 +14,14 @@ import com.umpa2020.tracer.extensions.MM_SS
 import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.main.ranking.RankRecyclerItemClickActivity
 import com.umpa2020.tracer.util.Logg
+import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.PrettyDistance
 import kotlinx.android.synthetic.main.recycler_profilefragment_route_grid_image.view.*
 import java.sql.Timestamp
 import java.util.*
 
-class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) : RecyclerView.Adapter<ProfileRecyclerViewAdapterRoute.mViewHolder>() {
+class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>)
+  : RecyclerView.Adapter<ProfileRecyclerViewAdapterRoute.mViewHolder>() {
   var context: Context? = null
 
   //생성된 뷰 홀더에 데이터를 바인딩 해줌.
@@ -61,11 +63,13 @@ class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) : Recycler
     //holder.nickname.text = singleItem.makersNickname
 
     //클릭하면 맵 상세보기 페이지로 이동
-    holder.itemView.setOnClickListener {
-      val nextIntent = Intent(context, RankRecyclerItemClickActivity::class.java)
-      nextIntent.putExtra("MapTitle", singleItem.mapTitle) //mapTitle 정보 인텐트로 넘김
-      context!!.startActivity(nextIntent)
-    }
+    holder.itemView.setOnClickListener(object : OnSingleClickListener{
+      override fun onSingleClick(v: View?) {
+        val nextIntent = Intent(context, RankRecyclerItemClickActivity::class.java)
+        nextIntent.putExtra("MapTitle", singleItem.mapTitle) //mapTitle 정보 인텐트로 넘김
+        context!!.startActivity(nextIntent)
+      }
+    })
   }
 
   //뷰 홀더 생성
