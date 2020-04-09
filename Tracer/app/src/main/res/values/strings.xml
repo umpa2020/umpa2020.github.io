@@ -79,6 +79,9 @@
   <string name="distance_display">떨어진 거리 표시</string>
   <string name="yes">예</string>
   <string name="no">아니오</string>
+  <string name="please_select1">선택해주세요.</string>
+  <string name="yes1">예</string>
+  <string name="no1">아니오</string>
   <string name="noroute">현재 저장된 루트가 없습니다.</string>
   <string name="profile_information">내 정보</string>
   <string name="profile_image_change">프로필 이미지 변경</string>
@@ -119,6 +122,25 @@
   <string name="goToStartPoint">시작 위치로 이동하세요</string>
   <string name="startRacing">레이싱을 시작합니다</string>
   <string name="finishRacing">레이싱을 종료합니다</string>
+  <string name="execute">실행수</string>
+  <string name="likes">좋아요</string>
+  <string name="select_type">유형을 선택해주세요.</string>
+  <string name="recording">기록용</string>
+  <string name="around">주변</string>
+  <string name="ranking1">순위</string>
+  <string name="start_running">시작버튼을 누르면 러닝이 시작됩니다</string>
+  <string name="Distance_km">거리 (km)</string>
+  <string name="Time">시간</string>
+  <string name="speed_km">속력 (km/h)</string>
+  <string name="pause_mode">일시정지를 하게 되면\n경쟁 모드 업로드가 불가합니다.\n\n일시정지를 하시겠습니까?</string>
+  <string name="twohundred_save">거리가 200m 미만일때\n정지하시면 저장이 불가능합니다.\n\n정지하시겠습니까?</string>
+  <string name="stop_save">지금 정지하시면 저장이 불가능합니다.\n\n정지하시겠습니까?</string>
+  <string name="like_logout">로그아웃하시겠습니까?</string>
+  <string name="sort">정렬 기준</string>
+  <string name="execute_order">실행순</string>
+  <string name="like_order">좋아요순</string>
+  <string name="delete_all">전체 삭제</string>
+  <string name="apply">적용하기</string>
 
 
 </resources>

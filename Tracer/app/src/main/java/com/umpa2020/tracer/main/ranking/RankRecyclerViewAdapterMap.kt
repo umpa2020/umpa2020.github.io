@@ -54,7 +54,7 @@ class RankRecyclerViewAdapterMap(val mdata: ArrayList<InfoData>, val mode: Strin
       holder.modeIcon.tag = R.drawable.ic_sneaker_for_running
       holder.modeNo.text = singleItem.execute.toString()
     } else if (mode.equals("likes")) {
-      FBLikes().getLikes(mHandler)
+      FBLikes().getLikes(mHandler, "rank")
       holder.modeIcon.setImageResource(R.drawable.ic_favorite_border_black_24dp)
       holder.modeIcon.tag = R.drawable.ic_favorite_border_black_24dp
       holder.modeNo.text = singleItem.likes.toString()
