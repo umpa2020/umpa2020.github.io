@@ -283,6 +283,7 @@ class SignUpActivity : AppCompatActivity() {
         }
       } else if (resultCode == RESULT_CANCELED) {
         //사진 선택 취소
+
         Toast.makeText(this, getString(R.string.picture_select_cancel), Toast.LENGTH_LONG).show()
       }
     }
