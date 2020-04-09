@@ -6,7 +6,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.*
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
-import com.umpa2020.tracer.extensions.getMinMax
+import com.umpa2020.tracer.extensions.bounds
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.Wow
 import io.jenetics.jpx.WayPoint
@@ -53,9 +53,8 @@ class TraceMap(val mMap: GoogleMap) {
         )
       )
     }
-    val trackMinMax = track.getMinMax()
-    mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(LatLngBounds(trackMinMax.first, trackMinMax.second), 1080, 300, 100))
-    Logg.d(trackMinMax.first.toString() + trackMinMax.second.toString())
+    val trackBounds = track.bounds()
+    mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(trackBounds, 1080, 300, 100))
   }
 
   fun drawPolyLine(preLoc: LatLng, curLoc: LatLng) {
