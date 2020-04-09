@@ -13,6 +13,7 @@ import com.umpa2020.tracer.dataClass.RankingData
 import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.extensions.MM_SS
 import com.umpa2020.tracer.extensions.format
+import com.umpa2020.tracer.extensions.toRank
 import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.main.ranking.RankRecyclerViewAdapterTopPlayer
 import com.umpa2020.tracer.network.FBRacing
@@ -102,10 +103,10 @@ class RacingFinishActivity : AppCompatActivity() {
   private fun setUiData(racerSpeeds: MutableList<Double>, makerSpeeds: MutableList<Double>, resultRankText: Int) {
 
     if (resultRankText == 0) {
-      resultRankTextView.text = "실패"
+      resultRankTextView.text = getString(R.string.fail)
     }
     else {
-      resultRankTextView.text = "$resultRankText 등"
+      resultRankTextView.text = resultRankText.toRank()
     }
 
     makerLapTimeTextView.text =makerData.time!!.format(MM_SS)

@@ -10,3 +10,11 @@ fun String.show(){
   toast.show()
 
 }
+fun Int.toRank():String{
+  when(this%10){
+    1-> return "${this}st"
+    2-> return "${this}nd"
+    3-> return "${this}rd"
+    else-> return "${this}th"
+  }
+}

@@ -108,7 +108,7 @@ class MyInformationActivity : AppCompatActivity() {
         }
       } else if (resultCode == RESULT_CANCELED) {
         //사진 선택 취소
-        Toast.makeText(this, "사진 선택 취소", Toast.LENGTH_LONG).show()
+        Toast.makeText(this, getString(R.string.deselect_photo), Toast.LENGTH_LONG).show()
       }
     }
   }

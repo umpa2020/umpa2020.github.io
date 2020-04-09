@@ -141,4 +141,23 @@
   <string name="like_order">Like order</string>
   <string name="delete_all">Delete all</string>
   <string name="apply">Apply</string>
+  <string name="restart">Restart</string>
+  <string name="fail">Fail</string>
+  <string name="enter_address">Please enter some address</string>
+  <string name="press_hold">Press and hold to exit</string>
+  <string name="sorry">Sorry</string>
+  <string name="not_search">No results were found for your search</string>
+  <string name="cannot_find">Can\'t find location</string>
+  <string name="startpoint">You can only start within</string>
+  <string name="only_start">m of the starting point.</string>
+  <string name="move_startpoint">Go to the starting point.\nDistance left to the starting point\n</string>
+  <string name="how_type">What type would you like to play?\n\nRanking records: Ranking registration possible</string>
+  <string name="public1">Public</string>
+  <string name="want_start">If you want to start, press the start button</string>
+  <string name="deselect_photo">Deselect photos</string>
+  <string name="cannot_save">If you stop now, saving is not possible.\n\nAre you sure you want to stop?</string>
+  <string name="pause_notsave">If you pause,\nyou will not be able to register for ranking.\n\nDo you want to pause?</string>
+  <string name="route_deviates">\n(Caution)If the route deviates more than</string>
+  <string name="resgisration">seconds, ranking registration is not possible.</string>
+  <string name="out_of_route">Out of route</string>
 </resources>
