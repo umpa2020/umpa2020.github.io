@@ -2,6 +2,9 @@ package com.umpa2020.tracer.main.profile.myroute
 
 import android.content.Context
 import android.content.Intent
+import android.os.Handler
+import android.os.Looper
+import android.os.Message
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,17 +13,23 @@ import com.bumptech.glide.Glide
 import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.InfoData
+import com.umpa2020.tracer.dataClass.LikeMapsData
 import com.umpa2020.tracer.extensions.MM_SS
 import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.main.ranking.RankRecyclerItemClickActivity
+import com.umpa2020.tracer.network.FBLikes
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.PrettyDistance
+import kotlinx.android.synthetic.main.activity_ranking_map_detail.*
 import kotlinx.android.synthetic.main.recycler_profilefragment_route_grid_image.view.*
 import java.sql.Timestamp
 import java.util.*
 
 class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) : RecyclerView.Adapter<ProfileRecyclerViewAdapterRoute.mViewHolder>() {
   var context: Context? = null
+  val GETPROFILELIKES = 110
+  var likeMapsDatas = arrayListOf<LikeMapsData>()
+
 
   //생성된 뷰 홀더에 데이터를 바인딩 해줌.
   override fun onBindViewHolder(holder: mViewHolder, position: Int) {
@@ -48,23 +57,64 @@ class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) : Recycler
       }
     }
 
+    val mHandler = object : Handler(Looper.getMainLooper()) {
+      override fun handleMessage(msg: Message) {
+        when (msg.what) {
+          GETPROFILELIKES -> {
+            likeMapsDatas = msg.obj as ArrayList<LikeMapsData>
+            //adpater 추가
+            for (i in likeMapsDatas) {
+              if (i.mapTitle.equals(singleItem.mapTitle)) {
+                holder.heart.setImageResource(R.drawable.ic_favorite_red_24dp)
+                holder.heart.tag = R.drawable.ic_favorite_red_24dp
+              }
+            }
+          }
+        }
+      }
+    }
+    FBLikes().getLikes(mHandler, "profile")
+
+
+
     holder.maptitle.text = cutted[0]
     holder.distance.text = PrettyDistance().convertPretty(singleItem.distance!!)
     holder.time.text = singleItem.time!!.format(MM_SS)
     holder.likes.text = singleItem.likes.toString()
     holder.excutes.text = singleItem.execute.toString()
-    val timestamp = Timestamp(cutted[1].toLong())
-    val date = Date(timestamp.time)
-    holder.date.text = date.toString()
+    holder.date.text = cutted[1].toLong().format("yyyy-MM-dd HH:mm:ss")
+    holder.heart.tag = R.drawable.ic_favorite_border_black_24dp
 
-    // 아마 이 부분에서 터질건데 이거는 예전 데이터 지우면 해결
-    //holder.nickname.text = singleItem.makersNickname
 
     //클릭하면 맵 상세보기 페이지로 이동
     holder.itemView.setOnClickListener {
       val nextIntent = Intent(context, RankRecyclerItemClickActivity::class.java)
       nextIntent.putExtra("MapTitle", singleItem.mapTitle) //mapTitle 정보 인텐트로 넘김
       context!!.startActivity(nextIntent)
+    }
+
+    holder.heart.setOnClickListener {
+      var likes = Integer.parseInt(holder.likes.text.toString())
+      Logg.d("ssmm11 눌림 tag = ${holder.heart.tag}")
+      when (holder.heart.tag) {
+        R.drawable.ic_sneaker_for_running -> {
+
+        }
+        R.drawable.ic_favorite_border_black_24dp -> {
+          FBLikes().setLikes(singleItem.mapTitle!!, likes)
+          holder.heart.setImageResource(R.drawable.ic_favorite_red_24dp)
+          holder.heart.tag = R.drawable.ic_favorite_red_24dp
+          likes++
+          holder.likes.text = likes.toString()
+        }
+        R.drawable.ic_favorite_red_24dp -> {
+          FBLikes().setminusLikes(singleItem.mapTitle!!, likes)
+          holder.heart.setImageResource(R.drawable.ic_favorite_border_black_24dp)
+          holder.heart.tag = R.drawable.ic_favorite_border_black_24dp
+          likes--
+          holder.likes.text = likes.toString()
+        }
+      }
     }
   }
 
