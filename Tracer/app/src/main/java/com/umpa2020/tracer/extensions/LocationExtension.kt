@@ -12,9 +12,10 @@ import io.jenetics.jpx.TrackSegment
 import io.jenetics.jpx.WayPoint
 import java.io.File
 
-fun Location.toLatLng():LatLng{
+fun Location.toLatLng(): LatLng {
   return LatLng(latitude.toDouble(), longitude.toDouble())
 }
+
 fun WayPoint.toLatLng(): LatLng {
   return LatLng(latitude.toDouble(), longitude.toDouble())
 }
@@ -30,23 +31,34 @@ fun MutableList<LatLng>.bounds(): LatLngBounds {
     if (it.longitude < minlon) minlon = it.longitude
     else if (it.longitude > maxlon) maxlon = it.longitude
   }
-  return LatLngBounds(LatLng(minlat,minlon), LatLng(maxlat,maxlon))
+  return LatLngBounds(LatLng(minlat, minlon), LatLng(maxlat, maxlon))
 }
 
+//TODO : Kotlin scope 적용
 fun RouteGPX.classToGpx(folderPath: String): Uri {
+  val gpx=GPX.builder()
+    .addTrack { it.addSegment(TrackSegment.of(trkList)).build() }
+    .addWayPoint {
+      this.wptList.map { wpt ->
+        it.lat(wpt.latitude)
+          .lon(wpt.longitude)
+          .build()
+      }
+    }.build()
+
   try {
-    Logg.d( "make gpx file")
-    var gpxBuilder = GPX.builder()
-    var track = Track.builder()
-    track.addSegment(TrackSegment.of(this.trkList))
+    Logg.d("make gpx file")
+   /* val gpxBuilder = GPX.builder()
+    val track = Track.builder().addSegment(TrackSegment.of(this.trkList))
     gpxBuilder.addTrack(track.build())
-    this.wptList.forEach{ gpxBuilder.addWayPoint(it)}
-    val gpx = gpxBuilder.build()
+    this.wptList.forEach { gpxBuilder.addWayPoint(it) }
+    val gpx = gpxBuilder.build()*/
+
     val saveFolder = File(folderPath) // 저장 경로
     if (!saveFolder.exists()) {       //폴더 없으면 생성
       saveFolder.mkdir()
     }
-    val path = "route" + saveFolder.list()!!.size + ".gpx"
+    val path = "route_${System.currentTimeMillis()}.gpx"
     val myfile = File(saveFolder, path)         //로컬에 파일저장
     GPX.write(gpx, (myfile.path))
     Logg.d("start upload gpx")
@@ -59,5 +71,5 @@ fun RouteGPX.classToGpx(folderPath: String): Uri {
 
 fun String.gpxToClass(): RouteGPX {
   val gpx = GPX.read(this)
-  return RouteGPX("test","Test",gpx.wayPoints,gpx.tracks[0].segments[0].points)
+  return RouteGPX("test", "Test", gpx.wayPoints, gpx.tracks[0].segments[0].points)
 }

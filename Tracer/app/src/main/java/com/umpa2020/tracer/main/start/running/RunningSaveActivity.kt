@@ -20,6 +20,7 @@ import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.extensions.MM_SS
 import com.umpa2020.tracer.extensions.classToGpx
 import com.umpa2020.tracer.extensions.format
+import com.umpa2020.tracer.extensions.prettyDistance
 import com.umpa2020.tracer.map.TraceMap
 import com.umpa2020.tracer.util.Chart
 import com.umpa2020.tracer.util.Logg
@@ -53,7 +54,7 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
       speedList.add(it.speed.get().toDouble())
       elevationList.add(it.elevation.get().toDouble())
     }
-    distance_tv.text = String.format("%.2f", infoData.distance!! / 1000)
+    distance_tv.text = infoData.distance!!.prettyDistance
 
     time_tv.text = infoData.time!!.format(MM_SS)
     speed_tv.text = String.format("%.2f", speedList.average())
@@ -64,10 +65,10 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
     }
     val myChart = Chart(elevationList, speedList, chart)
     myChart.setChart()
+    save_btn.setOnClickListener(this)
   }
 
   override fun onSingleClick(v: View?) {
-    if (switch == 0) {
       when (v!!.id) {
         com.umpa2020.tracer.R.id.save_btn -> {
           if (mapTitleEdit.text.toString() == "") {
@@ -94,8 +95,6 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
               }
             }
             traceMap.captureMapScreen(callback)
-            switch++
-          }
         }
       }
     }
