@@ -24,27 +24,16 @@ class FBLikes {
    *
    * -> 리사이클러뷰에서 해당 유저가 좋아요한 맵에 대해서 이미지 작업을 한다.
    */
-  fun getLikes(mHandler: Handler, mode: String) {
+  fun getLikes( listener: LikedMapListener) {
     db.collection("userinfo").document(UserInfo.autoLoginKey).collection("user liked these maps")
       .get()
       .addOnSuccessListener { result ->
-        val likeMapsDatas = arrayListOf<LikeMapsData>()
-
-        for (document in result) {
-          val likeMapsData = LikeMapsData(document.get("mapTitle") as String, document.get("uid") as String)
-          likeMapsDatas.add(likeMapsData)
-        }
-        if (mode == "rank") {
-          val msg: Message = mHandler.obtainMessage(GETLIKES)
-          msg.obj = likeMapsDatas
-          mHandler.sendMessage(msg)
-        }
-        else if (mode == "profile") {
-          val msg: Message = mHandler.obtainMessage(GETPROFILELIKES)
-          msg.obj = likeMapsDatas
-          mHandler.sendMessage(msg)
-        }
-
+//        for (document in result) {
+////          val likeMapsData =
+////            LikeMapsData(document.get("mapTitle") as String, document.get("uid") as String)
+////          likeMapsDatas.add(likeMapsData)
+////        }
+        listener.liked(result.map { LikeMapsData(it.getString("mapTitle"), it.getString("uid")) })
       }
   }
 
@@ -78,7 +67,8 @@ class FBLikes {
    */
   fun setLikes(maptitle: String, likes: Int) {
     val likeMapsData = LikeMapsData(maptitle, UserInfo.autoLoginKey)
-    db.collection("userinfo").document(UserInfo.autoLoginKey).collection("user liked these maps").add(likeMapsData)
+    db.collection("userinfo").document(UserInfo.autoLoginKey).collection("user liked these maps")
+      .add(likeMapsData)
     db.collection("mapInfo").document(maptitle).collection("likes").add(likeMapsData)
     db.collection("mapInfo").document(maptitle).update("likes", likes + 1)
   }
@@ -97,7 +87,8 @@ class FBLikes {
       .addOnSuccessListener { result ->
         val documentid = result.documents.get(0).id
 
-        db.collection("userinfo").document(UserInfo.autoLoginKey).collection("user liked these maps")
+        db.collection("userinfo").document(UserInfo.autoLoginKey)
+          .collection("user liked these maps")
           .document(documentid).delete()
       }
 

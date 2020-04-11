@@ -14,15 +14,20 @@ import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.LikeMapsData
 import com.umpa2020.tracer.extensions.prettyDistance
 import com.umpa2020.tracer.network.FBLikes
+import com.umpa2020.tracer.network.LikedMapListener
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.ProgressBar
 import kotlinx.android.synthetic.main.recycler_rankfragment_item.view.*
 
-class RankRecyclerViewAdapterMap(
-  val mdata: ArrayList<InfoData>,
+/**
+ * 맵 랭킹 목록 어댑터
+ */
+class MapRankingAdapter(
+  val infoDatas: ArrayList<InfoData>,
   val mode: String,
   val progressBar: ProgressBar
-) : RecyclerView.Adapter<RankRecyclerViewAdapterMap.mViewHolder>() {
+) : RecyclerView.Adapter<MapRankingAdapter.mViewHolder>() {
+
   var context: Context? = null
   val GETLIKES = 50
   var likeMapsDatas = arrayListOf<LikeMapsData>()
@@ -34,40 +39,38 @@ class RankRecyclerViewAdapterMap(
     position: Int
   ) {
 //    holder1 = holder
-    val singleItem = mdata[position]
+    val infoData = infoDatas[position]
     val ranking = position + 1
     val mHandler = object : Handler(Looper.getMainLooper()) {
       override fun handleMessage(msg: Message) {
         when (msg.what) {
           GETLIKES -> {
             likeMapsDatas = msg.obj as ArrayList<LikeMapsData>
-            //adpater 추가
-            for (i in likeMapsDatas) {
-              if (i.mapTitle.equals(singleItem.mapTitle)) {
-                holder.modeIcon.setImageResource(R.drawable.ic_favorite_red_24dp)
-                holder.modeIcon.tag = R.drawable.ic_favorite_red_24dp
-              }
-            }
+
           }
         }
       }
     }
 
-    val cutted = singleItem.mapTitle!!.split("||")
+    val cutted = infoData.mapTitle!!.split("||")
     //데이터 바인딩
     holder.rank.text = ranking.toString()
 
     holder.maptitle.text = cutted[0]
-    holder.distance.text = singleItem.distance!!.prettyDistance()
+    holder.distance.text = infoData.distance!!.prettyDistance()
     if (mode.equals("execute")) {
       holder.modeIcon.setImageResource(R.drawable.ic_sneaker_for_running)
       holder.modeIcon.tag = R.drawable.ic_sneaker_for_running
-      holder.modeNo.text = singleItem.execute.toString()
+      holder.modeNo.text = infoData.execute.toString()
     } else if (mode.equals("likes")) {
-      FBLikes().getLikes(mHandler, "rank")
-      holder.modeIcon.setImageResource(R.drawable.ic_favorite_border_black_24dp)
-      holder.modeIcon.tag = R.drawable.ic_favorite_border_black_24dp
-      holder.modeNo.text = singleItem.likes.toString()
+      if (infoData.myLiked) {
+        holder.modeIcon.setImageResource(R.drawable.ic_favorite_red_24dp)
+        holder.modeIcon.tag = R.drawable.ic_favorite_red_24dp
+      } else {
+        holder.modeIcon.setImageResource(R.drawable.ic_favorite_border_black_24dp)
+        holder.modeIcon.tag = R.drawable.ic_favorite_border_black_24dp
+        holder.modeNo.text = infoData.likes.toString()
+      }
     }
 
     //ranking에 따라 트로피 색 바뀌게 하는 부분
@@ -83,18 +86,19 @@ class RankRecyclerViewAdapterMap(
     } else
       holder.rank.setBackgroundResource(R.drawable.ic_4)
 
+
     //클릭하면 맵 상세보기 페이지로 이동
-    holder.itemView.setOnClickListener (
+    holder.itemView.setOnClickListener(
       object : OnSingleClickListener {
         override fun onSingleClick(v: View?) {
           val nextIntent = Intent(context, RankRecyclerItemClickActivity::class.java)
-          nextIntent.putExtra("MapTitle", singleItem.mapTitle) //mapTitle 정보 인텐트로 넘김
+          nextIntent.putExtra("MapTitle", infoData.mapTitle) //mapTitle 정보 인텐트로 넘김
           context!!.startActivity(nextIntent)
         }
       }
     )
 
-    holder.modeIcon.setOnClickListener (
+    holder.modeIcon.setOnClickListener(
       object : OnSingleClickListener {
         override fun onSingleClick(v: View?) {
           var likes = Integer.parseInt(holder.modeNo.text.toString())
@@ -104,14 +108,14 @@ class RankRecyclerViewAdapterMap(
 
             }
             R.drawable.ic_favorite_border_black_24dp -> {
-              FBLikes().setLikes(singleItem.mapTitle!!, likes)
+              FBLikes().setLikes(infoData.mapTitle!!, likes)
               holder.modeIcon.setImageResource(R.drawable.ic_favorite_red_24dp)
               holder.modeIcon.tag = R.drawable.ic_favorite_red_24dp
               likes++
               holder.modeNo.text = likes.toString()
             }
             R.drawable.ic_favorite_red_24dp -> {
-              FBLikes().setminusLikes(singleItem.mapTitle!!, likes)
+              FBLikes().setminusLikes(infoData.mapTitle!!, likes)
               holder.modeIcon.setImageResource(R.drawable.ic_favorite_border_black_24dp)
               holder.modeIcon.tag = R.drawable.ic_favorite_border_black_24dp
               likes--
@@ -126,7 +130,7 @@ class RankRecyclerViewAdapterMap(
     // 스크롤이 내려가면 달게 posiotion이 증가 되어서 mdata.size 까지
     // 도달하지 못하는 경우가 있음
     // 추후에 코드 정리 할 예정 - 정빈
-    if (position == mdata.size - 1 || position > 5) {
+    if (position == infoDatas.size - 1 || position > 5) {
       progressBar.dismiss()
     }
   }
@@ -145,7 +149,7 @@ class RankRecyclerViewAdapterMap(
   //item 사이즈, 데이터의 전체 길이 반ㅎ환
   override fun getItemCount(): Int {
     //return 10
-    return mdata.size
+    return infoDatas.size
   }
 
   //여기서 item을 textView에 옮겨줌
@@ -155,6 +159,25 @@ class RankRecyclerViewAdapterMap(
     var distance = view.rankingFragmentDistanceTextView
     var modeNo = view.rankingFragmentModeTextView
     var modeIcon = view.rankingFragmentModeImageView
+  }
+
+  private val likedMapListener = object : LikedMapListener {
+    override fun liked(likedMaps: List<LikeMapsData>) {
+      //adpater 추가
+      infoDatas.filter { infoData ->
+        likedMaps.map { it.mapTitle }
+          .contains(infoData.mapTitle)
+      }.map {
+        it.myLiked = true
+      }
+      notifyDataSetChanged()
+//      for (i in likeMapsDatas) {
+//        if (i.mapTitle.equals(singleItem.mapTitle)) {
+//          holder.modeIcon.setImageResource(R.drawable.ic_favorite_red_24dp)
+//          holder.modeIcon.tag = R.drawable.ic_favorite_red_24dp
+//        }
+//      }
+    }
   }
 }
 
