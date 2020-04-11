@@ -73,7 +73,7 @@ class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) :
         }
       }
     }
-    FBLikes().getLikes(mHandler, "profile")
+    //FBLikes().getLikes(mHandler, "profile")
 
 
 

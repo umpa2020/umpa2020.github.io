@@ -53,7 +53,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
   lateinit var traceMap: TraceMap
   var currentLocation: Location? = null
 
-  lateinit var locationBroadcastReceiver: BroadcastReceiver
+
   var routeMarkers = mutableListOf<Marker>()
 
   // 처음 화면 시작에서 주변 route 마커 찍어주기 위함
@@ -223,18 +223,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
 
     val smf = childFragmentManager.findFragmentById(R.id.map_viewer_start) as SupportMapFragment
     smf.getMapAsync(this)
-    locationBroadcastReceiver = object : BroadcastReceiver() {
-      override fun onReceive(context: Context?, intent: Intent?) {
-        val message = intent?.getParcelableExtra<Location>("message")
-        currentLocation = message as Location
-        if (wedgedCamera) traceMap.moveCamera(currentLocation!!.toLatLng())
-        if(firstFlag) {
-            searchThisArea()
-            firstFlag=false
-        }
 
-      }
-    }
     return view
   }
 
@@ -260,25 +249,41 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
     view.mainStartSearchAreaButton.setOnClickListener(this)
     view.mainStartSearchButton.setOnClickListener(this)
     view.mainStartBackButton.setOnClickListener(this)
+
+    // 브로드 캐스트 등록 - 전역 context로 수정해야함
+    LocalBroadcastManager.getInstance(this.requireContext())
+      .registerReceiver(locationBroadcastReceiver, IntentFilter("custom-event-name"))
   }
 
   override fun onResume() {
     super.onResume()
-    // 브로드 캐스트 등록 - 전역 context로 수정해야함
-    LocalBroadcastManager.getInstance(this.requireContext())
-      .registerReceiver(locationBroadcastReceiver, IntentFilter("custom-event-name"))
+
   }
 
   override fun onPause() {
     super.onPause()
     UserInfo.rankingLatLng = currentLocation?.toLatLng()
     //        브로드 캐스트 해제 - 전역 context로 수정해야함
-    LocalBroadcastManager.getInstance(this.requireContext())
-      .unregisterReceiver(locationBroadcastReceiver)
+
   }
 
   override fun onDestroy() {
     super.onDestroy()
     Logg.d("onDestroy()")
+    LocalBroadcastManager.getInstance(this.requireContext())
+      .unregisterReceiver(locationBroadcastReceiver)
+  }
+
+  var locationBroadcastReceiver = object : BroadcastReceiver() {
+    override fun onReceive(context: Context?, intent: Intent?) {
+      val message = intent?.getParcelableExtra<Location>("message")
+      currentLocation = message as Location
+      if (wedgedCamera) traceMap.moveCamera(currentLocation!!.toLatLng())
+      if(firstFlag) {
+        searchThisArea()
+        firstFlag=false
+      }
+      Logg.d("${currentLocation}")
+    }
   }
 }

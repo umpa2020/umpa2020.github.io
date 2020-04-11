@@ -11,7 +11,7 @@ import com.umpa2020.tracer.App
 import com.umpa2020.tracer.constant.Constants.Companion.MAX_DISTANCE
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.NearMap
-import com.umpa2020.tracer.main.ranking.RankRecyclerViewAdapterMap
+import com.umpa2020.tracer.main.ranking.MapRankingAdapter
 import com.umpa2020.tracer.util.ProgressBar
 import kotlinx.android.synthetic.main.fragment_ranking.view.*
 
@@ -59,7 +59,7 @@ class FBRanking {
           view.rankingRecyclerRouteisEmpty.visibility = View.VISIBLE
           progressbar.dismiss()
         }
-        view.rank_recycler_map.adapter = RankRecyclerViewAdapterMap(infoDatas, mode, progressbar)
+        view.rank_recycler_map.adapter = MapRankingAdapter(infoDatas, mode, progressbar)
       }
   }
 
@@ -110,7 +110,7 @@ class FBRanking {
           view.rankingRecyclerRouteisEmpty.visibility = View.GONE
           progressbar.dismiss()
         }
-        view.rank_recycler_map.adapter = RankRecyclerViewAdapterMap(infoDatas, mode, progressbar)
+        view.rank_recycler_map.adapter = MapRankingAdapter(infoDatas, mode, progressbar)
       }
   }
 }

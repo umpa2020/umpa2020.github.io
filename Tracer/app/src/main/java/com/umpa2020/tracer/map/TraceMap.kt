@@ -18,6 +18,7 @@ class TraceMap(val mMap: GoogleMap) {
 
   lateinit var loadTrack: Polyline
   val passedIcon=R.drawable.ic_checkpoint_red.makingIcon()
+
   var markerList = mutableListOf<Marker>()
   fun drawRoute(track: MutableList<LatLng>, wptList: MutableList<WayPoint>) {
     Logg.d("Map is draw")
@@ -58,8 +59,9 @@ class TraceMap(val mMap: GoogleMap) {
 
   fun drawPolyLine(preLoc: LatLng, curLoc: LatLng) {
     Logg.d("making polyline $preLoc $curLoc")
+
     //polyline 그리기
-    mMap.addPolyline(
+   mMap.addPolyline(
       PolylineOptions().add(
         preLoc,
         curLoc
