@@ -13,13 +13,27 @@
     android:background="@color/white"
     android:elevation="1dp">
 
-    <TextView
-      style="@style/appBarText"
+    <RelativeLayout
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginRight="12dp"
-      android:gravity="center"
-      android:text="@string/activities"></TextView>
+      android:layout_height="match_parent">
+
+      <TextView
+        style="@style/appBarText"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginRight="12dp"
+        android:gravity="center"
+        android:text="@string/activities" />
+
+      <Button
+        android:id="@+id/runningSaveDeleteButton"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/ic_delete_red_24dp"
+        android:layout_margin="10dp"/>
+    </RelativeLayout>
   </Toolbar>
 
   <ScrollView
@@ -38,7 +52,7 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        tools:context=".fragment.MapFragment" />
+        class="com.umpa2020.tracer.customUI.WorkaroundMapFragment"/>
 
       <TextView
         android:id="@+id/line1"
@@ -246,7 +260,7 @@
             android:checked="true"
             android:fontFamily="@font/notosansmedium"
             android:text="@string/competition"
-            android:textSize="12sp"/>
+            android:textSize="12sp" />
 
           <RadioButton
             android:id="@+id/publicRadio"
@@ -255,7 +269,7 @@
             android:layout_weight="1"
             android:fontFamily="@font/notosansmedium"
             android:text="@string/public_"
-            android:textSize="12sp"/>
+            android:textSize="12sp" />
 
           <RadioButton
             android:id="@+id/privateRadio"
@@ -264,7 +278,7 @@
             android:layout_weight="1"
             android:fontFamily="@font/notosansmedium"
             android:text="@string/private_"
-            android:textSize="12sp"/>
+            android:textSize="12sp" />
         </RadioGroup>
       </LinearLayout>
     </RelativeLayout>
