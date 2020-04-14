@@ -162,4 +162,5 @@
   <string name="out_of_route">\"경로이탈 \"</string>
   <string name="altitude">고도</string>
   <string name="speed">속도</string>
+  <string name="Are_you_sure_to_delete_this">이 달리기를 삭제하시겠습니까?</string>
 </resources>

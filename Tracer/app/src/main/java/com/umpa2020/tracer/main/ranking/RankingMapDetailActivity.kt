@@ -9,6 +9,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
+import com.umpa2020.tracer.customUI.WorkaroundMapFragment
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.extensions.MM_SS
@@ -43,8 +44,12 @@ class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener {
 
 
     rankingDetailDate.text = cutted[1].toLong().format("yyyy-MM-dd HH:mm:ss")
-
-
+    (supportFragmentManager.findFragmentById(R.id.rankingDetailMapViewer) as WorkaroundMapFragment)
+      .setListener(object : WorkaroundMapFragment.OnTouchListener {
+        override fun onTouch() {
+          rankingDetailScrollView.requestDisallowInterceptTouchEvent(true);
+        }
+      })
     val db = FirebaseFirestore.getInstance()
     db.collection("mapInfo").whereEqualTo("mapTitle", mapTitle)
       .get()
@@ -93,7 +98,7 @@ class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener {
             }
           }
         }
-        FBMapImage().getMapImage(rankingDetailGoogleMap, mapTitle)
+        //FBMapImage().getMapImage(rankingDetailGoogleMap, mapTitle)
 
         rankingDetailRaceButton.setOnClickListener(this)
       }

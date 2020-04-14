@@ -1,6 +1,7 @@
 package com.umpa2020.tracer.main.start.running
 
 
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.net.Uri
@@ -13,7 +14,10 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import com.umpa2020.tracer.App
+import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Privacy
+import com.umpa2020.tracer.customUI.WorkaroundMapFragment
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.RankingData
 import com.umpa2020.tracer.dataClass.RouteGPX
@@ -21,11 +25,10 @@ import com.umpa2020.tracer.extensions.MM_SS
 import com.umpa2020.tracer.extensions.classToGpx
 import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.extensions.prettyDistance
+import com.umpa2020.tracer.main.MainActivity
+import com.umpa2020.tracer.main.start.racing.RacingActivity
 import com.umpa2020.tracer.map.TraceMap
-import com.umpa2020.tracer.util.Chart
-import com.umpa2020.tracer.util.Logg
-import com.umpa2020.tracer.util.OnSingleClickListener
-import com.umpa2020.tracer.util.UserInfo
+import com.umpa2020.tracer.util.*
 import kotlinx.android.synthetic.main.activity_running_save.*
 import java.io.File
 import java.io.FileOutputStream
@@ -45,8 +48,13 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
     infoData = intent.getParcelableExtra("InfoData")!!
     routeGPX = intent.getParcelableExtra("RouteGPX")!!
     loadRoute()
-    val smf = supportFragmentManager.findFragmentById(com.umpa2020.tracer.R.id.map_viewer) as SupportMapFragment
-    smf.getMapAsync(this)
+    val wmf = supportFragmentManager.findFragmentById(com.umpa2020.tracer.R.id.map_viewer) as WorkaroundMapFragment
+    wmf.getMapAsync(this)
+    wmf.setListener(object : WorkaroundMapFragment.OnTouchListener {
+      override fun onTouch() {
+        runningSaveScrollView.requestDisallowInterceptTouchEvent(true);
+      }
+    })
 
     val speedList = mutableListOf<Double>()
     val elevationList = mutableListOf<Double>()
@@ -66,11 +74,23 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
     val myChart = Chart(elevationList, speedList, chart)
     myChart.setChart()
     save_btn.setOnClickListener(this)
+    runningSaveDeleteButton.setOnClickListener(this)
+  }
+
+  override fun onBackPressed() {
+    if(::noticePopup.isInitialized&&noticePopup.isShowing) {
+        noticePopup.dismiss()
+    }else {
+      deleteSaving()
+    }
   }
 
   override fun onSingleClick(v: View?) {
       when (v!!.id) {
-        com.umpa2020.tracer.R.id.save_btn -> {
+        R.id.runningSaveDeleteButton->{
+          deleteSaving()
+        }
+        R.id.save_btn -> {
           if (mapTitleEdit.text.toString() == "") {
             mapTitleEdit.hint = "제목을 설정해주세요"
             mapTitleEdit.setHintTextColor(Color.RED)
@@ -98,6 +118,23 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
         }
       }
     }
+  }
+  lateinit var noticePopup:ChoicePopup
+  private fun deleteSaving() {
+    noticePopup = ChoicePopup(this, getString(R.string.select_type),
+      getString(R.string.Are_you_sure_to_delete_this),
+      getString(R.string.yes), getString(R.string.no),
+      View.OnClickListener {
+        //랭킹 기록용 버튼 눌렀을 때
+        val intent = Intent(App.instance.context(), MainActivity::class.java)
+        noticePopup.dismiss()
+        startActivity(intent)
+        finish()
+      },
+      View.OnClickListener {
+        noticePopup.dismiss()
+      })
+    noticePopup.show()
   }
 
 
@@ -181,7 +218,6 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
   override fun onMapReady(googleMap: GoogleMap) {
     Logg.d("onMapReady")
     traceMap = TraceMap(googleMap) //구글맵
-    traceMap.mMap.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
     traceMap.drawRoute(track, routeGPX.wptList)
   }
 }

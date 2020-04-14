@@ -163,4 +163,5 @@
   <string name="altitude" >altitude</string>
 
   <string name="speed">speed</string>
+  <string name="Are_you_sure_to_delete_this">Are you sure to delete this running?</string>
 </resources>
