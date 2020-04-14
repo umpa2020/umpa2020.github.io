@@ -10,5 +10,5 @@ interface RankingListener {
   /**
    * 랭킹을 받아오면 infoDatas 를 반환
    */
-  fun getRank(infoDatas: ArrayList<InfoData>)
+  fun getRank(infoDatas: ArrayList<InfoData>, mode: String)
 }

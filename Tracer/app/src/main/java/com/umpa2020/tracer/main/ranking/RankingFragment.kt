@@ -17,7 +17,6 @@ import com.umpa2020.tracer.constant.Constants.Companion.MAX_SEEKERBAR
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.network.FBRanking
 import com.umpa2020.tracer.network.RankingListener
-import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.UserInfo
@@ -33,7 +32,6 @@ class RankingFragment : Fragment(), OnSingleClickListener {
   var distance = MAX_DISTANCE
   lateinit var root: View
   val progressbar = MyProgressBar()
-
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -90,24 +88,27 @@ class RankingFragment : Fragment(), OnSingleClickListener {
 
       R.id.applyButton -> { //적용 버튼 누를때
         val tuneDistance = distance
-        Logg.d("ssmm11 tune distance = $tuneDistance")
+        progressbar.show()
+
         if (UserInfo.rankingLatLng != null) {
           //실행순 버튼에 체크가 되어 있을 경우
           if (requireView().tuneRadioBtnExecute.isChecked) {
             requireView().rankingfiltermode.text = getString(R.string.execute)
+
             FBRanking().getFilterRange(
-              requireView(),
               UserInfo.rankingLatLng!!,
               tuneDistance,
-              "execute"
+              "execute",
+              rankingListener
             )
           } else {
             requireView().rankingfiltermode.text = getString(R.string.likes)
+
             FBRanking().getFilterRange(
-              requireView(),
               UserInfo.rankingLatLng!!,
               tuneDistance,
-              "likes"
+              "likes",
+              rankingListener
             )
           }
           disappearAnimation()
@@ -117,25 +118,8 @@ class RankingFragment : Fragment(), OnSingleClickListener {
   }
 
   override fun onResume() {
-    Logg.d("ssmm11 onresume")
     if (UserInfo.rankingLatLng != null) {
       progressbar.show()
-
-      val rankingListener = object : RankingListener {
-        override fun getRank(infoDatas: ArrayList<InfoData>) {
-          if (infoDatas.isEmpty()) {
-            rankingRecyclerRouteisEmpty.visibility = View.VISIBLE
-          }
-
-          val mode = "execute"
-          //TODO : 이제 리쥼에서 전 꺼 기억해놔서 하기
-          // val mode = "likes" 이렇게
-
-          //레이아웃 매니저, 어댑터 추가
-          rank_recycler_map.layoutManager = LinearLayoutManager(context)
-          rank_recycler_map.adapter = MapRankingAdapter(infoDatas, mode, progressbar)
-        }
-      }
 
       FBRanking().getExcuteDESCENDING(
         UserInfo.rankingLatLng!!,
@@ -149,7 +133,7 @@ class RankingFragment : Fragment(), OnSingleClickListener {
    * 레이아웃이 스르륵 보이는 함수
    */
 
-  fun appearAnimation() {
+  private fun appearAnimation() {
     val animate = AlphaAnimation(0f, 1f) //투명도 변화
     animate.duration = ANIMATION_DURATION_TIME
     animate.fillAfter = true
@@ -162,7 +146,7 @@ class RankingFragment : Fragment(), OnSingleClickListener {
   /**
    * 레이아웃이 스르륵 사라지는 함수
    */
-  fun disappearAnimation() {
+  private fun disappearAnimation() {
     requireView().tuneLinearLayout.visibility = View.GONE
     requireView().filterLayout.visibility = View.GONE
     requireView().disappearLayout.visibility = View.GONE
@@ -171,5 +155,18 @@ class RankingFragment : Fragment(), OnSingleClickListener {
     animate.duration = ANIMATION_DURATION_TIME
     animate.fillAfter = true
     requireView().tuneLinearLayout.startAnimation(animate)
+  }
+
+  private val rankingListener = object : RankingListener {
+    override fun getRank(infoDatas: ArrayList<InfoData>, mode: String) {
+      if (infoDatas.isEmpty()) {
+        rankingRecyclerRouteisEmpty.visibility = View.VISIBLE
+        progressbar.dismiss()
+      } else {
+        //레이아웃 매니저, 어댑터 추가
+        rank_recycler_map.layoutManager = LinearLayoutManager(context)
+        rank_recycler_map.adapter = MapRankingAdapter(infoDatas, mode, progressbar)
+      }
+    }
   }
 }

@@ -10,6 +10,7 @@ import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.extensions.prettyDistance
 import com.umpa2020.tracer.network.FBLikes
+import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.recycler_rankfragment_item.view.*
@@ -44,17 +45,20 @@ class MapRankingAdapter(
     if (mode.equals("execute")) {
       holder.modeIcon.setImageResource(R.drawable.ic_sneaker_for_running)
       holder.modeIcon.tag = R.drawable.ic_sneaker_for_running
+
+      if (infoData.played) {
+        holder.modeIcon.setColorFilter(R.color.green)
+      }
       holder.modeNo.text = infoData.execute.toString()
     } else if (mode.equals("likes")) {
       if (infoData.myLiked) {
         holder.modeIcon.setImageResource(R.drawable.ic_favorite_red_24dp)
         holder.modeIcon.tag = R.drawable.ic_favorite_red_24dp
-        holder.modeNo.text = infoData.likes.toString()
       } else {
         holder.modeIcon.setImageResource(R.drawable.ic_favorite_border_black_24dp)
         holder.modeIcon.tag = R.drawable.ic_favorite_border_black_24dp
-        holder.modeNo.text = infoData.likes.toString()
       }
+      holder.modeNo.text = infoData.likes.toString()
     }
 
     //ranking에 따라 트로피 색 바뀌게 하는 부분
@@ -115,7 +119,9 @@ class MapRankingAdapter(
     // 도달하지 못하는 경우가 있음
     // 추후에 코드 정리 할 예정 - 정빈
     if (position == infoDatas.size - 1 || position > 5) {
-      progressBar.dismiss()
+      if (progressBar.mprogressBar.isShowing) {
+        progressBar.dismiss()
+      }
     }
   }
 

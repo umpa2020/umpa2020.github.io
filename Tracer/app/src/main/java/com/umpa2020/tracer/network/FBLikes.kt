@@ -12,9 +12,7 @@ import com.umpa2020.tracer.util.UserInfo
  */
 
 class FBLikes {
-  val GETLIKES = 50
   val GETLIKE = 51
-  val GETPROFILELIKES = 110
 
   val db = FirebaseFirestore.getInstance()
 
@@ -91,7 +89,7 @@ class FBLikes {
       .whereEqualTo("mapTitle", maptitle)
       .get()
       .addOnSuccessListener { result ->
-        val documentid = result.documents.get(0).id
+        val documentid = result.documents[0].id
 
         db.collection("mapInfo").document(maptitle).collection("likes")
           .document(documentid).delete()
