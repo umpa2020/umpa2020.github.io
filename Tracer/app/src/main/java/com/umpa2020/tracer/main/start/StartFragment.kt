@@ -100,7 +100,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
    *  현재 맵 보이는 범위로 루트 검색
    */
   private fun searchThisArea() {
-    progressBar.progressBarShow()
+    progressBar.show()
     val bound = traceMap.mMap.projection.visibleRegion.latLngBounds
 
     val mHandler = object : Handler(Looper.getMainLooper()) {
@@ -141,11 +141,11 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
               }
             }
 
-            progressBar.progressBarDismiss()
+            progressBar.dismiss()
           }
           NEARMAPFALSE -> {
             getString(R.string.not_search).show()
-            progressBar.progressBarDismiss()
+            progressBar.dismiss()
           }
         }
       }

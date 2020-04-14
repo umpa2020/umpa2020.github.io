@@ -1,18 +1,17 @@
 package com.umpa2020.tracer.network
 
 import android.app.Activity
-import android.content.Context
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.maps.android.SphericalUtil
 import com.umpa2020.tracer.App
-import com.umpa2020.tracer.constant.Constants.Companion.MAX_DISTANCE
 import com.umpa2020.tracer.dataClass.InfoData
+import com.umpa2020.tracer.dataClass.LikedMapData
 import com.umpa2020.tracer.dataClass.NearMap
 import com.umpa2020.tracer.main.ranking.MapRankingAdapter
-import com.umpa2020.tracer.util.ProgressBar
+import com.umpa2020.tracer.util.MyProgressBar
 import kotlinx.android.synthetic.main.fragment_ranking.view.*
 
 
@@ -25,22 +24,14 @@ class FBRanking {
   lateinit var infoDatas: ArrayList<InfoData>
   var nearMaps1: ArrayList<NearMap> = arrayListOf()
 
-  var cur_loc = LatLng(0.0, 0.0)          //현재위치
-
   val db = FirebaseFirestore.getInstance()
 
   /**
    * 필터를 거치지 않고, 실행순으로 정렬되는 데이터를 가져오는 함수.
    */
 
-  fun getExcuteDESCENDING(context: Context, view: View, latlng: LatLng, mode: String) {
-    val progressbar = ProgressBar(context)
-    progressbar.show()
-    cur_loc = latlng
+  fun getExcuteDESCENDING(cur_loc: LatLng, rankingListener: RankingListener) {
     nearMaps1.clear()
-
-    //레이아웃 매니저 추가
-    view.rank_recycler_map.layoutManager = LinearLayoutManager(context)
 
     db.collection("mapInfo")
       .get()
@@ -49,17 +40,15 @@ class FBRanking {
 
         for (document in result) {
           infoData = document.toObject(InfoData::class.java)
-          infoData.mapTitle = document.id
 
-          infoData.distance = SphericalUtil.computeDistanceBetween(cur_loc, LatLng(infoData.startLatitude!!, infoData.startLongitude!!))
+          infoData.distance = SphericalUtil.computeDistanceBetween(
+            cur_loc,
+            LatLng(infoData.startLatitude!!, infoData.startLongitude!!)
+          )
           infoDatas.add(infoData)
         }
         infoDatas.sortByDescending { infoData -> infoData.execute }
-        if (infoDatas.isEmpty()) {
-          view.rankingRecyclerRouteisEmpty.visibility = View.VISIBLE
-          progressbar.dismiss()
-        }
-        view.rank_recycler_map.adapter = MapRankingAdapter(infoDatas, mode, progressbar)
+        rankingListener.getRank(infoDatas)
       }
   }
 
@@ -67,17 +56,17 @@ class FBRanking {
    * 현재 위치를 받아서 현재 위치와 필터에 적용한 위치 만큼 떨어져 있는 구간에서 실행순으로 정렬한 코드
    */
 
-  fun getFilterRange(view: View, latlng: LatLng, distance: Int, mode: String) {
-    val progressbar = ProgressBar(App.instance.currentActivity() as Activity)
+  fun getFilterRange(view: View, cur_loc: LatLng, distance: Int, mode: String) {
+    val progressbar = MyProgressBar()
     progressbar.show()
 
     //결과로 가져온 location에서 정보추출 / 이건 위도 경도 형태로 받아오는 형식
     //Location 형태로 받아오고 싶다면 아래처럼
     //var getintentLocation = current
-    cur_loc = latlng
 
     //레이아웃 매니저 추가
-    view.rank_recycler_map.layoutManager = LinearLayoutManager(App.instance.currentActivity() as Activity)
+    view.rank_recycler_map.layoutManager =
+      LinearLayoutManager(App.instance.currentActivity() as Activity)
 
     nearMaps1.clear()
 
@@ -89,20 +78,15 @@ class FBRanking {
         for (document in result) {
           infoData = document.toObject(InfoData::class.java)
           infoData.mapTitle = document.id
-          infoData.distance = SphericalUtil.computeDistanceBetween(cur_loc, LatLng(infoData.startLatitude!!, infoData.startLongitude!!))
-          if (distance != MAX_DISTANCE) {
-            if (infoData.distance!! < distance * 1000)
-              infoDatas.add(infoData)
-          } else {
+          infoData.distance = SphericalUtil.computeDistanceBetween(
+            cur_loc,
+            LatLng(infoData.startLatitude!!, infoData.startLongitude!!)
+          )
+          if (infoData.distance!! < distance * 1000) {
             infoDatas.add(infoData)
           }
         }
 
-        if (mode.equals("execute")) {
-          infoDatas.sortByDescending { infoData -> infoData.execute }
-        } else if (mode.equals("likes")) {
-          infoDatas.sortByDescending { infoData -> infoData.likes }
-        }
         if (infoDatas.isEmpty()) {
           view.rankingRecyclerRouteisEmpty.visibility = View.VISIBLE
           progressbar.dismiss()
@@ -110,7 +94,29 @@ class FBRanking {
           view.rankingRecyclerRouteisEmpty.visibility = View.GONE
           progressbar.dismiss()
         }
-        view.rank_recycler_map.adapter = MapRankingAdapter(infoDatas, mode, progressbar)
+
+        if (mode.equals("execute")) {
+          infoDatas.sortByDescending { infoData -> infoData.execute }
+          view.rank_recycler_map.adapter = MapRankingAdapter(infoDatas, mode, progressbar)
+
+        } else if (mode.equals("likes")) {
+
+          // 좋아요 필터를 눌렀을 때, 유저가 좋아요 누른 맵들을 가져오는 리스너
+          val likedMapListener = object : LikedMapListener {
+            override fun liked(likedMaps: List<LikedMapData>) {
+              infoDatas.filter { infoData ->
+                likedMaps.map { it.mapTitle }
+                  .contains(infoData.mapTitle)
+              }.map {
+                it.myLiked = true
+              }
+              //adpater 추가
+              view.rank_recycler_map.adapter = MapRankingAdapter(infoDatas, mode, progressbar)
+            }
+          }
+          FBLikes().getLikes(likedMapListener)
+          infoDatas.sortByDescending { infoData -> infoData.likes }
+        }
       }
   }
 }

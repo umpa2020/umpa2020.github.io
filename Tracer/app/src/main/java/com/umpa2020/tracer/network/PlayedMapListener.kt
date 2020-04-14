@@ -5,9 +5,9 @@ import com.umpa2020.tracer.dataClass.LikedMapData
 /**
  * 내가 좋아요 누른 맵 목록 리스너
  */
-interface LikedMapListener {
+interface PlayedMapListener {
   /**
    * 내가 좋아요 누른 맵 목록
    */
-  fun liked(likedMaps: List<LikedMapData>)
+  fun played(likedMaps: List<LikedMapData>)
 }

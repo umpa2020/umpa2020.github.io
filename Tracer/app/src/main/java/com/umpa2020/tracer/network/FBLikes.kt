@@ -3,7 +3,7 @@ package com.umpa2020.tracer.network
 import android.os.Handler
 import android.os.Message
 import com.google.firebase.firestore.FirebaseFirestore
-import com.umpa2020.tracer.dataClass.LikeMapsData
+import com.umpa2020.tracer.dataClass.LikedMapData
 import com.umpa2020.tracer.util.UserInfo
 
 /**
@@ -24,16 +24,11 @@ class FBLikes {
    *
    * -> 리사이클러뷰에서 해당 유저가 좋아요한 맵에 대해서 이미지 작업을 한다.
    */
-  fun getLikes( listener: LikedMapListener) {
+  fun getLikes(listener: LikedMapListener) {
     db.collection("userinfo").document(UserInfo.autoLoginKey).collection("user liked these maps")
       .get()
       .addOnSuccessListener { result ->
-//        for (document in result) {
-////          val likeMapsData =
-////            LikeMapsData(document.get("mapTitle") as String, document.get("uid") as String)
-////          likeMapsDatas.add(likeMapsData)
-////        }
-        listener.liked(result.map { LikeMapsData(it.getString("mapTitle"), it.getString("uid")) })
+        listener.liked(result.map { LikedMapData(it.getString("mapTitle"), it.getString("uid")) })
       }
   }
 
@@ -66,7 +61,7 @@ class FBLikes {
    * 3. 맵 인포에 좋아요 숫자를 1 더한다
    */
   fun setLikes(maptitle: String, likes: Int) {
-    val likeMapsData = LikeMapsData(maptitle, UserInfo.autoLoginKey)
+    val likeMapsData = LikedMapData(maptitle, UserInfo.autoLoginKey)
     db.collection("userinfo").document(UserInfo.autoLoginKey).collection("user liked these maps")
       .add(likeMapsData)
     db.collection("mapInfo").document(maptitle).collection("likes").add(likeMapsData)
