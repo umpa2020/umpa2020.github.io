@@ -109,7 +109,7 @@ dependencies {
 
   // 맵 달릴때 정확히 뭔진 모르겠으나 윤권이가 알듯 ㅎ
   implementation 'com.github.moraisigor:slidingdrawer:1.7.1'
-  implementation 'androidx.fragment:fragment-ktx:1.2.3'
+  implementation 'androidx.fragment:fragment-ktx:1.2.4'
 
   // chart 그리는 gradle
   implementation 'com.github.PhilJay:MPAndroidChart:v3.0.2'

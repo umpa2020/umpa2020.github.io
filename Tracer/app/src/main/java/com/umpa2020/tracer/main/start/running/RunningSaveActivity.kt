@@ -14,6 +14,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.constant.Privacy
+import com.umpa2020.tracer.customUI.WorkaroundMapFragment
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.RankingData
 import com.umpa2020.tracer.dataClass.RouteGPX
@@ -45,8 +46,13 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
     infoData = intent.getParcelableExtra("InfoData")!!
     routeGPX = intent.getParcelableExtra("RouteGPX")!!
     loadRoute()
-    val smf = supportFragmentManager.findFragmentById(com.umpa2020.tracer.R.id.map_viewer) as SupportMapFragment
-    smf.getMapAsync(this)
+    val wmf = supportFragmentManager.findFragmentById(com.umpa2020.tracer.R.id.map_viewer) as WorkaroundMapFragment
+    wmf.getMapAsync(this)
+    wmf.setListener(object : WorkaroundMapFragment.OnTouchListener {
+      override fun onTouch() {
+        runningSaveScrollView.requestDisallowInterceptTouchEvent(true);
+      }
+    })
 
     val speedList = mutableListOf<Double>()
     val elevationList = mutableListOf<Double>()
@@ -181,7 +187,6 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
   override fun onMapReady(googleMap: GoogleMap) {
     Logg.d("onMapReady")
     traceMap = TraceMap(googleMap) //구글맵
-    traceMap.mMap.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
     traceMap.drawRoute(track, routeGPX.wptList)
   }
 }
