@@ -12,13 +12,9 @@ import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.InfoData
-import com.umpa2020.tracer.extensions.MM_SS
-import com.umpa2020.tracer.extensions.format
-import com.umpa2020.tracer.extensions.prettyDistance
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
-import kotlinx.android.synthetic.main.fragment_profile.view.*
 import java.io.ByteArrayOutputStream
 import java.util.*
 
@@ -41,10 +37,7 @@ class FBProfile {
    * 해당 사용자가 뛴 거리, 뛴
    */
 
-  fun setProfile(view: View, nickname: String) {
-    val progressbar = ProgressBar(App.instance.currentActivity() as Activity)
-    progressbar.show()
-
+  fun setProfile(view: View, nickname: String, profileListener: ProfileListener) {
     var uid = "init"
     db.collection("userinfo").whereEqualTo("nickname", nickname)
       .get()
@@ -73,15 +66,11 @@ class FBProfile {
                   sumTime += document2.get("time") as Long
                 }
 
-                // 총 거리와 시간을 띄워줌
-                view.profileFragmentTotalDistance.text = sumDistance.prettyDistance()
-
-                view.profileFragmentTotalTime.text = sumTime.toLong().format(MM_SS)
-                progressbar.dismiss()
+                profileListener.getProfile(sumDistance, sumTime)
               }
           }
-        val imageView = view.findViewById<ImageView>(R.id.profileImageView)
 
+        val imageView = view.findViewById<ImageView>(R.id.profileImageView)
         getProfileImage(imageView, nickname)
       }
   }
@@ -102,7 +91,7 @@ class FBProfile {
         // glide imageview 소스
         // 프사 설정하는 코드 db -> imageView glide
         val storage = FirebaseStorage.getInstance()
-        val profileRef = storage.reference.child("Profile").child(uid).child(profileImagePath)
+        val profileRef = storage.reference.child(profileImagePath)
 
         profileRef.downloadUrl.addOnCompleteListener { task ->
           if (task.isSuccessful) {
@@ -149,7 +138,7 @@ class FBProfile {
           val mFirestoreDB = FirebaseFirestore.getInstance()
 
           mFirestoreDB.collection("userinfo").document(UserInfo.autoLoginKey)
-            .update("profileImagePath", "${dt.time}.jpg")
+            .update("profileImagePath", "Profile/${UserInfo.autoLoginKey}/${dt.time}.jpg")
             .addOnSuccessListener {
 
               val msg: Message = mHandler.obtainMessage(CHANGEPROFILE)

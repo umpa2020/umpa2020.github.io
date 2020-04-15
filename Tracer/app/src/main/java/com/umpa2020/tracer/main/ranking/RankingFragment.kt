@@ -23,7 +23,6 @@ import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.fragment_ranking.*
 import kotlinx.android.synthetic.main.fragment_ranking.view.*
 
-
 /**
  * main 화면의 ranking tab
  */
@@ -62,14 +61,12 @@ class RankingFragment : Fragment(), OnSingleClickListener {
     view.allDeleteButton.setOnClickListener(this)
     view.applyButton.setOnClickListener(this)
 
-
     return view
   }
 
   override fun onSingleClick(v: View?) {
     when (v!!.id) {
-      R.id.filterLayout -> {
-
+      R.id.filterLayout -> { // 뒤 쪽 클릭 안되게 클릭 리스너 달아서 제한
       }
       R.id.rankingToolBarTuneButton -> { //필터 버튼 누르면 레이아웃 보임
         if (requireView().tuneLinearLayout.visibility == GONE) {
@@ -95,20 +92,19 @@ class RankingFragment : Fragment(), OnSingleClickListener {
           if (requireView().tuneRadioBtnExecute.isChecked) {
             requireView().rankingfiltermode.text = getString(R.string.execute)
 
-            FBRanking().getFilterRange(
+            FBRanking(rankingListener).getFilterRange(
               UserInfo.rankingLatLng!!,
               tuneDistance,
-              "execute",
-              rankingListener
+              "execute"
+
             )
           } else {
             requireView().rankingfiltermode.text = getString(R.string.likes)
 
-            FBRanking().getFilterRange(
+            FBRanking(rankingListener).getFilterRange(
               UserInfo.rankingLatLng!!,
               tuneDistance,
-              "likes",
-              rankingListener
+              "likes"
             )
           }
           disappearAnimation()
@@ -121,9 +117,8 @@ class RankingFragment : Fragment(), OnSingleClickListener {
     if (UserInfo.rankingLatLng != null) {
       progressbar.show()
 
-      FBRanking().getExcuteDESCENDING(
-        UserInfo.rankingLatLng!!,
-        rankingListener
+      FBRanking(rankingListener).getExcuteDESCENDING(
+        UserInfo.rankingLatLng!!
       )
     }
     super.onResume()

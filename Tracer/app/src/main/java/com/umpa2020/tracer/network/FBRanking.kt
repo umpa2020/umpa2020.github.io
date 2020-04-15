@@ -13,7 +13,7 @@ import com.umpa2020.tracer.dataClass.PlayedMapData
  * 랭킹 네트워크 클래스 - 랭킹에 관련한
  * 네트워크 접근 함수는 이 곳에 정의
  */
-class FBRanking {
+class FBRanking(rankingListener: RankingListener) {
   lateinit var infoData: InfoData
   lateinit var infoDatas: ArrayList<InfoData>
   var nearMaps1: ArrayList<NearMap> = arrayListOf()
@@ -24,7 +24,7 @@ class FBRanking {
    * 필터를 거치지 않고, 실행순으로 정렬되는 데이터를 가져오는 함수.
    */
 
-  fun getExcuteDESCENDING(cur_loc: LatLng, rankingListener: RankingListener) {
+  fun getExcuteDESCENDING(cur_loc: LatLng) {
     nearMaps1.clear()
 
     db.collection("mapInfo")
@@ -43,17 +43,7 @@ class FBRanking {
         }
         infoDatas.sortByDescending { infoData -> infoData.execute }
 
-        // TODO 리스너 밖으로 빼서 재활용 하자
-        val playedMapListener = object : PlayedMapListener {
-          override fun played(playedMapDatas: ArrayList<PlayedMapData>) {
-            infoDatas.filter { infoData ->
-              playedMapDatas.map { it.mapTitle }
-                .contains(infoData.mapTitle)
-            }.map { it.played = true }
 
-            rankingListener.getRank(infoDatas, "execute")
-          }
-        }
         FBPlayed().getPlayed(playedMapListener)
       }
   }
@@ -65,8 +55,7 @@ class FBRanking {
   fun getFilterRange(
     cur_loc: LatLng,
     distance: Int,
-    mode: String,
-    rankingListener: RankingListener
+    mode: String
   ) {
     //결과로 가져온 location에서 정보추출 / 이건 위도 경도 형태로 받아오는 형식
     //Location 형태로 받아오고 싶다면 아래처럼
@@ -93,33 +82,33 @@ class FBRanking {
 
         if (mode == "execute") {
           infoDatas.sortByDescending { infoData -> infoData.execute }
-
-          val playedMapListener = object : PlayedMapListener {
-            override fun played(playedMapDatas: ArrayList<PlayedMapData>) {
-              infoDatas.filter { infoData ->
-                playedMapDatas.map { it.mapTitle }
-                  .contains(infoData.mapTitle)
-              }.map { it.played = true }
-              rankingListener.getRank(infoDatas, "execute")
-            }
-          }
           FBPlayed().getPlayed(playedMapListener)
-
         } else if (mode == "likes") {
           infoDatas.sortByDescending { infoData -> infoData.likes }
-
-          // 좋아요 필터를 눌렀을 때, 유저가 좋아요 누른 맵들을 가져오는 리스너
-          val likedMapListener = object : LikedMapListener {
-            override fun liked(likedMaps: List<LikedMapData>) {
-              infoDatas.filter { infoData ->
-                likedMaps.map { it.mapTitle }
-                  .contains(infoData.mapTitle)
-              }.map { it.myLiked = true }
-              rankingListener.getRank(infoDatas, "likes")
-            }
-          }
           FBLikes().getLikes(likedMapListener)
         }
       }
+  }
+
+  private val playedMapListener = object : PlayedMapListener {
+    override fun played(playedMapDatas: ArrayList<PlayedMapData>) {
+      infoDatas.filter { infoData ->
+        playedMapDatas.map { it.mapTitle }
+          .contains(infoData.mapTitle)
+      }.map { it.played = true }
+
+      rankingListener.getRank(infoDatas, "execute")
+    }
+  }
+
+  // 좋아요 필터를 눌렀을 때, 유저가 좋아요 누른 맵들을 가져오는 리스너
+  private val likedMapListener = object : LikedMapListener {
+    override fun liked(likedMaps: List<LikedMapData>) {
+      infoDatas.filter { infoData ->
+        likedMaps.map { it.mapTitle }
+          .contains(infoData.mapTitle)
+      }.map { it.myLiked = true }
+      rankingListener.getRank(infoDatas, "likes")
+    }
   }
 }
