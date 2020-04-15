@@ -44,44 +44,27 @@ fun RouteGPX.addDirectionSign(): RouteGPX {
     val a = simplifyLatLngs[i - 1]
     val b = simplifyLatLngs[i]
     val c = simplifyLatLngs[i + 1]
-    /*val preGradient = (b.longitude - a.longitude) / (b.latitude - a.latitude)
-    val postGradient = (c.longitude - b.longitude) / (c.latitude - b.latitude)
-    val angle = (kotlin.math.atan(preGradient) - kotlin.math.atan(postGradient)) * 180 / PI*/
-    val preGradient = (kotlin.math.atan((b.latitude - a.latitude)/ (b.longitude - a.longitude)))
-    val postGradient = (kotlin.math.atan((c.latitude - b.latitude)/ (c.longitude - b.longitude)))
-     val angle =
-      when (checkQuadrant(a, b)) {
-        1 -> (postGradient-preGradient) * 180 / PI
-        2 -> (postGradient + preGradient) * 180 / PI
-        3 -> (-postGradient - preGradient) * 180 / PI
-        4 -> (-postGradient + preGradient) * 180 / PI
-        else -> 0
+
+    var preGradient =
+      (kotlin.math.atan2((b.latitude - a.latitude), (b.longitude - a.longitude))) * 180 / PI
+    var postGradient =
+      (kotlin.math.atan2((c.latitude - b.latitude), (c.longitude - b.longitude))) * 180 / PI
+
+    Logg.d("보정 전 pre = $preGradient / post = $postGradient")
+
+    if (preGradient - postGradient < -180.0 || preGradient - postGradient > 180.0) {
+      if (preGradient < 0) {
+        preGradient += 360.0
       }
-    Logg.d(((postGradient - preGradient) * 180 / PI).toString())
-    Logg.d(((postGradient + preGradient) * 180 / PI).toString())
-    Logg.d(((-postGradient - preGradient) * 180 / PI).toString())
-    Logg.d(((-postGradient + preGradient) * 180 / PI).toString())
-    Logg.d("pre = ${preGradient*180/PI} / post = ${postGradient*180/PI}")
-    /*var direction = ""
-    if (angle > 45) {
-      direction =
-        if (preGradient > postGradient) "left"
-        else "right"
-    }*/
+      if (postGradient < 0) {
+        postGradient += 360.0
+      }
+    }
+
+    val angle = preGradient - postGradient
+    Logg.d("angle = $angle")
   }
-
-
   return this
-}
-
-fun checkQuadrant(a: LatLng, b: LatLng): Int {
-  var a=(if (b.latitude - a.latitude >= 0 && b.longitude - a.longitude >= 0) 1
-  else if (b.latitude - a.latitude >= 0 && b.longitude - a.longitude <= 0) 2
-  else if (b.latitude - a.latitude <= 0 && b.longitude - a.longitude <= 0) 3
-  else if (b.latitude - a.latitude <= 0 && b.longitude - a.longitude >= 0) 4
-  else 0)
-  Logg.d("판별찡 $a")
-  return a
 }
 
 //TODO : Kotlin scope 적용
