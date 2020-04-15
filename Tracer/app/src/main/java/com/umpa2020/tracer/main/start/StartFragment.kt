@@ -29,10 +29,8 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.NearMap
-import com.umpa2020.tracer.extensions.gpxToClass
-import com.umpa2020.tracer.extensions.prettyDistance
-import com.umpa2020.tracer.extensions.show
-import com.umpa2020.tracer.extensions.toLatLng
+import com.umpa2020.tracer.dataClass.RouteGPX
+import com.umpa2020.tracer.extensions.*
 import com.umpa2020.tracer.main.ranking.RankingMapDetailActivity
 import com.umpa2020.tracer.main.start.racing.RacingActivity
 import com.umpa2020.tracer.main.start.running.RunningActivity
@@ -42,6 +40,7 @@ import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.UserInfo
+import io.jenetics.jpx.WayPoint
 import kotlinx.android.synthetic.main.fragment_start.*
 import kotlinx.android.synthetic.main.fragment_start.view.*
 import java.io.File
@@ -192,21 +191,30 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
     Logg.d("onCreateView()")
     val view = inflater.inflate(R.layout.fragment_start, container, false)
     view.test.setOnClickListener {
-      Logg.d("test 실행")
-      val storage = FirebaseStorage.getInstance()
-      val routeRef =
-        storage.reference.child("mapRoute").child("Short SanDiego route||1586002359186")
-      val localFile = File.createTempFile("routeGpx", "xml")
+      val routeGPX1=RouteGPX("0","0", mutableListOf(), mutableListOf())
+      routeGPX1.trkList.add(WayPoint.of(0.0, 0.0))
+      routeGPX1.trkList.add(WayPoint.of(1.0, 1.0))
+      routeGPX1.trkList.add(WayPoint.of(0.0, 1.0))
+      routeGPX1.addDirectionSign()
+      // 2사분면
+      val routeGPX2=RouteGPX("0","0", mutableListOf(), mutableListOf())
+      routeGPX2.trkList.add(WayPoint.of(0.0, 0.0))
+      routeGPX2.trkList.add(WayPoint.of(1.0, -1.0))
+      routeGPX2.trkList.add(WayPoint.of(1.0, 0.0))
+      routeGPX2.addDirectionSign()
+      // 3사분면
+      val routeGPX3=RouteGPX("0","0", mutableListOf(), mutableListOf())
+      routeGPX3.trkList.add(WayPoint.of(0.0, 0.0))
+      routeGPX3.trkList.add(WayPoint.of(-1.0, -1.0))
+      routeGPX3.trkList.add(WayPoint.of(0.0, -1.0))
+      routeGPX3.addDirectionSign()
+      // 4사분면
+      val routeGPX4=RouteGPX("0","0", mutableListOf(), mutableListOf())
+      routeGPX4.trkList.add(WayPoint.of(0.0, 0.0))
+      routeGPX4.trkList.add(WayPoint.of(-1.0, 1.0))
+      routeGPX4.trkList.add(WayPoint.of(-1.0, 0.0))
+      routeGPX4.addDirectionSign()
 
-      routeRef.getFile(Uri.fromFile(localFile)).addOnSuccessListener {
-        val routeGPX = localFile.path.gpxToClass()
-        val intent = Intent(context, RacingActivity::class.java)
-        intent.putExtra("RouteGPX", routeGPX)
-        intent.putExtra("mapTitle", "Short SanDiego route||1586002359186")
-        startActivity(intent)
-      }
-      routeRef.downloadUrl.addOnCompleteListener {
-      }
     }
 
     // 검색 창 키보드에서 엔터키 리스너

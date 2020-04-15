@@ -21,10 +21,7 @@ import com.umpa2020.tracer.customUI.WorkaroundMapFragment
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.RankingData
 import com.umpa2020.tracer.dataClass.RouteGPX
-import com.umpa2020.tracer.extensions.MM_SS
-import com.umpa2020.tracer.extensions.classToGpx
-import com.umpa2020.tracer.extensions.format
-import com.umpa2020.tracer.extensions.prettyDistance
+import com.umpa2020.tracer.extensions.*
 import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.main.start.racing.RacingActivity
 import com.umpa2020.tracer.map.TraceMap
@@ -163,6 +160,7 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
     if (!saveFolder.exists()) {       //폴더 없으면 생성
       saveFolder.mkdir()
     }
+    val testedRouteGPX=routeGPX.addDirectionSign()
     val routeGpxFile = routeGPX.classToGpx(saveFolder.path)
     // storage에 이미지 업로드 모든 맵 이미지는 mapimage/maptitle로 업로드가 된다.
     val fstorage = FirebaseStorage.getInstance()

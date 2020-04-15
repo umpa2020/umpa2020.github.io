@@ -114,7 +114,7 @@
 
 
     <Button
-      android:visibility="gone"
+      android:visibility="visible"
       android:id="@+id/test"
       style="@style/buttonText"
       android:layout_width="100dp"
