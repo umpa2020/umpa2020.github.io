@@ -47,20 +47,20 @@ fun RouteGPX.addDirectionSign(): RouteGPX {
     /*val preGradient = (b.longitude - a.longitude) / (b.latitude - a.latitude)
     val postGradient = (c.longitude - b.longitude) / (c.latitude - b.latitude)
     val angle = (kotlin.math.atan(preGradient) - kotlin.math.atan(postGradient)) * 180 / PI*/
-    val postGradient = (kotlin.math.atan((c.latitude - b.latitude)/ (c.longitude - b.longitude)))
     val preGradient = (kotlin.math.atan((b.latitude - a.latitude)/ (b.longitude - a.longitude)))
-    val angle =
+    val postGradient = (kotlin.math.atan((c.latitude - b.latitude)/ (c.longitude - b.longitude)))
+     val angle =
       when (checkQuadrant(a, b)) {
-        1 -> (preGradient - postGradient) * 180 / PI
-        2 -> (preGradient + postGradient) * 180 / PI
-        3 -> (-preGradient - postGradient) * 180 / PI
-        4 -> (-preGradient + postGradient) * 180 / PI
+        1 -> (postGradient-preGradient) * 180 / PI
+        2 -> (postGradient + preGradient) * 180 / PI
+        3 -> (-postGradient - preGradient) * 180 / PI
+        4 -> (-postGradient + preGradient) * 180 / PI
         else -> 0
       }
-    Logg.d(((preGradient - postGradient) * 180 / PI).toString())
-    Logg.d(((preGradient + postGradient) * 180 / PI).toString())
-    Logg.d(((-preGradient - postGradient) * 180 / PI).toString())
-    Logg.d(((-preGradient + postGradient) * 180 / PI).toString())
+    Logg.d(((postGradient - preGradient) * 180 / PI).toString())
+    Logg.d(((postGradient + preGradient) * 180 / PI).toString())
+    Logg.d(((-postGradient - preGradient) * 180 / PI).toString())
+    Logg.d(((-postGradient + preGradient) * 180 / PI).toString())
     Logg.d("pre = ${preGradient*180/PI} / post = ${postGradient*180/PI}")
     /*var direction = ""
     if (angle > 45) {
