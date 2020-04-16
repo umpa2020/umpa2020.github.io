@@ -48,10 +48,17 @@ class Constants {
 
     // 최소 정지 거리 m
     const val MINIMUM_STOPPING_DISTANCE = 200
-
+    //회전 판정 각도
+    const val TURNING_ANGLE=30
     //중복 클릭 방지 시간 설정 ( 해당 시간 이후에 다시 클릭 가능 )
     const val MIN_CLICK_INTERVAL: Long = 600
     var mLastClickTime: Long = 0
 
+    //Waypoint 타입
+    const val START_POINT="0"
+    const val FINISH_POINT="1"
+    const val DISTANCE_POINT="2"
+    const val TURNING_LEFT_POINT="3"
+    const val TURNING_RIGHT_POINT="4"
   }
 }

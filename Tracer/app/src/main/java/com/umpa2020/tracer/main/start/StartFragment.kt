@@ -191,31 +191,14 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
     val view = inflater.inflate(R.layout.fragment_start, container, false)
     view.test.setOnClickListener {
       // 1사분면
-      val routeGPX1=RouteGPX("0","0", mutableListOf(), mutableListOf())
+      var routeGPX1=RouteGPX("0","0", mutableListOf(), mutableListOf())
       routeGPX1.trkList.add(WayPoint.of(0.0, 0.0))
-      routeGPX1.trkList.add(WayPoint.of(-1.0, -1.0))
-      routeGPX1.trkList.add(WayPoint.of(2.0, -2.0))
+      routeGPX1.trkList.add(WayPoint.of(0.0, 1.0))
+      routeGPX1.trkList.add(WayPoint.of(1.0, 1.0))
       routeGPX1.addDirectionSign()
-      // 2사분면
-      val routeGPX2=RouteGPX("0","0", mutableListOf(), mutableListOf())
-      routeGPX2.trkList.add(WayPoint.of(0.0, 0.0))
-      routeGPX2.trkList.add(WayPoint.of(0.0, -1.0))
-      routeGPX2.trkList.add(WayPoint.of(-3.0, -2.0))
-      routeGPX2.addDirectionSign()
-      // 3사분면
-      val routeGPX3=RouteGPX("0","0", mutableListOf(), mutableListOf())
-      routeGPX3.trkList.add(WayPoint.of(0.0, 0.0))
-      routeGPX3.trkList.add(WayPoint.of(-1.0, -1.0))
-      routeGPX3.trkList.add(WayPoint.of(0.0, -1.0))
-      routeGPX3.addDirectionSign()
-      // 4사분면
-      val routeGPX4=RouteGPX("0","0", mutableListOf(), mutableListOf())
-      routeGPX4.trkList.add(WayPoint.of(0.0, 0.0))
-      routeGPX4.trkList.add(WayPoint.of(-1.0, 1.0))
-      routeGPX4.trkList.add(WayPoint.of(-1.0, 0.0))
-      routeGPX4.addDirectionSign()
-
-
+      routeGPX1.wptList.forEach {
+        Logg.d("lat : ${it.latitude} lon : ${it.longitude} desc : ${it.description} ")
+      }
     }
 
     // 검색 창 키보드에서 엔터키 리스너
