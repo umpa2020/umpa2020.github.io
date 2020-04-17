@@ -37,8 +37,12 @@ class ProfileFragment : Fragment(), OnSingleClickListener {
     // 설정 버튼 누르면
     view.appSettingButton.setOnClickListener(this)
 
-    // 나의 활동 액티비티
+    // 나의 루트 액티비티
     view.profileRouteTextView.setOnClickListener(this)
+
+    // 나의 활동 액티비티
+    view.profileRecordTextView.setOnClickListener(this)
+
 
     /*val recordTextView = view.findViewById<TextView>(R.id.profileRecordTextView)
     recordTextView.setOnClickListener {
@@ -56,11 +60,19 @@ class ProfileFragment : Fragment(), OnSingleClickListener {
         startActivity(nextIntent)
       }
 
-      R.id.profileRouteTextView->{ // 나의 활동 액티비티
+      R.id.profileRouteTextView->{ // 나의 루트 액티비티
         val nextIntent = Intent(activity, ProfileRouteActivity::class.java)
         nextIntent.putExtra("nickname", UserInfo.nickname)
         startActivity(nextIntent)
       }
+
+      R.id.profileRecordTextView->{ // 나의 활동 액티비티
+        val nextIntent = Intent(activity, ProfileRouteActivity::class.java)
+        nextIntent.putExtra("nickname", UserInfo.nickname)
+        startActivity(nextIntent)
+      }
+
+
     }
   }
 

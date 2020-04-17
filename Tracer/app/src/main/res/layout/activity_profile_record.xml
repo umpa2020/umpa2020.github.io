@@ -9,7 +9,6 @@
   <Toolbar
     android:layout_width="match_parent"
     android:layout_height="50dp"
-    android:layout_alignParentTop="true"
     android:background="@color/white"
     android:elevation="1dp">
 
@@ -17,14 +16,13 @@
       style="@style/appBarText"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginRight="12dp"
       android:gravity="center"
-      android:text="@string/my_activity"></TextView>
+      android:text="나의 활동"/>
   </Toolbar>
 
   <androidx.recyclerview.widget.RecyclerView
     android:id="@+id/profileRecyclerRecord"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"></androidx.recyclerview.widget.RecyclerView>
+    android:layout_height="match_parent"/>
 
 </LinearLayout>
