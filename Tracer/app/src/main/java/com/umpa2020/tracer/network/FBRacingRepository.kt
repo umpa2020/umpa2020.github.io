@@ -7,11 +7,10 @@ import com.google.firebase.firestore.Query
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.RanMapsData
 import com.umpa2020.tracer.dataClass.RankingData
-import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.UserInfo
 import java.util.*
 
-class FBRacing {
+class FBRacingRepository {
   val GETMAKERDATA = 100
   val GETRACING = 101
   val db = FirebaseFirestore.getInstance()
@@ -72,11 +71,6 @@ class FBRacing {
         for (document2 in resultdb) {
           val recycleRankingData: RankingData = document2.toObject(RankingData::class.java)
           if (recycleRankingData.bestTime == 1) {
-            Logg.d("ssmm11 challengerNickname = ${document2.get("challengerNickname")}")
-            Logg.d("ssmm11 userinfo.nickname = ${UserInfo.nickname}")
-            Logg.d("ssmm11 chatime = ${document2.get("challengerTime")}")
-            Logg.d("ssmm11 racer time = ${racerData.time}")
-
             if (document2.get("challengerNickname") == UserInfo.nickname) {
               if (result) {
                 arg = index
@@ -90,7 +84,6 @@ class FBRacing {
             index++
           }
         }
-        //TODO : 핸들러로 arr 넘기고, text 넘기기
         val msg: Message = mHandler.obtainMessage(GETRACING)
         msg.obj = arrRankingData
         msg.arg1 = arg

@@ -9,13 +9,18 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.umpa2020.tracer.R
+import com.umpa2020.tracer.extensions.MM_SS
+import com.umpa2020.tracer.extensions.format
+import com.umpa2020.tracer.extensions.prettyDistance
 import com.umpa2020.tracer.main.profile.myroute.ProfileRouteActivity
 import com.umpa2020.tracer.main.profile.settting.AppSettingActivity
-import com.umpa2020.tracer.network.FBProfile
+import com.umpa2020.tracer.network.FBProfileRepository
+import com.umpa2020.tracer.network.ProfileListener
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.fragment_profile.view.*
+
 
 /**
  * A simple [Fragment] subclass.
@@ -81,7 +86,7 @@ class ProfileFragment : Fragment(), OnSingleClickListener {
      * 프로필 변경을 하고 나오는 경우에도 적용된
      * 사진을 바로 보기 위해 Resume에서 적용
      */
-    FBProfile().setProfile(root, UserInfo.nickname)
+    FBProfileRepository().setProfile(root, UserInfo.nickname, profileListener)
     super.onResume()
   }
 
@@ -93,6 +98,17 @@ class ProfileFragment : Fragment(), OnSingleClickListener {
   override fun onStop() {
     Logg.i("onStop()")
     super.onStop()
+  }
+
+  private val profileListener = object : ProfileListener {
+    override fun getProfile(distance: Double, time: Double) {
+      // 총 거리와 시간을 띄워줌
+      root.profileFragmentTotalDistance.text = distance.prettyDistance()
+      root.profileFragmentTotalTime.text = time.toLong().format(MM_SS)
+    }
+
+    override fun changeProfile() {
+    }
   }
 
 }

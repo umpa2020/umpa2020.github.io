@@ -19,5 +19,6 @@ data class InfoData(
   var privacy: Privacy = Privacy.PUBLIC,
   var startLatitude: Double? = null,
   var startLongitude: Double? = null,
-  var myLiked: Boolean = false
+  var myLiked: Boolean = false,
+  var played: Boolean = false
 ) : Parcelable
