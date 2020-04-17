@@ -121,7 +121,8 @@ class FBProfileRepository {
     val mStorage = FirebaseStorage.getInstance()
     val mStorageReference = mStorage.reference
 
-    val profileRef = mStorageReference.child("Profile").child(UserInfo.autoLoginKey).child("${dt.time}.jpg")
+    val profileRef =
+      mStorageReference.child("Profile").child(UserInfo.autoLoginKey).child("${dt.time}.jpg")
     // 이미지
     val baos = ByteArrayOutputStream()
     bitmapImg.compress(Bitmap.CompressFormat.JPEG, 100, baos)
@@ -146,7 +147,8 @@ class FBProfileRepository {
 
   fun getRoute(mHandler: Handler, nickname: String) {
     val infoDatas: ArrayList<InfoData> = arrayListOf()
-    db.collection("mapInfo").whereEqualTo("makersNickname", nickname).whereEqualTo("privacy", "RACING")
+    db.collection("mapInfo").whereEqualTo("makersNickname", nickname)
+      .whereEqualTo("privacy", "RACING")
       .get()
       .addOnSuccessListener { result ->
         for (document in result) {
