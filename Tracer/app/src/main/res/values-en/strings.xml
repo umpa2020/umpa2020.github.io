@@ -164,4 +164,12 @@
 
   <string name="speed">speed</string>
   <string name="Are_you_sure_to_delete_this">Are you sure to delete this running?</string>
+
+  <!--activity_racing_finish-->
+  <string name="my_rank">My rank</string>
+  <string name="top3_rank">TOP 3</string>
+  <string name="record_comparison">Record Comparison</string>
+  <string name="max_speed">Max Speed</string>
+  <string name="avg_speed">Average Speed</string>
+
 </resources>

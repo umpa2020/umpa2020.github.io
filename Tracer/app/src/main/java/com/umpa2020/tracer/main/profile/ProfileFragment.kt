@@ -72,8 +72,8 @@ class ProfileFragment : Fragment(), OnSingleClickListener {
       }
 
       R.id.profileRecordTextView->{ // 나의 활동 액티비티
-        val nextIntent = Intent(activity, ProfileRouteActivity::class.java)
-        nextIntent.putExtra("nickname", UserInfo.nickname)
+        val nextIntent = Intent(activity, ProfileRecordActivity::class.java)
+        //nextIntent.putExtra("nickname", UserInfo.nickname)
         startActivity(nextIntent)
       }
 
