@@ -18,7 +18,7 @@ import com.umpa2020.tracer.extensions.prettyDistance
 import com.umpa2020.tracer.extensions.toRank
 import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.main.ranking.RankRecyclerViewAdapterTopPlayer
-import com.umpa2020.tracer.network.FBRacing
+import com.umpa2020.tracer.network.FBRacingRepository
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.ProgressBar
@@ -77,15 +77,15 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
     }
 
     // 메이커 인포데이터를 가져오는 함수
-    FBRacing().getMakerData(racerData, mHandler)
+    FBRacingRepository().getMakerData(racerData, mHandler)
 
 
     // 유저 인포에 해당 유저가 이 맵을 뛰었다는
     // 히스토리를 더하는 함수
-    FBRacing().setUserInfoRacing(racerData)
+    FBRacingRepository().setUserInfoRacing(racerData)
 
 
-    FBRacing().setRankingData(result, racerData, mHandler)
+    FBRacingRepository().setRankingData(result, racerData, mHandler)
 
     OKButton.setOnClickListener(this)
   }

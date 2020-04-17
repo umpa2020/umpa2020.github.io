@@ -9,7 +9,7 @@ import com.umpa2020.tracer.extensions.MM_SS
 import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.extensions.prettyDistance
 import com.umpa2020.tracer.main.profile.myroute.ProfileRouteActivity
-import com.umpa2020.tracer.network.FBProfile
+import com.umpa2020.tracer.network.FBProfileRepository
 import com.umpa2020.tracer.network.ProfileListener
 import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.OnSingleClickListener
@@ -33,7 +33,7 @@ class OtherProfileActivity : AppCompatActivity(), OnSingleClickListener {
     // 넘어온 닉네임으로 현재 액티비티 닉네임 적용
     profileIdTextView.text = nickname
 
-    FBProfile().setProfile(contentView!!, nickname, profileListener)
+    FBProfileRepository().setProfile(contentView!!, nickname, profileListener)
     otherProfileRouteTextView.setOnClickListener(this)
   }
 
@@ -53,6 +53,10 @@ class OtherProfileActivity : AppCompatActivity(), OnSingleClickListener {
       // 총 거리와 시간을 띄워줌
       profileFragmentTotalDistance.text = distance.prettyDistance()
       profileFragmentTotalTime.text = time.toLong().format(MM_SS)
+    }
+
+    override fun changeProfile() {
+
     }
   }
 

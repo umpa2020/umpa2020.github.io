@@ -1,11 +1,16 @@
 package com.umpa2020.tracer.network
 
 /**
- * 내가 좋아요 누른 맵 목록 리스너
+ * 프로필 관련 리스너
  */
 interface ProfileListener {
   /**
-   * 내가 좋아요 누른 맵 목록
+   * 뛴 거리, 뛴 시간 가져오기
    */
   fun getProfile(distance: Double, time: Double)
+
+  /**
+   *
+   */
+  fun changeProfile()
 }

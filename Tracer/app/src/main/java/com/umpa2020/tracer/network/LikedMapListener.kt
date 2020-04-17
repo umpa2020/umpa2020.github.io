@@ -9,5 +9,7 @@ interface LikedMapListener {
   /**
    * 내가 좋아요 누른 맵 목록
    */
-  fun liked(likedMaps: List<LikedMapData>)
+  fun likedList(likedMaps: List<LikedMapData>)
+
+  fun liked(liked: Boolean, likes: Int)
 }

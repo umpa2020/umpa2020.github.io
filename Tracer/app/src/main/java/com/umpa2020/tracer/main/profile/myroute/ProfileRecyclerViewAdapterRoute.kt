@@ -18,7 +18,7 @@ import com.umpa2020.tracer.extensions.MM_SS
 import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.extensions.prettyDistance
 import com.umpa2020.tracer.main.ranking.RankRecyclerItemClickActivity
-import com.umpa2020.tracer.network.FBLikes
+import com.umpa2020.tracer.network.FBLikesRepository
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.recycler_profilefragment_route_grid_image.view.*
@@ -97,14 +97,14 @@ class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) :
 
           }
           R.drawable.ic_favorite_border_black_24dp -> {
-            FBLikes().setLikes(singleItem.mapTitle!!, likes)
+            FBLikesRepository().setLikes(singleItem.mapTitle!!, likes)
             holder.heart.setImageResource(R.drawable.ic_favorite_red_24dp)
             holder.heart.tag = R.drawable.ic_favorite_red_24dp
             likes++
             holder.likes.text = likes.toString()
           }
           R.drawable.ic_favorite_red_24dp -> {
-            FBLikes().setminusLikes(singleItem.mapTitle!!, likes)
+            FBLikesRepository().setminusLikes(singleItem.mapTitle!!, likes)
             holder.heart.setImageResource(R.drawable.ic_favorite_border_black_24dp)
             holder.heart.tag = R.drawable.ic_favorite_border_black_24dp
             likes--

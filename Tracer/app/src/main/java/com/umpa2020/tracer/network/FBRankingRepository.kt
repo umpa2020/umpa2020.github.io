@@ -13,40 +13,12 @@ import com.umpa2020.tracer.dataClass.PlayedMapData
  * 랭킹 네트워크 클래스 - 랭킹에 관련한
  * 네트워크 접근 함수는 이 곳에 정의
  */
-class FBRanking(rankingListener: RankingListener) {
+class FBRankingRepository(rankingListener: RankingListener) {
   lateinit var infoData: InfoData
   lateinit var infoDatas: ArrayList<InfoData>
   var nearMaps1: ArrayList<NearMap> = arrayListOf()
 
   val db = FirebaseFirestore.getInstance()
-
-  /**
-   * 필터를 거치지 않고, 실행순으로 정렬되는 데이터를 가져오는 함수.
-   */
-
-  fun getExcuteDESCENDING(cur_loc: LatLng) {
-    nearMaps1.clear()
-
-    db.collection("mapInfo")
-      .get()
-      .addOnSuccessListener { result ->
-        infoDatas = arrayListOf()
-
-        for (document in result) {
-          infoData = document.toObject(InfoData::class.java)
-
-          infoData.distance = SphericalUtil.computeDistanceBetween(
-            cur_loc,
-            LatLng(infoData.startLatitude!!, infoData.startLongitude!!)
-          )
-          infoDatas.add(infoData)
-        }
-        infoDatas.sortByDescending { infoData -> infoData.execute }
-
-
-        FBPlayed().getPlayed(playedMapListener)
-      }
-  }
 
   /**
    * 현재 위치를 받아서 현재 위치와 필터에 적용한 위치 만큼 떨어져 있는 구간에서 실행순으로 정렬한 코드
@@ -82,10 +54,10 @@ class FBRanking(rankingListener: RankingListener) {
 
         if (mode == "execute") {
           infoDatas.sortByDescending { infoData -> infoData.execute }
-          FBPlayed().getPlayed(playedMapListener)
+          FBPlayedRepository().getPlayed(playedMapListener)
         } else if (mode == "likes") {
           infoDatas.sortByDescending { infoData -> infoData.likes }
-          FBLikes().getLikes(likedMapListener)
+          FBLikesRepository().getLikes(likedMapListener)
         }
       }
   }
@@ -103,12 +75,15 @@ class FBRanking(rankingListener: RankingListener) {
 
   // 좋아요 필터를 눌렀을 때, 유저가 좋아요 누른 맵들을 가져오는 리스너
   private val likedMapListener = object : LikedMapListener {
-    override fun liked(likedMaps: List<LikedMapData>) {
+    override fun likedList(likedMaps: List<LikedMapData>) {
       infoDatas.filter { infoData ->
         likedMaps.map { it.mapTitle }
           .contains(infoData.mapTitle)
       }.map { it.myLiked = true }
       rankingListener.getRank(infoDatas, "likes")
+    }
+
+    override fun liked(liked: Boolean, likes: Int) {
     }
   }
 }

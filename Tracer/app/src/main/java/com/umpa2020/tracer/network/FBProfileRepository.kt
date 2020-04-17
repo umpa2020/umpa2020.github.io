@@ -23,7 +23,7 @@ import java.util.*
  *
  */
 
-class FBProfile {
+class FBProfileRepository {
   val MYROUTE = 60 // 마이 루트가 존재
   val MYROUTEFAIL = 70 // 마이 루트가 없을 경우
   val CHANGEPROFILE = 110 // 프로필 사진 체인지
@@ -65,11 +65,9 @@ class FBProfile {
                   sumDistance += document2.get("distance") as Double
                   sumTime += document2.get("time") as Long
                 }
-
                 profileListener.getProfile(sumDistance, sumTime)
               }
           }
-
         val imageView = view.findViewById<ImageView>(R.id.profileImageView)
         getProfileImage(imageView, nickname)
       }
@@ -114,9 +112,8 @@ class FBProfile {
    * 사진 변경 시, 해당 사진을 storage에 업로드하고
    * 그 경로를 db에 update하는 함수
    */
-  fun changeProfileImage(bitmapImg: Bitmap, mHandler: Handler) {
-    val progressbar = ProgressBar(App.instance.currentActivity() as Activity)
-    progressbar.show()
+  fun changeProfileImage(bitmapImg: Bitmap, profileListener: ProfileListener) {
+
 
     val dt = Date()
     // 현재 날짜를 프로필 이름으로 nickname/Profile/현재날짜(영어).jpg 경로 만들기
@@ -140,11 +137,7 @@ class FBProfile {
           mFirestoreDB.collection("userinfo").document(UserInfo.autoLoginKey)
             .update("profileImagePath", "Profile/${UserInfo.autoLoginKey}/${dt.time}.jpg")
             .addOnSuccessListener {
-
-              val msg: Message = mHandler.obtainMessage(CHANGEPROFILE)
-              msg.obj = true
-              mHandler.sendMessage(msg)
-              progressbar.dismiss()
+              profileListener.changeProfile()
             }
         }
       }

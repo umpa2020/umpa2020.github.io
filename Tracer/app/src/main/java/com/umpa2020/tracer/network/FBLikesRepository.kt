@@ -1,7 +1,5 @@
 package com.umpa2020.tracer.network
 
-import android.os.Handler
-import android.os.Message
 import com.google.firebase.firestore.FirebaseFirestore
 import com.umpa2020.tracer.dataClass.LikedMapData
 import com.umpa2020.tracer.util.UserInfo
@@ -11,7 +9,7 @@ import com.umpa2020.tracer.util.UserInfo
  * 사용법 - Likes().관련기능함수()
  */
 
-class FBLikes {
+class FBLikesRepository {
   val GETLIKE = 51
 
   val db = FirebaseFirestore.getInstance()
@@ -26,27 +24,25 @@ class FBLikes {
     db.collection("userinfo").document(UserInfo.autoLoginKey).collection("user liked these maps")
       .get()
       .addOnSuccessListener { result ->
-        listener.liked(result.map { LikedMapData(it.getString("mapTitle"), it.getString("uid")) })
+        listener.likedList(result.map { LikedMapData(it.getString("mapTitle"), it.getString("uid")) })
       }
   }
 
-  fun getLike(mapTitle: String, mHandler: Handler) {
+  fun getLike(mapTitle: String, listener: LikedMapListener) {
     db.collection("userinfo").document(UserInfo.autoLoginKey).collection("user liked these maps")
       .whereEqualTo("mapTitle", mapTitle)
       .get()
       .addOnSuccessListener {
-        val msg: Message = mHandler.obtainMessage(GETLIKE)
 
-        // 사용자가 좋아한 맵에 현재 맵이 있으면 true 넘겨주고
-        // 없으면 false 넘겨주기
-        msg.obj = !it.isEmpty
+
         db.collection("mapInfo").whereEqualTo("mapTitle", mapTitle)
           .get()
           .addOnSuccessListener { result ->
             for (document in result) {
               val buffer = document.get("likes")
-              msg.arg1 = Integer.parseInt(buffer.toString())
-              mHandler.sendMessage(msg)
+              // 사용자가 좋아한 맵에 현재 맵이 있으면 true 넘겨주고
+              // 없으면 false 넘겨주기
+              listener.liked(!it.isEmpty, Integer.parseInt(buffer.toString()))
             }
           }
       }
@@ -78,7 +74,7 @@ class FBLikes {
       .whereEqualTo("mapTitle", maptitle)
       .get()
       .addOnSuccessListener { result ->
-        val documentid = result.documents.get(0).id
+        val documentid = result.documents[0].id
 
         db.collection("userinfo").document(UserInfo.autoLoginKey)
           .collection("user liked these maps")

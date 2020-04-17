@@ -11,8 +11,6 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
-import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.maps.android.PolyUtil
 import com.google.maps.android.SphericalUtil
 import com.umpa2020.tracer.R
@@ -23,14 +21,11 @@ import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.constant.UserState
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.RouteGPX
-import com.umpa2020.tracer.extensions.prettyDistance
-import com.umpa2020.tracer.extensions.show
 import com.umpa2020.tracer.extensions.toLatLng
 import com.umpa2020.tracer.main.start.BaseRunningActivity
-import com.umpa2020.tracer.network.FBMap
+import com.umpa2020.tracer.network.FBMapRepository
 import com.umpa2020.tracer.util.ChoicePopup
 import com.umpa2020.tracer.util.Logg
-import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.TTS
 import io.jenetics.jpx.WayPoint
 import kotlinx.android.synthetic.main.activity_ranking_recode_racing.*
@@ -173,7 +168,7 @@ class RacingActivity : BaseRunningActivity() {
 
   override fun start() {
     super.start()
-    FBMap().increaseExecute(mapTitle)
+    FBMapRepository().increaseExecute(mapTitle)
 
     // 레이싱 시작 TTS
     TTS.speech(getString(R.string.startRacing))

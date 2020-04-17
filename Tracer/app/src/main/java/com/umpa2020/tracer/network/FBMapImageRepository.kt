@@ -6,7 +6,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.App
 
-class FBMapImage {
+class FBMapImageRepository {
   val db = FirebaseFirestore.getInstance()
 
   fun getMapImage(imageView: ImageView, mapTitle: String) {

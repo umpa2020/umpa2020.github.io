@@ -9,8 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.extensions.prettyDistance
-import com.umpa2020.tracer.network.FBLikes
-import com.umpa2020.tracer.util.Logg
+import com.umpa2020.tracer.network.FBLikesRepository
 import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.recycler_rankfragment_item.view.*
@@ -96,14 +95,14 @@ class MapRankingAdapter(
 
             }
             R.drawable.ic_favorite_border_black_24dp -> {
-              FBLikes().setLikes(infoData.mapTitle!!, likes)
+              FBLikesRepository().setLikes(infoData.mapTitle!!, likes)
               holder.modeIcon.setImageResource(R.drawable.ic_favorite_red_24dp)
               holder.modeIcon.tag = R.drawable.ic_favorite_red_24dp
               likes++
               holder.modeNo.text = likes.toString()
             }
             R.drawable.ic_favorite_red_24dp -> {
-              FBLikes().setminusLikes(infoData.mapTitle!!, likes)
+              FBLikesRepository().setminusLikes(infoData.mapTitle!!, likes)
               holder.modeIcon.setImageResource(R.drawable.ic_favorite_border_black_24dp)
               holder.modeIcon.tag = R.drawable.ic_favorite_border_black_24dp
               likes--

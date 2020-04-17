@@ -15,7 +15,7 @@ import com.umpa2020.tracer.constant.Constants.Companion.ANIMATION_DURATION_TIME
 import com.umpa2020.tracer.constant.Constants.Companion.MAX_DISTANCE
 import com.umpa2020.tracer.constant.Constants.Companion.MAX_SEEKERBAR
 import com.umpa2020.tracer.dataClass.InfoData
-import com.umpa2020.tracer.network.FBRanking
+import com.umpa2020.tracer.network.FBRankingRepository
 import com.umpa2020.tracer.network.RankingListener
 import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.OnSingleClickListener
@@ -92,7 +92,7 @@ class RankingFragment : Fragment(), OnSingleClickListener {
           if (requireView().tuneRadioBtnExecute.isChecked) {
             requireView().rankingfiltermode.text = getString(R.string.execute)
 
-            FBRanking(rankingListener).getFilterRange(
+            FBRankingRepository(rankingListener).getFilterRange(
               UserInfo.rankingLatLng!!,
               tuneDistance,
               "execute"
@@ -101,7 +101,7 @@ class RankingFragment : Fragment(), OnSingleClickListener {
           } else {
             requireView().rankingfiltermode.text = getString(R.string.likes)
 
-            FBRanking(rankingListener).getFilterRange(
+            FBRankingRepository(rankingListener).getFilterRange(
               UserInfo.rankingLatLng!!,
               tuneDistance,
               "likes"
@@ -115,11 +115,30 @@ class RankingFragment : Fragment(), OnSingleClickListener {
 
   override fun onResume() {
     if (UserInfo.rankingLatLng != null) {
+      val tuneDistance = distance
       progressbar.show()
 
-      FBRanking(rankingListener).getExcuteDESCENDING(
-        UserInfo.rankingLatLng!!
-      )
+      if (UserInfo.rankingLatLng != null) {
+        //실행순 버튼에 체크가 되어 있을 경우
+        if (requireView().tuneRadioBtnExecute.isChecked) {
+          requireView().rankingfiltermode.text = getString(R.string.execute)
+
+          FBRankingRepository(rankingListener).getFilterRange(
+            UserInfo.rankingLatLng!!,
+            tuneDistance,
+            "execute"
+
+          )
+        } else {
+          requireView().rankingfiltermode.text = getString(R.string.likes)
+
+          FBRankingRepository(rankingListener).getFilterRange(
+            UserInfo.rankingLatLng!!,
+            tuneDistance,
+            "likes"
+          )
+        }
+      }
     }
     super.onResume()
   }
