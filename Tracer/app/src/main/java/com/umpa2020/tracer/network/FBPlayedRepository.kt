@@ -4,12 +4,15 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.umpa2020.tracer.dataClass.PlayedMapData
 import com.umpa2020.tracer.util.UserInfo
 
+/**
+ * 내가 뛰었던 맵 가져오는 Repository
+ */
+
 class FBPlayedRepository {
   val db = FirebaseFirestore.getInstance()
   val playedMapDatas = arrayListOf<PlayedMapData>()
 
   fun getPlayed(playedMapListener: PlayedMapListener) {
-
     db.collection("userinfo").whereEqualTo("UID", UserInfo.autoLoginKey)
       .get()
       .addOnSuccessListener {
@@ -22,6 +25,5 @@ class FBPlayedRepository {
             playedMapListener.played(playedMapDatas)
           }
       }
-
   }
 }

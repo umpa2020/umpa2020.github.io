@@ -140,7 +140,6 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
                 startActivity(intent)
               }
             }
-
             progressBar.dismiss()
           }
           NEARMAPFALSE -> {

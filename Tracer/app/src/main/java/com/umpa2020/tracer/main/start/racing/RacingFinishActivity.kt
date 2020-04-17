@@ -70,7 +70,8 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
 
             // Recycler view adpater 추가
             resultPlayerRankingRecycler.layoutManager = LinearLayoutManager(baseContext)
-            resultPlayerRankingRecycler.adapter = RankRecyclerViewAdapterTopPlayer(arrRankingData, racerData.mapTitle!!)
+            resultPlayerRankingRecycler.adapter =
+              RankRecyclerViewAdapterTopPlayer(arrRankingData, racerData.mapTitle!!)
           }
         }
       }
@@ -78,7 +79,6 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
 
     // 메이커 인포데이터를 가져오는 함수
     FBRacingRepository().getMakerData(racerData, mHandler)
-
 
     // 유저 인포에 해당 유저가 이 맵을 뛰었다는
     // 히스토리를 더하는 함수
@@ -91,8 +91,8 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
   }
 
   override fun onSingleClick(v: View?) {
-    when(v!!.id){
-      R.id.OKButton->{
+    when (v!!.id) {
+      R.id.OKButton -> {
         val intent = Intent(this, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
         startActivity(intent)
@@ -108,20 +108,23 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
     return speeds
   }
 
-  private fun setUiData(racerSpeeds: MutableList<Double>, makerSpeeds: MutableList<Double>, resultRankText: Int) {
+  private fun setUiData(
+    racerSpeeds: MutableList<Double>,
+    makerSpeeds: MutableList<Double>,
+    resultRankText: Int
+  ) {
 
     if (resultRankText == 0) {
       resultRankTextView.text = getString(R.string.fail)
-    }
-    else {
+    } else {
       resultRankTextView.text = resultRankText.toRank()
     }
 
-    makerLapTimeTextView.text =makerData.time!!.format(MM_SS)
+    makerLapTimeTextView.text = makerData.time!!.format(MM_SS)
     makerMaxSpeedTextView.text = makerSpeeds.max()!!.prettyDistance()
     makerAvgSpeedTextView.text = makerSpeeds.average().prettyDistance()
 
-    racerLapTimeTextView.text =racerData.time!!.format(MM_SS)
+    racerLapTimeTextView.text = racerData.time!!.format(MM_SS)
     racerMaxSpeedTextView.text = racerSpeeds.max()!!.prettyDistance()
     racerAvgSpeedTextView.text = racerSpeeds.average().prettyDistance()
     progressbar.dismiss()

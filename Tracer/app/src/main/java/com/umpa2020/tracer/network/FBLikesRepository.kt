@@ -10,8 +10,6 @@ import com.umpa2020.tracer.util.UserInfo
  */
 
 class FBLikesRepository {
-  val GETLIKE = 51
-
   val db = FirebaseFirestore.getInstance()
 
   /**
@@ -24,7 +22,12 @@ class FBLikesRepository {
     db.collection("userinfo").document(UserInfo.autoLoginKey).collection("user liked these maps")
       .get()
       .addOnSuccessListener { result ->
-        listener.likedList(result.map { LikedMapData(it.getString("mapTitle"), it.getString("uid")) })
+        listener.likedList(result.map {
+          LikedMapData(
+            it.getString("mapTitle"),
+            it.getString("uid")
+          )
+        })
       }
   }
 
@@ -33,7 +36,6 @@ class FBLikesRepository {
       .whereEqualTo("mapTitle", mapTitle)
       .get()
       .addOnSuccessListener {
-
 
         db.collection("mapInfo").whereEqualTo("mapTitle", mapTitle)
           .get()
@@ -61,7 +63,6 @@ class FBLikesRepository {
     db.collection("mapInfo").document(maptitle).collection("likes").add(likeMapsData)
     db.collection("mapInfo").document(maptitle).update("likes", likes + 1)
   }
-
 
   /**
    * 1. 유저가 이미 좋아요한 맵을 취소할 때, 유저 인포에서 좋아요한 맵을 찾아 삭제하고
@@ -91,6 +92,5 @@ class FBLikesRepository {
           .document(documentid).delete()
       }
     db.collection("mapInfo").document(maptitle).update("likes", likes - 1)
-
   }
 }

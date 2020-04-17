@@ -5,6 +5,11 @@ import com.google.firebase.firestore.Query
 import com.umpa2020.tracer.dataClass.RankingData
 import com.umpa2020.tracer.util.Logg
 
+/**
+ * 한 맵에 대한 랭킹만 가져오는
+ * Repository
+ */
+
 class FBMapRankingRepository {
   val db = FirebaseFirestore.getInstance()
 
@@ -25,7 +30,5 @@ class FBMapRankingRepository {
         }
         listener.getMapRank(arrRankingData)
       }
-
-
   }
 }
