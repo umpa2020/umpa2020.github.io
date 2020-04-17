@@ -31,7 +31,7 @@
     android:supportsRtl="true"
     android:theme="@style/AppTheme"
     tools:ignore="GoogleAppIndexingWarning">
-    <activity android:name=".main.start.racing.AllRanking"></activity>
+    <activity android:name=".main.start.racing.AllRankingActivity"></activity>
     <activity android:name=".main.profile.settting.MyInformationActivity" />
     <activity android:name=".main.profile.settting.AppSettingActivity" />
     <activity android:name=".main.profile.ProfileRecordActivity" />

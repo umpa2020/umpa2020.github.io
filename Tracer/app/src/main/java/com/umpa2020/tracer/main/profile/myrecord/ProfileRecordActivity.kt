@@ -1,20 +1,8 @@
 package com.umpa2020.tracer.main.profile.myrecord
 
-import android.app.Activity
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.os.Message
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
-import com.umpa2020.tracer.dataClass.InfoData
-import com.umpa2020.tracer.network.FBProfile
-import com.umpa2020.tracer.util.ProgressBar
-import com.umpa2020.tracer.util.UserInfo
-import kotlinx.android.synthetic.main.activity_profile_route.*
 
 class ProfileRecordActivity : AppCompatActivity() {
 

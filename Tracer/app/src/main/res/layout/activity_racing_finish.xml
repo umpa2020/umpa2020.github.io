@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:id="@+id/parentRelativeLayout"
   android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:id="@+id/parentRelativeLayout">
+  android:layout_height="match_parent">
 
   <Toolbar
     android:id="@+id/RacingFinishToolBar"
@@ -139,7 +139,7 @@
         android:layout_below="@+id/racingFinishFrameLayoutFirst"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:text="1등 닉네임" />
+        android:text="기록 없음" />
 
       <TextView
         android:id="@+id/racingFinishLapTimeFirst"
@@ -148,7 +148,7 @@
         android:layout_below="@+id/racingFinishNicknameFirst"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:text="1등 랩타임" />
+        android:text="기록 없음" />
 
 
       <!--2등-->
@@ -188,7 +188,7 @@
           android:layout_height="wrap_content"
           android:layout_gravity="center_horizontal"
           android:layout_marginTop="10dp"
-          android:text="2등 닉네임" />
+          android:text="기록 없음" />
 
         <TextView
           android:id="@+id/racingFinishLapTimeSecond"
@@ -196,7 +196,7 @@
           android:layout_height="wrap_content"
           android:layout_gravity="center_horizontal"
           android:layout_marginTop="10dp"
-          android:text="2등 랩타임" />
+          android:text="기록 없음" />
       </LinearLayout>
 
       <!--3등-->
@@ -237,7 +237,7 @@
           android:layout_height="wrap_content"
           android:layout_gravity="center_horizontal"
           android:layout_marginTop="10dp"
-          android:text="3등 닉네임" />
+          android:text="기록 없음" />
 
         <TextView
           android:id="@+id/racingFinishLapTimeThird"
@@ -245,7 +245,7 @@
           android:layout_height="wrap_content"
           android:layout_gravity="center_horizontal"
           android:layout_marginTop="10dp"
-          android:text="3등 랩타임" />
+          android:text="기록 없음" />
       </LinearLayout>
 
 
@@ -286,8 +286,7 @@
             android:id="@+id/RacingFinishAnalysisMyNickname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="내 닉네임" />
+            android:layout_marginTop="10dp" />
 
         </LinearLayout>
 
@@ -305,20 +304,20 @@
 
         <LinearLayout
           android:layout_width="80dp"
-          android:layout_height="wrap_content"
+          android:layout_height="89dp"
           android:gravity="center"
           android:orientation="vertical">
 
           <FrameLayout
+            android:id="@+id/otherPeopleProfileSelect"
             android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:id="@+id/otherPeopleProfileSelect">
+            android:layout_height="70dp">
 
             <de.hdodenhof.circleimageview.CircleImageView
-              android:layout_gravity="center"
               android:id="@+id/RacingFinishAnalysisOtherProfile"
               android:layout_width="60dp"
               android:layout_height="60dp"
+              android:layout_gravity="center"
               android:src="@drawable/ic_profile_logo"
               app:civ_border_color="@color/gray"
               app:civ_border_width="2dp" />
@@ -326,8 +325,8 @@
             <ImageView
               android:layout_width="25dp"
               android:layout_height="25dp"
-              android:background="@drawable/ic_add_circle_24dp"
-              android:layout_gravity="top|end"/>
+              android:layout_gravity="top|end"
+              android:background="@drawable/ic_add_circle_24dp" />
           </FrameLayout>
 
 
@@ -335,8 +334,7 @@
             android:id="@+id/RacingFinishAnalysisOtherNickname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="상대방" />
+            android:layout_marginTop="10dp" />
         </LinearLayout>
       </LinearLayout>
 
@@ -371,16 +369,14 @@
             android:id="@+id/racerLapTimeTextView"
             android:layout_width="80dp"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="내 랩타임" />
+            android:gravity="center" />
 
           <TextView
             android:id="@+id/makerLapTimeTextView"
             android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="80dp"
-            android:gravity="center"
-            android:text="상대 랩타임" />
+            android:gravity="center" />
         </LinearLayout>
       </LinearLayout>
 
@@ -415,16 +411,14 @@
             android:id="@+id/racerMaxSpeedTextView"
             android:layout_width="80dp"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="내 최고 속력" />
+            android:gravity="center" />
 
           <TextView
             android:id="@+id/makerMaxSpeedTextView"
             android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="80dp"
-            android:gravity="center"
-            android:text="상대 랩타임" />
+            android:gravity="center" />
         </LinearLayout>
       </LinearLayout>
 
@@ -437,6 +431,7 @@
         android:layout_marginLeft="30dp"
         android:layout_marginTop="15dp"
         android:layout_marginRight="30dp"
+        android:layout_marginBottom="50dp"
         android:background="@drawable/profile_route_bg"
         android:orientation="vertical">
 
@@ -459,30 +454,30 @@
             android:id="@+id/racerAvgSpeedTextView"
             android:layout_width="80dp"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="내 평균 속력" />
+            android:gravity="center" />
 
           <TextView
             android:id="@+id/makerAvgSpeedTextView"
             android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="80dp"
-            android:gravity="center"
-            android:text="상대 랩타임" />
+            android:gravity="center" />
         </LinearLayout>
       </LinearLayout>
 
-      <Button
-        style="@style/buttonText"
-        android:id="@+id/OKButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/button_background"
-        android:text="확인" />
+
     </RelativeLayout>
   </ScrollView>
+
+  <Button
+    android:id="@+id/OKButton"
+    style="@style/buttonText"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp"
+    android:layout_marginBottom="10dp"
+    android:background="@drawable/button_background"
+    android:text="확인" />
 </RelativeLayout>
