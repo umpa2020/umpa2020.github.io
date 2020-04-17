@@ -28,7 +28,6 @@ import java.util.*
 
 /* 핸들러로 받아서 사용할 것
 //레이아웃 매니저 추가
-
  */
 
 class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
@@ -47,6 +46,7 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
     progressbar = ProgressBar(this)
     progressbar.show()
 
+
     // Racing Activity 에서 넘겨준 infoData를 받아서 활용
     racerData = intent.getParcelableExtra("InfoData") as InfoData
     val result = intent.extras!!.getBoolean("Result")
@@ -63,15 +63,16 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
             makerData = msg.obj as InfoData
           }
 
+
           GETRACING -> {
             arrRankingData = msg.obj as ArrayList<RankingData>
             val resultRankText = msg.arg1
             setUiData(racerSpeeds, makerSpeeds, resultRankText)
 
             // Recycler view adpater 추가
-            resultPlayerRankingRecycler.layoutManager = LinearLayoutManager(baseContext)
-            resultPlayerRankingRecycler.adapter =
-              RankRecyclerViewAdapterTopPlayer(arrRankingData, racerData.mapTitle!!)
+            //resultPlayerRankingRecycler.layoutManager = LinearLayoutManager(baseContext)
+            //resultPlayerRankingRecycler.adapter = RankRecyclerViewAdapterTopPlayer(arrRankingData, racerData.mapTitle!!)
+
           }
         }
       }
@@ -88,7 +89,10 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
     FBRacingRepository().setRankingData(result, racerData, mHandler)
 
     OKButton.setOnClickListener(this)
+    otherPeopleProfileSelect.setOnClickListener(this)
   }
+
+
 
   override fun onSingleClick(v: View?) {
     when (v!!.id) {
@@ -97,8 +101,16 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
         startActivity(intent)
       }
+
+      //리스트 선택화면으로 넘어감
+      R.id.otherPeopleProfileSelect->{
+        val intent = Intent(this, AllRanking::class.java)
+        startActivity(intent)
+      }
+
     }
   }
+
 
   private fun RouteGPX.getSpeed(): MutableList<Double> {
     val speeds = mutableListOf<Double>()
@@ -129,4 +141,6 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
     racerAvgSpeedTextView.text = racerSpeeds.average().prettyDistance()
     progressbar.dismiss()
   }
+
+
 }

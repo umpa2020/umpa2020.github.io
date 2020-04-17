@@ -1,4 +1,4 @@
-package com.umpa2020.tracer.main.profile.history
+package com.umpa2020.tracer.main.profile.myrecord
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -10,7 +10,7 @@ import com.umpa2020.tracer.dataClass.HistoryData
 import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.recycler_profile_user_history_item.view.*
 
-class ProfileRecyclerViewAdapterHistory(private var datas: ArrayList<HistoryData>) : RecyclerView.Adapter<ProfileRecyclerViewAdapterHistory.MyViewHolder>() {
+class ProfileRecyclerViewAdapterRecord(private var datas: ArrayList<HistoryData>) : RecyclerView.Adapter<ProfileRecyclerViewAdapterRecord.MyViewHolder>() {
   var context: Context? = null
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
     val view = LayoutInflater.from(parent.context).inflate(R.layout.recycler_profile_user_history_item, parent, false)
