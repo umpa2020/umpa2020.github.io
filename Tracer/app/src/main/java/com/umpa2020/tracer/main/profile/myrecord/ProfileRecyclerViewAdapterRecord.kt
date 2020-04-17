@@ -6,14 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.umpa2020.tracer.R
-import com.umpa2020.tracer.dataClass.HistoryData
+import com.umpa2020.tracer.dataClass.RecordData
+import com.umpa2020.tracer.network.FBMapImageRepository
 import com.umpa2020.tracer.util.OnSingleClickListener
-import kotlinx.android.synthetic.main.recycler_profile_user_history_item.view.*
+import kotlinx.android.synthetic.main.recycler_profile_user_record_item.view.*
 
-class ProfileRecyclerViewAdapterRecord(private var datas: ArrayList<HistoryData>) : RecyclerView.Adapter<ProfileRecyclerViewAdapterRecord.MyViewHolder>() {
+class ProfileRecyclerViewAdapterRecord(private var datas: ArrayList<RecordData>) : RecyclerView.Adapter<ProfileRecyclerViewAdapterRecord.MyViewHolder>() {
   var context: Context? = null
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-    val view = LayoutInflater.from(parent.context).inflate(R.layout.recycler_profile_user_history_item, parent, false)
+    val view = LayoutInflater.from(parent.context).inflate(R.layout.recycler_profile_user_record_item, parent, false)
     context = parent.context
     return MyViewHolder(view)
   }
@@ -26,8 +27,9 @@ class ProfileRecyclerViewAdapterRecord(private var datas: ArrayList<HistoryData>
     val singleItem1 = datas[position]
 
     //데이터 바인딩
-    holder.mapTitle.text = singleItem1.mapTitle
-    holder.testvalues.text = singleItem1.testvalues
+    FBMapImageRepository().getMapImage(holder.mapImageView, "test 로 남겨놔" )
+    holder.record.text = singleItem1.record
+
 
     //클릭하면 맵 상세보기 페이지로 이동
     holder.itemView.setOnClickListener(object : OnSingleClickListener{
@@ -44,8 +46,8 @@ class ProfileRecyclerViewAdapterRecord(private var datas: ArrayList<HistoryData>
   }
 
   inner class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    var mapTitle = view.profileFragmentHistoryTextView1
-    var testvalues = view.profileFragmentHistoryTextView2
+    var mapImageView = view.profileUserRecordMapImageView!!
+    var record = view.profileUserRecordTextView!!
   }
 }
 

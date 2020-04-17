@@ -5,16 +5,21 @@
   android:layout_height="match_parent">
 
   <Button
-    android:visibility="gone"
+    android:visibility="visible"
     android:id="@+id/mainStartSearchAreaButton"
     style="@style/buttonTextRedText"
-    android:layout_width="150dp"
+    android:layout_width="wrap_content"
     android:layout_height="40dp"
     android:layout_marginTop="70dp"
-    android:background="@drawable/button_empty_background"
     android:layout_centerHorizontal="true"
     android:textSize="12sp"
-    android:text="@string/re_search_this_area" />
+    android:text="@string/re_search_this_area"
+    android:textColor="@color/skyBlue"
+    android:drawableStart="@drawable/ic_refresh_24dp"
+    android:drawablePadding="10dp"
+    android:background="@drawable/button_empty_background_circle"
+    android:paddingStart="15dp"
+    android:paddingEnd="15dp"/>
 
   <LinearLayout
     android:layout_width="match_parent"
@@ -104,11 +109,11 @@
 
     <Button
       android:id="@+id/mainStartRunning"
-      style="@style/buttonTextRedText"
+      style="@style/buttonText"
       android:layout_width="100dp"
       android:layout_height="40dp"
       android:layout_gravity="bottom"
-      android:background="@drawable/button_empty_background"
+      android:background="@drawable/button_background"
       android:gravity="center"
       android:text="@string/runningmode" />
 

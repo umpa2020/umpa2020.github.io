@@ -168,7 +168,7 @@
     android:layout_marginLeft="20dp"
     android:layout_marginRight="20dp"
     android:padding="10dp"
-    android:text="나의 활동" />
+    android:text="@string/my_activity" />
 
   <TextView
     android:layout_width="wrap_content"

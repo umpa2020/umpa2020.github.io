@@ -40,7 +40,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp"
-        android:text="내 순위" />
+        android:text="@string/my_rank" />
 
       <LinearLayout
         android:id="@+id/RacingFinishLayout"
@@ -80,7 +80,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="10dp"
-            android:text="랩 타임"
+            android:text="@string/laptime"
             android:textColor="@color/skyBlue"
             android:textSize="16dp"
             android:textStyle="bold" />
@@ -106,68 +106,24 @@
         android:layout_below="@+id/RacingFinishLayout"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
-        android:text="상위 기록" />
+        android:text="@string/top3_rank" />
 
       <!--1등-->
-      <FrameLayout
-        android:id="@+id/racingFinishFrameLayoutFirst"
-        android:layout_width="90dp"
-        android:layout_height="90dp"
+      <LinearLayout
+        android:gravity="center"
+        android:id="@+id/racingFinishLinearLayoutFirst"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:layout_below="@+id/RacingFinishAnalysis"
         android:layout_centerHorizontal="true">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-          android:id="@+id/racingFinishProfileFirst"
-          android:layout_width="80dp"
-          android:layout_height="80dp"
-          android:layout_gravity="center"
-          android:src="@drawable/ic_profile_logo"
-          app:civ_border_color="@color/gray"
-          app:civ_border_width="2dp" />
-
-        <de.hdodenhof.circleimageview.CircleImageView
-          android:layout_width="30dp"
-          android:layout_height="30dp"
-          android:layout_gravity="top|end"
-          android:background="@drawable/ic_looks_one_24dp" />
-      </FrameLayout>
-
-      <TextView
-        android:id="@+id/racingFinishNicknameFirst"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/racingFinishFrameLayoutFirst"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:text="1등 닉네임" />
-
-      <TextView
-        android:id="@+id/racingFinishLapTimeFirst"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/racingFinishNicknameFirst"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:text="1등 랩타임" />
-
-
-      <!--2등-->
-      <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/RacingFinishAnalysis"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_toLeftOf="@+id/racingFinishFrameLayoutFirst"
-        android:orientation="vertical">
-
         <FrameLayout
-          android:id="@+id/racingFinishFrameLayoutSecond"
           android:layout_width="90dp"
           android:layout_height="90dp">
 
           <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/racingFinishProfileSecond"
+            android:id="@+id/racingFinishProfileFirst"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_gravity="center"
@@ -179,6 +135,54 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_gravity="top|end"
+            android:background="@drawable/ic_looks_one_24dp" />
+        </FrameLayout>
+
+        <TextView
+          android:id="@+id/racingFinishNicknameFirst"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="10dp"
+          android:text="1등 닉네임" />
+
+        <TextView
+          android:id="@+id/racingFinishLapTimeFirst"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="10dp"
+          android:text="1등 랩타임" />
+
+      </LinearLayout>
+
+      <!--2등-->
+      <LinearLayout
+        android:gravity="bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/RacingFinishAnalysis"
+        android:layout_marginEnd="20dp"
+        android:layout_toStartOf="@+id/racingFinishLinearLayoutFirst"
+        android:layout_alignBottom="@+id/racingFinishLinearLayoutFirst"
+        android:orientation="vertical">
+
+        <FrameLayout
+          android:id="@+id/racingFinishFrameLayoutSecond"
+          android:layout_width="70dp"
+          android:layout_height="70dp">
+
+          <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/racingFinishProfileSecond"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_profile_logo"
+            app:civ_border_color="@color/gray"
+            app:civ_border_width="2dp" />
+
+          <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="top|end"
             android:background="@drawable/ic_looks_two_24dp" />
         </FrameLayout>
 
@@ -188,7 +192,8 @@
           android:layout_height="wrap_content"
           android:layout_gravity="center_horizontal"
           android:layout_marginTop="10dp"
-          android:text="2등 닉네임" />
+          android:text="2등 닉네임"
+          />
 
         <TextView
           android:id="@+id/racingFinishLapTimeSecond"
@@ -201,32 +206,34 @@
 
       <!--3등-->
       <LinearLayout
+        android:gravity="bottom"
         android:id="@+id/racingFinishLinearLayoutThird"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/RacingFinishAnalysis"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="30dp"
-        android:layout_toRightOf="@+id/racingFinishFrameLayoutFirst"
+        android:layout_marginStart="20dp"
+        android:layout_toRightOf="@+id/racingFinishLinearLayoutFirst"
+        android:layout_alignBottom="@+id/racingFinishLinearLayoutFirst"
         android:orientation="vertical">
+
 
         <FrameLayout
           android:id="@+id/racingFinishFrameLayoutThird"
-          android:layout_width="90dp"
-          android:layout_height="90dp">
+          android:layout_width="70dp"
+          android:layout_height="70dp">
 
           <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/racingFinishProfileThird"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_gravity="center"
             android:src="@drawable/ic_profile_logo"
             app:civ_border_color="@color/gray"
             app:civ_border_width="2dp" />
 
           <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_gravity="top|end"
             android:background="@drawable/ic_looks_3_24dp" />
         </FrameLayout>
@@ -257,7 +264,7 @@
         android:layout_below="@+id/racingFinishLinearLayoutThird"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
-        android:text="기록 비교" />
+        android:text="@string/record_comparison" />
 
       <LinearLayout
         android:id="@+id/VSLinearLayout"
@@ -271,8 +278,8 @@
         <LinearLayout
           android:layout_width="80dp"
           android:layout_height="wrap_content"
-          android:gravity="center"
-          android:orientation="vertical">
+          android:orientation="vertical"
+          android:gravity="center">
 
           <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/RacingFinishAnalysisMyProfile"
@@ -311,7 +318,7 @@
 
           <FrameLayout
             android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_height="60dp"
             android:id="@+id/otherPeopleProfileSelect">
 
             <de.hdodenhof.circleimageview.CircleImageView
@@ -401,7 +408,7 @@
           android:layout_height="wrap_content"
           android:layout_marginLeft="20dp"
           android:layout_marginTop="10dp"
-          android:text="최고 속력" />
+          android:text="@string/max_speed" />
 
         <LinearLayout
           android:layout_width="match_parent"
@@ -445,7 +452,7 @@
           android:layout_height="wrap_content"
           android:layout_marginLeft="20dp"
           android:layout_marginTop="10dp"
-          android:text="평균 속력" />
+          android:text="@string/avg_speed" />
 
         <LinearLayout
           android:layout_width="match_parent"
@@ -482,7 +489,7 @@
         android:layout_marginRight="20dp"
         android:layout_marginBottom="10dp"
         android:background="@drawable/button_background"
-        android:text="확인" />
+        android:text="@string/confirmation" />
     </RelativeLayout>
   </ScrollView>
 </RelativeLayout>
