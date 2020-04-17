@@ -105,32 +105,46 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
 
         progressbar.show()
 
+        /**
+         * TODO 아래 코드 원래 있던 코드를 재활용 안하고 새로 했는데 - 정빈
+         *
+         * 1. AllRankingActivity 안에 RecyclerView에서 종료를 시키고 있어서
+         *    제대로 된 종료가 안되서
+         * 2. 원래 있던 코드를 사용하면 APP.instance 부분이 오류가 나게 됨
+         *
+         */
         val db = FirebaseFirestore.getInstance()
         var profileImagePath = "init"
         db.collection("userinfo").whereEqualTo("nickname", getNickname)
           .get()
           .addOnSuccessListener { result ->
-            for (document in result) {
-              profileImagePath = document.get("profileImagePath") as String
-              break
-            }
-            // glide imageview 소스
-            // 프사 설정하는 코드 db -> imageView glide
-            val storage = FirebaseStorage.getInstance()
-            val profileRef = storage.reference.child(profileImagePath)
+            if (!result.isEmpty) {
+              for (document in result) {
+                profileImagePath = document.get("profileImagePath") as String
+                break
+              }
+              // glide imageview 소스
+              // 프사 설정하는 코드 db -> imageView glide
+              val storage = FirebaseStorage.getInstance()
+              val profileRef = storage.reference.child(profileImagePath)
 
-            profileRef.downloadUrl.addOnCompleteListener { task ->
-              if (task.isSuccessful) {
-                // Glide 이용하여 이미지뷰에 로딩
-                Glide.with(App.instance.currentActivity() as Activity)
-                  .load(task.result)
-                  .override(1024, 980)
-                  .into(RacingFinishAnalysisOtherProfile)
-                progressbar.dismiss()
-              } else {
-                progressbar.dismiss()
+              profileRef.downloadUrl.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                  // Glide 이용하여 이미지뷰에 로딩
+                  Glide.with(App.instance.currentActivity() as Activity)
+                    .load(task.result)
+                    .override(1024, 980)
+                    .into(RacingFinishAnalysisOtherProfile)
+                  progressbar.dismiss()
+                } else {
+                  progressbar.dismiss()
+                }
               }
             }
+            else {
+              RacingFinishAnalysisOtherNickname.text = "탈퇴한 회원입니다."
+            }
+
           }
         //FBProfileRepository().getProfileImage(RacingFinishAnalysisOtherProfile, getNickname!!)
       }
