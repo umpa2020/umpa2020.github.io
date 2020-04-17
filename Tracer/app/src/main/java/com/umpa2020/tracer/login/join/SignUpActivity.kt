@@ -15,10 +15,8 @@ import android.text.TextWatcher
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -392,7 +390,7 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
       "nickname" to nickname,
       "age" to age,
       "gender" to gender,
-      "profileImagePath" to dt + ".jpg"
+      "profileImagePath" to "Profile/$uid/$dt.jpg"
     )
     mFirestoreDB!!.collection("userinfo").document(uid!!).set(data)
       .addOnSuccessListener { Logg.d("DocumentSnapshot successfully written!") }

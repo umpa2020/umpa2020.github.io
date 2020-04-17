@@ -18,7 +18,7 @@ import com.umpa2020.tracer.extensions.prettyDistance
 import com.umpa2020.tracer.extensions.toRank
 import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.main.ranking.RankRecyclerViewAdapterTopPlayer
-import com.umpa2020.tracer.network.FBRacing
+import com.umpa2020.tracer.network.FBRacingRepository
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.ProgressBar
@@ -73,22 +73,20 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
             //resultPlayerRankingRecycler.layoutManager = LinearLayoutManager(baseContext)
             //resultPlayerRankingRecycler.adapter = RankRecyclerViewAdapterTopPlayer(arrRankingData, racerData.mapTitle!!)
 
-
           }
         }
       }
     }
 
     // 메이커 인포데이터를 가져오는 함수
-    FBRacing().getMakerData(racerData, mHandler)
-
+    FBRacingRepository().getMakerData(racerData, mHandler)
 
     // 유저 인포에 해당 유저가 이 맵을 뛰었다는
     // 히스토리를 더하는 함수
-    FBRacing().setUserInfoRacing(racerData)
+    FBRacingRepository().setUserInfoRacing(racerData)
 
 
-    FBRacing().setRankingData(result, racerData, mHandler)
+    FBRacingRepository().setRankingData(result, racerData, mHandler)
 
     OKButton.setOnClickListener(this)
     otherPeopleProfileSelect.setOnClickListener(this)
@@ -97,8 +95,8 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
 
 
   override fun onSingleClick(v: View?) {
-    when(v!!.id){
-      R.id.OKButton->{
+    when (v!!.id) {
+      R.id.OKButton -> {
         val intent = Intent(this, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
         startActivity(intent)
@@ -122,20 +120,23 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
     return speeds
   }
 
-  private fun setUiData(racerSpeeds: MutableList<Double>, makerSpeeds: MutableList<Double>, resultRankText: Int) {
+  private fun setUiData(
+    racerSpeeds: MutableList<Double>,
+    makerSpeeds: MutableList<Double>,
+    resultRankText: Int
+  ) {
 
     if (resultRankText == 0) {
       resultRankTextView.text = getString(R.string.fail)
-    }
-    else {
+    } else {
       resultRankTextView.text = resultRankText.toRank()
     }
 
-    makerLapTimeTextView.text =makerData.time!!.format(MM_SS)
+    makerLapTimeTextView.text = makerData.time!!.format(MM_SS)
     makerMaxSpeedTextView.text = makerSpeeds.max()!!.prettyDistance()
     makerAvgSpeedTextView.text = makerSpeeds.average().prettyDistance()
 
-    racerLapTimeTextView.text =racerData.time!!.format(MM_SS)
+    racerLapTimeTextView.text = racerData.time!!.format(MM_SS)
     racerMaxSpeedTextView.text = racerSpeeds.max()!!.prettyDistance()
     racerAvgSpeedTextView.text = racerSpeeds.average().prettyDistance()
     progressbar.dismiss()

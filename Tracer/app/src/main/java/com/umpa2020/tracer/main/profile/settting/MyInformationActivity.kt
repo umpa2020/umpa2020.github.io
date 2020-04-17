@@ -1,35 +1,36 @@
 package com.umpa2020.tracer.main.profile.settting
 
+import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.os.Message
 import android.provider.MediaStore
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
-import com.umpa2020.tracer.network.FBProfile
+import com.umpa2020.tracer.network.FBProfileRepository
+import com.umpa2020.tracer.network.ProfileListener
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.OnSingleClickListener
+import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_my_information.*
 import kotlinx.android.synthetic.main.signup_toolbar.*
 import kotlinx.android.synthetic.main.signup_toolbar.view.*
 
 class MyInformationActivity : AppCompatActivity(), OnSingleClickListener {
-  val CHANGEPROFILE = 110 // 프로필 사진 체인지
+  lateinit var progressBar : ProgressBar
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_my_information)
     app_toolbar.titleText.text=getString(R.string.my_information)
     // 프로필 이미지 서버에서 가져와서 화면에 설정
-    FBProfile().getProfileImage(profileImage, UserInfo.nickname)
+    FBProfileRepository().getProfileImage(profileImage, UserInfo.nickname)
 
     // TODO : 프로필 이미지 변경.
     // Shared에 저장된 유저 정보 설정정
@@ -55,25 +56,11 @@ class MyInformationActivity : AppCompatActivity(), OnSingleClickListener {
         goToAlbum()
       }
       R.id.profileChangeButton -> {
-        // TODO: 서버로 변경된 프로필 이미지 전송
-        Logg.i("서버로 변경된 프로필 이미지 전송")
-        val mHandler = object : Handler(Looper.getMainLooper()) {
-          override fun handleMessage(msg: Message) {
-            when (msg.what) {
-              CHANGEPROFILE -> {
-                val changeFinished = msg.obj as Boolean
-                if (changeFinished) {
-                  finish()
-                }
-              }
-            }
-          }
-        }
-
-        // TODO 이 로그 지우지마!!! - 정빈
-        Logg.d("ssmm11 bitmapImg = $bitmapImg")
         if (bitmapImg != null) { // 사진을 고르면
-          FBProfile().changeProfileImage(bitmapImg!!, mHandler)
+          progressBar = ProgressBar(App.instance.currentActivity() as Activity)
+          progressBar.show()
+
+          FBProfileRepository().changeProfileImage(bitmapImg!!, profileListener)
         }
         else { // 사진을 안고르면
           finish()
@@ -125,5 +112,16 @@ class MyInformationActivity : AppCompatActivity(), OnSingleClickListener {
   companion object {
     // 카메라 requestCode
     private val PICK_FROM_ALBUM = 1
+  }
+
+  private val profileListener = object : ProfileListener {
+    override fun getProfile(distance: Double, time: Double) {
+
+    }
+
+    override fun changeProfile() {
+      progressBar.dismiss()
+      finish()
+    }
   }
 }

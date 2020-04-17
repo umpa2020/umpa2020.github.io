@@ -2,21 +2,16 @@ package com.umpa2020.tracer.main.ranking
 
 import android.content.Context
 import android.content.Intent
-import android.os.Handler
-import android.os.Looper
-import android.os.Message
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.InfoData
-import com.umpa2020.tracer.dataClass.LikeMapsData
 import com.umpa2020.tracer.extensions.prettyDistance
-import com.umpa2020.tracer.network.FBLikes
-import com.umpa2020.tracer.network.LikedMapListener
+import com.umpa2020.tracer.network.FBLikesRepository
+import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.OnSingleClickListener
-import com.umpa2020.tracer.util.ProgressBar
 import kotlinx.android.synthetic.main.recycler_rankfragment_item.view.*
 
 /**
@@ -25,12 +20,10 @@ import kotlinx.android.synthetic.main.recycler_rankfragment_item.view.*
 class MapRankingAdapter(
   val infoDatas: ArrayList<InfoData>,
   val mode: String,
-  val progressBar: ProgressBar
+  val progressBar: MyProgressBar
 ) : RecyclerView.Adapter<MapRankingAdapter.mViewHolder>() {
 
   var context: Context? = null
-  val GETLIKES = 50
-  var likeMapsDatas = arrayListOf<LikeMapsData>()
 
   //  var holder1 : mViewHolder? = null
   //생성된 뷰 홀더에 데이터를 바인딩 해줌.
@@ -38,19 +31,9 @@ class MapRankingAdapter(
     holder: mViewHolder,
     position: Int
   ) {
-//    holder1 = holder
     val infoData = infoDatas[position]
     val ranking = position + 1
-    val mHandler = object : Handler(Looper.getMainLooper()) {
-      override fun handleMessage(msg: Message) {
-        when (msg.what) {
-          GETLIKES -> {
-            likeMapsDatas = msg.obj as ArrayList<LikeMapsData>
 
-          }
-        }
-      }
-    }
 
     val cutted = infoData.mapTitle!!.split("||")
     //데이터 바인딩
@@ -61,6 +44,10 @@ class MapRankingAdapter(
     if (mode.equals("execute")) {
       holder.modeIcon.setImageResource(R.drawable.ic_sneaker_for_running)
       holder.modeIcon.tag = R.drawable.ic_sneaker_for_running
+
+      if (infoData.played) {
+        holder.modeIcon.setColorFilter(R.color.green)
+      }
       holder.modeNo.text = infoData.execute.toString()
     } else if (mode.equals("likes")) {
       if (infoData.myLiked) {
@@ -69,8 +56,8 @@ class MapRankingAdapter(
       } else {
         holder.modeIcon.setImageResource(R.drawable.ic_favorite_border_black_24dp)
         holder.modeIcon.tag = R.drawable.ic_favorite_border_black_24dp
-        holder.modeNo.text = infoData.likes.toString()
       }
+      holder.modeNo.text = infoData.likes.toString()
     }
 
     //ranking에 따라 트로피 색 바뀌게 하는 부분
@@ -108,14 +95,14 @@ class MapRankingAdapter(
 
             }
             R.drawable.ic_favorite_border_black_24dp -> {
-              FBLikes().setLikes(infoData.mapTitle!!, likes)
+              FBLikesRepository().setLikes(infoData.mapTitle!!, likes)
               holder.modeIcon.setImageResource(R.drawable.ic_favorite_red_24dp)
               holder.modeIcon.tag = R.drawable.ic_favorite_red_24dp
               likes++
               holder.modeNo.text = likes.toString()
             }
             R.drawable.ic_favorite_red_24dp -> {
-              FBLikes().setminusLikes(infoData.mapTitle!!, likes)
+              FBLikesRepository().setminusLikes(infoData.mapTitle!!, likes)
               holder.modeIcon.setImageResource(R.drawable.ic_favorite_border_black_24dp)
               holder.modeIcon.tag = R.drawable.ic_favorite_border_black_24dp
               likes--
@@ -131,7 +118,9 @@ class MapRankingAdapter(
     // 도달하지 못하는 경우가 있음
     // 추후에 코드 정리 할 예정 - 정빈
     if (position == infoDatas.size - 1 || position > 5) {
-      progressBar.dismiss()
+      if (progressBar.mprogressBar.isShowing) {
+        progressBar.dismiss()
+      }
     }
   }
 
@@ -161,23 +150,6 @@ class MapRankingAdapter(
     var modeIcon = view.rankingFragmentModeImageView
   }
 
-  private val likedMapListener = object : LikedMapListener {
-    override fun liked(likedMaps: List<LikeMapsData>) {
-      //adpater 추가
-      infoDatas.filter { infoData ->
-        likedMaps.map { it.mapTitle }
-          .contains(infoData.mapTitle)
-      }.map {
-        it.myLiked = true
-      }
-      notifyDataSetChanged()
-//      for (i in likeMapsDatas) {
-//        if (i.mapTitle.equals(singleItem.mapTitle)) {
-//          holder.modeIcon.setImageResource(R.drawable.ic_favorite_red_24dp)
-//          holder.modeIcon.tag = R.drawable.ic_favorite_red_24dp
-//        }
-//      }
-    }
-  }
+
 }
 

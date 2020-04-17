@@ -13,12 +13,12 @@ import com.bumptech.glide.Glide
 import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.InfoData
-import com.umpa2020.tracer.dataClass.LikeMapsData
+import com.umpa2020.tracer.dataClass.LikedMapData
 import com.umpa2020.tracer.extensions.MM_SS
 import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.extensions.prettyDistance
 import com.umpa2020.tracer.main.ranking.RankRecyclerItemClickActivity
-import com.umpa2020.tracer.network.FBLikes
+import com.umpa2020.tracer.network.FBLikesRepository
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.recycler_profilefragment_route_grid_image.view.*
@@ -28,7 +28,7 @@ class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) :
   RecyclerView.Adapter<ProfileRecyclerViewAdapterRoute.mViewHolder>() {
   var context: Context? = null
   val GETPROFILELIKES = 110
-  var likeMapsDatas = arrayListOf<LikeMapsData>()
+  var likeMapsDatas = arrayListOf<LikedMapData>()
 
 
   //생성된 뷰 홀더에 데이터를 바인딩 해줌.
@@ -61,7 +61,7 @@ class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) :
       override fun handleMessage(msg: Message) {
         when (msg.what) {
           GETPROFILELIKES -> {
-            likeMapsDatas = msg.obj as ArrayList<LikeMapsData>
+            likeMapsDatas = msg.obj as ArrayList<LikedMapData>
             //adpater 추가
             for (i in likeMapsDatas) {
               if (i.mapTitle.equals(singleItem.mapTitle)) {
@@ -97,14 +97,14 @@ class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) :
 
           }
           R.drawable.ic_favorite_border_black_24dp -> {
-            FBLikes().setLikes(singleItem.mapTitle!!, likes)
+            FBLikesRepository().setLikes(singleItem.mapTitle!!, likes)
             holder.heart.setImageResource(R.drawable.ic_favorite_red_24dp)
             holder.heart.tag = R.drawable.ic_favorite_red_24dp
             likes++
             holder.likes.text = likes.toString()
           }
           R.drawable.ic_favorite_red_24dp -> {
-            FBLikes().setminusLikes(singleItem.mapTitle!!, likes)
+            FBLikesRepository().setminusLikes(singleItem.mapTitle!!, likes)
             holder.heart.setImageResource(R.drawable.ic_favorite_border_black_24dp)
             holder.heart.tag = R.drawable.ic_favorite_border_black_24dp
             likes--
