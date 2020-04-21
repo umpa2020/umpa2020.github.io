@@ -26,7 +26,8 @@ class TraceMap(val mMap: GoogleMap) {
   val passedIcon = R.drawable.ic_checkpoint_red.makingIcon()
 
   var markerList = mutableListOf<Marker>()
-  fun drawRoute(track: MutableList<LatLng>, wptList: MutableList<WayPoint>) {
+  var turningPointList= mutableListOf<Marker>()
+  fun drawRoute(track: MutableList<LatLng>, wptList: MutableList<WayPoint>) :MutableList<Marker>{
     Logg.d("Map is draw")
     loadTrack =
       mMap.addPolyline(
@@ -38,32 +39,55 @@ class TraceMap(val mMap: GoogleMap) {
       )        //경로를 그릴 폴리라인 집합
     val unPassedIcon = R.drawable.ic_checkpoint_gray.makingIcon()
     wptList.forEachIndexed { i, it ->
-      val icon = when (it.type.toString()) {
+       when (it.type.get()) {
         START_POINT -> {
-          R.drawable.ic_racing_startpoint.makingIcon()
+          markerList.add(mMap.addMarker(
+            MarkerOptions()
+              .position(it.toLatLng())
+              .title(it.name.get())
+              .icon(R.drawable.ic_racing_startpoint.makingIcon())
+          ))
         }
         FINISH_POINT -> {
-          R.drawable.ic_racing_finishpoint.makingIcon()
+          markerList.add(mMap.addMarker(
+            MarkerOptions()
+              .position(it.toLatLng())
+              .title(it.name.get())
+              .icon(
+                R.drawable.ic_racing_finishpoint.makingIcon())
+          ))
         }
         DISTANCE_POINT -> {
-          unPassedIcon
+          markerList.add(mMap.addMarker(
+            MarkerOptions()
+              .position(it.toLatLng())
+              .title(it.name.get())
+              .icon(
+                unPassedIcon)
+          ))
         }
         TURNING_LEFT_POINT -> {
-          unPassedIcon
+          turningPointList.add(mMap.addMarker(
+            MarkerOptions()
+              .position(it.toLatLng())
+              .title(it.name.get())
+          ))
         }
         TURNING_RIGHT_POINT -> {
-          unPassedIcon
+          turningPointList.add(mMap.addMarker(
+            MarkerOptions()
+              .position(it.toLatLng())
+              .title(it.name.get())
+          ))
         }
         else -> {
           unPassedIcon
         }
       }
-      mMap.addMarker(
-        MarkerOptions().position(it.toLatLng()).title(it.name.get()).
-      )
     }
     val trackBounds = track.bounds()
     mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(trackBounds, 1080, 300, 100))
+    return markerList
   }
 
   fun drawPolyLine(preLoc: LatLng, curLoc: LatLng) {
@@ -82,7 +106,7 @@ class TraceMap(val mMap: GoogleMap) {
     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, 17F))
   }
 
-  fun changeMarkerColor(nextWP: Int, color: Float) {
+  fun changeMarkerIcon(nextWP: Int) {
     markerList[nextWP].remove()
     markerList[nextWP] = mMap.addMarker(
       MarkerOptions()
