@@ -151,6 +151,7 @@ class RunningActivity : BaseRunningActivity() {
             .position(currentLatLng)
             .title(markerCount.toString())
             .icon(passedIcon)
+            .anchor(0f,0.5f)
         )
         wpList.add(
           WayPoint.builder()

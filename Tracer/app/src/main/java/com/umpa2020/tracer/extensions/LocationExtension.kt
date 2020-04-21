@@ -43,7 +43,7 @@ fun MutableList<LatLng>.bounds(): LatLngBounds {
 fun RouteGPX.addDirectionSign(): RouteGPX {
   val latlngs = mutableListOf<LatLng>()
   this.trkList.forEach { latlngs.add(it.toLatLng()) }
-  val simplifyLatLngs = PolyUtil.simplify(latlngs, 10.0)
+  val simplifyLatLngs = PolyUtil.simplify(latlngs, 20.0)
 
   for (i in 1 until simplifyLatLngs.size - 1) {
     val a = simplifyLatLngs[i - 1]

@@ -18,13 +18,14 @@ import com.umpa2020.tracer.util.ProgressBar
 import kotlinx.android.synthetic.main.activity_rank_recycler_item_click.*
 
 class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener {
-  val progressbar = ProgressBar(App.instance.currentActivity() as Activity)
+  lateinit var progressbar:ProgressBar
   val activity = this
   var likes = 0
   var mapTitle = ""
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_rank_recycler_item_click)
+    progressbar = ProgressBar(this)
     rankRecyclerMoreButton.setOnClickListener(this)
     rankRecyclerHeart.setOnClickListener(this)
     progressbar.show()
