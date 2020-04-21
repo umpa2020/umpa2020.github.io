@@ -95,6 +95,10 @@
   <string name="please_select">Please select</string>
   <string name="set_default_image">Would you like to set it as the default image?</string>
   <string name="gps_activation">GPS activation</string>
+  <string name="racing_go_the_distance">You went the distance %1$s %2$s.</string>
+  <string name="racing_fail">"You failed %1$s on %2$s."</string>
+  <string name="map_save">"You made %1$s on %2$s."</string>
+
 
   <!-- firebase string-->
   <string name="google_storage_bucket_string" >gs://tracer-release.appspot.com/</string>
@@ -164,4 +168,12 @@
 
   <string name="speed">speed</string>
   <string name="Are_you_sure_to_delete_this">Are you sure to delete this running?</string>
+
+  <!--activity_racing_finish-->
+  <string name="my_rank">My rank</string>
+  <string name="top3_rank">TOP 3</string>
+  <string name="record_comparison">Record Comparison</string>
+  <string name="max_speed">Max Speed</string>
+  <string name="avg_speed">Average Speed</string>
+
 </resources>

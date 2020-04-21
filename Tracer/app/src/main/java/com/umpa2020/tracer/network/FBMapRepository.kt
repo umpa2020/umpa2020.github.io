@@ -8,7 +8,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.umpa2020.tracer.dataClass.NearMap
 import com.umpa2020.tracer.util.Logg
 
-class FBMap {
+class FBMapRepository {
   val NEARMAPTRUE = 40
   val NEARMAPFALSE = 41
   val STRAT_FRAGMENT_NEARMAP = 30

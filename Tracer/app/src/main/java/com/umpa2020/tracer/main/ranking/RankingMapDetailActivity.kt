@@ -16,8 +16,7 @@ import com.umpa2020.tracer.extensions.MM_SS
 import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.extensions.gpxToClass
 import com.umpa2020.tracer.main.start.racing.RacingActivity
-import com.umpa2020.tracer.network.FBMapImage
-import com.umpa2020.tracer.network.FBProfile
+import com.umpa2020.tracer.network.FBProfileRepository
 import com.umpa2020.tracer.util.Chart
 import com.umpa2020.tracer.util.ChoicePopup
 import com.umpa2020.tracer.util.Logg
@@ -55,7 +54,7 @@ class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener {
       .get()
       .addOnSuccessListener { result ->
         for (document in result) {
-          FBProfile().getProfileImage(rankingDetailProfileImage, document.get("makersNickname") as String)
+          FBProfileRepository().getProfileImage(rankingDetailProfileImage, document.get("makersNickname") as String)
           break
         }
       }

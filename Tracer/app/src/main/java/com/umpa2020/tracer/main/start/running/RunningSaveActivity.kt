@@ -10,7 +10,6 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -18,13 +17,14 @@ import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.customUI.WorkaroundMapFragment
+import com.umpa2020.tracer.dataClass.ActivityData
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.RankingData
 import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.extensions.*
 import com.umpa2020.tracer.main.MainActivity
-import com.umpa2020.tracer.main.start.racing.RacingActivity
 import com.umpa2020.tracer.map.TraceMap
+import com.umpa2020.tracer.network.FBUserActivityRepository
 import com.umpa2020.tracer.util.*
 import kotlinx.android.synthetic.main.activity_running_save.*
 import java.io.File
@@ -38,6 +38,8 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
   lateinit var infoData: InfoData
   lateinit var routeGPX: RouteGPX
   lateinit var traceMap: TraceMap
+  val speedList = mutableListOf<Double>()
+
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -53,7 +55,6 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
       }
     })
 
-    val speedList = mutableListOf<Double>()
     val elevationList = mutableListOf<Double>()
     routeGPX.trkList.forEach {
       speedList.add(it.speed.get().toDouble())
@@ -190,7 +191,11 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
     //TODO: routeGPX 파일로 스토리지에 업로드 후 경로 infoData에 넣어서 set
     db.collection("mapInfo").document(infoData.mapTitle!!).set(infoData)
 
-    val rankingData = RankingData(UserInfo.nickname, UserInfo.nickname, infoData.time, 1)
+    // 히스토리 업로드
+    val activityData = ActivityData(infoData.mapTitle, timestamp.toString(), "map save")
+    FBUserActivityRepository().setUserHistory(activityData)
+
+    val rankingData = RankingData(UserInfo.nickname, UserInfo.nickname, infoData.time, 1, speedList.max().toString(), speedList.average().toString())
     db.collection("rankingMap").document(infoData.mapTitle!!).set(rankingData)
     db.collection("rankingMap").document(infoData.mapTitle!!).collection("ranking")
       .document(UserInfo.autoLoginKey + "||" + timestamp).set(rankingData)

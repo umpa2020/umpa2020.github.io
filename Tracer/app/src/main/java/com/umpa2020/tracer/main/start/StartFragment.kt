@@ -35,7 +35,7 @@ import com.umpa2020.tracer.extensions.toLatLng
 import com.umpa2020.tracer.main.ranking.RankingMapDetailActivity
 import com.umpa2020.tracer.main.start.running.RunningActivity
 import com.umpa2020.tracer.map.TraceMap
-import com.umpa2020.tracer.network.FBMap
+import com.umpa2020.tracer.network.FBMapRepository
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.OnSingleClickListener
@@ -98,7 +98,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
    *  현재 맵 보이는 범위로 루트 검색
    */
   private fun searchThisArea() {
-    progressBar.progressBarShow()
+    progressBar.show()
     val bound = traceMap.mMap.projection.visibleRegion.latLngBounds
 
     val mHandler = object : Handler(Looper.getMainLooper()) {
@@ -138,17 +138,16 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
                 startActivity(intent)
               }
             }
-
-            progressBar.progressBarDismiss()
+            progressBar.dismiss()
           }
           NEARMAPFALSE -> {
             getString(R.string.not_search).show()
-            progressBar.progressBarDismiss()
+            progressBar.dismiss()
           }
         }
       }
     }
-    FBMap().getNearMap(bound.southwest, bound.northeast, mHandler)
+    FBMapRepository().getNearMap(bound.southwest, bound.northeast, mHandler)
   }
 
   /**

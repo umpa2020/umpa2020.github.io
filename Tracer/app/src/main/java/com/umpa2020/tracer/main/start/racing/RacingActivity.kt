@@ -24,7 +24,7 @@ import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.extensions.toLatLng
 import com.umpa2020.tracer.main.start.BaseRunningActivity
-import com.umpa2020.tracer.network.FBMap
+import com.umpa2020.tracer.network.FBMapRepository
 import com.umpa2020.tracer.util.ChoicePopup
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.TTS
@@ -168,7 +168,7 @@ class RacingActivity : BaseRunningActivity() {
 
   override fun start() {
     super.start()
-    FBMap().increaseExecute(mapTitle)
+    FBMapRepository().increaseExecute(mapTitle)
 
     // 레이싱 시작 TTS
     TTS.speech(getString(R.string.startRacing))

@@ -12,13 +12,9 @@ import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.InfoData
-import com.umpa2020.tracer.extensions.MM_SS
-import com.umpa2020.tracer.extensions.format
-import com.umpa2020.tracer.extensions.prettyDistance
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
-import kotlinx.android.synthetic.main.fragment_profile.view.*
 import java.io.ByteArrayOutputStream
 import java.util.*
 
@@ -27,7 +23,7 @@ import java.util.*
  *
  */
 
-class FBProfile {
+class FBProfileRepository {
   val MYROUTE = 60 // 마이 루트가 존재
   val MYROUTEFAIL = 70 // 마이 루트가 없을 경우
   val CHANGEPROFILE = 110 // 프로필 사진 체인지
@@ -41,10 +37,7 @@ class FBProfile {
    * 해당 사용자가 뛴 거리, 뛴
    */
 
-  fun setProfile(view: View, nickname: String) {
-    val progressbar = ProgressBar(App.instance.currentActivity() as Activity)
-    progressbar.show()
-
+  fun setProfile(view: View, nickname: String, profileListener: ProfileListener) {
     var uid = "init"
     db.collection("userinfo").whereEqualTo("nickname", nickname)
       .get()
@@ -72,16 +65,10 @@ class FBProfile {
                   sumDistance += document2.get("distance") as Double
                   sumTime += document2.get("time") as Long
                 }
-
-                // 총 거리와 시간을 띄워줌
-                view.profileFragmentTotalDistance.text = sumDistance.prettyDistance()
-
-                view.profileFragmentTotalTime.text = sumTime.toLong().format(MM_SS)
-                progressbar.dismiss()
+                profileListener.getProfile(sumDistance, sumTime)
               }
           }
         val imageView = view.findViewById<ImageView>(R.id.profileImageView)
-
         getProfileImage(imageView, nickname)
       }
   }
@@ -102,7 +89,7 @@ class FBProfile {
         // glide imageview 소스
         // 프사 설정하는 코드 db -> imageView glide
         val storage = FirebaseStorage.getInstance()
-        val profileRef = storage.reference.child("Profile").child(uid).child(profileImagePath)
+        val profileRef = storage.reference.child(profileImagePath)
 
         profileRef.downloadUrl.addOnCompleteListener { task ->
           if (task.isSuccessful) {
@@ -125,9 +112,8 @@ class FBProfile {
    * 사진 변경 시, 해당 사진을 storage에 업로드하고
    * 그 경로를 db에 update하는 함수
    */
-  fun changeProfileImage(bitmapImg: Bitmap, mHandler: Handler) {
-    val progressbar = ProgressBar(App.instance.currentActivity() as Activity)
-    progressbar.show()
+  fun changeProfileImage(bitmapImg: Bitmap, profileListener: ProfileListener) {
+
 
     val dt = Date()
     // 현재 날짜를 프로필 이름으로 nickname/Profile/현재날짜(영어).jpg 경로 만들기
@@ -135,7 +121,8 @@ class FBProfile {
     val mStorage = FirebaseStorage.getInstance()
     val mStorageReference = mStorage.reference
 
-    val profileRef = mStorageReference.child("Profile").child(UserInfo.autoLoginKey).child("${dt.time}.jpg")
+    val profileRef =
+      mStorageReference.child("Profile").child(UserInfo.autoLoginKey).child("${dt.time}.jpg")
     // 이미지
     val baos = ByteArrayOutputStream()
     bitmapImg.compress(Bitmap.CompressFormat.JPEG, 100, baos)
@@ -149,13 +136,9 @@ class FBProfile {
           val mFirestoreDB = FirebaseFirestore.getInstance()
 
           mFirestoreDB.collection("userinfo").document(UserInfo.autoLoginKey)
-            .update("profileImagePath", "${dt.time}.jpg")
+            .update("profileImagePath", "Profile/${UserInfo.autoLoginKey}/${dt.time}.jpg")
             .addOnSuccessListener {
-
-              val msg: Message = mHandler.obtainMessage(CHANGEPROFILE)
-              msg.obj = true
-              mHandler.sendMessage(msg)
-              progressbar.dismiss()
+              profileListener.changeProfile()
             }
         }
       }
@@ -164,7 +147,8 @@ class FBProfile {
 
   fun getRoute(mHandler: Handler, nickname: String) {
     val infoDatas: ArrayList<InfoData> = arrayListOf()
-    db.collection("mapInfo").whereEqualTo("makersNickname", nickname).whereEqualTo("privacy", "RACING")
+    db.collection("mapInfo").whereEqualTo("makersNickname", nickname)
+      .whereEqualTo("privacy", "RACING")
       .get()
       .addOnSuccessListener { result ->
         for (document in result) {
