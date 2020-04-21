@@ -14,6 +14,9 @@ import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.MarkerOptions
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants
+import com.umpa2020.tracer.constant.Constants.Companion.DISTANCE_POINT
+import com.umpa2020.tracer.constant.Constants.Companion.FINISH_POINT
+import com.umpa2020.tracer.constant.Constants.Companion.START_POINT
 import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.constant.UserState
 import com.umpa2020.tracer.dataClass.InfoData
@@ -102,6 +105,7 @@ class RunningActivity : BaseRunningActivity() {
         .lon(currentLatLng.longitude)
         .name("Start")
         .desc("Start Description")
+        .type(START_POINT)
         .build()
     )
   }
@@ -118,6 +122,7 @@ class RunningActivity : BaseRunningActivity() {
         .lon(currentLatLng.longitude)
         .name("Finish")
         .desc("Finish Description")
+        .type(FINISH_POINT)
         .build()
     )
     val infoData = InfoData()
@@ -153,6 +158,7 @@ class RunningActivity : BaseRunningActivity() {
             .lon(currentLatLng.longitude)
             .name("WayPoint")
             .desc("wayway...")
+            .type(DISTANCE_POINT)
             .build()
         )
         markerCount++

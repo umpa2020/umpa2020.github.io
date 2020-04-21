@@ -11,6 +11,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.maps.android.PolyUtil
 import com.google.maps.android.SphericalUtil
 import com.umpa2020.tracer.R
@@ -41,9 +42,9 @@ class RacingActivity : BaseRunningActivity() {
   var racingResult = true
   var deviationCount = 0
 
-  var wptList: MutableList<WayPoint> = mutableListOf()
+  var markerList: MutableList<Marker> = mutableListOf()
   var track: MutableList<LatLng> = mutableListOf()
-  var nextWP: Int = 0
+  var nextWP: Int = 1
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -64,7 +65,7 @@ class RacingActivity : BaseRunningActivity() {
 
   override fun onMapReady(googleMap: GoogleMap) {
     super.onMapReady(googleMap)
-    traceMap.drawRoute(track, mapRouteGPX.wptList)
+    markerList=traceMap.drawRoute(track, mapRouteGPX.wptList)
   }
 
 
@@ -103,7 +104,6 @@ class RacingActivity : BaseRunningActivity() {
     mapRouteGPX.trkList.forEach {
       track.add(LatLng(it.latitude.toDouble(), it.longitude.toDouble()))
     }
-    wptList = mapRouteGPX.wptList
   }
 
   override fun onSingleClick(v: View?) {
@@ -200,12 +200,13 @@ class RacingActivity : BaseRunningActivity() {
   private fun checkMarker() {
     if (SphericalUtil.computeDistanceBetween(
         currentLatLng,
-        wptList[nextWP].toLatLng()
+        markerList[nextWP].position
       ) < ARRIVE_BOUNDARY
     ) {
-      traceMap.changeMarkerColor(nextWP, BitmapDescriptorFactory.HUE_BLUE)
+
+      traceMap.changeMarkerIcon(nextWP)
       nextWP++
-      if (nextWP == mapRouteGPX.wptList.size) {
+      if (nextWP == markerList.size+1) {
         stop()
       }
     }
@@ -244,15 +245,14 @@ class RacingActivity : BaseRunningActivity() {
   private fun checkIsReadyToRacing() {
     if (SphericalUtil.computeDistanceBetween(
         currentLatLng, mapRouteGPX.wptList[0].toLatLng()
-      ) > Constants.ARRIVE_BOUNDARY
+      ) > ARRIVE_BOUNDARY
     ) {
       userState = UserState.NORMAL
-      traceMap.changeMarkerColor(0, BitmapDescriptorFactory.HUE_ROSE)
       notice(
         getString(R.string.move_startpoint)
           + (SphericalUtil.computeDistanceBetween(
           currentLatLng,
-          wptList[0].toLatLng()
+          markerList[0].position
         )).roundToLong().toString() + "m"
       )
     }
@@ -265,14 +265,14 @@ class RacingActivity : BaseRunningActivity() {
       ) <= ARRIVE_BOUNDARY
     ) {
       notice(getString(R.string.want_start))
-      traceMap.changeMarkerColor(0, BitmapDescriptorFactory.HUE_BLUE)
+      //traceMap.changeMarkerColor(0, BitmapDescriptorFactory.HUE_BLUE)
       userState = UserState.READYTORACING
     } else {
       notice(
         getString(R.string.move_startpoint)
           + (SphericalUtil.computeDistanceBetween(
           currentLatLng,
-          wptList[0].toLatLng()
+          mapRouteGPX.wptList[0].toLatLng()
         )).roundToLong().toString() + "m"
       )
 

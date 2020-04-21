@@ -21,10 +21,7 @@ import com.umpa2020.tracer.dataClass.ActivityData
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.RankingData
 import com.umpa2020.tracer.dataClass.RouteGPX
-import com.umpa2020.tracer.extensions.MM_SS
-import com.umpa2020.tracer.extensions.classToGpx
-import com.umpa2020.tracer.extensions.format
-import com.umpa2020.tracer.extensions.prettyDistance
+import com.umpa2020.tracer.extensions.*
 import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.map.TraceMap
 import com.umpa2020.tracer.network.FBUserActivityRepository
@@ -154,9 +151,9 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
     infoData.likes = 0
 
     when (privacyRadioGroup.checkedRadioButtonId) {
-      com.umpa2020.tracer.R.id.racingRadio -> infoData.privacy = Privacy.RACING
-      com.umpa2020.tracer.R.id.publicRadio -> infoData.privacy = Privacy.PUBLIC
-      com.umpa2020.tracer.R.id.privateRadio -> infoData.privacy = Privacy.PRIVATE
+      R.id.racingRadio -> infoData.privacy = Privacy.RACING
+      R.id.publicRadio -> infoData.privacy = Privacy.PUBLIC
+      R.id.privateRadio -> infoData.privacy = Privacy.PRIVATE
     }
 
     // 맵 타이틀과, 랭킹 중복 방지를 위해서 시간 값을 넣어서 중복 방지
@@ -164,7 +161,12 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
     if (!saveFolder.exists()) {       //폴더 없으면 생성
       saveFolder.mkdir()
     }
+    routeGPX.addDirectionSign()
+    routeGPX.wptList.forEach {
+      Logg.d("lat : ${it.latitude} lon : ${it.longitude} desc : ${it.description} ")
+    }
     val routeGpxFile = routeGPX.classToGpx(saveFolder.path)
+
     // storage에 이미지 업로드 모든 맵 이미지는 mapimage/maptitle로 업로드가 된다.
     val fstorage = FirebaseStorage.getInstance()
     Logg.d("HI0?")
