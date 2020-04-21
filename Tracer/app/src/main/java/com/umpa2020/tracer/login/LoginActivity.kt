@@ -72,8 +72,8 @@ class LoginActivity : AppCompatActivity(), OnSingleClickListener {
   }
 
   override fun onSingleClick(v: View?) {
-    when(v!!.id){
-      R.id.googleSignInButton->{
+    when (v!!.id) {
+      R.id.googleSignInButton -> {
         signIn()
       }
     }
@@ -110,6 +110,7 @@ class LoginActivity : AppCompatActivity(), OnSingleClickListener {
       } catch (e: ApiException) {
         // Google Sign In failed, update UI appropriately
         Logg.w("Google sign in failed$e")
+        progressbar.dismiss()
         // ...
       }
     }
@@ -149,15 +150,12 @@ class LoginActivity : AppCompatActivity(), OnSingleClickListener {
                 val nextIntent = Intent(this@LoginActivity, SignUpActivity::class.java)
                 nextIntent.putExtra("user UID", mAuth!!.uid.toString())
                 nextIntent.putExtra("email", email)
-
-
                 startActivity(nextIntent)
                 finish()
                 progressbar.dismiss()
               } else {
                 for (document in result) {
                   // DocumentSnapshot{key=UserInfo/117635384468060774340, metadata=SnapshotMetadata{hasPendingWrites=false, isFromCache=false}, doc=null}
-
                   Logg.d(document.exists().toString()) // false
                   Logg.d(document.reference.toString()) // com.google.firebase.firestore.DocumentReference@aafeaf20
                   Logg.d("Cached document data: ${document?.data}") // Cached document data: null
@@ -176,7 +174,6 @@ class LoginActivity : AppCompatActivity(), OnSingleClickListener {
                   startActivity(nextIntent)
                   finish()
                   progressbar.dismiss()
-
                 }
               }
             }
@@ -185,6 +182,7 @@ class LoginActivity : AppCompatActivity(), OnSingleClickListener {
           //    이때 db에서 값을 가져와야겠지??
         } else {
           // If sign in fails, display a message to the user.
+          progressbar.dismiss()
           Logg.w("signInWithCredential:failure" + task.exception)
         }
       }
