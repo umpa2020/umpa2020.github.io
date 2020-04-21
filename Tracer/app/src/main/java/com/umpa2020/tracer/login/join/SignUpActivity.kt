@@ -310,6 +310,7 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
 
   // 바탕 클릭 시 키패드 숨기기
   override fun onTouchEvent(event: MotionEvent?): Boolean {
+    editNickname.requestFocus()
     val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     imm.hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
     return true
