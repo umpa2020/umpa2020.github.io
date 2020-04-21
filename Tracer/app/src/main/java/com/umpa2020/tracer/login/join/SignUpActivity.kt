@@ -81,7 +81,6 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
 
     progressbar = ProgressBar(this)
 
-    Logg.i("test")
     editNickname.requestFocus()
     init()
 
@@ -128,7 +127,11 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
     inputDataField = arrayOf(editNickname, editAge, editGender)
     textInputLayoutArray =
       arrayOf(nicknameTextInput, ageTextInput, genderTextInput)
-    inputInfoMessage = arrayOf(getString(R.string.txtInputInfoNick), getString(R.string.txtInputInfoAge), getString(R.string.txtInputInfoGender))
+    inputInfoMessage = arrayOf(
+      getString(R.string.txtInputInfoNick),
+      getString(R.string.txtInputInfoAge),
+      getString(R.string.txtInputInfoGender)
+    )
 
     typingListener()
 
@@ -149,7 +152,11 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
     startActivityForResult(intent, PICK_FROM_ALBUM)
   }
 
-  override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+  override fun onRequestPermissionsResult(
+    requestCode: Int,
+    permissions: Array<out String>,
+    grantResults: IntArray
+  ) {
     super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     success_request = requestCode
     if (requestCode == success_request) {
@@ -336,7 +343,12 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
           Logg.d(document.exists().toString())
           if (document.exists()) {
             Logg.d("${document.id} => ${document.data}")
-            textInputLayoutArray[0].setErrorTextColor(resources.getColorStateList(R.color.red, null))
+            textInputLayoutArray[0].setErrorTextColor(
+              resources.getColorStateList(
+                R.color.red,
+                null
+              )
+            )
             textInputLayoutArray[0].error = getString(R.string.nickname_already_using)
             flag = 2 // flag = false로 하여 addOnCompleteListener의 if문이 실행 안되게 하기
           }
@@ -347,7 +359,12 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
       }
       .addOnCompleteListener {
         if (flag == 3) {
-          textInputLayoutArray[0].setErrorTextColor(resources.getColorStateList(R.color.yellowGreen, null))
+          textInputLayoutArray[0].setErrorTextColor(
+            resources.getColorStateList(
+              R.color.yellowGreen,
+              null
+            )
+          )
           textInputLayoutArray[0].error = getString(R.string.nickname_available)
 
           flag = 1
@@ -356,7 +373,13 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
     flag = 3 // 비동기라서 이건 무조건 실행. 하지만 firebase보단 항상 먼저 실행됨.
   }
 
-  private fun uploadProfileImage(bitmapImg: Bitmap, nickname: String, age: String, gender: String, timestamp: String) {
+  private fun uploadProfileImage(
+    bitmapImg: Bitmap,
+    nickname: String,
+    age: String,
+    gender: String,
+    timestamp: String
+  ) {
     // 현재 날짜를 프로필 이름으로 nickname/Profile/현재날짜(영어).jpg 경로 만들기
 
     val profileRef = mStorageReference!!.child("Profile").child(uid!!).child(timestamp + ".jpg")
@@ -466,7 +489,8 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
   기본 이미지로 설정할건지 물어보는 팝업
    **/
 
-  lateinit var noticePopup : ChoicePopup
+  lateinit var noticePopup: ChoicePopup
+
   private fun basicProfileSettingPopup() {
     noticePopup = ChoicePopup(this, getString(R.string.please_select),
       getString(R.string.set_default_image),
