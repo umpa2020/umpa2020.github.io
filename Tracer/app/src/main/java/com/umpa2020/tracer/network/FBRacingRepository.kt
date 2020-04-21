@@ -12,9 +12,7 @@ import java.util.*
 
 class FBRacingRepository {
   val GETMAKERDATA = 100
-  val GETRACING = 101
   val db = FirebaseFirestore.getInstance()
-
 
   /**
    * 첫 번째 실행 되어야하는 함수
@@ -23,12 +21,12 @@ class FBRacingRepository {
    * 최고 기록이 아닐 경우 bestTime을 0으로 설정하여
    * ranking 에 등록하는 함수
    */
-  fun setRankingData(result: Boolean, racerData: InfoData, mHandler: Handler) {
+  fun setRankingData(result: Boolean, racerData: InfoData, mHandler: Handler, racingFinishListener: RacingFinishListener, racerSpeeds: MutableList<Double>) {
     // 타임스탬프
     val timestamp = Date().time
 
     if (result) {
-      val rankingData = RankingData(racerData.makersNickname, UserInfo.nickname, racerData.time, 1)
+      val rankingData = RankingData(racerData.makersNickname, UserInfo.nickname, racerData.time, 1, racerSpeeds.max().toString(), racerSpeeds.average().toString())
       // 랭킹 맵에서
       db.collection("rankingMap").document(racerData.mapTitle!!).collection("ranking")
         .whereEqualTo("bestTime", 1)
@@ -47,10 +45,10 @@ class FBRacingRepository {
           db.collection("rankingMap").document(racerData.mapTitle!!).collection("ranking")
             .document(UserInfo.autoLoginKey + timestamp).set(rankingData)
 
-          getRacingFinishRank(result, racerData, mHandler)
+          getRacingFinishRank(result, racerData, mHandler, racingFinishListener)
         }
     } else {
-      getRacingFinishRank(result, racerData, mHandler)
+      getRacingFinishRank(result, racerData, mHandler, racingFinishListener)
     }
   }
 
@@ -60,7 +58,7 @@ class FBRacingRepository {
    * 2. 성공했을 때에만 N등
    * 3. 실패했을 경우 실패
    */
-  private fun getRacingFinishRank(result: Boolean, racerData: InfoData, mHandler: Handler) {
+  private fun getRacingFinishRank(result: Boolean, racerData: InfoData, mHandler: Handler, racingFinishListener: RacingFinishListener) {
     val arrRankingData: ArrayList<RankingData> = arrayListOf()
     var arg = 0
 
@@ -76,18 +74,12 @@ class FBRacingRepository {
                 arg = index
               }
             }
-            //최대 10위까지만 띄우기
-            if (arrRankingData.size > 10) {
-              break
-            }
+
             arrRankingData.add(recycleRankingData)
             index++
           }
         }
-        val msg: Message = mHandler.obtainMessage(GETRACING)
-        msg.obj = arrRankingData
-        msg.arg1 = arg
-        mHandler.sendMessage(msg)
+        racingFinishListener.getRacingFinish(arrRankingData, arg)
       }
   }
 
@@ -106,6 +98,22 @@ class FBRacingRepository {
         mHandler.sendMessage(msg)
       }
   }
+
+  /**
+   * 다른 사람 인포데이터를 가져오는 함수
+   */
+  fun getOtherData(mapTitle: String, nickname: String, racingFinishListener: RacingFinishListener) {
+
+    db.collection("rankingMap").document(mapTitle)
+      .collection("ranking").whereEqualTo("challengerNickname", nickname)
+      .whereEqualTo("bestTime", 1)
+      .get()
+      .addOnSuccessListener {
+        val rankingData = it.documents.last().toObject(RankingData::class.java)
+        racingFinishListener.getOtherRacing(rankingData!!)
+      }
+  }
+
 
   /**
    * 유저 인포에 해당 유저가 이 맵을 뛰었다는

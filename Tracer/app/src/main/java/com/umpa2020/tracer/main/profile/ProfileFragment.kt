@@ -12,6 +12,7 @@ import com.umpa2020.tracer.R
 import com.umpa2020.tracer.extensions.MM_SS
 import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.extensions.prettyDistance
+import com.umpa2020.tracer.main.profile.myrecord.ProfileRecordActivity
 import com.umpa2020.tracer.main.profile.myroute.ProfileRouteActivity
 import com.umpa2020.tracer.main.profile.settting.AppSettingActivity
 import com.umpa2020.tracer.network.FBProfileRepository
