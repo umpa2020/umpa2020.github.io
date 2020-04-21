@@ -45,7 +45,7 @@
     <activity android:name=".main.start.racing.RacingFinishActivity" />
     <activity android:name=".main.start.racing.RacingActivity" />
     <activity android:name=".login.join.GenderSelectActivity" />
-    <activity android:name=".login.join.SignUpActivity" />
+    <activity android:name=".login.join.SignUpActivity"/>
     <activity android:name=".login.splash.SplashActivity">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
