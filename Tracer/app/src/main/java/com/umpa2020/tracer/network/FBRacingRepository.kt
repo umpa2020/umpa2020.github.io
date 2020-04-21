@@ -12,7 +12,6 @@ import java.util.*
 
 class FBRacingRepository {
   val GETMAKERDATA = 100
-  val GETRACING = 101
   val db = FirebaseFirestore.getInstance()
 
   /**
@@ -22,12 +21,12 @@ class FBRacingRepository {
    * 최고 기록이 아닐 경우 bestTime을 0으로 설정하여
    * ranking 에 등록하는 함수
    */
-  fun setRankingData(result: Boolean, racerData: InfoData, mHandler: Handler, racingFinishListener: RacingFinishListener) {
+  fun setRankingData(result: Boolean, racerData: InfoData, mHandler: Handler, racingFinishListener: RacingFinishListener, racerSpeeds: MutableList<Double>) {
     // 타임스탬프
     val timestamp = Date().time
 
     if (result) {
-      val rankingData = RankingData(racerData.makersNickname, UserInfo.nickname, racerData.time, 1)
+      val rankingData = RankingData(racerData.makersNickname, UserInfo.nickname, racerData.time, 1, racerSpeeds.max().toString(), racerSpeeds.average().toString())
       // 랭킹 맵에서
       db.collection("rankingMap").document(racerData.mapTitle!!).collection("ranking")
         .whereEqualTo("bestTime", 1)

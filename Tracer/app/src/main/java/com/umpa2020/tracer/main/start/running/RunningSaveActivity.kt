@@ -41,6 +41,8 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
   lateinit var infoData: InfoData
   lateinit var routeGPX: RouteGPX
   lateinit var traceMap: TraceMap
+  val speedList = mutableListOf<Double>()
+
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -56,7 +58,6 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
       }
     })
 
-    val speedList = mutableListOf<Double>()
     val elevationList = mutableListOf<Double>()
     routeGPX.trkList.forEach {
       speedList.add(it.speed.get().toDouble())
@@ -192,7 +193,7 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
     val activityData = ActivityData(infoData.mapTitle, timestamp.toString(), "map save")
     FBUserActivityRepository().setUserHistory(activityData)
 
-    val rankingData = RankingData(UserInfo.nickname, UserInfo.nickname, infoData.time, 1)
+    val rankingData = RankingData(UserInfo.nickname, UserInfo.nickname, infoData.time, 1, speedList.max().toString(), speedList.average().toString())
     db.collection("rankingMap").document(infoData.mapTitle!!).set(rankingData)
     db.collection("rankingMap").document(infoData.mapTitle!!).collection("ranking")
       .document(UserInfo.autoLoginKey + "||" + timestamp).set(rankingData)

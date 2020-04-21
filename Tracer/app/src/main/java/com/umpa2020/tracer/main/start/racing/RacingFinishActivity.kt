@@ -88,7 +88,7 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
     }
 
 
-    FBRacingRepository().setRankingData(result, racerData, mHandler, racingFinishListener)
+    FBRacingRepository().setRankingData(result, racerData, mHandler, racingFinishListener, racerSpeeds)
 
     OKButton.setOnClickListener(this)
     otherPeopleProfileSelect.setOnClickListener(this)
@@ -118,7 +118,7 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
         RacingFinishAnalysisOtherNickname.text = getNickname
 
         progressbar.show()
-
+        FBRacingRepository().getOtherData(racerData.mapTitle!!, getNickname!!, racingFinishListener)
         /**
          * TODO 아래 코드 원래 있던 코드를 재활용 안하고 새로 했는데 - 정빈
          *
@@ -249,7 +249,9 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
     }
 
     override fun getOtherRacing(otherData: RankingData) {
-
+      makerLapTimeTextView.text = otherData.challengerTime!!.format(MM_SS)
+      makerMaxSpeedTextView.text = otherData.maxSpeed
+      makerAvgSpeedTextView.text = otherData.averageSpeed
     }
   }
 }
