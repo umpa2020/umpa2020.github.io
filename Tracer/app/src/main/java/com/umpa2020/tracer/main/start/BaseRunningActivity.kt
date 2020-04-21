@@ -4,6 +4,7 @@ import android.content.IntentFilter
 import android.location.Location
 import android.os.Bundle
 import android.os.SystemClock
+import android.speech.tts.TextToSpeech
 import android.view.View
 import android.view.animation.*
 import android.widget.Button
@@ -11,11 +12,13 @@ import android.widget.Chronometer
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.preference.PreferenceManager
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.SphericalUtil
+import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.constant.Privacy
@@ -24,11 +27,9 @@ import com.umpa2020.tracer.extensions.makingIcon
 import com.umpa2020.tracer.extensions.prettyDistance
 import com.umpa2020.tracer.extensions.prettySpeed
 import com.umpa2020.tracer.extensions.toLatLng
+import com.umpa2020.tracer.lockscreen.util.LockScreen
 import com.umpa2020.tracer.map.TraceMap
-import com.umpa2020.tracer.util.ChoicePopup
-import com.umpa2020.tracer.util.LocationBroadcastReceiver
-import com.umpa2020.tracer.util.Logg
-import com.umpa2020.tracer.util.OnSingleClickListener
+import com.umpa2020.tracer.util.*
 import hollowsoft.slidingdrawer.OnDrawerCloseListener
 import hollowsoft.slidingdrawer.OnDrawerOpenListener
 import hollowsoft.slidingdrawer.OnDrawerScrollListener
@@ -137,9 +138,9 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     chronometer.base = SystemClock.elapsedRealtime()
     chronometer.start()
     notificationTextView.visibility = View.GONE
+    lockScreen(true)
   }
 
-  var flag = true
   open fun pause() {
     Logg.i("일시 정지")
 
@@ -168,6 +169,7 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
   open fun stop() {
     userState = UserState.STOP
     chronometer.stop()
+    lockScreen(false)
   }
 
   fun pauseNotice(str: String) {
@@ -202,6 +204,21 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     return moving
   }
 
+  fun lockScreen(flag: Boolean) {
+    val prefs = PreferenceManager.getDefaultSharedPreferences(App.instance.context())
+    if (prefs.getBoolean("LockScreenStatus", false)) {
+      if (flag) {
+        Logg.d("서비스 실행")
+        LockScreen.active()
+      } else {
+        Logg.d("서비스 중지")
+        LockScreen.deActivate()
+      }
+    } else {
+      Logg.d("LockScreen 설정 안함.")
+    }
+  }
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     locationBroadcastReceiver = LocationBroadcastReceiver(this)
@@ -227,7 +244,7 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
           getString(R.string.yes), getString(R.string.no),
           View.OnClickListener {
             noticePopup.dismiss()
-            // yes 버튼 눌렀을 때 해당 액티비티 재시작.
+            lockScreen(false)
             finish()
           },
           View.OnClickListener {

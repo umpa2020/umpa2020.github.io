@@ -162,6 +162,10 @@ dependencies {
     kapt 'com.android.databinding:compiler:3.1.4'
 
     //preference
-    implementation 'androidx.preference:preference:1.1.0'
+    implementation 'androidx.preference:preference:1.1.1'
+
+    // lockScreen 관련
+    implementation 'com.android.support:multidex:1.0.3'
+    implementation 'com.sothree.slidinguppanel:library:3.4.0'   // 화면 슬라이딩
 
 }

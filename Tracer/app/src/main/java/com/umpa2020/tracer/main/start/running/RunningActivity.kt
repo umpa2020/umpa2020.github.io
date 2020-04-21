@@ -2,15 +2,12 @@ package com.umpa2020.tracer.main.start.running
 
 import android.content.Intent
 import android.content.pm.ActivityInfo
-import android.graphics.Color
 import android.location.Location
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.View
 import android.widget.Toast
-import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.MarkerOptions
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants
@@ -21,9 +18,6 @@ import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.extensions.makingIcon
 import com.umpa2020.tracer.main.start.BaseRunningActivity
 import com.umpa2020.tracer.util.*
-import hollowsoft.slidingdrawer.OnDrawerCloseListener
-import hollowsoft.slidingdrawer.OnDrawerOpenListener
-import hollowsoft.slidingdrawer.OnDrawerScrollListener
 import io.jenetics.jpx.WayPoint
 import kotlinx.android.synthetic.main.activity_running.*
 
@@ -51,11 +45,11 @@ class RunningActivity : BaseRunningActivity() {
     startButton = runningStartButton
     stopButton = runningStopButton
     pauseButton = runningPauseButton
-    chronometer = runningTimerTextView
     notificationTextView = runningNotificationTextView
     pauseNotificationTextView = runningPauseNotificationTextView
     drawerHandle = runningHandle
     drawer = runningDrawer
+    chronometer = runningTimerTextView
     speedTextView=runningSpeedTextView
     distanceTextView=runningDistanceTextView
     /**
@@ -69,6 +63,7 @@ class RunningActivity : BaseRunningActivity() {
           View.OnClickListener {
             noticePopup.dismiss()
             // yes 버튼 눌렀을 때 해당 액티비티 재시작.
+            lockScreen(false)
             finish()
           },
           View.OnClickListener {
@@ -160,8 +155,8 @@ class RunningActivity : BaseRunningActivity() {
     }
   }
 
-  override fun onSingleClick(view: View?) {
-    when (view!!.id) {
+  override fun onSingleClick(v: View?) {
+    when (v!!.id) {
       R.id.runningStartButton -> {
         start()
       }

@@ -114,7 +114,14 @@
   <string name="noticeSetting">알림 설정</string>
   <string name="noticeSound">알림을 소리로 받습니다</string>
   <string name="noticeCheck">알림 여부</string>
+  <string name="lockScreenSetting">잠금화면 설정</string>
+  <string name="lockScreenBody">잠금화면 설정 시 기록 측정 가능</string>
+  <string name="lockScreenCheck">잠금화면 여부</string>
 
+  <!-- LcokScreen -->
+  <string name="km">Km</string>
+  <string name="km_h">Km/h</string>
+  <string name="unlock">슬래이드해서 잠금해체</string>
   <!-- TTS -->
   <string name="pushthestartbutton">시작버튼을 누르면 러닝이 시작됩니다.</string>
   <string name="startRunning">러닝을 시작합니다</string>

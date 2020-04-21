@@ -35,7 +35,9 @@ class SettingPreferenceFragment : PreferenceFragmentCompat() {
 
       true
     }
-    
+
+    // 잠금 화면 스위치 버튼
+
     // 알람 스위치 버튼
     val switchNotification: SwitchPreference? = findPreference("notificationSetting") as SwitchPreference?
 
