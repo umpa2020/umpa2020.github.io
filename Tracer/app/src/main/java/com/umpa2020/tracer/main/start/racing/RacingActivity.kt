@@ -42,10 +42,11 @@ class RacingActivity : BaseRunningActivity() {
   var racingResult = true
   var deviationCount = 0
 
-  var markerList: MutableList<Marker> = mutableListOf()
+  lateinit var turningPointList :MutableList<Marker>
+  lateinit var markerList: MutableList<Marker>
   var track: MutableList<LatLng> = mutableListOf()
   var nextWP: Int = 1
-
+  var nextTP:Int=0
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
@@ -65,7 +66,10 @@ class RacingActivity : BaseRunningActivity() {
 
   override fun onMapReady(googleMap: GoogleMap) {
     super.onMapReady(googleMap)
-    markerList=traceMap.drawRoute(track, mapRouteGPX.wptList)
+    traceMap.drawRoute(track, mapRouteGPX.wptList).run {
+      markerList=this.first
+      turningPointList=this.second
+    }
   }
 
 
@@ -158,6 +162,7 @@ class RacingActivity : BaseRunningActivity() {
       UserState.RUNNING -> {
         Logg.d("RUNNING")
         checkMarker()
+        checkTurningPoint()
         checkDeviation()
       }
       else -> {
@@ -165,6 +170,7 @@ class RacingActivity : BaseRunningActivity() {
       }
     }
   }
+
 
   override fun start() {
     super.start()
@@ -196,17 +202,30 @@ class RacingActivity : BaseRunningActivity() {
     startActivity(newIntent)
     finish()
   }
+  private fun checkTurningPoint() {
+    if (nextTP < turningPointList.size) {
+      if (SphericalUtil.computeDistanceBetween(
+          currentLatLng,
+          turningPointList[nextTP].position
+        ) < ARRIVE_BOUNDARY
+      ) {
+        TTS.speech(turningPointList[nextTP].title)
+        nextTP++
+      }
+    }
+  }
 
   private fun checkMarker() {
-    if (SphericalUtil.computeDistanceBetween(
+    if(nextWP == markerList.size){
+      return
+    }else if (SphericalUtil.computeDistanceBetween(
         currentLatLng,
         markerList[nextWP].position
       ) < ARRIVE_BOUNDARY
     ) {
-
       traceMap.changeMarkerIcon(nextWP)
       nextWP++
-      if (nextWP == markerList.size+1) {
+      if (nextWP == markerList.size) {
         stop()
       }
     }

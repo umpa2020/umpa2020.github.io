@@ -23,11 +23,14 @@ class TraceMap(val mMap: GoogleMap) {
   }
 
   lateinit var loadTrack: Polyline
-  val passedIcon = R.drawable.ic_checkpoint_red.makingIcon()
+  val passedIcon = R.drawable.ic_passed_circle.makingIcon()
 
   var markerList = mutableListOf<Marker>()
-  var turningPointList= mutableListOf<Marker>()
-  fun drawRoute(track: MutableList<LatLng>, wptList: MutableList<WayPoint>) :MutableList<Marker>{
+  var turningPointList = mutableListOf<Marker>()
+  fun drawRoute(
+    track: MutableList<LatLng>,
+    wptList: MutableList<WayPoint>
+  ): Pair<MutableList<Marker>, MutableList<Marker>> {
     Logg.d("Map is draw")
     loadTrack =
       mMap.addPolyline(
@@ -37,57 +40,67 @@ class TraceMap(val mMap: GoogleMap) {
           .startCap(RoundCap() as Cap)
           .endCap(RoundCap())
       )        //경로를 그릴 폴리라인 집합
-    val unPassedIcon = R.drawable.ic_checkpoint_gray.makingIcon()
+    val unPassedIcon = R.drawable.ic_unpassed_circle.makingIcon()
     wptList.forEachIndexed { i, it ->
-       when (it.type.get()) {
+      when (it.type.get()) {
         START_POINT -> {
-          markerList.add(mMap.addMarker(
-            MarkerOptions()
-              .position(it.toLatLng())
-              .title(it.name.get())
-              .icon(R.drawable.ic_racing_startpoint.makingIcon())
-          ))
+          markerList.add(
+            mMap.addMarker(
+              MarkerOptions()
+                .position(it.toLatLng())
+                .title(it.name.get())
+                .icon(R.drawable.ic_start_point.makingIcon())
+            )
+          )
+
         }
         FINISH_POINT -> {
-          markerList.add(mMap.addMarker(
-            MarkerOptions()
-              .position(it.toLatLng())
-              .title(it.name.get())
-              .icon(
-                R.drawable.ic_racing_finishpoint.makingIcon())
-          ))
+          markerList.add(
+            mMap.addMarker(
+              MarkerOptions()
+                .position(it.toLatLng())
+                .title(it.name.get())
+                .icon(R.drawable.ic_finish_point.makingIcon())
+            )
+          )
         }
         DISTANCE_POINT -> {
-          markerList.add(mMap.addMarker(
-            MarkerOptions()
-              .position(it.toLatLng())
-              .title(it.name.get())
-              .icon(
-                unPassedIcon)
-          ))
+          markerList.add(
+            mMap.addMarker(
+              MarkerOptions()
+                .position(it.toLatLng())
+                .title(it.name.get())
+                .icon(unPassedIcon)
+                .anchor(0f,0.5f)
+            )
+          )
         }
         TURNING_LEFT_POINT -> {
-          turningPointList.add(mMap.addMarker(
-            MarkerOptions()
-              .position(it.toLatLng())
-              .title(it.name.get())
-          ))
+          turningPointList.add(
+            mMap.addMarker(
+              MarkerOptions()
+                .position(it.toLatLng())
+                .title(it.description.get())
+                .icon(R.drawable.ic_turn_left.makingIcon())
+            )
+          )
         }
         TURNING_RIGHT_POINT -> {
-          turningPointList.add(mMap.addMarker(
-            MarkerOptions()
-              .position(it.toLatLng())
-              .title(it.name.get())
-          ))
+          turningPointList.add(
+            mMap.addMarker(
+              MarkerOptions()
+                .position(it.toLatLng())
+                .title(it.description.get())
+                .icon(R.drawable.ic_turn_right.makingIcon())
+            )
+          )
         }
-        else -> {
-          unPassedIcon
-        }
+        else -> { }
       }
     }
     val trackBounds = track.bounds()
     mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(trackBounds, 1080, 300, 100))
-    return markerList
+    return Pair(markerList, turningPointList)
   }
 
   fun drawPolyLine(preLoc: LatLng, curLoc: LatLng) {
@@ -113,6 +126,7 @@ class TraceMap(val mMap: GoogleMap) {
         .position(markerList[nextWP].position)
         .title(markerList[nextWP].title)
         .icon(passedIcon)
+        .anchor(0f,0.5f)
     )
   }
 }
