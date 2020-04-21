@@ -12,6 +12,7 @@ import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.LikedMapData
 import com.umpa2020.tracer.dataClass.RankingData
 import com.umpa2020.tracer.network.*
+import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.ProgressBar
 import kotlinx.android.synthetic.main.activity_rank_recycler_item_click.*
@@ -69,11 +70,13 @@ class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener
           rankRecyclerHeart.setImageResource(R.drawable.ic_favorite_red_24dp)
           rankRecyclerHeartSwitch.text = "on"
           likes++
+          rankRecyclerHeartCount.text = likes.toString()
         } else if (rankRecyclerHeartSwitch.text == "on") {
           FBLikesRepository().setminusLikes(mapTitle, likes)
           rankRecyclerHeart.setImageResource(R.drawable.ic_favorite_border_black_24dp)
           rankRecyclerHeartSwitch.text = "off"
           likes--
+          rankRecyclerHeartCount.text = likes.toString()
         }
       }
     }
@@ -89,9 +92,10 @@ class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener
     override fun likedList(likedMaps: List<LikedMapData>) {
     }
 
-    override fun liked(liked: Boolean, likes: Int) {
-      rankRecyclerHeartCount.text = likes.toString()
+    override fun liked(liked: Boolean, getlikes: Int) {
+      rankRecyclerHeartCount.text = getlikes.toString()
       //adpater 추가
+      likes = getlikes
       if (liked) {
         rankRecyclerHeart.setImageResource(R.drawable.ic_favorite_red_24dp)
         rankRecyclerHeartSwitch.text = "on"

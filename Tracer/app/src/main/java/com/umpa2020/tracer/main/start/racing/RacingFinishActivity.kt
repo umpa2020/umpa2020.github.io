@@ -13,6 +13,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
+import com.umpa2020.tracer.dataClass.ActivityData
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.RankingData
 import com.umpa2020.tracer.dataClass.RouteGPX
@@ -23,11 +24,13 @@ import com.umpa2020.tracer.extensions.toRank
 import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.network.FBProfileRepository
 import com.umpa2020.tracer.network.FBRacingRepository
+import com.umpa2020.tracer.network.FBUserActivityRepository
 import com.umpa2020.tracer.network.RacingFinishListener
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_racing_finish.*
+import java.util.*
 
 
 class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
@@ -73,6 +76,17 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
     // 유저 인포에 해당 유저가 이 맵을 뛰었다는
     // 히스토리를 더하는 함수
     FBRacingRepository().setUserInfoRacing(racerData)
+    val timestamp = Date().time
+
+    if (result) {
+      val activityData = ActivityData(racerData.mapTitle, timestamp.toString(), "racing go the distance")
+      FBUserActivityRepository().setUserHistory(activityData)
+    }
+    else {
+      val activityData = ActivityData(racerData.mapTitle, timestamp.toString(), "racing fail")
+      FBUserActivityRepository().setUserHistory(activityData)
+    }
+
 
     FBRacingRepository().setRankingData(result, racerData, mHandler, racingFinishListener)
 
