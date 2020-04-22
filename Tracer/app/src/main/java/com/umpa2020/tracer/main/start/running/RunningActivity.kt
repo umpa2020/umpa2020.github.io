@@ -175,7 +175,7 @@ class RunningActivity : BaseRunningActivity() {
       R.id.runningPauseButton -> {
         if (privacy == Privacy.RACING) {
           showPausePopup(
-            "일시정지를 하게 되면\n경쟁 모드 업로드가 불가합니다.\n\n일시정지를 하시겠습니까?"
+            getString(R.string.pause_mode)
           )
         } else {
           if (userState == UserState.PAUSED)
@@ -185,7 +185,7 @@ class RunningActivity : BaseRunningActivity() {
         }
       }
       R.id.runningStopButton -> {
-        Toast.makeText(this, "종료를 원하시면 길게 눌러주세요", Toast.LENGTH_LONG).show()
+        Toast.makeText(this, getString(R.string.press_hold), Toast.LENGTH_LONG).show()
       }
     }
   }
