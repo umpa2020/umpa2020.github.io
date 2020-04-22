@@ -7,12 +7,14 @@ import android.os.SystemClock
 import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.PreferenceManager
 import androidx.preference.SwitchPreference
 import com.google.firebase.auth.FirebaseAuth
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.util.ChoicePopup
+import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.UserInfo
 
 class SettingPreferenceFragment : PreferenceFragmentCompat() {
@@ -23,19 +25,6 @@ class SettingPreferenceFragment : PreferenceFragmentCompat() {
     setPreferencesFromResource(R.xml.fragment_setting_preference, rootKey)
     mAuth = FirebaseAuth.getInstance() // FirebaseAuth를 사용하기 위해서 인스턴스를 꼭 받아오기
 
-
-    // TTS 스위치 버튼
-    val switchTTS: SwitchPreference? = findPreference("ttsNotificationSetting") as SwitchPreference?
-
-    // Switch preference change listener
-    switchTTS?.setOnPreferenceChangeListener{ preference, newValue ->
-      if (newValue == true){
-      }else{
-      }
-
-      true
-    }
-    
     // 알람 스위치 버튼
     val switchNotification: SwitchPreference? = findPreference("notificationSetting") as SwitchPreference?
 
@@ -49,9 +38,9 @@ class SettingPreferenceFragment : PreferenceFragmentCompat() {
 
       true
     }
-
-
   }
+
+
 
   /**
    * preference 클릭할 때
