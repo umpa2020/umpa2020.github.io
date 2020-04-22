@@ -19,7 +19,6 @@ import com.umpa2020.tracer.main.start.racing.RacingActivity
 import com.umpa2020.tracer.network.FBProfileRepository
 import com.umpa2020.tracer.util.Chart
 import com.umpa2020.tracer.util.ChoicePopup
-import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.activity_ranking_map_detail.*
 import java.io.File
@@ -38,12 +37,7 @@ class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener {
     val cutted = mapTitle.subSequence(0, mapTitle.length-13)
     val time = mapTitle.subSequence(mapTitle.length-13, mapTitle.length) as String
 
-    Logg.d("ssmm11 time = $time")
-
     rankingDetailMapTitle.text = cutted
-    //TODO : 날짜로 바꿔야함 (한국 시간만 해결하면 됨)
-    // TODO : 메인에서 마커 클릭하면 여기서 어플 터짐
-
 
     rankingDetailDate.text = time.toLong().format("yyyy-MM-dd HH:mm:ss")
     (supportFragmentManager.findFragmentById(R.id.rankingDetailMapViewer) as WorkaroundMapFragment)
@@ -66,7 +60,7 @@ class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener {
       .get()
       .addOnSuccessListener { result ->
         for (document in result) {
-          if (document.id.equals(mapTitle)) {
+          if (document.id == mapTitle) {
             val infoData = document.toObject(InfoData::class.java)
 
             val storage = FirebaseStorage.getInstance()

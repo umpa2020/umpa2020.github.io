@@ -6,8 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.extensions.MM_SS
@@ -49,7 +47,13 @@ class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) :
     holder.likes.text = singleItem.likes.toString()
     holder.excutes.text = singleItem.execute.toString()
     holder.date.text = time.toLong().format("yyyy-MM-dd HH:mm:ss")
-    holder.heart.tag = R.drawable.ic_favorite_border_black_24dp
+    if (singleItem.myLiked) {
+      holder.heart.setImageResource(R.drawable.ic_favorite_red_24dp)
+      holder.heart.tag = R.drawable.ic_favorite_red_24dp
+    }
+    else {
+      holder.heart.tag = R.drawable.ic_favorite_border_black_24dp
+    }
 
 
     //클릭하면 맵 상세보기 페이지로 이동
