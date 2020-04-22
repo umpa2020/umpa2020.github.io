@@ -31,7 +31,7 @@ object TTS {
   fun speech(sentence: String) {
     // Get the preferences
     val prefs = PreferenceManager.getDefaultSharedPreferences(App.instance.context())
-    if (prefs.getBoolean("ttsNotificationSetting", false)) {
+    if (prefs.getBoolean("ttsNotificationSetting", true)) {
       tts.speak(sentence, TextToSpeech.QUEUE_FLUSH, null, null)
       Logg.d(sentence)
     }
