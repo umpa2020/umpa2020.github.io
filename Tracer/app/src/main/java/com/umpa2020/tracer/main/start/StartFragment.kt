@@ -18,6 +18,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
@@ -273,6 +274,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
       if(firstFlag) {
         searchThisArea()
         firstFlag=false
+        traceMap.initCamera(currentLocation!!.toLatLng())
       }
       Logg.d("${currentLocation}")
     }

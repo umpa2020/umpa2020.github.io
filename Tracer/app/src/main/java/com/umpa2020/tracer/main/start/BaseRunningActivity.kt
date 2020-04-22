@@ -10,6 +10,7 @@ import android.widget.Button
 import android.widget.Chronometer
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.trace
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -94,6 +95,8 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
       wedgedCamera = true
       true
     }
+    traceMap.mMap.uiSettings.isCompassEnabled=true
+    traceMap.mMap.uiSettings.isZoomControlsEnabled=true
   }
 
   open fun updateLocation(curLoc: Location) {
@@ -102,6 +105,7 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     if (setLocation(curLoc)) {
       when (userState) {
         UserState.NORMAL -> {
+          traceMap.initCamera(curLoc.toLatLng())
         }
         UserState.READYTORUNNING -> {
         }
@@ -192,12 +196,7 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     } else if (false) { //TODO:비정상적인 움직임일 경우 + finish에 도착한 경우
     } else {
       moving = true
-      if (wedgedCamera) traceMap.mMap.moveCamera(
-        CameraUpdateFactory.newLatLngZoom(
-          currentLatLng,
-          16F
-        )
-      )
+      if (wedgedCamera) traceMap.mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLatLng))
     }
     return moving
   }

@@ -60,5 +60,6 @@ class Constants {
     const val DISTANCE_POINT="2"
     const val TURNING_LEFT_POINT="3"
     const val TURNING_RIGHT_POINT="4"
+
   }
 }

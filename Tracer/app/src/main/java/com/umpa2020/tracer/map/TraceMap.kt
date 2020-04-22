@@ -116,7 +116,7 @@ class TraceMap(val mMap: GoogleMap) {
   }
 
   fun moveCamera(latlng: LatLng) {
-    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, 17F))
+    mMap.moveCamera(CameraUpdateFactory.newLatLng(latlng))
   }
 
   fun changeMarkerIcon(nextWP: Int) {
@@ -128,5 +128,9 @@ class TraceMap(val mMap: GoogleMap) {
         .icon(passedIcon)
         .anchor(0f,0.5f)
     )
+  }
+
+  fun initCamera(latlng: LatLng) {
+    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng,17F))
   }
 }
