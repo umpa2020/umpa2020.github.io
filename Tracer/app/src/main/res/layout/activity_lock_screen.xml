@@ -6,54 +6,53 @@
   android:id="@+id/lockScreenView"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="@color/red"
+  android:background="@drawable/login_image"
   android:gravity="center"
   android:orientation="vertical"
   tools:context=".lockscreen.LockScreenActivity">
 
 
   <Chronometer
-    android:id="@+id/lockscreenTimerTextView"
+    android:id="@+id/lockScreenChronometer"
     style="@style/blackMediumText18"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="124dp"
     android:textSize="90sp"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent" />
+    android:gravity="center"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintBottom_toTopOf="@id/lockScreenInfoLayout"/>
 
   <LinearLayout
-    android:id="@+id/linearLayout"
+    android:id="@+id/lockScreenInfoLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:layout_marginTop="50dp"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/lockscreenTimerTextView">
+    app:layout_constraintTop_toBottomOf="@+id/lockScreenChronometer"
+    app:layout_constraintBottom_toTopOf="@+id/scrollImageView">
 
     <LinearLayout
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_weight="1"
-      android:gravity="center"
       android:orientation="vertical">
 
       <TextView
         android:id="@+id/lockscreenDistanceTextView"
         style="@style/blackMediumText18"
-        android:layout_width="wrap_content"
-        android:layout_height="73dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:gravity="center"
         android:text="0.00"
         android:textSize="50sp" />
 
       <TextView
         style="@style/blackMediumText18"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/km"
+        android:gravity="center"
         android:textSize="20sp" />
     </LinearLayout>
 
@@ -61,49 +60,45 @@
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_weight="1"
-      android:gravity="center"
       android:orientation="vertical">
 
       <TextView
         android:id="@+id/lockscreenSpeedTextView"
         style="@style/blackMediumText18"
         android:layout_width="match_parent"
-        android:layout_height="75dp"
+        android:layout_height="wrap_content"
         android:gravity="center"
         android:text="0.0"
         android:textSize="50sp" />
 
       <TextView
         style="@style/blackMediumText18"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/km_h"
+        android:gravity="center"
         android:textSize="20sp" />
     </LinearLayout>
   </LinearLayout>
 
   <ImageView
+    android:id="@+id/scrollImageView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:src="@drawable/ic_up_arrow"
-    app:layout_constraintBottom_toTopOf="@+id/textView"
-    app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-    app:layout_constraintVertical_bias="0.835"
-    tools:layout_editor_absoluteX="0dp" />
+    app:layout_constraintTop_toBottomOf="@+id/lockScreenInfoLayout"
+    app:layout_constraintBottom_toTopOf="@+id/lockScreenUnLockTextView"
+    />
 
   <TextView
-    android:id="@+id/textView"
-    android:layout_width="wrap_content"
+    android:id="@+id/lockScreenUnLockTextView"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="96dp"
     android:text="@string/unlock"
     android:textSize="20sp"
     style="@style/blackMediumText18"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintHorizontal_bias="0.497"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/lockscreenTimerTextView"
-    app:layout_constraintVertical_bias="1.0" />
+    android:gravity="center"
+    app:layout_constraintTop_toBottomOf="@+id/scrollImageView"
+    app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
