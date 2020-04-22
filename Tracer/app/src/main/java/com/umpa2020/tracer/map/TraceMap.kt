@@ -28,10 +28,11 @@ class TraceMap(val mMap: GoogleMap) {
   var markerList = mutableListOf<Marker>()
   var turningPointList = mutableListOf<Marker>()
   fun drawRoute(
-    track: MutableList<LatLng>,
+    trkList: MutableList<WayPoint>,
     wptList: MutableList<WayPoint>
   ): Pair<MutableList<Marker>, MutableList<Marker>> {
     Logg.d("Map is draw")
+    val track=trkList.map{it.toLatLng()}
     loadTrack =
       mMap.addPolyline(
         PolylineOptions()
@@ -98,7 +99,7 @@ class TraceMap(val mMap: GoogleMap) {
         else -> { }
       }
     }
-    val trackBounds = track.bounds()
+    val trackBounds = track.toMutableList().bounds()
     mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(trackBounds, 1080, 300, 100))
     return Pair(markerList, turningPointList)
   }
