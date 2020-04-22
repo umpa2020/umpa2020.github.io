@@ -98,6 +98,7 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
           } else {
             val callback = GoogleMap.SnapshotReadyCallback {
               try {
+                save_btn.isEnabled=false
                 val saveFolder = File(filesDir, "mapdata") // 저장 경로
                 if (!saveFolder.exists()) {       //폴더 없으면 생성
                   saveFolder.mkdir()
