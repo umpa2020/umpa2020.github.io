@@ -1,64 +1,47 @@
 package com.umpa2020.tracer.main.challenge
 
-import android.app.Activity
 import android.content.Context
-import android.os.Parcel
-import android.os.Parcelable
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.ImageView
-import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import com.umpa2020.tracer.R
+import com.umpa2020.tracer.dataClass.ChallengeData
+import kotlinx.android.synthetic.main.recycler_challengefragment_item.view.*
 
-class ChallengeRecyclerViewAdapter(private val getContext : Context, private val CustomLayout : Int, private val custom_item : ArrayList<ChallengeLayout>)
-  : ArrayAdapter<ChallengeLayout>(getContext, CustomLayout,custom_item), Parcelable {
+class ChallengeRecyclerViewAdapter(var challenge: ArrayList<ChallengeData>) :
+  RecyclerView.Adapter<ChallengeRecyclerViewAdapter.ItemHolder>(){
 
-  constructor(parcel: Parcel) : this(
-    TODO("getContext"),
-    parcel.readInt(),
-    TODO("custom_item")
-  ) {
+  var context: Context? = null
+
+
+  override fun onBindViewHolder(holder: ItemHolder, position: Int) {
+
+    var ChallengeData: ChallengeData = challenge.get(position)
+
+    holder.icons.setImageResource(ChallengeData.iconsBar!!)
+    holder.recename.text = ChallengeData.nametxt
+    holder.racedate.text = ChallengeData.datetxt
+    holder.raceweek.text = ChallengeData.dateweek
+
   }
 
-  override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-    var row = convertView
-    val Holder : ViewHolder
-    if(row == null) {
-      val inflater = (getContext as Activity).layoutInflater
-      row = inflater.inflate(CustomLayout, parent, false)
-      Holder = ViewHolder()
-      Holder.img = row!!.findViewById(R.id.challenge_map) as ImageView
-      Holder.txt = row!!.findViewById(R.id.challenge_map_text) as TextView
-      row.setTag(Holder)
-    } else {
-      Holder = row.getTag() as ViewHolder
-    }
-    val item = custom_item[position]
-    Holder.img!!.setImageResource(item.image)
-    Holder.txt!!.setText(item.text)
-    return row
-  }
-  class ViewHolder{
-    internal var img : ImageView? = null
-    internal var txt : TextView? = null
+  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemHolder {
+    val itemHolder = LayoutInflater.from(parent.context).inflate(R.layout.recycler_challengefragment_item, parent, false)
+    context = parent.context
+    return ItemHolder(itemHolder)
   }
 
-  override fun writeToParcel(parcel: Parcel, flags: Int) {
-    parcel.writeInt(CustomLayout)
+  override fun getItemCount(): Int {
+    return challenge.size
   }
 
-  override fun describeContents(): Int {
-    return 0
+
+  inner class ItemHolder(view: View) : RecyclerView.ViewHolder(view){
+    var icons = view.challenge_map
+    var recename = view.challenge_race_name
+    var racedate = view.challenge_date
+    var raceweek = view.challenge_week
   }
 
-  companion object CREATOR : Parcelable.Creator<ChallengeRecyclerViewAdapter> {
-    override fun createFromParcel(parcel: Parcel): ChallengeRecyclerViewAdapter {
-      return ChallengeRecyclerViewAdapter(parcel)
-    }
-
-    override fun newArray(size: Int): Array<ChallengeRecyclerViewAdapter?> {
-      return arrayOfNulls(size)
-    }
-  }
 }
