@@ -18,16 +18,24 @@ class FBMapImageRepository {
    */
 
   fun getMapImage(imageView: ImageView, mapTitle: String) {
-    val storage = FirebaseStorage.getInstance()
-    val mapImageRef = storage.reference.child("mapImage").child(mapTitle)
-    mapImageRef.downloadUrl.addOnCompleteListener { task ->
-      if (task.isSuccessful) {
-        // Glide 이용하여 이미지뷰에 로딩
-        Glide.with(App.instance.context())
-          .load(task.result)
-          .override(1024, 980)
-          .into(imageView)
+    db.collection("mapInfo").whereEqualTo("mapTitle", mapTitle)
+      .get()
+      .addOnSuccessListener {
+        val mapImagePath = it.documents.last().get("mapImage") as String
+
+        val storage = FirebaseStorage.getInstance()
+        val mapImageRef = storage.reference.child(mapImagePath)
+        mapImageRef.downloadUrl.addOnCompleteListener { task ->
+          if (task.isSuccessful) {
+            // Glide 이용하여 이미지뷰에 로딩
+            Glide.with(App.instance.context())
+              .load(task.result)
+              .override(1024, 980)
+              .into(imageView)
+          }
+        }
       }
-    }
+
+
   }
 }

@@ -35,14 +35,17 @@ class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener {
     val intent = intent
     //전달 받은 값으로 Title 설정
     val mapTitle = intent.extras?.getString("MapTitle").toString()
-    val cutted = mapTitle.split("||")
-    rankingDetailMapTitle.text = cutted[0]
+    val cutted = mapTitle.subSequence(0, mapTitle.length-13)
+    val time = mapTitle.subSequence(mapTitle.length-13, mapTitle.length) as String
+
+    Logg.d("ssmm11 time = $time")
+
+    rankingDetailMapTitle.text = cutted
     //TODO : 날짜로 바꿔야함 (한국 시간만 해결하면 됨)
     // TODO : 메인에서 마커 클릭하면 여기서 어플 터짐
-    Logg.d(cutted[1])
 
 
-    rankingDetailDate.text = cutted[1].toLong().format("yyyy-MM-dd HH:mm:ss")
+    rankingDetailDate.text = time.toLong().format("yyyy-MM-dd HH:mm:ss")
     (supportFragmentManager.findFragmentById(R.id.rankingDetailMapViewer) as WorkaroundMapFragment)
       .setListener(object : WorkaroundMapFragment.OnTouchListener {
         override fun onTouch() {

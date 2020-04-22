@@ -35,11 +35,12 @@ class MapRankingAdapter(
     val ranking = position + 1
 
 
-    val cutted = infoData.mapTitle!!.split("||")
+    val cutted = infoData.mapTitle!!.subSequence(0, infoData.mapTitle!!.length - 13)
+
     //데이터 바인딩
     holder.rank.text = ranking.toString()
 
-    holder.maptitle.text = cutted[0]
+    holder.maptitle.text = cutted
     holder.distance.text = infoData.distance!!.prettyDistance()
     if (mode.equals("execute")) {
       holder.modeIcon.setImageResource(R.drawable.ic_sneaker_for_running)
