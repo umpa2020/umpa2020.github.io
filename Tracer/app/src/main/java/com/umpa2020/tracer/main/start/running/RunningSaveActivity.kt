@@ -46,7 +46,6 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
     setContentView(com.umpa2020.tracer.R.layout.activity_running_save)
     infoData = intent.getParcelableExtra("InfoData")!!
     routeGPX = intent.getParcelableExtra("RouteGPX")!!
-    loadRoute()
     val wmf = supportFragmentManager.findFragmentById(com.umpa2020.tracer.R.id.map_viewer) as WorkaroundMapFragment
     wmf.getMapAsync(this)
     wmf.setListener(object : WorkaroundMapFragment.OnTouchListener {
@@ -212,16 +211,9 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
     // 위에 지정한 스레드 스타트
   }
 
-  var track: MutableList<LatLng> = mutableListOf()
-  fun loadRoute() {
-    routeGPX.trkList.forEach {
-      track.add(LatLng(it.latitude.toDouble(), it.longitude.toDouble()))
-    }
-  }
-
   override fun onMapReady(googleMap: GoogleMap) {
     Logg.d("onMapReady")
     traceMap = TraceMap(googleMap) //구글맵
-    traceMap.drawRoute(track, routeGPX.wptList)
+    traceMap.drawRoute(routeGPX.trkList, routeGPX.wptList)
   }
 }

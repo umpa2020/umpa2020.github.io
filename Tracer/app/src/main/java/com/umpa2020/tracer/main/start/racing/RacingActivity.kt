@@ -66,7 +66,7 @@ class RacingActivity : BaseRunningActivity() {
 
   override fun onMapReady(googleMap: GoogleMap) {
     super.onMapReady(googleMap)
-    traceMap.drawRoute(track, mapRouteGPX.wptList).run {
+    traceMap.drawRoute(mapRouteGPX.trkList, mapRouteGPX.wptList).run {
       markerList=this.first
       turningPointList=this.second
     }
