@@ -34,23 +34,24 @@ class ProfileRecyclerViewAdapterRecord(private var datas: ArrayList<ActivityData
   override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
     val singleItem1 = datas[position]
 
-    val cutted = singleItem1.mapTitle!!.split("||")
+    val cutted = singleItem1.mapTitle!!.subSequence(0, singleItem1.mapTitle.length-13) as String
     val time = singleItem1.time!!.toLong().format(Locale.getDefault())
+
     //데이터 바인딩
     FBMapImageRepository().getMapImage(holder.mapImageView, singleItem1.mapTitle)
 
     when (singleItem1.mode) {
       "racing go the distance" -> {
         holder.activityText.text =
-          String.format(context!!.getString(R.string.racing_go_the_distance), cutted[0], time)
+          String.format(context!!.getString(R.string.racing_go_the_distance), cutted, time)
       }
       "racing fail" -> {
         holder.activityText.text =
-          String.format(context!!.getString(R.string.racing_fail), cutted[0], time)
+          String.format(context!!.getString(R.string.racing_fail), cutted, time)
       }
       "map save" -> {
         holder.activityText.text =
-          String.format(context!!.getString(R.string.map_save), cutted[0], time)
+          String.format(context!!.getString(R.string.map_save), cutted, time)
 
         //클릭하면 맵 상세보기 페이지로 이동
       }

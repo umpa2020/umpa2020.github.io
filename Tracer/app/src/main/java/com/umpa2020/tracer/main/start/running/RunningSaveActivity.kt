@@ -143,8 +143,8 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
 
     // 인포데이터에 필요한 내용을 저장하고
     infoData.makersNickname = UserInfo.nickname
-    infoData.mapImage = imgPath
-    infoData.mapTitle = mapTitleEdit.text.toString() + "||" + timestamp.toString()
+    infoData.mapTitle = mapTitleEdit.text.toString() + timestamp.toString()
+    infoData.mapImage = "mapImage/${infoData.mapTitle}"
     infoData.mapExplanation = mapExplanationEdit.text.toString()
     infoData.makersNickname = UserInfo.nickname
     infoData.execute = 0
@@ -169,20 +169,16 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
 
     // storage에 이미지 업로드 모든 맵 이미지는 mapimage/maptitle로 업로드가 된다.
     val fstorage = FirebaseStorage.getInstance()
-    Logg.d("HI0?")
     val fRef = fstorage.reference.child("mapRoute").child(infoData.mapTitle!!)
     infoData.routeGPXPath = fRef.path
 
-    Logg.d("HI1?")
     val fuploadTask = fRef.putFile(routeGpxFile)
 
-    Logg.d("HI2?")
     fuploadTask.addOnFailureListener {
       Logg.d("Success")
     }.addOnSuccessListener {
       Logg.d("Fail : $it")
     }
-    Logg.d("HI3?")
     // db에 그려진 맵 저장하는 스레드 - 여기서는 실제 그려진 것 보다 후 보정을 통해서
     // 간략화 된 맵을 업로드 합니다.
     val db = FirebaseFirestore.getInstance()
@@ -198,13 +194,13 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
     val rankingData = RankingData(UserInfo.nickname, UserInfo.nickname, infoData.time, 1, speedList.max().toString(), speedList.average().toString())
     db.collection("rankingMap").document(infoData.mapTitle!!).set(rankingData)
     db.collection("rankingMap").document(infoData.mapTitle!!).collection("ranking")
-      .document(UserInfo.autoLoginKey + "||" + timestamp).set(rankingData)
+      .document(UserInfo.autoLoginKey + timestamp).set(rankingData)
 
     // db에 원하는 경로 및, 문서로 업로드
 
     // storage에 이미지 업로드 모든 맵 이미지는 mapimage/maptitle로 업로드가 된다.
     val storage = FirebaseStorage.getInstance()
-    val mapImageRef = storage.reference.child("mapImage").child(infoData.mapTitle!!)
+    val mapImageRef = storage.reference.child(infoData.mapImage.toString())
     val uploadTask = mapImageRef.putFile(Uri.fromFile(File(imgPath)))
     uploadTask.addOnFailureListener {
       Logg.d("스토리지 실패 = " + it.toString())

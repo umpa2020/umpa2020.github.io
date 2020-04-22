@@ -118,13 +118,14 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
             }
             routeMarkers.clear()
             nearMaps.forEach {
-              val mapTitle = it.mapTitle.split("||")
+              val cutted = it.mapTitle.subSequence(0, it.mapTitle.length-13)
+
               //데이터 바인딩
               routeMarkers.add(
                 traceMap.mMap.addMarker(
                   MarkerOptions()
                     .position(it.latLng)
-                    .title(mapTitle[0])
+                    .title(cutted.toString())
                     .snippet(it.distance.prettyDistance())
                     .icon(icon)
                 )

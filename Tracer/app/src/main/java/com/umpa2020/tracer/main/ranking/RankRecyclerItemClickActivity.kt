@@ -1,6 +1,5 @@
 package com.umpa2020.tracer.main.ranking
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -12,7 +11,6 @@ import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.LikedMapData
 import com.umpa2020.tracer.dataClass.RankingData
 import com.umpa2020.tracer.network.*
-import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.ProgressBar
 import kotlinx.android.synthetic.main.activity_rank_recycler_item_click.*
@@ -33,8 +31,8 @@ class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener
     //전달 받은 값으로 Title 설정
     mapTitle = intent.extras?.getString("MapTitle").toString()
 
-    val cutted = mapTitle.split("||")
-    rankRecyclerMapTitle.text = cutted[0]
+    val cutted = mapTitle.subSequence(0, mapTitle.length-13)
+    rankRecyclerMapTitle.text = cutted
 
     // 맵 이미지 DB에서 받아와서 설정
     val imageView = rankRoutePriview

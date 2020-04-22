@@ -204,16 +204,6 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
     makerMaxSpeedTextView.text = makerSpeeds.max()!!.prettyDistance()
     makerAvgSpeedTextView.text = makerSpeeds.average().prettyDistance()
 
-    // temp
-
-    racerSpeeds.add(3.0)
-    racerSpeeds.add(4.0)
-    racerSpeeds.add(5.0)
-    racerSpeeds.add(6.0)
-    racerSpeeds.add(7.0)
-
-    // temo
-
     racerLapTimeTextView.text = racerData.time!!.format(MM_SS)
     racerMaxSpeedTextView.text = racerSpeeds.max()!!.prettyDistance()
     racerAvgSpeedTextView.text = racerSpeeds.average().prettyDistance()
@@ -250,8 +240,8 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
 
     override fun getOtherRacing(otherData: RankingData) {
       makerLapTimeTextView.text = otherData.challengerTime!!.format(MM_SS)
-      makerMaxSpeedTextView.text = otherData.maxSpeed
-      makerAvgSpeedTextView.text = otherData.averageSpeed
+      makerMaxSpeedTextView.text = otherData.maxSpeed!!.toDouble().prettyDistance()
+      makerAvgSpeedTextView.text = otherData.averageSpeed!!.toDouble().prettyDistance()
     }
   }
 }
