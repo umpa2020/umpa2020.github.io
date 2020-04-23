@@ -33,7 +33,7 @@ class ChallengeFragment : Fragment() {
 
     view.challenge_recycler_view.adapter = ChallengeRecyclerViewAdapter(challengeDatas)
     view.challenge_recycler_view.layoutManager = GridLayoutManager(context, 2)
-    return view
+
   }
 
 
