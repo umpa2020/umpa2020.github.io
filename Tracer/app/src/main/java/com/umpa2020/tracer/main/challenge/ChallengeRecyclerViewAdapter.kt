@@ -17,7 +17,7 @@ class ChallengeRecyclerViewAdapter(var challenge: ArrayList<ChallengeData>) :
 
   override fun onBindViewHolder(holder: ItemHolder, position: Int) {
 
-    var ChallengeData: ChallengeData = challenge.get(position)
+    val ChallengeData: ChallengeData = challenge.get(position)
 
     holder.icons.setImageResource(ChallengeData.iconsBar!!)
     holder.recename.text = ChallengeData.nametxt
