@@ -1,4 +1,4 @@
-package com.umpa2020.tracer.main.ranking
+package com.umpa2020.tracer.main.challenge
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -33,9 +33,6 @@ class ChallengeFragment : Fragment() {
 
     view.challenge_recycler_view.adapter = ChallengeRecyclerViewAdapter(challengeDatas)
     view.challenge_recycler_view.layoutManager = GridLayoutManager(context, 2)
-
+    return view
   }
-
-
-
 }

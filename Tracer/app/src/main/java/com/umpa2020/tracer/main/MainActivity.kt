@@ -13,7 +13,7 @@ import com.umpa2020.tracer.locationBackground.LocationBackgroundService
 import com.umpa2020.tracer.locationBackground.ServiceStatus
 import com.umpa2020.tracer.main.profile.ProfileFragment
 import com.umpa2020.tracer.main.ranking.RankingFragment
-import com.umpa2020.tracer.main.ranking.ChallengeFragment
+import com.umpa2020.tracer.main.challenge.ChallengeFragment
 import com.umpa2020.tracer.main.start.StartFragment
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.TTS
