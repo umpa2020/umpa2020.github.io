@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.FirebaseFirestore
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
+import com.umpa2020.tracer.constant.Constants.Companion.TIMESTAMP_LENGTH
 import com.umpa2020.tracer.dataClass.LikedMapData
 import com.umpa2020.tracer.dataClass.RankingData
 import com.umpa2020.tracer.network.*
@@ -39,7 +40,7 @@ class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener
     FBMapImageRepository().getMapImage(imageView, mapTitle)
 
     // 해당 맵 좋아요 눌렀는지 확인
-    FBLikesRepository().getLike(mapTitle, likedMapListener)
+    FBLikesRepository().getMapLike(mapTitle, likedMapListener)
 
     FBMapRankingRepository().getMapRanking(mapTitle, mapRankingListener)
 
@@ -65,13 +66,13 @@ class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener
       }
       R.id.rankRecyclerHeart -> {
         if (rankRecyclerHeartSwitch.text == "off") {
-          FBLikesRepository().setLikes(mapTitle, likes)
+          FBLikesRepository().updateLikes(mapTitle, likes)
           rankRecyclerHeart.setImageResource(R.drawable.ic_favorite_red_24dp)
           rankRecyclerHeartSwitch.text = "on"
           likes++
           rankRecyclerHeartCount.text = likes.toString()
         } else if (rankRecyclerHeartSwitch.text == "on") {
-          FBLikesRepository().setminusLikes(mapTitle, likes)
+          FBLikesRepository().updateNotLikes(mapTitle, likes)
           rankRecyclerHeart.setImageResource(R.drawable.ic_favorite_border_black_24dp)
           rankRecyclerHeartSwitch.text = "off"
           likes--

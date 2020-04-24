@@ -57,7 +57,7 @@ class FBRankingRepository(rankingListener: RankingListener) {
         if (mode == "execute") {
           FBPlayedRepository().getPlayed(playedMapListener)
         } else if (mode == "likes") {
-          FBLikesRepository().getLikes(likedMapListener)
+          FBLikesRepository().listLikedMap(likedMapListener)
         }
       }
   }
@@ -95,7 +95,7 @@ class FBRankingRepository(rankingListener: RankingListener) {
         if (mode == "execute") {
           FBPlayedRepository().getPlayed(playedMapListener)
         } else if (mode == "likes") {
-          FBLikesRepository().getLikes(likedMapListener)
+          FBLikesRepository().listLikedMap(likedMapListener)
         }
       }
   }

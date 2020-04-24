@@ -168,7 +168,7 @@ class FBProfileRepository() {
           }
         }
 
-        FBLikesRepository().getLikes(likedMapListener)
+        FBLikesRepository().listLikedMap(likedMapListener)
 
         // 받아온 자신이 만든 맵 리스너로 보내기
       }

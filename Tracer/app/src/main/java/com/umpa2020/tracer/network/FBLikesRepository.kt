@@ -16,25 +16,24 @@ class FBLikesRepository:BaseFB() {
    *
    * -> 리사이클러뷰에서 해당 유저가 좋아요한 맵에 대해서 이미지 작업을 한다.
    */
-  fun getLikes(listener: LikedMapListener) {
-    userInfoColRef.document(UserInfo.autoLoginKey).collection("user liked these maps")
+  fun listLikedMap(listener: LikedMapListener) {
+    userInfoColRef.document(UserInfo.autoLoginKey).collection(USER_LIKED_THESE_MAPS)
       .get()
       .addOnSuccessListener { result ->
         listener.likedList(result.map {
           LikedMapData(
-            it.getString("mapTitle"),
+            it.getString(MAP_TITLE),
             it.getString("uid")
           )
         })
       }
   }
 
-  fun getLike(mapTitle: String, listener: LikedMapListener) {
+  fun getMapLike(mapTitle: String, listener: LikedMapListener) {
     userInfoColRef.document(UserInfo.autoLoginKey).collection("user liked these maps")
       .whereEqualTo("mapTitle", mapTitle)
       .get()
       .addOnSuccessListener {
-
         mapInfoColRef.whereEqualTo("mapTitle", mapTitle)
           .get()
           .addOnSuccessListener { result ->
@@ -54,7 +53,7 @@ class FBLikesRepository:BaseFB() {
    * 2. 맵 인포에 유저 uid를 저장하고
    * 3. 맵 인포에 좋아요 숫자를 1 더한다
    */
-  fun setLikes(maptitle: String, likes: Int) {
+  fun updateLikes(maptitle: String, likes: Int) {
     val likeMapsData = LikedMapData(maptitle, UserInfo.autoLoginKey)
     userInfoColRef.document(UserInfo.autoLoginKey).collection("user liked these maps")
       .add(likeMapsData)
@@ -67,14 +66,13 @@ class FBLikesRepository:BaseFB() {
    * 2. 맵 인포에서 유저 uid를 삭제하고
    * 3. 맵 인포에서 좋아요 수를 1 감소한 값으로 업데이트
    */
-  fun setminusLikes(maptitle: String, likes: Int) {
+  fun updateNotLikes(maptitle: String, likes: Int) {
 
     userInfoColRef.document(UserInfo.autoLoginKey).collection("user liked these maps")
       .whereEqualTo("mapTitle", maptitle)
       .get()
       .addOnSuccessListener { result ->
         val documentid = result.documents[0].id
-
         userInfoColRef.document(UserInfo.autoLoginKey)
           .collection("user liked these maps")
           .document(documentid).delete()

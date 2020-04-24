@@ -67,14 +67,14 @@ class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) :
 
           }
           R.drawable.ic_favorite_border_black_24dp -> {
-            FBLikesRepository().setLikes(singleItem.mapTitle!!, likes)
+            FBLikesRepository().updateLikes(singleItem.mapTitle!!, likes)
             holder.heart.setImageResource(R.drawable.ic_favorite_red_24dp)
             holder.heart.tag = R.drawable.ic_favorite_red_24dp
             likes++
             holder.likes.text = likes.toString()
           }
           R.drawable.ic_favorite_red_24dp -> {
-            FBLikesRepository().setminusLikes(singleItem.mapTitle!!, likes)
+            FBLikesRepository().updateNotLikes(singleItem.mapTitle!!, likes)
             holder.heart.setImageResource(R.drawable.ic_favorite_border_black_24dp)
             holder.heart.tag = R.drawable.ic_favorite_border_black_24dp
             likes--
