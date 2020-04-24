@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.Window
 import com.umpa2020.tracer.R
-import kotlinx.android.synthetic.main.running_activity_yesnopopup.*
+import kotlinx.android.synthetic.main.choice_popup.*
 
 /**
  *  text에는 제목도
@@ -21,7 +21,7 @@ class ChoicePopup(context: Context,
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     requestWindowFeature(Window.FEATURE_NO_TITLE);
-    setContentView(R.layout.running_activity_yesnopopup)
+    setContentView(R.layout.choice_popup)
     runningActivityPopUpTitle.text = titleText
     runningActivityPopUpTextView.text=bodyText
     runningActivityYesButton.text = yesText
