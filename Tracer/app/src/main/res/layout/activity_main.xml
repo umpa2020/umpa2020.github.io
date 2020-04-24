@@ -25,5 +25,6 @@
     android:background="?android:attr/windowBackground"
     app:itemIconTint="@drawable/bottom_navigation_select_color"
     app:itemTextColor="@drawable/bottom_navigation_select_color"
-    app:menu="@menu/bottom_navigation_menu" />
+    app:menu="@menu/bottom_navigation_menu"
+    app:labelVisibilityMode="labeled"/>
 </RelativeLayout>

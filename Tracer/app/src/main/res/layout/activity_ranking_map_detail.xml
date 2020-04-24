@@ -24,6 +24,7 @@
   </Toolbar>
 
   <ScrollView
+    android:id="@+id/rankingDetailScrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_below="@+id/rankingDetailToolBar"
@@ -193,7 +194,7 @@
             style="@style/ListDetail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/speed" />
+            android:text="@string/speed_with_unit" />
 
           <TextView
             android:id="@+id/rankingDetailSpeed"
@@ -215,21 +216,22 @@
         android:text="@string/thumbnail"
         android:textColor="@android:color/black" />
 
-      <ImageView
-        android:id="@+id/rankingDetailGoogleMap"
+      <fragment
+        android:id="@+id/rankingDetailMapViewer"
         android:layout_width="match_parent"
         android:layout_height="250dp"
         android:layout_below="@+id/rankingDetailMapDetailItem2"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
-        android:src="@drawable/ic_launcher_foreground"></ImageView>
+        class="com.umpa2020.tracer.customUI.WorkaroundMapFragment"
+        />
 
       <TextView
         android:id="@+id/rankingDetailMapDetailItem3"
         style="@style/ListTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/rankingDetailGoogleMap"
+        android:layout_below="@+id/rankingDetailMapViewer"
         android:background="@color/lightgray"
         android:paddingLeft="20dp"
         android:text="@string/altitude_sppedchart"

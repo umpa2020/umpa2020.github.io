@@ -2,6 +2,7 @@ package com.umpa2020.tracer.login
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.chibatching.kotpref.Kotpref
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -17,12 +18,13 @@ import com.umpa2020.tracer.R
 import com.umpa2020.tracer.login.join.SignUpActivity
 import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.util.Logg
+import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_login.*
 
 
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : AppCompatActivity(), OnSingleClickListener {
   // firebase Auth
   private var mAuth: FirebaseAuth? = null
   private var mGoogleSignInClient: GoogleSignInClient? = null
@@ -66,8 +68,14 @@ class LoginActivity : AppCompatActivity() {
     Kotpref.init(this) // Kotpref 사용을 위한 singleton context 저장
 
     // 람다식으로 onClick 설정
-    googleSignInButton.setOnClickListener {
-      signIn()
+    googleSignInButton.setOnClickListener(this)
+  }
+
+  override fun onSingleClick(v: View?) {
+    when (v!!.id) {
+      R.id.googleSignInButton -> {
+        signIn()
+      }
     }
   }
 
@@ -102,6 +110,7 @@ class LoginActivity : AppCompatActivity() {
       } catch (e: ApiException) {
         // Google Sign In failed, update UI appropriately
         Logg.w("Google sign in failed$e")
+        progressbar.dismiss()
         // ...
       }
     }
@@ -141,15 +150,12 @@ class LoginActivity : AppCompatActivity() {
                 val nextIntent = Intent(this@LoginActivity, SignUpActivity::class.java)
                 nextIntent.putExtra("user UID", mAuth!!.uid.toString())
                 nextIntent.putExtra("email", email)
-
-
                 startActivity(nextIntent)
                 finish()
                 progressbar.dismiss()
               } else {
                 for (document in result) {
                   // DocumentSnapshot{key=UserInfo/117635384468060774340, metadata=SnapshotMetadata{hasPendingWrites=false, isFromCache=false}, doc=null}
-
                   Logg.d(document.exists().toString()) // false
                   Logg.d(document.reference.toString()) // com.google.firebase.firestore.DocumentReference@aafeaf20
                   Logg.d("Cached document data: ${document?.data}") // Cached document data: null
@@ -168,7 +174,6 @@ class LoginActivity : AppCompatActivity() {
                   startActivity(nextIntent)
                   finish()
                   progressbar.dismiss()
-
                 }
               }
             }
@@ -177,6 +182,7 @@ class LoginActivity : AppCompatActivity() {
           //    이때 db에서 값을 가져와야겠지??
         } else {
           // If sign in fails, display a message to the user.
+          progressbar.dismiss()
           Logg.w("signInWithCredential:failure" + task.exception)
         }
       }

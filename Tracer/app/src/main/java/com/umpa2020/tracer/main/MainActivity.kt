@@ -3,6 +3,7 @@ package com.umpa2020.tracer.main
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.os.SystemClock
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -24,23 +25,30 @@ class MainActivity : AppCompatActivity() {
   private var doubleBackToExitPressedOnce1 = false
 
   var selectedFragment: Fragment? = null//선택된 프래그먼트 저장하는 변수
+
   //bottomNavigation 아이템 선택 리스너
   private val navListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
+    val currentClickTime = SystemClock.uptimeMillis()
+    val elapsedTime = currentClickTime - Constants.mLastClickTime
+    Constants.mLastClickTime = currentClickTime
 
-    when (item.itemId) { //선택된 메뉴에 따라서 선택된 프래그 먼트 설정
-      R.id.navigation_start -> selectedFragment = StartFragment()
-      R.id.navigation_profile -> selectedFragment = ProfileFragment()
-      R.id.navigation_ranking -> selectedFragment = RankingFragment()
-      R.id.navigation_challenge -> selectedFragment = ChallengeFragment()
+    // 중복클릭 아닌 경우
+    if (elapsedTime > Constants.MIN_CLICK_INTERVAL) {
+      when (item.itemId) { //선택된 메뉴에 따라서 선택된 프래그 먼트 설정
+        R.id.navigation_start -> selectedFragment = StartFragment()
+        R.id.navigation_profile -> selectedFragment = ProfileFragment()
+        R.id.navigation_ranking -> selectedFragment = RankingFragment()
+        R.id.navigation_challenge -> selectedFragment = ChallengeFragment()
+      }
+
+      Logg.i("프래그먼트 개수 : " + supportFragmentManager.backStackEntryCount.toString())
+      //동적으로 프래그먼트 교체
+      supportFragmentManager.beginTransaction().replace(
+        R.id.container,
+        selectedFragment!!
+      ).commit()
+    
     }
-
-    Logg.i("프래그먼트 개수 : " + supportFragmentManager.backStackEntryCount.toString())
-    //동적으로 프래그먼트 교체
-    supportFragmentManager.beginTransaction().replace(
-      R.id.container,
-      selectedFragment!!
-    ).commit()
-
     true
   }
 
@@ -48,7 +56,7 @@ class MainActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     Logg.d("Hello I'm New")
     setContentView(R.layout.activity_main)
-
+    TTS.speech(" ")
     startService() // 서비스 시작.
 
     bottom_navigation.selectedItemId = R.id.navigation_start
@@ -57,7 +65,6 @@ class MainActivity : AppCompatActivity() {
       StartFragment()
     ).commit()
     selectedFragment = StartFragment()
-    TTS.set(applicationContext)
 
     //선택한 메뉴로 프래그먼트 바꿈
     bottom_navigation.setOnNavigationItemSelectedListener(navListener)
@@ -89,7 +96,7 @@ class MainActivity : AppCompatActivity() {
     Logg.d(selectedFragment.toString())
     Logg.d(selectedFragment!!.id.toString())
 
-    if (selectedFragment!!.id ==  Constants.PROFILE_FRAGMENT_ID) { //  ProfileFragment id = 2131296382
+    if (selectedFragment!!.id == Constants.PROFILE_FRAGMENT_ID) { //  ProfileFragment id = 2131296382
       Logg.d(selectedFragment!!.id.toString())
       Logg.i("누구냐!")
       supportFragmentManager.beginTransaction().detach(selectedFragment!!).attach(selectedFragment!!).commit()
@@ -152,7 +159,6 @@ class MainActivity : AppCompatActivity() {
       return
     }
     this.doubleBackToExitPressedOnce1 = true
-    Toast.makeText(applicationContext, "뒤로 버튼을 한번 더 누르면 종료됩니다.", Toast.LENGTH_LONG).show()
     Handler().postDelayed({ doubleBackToExitPressedOnce1 = false }, 3000)
   }
 }
