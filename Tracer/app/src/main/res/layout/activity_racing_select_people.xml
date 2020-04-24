@@ -18,7 +18,7 @@
       android:layout_height="wrap_content"
       android:layout_marginRight="12dp"
       android:gravity="center"
-      android:text="가상 레이싱 상대방 선택"/>
+      android:text="@string/select_people"/>
   </Toolbar>
 
   <TextView
@@ -28,7 +28,7 @@
     android:layout_marginTop="10dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:text="경쟁 상대 최대 3명 선택"/>
+    android:text="@string/max_five_select"/>
 
   <co.lujun.androidtagview.TagContainerLayout
     android:layout_below="@+id/Max3TextView"
@@ -68,7 +68,7 @@
   <Button
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:text="선택 완료"
+    android:text="@string/selection_complete"
     android:id="@+id/racingSelectButton"
     android:background="@drawable/button_background"
     style="@style/buttonText"

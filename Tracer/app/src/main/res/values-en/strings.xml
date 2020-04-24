@@ -176,4 +176,10 @@
   <string name="max_speed">Max Speed</string>
   <string name="avg_speed">Average Speed</string>
 
+  <!--activity_racing_select_people-->
+  <string name="selection_complete">Complete</string>
+  <string name="max_five_select">Choose up to 5 virtual racer</string>
+  <string name="select_people">Virtual Racer Selection</string>
+  <string name="max_five">Up to 5 people can be chosen</string>
+
 </resources>

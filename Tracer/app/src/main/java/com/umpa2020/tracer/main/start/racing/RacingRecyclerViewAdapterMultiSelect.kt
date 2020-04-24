@@ -5,20 +5,33 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import androidx.recyclerview.widget.RecyclerView
+import co.lujun.androidtagview.TagContainerLayout
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.RankingData
 import com.umpa2020.tracer.extensions.MM_SS
 import com.umpa2020.tracer.extensions.format
+import com.umpa2020.tracer.extensions.show
+import com.umpa2020.tracer.extensions.toRank
 import com.umpa2020.tracer.main.profile.OtherProfileActivity
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.OnSingleClickListener
+import com.umpa2020.tracer.util.UserInfo.nickname
+import kotlinx.android.synthetic.main.recycler_racing_select_people_item.view.*
 import kotlinx.android.synthetic.main.recycler_rankfragment_topplayer_item.view.*
+import kotlinx.android.synthetic.main.recycler_rankfragment_topplayer_item.view.rankRecyclerItemClickChallengerNicknameTextView
+import kotlinx.android.synthetic.main.recycler_rankfragment_topplayer_item.view.rankRecyclerItemClickCountTextView
+import kotlinx.android.synthetic.main.recycler_rankfragment_topplayer_item.view.rankRecyclerItemClickTimeTextView
 import java.util.*
 
-class RacingRecyclerViewAdapterMultiSelect(val mydata: ArrayList<RankingData>, val mapTitle: String) : RecyclerView.Adapter<RacingRecyclerViewAdapterMultiSelect.myViewHolder>() {
+class RacingRecyclerViewAdapterMultiSelect(
+  val mydata: ArrayList<RankingData>,
+  val mapTitle: String,
+  val tagContainerLayout: TagContainerLayout
+) : RecyclerView.Adapter<RacingRecyclerViewAdapterMultiSelect.myViewHolder>() {
   var context: Context? = null
-
+  val whichIsCheck = mutableListOf<String>()
   //생성된 뷰 홀더에 데이터를 바인딩 해줌.
   override fun onBindViewHolder(holder: myViewHolder, position: Int) {
     val singleItem1 = mydata[position]
@@ -42,11 +55,39 @@ class RacingRecyclerViewAdapterMultiSelect(val mydata: ArrayList<RankingData>, v
     } else
       holder.rank.setBackgroundResource(R.drawable.ic_4)
 
-    //클릭하면 맵 상세보기 페이지로 이동
-    holder.itemView.setOnClickListener(object : OnSingleClickListener{
-      override fun onSingleClick(v: View?) {
-        //TODO 멀티 선택
 
+    if (whichIsCheck.contains(singleItem1.challengerNickname)) {
+      //checked
+      holder.checked.visibility = View.VISIBLE
+    } else {
+      //unchecked
+      holder.checked.visibility = View.INVISIBLE
+    }
+
+    //클릭했을 때
+    holder.itemView.setOnClickListener(object : OnSingleClickListener {
+      override fun onSingleClick(v: View?) {
+        //다시 선택하면 취소
+        if (whichIsCheck.contains(singleItem1.challengerNickname)) {
+          whichIsCheck.remove(singleItem1.challengerNickname)
+          tagContainerLayout.tags.forEachIndexed {i,text->
+            if(text == singleItem1.challengerNickname){
+              tagContainerLayout.removeTag(i)
+            }
+            notifyDataSetChanged()
+          }
+        }
+        else{
+          //size 개수 제한
+          if(whichIsCheck.size < 6){
+            //리스트 뷰에서 선택한 닉네임을 태그 뷰로 추가
+            whichIsCheck.add(singleItem1.challengerNickname!!)
+            tagContainerLayout.addTag(singleItem1.challengerNickname)
+            notifyDataSetChanged()
+          }
+          else
+           context!!.getString(R.string.max_five).show()
+        }
       }
     })
 
@@ -54,7 +95,8 @@ class RacingRecyclerViewAdapterMultiSelect(val mydata: ArrayList<RankingData>, v
 
   //뷰 홀더 생성
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): myViewHolder {
-    val view = LayoutInflater.from(parent.context).inflate(R.layout.recycler_rankfragment_topplayer_item, parent, false)
+    val view = LayoutInflater.from(parent.context)
+      .inflate(R.layout.recycler_racing_select_people_item, parent, false)
     context = parent.context
     Logg.d("onCreateViewHolder호출")
     return myViewHolder(view) //view 객체는 한개의 리사이클러뷰가 디자인 되어 있는 레이아웃을 의미
@@ -72,6 +114,7 @@ class RacingRecyclerViewAdapterMultiSelect(val mydata: ArrayList<RankingData>, v
     var rank = view.rankRecyclerItemClickCountTextView
     var nickname = view.rankRecyclerItemClickChallengerNicknameTextView
     var time = view.rankRecyclerItemClickTimeTextView
+    var checked = view.selectPeopleCheckImage
   }
 
 
