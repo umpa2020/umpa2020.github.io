@@ -134,4 +134,17 @@ class TraceMap(val mMap: GoogleMap) {
   fun initCamera(latlng: LatLng) {
     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng,17F))
   }
+
+  var racerList= mutableListOf<Marker>()
+
+  suspend fun updateMarker(i:Int,latlng:LatLng){
+    racerList[i].remove()
+    racerList[i]= mMap.addMarker(MarkerOptions()
+      .position(latlng)
+      .title(racerList[i].title))
+  }
+
+  suspend fun addRacer(marker: MarkerOptions?) {
+    racerList.add(mMap.addMarker(marker))
+  }
 }

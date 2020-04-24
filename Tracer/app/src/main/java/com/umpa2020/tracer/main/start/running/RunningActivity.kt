@@ -21,6 +21,8 @@ import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.constant.UserState
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.RouteGPX
+import com.umpa2020.tracer.extensions.MM_SS
+import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.extensions.makingIcon
 import com.umpa2020.tracer.main.start.BaseRunningActivity
 import com.umpa2020.tracer.util.*
@@ -29,6 +31,7 @@ import hollowsoft.slidingdrawer.OnDrawerOpenListener
 import hollowsoft.slidingdrawer.OnDrawerScrollListener
 import io.jenetics.jpx.WayPoint
 import kotlinx.android.synthetic.main.activity_running.*
+import kotlin.time.milliseconds
 
 
 class RunningActivity : BaseRunningActivity() {
@@ -105,6 +108,7 @@ class RunningActivity : BaseRunningActivity() {
         .lon(currentLatLng.longitude)
         .name("Start")
         .desc("Start Description")
+        .time(System.currentTimeMillis())
         .type(START_POINT)
         .build()
     )
@@ -122,6 +126,7 @@ class RunningActivity : BaseRunningActivity() {
         .lon(currentLatLng.longitude)
         .name("Finish")
         .desc("Finish Description")
+        .time(System.currentTimeMillis())
         .type(FINISH_POINT)
         .build()
     )
@@ -159,6 +164,7 @@ class RunningActivity : BaseRunningActivity() {
             .lon(currentLatLng.longitude)
             .name("WayPoint")
             .desc("wayway...")
+            .time((System.currentTimeMillis()))
             .type(DISTANCE_POINT)
             .build()
         )

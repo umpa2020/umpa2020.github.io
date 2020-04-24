@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.location.Geocoder
 import android.location.Location
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -18,7 +19,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
@@ -26,14 +26,17 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.firebase.storage.FirebaseStorage
+import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.NearMap
 import com.umpa2020.tracer.dataClass.RouteGPX
-import com.umpa2020.tracer.extensions.addDirectionSign
+import com.umpa2020.tracer.extensions.gpxToClass
 import com.umpa2020.tracer.extensions.prettyDistance
 import com.umpa2020.tracer.extensions.show
 import com.umpa2020.tracer.extensions.toLatLng
 import com.umpa2020.tracer.main.ranking.RankingMapDetailActivity
+import com.umpa2020.tracer.main.start.racing.RacingActivity
 import com.umpa2020.tracer.main.start.running.RunningActivity
 import com.umpa2020.tracer.map.TraceMap
 import com.umpa2020.tracer.network.FBMapRepository
@@ -41,9 +44,9 @@ import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.UserInfo
-import io.jenetics.jpx.WayPoint
 import kotlinx.android.synthetic.main.fragment_start.*
 import kotlinx.android.synthetic.main.fragment_start.view.*
+import java.io.File
 
 
 class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
@@ -118,7 +121,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
             }
             routeMarkers.clear()
             nearMaps.forEach {
-              val cutted = it.mapTitle.subSequence(0, it.mapTitle.length-13)
+              val cutted = it.mapTitle.subSequence(0, it.mapTitle.length - 13)
 
               //데이터 바인딩
               routeMarkers.add(
@@ -191,14 +194,21 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
     Logg.d("onCreateView()")
     val view = inflater.inflate(R.layout.fragment_start, container, false)
     view.test.setOnClickListener {
-      // 1사분면
-      var routeGPX1=RouteGPX("0","0", mutableListOf(), mutableListOf())
-      routeGPX1.trkList.add(WayPoint.of(0.0, 0.0))
-      routeGPX1.trkList.add(WayPoint.of(0.0, 1.0))
-      routeGPX1.trkList.add(WayPoint.of(1.0, 1.0))
-      routeGPX1.addDirectionSign()
-      routeGPX1.wptList.forEach {
-        Logg.d("lat : ${it.latitude} lon : ${it.longitude} desc : ${it.description} ")
+      val storage = FirebaseStorage.getInstance()
+      val routeRef = storage.reference.child("mapRoute").child("asdasdqwe1587633430060")
+      val localFile = File.createTempFile("routeGpx", "xml")
+      routeRef.getFile(Uri.fromFile(localFile)).addOnSuccessListener {
+        val routeGPX = localFile.path.gpxToClass()
+        val intent = Intent(App.instance.context(), RacingActivity::class.java)
+        intent.putExtra("RouteGPX", routeGPX)
+        val racingGPXs= ArrayList<RouteGPX>()
+        racingGPXs.add(routeGPX)
+        racingGPXs.add(routeGPX)
+        racingGPXs.add(routeGPX)
+
+        intent.putExtra("RacingGPXs",racingGPXs)
+        intent.putExtra("mapTitle", "asdasdqwe1587633430060")
+        startActivity(intent)
       }
     }
 
@@ -272,9 +282,9 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
       val message = intent?.getParcelableExtra<Location>("message")
       currentLocation = message as Location
       if (wedgedCamera) traceMap.moveCamera(currentLocation!!.toLatLng())
-      if(firstFlag) {
+      if (firstFlag) {
         searchThisArea()
-        firstFlag=false
+        firstFlag = false
         traceMap.initCamera(currentLocation!!.toLatLng())
       }
       Logg.d("${currentLocation}")
