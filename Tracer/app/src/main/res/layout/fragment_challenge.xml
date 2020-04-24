@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
   android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  xmlns:app="http://schemas.android.com/apk/res-auto">
+  android:layout_height="match_parent">
 
   <LinearLayout
     android:layout_width="match_parent"
@@ -27,72 +27,87 @@
       </TextView>
     </Toolbar>
 
-    <TextView
-      android:id="@+id/profileFragmentMyData"
-      style="@style/ListDetail"
+    <RelativeLayout
       android:layout_width="match_parent"
-      android:layout_height="150dp"
-      android:layout_below="@id/profileFragmentLinearLayout"
-      android:layout_marginLeft="20dp"
-      android:layout_marginTop="10dp"
-      android:layout_marginRight="20dp"
-      android:background="@drawable/textlines"
-      android:padding="10dp"
-      android:text="공간에 어떻게 넣으면 될까요" />
+      android:layout_height="wrap_content"
+      android:layout_margin="5dp">
+
+      <com.github.demono.AutoScrollViewPager
+        android:id="@+id/adChallengeScrollViewPager"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_margin="5dp"
+        android:background="#00000000"
+        app:slideDirection="right"
+        app:slideDuration="5000"
+        app:slideInterval="5000"
+        app:stopWhenTouch="true" />
+
+      <LinearLayout
+        android:layout_width="30dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/adChallengeScrollViewPager"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="10dp">
+
+        <TextView
+          android:id="@+id/adChallengeCountTextView"
+          android:layout_width="30dp"
+          android:layout_height="wrap_content"
+          android:text="1/20" />
+      </LinearLayout>
+
+    </RelativeLayout>
 
     <TextView
       android:id="@+id/divisionTextView"
       style="@style/divisionTextView" />
 
     <LinearLayout
-      android:paddingLeft="20dp"
-      android:paddingRight="20dp"
       android:layout_width="match_parent"
       android:layout_height="50dp"
-      android:orientation="horizontal">
+      android:orientation="horizontal"
+      android:paddingLeft="20dp"
+      android:paddingRight="20dp">
 
       <Button
         android:id="@+id/btn_challenge_from"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"/>
+        android:layout_weight="1" />
 
       <Button
         android:id="@+id/btn_challenge_to"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"/>
+        android:layout_weight="1" />
 
       <Button
         android:id="@+id/btn_challenge_region"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"/>
+        android:layout_weight="1" />
 
       <Button
         android:id="@+id/btn_challenge_search"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"/>
-
+        android:layout_weight="1" />
 
 
     </LinearLayout>
 
-    <TextView
-      style="@style/divisionTextView" />
+    <TextView style="@style/divisionTextView" />
 
 
     <androidx.recyclerview.widget.RecyclerView
-      app:layoutManager="GridLayoutManager"
-      app:spanCount="2"
       android:id="@+id/challenge_recycler_view"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:padding="12dp"/>
+      android:padding="12dp"
+      app:layoutManager="GridLayoutManager"
+      app:spanCount="2" />
   </LinearLayout>
-
-
 
 
 </FrameLayout>
