@@ -4,22 +4,21 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:orientation="vertical"
-  tools:context=".main.profile.ProfileRouteActivity">
+  tools:context=".main.profile.myroute.ProfileRouteActivity">
 
   <Toolbar
     android:layout_width="match_parent"
     android:layout_height="50dp"
-    android:layout_alignParentTop="true"
     android:background="@color/white"
     android:elevation="1dp">
 
     <TextView
+      android:id="@+id/profileRouteMyRoute"
       style="@style/appBarText"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginRight="12dp"
       android:gravity="center"
-      android:text="@string/my_route"></TextView>
+      android:text="@string/my_route"/>
   </Toolbar>
 
 
@@ -27,7 +26,7 @@
     android:id="@+id/profileRecyclerRoute"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="50dp"></androidx.recyclerview.widget.RecyclerView>
+    android:layout_marginTop="50dp"/>
 
   <TextView
     android:id="@+id/profileRecyclerRouteisEmpty"

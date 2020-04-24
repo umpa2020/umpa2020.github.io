@@ -15,10 +15,8 @@ import android.text.TextWatcher
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -29,18 +27,17 @@ import com.google.firebase.storage.StorageReference
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants
+import com.umpa2020.tracer.extensions.show
 import com.umpa2020.tracer.main.MainActivity
-import com.umpa2020.tracer.util.ChoicePopup
-import com.umpa2020.tracer.util.Logg
-import com.umpa2020.tracer.util.ProgressBar
-import com.umpa2020.tracer.util.UserInfo
+import com.umpa2020.tracer.util.*
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_sign_up.*
+import kotlinx.android.synthetic.main.signup_toolbar.*
 import java.io.ByteArrayOutputStream
 import java.util.*
 import java.util.regex.Pattern
 
-class SignUpActivity : AppCompatActivity() {
+class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
 
   private var WSY = "WSY"
   var success_request = 0
@@ -70,8 +67,6 @@ class SignUpActivity : AppCompatActivity() {
   private var mStorage: FirebaseStorage? = null
   private var mStorageReference: StorageReference? = null
 
-  // 중복 확인 버튼
-  private var redundantCheckButton: Button? = null
 
   // 초기 가입자인 경우 LoginActivity에서 uid, email을 넘겨 받음
   private var uid: String? = null
@@ -86,7 +81,6 @@ class SignUpActivity : AppCompatActivity() {
 
     progressbar = ProgressBar(this)
 
-    Logg.i("test")
     editNickname.requestFocus()
     init()
 
@@ -104,6 +98,13 @@ class SignUpActivity : AppCompatActivity() {
 
       }
     })
+
+    backImageBtn.setOnClickListener(this)
+    editAge.setOnClickListener(this)
+    editGender.setOnClickListener(this)
+    profileImage.setOnClickListener(this)
+    redundantCheckButton.setOnClickListener(this)
+    sign_up_button.setOnClickListener(this)
   }
 
   private fun init() {
@@ -126,14 +127,13 @@ class SignUpActivity : AppCompatActivity() {
     inputDataField = arrayOf(editNickname, editAge, editGender)
     textInputLayoutArray =
       arrayOf(nicknameTextInput, ageTextInput, genderTextInput)
-    inputInfoMessage = arrayOf(getString(R.string.txtInputInfoNick), getString(R.string.txtInputInfoAge), getString(R.string.txtInputInfoGender))
+    inputInfoMessage = arrayOf(
+      getString(R.string.txtInputInfoNick),
+      getString(R.string.txtInputInfoAge),
+      getString(R.string.txtInputInfoGender)
+    )
 
     typingListener()
-
-    /**
-     *  중복 확인 버튼 초기화
-     */
-    redundantCheckButton = redundantCheckButton
 
     /**
      *   초기 가입자인 경우 LoginActivity에서 uid, email을 넘겨 받음
@@ -152,7 +152,11 @@ class SignUpActivity : AppCompatActivity() {
     startActivityForResult(intent, PICK_FROM_ALBUM)
   }
 
-  override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+  override fun onRequestPermissionsResult(
+    requestCode: Int,
+    permissions: Array<out String>,
+    grantResults: IntArray
+  ) {
     super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     success_request = requestCode
     if (requestCode == success_request) {
@@ -188,7 +192,6 @@ class SignUpActivity : AppCompatActivity() {
       ActivityCompat.requestPermissions(this, temp.trim().split(" ").toTypedArray(), 1)
     } else {
       // 모든 허용 상태
-      //toast("권한을 모두 허용")
       goToAlbum()
     }
   }
@@ -284,7 +287,7 @@ class SignUpActivity : AppCompatActivity() {
         }
       } else if (resultCode == RESULT_CANCELED) {
         //사진 선택 취소
-        Toast.makeText(this, getString(R.string.picture_select_cancel), Toast.LENGTH_LONG).show()
+        getString(R.string.picture_select_cancel).show()
       }
     }
   }
@@ -307,6 +310,7 @@ class SignUpActivity : AppCompatActivity() {
 
   // 바탕 클릭 시 키패드 숨기기
   override fun onTouchEvent(event: MotionEvent?): Boolean {
+    editNickname.requestFocus()
     val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     imm.hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
     return true
@@ -340,7 +344,12 @@ class SignUpActivity : AppCompatActivity() {
           Logg.d(document.exists().toString())
           if (document.exists()) {
             Logg.d("${document.id} => ${document.data}")
-            textInputLayoutArray[0].setErrorTextColor(resources.getColorStateList(R.color.red, null))
+            textInputLayoutArray[0].setErrorTextColor(
+              resources.getColorStateList(
+                R.color.red,
+                null
+              )
+            )
             textInputLayoutArray[0].error = getString(R.string.nickname_already_using)
             flag = 2 // flag = false로 하여 addOnCompleteListener의 if문이 실행 안되게 하기
           }
@@ -351,7 +360,12 @@ class SignUpActivity : AppCompatActivity() {
       }
       .addOnCompleteListener {
         if (flag == 3) {
-          textInputLayoutArray[0].setErrorTextColor(resources.getColorStateList(R.color.yellowGreen, null))
+          textInputLayoutArray[0].setErrorTextColor(
+            resources.getColorStateList(
+              R.color.yellowGreen,
+              null
+            )
+          )
           textInputLayoutArray[0].error = getString(R.string.nickname_available)
 
           flag = 1
@@ -360,7 +374,13 @@ class SignUpActivity : AppCompatActivity() {
     flag = 3 // 비동기라서 이건 무조건 실행. 하지만 firebase보단 항상 먼저 실행됨.
   }
 
-  private fun uploadProfileImage(bitmapImg: Bitmap, nickname: String, age: String, gender: String, timestamp: String) {
+  private fun uploadProfileImage(
+    bitmapImg: Bitmap,
+    nickname: String,
+    age: String,
+    gender: String,
+    timestamp: String
+  ) {
     // 현재 날짜를 프로필 이름으로 nickname/Profile/현재날짜(영어).jpg 경로 만들기
 
     val profileRef = mStorageReference!!.child("Profile").child(uid!!).child(timestamp + ".jpg")
@@ -394,7 +414,7 @@ class SignUpActivity : AppCompatActivity() {
       "nickname" to nickname,
       "age" to age,
       "gender" to gender,
-      "profileImagePath" to dt + ".jpg"
+      "profileImagePath" to "Profile/$uid/$dt.jpg"
     )
     mFirestoreDB!!.collection("userinfo").document(uid!!).set(data)
       .addOnSuccessListener { Logg.d("DocumentSnapshot successfully written!") }
@@ -402,8 +422,8 @@ class SignUpActivity : AppCompatActivity() {
 
   }
 
-  fun onClick(v: View) {
-    when (v.id) {
+  override fun onSingleClick(v: View?) {
+    when (v!!.id) {
       R.id.backImageBtn -> {
         finish()
       }
@@ -441,7 +461,7 @@ class SignUpActivity : AppCompatActivity() {
 
         if (textInputLayoutArray[0].error != getString(R.string.nickname_available)) { //무조건 중복 확인 버튼을 눌러야만 회원가입 가능하게 함
           Logg.d(textInputLayoutArray[0].error.toString() + "if문 검사")
-          Toast.makeText(this, getString(R.string.check_duplicates1), Toast.LENGTH_LONG).show()
+          getString(R.string.check_duplicates1).show()
         } else { // 중복 확인 통과
           Logg.d(isInputCorrectData[0].toString() + ", " + age!!.isNotEmpty().toString() + ", " + gender!!.isNotEmpty().toString())
           if (isInputCorrectData[0] && age!!.isNotEmpty() && gender!!.isNotEmpty()) {
@@ -470,7 +490,8 @@ class SignUpActivity : AppCompatActivity() {
   기본 이미지로 설정할건지 물어보는 팝업
    **/
 
-  lateinit var noticePopup : ChoicePopup
+  lateinit var noticePopup: ChoicePopup
+
   private fun basicProfileSettingPopup() {
     noticePopup = ChoicePopup(this, getString(R.string.please_select),
       getString(R.string.set_default_image),
