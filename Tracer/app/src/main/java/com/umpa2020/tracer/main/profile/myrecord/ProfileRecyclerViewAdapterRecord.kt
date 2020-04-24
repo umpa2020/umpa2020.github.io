@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.umpa2020.tracer.R
+import com.umpa2020.tracer.constant.Constants.Companion.TIMESTAMP_LENGTH
 import com.umpa2020.tracer.dataClass.ActivityData
 import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.main.ranking.RankRecyclerItemClickActivity

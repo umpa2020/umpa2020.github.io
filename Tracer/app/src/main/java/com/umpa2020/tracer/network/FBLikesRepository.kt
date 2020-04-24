@@ -47,7 +47,6 @@ class FBLikesRepository:BaseFB() {
       }
   }
 
-
   /**
    * 1. 유저가 좋아요 버튼을 눌렀을 때, 유저 인포에 좋아요한 맵을 저장하고
    * 2. 맵 인포에 유저 uid를 저장하고
