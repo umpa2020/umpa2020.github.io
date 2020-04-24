@@ -7,23 +7,36 @@ import android.os.SystemClock
 import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.preference.PreferenceFragmentCompat
-import androidx.preference.PreferenceManager
 import androidx.preference.SwitchPreference
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.util.ChoicePopup
-import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.UserInfo
 
 class SettingPreferenceFragment : PreferenceFragmentCompat() {
   // firebase Auth
   private var mAuth: FirebaseAuth? = null
+  private var mGoogleSignInClient: GoogleSignInClient? = null
 
   override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
     setPreferencesFromResource(R.xml.fragment_setting_preference, rootKey)
+
     mAuth = FirebaseAuth.getInstance() // FirebaseAuth를 사용하기 위해서 인스턴스를 꼭 받아오기
+
+    //  Configure Google Sign In
+    // 구글 로그인 옵션
+    // GoogleSignInOptions 옵션을 관리해주는 클래스로 API 키값과 요청할 값이 저장되어 있다
+    val googleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+      .requestIdToken(getString(R.string.default_web_client_id))
+      .requestEmail()
+      .build()
+
+    mGoogleSignInClient = GoogleSignIn.getClient(App.instance, googleSignInOptions) //구글 로그인 클래스
 
     // 알람 스위치 버튼
     val switchNotification: SwitchPreference? = findPreference("notificationSetting") as SwitchPreference?
@@ -86,6 +99,9 @@ class SettingPreferenceFragment : PreferenceFragmentCompat() {
 //        UserInfo.permission = 0
 //        UserInfo.rankingLatLng = LatLng(0.0, 0.0)
 
+        // 이거 해주니깐 다시 로그인할 때 아이디 선택 요구함.
+        mGoogleSignInClient!!.signOut()
+
         noticePopup!!.dismiss()
         // 어플 재 시작
         ActivityCompat.finishAffinity(App.instance.currentActivity() as Activity)
@@ -105,3 +121,5 @@ class SettingPreferenceFragment : PreferenceFragmentCompat() {
 
 
 }
+
+
