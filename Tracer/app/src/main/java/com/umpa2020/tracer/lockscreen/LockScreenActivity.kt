@@ -9,10 +9,10 @@ import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.umpa2020.tracer.roomDatabase.entity.MapRecordData
 import com.umpa2020.tracer.R
-import com.umpa2020.tracer.roomDatabase.viewModel.RecordViewModel
 import com.umpa2020.tracer.lockscreen.util.ViewUnLock
+import com.umpa2020.tracer.roomDatabase.entity.MapRecordData
+import com.umpa2020.tracer.roomDatabase.viewModel.RecordViewModel
 import com.umpa2020.tracer.util.Logg
 import kotlinx.android.synthetic.main.activity_lock_screen.*
 
@@ -128,7 +128,17 @@ class LockScreenActivity : AppCompatActivity() {
         lockScreenChronometer.start()
         Logg.d("시간 시작")
       } else { // false
-        lockScreenChronometer.base = lockScreenChronometer.base + records.timeWhenStop
+//        val cur=SystemClock.elapsedRealtime()
+//        val temp =
+//          ((cur - (cur % 1000))
+//            + (records.timeWhenStop))
+//        if (temp % 1000 > 0) {
+//          lockScreenChronometer.base = temp - 1000
+//        } else {
+//          lockScreenChronometer.base = temp
+//        }
+        Logg.d(records.timeText)
+        lockScreenChronometer.text = records.timeText
         Logg.d("시간 정지")
       }
       flag = false

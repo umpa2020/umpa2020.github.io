@@ -62,4 +62,8 @@ class RecordViewModel(application: Application) : AndroidViewModel(application) 
     repository.updateTimeControl(whenStopped, flag)
   }
 
+  fun updateTimeText(timeText : String) = viewModelScope.launch {
+    repository.updateTimeText(timeText)
+  }
+
 }

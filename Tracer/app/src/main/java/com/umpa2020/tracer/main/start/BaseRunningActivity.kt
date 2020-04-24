@@ -10,7 +10,6 @@ import android.widget.Button
 import android.widget.Chronometer
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.trace
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.preference.PreferenceManager
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -19,15 +18,15 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.SphericalUtil
 import com.umpa2020.tracer.App
-import com.umpa2020.tracer.roomDatabase.entity.MapRecordData
 import com.umpa2020.tracer.R
-import com.umpa2020.tracer.roomDatabase.viewModel.RecordViewModel
 import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.constant.UserState
 import com.umpa2020.tracer.extensions.*
 import com.umpa2020.tracer.lockscreen.util.LockScreen
 import com.umpa2020.tracer.map.TraceMap
+import com.umpa2020.tracer.roomDatabase.entity.MapRecordData
+import com.umpa2020.tracer.roomDatabase.viewModel.RecordViewModel
 import com.umpa2020.tracer.util.ChoicePopup
 import com.umpa2020.tracer.util.LocationBroadcastReceiver
 import com.umpa2020.tracer.util.Logg
@@ -147,6 +146,7 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     userState = UserState.RUNNING
     anim()
 
+    Logg.d(chronometer.base.toString())
     chronometer.base = SystemClock.elapsedRealtime()
 
     // DB에 시작 시간 업데이트
@@ -162,9 +162,11 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
       "",
       chronometer.base,
       true,
-      0L
+      0L,
+      ""
     )
     Logg.d("처음에 데이터 삽입?")
+
     recordViewModel.insert(mapRecordDao)
   }
 
@@ -173,8 +175,10 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
 
     privacy = Privacy.PUBLIC
     userState = UserState.PAUSED
+    Logg.d(chronometer.text.toString())
     timeWhenStopped = chronometer.base - SystemClock.elapsedRealtime()
 
+   recordViewModel.updateTimeText(chronometer.text.toString())
     // 시간 통제 업데이트
     recordViewModel.updateTimeControl(timeWhenStopped,false)
     chronometer.stop()

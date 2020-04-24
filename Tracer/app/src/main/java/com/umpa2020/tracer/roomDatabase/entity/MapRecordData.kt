@@ -11,5 +11,6 @@ data class MapRecordData (
   var speed : String,
   var time : Long,
   var timeControl : Boolean,
-  var timeWhenStop : Long
+  var timeWhenStop : Long,
+  var timeText : String
 )

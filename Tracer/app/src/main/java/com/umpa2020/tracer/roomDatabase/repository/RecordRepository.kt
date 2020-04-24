@@ -38,4 +38,8 @@ class RecordRepository(private val recordDao: RecordDao) {
   suspend fun updateTimeControl(whenStopped : Long, flag : Boolean){
     recordDao.updateTimeControl(whenStopped, flag)
   }
+
+  suspend fun updateTimeText(timeText : String){
+    recordDao.updateTimeText(timeText)
+  }
 }

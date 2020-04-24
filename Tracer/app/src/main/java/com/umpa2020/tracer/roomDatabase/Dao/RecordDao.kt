@@ -33,6 +33,9 @@ interface RecordDao {
   @Query("UPDATE map_record SET timeWhenStop = :whenStopped, timeControl = :flag WHERE uid=0")
   suspend fun updateTimeControl(whenStopped : Long, flag : Boolean)
 
+  @Query("UPDATE map_record SET timeText = :timeText WHERE uid=0")
+  suspend fun updateTimeText(timeText : String)
+
   @Query("DELETE FROM map_record")
   suspend fun deleteAll()
 
