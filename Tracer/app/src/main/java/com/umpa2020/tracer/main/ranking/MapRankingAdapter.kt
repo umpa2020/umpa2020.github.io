@@ -42,7 +42,7 @@ class MapRankingAdapter(
     holder.rank.text = ranking.toString()
 
     holder.maptitle.text = cutted
-    holder.distance.text = infoData.distance!!.prettyDistance()
+    holder.distance.text = infoData.distance!!.prettyDistance
     if (mode.equals("execute")) {
       holder.modeIcon.setImageResource(R.drawable.ic_sneaker_for_running)
       holder.modeIcon.tag = R.drawable.ic_sneaker_for_running

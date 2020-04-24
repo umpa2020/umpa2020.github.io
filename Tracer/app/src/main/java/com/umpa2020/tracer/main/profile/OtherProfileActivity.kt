@@ -51,7 +51,7 @@ class OtherProfileActivity : AppCompatActivity(), OnSingleClickListener {
   private val profileListener = object : ProfileListener {
     override fun getProfile(distance: Double, time: Double) {
       // 총 거리와 시간을 띄워줌
-      profileFragmentTotalDistance.text = distance.prettyDistance()
+      profileFragmentTotalDistance.text = distance.prettyDistance
       profileFragmentTotalTime.text = time.toLong().format(MM_SS)
     }
 

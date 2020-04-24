@@ -43,8 +43,6 @@ class RunningActivity : BaseRunningActivity() {
     supportActionBar?.title = "RUNNING"
     init()
 
-    // TODO : 여기 밑에 있는 함수가 init()가 실행되야 가능한데 아애 init()에 넣어두는건?
-    // TODO : 그래서 RankingRecodeRacingActivity init()에서는 그렇게 해봄
     notice(getString(R.string.start_running))
 
     TTS.speech(getString(R.string.pushthestartbutton))
