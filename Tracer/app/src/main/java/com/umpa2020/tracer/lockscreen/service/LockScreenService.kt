@@ -11,7 +11,6 @@ import android.telephony.PhoneStateListener
 import android.telephony.TelephonyManager
 import androidx.core.app.NotificationCompat
 import com.umpa2020.tracer.App
-import com.umpa2020.tracer.LockScreenApplication
 import com.umpa2020.tracer.lockscreen.LockScreenActivity
 import com.umpa2020.tracer.util.Logg
 
@@ -65,7 +64,7 @@ class LockScreenService : Service() {
   }
 
   //
-  private fun stateReceiver(isStartReceiver: Boolean) {
+  fun stateReceiver(isStartReceiver: Boolean) {
     if (isStartReceiver) {
       val filter = IntentFilter()
       filter.addAction(Intent.ACTION_SCREEN_OFF)
@@ -117,7 +116,7 @@ class LockScreenService : Service() {
   }
   override fun onDestroy() {
     super.onDestroy()
-
+    stateReceiver(false)
   }
 
   private fun startLockScreenActivity() {
