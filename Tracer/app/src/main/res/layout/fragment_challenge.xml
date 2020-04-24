@@ -44,6 +44,44 @@
       android:id="@+id/divisionTextView"
       style="@style/divisionTextView" />
 
+    <LinearLayout
+      android:paddingLeft="20dp"
+      android:paddingRight="20dp"
+      android:layout_width="match_parent"
+      android:layout_height="50dp"
+      android:orientation="horizontal">
+
+      <Button
+        android:id="@+id/btn_challenge_from"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"/>
+
+      <Button
+        android:id="@+id/btn_challenge_to"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"/>
+
+      <Button
+        android:id="@+id/btn_challenge_region"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"/>
+
+      <Button
+        android:id="@+id/btn_challenge_search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"/>
+
+
+
+    </LinearLayout>
+
+    <TextView
+      style="@style/divisionTextView" />
+
 
     <androidx.recyclerview.widget.RecyclerView
       app:layoutManager="GridLayoutManager"

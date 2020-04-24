@@ -30,6 +30,24 @@ class ChallengeFragment : Fragment() {
     challengeData = ChallengeData(R.drawable.button_background,"화천 DMZ 랠리","2019. 06. 21","강원")
     challengeDatas.add(challengeData)
 
+    view.btn_challenge_from.setOnClickListener{
+
+    }
+
+    view.btn_challenge_to.setOnClickListener{
+
+    }
+
+    view.btn_challenge_region.setOnClickListener{
+
+    }
+
+    view.btn_challenge_search.setOnClickListener{
+
+    }
+
+
+
 
     view.challenge_recycler_view.adapter = ChallengeRecyclerViewAdapter(challengeDatas)
     view.challenge_recycler_view.layoutManager = GridLayoutManager(context, 2)

@@ -37,6 +37,8 @@ class ChallengeRecyclerViewAdapter(var challenge: ArrayList<ChallengeData>) :
   }
 
 
+
+
   inner class ItemHolder(view: View) : RecyclerView.ViewHolder(view){
     var icons = view.challenge_map
     var recename = view.challenge_race_name
