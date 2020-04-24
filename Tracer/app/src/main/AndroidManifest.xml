@@ -22,6 +22,8 @@
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- foreground service -->
   <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
+  <!-- 핸드폰 진동 -->
+  <uses-permission android:name = "android.permission.VIBRATE"/>
   <application
     android:name=".App"
     android:allowBackup="true"
