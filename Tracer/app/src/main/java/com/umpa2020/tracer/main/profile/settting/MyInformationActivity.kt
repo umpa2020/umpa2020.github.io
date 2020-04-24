@@ -23,12 +23,12 @@ import kotlinx.android.synthetic.main.signup_toolbar.*
 import kotlinx.android.synthetic.main.signup_toolbar.view.*
 
 class MyInformationActivity : AppCompatActivity(), OnSingleClickListener {
-  lateinit var progressBar : ProgressBar
+  lateinit var progressBar: ProgressBar
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_my_information)
-    app_toolbar.titleText.text=getString(R.string.my_information)
+    app_toolbar.titleText.text = getString(R.string.my_information)
     // 프로필 이미지 서버에서 가져와서 화면에 설정
     FBProfileRepository().getProfileImage(profileImage, UserInfo.nickname)
 
@@ -38,7 +38,6 @@ class MyInformationActivity : AppCompatActivity(), OnSingleClickListener {
     nickNameTextView.text = UserInfo.nickname
     ageTextView.text = UserInfo.age
     genderTextView.text = UserInfo.gender
-
 
     // 버튼 리스너 초기화
     backImageBtn.setOnClickListener(this)
@@ -61,14 +60,12 @@ class MyInformationActivity : AppCompatActivity(), OnSingleClickListener {
           progressBar.show()
 
           FBProfileRepository().updateProfileImage(bitmapImg!!, profileListener)
-        }
-        else { // 사진을 안고르면
+        } else { // 사진을 안고르면
           finish()
         }
       }
     }
   }
-
 
   /**
    * 카메라 접근 권한 and 앨범 접근
@@ -81,12 +78,12 @@ class MyInformationActivity : AppCompatActivity(), OnSingleClickListener {
 
   var options: BitmapFactory.Options? = null
   private var bitmapImg: Bitmap? = null
+
   // intent 결과 받기
   override fun onActivityResult(requestCode: Int, resultCode: Int, intentData: Intent?) {
     super.onActivityResult(requestCode, resultCode, intentData)
     // 앨범
     if (requestCode == PICK_FROM_ALBUM) {
-//
       if (resultCode == RESULT_OK) {
         try {
           val inputStream = intentData!!.data?.let { contentResolver.openInputStream(it) }
@@ -116,7 +113,6 @@ class MyInformationActivity : AppCompatActivity(), OnSingleClickListener {
 
   private val profileListener = object : ProfileListener {
     override fun getProfile(distance: Double, time: Double) {
-
     }
 
     override fun changeProfile() {

@@ -1,5 +1,6 @@
 package com.umpa2020.tracer.main.ranking
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -31,7 +32,7 @@ import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.activity_ranking_map_detail.*
 import java.io.File
 
-class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener,OnMapReadyCallback {
+class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener, OnMapReadyCallback {
   lateinit var routeGPX: RouteGPX
   var dbMapTitle = ""
   lateinit var traceMap: TraceMap
@@ -39,14 +40,15 @@ class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener,OnMa
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_ranking_map_detail)
 
-    val smf = supportFragmentManager.findFragmentById(R.id.rankingDetailMapViewer) as SupportMapFragment
+    val smf =
+      supportFragmentManager.findFragmentById(R.id.rankingDetailMapViewer) as SupportMapFragment
     smf.getMapAsync(this)
 
     val intent = intent
     //전달 받은 값으로 Title 설정
     val mapTitle = intent.extras?.getString("MapTitle").toString()
-    val cutted = mapTitle.subSequence(0, mapTitle.length- TIMESTAMP_LENGTH)
-    val time = mapTitle.subSequence(mapTitle.length- TIMESTAMP_LENGTH, mapTitle.length) as String
+    val cutted = mapTitle.subSequence(0, mapTitle.length - TIMESTAMP_LENGTH)
+    val time = mapTitle.subSequence(mapTitle.length - TIMESTAMP_LENGTH, mapTitle.length) as String
     intent.getStringExtra("asd")
     rankingDetailMapTitle.text = cutted
 
@@ -62,7 +64,10 @@ class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener,OnMa
       .get()
       .addOnSuccessListener { result ->
         for (document in result) {
-          FBProfileRepository().getProfileImage(rankingDetailProfileImage, document.get("makersNickname") as String)
+          FBProfileRepository().getProfileImage(
+            rankingDetailProfileImage,
+            document.get("makersNickname") as String
+          )
           break
         }
       }
@@ -113,8 +118,8 @@ class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener,OnMa
   }
 
   override fun onSingleClick(v: View?) {
-    when(v!!.id){
-      R.id.rankingDetailRaceButton->{ //버튼 누르면 연습용, 랭킹 기록용 선택 팝업 띄우기
+    when (v!!.id) {
+      R.id.rankingDetailRaceButton -> { //버튼 누르면 연습용, 랭킹 기록용 선택 팝업 띄우기
         showPopup()
       }
     }
@@ -161,16 +166,15 @@ class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener,OnMa
     traceMap = TraceMap(googleMap) //구글맵
     handler.sendEmptyMessage(0)
   }
-  var bDraw=false
-  val handler=object : Handler() {
+  var bDraw = false
+  val handler = object : Handler() {
     override fun handleMessage(msg: Message) {
-      when(msg.what){
-        0->{
-          if(bDraw) {
+      when (msg.what) {
+        0 -> {
+          if (bDraw) {
             //TODO : 이렇게 해야하나..?
-            traceMap.drawRoute(routeGPX.trkList,routeGPX.wptList)
-          }
-          else bDraw=true
+            traceMap.drawRoute(routeGPX.trkList, routeGPX.wptList)
+          } else bDraw = true
         }
       }
     }

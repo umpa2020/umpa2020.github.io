@@ -17,7 +17,7 @@ import com.umpa2020.tracer.util.ProgressBar
 import kotlinx.android.synthetic.main.activity_rank_recycler_item_click.*
 
 class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener {
-  lateinit var progressbar:ProgressBar
+  lateinit var progressbar: ProgressBar
   val activity = this
   var likes = 0
   var mapTitle = ""
@@ -32,7 +32,7 @@ class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener
     //전달 받은 값으로 Title 설정
     mapTitle = intent.extras?.getString("MapTitle").toString()
 
-    val cutted = mapTitle.subSequence(0, mapTitle.length- TIMESTAMP_LENGTH)
+    val cutted = mapTitle.subSequence(0, mapTitle.length - TIMESTAMP_LENGTH)
     rankRecyclerMapTitle.text = cutted
 
     // 맵 이미지 DB에서 받아와서 설정
@@ -52,7 +52,10 @@ class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener
         for (document in result) {
           // 해당 맵의 메이커 닉네임, 프로필 이미지 주소를 받아온다.
           rankRecyclerNickname.text = document.get("makersNickname") as String
-          FBProfileRepository().getProfileImage(rankRecyclerProfileImage, rankRecyclerNickname.text.toString())
+          FBProfileRepository().getProfileImage(
+            rankRecyclerProfileImage,
+            rankRecyclerNickname.text.toString()
+          )
         }
       }
   }
@@ -112,7 +115,8 @@ class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener
       //레이아웃 매니저 추가
       rankRecyclerItemClickRecyclerView.layoutManager = LinearLayoutManager(activity)
       //adpater 추가
-      rankRecyclerItemClickRecyclerView.adapter = RankRecyclerViewAdapterTopPlayer(arrRankingData, mapTitle)
+      rankRecyclerItemClickRecyclerView.adapter =
+        RankRecyclerViewAdapterTopPlayer(arrRankingData, mapTitle)
     }
   }
 }

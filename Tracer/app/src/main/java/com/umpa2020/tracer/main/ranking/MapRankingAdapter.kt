@@ -153,7 +153,5 @@ class MapRankingAdapter(
     var modeNo = view.rankingFragmentModeTextView
     var modeIcon = view.rankingFragmentModeImageView
   }
-
-
 }
 
