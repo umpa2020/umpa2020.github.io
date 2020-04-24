@@ -1,5 +1,6 @@
 package com.umpa2020.tracer.network
 
+import com.google.firebase.firestore.DocumentSnapshot
 import com.umpa2020.tracer.dataClass.InfoData
 
 /**
