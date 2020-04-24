@@ -121,6 +121,7 @@ class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener,OnMa
         val mapTitle = intent.extras?.getString("MapTitle").toString()
         val nextIntent = Intent(this, RacingSelectPeopleActivity::class.java)
         nextIntent.putExtra("MapTitle", mapTitle)
+        nextIntent.putExtra("RouteGPX",routeGPX)
         startActivity(nextIntent)
       }
     }

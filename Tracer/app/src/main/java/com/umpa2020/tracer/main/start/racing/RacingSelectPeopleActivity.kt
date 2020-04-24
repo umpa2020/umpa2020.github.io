@@ -1,5 +1,6 @@
 package com.umpa2020.tracer.main.start.racing
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -7,23 +8,28 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.get
 import androidx.recyclerview.widget.LinearLayoutManager
 import co.lujun.androidtagview.TagView.OnTagClickListener
+import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.RankingData
+import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.network.*
 import com.umpa2020.tracer.util.Logg
+import com.umpa2020.tracer.util.OnSingleClickListener
+import io.jenetics.jpx.Route
 import kotlinx.android.synthetic.main.activity_racing_select_people.*
 import java.util.*
 
-class RacingSelectPeopleActivity : AppCompatActivity() {
+class RacingSelectPeopleActivity : AppCompatActivity(), OnSingleClickListener {
   val activity = this
   var likes = 0
   var mapTitle = ""
-
+  lateinit var routeGPX:RouteGPX
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_racing_select_people)
 
     mapTitle = intent.extras?.getString("MapTitle").toString()
+    routeGPX=intent.getParcelableExtra("RouteGPX")
     FBMapRankingRepository().getMapRanking(mapTitle, mapRankingListener)
 
     // Set custom click listener
@@ -46,6 +52,7 @@ class RacingSelectPeopleActivity : AppCompatActivity() {
         //mTagContainerLayout1.removeTag(position);
       }
     })
+    racingSelectButton.setOnClickListener(this)
   }
 
   private val mapRankingListener = object : MapRankingListener {
@@ -55,6 +62,18 @@ class RacingSelectPeopleActivity : AppCompatActivity() {
       //adpater 추가
       racingSelectRecyclerView.adapter =
         RacingRecyclerViewAdapterMultiSelect(arrRankingData, mapTitle, tagcontainerLayout1)
+    }
+  }
+
+  override fun onSingleClick(v: View?) {
+    when(v!!.id){
+      R.id.racingSelectButton->{
+        val intent = Intent(App.instance.context(), RacingActivity::class.java)
+        intent.putExtra("RouteGPX", routeGPX)
+        intent.putExtra("RacerList",tagcontainerLayout1.tags.toTypedArray())
+        intent.putExtra("mapTitle", mapTitle)
+        startActivity(intent)
+      }
     }
   }
 }

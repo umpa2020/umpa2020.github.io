@@ -55,7 +55,9 @@ class RacingActivity : BaseRunningActivity() {
     setContentView(R.layout.activity_ranking_recode_racing)
     mapRouteGPX = intent.getParcelableExtra("RouteGPX") as RouteGPX
     mapTitle = intent.getStringExtra("mapTitle")!!
-    racingGPXs = intent.getParcelableArrayListExtra<RouteGPX>("RacingGPXs")
+    val racerList=intent.getStringArrayExtra("RacerList")
+    //TODO:: racerList로 racingGPX 가져오기 FireBase
+
     init()
 
     // 시작 포인트로 이동
@@ -183,7 +185,9 @@ class RacingActivity : BaseRunningActivity() {
     FBMapRepository().increaseExecute(mapTitle)
     // 레이싱 시작 TTS
     TTS.speech(getString(R.string.startRacing))
-    virtualRacing()
+    if(racingGPXs.isNotEmpty()) {
+      virtualRacing()
+    }
   }
 
   @RequiresApi(Build.VERSION_CODES.O)
