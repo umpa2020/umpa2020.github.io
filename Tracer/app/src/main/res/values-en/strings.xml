@@ -95,6 +95,10 @@
   <string name="please_select">Please select</string>
   <string name="set_default_image">Would you like to set it as the default image?</string>
   <string name="gps_activation">GPS activation</string>
+  <string name="racing_go_the_distance">You went the distance %1$s %2$s.</string>
+  <string name="racing_fail">"You failed %1$s on %2$s."</string>
+  <string name="map_save">"You made %1$s on %2$s."</string>
+
 
   <!-- firebase string-->
   <string name="google_storage_bucket_string" >gs://tracer-release.appspot.com/</string>

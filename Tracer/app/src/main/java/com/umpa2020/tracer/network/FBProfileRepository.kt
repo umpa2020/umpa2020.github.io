@@ -2,8 +2,6 @@ package com.umpa2020.tracer.network
 
 import android.app.Activity
 import android.graphics.Bitmap
-import android.os.Handler
-import android.os.Message
 import android.view.View
 import android.widget.ImageView
 import com.bumptech.glide.Glide
@@ -12,7 +10,19 @@ import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.InfoData
-import com.umpa2020.tracer.util.Logg
+import com.umpa2020.tracer.dataClass.LikedMapData
+import com.umpa2020.tracer.network.BaseFB.Companion.DISTANCE
+import com.umpa2020.tracer.network.BaseFB.Companion.MAKERS_NICKNAME
+import com.umpa2020.tracer.network.BaseFB.Companion.MAP_INFO
+import com.umpa2020.tracer.network.BaseFB.Companion.NICKNAME
+import com.umpa2020.tracer.network.BaseFB.Companion.PRIVACY
+import com.umpa2020.tracer.network.BaseFB.Companion.PROFILE
+import com.umpa2020.tracer.network.BaseFB.Companion.PROFILE_IMAGE_PATH
+import com.umpa2020.tracer.network.BaseFB.Companion.RACING
+import com.umpa2020.tracer.network.BaseFB.Companion.TIME
+import com.umpa2020.tracer.network.BaseFB.Companion.UID
+import com.umpa2020.tracer.network.BaseFB.Companion.USER_INFO
+import com.umpa2020.tracer.network.BaseFB.Companion.USER_RAN_THESE_MAPS
 import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
 import java.io.ByteArrayOutputStream
@@ -24,9 +34,7 @@ import java.util.*
  */
 
 class FBProfileRepository {
-  val MYROUTE = 60 // 마이 루트가 존재
-  val MYROUTEFAIL = 70 // 마이 루트가 없을 경우
-  val CHANGEPROFILE = 110 // 프로필 사진 체인지
+  var infoDatas = arrayListOf<InfoData>()
   val db = FirebaseFirestore.getInstance()
   var profileImagePath = "init"
 
@@ -37,33 +45,33 @@ class FBProfileRepository {
    * 해당 사용자가 뛴 거리, 뛴
    */
 
-  fun setProfile(view: View, nickname: String, profileListener: ProfileListener) {
+  fun getProfile(view: View, nickname: String, profileListener: ProfileListener) {
     var uid = "init"
-    db.collection("userinfo").whereEqualTo("nickname", nickname)
+    db.collection(USER_INFO).whereEqualTo(NICKNAME, nickname)
       .get()
       .addOnSuccessListener {
         for (document in it) {
-          uid = document.get("UID") as String
+          uid = document.get(UID) as String
           break
         }
         // 총 거리, 총 시간을 구하기 위해서 db에 접근하여 일단 먼저
         // 이용자가 뛴 다른 사람의 맵을 구함
-        db.collection("userinfo").document(uid).collection("user ran these maps")
+        db.collection(USER_INFO).document(uid).collection(USER_RAN_THESE_MAPS)
           .get()
           .addOnSuccessListener { result ->
             var sumDistance = 0.0
             var sumTime = 0.0
             for (document in result) {
-              sumDistance += document.get("distance") as Double
-              sumTime += document.get("time") as Long
+              sumDistance += document.get(DISTANCE) as Double
+              sumTime += document.get(TIME) as Long
             }
             // 구하고 나서 이용자가 만든 맵의 거리와 시간을 더함
-            db.collection("mapInfo").whereEqualTo("makersNickname", nickname)
+            db.collection(MAP_INFO).whereEqualTo(MAKERS_NICKNAME, nickname)
               .get()
               .addOnSuccessListener { result2 ->
                 for (document2 in result2) {
-                  sumDistance += document2.get("distance") as Double
-                  sumTime += document2.get("time") as Long
+                  sumDistance += document2.get(DISTANCE) as Double
+                  sumTime += document2.get(TIME) as Long
                 }
                 profileListener.getProfile(sumDistance, sumTime)
               }
@@ -78,12 +86,12 @@ class FBProfileRepository {
     progressbar.show()
     var uid = "init"
     // storage 에 올린 경로를 db에 저장해두었으니 다시 역 추적 하여 프로필 이미지 반영
-    db.collection("userinfo").whereEqualTo("nickname", nickname)
+    db.collection(USER_INFO).whereEqualTo(NICKNAME, nickname)
       .get()
       .addOnSuccessListener { result ->
         for (document in result) {
-          profileImagePath = document.get("profileImagePath") as String
-          uid = document.get("UID") as String
+          profileImagePath = document.get(PROFILE_IMAGE_PATH) as String
+          uid = document.get(UID) as String
           break
         }
         // glide imageview 소스
@@ -112,9 +120,7 @@ class FBProfileRepository {
    * 사진 변경 시, 해당 사진을 storage에 업로드하고
    * 그 경로를 db에 update하는 함수
    */
-  fun changeProfileImage(bitmapImg: Bitmap, profileListener: ProfileListener) {
-
-
+  fun updateProfileImage(bitmapImg: Bitmap, profileListener: ProfileListener) {
     val dt = Date()
     // 현재 날짜를 프로필 이름으로 nickname/Profile/현재날짜(영어).jpg 경로 만들기
 
@@ -122,7 +128,7 @@ class FBProfileRepository {
     val mStorageReference = mStorage.reference
 
     val profileRef =
-      mStorageReference.child("Profile").child(UserInfo.autoLoginKey).child("${dt.time}.jpg")
+      mStorageReference.child(PROFILE).child(UserInfo.autoLoginKey).child("${dt.time}.jpg")
     // 이미지
     val baos = ByteArrayOutputStream()
     bitmapImg.compress(Bitmap.CompressFormat.JPEG, 100, baos)
@@ -135,40 +141,44 @@ class FBProfileRepository {
         if (it.isSuccessful) {
           val mFirestoreDB = FirebaseFirestore.getInstance()
 
-          mFirestoreDB.collection("userinfo").document(UserInfo.autoLoginKey)
-            .update("profileImagePath", "Profile/${UserInfo.autoLoginKey}/${dt.time}.jpg")
+          mFirestoreDB.collection(USER_INFO).document(UserInfo.autoLoginKey)
+            .update(PROFILE_IMAGE_PATH, "$PROFILE/${UserInfo.autoLoginKey}/${dt.time}.jpg")
             .addOnSuccessListener {
               profileListener.changeProfile()
             }
         }
       }
-
   }
 
-  fun getRoute(mHandler: Handler, nickname: String) {
-    val infoDatas: ArrayList<InfoData> = arrayListOf()
-    db.collection("mapInfo").whereEqualTo("makersNickname", nickname)
-      .whereEqualTo("privacy", "RACING")
+  /**
+   * 프로필에서 해당 유저가 만든 맵 띄우기
+   */
+  fun listRoute(profileRouteListener: ProfileRouteListener, nickname: String) {
+    db.collection(MAP_INFO).whereEqualTo(MAKERS_NICKNAME, nickname)
+      .whereEqualTo(PRIVACY, RACING)
       .get()
       .addOnSuccessListener { result ->
         for (document in result) {
           val data = document.toObject(InfoData::class.java)
           infoDatas.add(data)
-          Logg.d("ssmm11 infodata = $data / " + document.id)
         }
-        val msg: Message
 
-        // 만든 맵이 없는 경우, 저장된 맵이 없다는 창을 띄우기
-        // 만든 맵이 있는 경우, 내용 띄우기 msg.what 으로 구분
-        if (result.isEmpty) {
-          msg = mHandler.obtainMessage(MYROUTEFAIL)
-        } else {
-          msg = mHandler.obtainMessage(MYROUTE)
+        // 좋아요 필터를 눌렀을 때, 유저가 좋아요 누른 맵들을 가져오는 리스너
+        val likedMapListener = object : LikedMapListener {
+          override fun likedList(likedMaps: List<LikedMapData>) {
+            infoDatas.filter { infoData ->
+              likedMaps.map { it.mapTitle }
+                .contains(infoData.mapTitle)
+            }.map { it.myLiked = true }
+            profileRouteListener.listProfileRoute(infoDatas)
+          }
+
+          override fun liked(liked: Boolean, likes: Int) {
+          }
         }
-        msg.obj = infoDatas
-        mHandler.sendMessage(msg)
-      }
-      .addOnFailureListener { exception ->
+
+        // 받아온 자신이 만든 맵 리스너로 보내기
+        FBLikesRepository().listLikedMap(likedMapListener)
       }
   }
 }

@@ -2,23 +2,19 @@ package com.umpa2020.tracer.main.profile.myroute
 
 import android.content.Context
 import android.content.Intent
-import android.os.Handler
-import android.os.Looper
-import android.os.Message
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.R
+import com.umpa2020.tracer.constant.Constants.Companion.TIMESTAMP_LENGTH
 import com.umpa2020.tracer.dataClass.InfoData
-import com.umpa2020.tracer.dataClass.LikedMapData
 import com.umpa2020.tracer.extensions.MM_SS
 import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.extensions.prettyDistance
 import com.umpa2020.tracer.main.ranking.RankRecyclerItemClickActivity
 import com.umpa2020.tracer.network.FBLikesRepository
+import com.umpa2020.tracer.network.FBMapImageRepository
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.recycler_profilefragment_route_grid_image.view.*
@@ -27,16 +23,15 @@ import java.util.*
 class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) :
   RecyclerView.Adapter<ProfileRecyclerViewAdapterRoute.mViewHolder>() {
   var context: Context? = null
-  val GETPROFILELIKES = 110
-  var likeMapsDatas = arrayListOf<LikedMapData>()
-
 
   //생성된 뷰 홀더에 데이터를 바인딩 해줌.
   override fun onBindViewHolder(holder: mViewHolder, position: Int) {
 
     val singleItem = mdata[position]
 
-    val cutted = singleItem.mapTitle!!.split("||")
+    val cutted = singleItem.mapTitle!!.subSequence(0, singleItem.mapTitle!!.length- TIMESTAMP_LENGTH) as String
+    val time = singleItem.mapTitle!!.subSequence(singleItem.mapTitle!!.length- TIMESTAMP_LENGTH, singleItem.mapTitle!!.length) as String
+
     //데이터 바인딩
     // glide imageview 소스
 
@@ -45,45 +40,21 @@ class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) :
     // string에 저장해서 사용 해보았으나
     // Please use a gs:// URL for your Firebase Storage bucket. 에러가 뜨면서 실행이 안되는 문제..
     // val storage = FirebaseStorage.getInstance(R.string.google_storage_bucket_string.toString()) // debug용, release용 구분
-    val storage = FirebaseStorage.getInstance() // debug용, release용 구분
-    val mapImageRef = storage.reference.child("mapImage").child(singleItem.mapTitle!!)
-    mapImageRef.downloadUrl.addOnCompleteListener { task ->
-      if (task.isSuccessful) {
-        // Glide 이용하여 이미지뷰에 로딩
-        Glide.with(context!!)
-          .load(task.result)
-          .override(1024, 980)
-          .into(holder.image)
-      }
-    }
+    FBMapImageRepository().getMapImage(holder.image, singleItem.mapTitle!!)
 
-    val mHandler = object : Handler(Looper.getMainLooper()) {
-      override fun handleMessage(msg: Message) {
-        when (msg.what) {
-          GETPROFILELIKES -> {
-            likeMapsDatas = msg.obj as ArrayList<LikedMapData>
-            //adpater 추가
-            for (i in likeMapsDatas) {
-              if (i.mapTitle.equals(singleItem.mapTitle)) {
-                holder.heart.setImageResource(R.drawable.ic_favorite_red_24dp)
-                holder.heart.tag = R.drawable.ic_favorite_red_24dp
-              }
-            }
-          }
-        }
-      }
-    }
-    //FBLikes().getLikes(mHandler, "profile")
-
-
-
-    holder.maptitle.text = cutted[0]
+    holder.maptitle.text = cutted
     holder.distance.text = singleItem.distance!!.prettyDistance()
     holder.time.text = singleItem.time!!.format(MM_SS)
     holder.likes.text = singleItem.likes.toString()
     holder.excutes.text = singleItem.execute.toString()
-    holder.date.text = cutted[1].toLong().format("yyyy-MM-dd HH:mm:ss")
-    holder.heart.tag = R.drawable.ic_favorite_border_black_24dp
+    holder.date.text = time.toLong().format("yyyy-MM-dd HH:mm:ss")
+    if (singleItem.myLiked) {
+      holder.heart.setImageResource(R.drawable.ic_favorite_red_24dp)
+      holder.heart.tag = R.drawable.ic_favorite_red_24dp
+    }
+    else {
+      holder.heart.tag = R.drawable.ic_favorite_border_black_24dp
+    }
 
 
     //클릭하면 맵 상세보기 페이지로 이동
@@ -97,14 +68,14 @@ class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) :
 
           }
           R.drawable.ic_favorite_border_black_24dp -> {
-            FBLikesRepository().setLikes(singleItem.mapTitle!!, likes)
+            FBLikesRepository().updateLikes(singleItem.mapTitle!!, likes)
             holder.heart.setImageResource(R.drawable.ic_favorite_red_24dp)
             holder.heart.tag = R.drawable.ic_favorite_red_24dp
             likes++
             holder.likes.text = likes.toString()
           }
           R.drawable.ic_favorite_red_24dp -> {
-            FBLikesRepository().setminusLikes(singleItem.mapTitle!!, likes)
+            FBLikesRepository().updateNotLikes(singleItem.mapTitle!!, likes)
             holder.heart.setImageResource(R.drawable.ic_favorite_border_black_24dp)
             holder.heart.tag = R.drawable.ic_favorite_border_black_24dp
             likes--

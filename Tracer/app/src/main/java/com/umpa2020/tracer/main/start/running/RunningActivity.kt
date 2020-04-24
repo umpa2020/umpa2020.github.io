@@ -12,15 +12,21 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.roomDatabase.viewModel.RecordViewModel
 import com.umpa2020.tracer.constant.Constants
+import com.umpa2020.tracer.constant.Constants.Companion.DISTANCE_POINT
+import com.umpa2020.tracer.constant.Constants.Companion.FINISH_POINT
+import com.umpa2020.tracer.constant.Constants.Companion.START_POINT
 import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.constant.UserState
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.RouteGPX
+import com.umpa2020.tracer.extensions.MM_SS
+import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.extensions.makingIcon
 import com.umpa2020.tracer.main.start.BaseRunningActivity
 import com.umpa2020.tracer.util.*
 import io.jenetics.jpx.WayPoint
 import kotlinx.android.synthetic.main.activity_running.*
+import kotlin.time.milliseconds
 
 
 class RunningActivity : BaseRunningActivity() {
@@ -85,7 +91,7 @@ class RunningActivity : BaseRunningActivity() {
      .zIndex(3.4f)
      .position(currentLatLng)
      .title("Start")
-     .icon( R.drawable.ic_racing_startpoint.makingIcon()))
+     .icon( R.drawable.ic_start_point.makingIcon()))
     TTS.speech(getString(R.string.startRunning))
 
     traceMap.mMap.setOnCameraMoveListener {
@@ -98,6 +104,8 @@ class RunningActivity : BaseRunningActivity() {
         .lon(currentLatLng.longitude)
         .name("Start")
         .desc("Start Description")
+        .time(System.currentTimeMillis())
+        .type(START_POINT)
         .build()
     )
   }
@@ -114,6 +122,8 @@ class RunningActivity : BaseRunningActivity() {
         .lon(currentLatLng.longitude)
         .name("Finish")
         .desc("Finish Description")
+        .time(System.currentTimeMillis())
+        .type(FINISH_POINT)
         .build()
     )
     val infoData = InfoData()
@@ -142,6 +152,7 @@ class RunningActivity : BaseRunningActivity() {
             .position(currentLatLng)
             .title(markerCount.toString())
             .icon(passedIcon)
+            .anchor(0f,0.5f)
         )
         wpList.add(
           WayPoint.builder()
@@ -149,6 +160,8 @@ class RunningActivity : BaseRunningActivity() {
             .lon(currentLatLng.longitude)
             .name("WayPoint")
             .desc("wayway...")
+            .time((System.currentTimeMillis()))
+            .type(DISTANCE_POINT)
             .build()
         )
         markerCount++

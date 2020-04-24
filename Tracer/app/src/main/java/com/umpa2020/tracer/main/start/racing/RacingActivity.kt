@@ -3,20 +3,26 @@ package com.umpa2020.tracer.main.start.racing
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.location.Location
+import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.View
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.maps.android.PolyUtil
 import com.google.maps.android.SphericalUtil
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.constant.Constants.Companion.ARRIVE_BOUNDARY
 import com.umpa2020.tracer.constant.Constants.Companion.DEVIATION_COUNT
+import com.umpa2020.tracer.constant.Constants.Companion.DISTANCE_POINT
+import com.umpa2020.tracer.constant.Constants.Companion.FINISH_POINT
+import com.umpa2020.tracer.constant.Constants.Companion.START_POINT
 import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.constant.UserState
 import com.umpa2020.tracer.dataClass.InfoData
@@ -27,12 +33,8 @@ import com.umpa2020.tracer.network.FBMapRepository
 import com.umpa2020.tracer.util.ChoicePopup
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.TTS
-import io.jenetics.jpx.WayPoint
 import kotlinx.android.synthetic.main.activity_ranking_recode_racing.*
-import kotlinx.android.synthetic.main.activity_ranking_recode_racing.racingDistanceTextView
-import kotlinx.android.synthetic.main.activity_ranking_recode_racing.racingHandle
-import kotlinx.android.synthetic.main.activity_ranking_recode_racing.racingSpeedTextView
-import kotlinx.android.synthetic.main.activity_ranking_recode_racing.racingTimerTextView
+import kotlinx.coroutines.*
 import kotlin.math.roundToLong
 
 class RacingActivity : BaseRunningActivity() {
@@ -41,17 +43,19 @@ class RacingActivity : BaseRunningActivity() {
   var racingResult = true
   var deviationCount = 0
 
-  var wptList: MutableList<WayPoint> = mutableListOf()
+  lateinit var turningPointList: MutableList<Marker>
+  lateinit var markerList: MutableList<Marker>
   var track: MutableList<LatLng> = mutableListOf()
-  var nextWP: Int = 0
-
+  var nextWP: Int = 1
+  var nextTP: Int = 0
+  lateinit var racingGPXs: ArrayList<RouteGPX>
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
     setContentView(R.layout.activity_ranking_recode_racing)
     mapRouteGPX = intent.getParcelableExtra("RouteGPX") as RouteGPX
     mapTitle = intent.getStringExtra("mapTitle")!!
-
+    racingGPXs = intent.getParcelableArrayListExtra<RouteGPX>("RacingGPXs")
     init()
 
     // 시작 포인트로 이동
@@ -64,7 +68,10 @@ class RacingActivity : BaseRunningActivity() {
 
   override fun onMapReady(googleMap: GoogleMap) {
     super.onMapReady(googleMap)
-    traceMap.drawRoute(track, mapRouteGPX.wptList)
+    traceMap.drawRoute(mapRouteGPX.trkList, mapRouteGPX.wptList).run {
+      markerList = this.first
+      turningPointList = this.second
+    }
   }
 
 
@@ -81,8 +88,8 @@ class RacingActivity : BaseRunningActivity() {
     pauseNotificationTextView = racingPauseNotificationTextView
     drawerHandle = racingHandle
     drawer = racingDrawer
-    speedTextView=racingSpeedTextView
-    distanceTextView=racingDistanceTextView
+    speedTextView = racingSpeedTextView
+    distanceTextView = racingDistanceTextView
     stopButton.setOnLongClickListener {
       noticePopup = ChoicePopup(this, getString(R.string.please_select),
         getString(R.string.cannot_save),
@@ -103,7 +110,6 @@ class RacingActivity : BaseRunningActivity() {
     mapRouteGPX.trkList.forEach {
       track.add(LatLng(it.latitude.toDouble(), it.longitude.toDouble()))
     }
-    wptList = mapRouteGPX.wptList
   }
 
   override fun onSingleClick(v: View?) {
@@ -111,7 +117,11 @@ class RacingActivity : BaseRunningActivity() {
       R.id.racingStartButton -> {
         when (userState) {
           UserState.NORMAL -> {
-            Toast.makeText(this, getString(R.string.startpoint) + ARRIVE_BOUNDARY + getString(R.string.only_start), Toast.LENGTH_LONG).show()
+            Toast.makeText(
+              this,
+              getString(R.string.startpoint) + ARRIVE_BOUNDARY + getString(R.string.only_start),
+              Toast.LENGTH_LONG
+            ).show()
             Logg.d("NORMAL")
           }
           UserState.READYTORACING -> {
@@ -125,7 +135,7 @@ class RacingActivity : BaseRunningActivity() {
       }
       R.id.racingStopButton -> {
         //"종료를 원하시면 길게 눌러주세요".show()
-       // Toast.makeText(this, "종료를 원하시면 길게 눌러주세요", Toast.LENGTH_LONG).show()
+        // Toast.makeText(this, "종료를 원하시면 길게 눌러주세요", Toast.LENGTH_LONG).show()
 
       }
       R.id.racingPauseButton -> {
@@ -158,6 +168,7 @@ class RacingActivity : BaseRunningActivity() {
       UserState.RUNNING -> {
         Logg.d("RUNNING")
         checkMarker()
+        checkTurningPoint()
         checkDeviation()
       }
       else -> {
@@ -166,12 +177,56 @@ class RacingActivity : BaseRunningActivity() {
     }
   }
 
+
   override fun start() {
     super.start()
-    FBMapRepository().increaseExecute(mapTitle)
-
+    FBMapRepository().updateExecute(mapTitle)
     // 레이싱 시작 TTS
     TTS.speech(getString(R.string.startRacing))
+    virtualRacing()
+  }
+
+  @RequiresApi(Build.VERSION_CODES.O)
+  private fun virtualRacing() {
+    val checkPoints = arrayOf(DISTANCE_POINT, START_POINT, FINISH_POINT)
+    racingGPXs.forEachIndexed { racerNo, racingGPX ->
+      GlobalScope.launch {
+        val wpts = racingGPX.wptList.filter { checkPoints.contains(it.type.get()) }
+        var temp_index = 1
+        val wptIndexs = mutableListOf<Int>()
+        wptIndexs.add(0)
+        wptIndexs.addAll(racingGPX.trkList.mapIndexed { i, trk ->
+          if (trk.toLatLng() == wpts[temp_index].toLatLng()) {
+            temp_index++
+            i
+          } else null
+        }.filterNotNull())
+        withContext(Dispatchers.Main) {
+          traceMap.addRacer(
+            MarkerOptions()
+              .zIndex(3.4f)
+              .position(wpts[0].toLatLng())
+              .title("Maker!!!!")
+          )
+
+          wpts.forEachIndexed { index, it ->
+            if (index < wpts.size - 1) {
+              val duration = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                ((wpts[index + 1].time.get().toEpochSecond() - wpts[index].time.get()
+                  .toEpochSecond()) + racerNo)*1000/ (wptIndexs[index + 1] - wptIndexs[index])
+              } else {
+                TODO("VERSION.SDK_INT < O")
+              }
+              Logg.d("기간 $duration  1 : ${wpts[index + 1].time.get()}   2: ${wpts[index].time.get()}")
+              for (trkIndex in wptIndexs[index]..wptIndexs[index + 1]) {
+                delay(duration)
+                traceMap.updateMarker(racerNo, racingGPX.trkList[trkIndex].toLatLng())
+              }
+            }
+          }
+        }
+      }
+    }
   }
 
   override fun stop() {
@@ -197,15 +252,30 @@ class RacingActivity : BaseRunningActivity() {
     finish()
   }
 
+  private fun checkTurningPoint() {
+    if (nextTP < turningPointList.size) {
+      if (SphericalUtil.computeDistanceBetween(
+          currentLatLng,
+          turningPointList[nextTP].position
+        ) < ARRIVE_BOUNDARY
+      ) {
+        TTS.speech(turningPointList[nextTP].title)
+        nextTP++
+      }
+    }
+  }
+
   private fun checkMarker() {
-    if (SphericalUtil.computeDistanceBetween(
+    if (nextWP == markerList.size) {
+      return
+    } else if (SphericalUtil.computeDistanceBetween(
         currentLatLng,
-        wptList[nextWP].toLatLng()
+        markerList[nextWP].position
       ) < ARRIVE_BOUNDARY
     ) {
-      traceMap.changeMarkerColor(nextWP, BitmapDescriptorFactory.HUE_BLUE)
+      traceMap.changeMarkerIcon(nextWP)
       nextWP++
-      if (nextWP == mapRouteGPX.wptList.size) {
+      if (nextWP == markerList.size) {
         stop()
       }
     }
@@ -232,7 +302,11 @@ class RacingActivity : BaseRunningActivity() {
       notificationTextView.visibility = View.GONE
     } else {
       deviationCount++
-      notice(getString(R.string.out_of_route) + deviationCount.toString() + getString(R.string.route_deviates) + DEVIATION_COUNT + getString(R.string.resgisration))
+      notice(
+        getString(R.string.out_of_route) + deviationCount.toString() + getString(R.string.route_deviates) + DEVIATION_COUNT + getString(
+          R.string.resgisration
+        )
+      )
       if (deviationCount > DEVIATION_COUNT) {
         racingResult = false
         stop()
@@ -244,15 +318,14 @@ class RacingActivity : BaseRunningActivity() {
   private fun checkIsReadyToRacing() {
     if (SphericalUtil.computeDistanceBetween(
         currentLatLng, mapRouteGPX.wptList[0].toLatLng()
-      ) > Constants.ARRIVE_BOUNDARY
+      ) > ARRIVE_BOUNDARY
     ) {
       userState = UserState.NORMAL
-      traceMap.changeMarkerColor(0, BitmapDescriptorFactory.HUE_ROSE)
       notice(
         getString(R.string.move_startpoint)
           + (SphericalUtil.computeDistanceBetween(
           currentLatLng,
-          wptList[0].toLatLng()
+          markerList[0].position
         )).roundToLong().toString() + "m"
       )
     }
@@ -265,14 +338,14 @@ class RacingActivity : BaseRunningActivity() {
       ) <= ARRIVE_BOUNDARY
     ) {
       notice(getString(R.string.want_start))
-      traceMap.changeMarkerColor(0, BitmapDescriptorFactory.HUE_BLUE)
+      //traceMap.changeMarkerColor(0, BitmapDescriptorFactory.HUE_BLUE)
       userState = UserState.READYTORACING
     } else {
       notice(
         getString(R.string.move_startpoint)
           + (SphericalUtil.computeDistanceBetween(
           currentLatLng,
-          wptList[0].toLatLng()
+          mapRouteGPX.wptList[0].toLatLng()
         )).roundToLong().toString() + "m"
       )
 

@@ -9,6 +9,7 @@ import android.view.animation.AlphaAnimation
 import android.widget.SeekBar
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.maps.model.LatLng
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants.Companion.ANIMATION_DURATION_TIME
@@ -23,14 +24,24 @@ import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.fragment_ranking.*
 import kotlinx.android.synthetic.main.fragment_ranking.view.*
 
+
 /**
  * main 화면의 ranking tab
  */
 class RankingFragment : Fragment(), OnSingleClickListener {
   lateinit var location: LatLng
-  var distance = MAX_DISTANCE
   lateinit var root: View
+  lateinit var rankingRepo: FBRankingRepository
+
+  var rootInfoDatas = arrayListOf<InfoData>()
+  var distance = MAX_DISTANCE
   val progressbar = MyProgressBar()
+  var tuneDistance = 0
+  var isLoding = false
+  var limit = 0L
+
+
+  //TODO : 예외 처리 (필터눌렀을때 rootinfodatas 초기화 하고 notify)
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -38,6 +49,40 @@ class RankingFragment : Fragment(), OnSingleClickListener {
     // Inflate the layout for this fragment
     val view = inflater.inflate(R.layout.fragment_ranking, container, false)
     root = view
+
+    rankingRepo = FBRankingRepository(rankingListener)
+
+    view.rank_recycler_map.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+      override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+        if (!rank_recycler_map.canScrollVertically(-1)) {
+          // 리사이클러뷰가 맨 위로 이동했을 경우
+        } else if (!rank_recycler_map.canScrollVertically(1)) {
+          // 리사이클러뷰가 맨 아래로 이동했을 경우
+          if (requireView().tuneRadioBtnExecute.isChecked) {
+            requireView().rankingfiltermode.text = getString(R.string.execute)
+            if (!isLoding) {
+              rankingRepo.listFilterRange(
+                UserInfo.rankingLatLng!!,
+                tuneDistance,
+                "execute",
+                15
+              )
+            }
+          } else {
+            requireView().rankingfiltermode.text = getString(R.string.likes)
+            if (!isLoding) {
+              rankingRepo.listFilterRange(
+                UserInfo.rankingLatLng!!,
+                tuneDistance,
+                "likes",
+                15
+              )
+            }
+          }
+          isLoding = true
+        }
+      }
+    })
 
     view.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
       override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
@@ -86,25 +131,29 @@ class RankingFragment : Fragment(), OnSingleClickListener {
       R.id.applyButton -> { //적용 버튼 누를때
         val tuneDistance = distance
         progressbar.show()
+        rootInfoDatas.clear()
+        rank_recycler_map.adapter!!.notifyDataSetChanged()
+        rankingRepo = FBRankingRepository(rankingListener)
 
         if (UserInfo.rankingLatLng != null) {
           //실행순 버튼에 체크가 되어 있을 경우
           if (requireView().tuneRadioBtnExecute.isChecked) {
             requireView().rankingfiltermode.text = getString(R.string.execute)
 
-            FBRankingRepository(rankingListener).getFilterRange(
+            rankingRepo.listRanking(
               UserInfo.rankingLatLng!!,
               tuneDistance,
-              "execute"
-
+              "execute",
+              15
             )
           } else {
             requireView().rankingfiltermode.text = getString(R.string.likes)
 
-            FBRankingRepository(rankingListener).getFilterRange(
+            rankingRepo.listRanking(
               UserInfo.rankingLatLng!!,
               tuneDistance,
-              "likes"
+              "likes",
+              15
             )
           }
           disappearAnimation()
@@ -115,27 +164,34 @@ class RankingFragment : Fragment(), OnSingleClickListener {
 
   override fun onResume() {
     if (UserInfo.rankingLatLng != null) {
-      val tuneDistance = distance
+      tuneDistance = distance
       progressbar.show()
+      limit = rootInfoDatas.size.toLong()
+
+      if (limit == 0L) limit = 15L
+      else rootInfoDatas.clear()
+
+      rankingRepo = FBRankingRepository(rankingListener)
 
       if (UserInfo.rankingLatLng != null) {
         //실행순 버튼에 체크가 되어 있을 경우
         if (requireView().tuneRadioBtnExecute.isChecked) {
           requireView().rankingfiltermode.text = getString(R.string.execute)
 
-          FBRankingRepository(rankingListener).getFilterRange(
+          rankingRepo.listRanking(
             UserInfo.rankingLatLng!!,
             tuneDistance,
-            "execute"
-
+            "execute",
+            limit
           )
         } else {
           requireView().rankingfiltermode.text = getString(R.string.likes)
 
-          FBRankingRepository(rankingListener).getFilterRange(
+          rankingRepo.listRanking(
             UserInfo.rankingLatLng!!,
             tuneDistance,
-            "likes"
+            "likes",
+            15
           )
         }
       }
@@ -173,13 +229,19 @@ class RankingFragment : Fragment(), OnSingleClickListener {
 
   private val rankingListener = object : RankingListener {
     override fun getRank(infoDatas: ArrayList<InfoData>, mode: String) {
-      if (infoDatas.isEmpty()) {
+      rootInfoDatas.addAll(infoDatas)
+      if (rootInfoDatas.isEmpty()) {
         rankingRecyclerRouteisEmpty.visibility = View.VISIBLE
         progressbar.dismiss()
       } else {
         //레이아웃 매니저, 어댑터 추가
-        rank_recycler_map.layoutManager = LinearLayoutManager(context)
-        rank_recycler_map.adapter = MapRankingAdapter(infoDatas, mode, progressbar)
+        if (rootInfoDatas.size < 16) {
+          rank_recycler_map.layoutManager = LinearLayoutManager(context)
+          rank_recycler_map.adapter = MapRankingAdapter(rootInfoDatas, mode, progressbar)
+        } else {
+          rank_recycler_map.adapter!!.notifyDataSetChanged()
+        }
+        isLoding = false
       }
     }
   }

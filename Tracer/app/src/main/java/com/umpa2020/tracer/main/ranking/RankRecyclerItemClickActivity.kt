@@ -1,6 +1,5 @@
 package com.umpa2020.tracer.main.ranking
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -9,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.FirebaseFirestore
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
+import com.umpa2020.tracer.constant.Constants.Companion.TIMESTAMP_LENGTH
 import com.umpa2020.tracer.dataClass.LikedMapData
 import com.umpa2020.tracer.dataClass.RankingData
 import com.umpa2020.tracer.network.*
@@ -17,13 +17,14 @@ import com.umpa2020.tracer.util.ProgressBar
 import kotlinx.android.synthetic.main.activity_rank_recycler_item_click.*
 
 class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener {
-  val progressbar = ProgressBar(App.instance.currentActivity() as Activity)
+  lateinit var progressbar: ProgressBar
   val activity = this
   var likes = 0
   var mapTitle = ""
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_rank_recycler_item_click)
+    progressbar = ProgressBar(this)
     rankRecyclerMoreButton.setOnClickListener(this)
     rankRecyclerHeart.setOnClickListener(this)
     progressbar.show()
@@ -31,17 +32,17 @@ class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener
     //전달 받은 값으로 Title 설정
     mapTitle = intent.extras?.getString("MapTitle").toString()
 
-    val cutted = mapTitle.split("||")
-    rankRecyclerMapTitle.text = cutted[0]
+    val cutted = mapTitle.subSequence(0, mapTitle.length - TIMESTAMP_LENGTH)
+    rankRecyclerMapTitle.text = cutted
 
     // 맵 이미지 DB에서 받아와서 설정
     val imageView = rankRoutePriview
     FBMapImageRepository().getMapImage(imageView, mapTitle)
 
     // 해당 맵 좋아요 눌렀는지 확인
-    FBLikesRepository().getLike(mapTitle, likedMapListener)
+    FBLikesRepository().getMapLike(mapTitle, likedMapListener)
 
-    FBMapRankingRepository().getMapRanking(mapTitle, mapRankingListener)
+    FBMapRankingRepository().listMapRanking(mapTitle, mapRankingListener)
 
     val db = FirebaseFirestore.getInstance()
 
@@ -51,7 +52,10 @@ class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener
         for (document in result) {
           // 해당 맵의 메이커 닉네임, 프로필 이미지 주소를 받아온다.
           rankRecyclerNickname.text = document.get("makersNickname") as String
-          FBProfileRepository().getProfileImage(rankRecyclerProfileImage, rankRecyclerNickname.text.toString())
+          FBProfileRepository().getProfileImage(
+            rankRecyclerProfileImage,
+            rankRecyclerNickname.text.toString()
+          )
         }
       }
   }
@@ -65,15 +69,17 @@ class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener
       }
       R.id.rankRecyclerHeart -> {
         if (rankRecyclerHeartSwitch.text == "off") {
-          FBLikesRepository().setLikes(mapTitle, likes)
+          FBLikesRepository().updateLikes(mapTitle, likes)
           rankRecyclerHeart.setImageResource(R.drawable.ic_favorite_red_24dp)
           rankRecyclerHeartSwitch.text = "on"
           likes++
+          rankRecyclerHeartCount.text = likes.toString()
         } else if (rankRecyclerHeartSwitch.text == "on") {
-          FBLikesRepository().setminusLikes(mapTitle, likes)
+          FBLikesRepository().updateNotLikes(mapTitle, likes)
           rankRecyclerHeart.setImageResource(R.drawable.ic_favorite_border_black_24dp)
           rankRecyclerHeartSwitch.text = "off"
           likes--
+          rankRecyclerHeartCount.text = likes.toString()
         }
       }
     }
@@ -89,9 +95,10 @@ class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener
     override fun likedList(likedMaps: List<LikedMapData>) {
     }
 
-    override fun liked(liked: Boolean, likes: Int) {
-      rankRecyclerHeartCount.text = likes.toString()
+    override fun liked(liked: Boolean, getlikes: Int) {
+      rankRecyclerHeartCount.text = getlikes.toString()
       //adpater 추가
+      likes = getlikes
       if (liked) {
         rankRecyclerHeart.setImageResource(R.drawable.ic_favorite_red_24dp)
         rankRecyclerHeartSwitch.text = "on"
@@ -108,7 +115,8 @@ class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener
       //레이아웃 매니저 추가
       rankRecyclerItemClickRecyclerView.layoutManager = LinearLayoutManager(activity)
       //adpater 추가
-      rankRecyclerItemClickRecyclerView.adapter = RankRecyclerViewAdapterTopPlayer(arrRankingData, mapTitle)
+      rankRecyclerItemClickRecyclerView.adapter =
+        RankRecyclerViewAdapterTopPlayer(arrRankingData, mapTitle)
     }
   }
 }

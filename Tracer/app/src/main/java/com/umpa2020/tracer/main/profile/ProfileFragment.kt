@@ -12,6 +12,7 @@ import com.umpa2020.tracer.R
 import com.umpa2020.tracer.extensions.MM_SS
 import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.extensions.prettyDistance
+import com.umpa2020.tracer.main.profile.myrecord.ProfileRecordActivity
 import com.umpa2020.tracer.main.profile.myroute.ProfileRouteActivity
 import com.umpa2020.tracer.main.profile.settting.AppSettingActivity
 import com.umpa2020.tracer.network.FBProfileRepository
@@ -98,7 +99,7 @@ class ProfileFragment : Fragment(), OnSingleClickListener {
      * 프로필 변경을 하고 나오는 경우에도 적용된
      * 사진을 바로 보기 위해 Resume에서 적용
      */
-    FBProfileRepository().setProfile(root, UserInfo.nickname, profileListener)
+    FBProfileRepository().getProfile(root, UserInfo.nickname, profileListener)
     super.onResume()
   }
 

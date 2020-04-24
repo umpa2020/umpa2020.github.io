@@ -7,12 +7,14 @@ import android.os.SystemClock
 import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.PreferenceManager
 import androidx.preference.SwitchPreference
 import com.google.firebase.auth.FirebaseAuth
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.util.ChoicePopup
+import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.UserInfo
 
 class SettingPreferenceFragment : PreferenceFragmentCompat() {
@@ -51,8 +53,6 @@ class SettingPreferenceFragment : PreferenceFragmentCompat() {
 
       true
     }
-
-
   }
 
   /**
@@ -71,7 +71,6 @@ class SettingPreferenceFragment : PreferenceFragmentCompat() {
         startActivity(intent)
       }
     }
-
 
     //로그아웃 눌렀을 때
     if (preference?.key.equals("logout")) {

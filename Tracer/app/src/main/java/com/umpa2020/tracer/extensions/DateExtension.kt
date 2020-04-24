@@ -4,9 +4,14 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 const val ISO8601 = "yyyy-MM-dd'T'HH:mm:ssZ"
-const val YEAR_MONTH_DAY = "yyyy-MM-dd"
-const val YEAR_MONTH_DAY_HOUR_MINUTE_SECOND = "yyyy-MM-dd HH:mm:ss"
-const val MM_SS="mm:ss"
+const val YEAR_MONTH_DAY_KR = "yyyy년 MM월 dd일"
+const val MONTH_DAY_KR = "MM월 dd일"
+const val YEAR_MONTH_DAY = "MMM dd, yyyy"
+const val YEAR = "yyyy"
+const val MONTH_DAY = "MMM dd"
+
+const val MM_SS = "mm:ss"
+
 /**
  * 날짜 시간 포맷 적용
  *
@@ -15,6 +20,26 @@ const val MM_SS="mm:ss"
  */
 fun Long.format(pattern: String): String {
   return SimpleDateFormat(pattern, Locale.getDefault()).format(this)
+}
+
+fun Long.format(locale: Locale): String {
+  val date = Date()
+  if (SimpleDateFormat(YEAR, Locale.getDefault()).format(this) == SimpleDateFormat(YEAR, Locale.getDefault()).format(date.time)) {
+    return when (locale) {
+      Locale.KOREA -> SimpleDateFormat(MONTH_DAY_KR, locale).format(this)
+      else -> {
+        SimpleDateFormat(MONTH_DAY, locale).format(this)
+      }
+    }
+  }
+  else {
+    return when (locale) {
+      Locale.KOREA -> SimpleDateFormat(YEAR_MONTH_DAY_KR, locale).format(this)
+      else -> {
+        SimpleDateFormat(YEAR_MONTH_DAY, locale).format(this)
+      }
+    }
+  }
 }
 
 /**

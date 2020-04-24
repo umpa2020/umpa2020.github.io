@@ -4,7 +4,7 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  tools:context=".main.start.racing.AllRanking">
+  tools:context=".main.start.racing.AllRankingActivity">
 
   <Toolbar
     android:id="@+id/AllRankingToolBar"
@@ -40,19 +40,5 @@
     android:layout_marginTop="10dp"
     android:layout_marginRight="20dp"
     android:layout_marginBottom="50dp" />
-
-  <Button
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="선택"
-    android:layout_marginBottom="10dp"
-    android:layout_marginLeft="20dp"
-    android:layout_marginRight="20dp"
-    android:id="@+id/selectButton"
-    android:layout_alignParentBottom="true"
-    android:background="@drawable/button_background"
-    style="@style/buttonText"/>
-
-
 
 </RelativeLayout>

@@ -27,8 +27,11 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.storage.FirebaseStorage
+import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
+import com.umpa2020.tracer.constant.Constants.Companion.TIMESTAMP_LENGTH
 import com.umpa2020.tracer.dataClass.NearMap
+import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.extensions.gpxToClass
 import com.umpa2020.tracer.extensions.prettyDistance
 import com.umpa2020.tracer.extensions.show
@@ -119,13 +122,14 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
             }
             routeMarkers.clear()
             nearMaps.forEach {
-              val mapTitle = it.mapTitle.split("||")
+              val cutted = it.mapTitle.subSequence(0, it.mapTitle.length - TIMESTAMP_LENGTH)
+
               //데이터 바인딩
               routeMarkers.add(
                 traceMap.mMap.addMarker(
                   MarkerOptions()
                     .position(it.latLng)
-                    .title(mapTitle[0])
+                    .title(cutted.toString())
                     .snippet(it.distance.prettyDistance())
                     .icon(icon)
                 )
@@ -149,7 +153,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
         }
       }
     }
-    FBMapRepository().getNearMap(bound.southwest, bound.northeast, mHandler)
+    FBMapRepository().listNearMap(bound.southwest, bound.northeast, mHandler)
   }
 
   /**
@@ -191,20 +195,21 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
     Logg.d("onCreateView()")
     val view = inflater.inflate(R.layout.fragment_start, container, false)
     view.test.setOnClickListener {
-      Logg.d("test 실행")
       val storage = FirebaseStorage.getInstance()
-      val routeRef =
-        storage.reference.child("mapRoute").child("Short SanDiego route||1586002359186")
+      val routeRef = storage.reference.child("mapRoute").child("asdasdqwe1587633430060")
       val localFile = File.createTempFile("routeGpx", "xml")
-
       routeRef.getFile(Uri.fromFile(localFile)).addOnSuccessListener {
         val routeGPX = localFile.path.gpxToClass()
-        val intent = Intent(context, RacingActivity::class.java)
+        val intent = Intent(App.instance.context(), RacingActivity::class.java)
         intent.putExtra("RouteGPX", routeGPX)
-        intent.putExtra("mapTitle", "Short SanDiego route||1586002359186")
+        val racingGPXs= ArrayList<RouteGPX>()
+        racingGPXs.add(routeGPX)
+        racingGPXs.add(routeGPX)
+        racingGPXs.add(routeGPX)
+
+        intent.putExtra("RacingGPXs",racingGPXs)
+        intent.putExtra("mapTitle", "asdasdqwe1587633430060")
         startActivity(intent)
-      }
-      routeRef.downloadUrl.addOnCompleteListener {
       }
     }
 
@@ -278,9 +283,10 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
       val message = intent?.getParcelableExtra<Location>("message")
       currentLocation = message as Location
       if (wedgedCamera) traceMap.moveCamera(currentLocation!!.toLatLng())
-      if(firstFlag) {
+      if (firstFlag) {
         searchThisArea()
-        firstFlag=false
+        firstFlag = false
+        traceMap.initCamera(currentLocation!!.toLatLng())
       }
       Logg.d("${currentLocation}")
     }

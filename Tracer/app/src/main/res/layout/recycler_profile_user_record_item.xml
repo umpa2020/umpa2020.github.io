@@ -9,7 +9,7 @@
   android:orientation="horizontal">
 
   <ImageView
-    android:id="@+id/profileUserRecordMapImageView"
+    android:id="@+id/profileUserActivityMapImageView"
     android:layout_width="50dp"
     android:layout_height="50dp"
     android:background="@color/gray"
@@ -21,6 +21,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:text="~맵을 @@언제 @@했습니다 요런형식으로"
-    android:id="@+id/profileUserRecordTextView"/>
+    android:id="@+id/profileUserActivityTextView"/>
 
 </LinearLayout>

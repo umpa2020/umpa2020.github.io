@@ -2,9 +2,6 @@ package com.umpa2020.tracer.main.profile.myroute
 
 import android.app.Activity
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.os.Message
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,15 +9,12 @@ import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.network.FBProfileRepository
+import com.umpa2020.tracer.network.ProfileRouteListener
 import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_profile_route.*
 
 class ProfileRouteActivity : AppCompatActivity() {
-
-  val MYROUTE = 60
-  val MYROUTEFAIL = 70
-  lateinit var getinfoDatas: ArrayList<InfoData>
   val progressbar = ProgressBar(App.instance.currentActivity() as Activity)
   var nickname = ""
 
@@ -44,29 +38,25 @@ class ProfileRouteActivity : AppCompatActivity() {
 
   override fun onResume() {
     // 마이 루트에 필요한 내용을 받아옴
-    FBProfileRepository().getRoute(mHandler, nickname)
+    FBProfileRepository().listRoute(profileRouteListener, nickname)
     super.onResume()
   }
 
   /**
-   * 핸들러로 받아온 루트 데이터들을
+   * 리스너로 받아온 루트 데이터들을
    * 리사이클러뷰에 띄워줌
    */
-  val mHandler = object : Handler(Looper.getMainLooper()) {
-    override fun handleMessage(msg: Message) {
-      when (msg.what) {
-        MYROUTE -> {
-          getinfoDatas = msg.obj as ArrayList<InfoData>
-          //adpater 추가
-          profileRecyclerRoute.adapter = ProfileRecyclerViewAdapterRoute(getinfoDatas)
-          profileRecyclerRoute.layoutManager = LinearLayoutManager(App.instance)
-          profileRecyclerRouteisEmpty.visibility = View.GONE
-          progressbar.dismiss()
-        }
-        MYROUTEFAIL -> {
-          profileRecyclerRouteisEmpty.visibility = View.VISIBLE
-          progressbar.dismiss()
-        }
+
+  private val profileRouteListener = object : ProfileRouteListener {
+    override fun listProfileRoute(infoDatas: ArrayList<InfoData>) {
+      if (infoDatas.isEmpty()) {
+        profileRecyclerRouteisEmpty.visibility = View.VISIBLE
+        progressbar.dismiss()
+      } else {
+        profileRecyclerRoute.adapter = ProfileRecyclerViewAdapterRoute(infoDatas)
+        profileRecyclerRoute.layoutManager = LinearLayoutManager(App.instance)
+        profileRecyclerRouteisEmpty.visibility = View.GONE
+        progressbar.dismiss()
       }
     }
   }
