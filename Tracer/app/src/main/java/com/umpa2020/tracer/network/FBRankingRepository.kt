@@ -52,7 +52,6 @@ class FBRankingRepository(rankingListener: RankingListener) {
             infoDatas.add(infoData)
           }
           globalStartAfter = document
-          Logg.d("ssmm11 $globalStartAfter")
         }
         if (mode == "execute") {
           FBPlayedRepository().getPlayed(playedMapListener)

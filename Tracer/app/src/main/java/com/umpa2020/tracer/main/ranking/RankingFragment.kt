@@ -130,11 +130,12 @@ class RankingFragment : Fragment(), OnSingleClickListener {
       }
 
       R.id.applyButton -> { //적용 버튼 누를때
-        val tuneDistance = distance
+        tuneDistance = distance
         progressbar.show()
+
         rootInfoDatas.clear()
-        rank_recycler_map.adapter!!.notifyDataSetChanged()
         rankingRepo = FBRankingRepository(rankingListener)
+
 
         if (UserInfo.rankingLatLng != null) {
           //실행순 버튼에 체크가 되어 있을 경우
@@ -179,6 +180,7 @@ class RankingFragment : Fragment(), OnSingleClickListener {
         if (requireView().tuneRadioBtnExecute.isChecked) {
           requireView().rankingfiltermode.text = getString(R.string.execute)
 
+          Logg.d("ssmm11 limit = $limit")
           rankingRepo.getRanking(
             UserInfo.rankingLatLng!!,
             tuneDistance,
@@ -192,7 +194,7 @@ class RankingFragment : Fragment(), OnSingleClickListener {
             UserInfo.rankingLatLng!!,
             tuneDistance,
             "likes",
-            15
+            limit
           )
         }
       }

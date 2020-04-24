@@ -23,7 +23,6 @@ class FBMapRankingRepository {
       .orderBy("challengerTime", Query.Direction.ASCENDING)
       .get()
       .addOnSuccessListener { result ->
-        Logg.d("ssmm11 result is empty? = ${result.isEmpty}")
         for (document in result) {
           rankingData = document.toObject(RankingData::class.java)
           arrRankingData.add(rankingData)
