@@ -44,8 +44,8 @@ class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener,OnMa
     val intent = intent
     //전달 받은 값으로 Title 설정
     val mapTitle = intent.extras?.getString("MapTitle").toString()
-    val cutted = mapTitle.subSequence(0, mapTitle.length-13)
-    val time = mapTitle.subSequence(mapTitle.length-13, mapTitle.length) as String
+    val cutted = mapTitle.subSequence(0, mapTitle.length- TIMESTAMP_LENGTH)
+    val time = mapTitle.subSequence(mapTitle.length- TIMESTAMP_LENGTH, mapTitle.length) as String
     intent.getStringExtra("asd")
     rankingDetailMapTitle.text = cutted
 

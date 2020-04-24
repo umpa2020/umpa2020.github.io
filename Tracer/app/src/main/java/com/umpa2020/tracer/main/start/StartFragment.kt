@@ -121,7 +121,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
             }
             routeMarkers.clear()
             nearMaps.forEach {
-              val cutted = it.mapTitle.subSequence(0, it.mapTitle.length - 13)
+              val cutted = it.mapTitle.subSequence(0, it.mapTitle.length - TIMESTAMP_LENGTH)
 
               //데이터 바인딩
               routeMarkers.add(

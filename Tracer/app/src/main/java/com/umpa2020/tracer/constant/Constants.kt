@@ -3,6 +3,7 @@ package com.umpa2020.tracer.constant
 class Constants {
   companion object {
     const val NICKNAME_RULE = "^(?=.*\\W).{3,12}\$"
+
     //이메일 정규식
     const val EMAIL_RULE = "^[a-z0-9_+.-]+@([a-z0-9-]+\\.)+[a-z0-9]{2,4}\$"
 
@@ -14,8 +15,10 @@ class Constants {
 
     //체크포인트에 도착 범위(단위 : 미터)
     const val ARRIVE_BOUNDARY = 10
+
     //경로이탈 범위(단위 : 미터)
     const val DEVIATION_DISTANCE = 20.0
+
     //경로이탈 카운트
     const val DEVIATION_COUNT = 30
     const val WPINTERVAL = 100  //way point interval
@@ -24,7 +27,7 @@ class Constants {
     const val INFOUPDATE = 1 //distance and speed update
     const val RACINGFINISH = 2 //Racing is finished
     const val DEVIATION = 3 //racer deviate the track
-    const val MAPISREADY=4 //on map ready call back
+    const val MAPISREADY = 4 //on map ready call back
 
     //최대 거리
     const val MAX_DISTANCE = 100000
@@ -43,23 +46,27 @@ class Constants {
 
     //위치 받아오는 주기
     const val LOCATION_INTERAL = 1000
+
     //REQUEST 성공
     const val SUCCESS_REQUEST = 1
 
     // 최소 정지 거리 m
     const val MINIMUM_STOPPING_DISTANCE = 200
+
     //회전 판정 각도
-    const val TURNING_ANGLE=30
+    const val TURNING_ANGLE = 30
+
     //중복 클릭 방지 시간 설정 ( 해당 시간 이후에 다시 클릭 가능 )
     const val MIN_CLICK_INTERVAL: Long = 600
     var mLastClickTime: Long = 0
 
     //Waypoint 타입
-    const val START_POINT="0"
-    const val FINISH_POINT="1"
-    const val DISTANCE_POINT="2"
-    const val TURNING_LEFT_POINT="3"
-    const val TURNING_RIGHT_POINT="4"
+    const val START_POINT = "0"
+    const val FINISH_POINT = "1"
+    const val DISTANCE_POINT = "2"
+    const val TURNING_LEFT_POINT = "3"
+    const val TURNING_RIGHT_POINT = "4"
 
+    const val TIMESTAMP_LENGTH = 13
   }
 }

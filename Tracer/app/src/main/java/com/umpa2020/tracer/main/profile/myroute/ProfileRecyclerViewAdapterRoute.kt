@@ -28,8 +28,8 @@ class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) :
 
     val singleItem = mdata[position]
 
-    val cutted = singleItem.mapTitle!!.subSequence(0, singleItem.mapTitle!!.length-13) as String
-    val time = singleItem.mapTitle!!.subSequence(singleItem.mapTitle!!.length-13, singleItem.mapTitle!!.length) as String
+    val cutted = singleItem.mapTitle!!.subSequence(0, singleItem.mapTitle!!.length- TIMESTAMP_LENGTH) as String
+    val time = singleItem.mapTitle!!.subSequence(singleItem.mapTitle!!.length- TIMESTAMP_LENGTH, singleItem.mapTitle!!.length) as String
 
     //데이터 바인딩
     // glide imageview 소스

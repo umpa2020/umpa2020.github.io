@@ -35,7 +35,7 @@ class MapRankingAdapter(
     val ranking = position + 1
 
 
-    val cutted = infoData.mapTitle!!.subSequence(0, infoData.mapTitle!!.length - 13)
+    val cutted = infoData.mapTitle!!.subSequence(0, infoData.mapTitle!!.length - TIMESTAMP_LENGTH)
 
     //데이터 바인딩
     holder.rank.text = ranking.toString()

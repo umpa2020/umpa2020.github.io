@@ -36,7 +36,6 @@ class FBUserActivityRepository {
               val activityData = result.toObject(ActivityData::class.java)
               activityDatas.add(activityData!!)
             }
-
             activityListener.activityList(activityDatas)
           }
       }

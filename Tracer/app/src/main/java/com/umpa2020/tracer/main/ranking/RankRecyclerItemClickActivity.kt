@@ -31,7 +31,7 @@ class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener
     //전달 받은 값으로 Title 설정
     mapTitle = intent.extras?.getString("MapTitle").toString()
 
-    val cutted = mapTitle.subSequence(0, mapTitle.length-13)
+    val cutted = mapTitle.subSequence(0, mapTitle.length- TIMESTAMP_LENGTH)
     rankRecyclerMapTitle.text = cutted
 
     // 맵 이미지 DB에서 받아와서 설정

@@ -9,9 +9,7 @@ import com.umpa2020.tracer.util.UserInfo
  * 사용법 - Likes().관련기능함수()
  */
 
-class FBLikesRepository {
-  val db = FirebaseFirestore.getInstance()
-
+class FBLikesRepository:BaseFB() {
   /**
    * 유저 인포에 저장되어있는 해당 유저가 좋아요 한 맵을 검사하여
    * 리사이클러뷰에 메시지를 보낸다.
@@ -19,7 +17,7 @@ class FBLikesRepository {
    * -> 리사이클러뷰에서 해당 유저가 좋아요한 맵에 대해서 이미지 작업을 한다.
    */
   fun getLikes(listener: LikedMapListener) {
-    db.collection("userinfo").document(UserInfo.autoLoginKey).collection("user liked these maps")
+    userInfoColRef.document(UserInfo.autoLoginKey).collection("user liked these maps")
       .get()
       .addOnSuccessListener { result ->
         listener.likedList(result.map {
@@ -32,12 +30,12 @@ class FBLikesRepository {
   }
 
   fun getLike(mapTitle: String, listener: LikedMapListener) {
-    db.collection("userinfo").document(UserInfo.autoLoginKey).collection("user liked these maps")
+    userInfoColRef.document(UserInfo.autoLoginKey).collection("user liked these maps")
       .whereEqualTo("mapTitle", mapTitle)
       .get()
       .addOnSuccessListener {
 
-        db.collection("mapInfo").whereEqualTo("mapTitle", mapTitle)
+        mapInfoColRef.whereEqualTo("mapTitle", mapTitle)
           .get()
           .addOnSuccessListener { result ->
             for (document in result) {
@@ -58,10 +56,10 @@ class FBLikesRepository {
    */
   fun setLikes(maptitle: String, likes: Int) {
     val likeMapsData = LikedMapData(maptitle, UserInfo.autoLoginKey)
-    db.collection("userinfo").document(UserInfo.autoLoginKey).collection("user liked these maps")
+    userInfoColRef.document(UserInfo.autoLoginKey).collection("user liked these maps")
       .add(likeMapsData)
-    db.collection("mapInfo").document(maptitle).collection("likes").add(likeMapsData)
-    db.collection("mapInfo").document(maptitle).update("likes", likes + 1)
+    mapInfoColRef.document(maptitle).collection("likes").add(likeMapsData)
+    mapInfoColRef.document(maptitle).update("likes", likes + 1)
   }
 
   /**
@@ -71,26 +69,26 @@ class FBLikesRepository {
    */
   fun setminusLikes(maptitle: String, likes: Int) {
 
-    db.collection("userinfo").document(UserInfo.autoLoginKey).collection("user liked these maps")
+    userInfoColRef.document(UserInfo.autoLoginKey).collection("user liked these maps")
       .whereEqualTo("mapTitle", maptitle)
       .get()
       .addOnSuccessListener { result ->
         val documentid = result.documents[0].id
 
-        db.collection("userinfo").document(UserInfo.autoLoginKey)
+        userInfoColRef.document(UserInfo.autoLoginKey)
           .collection("user liked these maps")
           .document(documentid).delete()
       }
 
-    db.collection("mapInfo").document(maptitle).collection("likes")
+    mapInfoColRef.document(maptitle).collection("likes")
       .whereEqualTo("mapTitle", maptitle)
       .get()
       .addOnSuccessListener { result ->
         val documentid = result.documents[0].id
 
-        db.collection("mapInfo").document(maptitle).collection("likes")
+        mapInfoColRef.document(maptitle).collection("likes")
           .document(documentid).delete()
       }
-    db.collection("mapInfo").document(maptitle).update("likes", likes - 1)
+    mapInfoColRef.document(maptitle).update("likes", likes - 1)
   }
 }
