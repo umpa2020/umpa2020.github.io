@@ -83,6 +83,7 @@
   <string name="yes1">예</string>
   <string name="no1">아니오</string>
   <string name="noroute">현재 저장된 루트가 없습니다.</string>
+  <string name="no_activity">현재 저장된 경로가 없습니다.</string>
   <string name="profile_information">내 정보</string>
   <string name="profile_image_change">프로필 이미지 변경</string>
   <string name="email_">이메일</string>
