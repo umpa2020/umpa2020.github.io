@@ -12,6 +12,7 @@ import kotlinx.android.synthetic.main.recycler_challengefragment_item.view.*
 class ChallengeRecyclerViewAdapter(var challenge: ArrayList<ChallengeData>) :
   RecyclerView.Adapter<ChallengeRecyclerViewAdapter.ItemHolder>(){
 
+
   var context: Context? = null
 
 
