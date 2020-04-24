@@ -60,7 +60,7 @@ class MyInformationActivity : AppCompatActivity(), OnSingleClickListener {
           progressBar = ProgressBar(App.instance.currentActivity() as Activity)
           progressBar.show()
 
-          FBProfileRepository().changeProfileImage(bitmapImg!!, profileListener)
+          FBProfileRepository().updateProfileImage(bitmapImg!!, profileListener)
         }
         else { // 사진을 안고르면
           finish()

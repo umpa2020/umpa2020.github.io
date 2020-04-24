@@ -99,7 +99,7 @@ class ProfileFragment : Fragment(), OnSingleClickListener {
      * 프로필 변경을 하고 나오는 경우에도 적용된
      * 사진을 바로 보기 위해 Resume에서 적용
      */
-    FBProfileRepository().setProfile(root, UserInfo.nickname, profileListener)
+    FBProfileRepository().getProfile(root, UserInfo.nickname, profileListener)
     super.onResume()
   }
 

@@ -8,7 +8,9 @@ import com.google.maps.android.SphericalUtil
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.LikedMapData
 import com.umpa2020.tracer.dataClass.PlayedMapData
-import com.umpa2020.tracer.util.Logg
+import com.umpa2020.tracer.network.BaseFB.Companion.EXECUTE
+import com.umpa2020.tracer.network.BaseFB.Companion.LIKES
+import com.umpa2020.tracer.network.BaseFB.Companion.MAP_INFO
 
 
 /**
@@ -24,7 +26,7 @@ class FBRankingRepository(rankingListener: RankingListener) {
   /**
    * 현재 위치를 받아서 현재 위치와 필터에 적용한 위치 만큼 떨어져 있는 구간에서 실행순으로 정렬한 코드
    */
-  fun getRanking(
+  fun listRanking(
     cur_loc: LatLng,
     distance: Int,
     mode: String,
@@ -34,7 +36,7 @@ class FBRankingRepository(rankingListener: RankingListener) {
     //Location 형태로 받아오고 싶다면 아래처럼
     //var getintentLocation = current
 
-    db.collection("mapInfo")
+    db.collection(MAP_INFO)
       .orderBy(mode, Query.Direction.DESCENDING)
       .limit(limit)
       .get()
@@ -52,17 +54,16 @@ class FBRankingRepository(rankingListener: RankingListener) {
             infoDatas.add(infoData)
           }
           globalStartAfter = document
-          Logg.d("ssmm11 $globalStartAfter")
         }
-        if (mode == "execute") {
-          FBPlayedRepository().getPlayed(playedMapListener)
-        } else if (mode == "likes") {
+        if (mode == EXECUTE) {
+          FBPlayedRepository().listPlayed(playedMapListener)
+        } else if (mode == LIKES) {
           FBLikesRepository().listLikedMap(likedMapListener)
         }
       }
   }
 
-  fun getFilterRange(
+  fun listFilterRange(
     cur_loc: LatLng,
     distance: Int,
     mode: String,
@@ -72,7 +73,7 @@ class FBRankingRepository(rankingListener: RankingListener) {
     //Location 형태로 받아오고 싶다면 아래처럼
     //var getintentLocation = current
 
-    db.collection("mapInfo")
+    db.collection(MAP_INFO)
       .orderBy(mode, Query.Direction.DESCENDING)
       .startAfter(globalStartAfter)
       .limit(limit)
@@ -92,9 +93,9 @@ class FBRankingRepository(rankingListener: RankingListener) {
           }
           globalStartAfter = document
         }
-        if (mode == "execute") {
-          FBPlayedRepository().getPlayed(playedMapListener)
-        } else if (mode == "likes") {
+        if (mode == EXECUTE) {
+          FBPlayedRepository().listPlayed(playedMapListener)
+        } else if (mode == LIKES) {
           FBLikesRepository().listLikedMap(likedMapListener)
         }
       }
@@ -107,7 +108,7 @@ class FBRankingRepository(rankingListener: RankingListener) {
           .contains(infoData.mapTitle)
       }.map { it.played = true }
 
-      rankingListener.getRank(infoDatas, "execute")
+      rankingListener.getRank(infoDatas, EXECUTE)
     }
   }
 
@@ -118,7 +119,7 @@ class FBRankingRepository(rankingListener: RankingListener) {
         likedMaps.map { it.mapTitle }
           .contains(infoData.mapTitle)
       }.map { it.myLiked = true }
-      rankingListener.getRank(infoDatas, "likes")
+      rankingListener.getRank(infoDatas, LIKES)
     }
 
     override fun liked(liked: Boolean, likes: Int) {

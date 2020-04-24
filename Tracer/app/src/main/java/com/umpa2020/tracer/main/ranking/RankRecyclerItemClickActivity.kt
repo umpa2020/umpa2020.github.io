@@ -42,7 +42,7 @@ class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener
     // 해당 맵 좋아요 눌렀는지 확인
     FBLikesRepository().getMapLike(mapTitle, likedMapListener)
 
-    FBMapRankingRepository().getMapRanking(mapTitle, mapRankingListener)
+    FBMapRankingRepository().listMapRanking(mapTitle, mapRankingListener)
 
     val db = FirebaseFirestore.getInstance()
 
