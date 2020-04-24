@@ -30,7 +30,8 @@ class RacingSelectPeopleActivity : AppCompatActivity(), OnSingleClickListener {
 
     mapTitle = intent.extras?.getString("MapTitle").toString()
     routeGPX=intent.getParcelableExtra("RouteGPX")
-    FBMapRankingRepository().getMapRanking(mapTitle, mapRankingListener)
+
+    FBMapRankingRepository().listMapRanking(mapTitle, mapRankingListener)
 
     // Set custom click listener
     tagcontainerLayout1.setOnTagClickListener(object : OnTagClickListener {
@@ -52,12 +53,14 @@ class RacingSelectPeopleActivity : AppCompatActivity(), OnSingleClickListener {
         //mTagContainerLayout1.removeTag(position);
       }
     })
+
     racingSelectButton.setOnClickListener(this)
   }
-
+  lateinit var rankingDataList: ArrayList<RankingData>
   private val mapRankingListener = object : MapRankingListener {
     override fun getMapRank(arrRankingData: ArrayList<RankingData>) {
       //레이아웃 매니저 추가
+      rankingDataList=arrRankingData
       racingSelectRecyclerView.layoutManager = LinearLayoutManager(activity)
       //adpater 추가
       racingSelectRecyclerView.adapter =
@@ -68,9 +71,11 @@ class RacingSelectPeopleActivity : AppCompatActivity(), OnSingleClickListener {
   override fun onSingleClick(v: View?) {
     when(v!!.id){
       R.id.racingSelectButton->{
+        val idList= tagcontainerLayout1.tags.toTypedArray().map {nickName->
+          rankingDataList.find { it.challengerNickname==nickName }!!.challengerId }
         val intent = Intent(App.instance.context(), RacingActivity::class.java)
         intent.putExtra("RouteGPX", routeGPX)
-        intent.putExtra("RacerList",tagcontainerLayout1.tags.toTypedArray())
+        intent.putExtra("RacerList",idList.toTypedArray())
         intent.putExtra("mapTitle", mapTitle)
         startActivity(intent)
       }

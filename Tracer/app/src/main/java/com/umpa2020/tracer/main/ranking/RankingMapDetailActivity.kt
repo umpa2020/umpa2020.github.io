@@ -80,7 +80,7 @@ class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener, OnM
             val infoData = document.toObject(InfoData::class.java)
 
             val storage = FirebaseStorage.getInstance()
-            val routeRef = storage.reference.child("mapRoute").child(mapTitle)
+            val routeRef = storage.reference.child(infoData.routeGPXPath.toString())
             val localFile = File.createTempFile("routeGpx", "xml")
             routeRef.getFile(Uri.fromFile(localFile)).addOnSuccessListener {
               routeGPX = localFile.path.gpxToClass()

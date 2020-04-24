@@ -6,9 +6,11 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class RankingData(
   val makerNickname: String? = null,
+  val challengerId: String?=null,
   val challengerNickname: String? = null,
   val challengerTime: Long? = null,
   var bestTime: Int? = null,
   val maxSpeed: String? = null,
-  val averageSpeed: String? = null
+  val averageSpeed: String? = null,
+  var racerGPX:String?=null
 ) : Parcelable
