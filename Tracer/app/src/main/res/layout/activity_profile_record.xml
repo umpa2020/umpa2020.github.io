@@ -26,4 +26,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"/>
 
+  <TextView
+    android:id="@+id/profileRecyclerActivityisEmpty"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:text="@string/noroute"
+    android:textSize="20dp"
+    android:visibility="gone" />
+
 </LinearLayout>
