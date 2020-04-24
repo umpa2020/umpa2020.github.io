@@ -1,6 +1,5 @@
 package com.umpa2020.tracer.network
 
-import com.google.firebase.firestore.FirebaseFirestore
 import com.umpa2020.tracer.dataClass.LikedMapData
 import com.umpa2020.tracer.util.UserInfo
 
@@ -22,8 +21,7 @@ class FBLikesRepository:BaseFB() {
       .addOnSuccessListener { result ->
         listener.likedList(result.map {
           LikedMapData(
-            it.getString(MAP_TITLE),
-            it.getString("uid")
+            it.getString(MAP_TITLE)
           )
         })
       }
@@ -53,8 +51,8 @@ class FBLikesRepository:BaseFB() {
    * 3. 맵 인포에 좋아요 숫자를 1 더한다
    */
   fun updateLikes(maptitle: String, likes: Int) {
-    val likeMapsData = LikedMapData(maptitle, UserInfo.autoLoginKey)
-    userInfoColRef.document(UserInfo.autoLoginKey).collection("user liked these maps")
+    val likeMapsData = LikedMapData(maptitle)
+    db.collection("userinfo").document(UserInfo.autoLoginKey).collection("user liked these maps")
       .add(likeMapsData)
     mapInfoColRef.document(maptitle).collection("likes").add(likeMapsData)
     mapInfoColRef.document(maptitle).update("likes", likes + 1)
