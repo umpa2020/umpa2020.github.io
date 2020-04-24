@@ -3,6 +3,7 @@ package com.umpa2020.tracer.network
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.maps.android.SphericalUtil
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.LikedMapData
@@ -34,7 +35,7 @@ class FBRankingRepository(rankingListener: RankingListener) {
     //var getintentLocation = current
 
     db.collection("mapInfo")
-      .orderBy(mode)
+      .orderBy(mode, Query.Direction.DESCENDING)
       .limit(limit)
       .get()
       .addOnSuccessListener { result ->
@@ -72,7 +73,7 @@ class FBRankingRepository(rankingListener: RankingListener) {
     //var getintentLocation = current
 
     db.collection("mapInfo")
-      .orderBy(mode)
+      .orderBy(mode, Query.Direction.DESCENDING)
       .startAfter(globalStartAfter)
       .limit(limit)
       .get()

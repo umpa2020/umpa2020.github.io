@@ -29,11 +29,19 @@ class FBMapRepository {
           val startLatitude = document.get("startLatitude") as Double
           if (southwest.longitude > 0 && northeast.longitude < 0) {
             if (southwest.longitude < startLongitude || startLongitude < northeast.longitude) {
-              val nearMap = NearMap(document.id, LatLng(startLatitude, startLongitude), document.get("distance") as Double)
+              val nearMap = NearMap(
+                document.id,
+                LatLng(startLatitude, startLongitude),
+                document.get("distance") as Double
+              )
               nearMaps.add(nearMap)
             }
           } else if (southwest.longitude < startLongitude && startLongitude < northeast.longitude) {
-            val nearMap = NearMap(document.id, LatLng(startLatitude, startLongitude), document.get("distance") as Double)
+            val nearMap = NearMap(
+              document.id,
+              LatLng(startLatitude, startLongitude),
+              document.get("distance") as Double
+            )
             nearMaps.add(nearMap)
           }
         }

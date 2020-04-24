@@ -11,7 +11,6 @@ import com.umpa2020.tracer.util.UserInfo
 import java.util.*
 
 class FBRacingRepository {
-  val GETMAKERDATA = 100
   val db = FirebaseFirestore.getInstance()
 
   /**
@@ -21,12 +20,24 @@ class FBRacingRepository {
    * 최고 기록이 아닐 경우 bestTime을 0으로 설정하여
    * ranking 에 등록하는 함수
    */
-  fun setRankingData(result: Boolean, racerData: InfoData, mHandler: Handler, racingFinishListener: RacingFinishListener, racerSpeeds: MutableList<Double>) {
+  fun setRankingData(
+    result: Boolean,
+    racerData: InfoData,
+    racingFinishListener: RacingFinishListener,
+    racerSpeeds: MutableList<Double>
+  ) {
     // 타임스탬프
     val timestamp = Date().time
 
     if (result) {
-      val rankingData = RankingData(racerData.makersNickname, UserInfo.nickname, racerData.time, 1, racerSpeeds.max().toString(), racerSpeeds.average().toString())
+      val rankingData = RankingData(
+        racerData.makersNickname,
+        UserInfo.nickname,
+        racerData.time,
+        1,
+        racerSpeeds.max().toString(),
+        racerSpeeds.average().toString()
+      )
       // 랭킹 맵에서
       db.collection("rankingMap").document(racerData.mapTitle!!).collection("ranking")
         .whereEqualTo("bestTime", 1)
@@ -45,10 +56,10 @@ class FBRacingRepository {
           db.collection("rankingMap").document(racerData.mapTitle!!).collection("ranking")
             .document(UserInfo.autoLoginKey + timestamp).set(rankingData)
 
-          getRacingFinishRank(result, racerData, mHandler, racingFinishListener)
+          getRacingFinishRank(result, racerData, racingFinishListener)
         }
     } else {
-      getRacingFinishRank(result, racerData, mHandler, racingFinishListener)
+      getRacingFinishRank(result, racerData, racingFinishListener)
     }
   }
 
@@ -58,11 +69,16 @@ class FBRacingRepository {
    * 2. 성공했을 때에만 N등
    * 3. 실패했을 경우 실패
    */
-  private fun getRacingFinishRank(result: Boolean, racerData: InfoData, mHandler: Handler, racingFinishListener: RacingFinishListener) {
+  private fun getRacingFinishRank(
+    result: Boolean,
+    racerData: InfoData,
+    racingFinishListener: RacingFinishListener
+  ) {
     val arrRankingData: ArrayList<RankingData> = arrayListOf()
     var arg = 0
 
-    db.collection("rankingMap").document(racerData.mapTitle!!).collection("ranking").orderBy("challengerTime", Query.Direction.ASCENDING)
+    db.collection("rankingMap").document(racerData.mapTitle!!).collection("ranking")
+      .orderBy("challengerTime", Query.Direction.ASCENDING)
       .get()
       .addOnSuccessListener { resultdb ->
         var index = 1
@@ -86,16 +102,14 @@ class FBRacingRepository {
   /**
    * 메이커 인포데이터를 가져오는 함수
    */
-  fun getMakerData(racerData: InfoData, mHandler: Handler) {
+  fun getMakerData(racerData: InfoData, getMakerDataListener: GetMakerDataListener) {
     lateinit var makerData: InfoData
 
     db.collection("mapInfo").document(racerData.mapTitle!!)
       .get()
       .addOnSuccessListener { document ->
         makerData = document.toObject(InfoData::class.java)!!
-        val msg: Message = mHandler.obtainMessage(GETMAKERDATA)
-        msg.obj = makerData
-        mHandler.sendMessage(msg)
+        getMakerDataListener.makerData(makerData)
       }
   }
 
@@ -121,6 +135,7 @@ class FBRacingRepository {
    */
   fun setUserInfoRacing(racerData: InfoData) {
     val ranMapsData = RanMapsData(racerData.mapTitle, racerData.distance, racerData.time)
-    db.collection("userinfo").document(UserInfo.autoLoginKey).collection("user ran these maps").add(ranMapsData)
+    db.collection("userinfo").document(UserInfo.autoLoginKey).collection("user ran these maps")
+      .add(ranMapsData)
   }
 }

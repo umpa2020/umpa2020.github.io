@@ -35,7 +35,5 @@ class FBMapImageRepository {
           }
         }
       }
-
-
   }
 }
