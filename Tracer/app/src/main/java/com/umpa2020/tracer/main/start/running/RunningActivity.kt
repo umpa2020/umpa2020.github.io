@@ -95,7 +95,7 @@ class RunningActivity : BaseRunningActivity() {
      .zIndex(3.4f)
      .position(currentLatLng)
      .title("Start")
-     .icon( R.drawable.ic_racing_startpoint.makingIcon()))
+     .icon( R.drawable.ic_start_point.makingIcon()))
     TTS.speech(getString(R.string.startRunning))
 
     traceMap.mMap.setOnCameraMoveListener {
