@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.umpa2020.tracer.R
+import com.umpa2020.tracer.constant.Constants.Companion.TIMESTAMP_LENGTH
 import com.umpa2020.tracer.dataClass.ActivityData
 import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.main.ranking.RankRecyclerItemClickActivity
@@ -34,7 +35,7 @@ class ProfileRecyclerViewAdapterRecord(private var datas: ArrayList<ActivityData
   override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
     val singleItem1 = datas[position]
 
-    val cutted = singleItem1.mapTitle!!.subSequence(0, singleItem1.mapTitle.length-13) as String
+    val cutted = singleItem1.mapTitle!!.subSequence(0, singleItem1.mapTitle.length- TIMESTAMP_LENGTH) as String
     val time = singleItem1.time!!.toLong().format(Locale.getDefault())
 
     //데이터 바인딩

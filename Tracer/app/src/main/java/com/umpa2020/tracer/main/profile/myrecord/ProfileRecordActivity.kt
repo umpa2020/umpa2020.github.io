@@ -16,7 +16,7 @@ class ProfileRecordActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_profile_record)
 
-    FBUserActivityRepository().getUserMakingActivity(activityListener)
+    FBUserActivityRepository().listUserMakingActivity(activityListener)
   }
 
   private val activityListener = object : ActivityListener {

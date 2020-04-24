@@ -29,6 +29,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
+import com.umpa2020.tracer.constant.Constants.Companion.TIMESTAMP_LENGTH
 import com.umpa2020.tracer.dataClass.NearMap
 import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.extensions.gpxToClass
@@ -121,7 +122,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
             }
             routeMarkers.clear()
             nearMaps.forEach {
-              val cutted = it.mapTitle.subSequence(0, it.mapTitle.length - 13)
+              val cutted = it.mapTitle.subSequence(0, it.mapTitle.length - TIMESTAMP_LENGTH)
 
               //데이터 바인딩
               routeMarkers.add(
@@ -152,7 +153,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
         }
       }
     }
-    FBMapRepository().getNearMap(bound.southwest, bound.northeast, mHandler)
+    FBMapRepository().listNearMap(bound.southwest, bound.northeast, mHandler)
   }
 
   /**
