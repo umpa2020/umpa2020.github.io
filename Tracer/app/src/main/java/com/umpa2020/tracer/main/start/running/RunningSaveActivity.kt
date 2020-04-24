@@ -10,7 +10,6 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.App
@@ -39,14 +38,17 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
   lateinit var routeGPX: RouteGPX
   lateinit var traceMap: TraceMap
   val speedList = mutableListOf<Double>()
+  lateinit var progressBar: MyProgressBar
 
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(com.umpa2020.tracer.R.layout.activity_running_save)
+    progressBar = MyProgressBar()
     infoData = intent.getParcelableExtra("InfoData")!!
     routeGPX = intent.getParcelableExtra("RouteGPX")!!
-    val wmf = supportFragmentManager.findFragmentById(com.umpa2020.tracer.R.id.map_viewer) as WorkaroundMapFragment
+    val wmf =
+      supportFragmentManager.findFragmentById(com.umpa2020.tracer.R.id.map_viewer) as WorkaroundMapFragment
     wmf.getMapAsync(this)
     wmf.setListener(object : WorkaroundMapFragment.OnTouchListener {
       override fun onTouch() {
@@ -75,49 +77,51 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
   }
 
   override fun onBackPressed() {
-    if(::noticePopup.isInitialized&&noticePopup.isShowing) {
-        noticePopup.dismiss()
-    }else {
+    if (::noticePopup.isInitialized && noticePopup.isShowing) {
+      noticePopup.dismiss()
+    } else {
       deleteSaving()
     }
   }
 
   override fun onSingleClick(v: View?) {
-      when (v!!.id) {
-        R.id.runningSaveDeleteButton->{
-          deleteSaving()
-        }
-        R.id.save_btn -> {
-          if (mapTitleEdit.text.toString() == "") {
-            mapTitleEdit.hint = "제목을 설정해주세요"
-            mapTitleEdit.setHintTextColor(Color.RED)
-          } else if (mapExplanationEdit.text.toString() == "") {
-            mapExplanationEdit.hint = "맵 설명을 작성해주세요"
-            mapExplanationEdit.setHintTextColor(Color.RED)
-          } else {
-            val callback = GoogleMap.SnapshotReadyCallback {
-              try {
-                save_btn.isEnabled=false
-                val saveFolder = File(filesDir, "mapdata") // 저장 경로
-                if (!saveFolder.exists()) {       //폴더 없으면 생성
-                  saveFolder.mkdir()
-                }
-                val path = "racingMap" + saveFolder.list()!!.size + ".bmp"        //파일명 생성하는건데 수정필요
-                //비트맵 크기에 맞게 잘라야함
-                val myfile = File(saveFolder, path)                //로컬에 파일저장
-                val out = FileOutputStream(myfile)
-                it.compress(Bitmap.CompressFormat.PNG, 90, out)
-                save(myfile.path)
-              } catch (e: Exception) {
-                Logg.d(e.toString())
+    when (v!!.id) {
+      R.id.runningSaveDeleteButton -> {
+        deleteSaving()
+      }
+      R.id.save_btn -> {
+        if (mapTitleEdit.text.toString() == "") {
+          mapTitleEdit.hint = "제목을 설정해주세요"
+          mapTitleEdit.setHintTextColor(Color.RED)
+        } else if (mapExplanationEdit.text.toString() == "") {
+          mapExplanationEdit.hint = "맵 설명을 작성해주세요"
+          mapExplanationEdit.setHintTextColor(Color.RED)
+        } else {
+          progressBar.show()
+          val callback = GoogleMap.SnapshotReadyCallback {
+            try {
+              //save_btn.isEnabled = false
+              val saveFolder = File(filesDir, "mapdata") // 저장 경로
+              if (!saveFolder.exists()) {       //폴더 없으면 생성
+                saveFolder.mkdir()
               }
+              val path = "racingMap" + saveFolder.list()!!.size + ".bmp"        //파일명 생성하는건데 수정필요
+              //비트맵 크기에 맞게 잘라야함
+              val myfile = File(saveFolder, path)                //로컬에 파일저장
+              val out = FileOutputStream(myfile)
+              it.compress(Bitmap.CompressFormat.PNG, 90, out)
+              save(myfile.path)
+            } catch (e: Exception) {
+              Logg.d(e.toString())
             }
-            traceMap.captureMapScreen(callback)
+          }
+          traceMap.captureMapScreen(callback)
         }
       }
     }
   }
-  lateinit var noticePopup:ChoicePopup
+
+  lateinit var noticePopup: ChoicePopup
   private fun deleteSaving() {
     noticePopup = ChoicePopup(this, getString(R.string.select_type),
       getString(R.string.Are_you_sure_to_delete_this),
@@ -191,7 +195,14 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
     val activityData = ActivityData(infoData.mapTitle, timestamp.toString(), "map save")
     FBUserActivityRepository().setUserHistory(activityData)
 
-    val rankingData = RankingData(UserInfo.nickname, UserInfo.nickname, infoData.time, 1, speedList.max().toString(), speedList.average().toString())
+    val rankingData = RankingData(
+      UserInfo.nickname,
+      UserInfo.nickname,
+      infoData.time,
+      1,
+      speedList.max().toString(),
+      speedList.average().toString()
+    )
     db.collection("rankingMap").document(infoData.mapTitle!!).set(rankingData)
     db.collection("rankingMap").document(infoData.mapTitle!!).collection("ranking")
       .document(UserInfo.autoLoginKey + timestamp).set(rankingData)
@@ -205,6 +216,7 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
     uploadTask.addOnFailureListener {
       Logg.d("스토리지 실패 = " + it.toString())
     }.addOnSuccessListener {
+      progressBar.dismiss()
       finish()
     }
 
