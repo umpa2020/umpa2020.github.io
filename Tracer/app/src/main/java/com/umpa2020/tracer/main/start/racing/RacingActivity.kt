@@ -182,7 +182,7 @@ class RacingActivity : BaseRunningActivity() {
 
   override fun start() {
     super.start()
-    FBMapRepository().increaseExecute(mapTitle)
+    FBMapRepository().updateExecute(mapTitle)
     // 레이싱 시작 TTS
     TTS.speech(getString(R.string.startRacing))
     if(racingGPXs.isNotEmpty()) {

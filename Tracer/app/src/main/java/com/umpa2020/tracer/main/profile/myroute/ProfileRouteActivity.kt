@@ -38,7 +38,7 @@ class ProfileRouteActivity : AppCompatActivity() {
 
   override fun onResume() {
     // 마이 루트에 필요한 내용을 받아옴
-    FBProfileRepository().getRoute(profileRouteListener, nickname)
+    FBProfileRepository().listRoute(profileRouteListener, nickname)
     super.onResume()
   }
 
@@ -48,7 +48,7 @@ class ProfileRouteActivity : AppCompatActivity() {
    */
 
   private val profileRouteListener = object : ProfileRouteListener {
-    override fun getProfileRoute(infoDatas: ArrayList<InfoData>) {
+    override fun listProfileRoute(infoDatas: ArrayList<InfoData>) {
       if (infoDatas.isEmpty()) {
         profileRecyclerRouteisEmpty.visibility = View.VISIBLE
         progressbar.dismiss()

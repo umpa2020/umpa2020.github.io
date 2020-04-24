@@ -3,9 +3,6 @@ package com.umpa2020.tracer.main.start.racing
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.os.Message
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
@@ -22,10 +19,7 @@ import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.extensions.prettyDistance
 import com.umpa2020.tracer.extensions.toRank
 import com.umpa2020.tracer.main.MainActivity
-import com.umpa2020.tracer.network.FBProfileRepository
-import com.umpa2020.tracer.network.FBRacingRepository
-import com.umpa2020.tracer.network.FBUserActivityRepository
-import com.umpa2020.tracer.network.RacingFinishListener
+import com.umpa2020.tracer.network.*
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
@@ -34,7 +28,6 @@ import java.util.*
 
 
 class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
-  val GETMAKERDATA = 100
 
   var activity = this
   lateinit var racerData: InfoData
@@ -60,35 +53,31 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
     racerSpeeds = routeGPX!!.getSpeed()
     makerSpeeds = mapRouteGPX!!.getSpeed()
 
-    val mHandler = object : Handler(Looper.getMainLooper()) {
-      override fun handleMessage(msg: Message) {
-        when (msg.what) {
-          GETMAKERDATA -> {
-            makerData = msg.obj as InfoData
-          }
-        }
-      }
-    }
 
     // 메이커 인포데이터를 가져오는 함수
-    FBRacingRepository().getMakerData(racerData, mHandler)
+    FBRacingRepository().getMakerData(racerData, getMakerDataListener)
 
     // 유저 인포에 해당 유저가 이 맵을 뛰었다는
     // 히스토리를 더하는 함수
-    FBRacingRepository().setUserInfoRacing(racerData)
+    FBRacingRepository().createUserInfoRacing(racerData)
     val timestamp = Date().time
 
     if (result) {
-      val activityData = ActivityData(racerData.mapTitle, timestamp.toString(), "racing go the distance")
-      FBUserActivityRepository().setUserHistory(activityData)
-    }
-    else {
+      val activityData =
+        ActivityData(racerData.mapTitle, timestamp.toString(), "racing go the distance")
+      FBUserActivityRepository().createUserHistory(activityData)
+    } else {
       val activityData = ActivityData(racerData.mapTitle, timestamp.toString(), "racing fail")
-      FBUserActivityRepository().setUserHistory(activityData)
+      FBUserActivityRepository().createUserHistory(activityData)
     }
 
 
-    FBRacingRepository().setRankingData(result, racerData, mHandler, racingFinishListener, racerSpeeds)
+    FBRacingRepository().createRankingData(
+      result,
+      racerData,
+      racingFinishListener,
+      racerSpeeds
+    )
 
     OKButton.setOnClickListener(this)
     otherPeopleProfileSelect.setOnClickListener(this)
@@ -96,14 +85,15 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
 
   override fun onSingleClick(v: View?) {
     when (v!!.id) {
+      // 다 봤다는 표시 - 그래도 앞에 있던 액티비티들을 끄고, 메인 엑티비티 실행
       R.id.OKButton -> {
         val intent = Intent(this, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
         startActivity(intent)
       }
 
-      //리스트 선택화면으로 넘어감
-      R.id.otherPeopleProfileSelect->{
+      // 리스트 선택화면으로 넘어감
+      R.id.otherPeopleProfileSelect -> {
         val intent = Intent(this, AllRankingActivity::class.java)
         intent.putExtra("arrRankingData", arrRankingData)
         startActivityForResult(intent, 100)
@@ -154,8 +144,7 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
                   progressbar.dismiss()
                 }
               }
-            }
-            else {
+            } else {
               RacingFinishAnalysisOtherNickname.text = "탈퇴한 회원입니다."
             }
 
@@ -197,7 +186,10 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
 
     // maker data
 
-    FBProfileRepository().getProfileImage(RacingFinishAnalysisOtherProfile, makerData.makersNickname!!)
+    FBProfileRepository().getProfileImage(
+      RacingFinishAnalysisOtherProfile,
+      makerData.makersNickname!!
+    )
     RacingFinishAnalysisOtherNickname.text = makerData.makersNickname
 
     makerLapTimeTextView.text = makerData.time!!.format(MM_SS)
@@ -210,29 +202,34 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
     progressbar.dismiss()
   }
 
-  private fun setOtherData() {
-
-  }
-
   private val racingFinishListener = object : RacingFinishListener {
     override fun getRacingFinish(rankingDatas: ArrayList<RankingData>, resultRank: Int) {
       arrRankingData = rankingDatas
       setMyUiData(racerSpeeds, makerSpeeds, resultRank)
 
       if (arrRankingData.size >= 1) {
-        FBProfileRepository().getProfileImage(racingFinishProfileFirst, arrRankingData[0].challengerNickname!!)
+        FBProfileRepository().getProfileImage(
+          racingFinishProfileFirst,
+          arrRankingData[0].challengerNickname!!
+        )
         racingFinishNicknameFirst.text = arrRankingData[0].challengerNickname
         racingFinishLapTimeFirst.text = arrRankingData[0].challengerTime!!.format(MM_SS)
       }
 
       if (arrRankingData.size >= 2) {
-        FBProfileRepository().getProfileImage(racingFinishProfileSecond, arrRankingData[1].challengerNickname!!)
+        FBProfileRepository().getProfileImage(
+          racingFinishProfileSecond,
+          arrRankingData[1].challengerNickname!!
+        )
         racingFinishNicknameSecond.text = arrRankingData[1].challengerNickname
         racingFinishLapTimeSecond.text = arrRankingData[1].challengerTime!!.format(MM_SS)
       }
 
       if (arrRankingData.size >= 3) {
-        FBProfileRepository().getProfileImage(racingFinishProfileThird, arrRankingData[2].challengerNickname!!)
+        FBProfileRepository().getProfileImage(
+          racingFinishProfileThird,
+          arrRankingData[2].challengerNickname!!
+        )
         racingFinishNicknameThird.text = arrRankingData[2].challengerNickname
         racingFinishLapTimeThird.text = arrRankingData[2].challengerTime!!.format(MM_SS)
       }
@@ -242,6 +239,12 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
       makerLapTimeTextView.text = otherData.challengerTime!!.format(MM_SS)
       makerMaxSpeedTextView.text = otherData.maxSpeed!!.toDouble().prettyDistance()
       makerAvgSpeedTextView.text = otherData.averageSpeed!!.toDouble().prettyDistance()
+    }
+  }
+
+  private val getMakerDataListener = object : GetMakerDataListener {
+    override fun makerData(getMakerData: InfoData) {
+      makerData = getMakerData
     }
   }
 }

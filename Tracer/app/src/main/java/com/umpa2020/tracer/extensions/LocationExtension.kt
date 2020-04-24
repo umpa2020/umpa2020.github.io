@@ -65,7 +65,6 @@ fun RouteGPX.addDirectionSign(): RouteGPX {
     }
     //직선의 회전각
     val angle = postGradient - preGradient
-    Logg.d("angle = $angle")
     if (abs(angle) >= TURNING_ANGLE) {
       if (angle > 0) {
         this.wptList.add(

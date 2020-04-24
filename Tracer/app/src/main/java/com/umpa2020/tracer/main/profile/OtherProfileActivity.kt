@@ -33,7 +33,7 @@ class OtherProfileActivity : AppCompatActivity(), OnSingleClickListener {
     // 넘어온 닉네임으로 현재 액티비티 닉네임 적용
     profileIdTextView.text = nickname
 
-    FBProfileRepository().setProfile(contentView!!, nickname, profileListener)
+    FBProfileRepository().getProfile(contentView!!, nickname, profileListener)
     otherProfileRouteTextView.setOnClickListener(this)
   }
 
