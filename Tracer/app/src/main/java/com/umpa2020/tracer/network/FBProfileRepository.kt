@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.view.View
 import android.widget.ImageView
 import com.bumptech.glide.Glide
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.App
@@ -26,6 +27,8 @@ class FBProfileRepository() {
   var infoDatas = arrayListOf<InfoData>()
   val db = FirebaseFirestore.getInstance()
   var profileImagePath = "init"
+  lateinit var globalStartAfter: DocumentSnapshot
+
 
   /**
    * 프로필 프래그먼트, 다른 사람 프로필 액티비티의
@@ -141,17 +144,19 @@ class FBProfileRepository() {
   }
 
   /**
-   * 프로필에서 해당 유저가 만든 맵 띄우기
+   * 처음만 프로필에서 해당 유저가 만든 맵 띄우기
    */
-  fun getRoute(profileRouteListener: ProfileRouteListener, nickname: String) {
+  fun getRouteFirst(profileRouteListener: ProfileRouteListener, nickname: String, limit: Long) {
     db.collection("mapInfo").whereEqualTo("makersNickname", nickname)
       .whereEqualTo("privacy", "RACING")
+      .limit(limit)
       .get()
       .addOnSuccessListener { result ->
         for (document in result) {
           val data = document.toObject(InfoData::class.java)
           infoDatas.add(data)
-          Logg.d("ssmm11 infodata = $data / " + document.id)
+
+          globalStartAfter = document
         }
 
         // 좋아요 필터를 눌렀을 때, 유저가 좋아요 누른 맵들을 가져오는 리스너
@@ -167,10 +172,42 @@ class FBProfileRepository() {
           override fun liked(liked: Boolean, likes: Int) {
           }
         }
-
-        FBLikesRepository().getLikes(likedMapListener)
-
         // 받아온 자신이 만든 맵 리스너로 보내기
+        FBLikesRepository().getLikes(likedMapListener)
+      }
+  }
+
+  /**
+   * 프로필에서 해당 유저가 만든 맵 띄우기
+   */
+  fun getRoute(profileRouteListener: ProfileRouteListener, nickname: String, limit: Long) {
+    db.collection("mapInfo").whereEqualTo("makersNickname", nickname)
+      .whereEqualTo("privacy", "RACING")
+      .startAfter(globalStartAfter)
+      .limit(limit)
+      .get()
+      .addOnSuccessListener { result ->
+        for (document in result) {
+          val data = document.toObject(InfoData::class.java)
+          infoDatas.add(data)
+          globalStartAfter = document
+        }
+
+        // 좋아요 필터를 눌렀을 때, 유저가 좋아요 누른 맵들을 가져오는 리스너
+        val likedMapListener = object : LikedMapListener {
+          override fun likedList(likedMaps: List<LikedMapData>) {
+            infoDatas.filter { infoData ->
+              likedMaps.map { it.mapTitle }
+                .contains(infoData.mapTitle)
+            }.map { it.myLiked = true }
+            profileRouteListener.getProfileRoute(infoDatas)
+          }
+
+          override fun liked(liked: Boolean, likes: Int) {
+          }
+        }
+        // 받아온 자신이 만든 맵 리스너로 보내기
+        FBLikesRepository().getLikes(likedMapListener)
       }
   }
 

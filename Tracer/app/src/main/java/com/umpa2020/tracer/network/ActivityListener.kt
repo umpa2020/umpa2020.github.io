@@ -9,6 +9,6 @@ interface ActivityListener {
   /**
    * 유저 히스토리 가져오기
    */
-  fun activityList(activityData: ArrayList<ActivityData>)
+  fun activityList(activityDatas: ArrayList<ActivityData>)
 
 }

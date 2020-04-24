@@ -41,9 +41,6 @@ class RankingFragment : Fragment(), OnSingleClickListener {
   var isLoding = false
   var limit = 0L
 
-
-  //TODO : 예외 처리 (필터눌렀을때 rootinfodatas 초기화 하고 notify)
-
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
   ): View? {
@@ -180,7 +177,6 @@ class RankingFragment : Fragment(), OnSingleClickListener {
         if (requireView().tuneRadioBtnExecute.isChecked) {
           requireView().rankingfiltermode.text = getString(R.string.execute)
 
-          Logg.d("ssmm11 limit = $limit")
           rankingRepo.getRanking(
             UserInfo.rankingLatLng!!,
             tuneDistance,
