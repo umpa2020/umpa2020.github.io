@@ -19,7 +19,7 @@ open class BaseFB {
     const val RANKING_MAP = "rankingMap"
     const val BEST_TIME = "bestTime"
     const val CHALLENGER_TIME = "challengerTime"
-    const val RANKING ="ranking"
+    const val RANKING = "ranking"
 
     const val MAP_INFO = "mapInfo"
     const val START_LATITUDE = "startLatitude"

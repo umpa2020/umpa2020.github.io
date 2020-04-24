@@ -8,7 +8,7 @@ import com.umpa2020.tracer.util.UserInfo
  * 사용법 - Likes().관련기능함수()
  */
 
-class FBLikesRepository:BaseFB() {
+class FBLikesRepository : BaseFB() {
   /**
    * 유저 인포에 저장되어있는 해당 유저가 좋아요 한 맵을 검사하여
    * 리사이클러뷰에 메시지를 보낸다.
