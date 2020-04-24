@@ -193,7 +193,7 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
 
     // 히스토리 업로드
     val activityData = ActivityData(infoData.mapTitle, timestamp.toString(), "map save")
-    FBUserActivityRepository().setUserHistory(activityData)
+    FBUserActivityRepository().createUserHistory(activityData)
 
     val rankingData = RankingData(
       UserInfo.nickname,

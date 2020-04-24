@@ -10,12 +10,7 @@ const val YEAR_MONTH_DAY = "MMM dd, yyyy"
 const val YEAR = "yyyy"
 const val MONTH_DAY = "MMM dd"
 
-const val YEAR_MONTH_DAY_HOUR_MINUTE_SECOND = "yyyy-MM-dd HH:mm:ss"
 const val MM_SS = "mm:ss"
-
-enum class ENMonths {
-  Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec
-}
 
 /**
  * 날짜 시간 포맷 적용

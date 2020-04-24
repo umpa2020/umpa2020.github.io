@@ -16,19 +16,19 @@ fun String.show() {
 }
 
 fun Int.toRank(): String {
-  when (this % 10) {
-    1 -> return "${this}st"
-    2 -> return "${this}nd"
-    3 -> return "${this}rd"
-    else -> return "${this}th"
+  return when (this % 10) {
+    1 -> "${this}st"
+    2 -> "${this}nd"
+    3 -> "${this}rd"
+    else -> "${this}th"
   }
 }
 
 fun Int.makingIcon(): BitmapDescriptor {
   // 기본 마커 활용해서
   val circleDrawable = App.instance.context().getDrawable(this)
-  var canvas = Canvas()
-  var bitmap = Bitmap.createBitmap(
+  val canvas = Canvas()
+  val bitmap = Bitmap.createBitmap(
     circleDrawable!!.intrinsicWidth,
     circleDrawable.intrinsicHeight,
     Bitmap.Config.ARGB_8888

@@ -40,8 +40,6 @@ class SettingPreferenceFragment : PreferenceFragmentCompat() {
     }
   }
 
-
-
   /**
    * preference 클릭할 때
    */
@@ -58,7 +56,6 @@ class SettingPreferenceFragment : PreferenceFragmentCompat() {
         startActivity(intent)
       }
     }
-
 
     //로그아웃 눌렀을 때
     if (preference?.key.equals("logout")) {
