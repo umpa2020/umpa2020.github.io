@@ -24,8 +24,7 @@ class FBLikesRepository {
       .addOnSuccessListener { result ->
         listener.likedList(result.map {
           LikedMapData(
-            it.getString("mapTitle"),
-            it.getString("uid")
+            it.getString("mapTitle")
           )
         })
       }
@@ -57,7 +56,7 @@ class FBLikesRepository {
    * 3. 맵 인포에 좋아요 숫자를 1 더한다
    */
   fun setLikes(maptitle: String, likes: Int) {
-    val likeMapsData = LikedMapData(maptitle, UserInfo.autoLoginKey)
+    val likeMapsData = LikedMapData(maptitle)
     db.collection("userinfo").document(UserInfo.autoLoginKey).collection("user liked these maps")
       .add(likeMapsData)
     db.collection("mapInfo").document(maptitle).collection("likes").add(likeMapsData)

@@ -31,13 +31,16 @@ import kotlinx.android.synthetic.main.fragment_ranking.view.*
  */
 class RankingFragment : Fragment(), OnSingleClickListener {
   lateinit var location: LatLng
-  var distance = MAX_DISTANCE
   lateinit var root: View
+  lateinit var rankingRepo: FBRankingRepository
+
+  var rootInfoDatas = arrayListOf<InfoData>()
+  var distance = MAX_DISTANCE
   val progressbar = MyProgressBar()
   var tuneDistance = 0
-  var rootInfoDatas = arrayListOf<InfoData>()
-  lateinit var rankingRepo: FBRankingRepository
   var isLoding = false
+  var limit = 0L
+
 
   //TODO : 예외 처리 (필터눌렀을때 rootinfodatas 초기화 하고 notify)
 
@@ -53,11 +56,11 @@ class RankingFragment : Fragment(), OnSingleClickListener {
     view.rank_recycler_map.addOnScrollListener(object : RecyclerView.OnScrollListener() {
       override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
         if (!rank_recycler_map.canScrollVertically(-1)) {
-          Logg.i("ssmm11 Top of list")
+          // 리사이클러뷰가 맨 위로 이동했을 경우
         } else if (!rank_recycler_map.canScrollVertically(1)) {
+          // 리사이클러뷰가 맨 아래로 이동했을 경우
           if (requireView().tuneRadioBtnExecute.isChecked) {
             requireView().rankingfiltermode.text = getString(R.string.execute)
-
             if (!isLoding) {
               rankingRepo.getFilterRange(
                 UserInfo.rankingLatLng!!,
@@ -76,12 +79,8 @@ class RankingFragment : Fragment(), OnSingleClickListener {
                 15
               )
             }
-
           }
           isLoding = true
-          Logg.i("ssmm11 End of list")
-        } else {
-          Logg.i("ssmm11 idle")
         }
       }
     })
@@ -168,6 +167,12 @@ class RankingFragment : Fragment(), OnSingleClickListener {
     if (UserInfo.rankingLatLng != null) {
       tuneDistance = distance
       progressbar.show()
+      limit = rootInfoDatas.size.toLong()
+
+      if (limit == 0L) limit = 15L
+      else rootInfoDatas.clear()
+
+      rankingRepo = FBRankingRepository(rankingListener)
 
       if (UserInfo.rankingLatLng != null) {
         //실행순 버튼에 체크가 되어 있을 경우
@@ -178,8 +183,7 @@ class RankingFragment : Fragment(), OnSingleClickListener {
             UserInfo.rankingLatLng!!,
             tuneDistance,
             "execute",
-            15
-
+            limit
           )
         } else {
           requireView().rankingfiltermode.text = getString(R.string.likes)

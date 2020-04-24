@@ -97,16 +97,18 @@ class MapRankingAdapter(
             }
             R.drawable.ic_favorite_border_black_24dp -> {
               FBLikesRepository().setLikes(infoData.mapTitle!!, likes)
+              infoDatas[position].myLiked = true
+              infoDatas[position].likes = ++likes
               holder.modeIcon.setImageResource(R.drawable.ic_favorite_red_24dp)
               holder.modeIcon.tag = R.drawable.ic_favorite_red_24dp
-              likes++
               holder.modeNo.text = likes.toString()
             }
             R.drawable.ic_favorite_red_24dp -> {
               FBLikesRepository().setminusLikes(infoData.mapTitle!!, likes)
+              infoDatas[position].myLiked = false
+              infoDatas[position].likes = --likes
               holder.modeIcon.setImageResource(R.drawable.ic_favorite_border_black_24dp)
               holder.modeIcon.tag = R.drawable.ic_favorite_border_black_24dp
-              likes--
               holder.modeNo.text = likes.toString()
             }
           }
