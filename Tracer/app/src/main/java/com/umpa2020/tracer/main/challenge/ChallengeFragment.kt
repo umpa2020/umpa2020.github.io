@@ -21,13 +21,13 @@ class ChallengeFragment : Fragment() {
     val view: View = inflater.inflate(R.layout.fragment_challenge, container, false)
     val challengeDatas = arrayListOf<ChallengeData>()
 
-    var challengeData = ChallengeData(0,"1","1","1")
+    var challengeData = ChallengeData(R.drawable.button_background,"제주 그란폰도","2019. 04. 01","제주")
     challengeDatas.add(challengeData)
-    challengeData = ChallengeData(0,"2","3","4")
+    challengeData = ChallengeData(R.drawable.button_background,"철원 DMZ 랠리","2019. 07. 03","강원")
     challengeDatas.add(challengeData)
-    challengeData = ChallengeData(0,"2","3","5")
+    challengeData = ChallengeData(R.drawable.button_background,"양양 그란폰도","2019. 08. 21","경기")
     challengeDatas.add(challengeData)
-    challengeData = ChallengeData(0,"2","3","6")
+    challengeData = ChallengeData(R.drawable.button_background,"화천 DMZ 랠리","2019. 06. 21","강원")
     challengeDatas.add(challengeData)
 
 
