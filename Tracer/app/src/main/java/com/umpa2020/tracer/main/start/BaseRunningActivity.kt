@@ -325,13 +325,13 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
   }
 
   override fun onDrawerOpened() {
-    racingHandle.text = "▼"
-    Logg.d("onDrawerOpened()")
+    drawerHandle.text = "▼"
+    Logg.d("onDrawerOpened() : ${drawerHandle.text}")
   }
 
   override fun onDrawerClosed() {
-    racingHandle.text = "▲"
-    Logg.d("onDrawerClosed()")
+    drawerHandle.text = "▲"
+    Logg.d("onDrawerClosed() : ${drawerHandle.text}")
   }
 
   override fun onSingleClick(v: View?) {
