@@ -118,7 +118,14 @@
   <string name="noticeSetting">Notification Settings</string>
   <string name="noticeSound">Receive notifications by sound</string>
   <string name="noticeCheck">Notification</string>
+  <string name="lockScreenSetting">LockScreen Setting</string>
+  <string name="lockScreenBody">Record measurement is possible when setting the lock screen</string>
+  <string name="lockScreenCheck">Lock Screen</string>
 
+  <!-- LcokScreen -->
+  <string name="km">Km</string>
+  <string name="km_h">Km/h</string>
+  <string name="unlock">Unlock</string>
   <!-- TTS -->
   <string name="pushthestartbutton">push the start button</string>
   <string name="startRunning">"Let's start running"</string>

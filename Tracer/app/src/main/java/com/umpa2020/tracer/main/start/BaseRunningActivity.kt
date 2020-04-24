@@ -10,22 +10,23 @@ import android.widget.Button
 import android.widget.Chronometer
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.trace
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.preference.PreferenceManager
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.SphericalUtil
+import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.constant.UserState
-import com.umpa2020.tracer.extensions.makingIcon
-import com.umpa2020.tracer.extensions.prettyDistance
-import com.umpa2020.tracer.extensions.prettySpeed
-import com.umpa2020.tracer.extensions.toLatLng
+import com.umpa2020.tracer.extensions.*
+import com.umpa2020.tracer.lockscreen.util.LockScreen
 import com.umpa2020.tracer.map.TraceMap
+import com.umpa2020.tracer.roomDatabase.entity.MapRecordData
+import com.umpa2020.tracer.roomDatabase.viewModel.RecordViewModel
 import com.umpa2020.tracer.util.ChoicePopup
 import com.umpa2020.tracer.util.LocationBroadcastReceiver
 import com.umpa2020.tracer.util.Logg
@@ -74,6 +75,8 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
   var unPassedIcon = R.drawable.ic_checkpoint_gray.makingIcon()
   var passedIcon = R.drawable.ic_checkpoint_red.makingIcon()
 
+
+  private lateinit var recordViewModel: RecordViewModel
   open fun init() {
     drawer.setOnDrawerScrollListener(this)
     drawer.setOnDrawerOpenListener(this)
@@ -102,6 +105,10 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
   open fun updateLocation(curLoc: Location) {
     distanceTextView.text = distance.prettyDistance
     speedTextView.text = speed.prettySpeed()
+
+    // room DB에 속도, 거리 데이터 업데이트.
+    recordViewModel.updateSpeedDistance(speed.lockSpeed, distance.lockDistance)
+
     if (setLocation(curLoc)) {
       when (userState) {
         UserState.NORMAL -> {
@@ -138,18 +145,42 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
   open fun start() {
     userState = UserState.RUNNING
     anim()
+
+    Logg.d(chronometer.base.toString())
     chronometer.base = SystemClock.elapsedRealtime()
+
+    // DB에 시작 시간 업데이트
+
     chronometer.start()
     notificationTextView.visibility = View.GONE
+    lockScreen(true)
+
+    // DB 초기값 설정
+    val mapRecordDao = MapRecordData(
+      0,
+      "",
+      "",
+      chronometer.base,
+      true,
+      0L,
+      ""
+    )
+    Logg.d("처음에 데이터 삽입?")
+
+    recordViewModel.insert(mapRecordDao)
   }
 
-  var flag = true
   open fun pause() {
     Logg.i("일시 정지")
 
     privacy = Privacy.PUBLIC
     userState = UserState.PAUSED
+    Logg.d(chronometer.text.toString())
     timeWhenStopped = chronometer.base - SystemClock.elapsedRealtime()
+
+   recordViewModel.updateTimeText(chronometer.text.toString())
+    // 시간 통제 업데이트
+    recordViewModel.updateTimeControl(timeWhenStopped,false)
     chronometer.stop()
     pauseButton.text = getString(R.string.restart)
 
@@ -157,12 +188,14 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
   }
 
   open fun restart() {
-
     userState = UserState.RUNNING
     pauseButton.text = getString(R.string.pause)
-    //btn_pause.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_pause_icon_pressed, 0, 0, 0)
-    chronometer.base = SystemClock.elapsedRealtime() + timeWhenStopped
+    val restartTime=SystemClock.elapsedRealtime()
+    chronometer.base = restartTime + timeWhenStopped
 
+    // 시간 통제 업데이트
+    recordViewModel.updateTimeControl(timeWhenStopped,true)
+    recordViewModel.updateStartTime(restartTime)
     chronometer.start()
 
     pauseNotificationTextView.visibility = View.INVISIBLE
@@ -171,7 +204,11 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
 
   open fun stop() {
     userState = UserState.STOP
+    // 시간 통제 업데이트
+    recordViewModel.updateTimeControl(0L,false)
+
     chronometer.stop()
+    lockScreen(false)
   }
 
   fun pauseNotice(str: String) {
@@ -201,20 +238,42 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     return moving
   }
 
+  fun lockScreen(flag: Boolean) {
+    val prefs = PreferenceManager.getDefaultSharedPreferences(App.instance.context())
+    if (prefs.getBoolean("LockScreenStatus", false)) {
+      if (flag) {
+        Logg.d("서비스 실행")
+        LockScreen.active()
+      } else {
+        Logg.d("서비스 중지")
+        LockScreen.deActivate()
+      }
+    } else {
+      Logg.d("LockScreen 설정 안함.")
+    }
+  }
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     locationBroadcastReceiver = LocationBroadcastReceiver(this)
-  }
+    LocalBroadcastManager.getInstance(this)
+      .registerReceiver(locationBroadcastReceiver, IntentFilter("custom-event-name"))
 
+    recordViewModel =
+      RecordViewModel(this.application)
+    recordViewModel.deleteAll()
+  }
+  override fun onDestroy() {
+    super.onDestroy()
+    LocalBroadcastManager.getInstance(this).unregisterReceiver(locationBroadcastReceiver)
+  }
   override fun onPause() {
     super.onPause()
-    LocalBroadcastManager.getInstance(this).unregisterReceiver(locationBroadcastReceiver)
   }
 
   override fun onResume() {
     super.onResume()
-    LocalBroadcastManager.getInstance(this)
-      .registerReceiver(locationBroadcastReceiver, IntentFilter("custom-event-name"))
+
   }
 
   lateinit var noticePopup: ChoicePopup
@@ -226,7 +285,7 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
           getString(R.string.yes), getString(R.string.no),
           View.OnClickListener {
             noticePopup.dismiss()
-            // yes 버튼 눌렀을 때 해당 액티비티 재시작.
+            lockScreen(false)
             finish()
           },
           View.OnClickListener {
