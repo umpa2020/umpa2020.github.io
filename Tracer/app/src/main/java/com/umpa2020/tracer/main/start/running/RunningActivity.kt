@@ -10,6 +10,7 @@ import android.widget.Toast
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.MarkerOptions
 import com.umpa2020.tracer.R
+import com.umpa2020.tracer.roomDatabase.viewModel.RecordViewModel
 import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.constant.UserState
@@ -23,7 +24,7 @@ import kotlinx.android.synthetic.main.activity_running.*
 
 
 class RunningActivity : BaseRunningActivity() {
-
+  private lateinit var recordViewModel: RecordViewModel
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT

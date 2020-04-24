@@ -14,10 +14,10 @@
 
   <Chronometer
     android:id="@+id/lockScreenChronometer"
-    style="@style/blackMediumText18"
+    style="@style/whiteText"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:textSize="90sp"
+    android:textSize="100sp"
     android:gravity="center"
     app:layout_constraintTop_toTopOf="parent"
     app:layout_constraintBottom_toTopOf="@id/lockScreenInfoLayout"/>
@@ -40,20 +40,20 @@
 
       <TextView
         android:id="@+id/lockscreenDistanceTextView"
-        style="@style/blackMediumText18"
+        style="@style/whiteText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="0.00"
-        android:textSize="50sp" />
+        android:textSize="60sp" />
 
       <TextView
-        style="@style/blackMediumText18"
+        style="@style/whiteText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/km"
         android:gravity="center"
-        android:textSize="20sp" />
+        android:textSize="30sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -64,20 +64,20 @@
 
       <TextView
         android:id="@+id/lockscreenSpeedTextView"
-        style="@style/blackMediumText18"
+        style="@style/whiteText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="0.0"
-        android:textSize="50sp" />
+        android:textSize="60sp" />
 
       <TextView
-        style="@style/blackMediumText18"
+        style="@style/whiteText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/km_h"
         android:gravity="center"
-        android:textSize="20sp" />
+        android:textSize="30sp" />
     </LinearLayout>
   </LinearLayout>
 
@@ -96,7 +96,7 @@
     android:layout_height="wrap_content"
     android:text="@string/unlock"
     android:textSize="20sp"
-    style="@style/blackMediumText18"
+    style="@style/whiteText"
     android:gravity="center"
     app:layout_constraintTop_toBottomOf="@+id/scrollImageView"
     app:layout_constraintBottom_toBottomOf="parent"/>

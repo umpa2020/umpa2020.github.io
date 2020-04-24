@@ -53,5 +53,6 @@ class Constants {
     const val MIN_CLICK_INTERVAL: Long = 600
     var mLastClickTime: Long = 0
 
+    var testId = 0
   }
 }
