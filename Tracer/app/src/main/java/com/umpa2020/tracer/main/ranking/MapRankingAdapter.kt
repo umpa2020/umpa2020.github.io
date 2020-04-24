@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.umpa2020.tracer.R
+import com.umpa2020.tracer.constant.Constants.Companion.TIMESTAMP_LENGTH
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.extensions.prettyDistance
 import com.umpa2020.tracer.network.FBLikesRepository
@@ -35,7 +36,7 @@ class MapRankingAdapter(
     val ranking = position + 1
 
 
-    val cutted = infoData.mapTitle!!.subSequence(0, infoData.mapTitle!!.length - 13)
+    val cutted = infoData.mapTitle!!.subSequence(0, infoData.mapTitle!!.length - TIMESTAMP_LENGTH)
 
     //데이터 바인딩
     holder.rank.text = ranking.toString()
@@ -96,7 +97,7 @@ class MapRankingAdapter(
 
             }
             R.drawable.ic_favorite_border_black_24dp -> {
-              FBLikesRepository().setLikes(infoData.mapTitle!!, likes)
+              FBLikesRepository().updateLikes(infoData.mapTitle!!, likes)
               infoDatas[position].myLiked = true
               infoDatas[position].likes = ++likes
               holder.modeIcon.setImageResource(R.drawable.ic_favorite_red_24dp)
@@ -104,7 +105,7 @@ class MapRankingAdapter(
               holder.modeNo.text = likes.toString()
             }
             R.drawable.ic_favorite_red_24dp -> {
-              FBLikesRepository().setminusLikes(infoData.mapTitle!!, likes)
+              FBLikesRepository().updateNotLikes(infoData.mapTitle!!, likes)
               infoDatas[position].myLiked = false
               infoDatas[position].likes = --likes
               holder.modeIcon.setImageResource(R.drawable.ic_favorite_border_black_24dp)
@@ -152,7 +153,5 @@ class MapRankingAdapter(
     var modeNo = view.rankingFragmentModeTextView
     var modeIcon = view.rankingFragmentModeImageView
   }
-
-
 }
 

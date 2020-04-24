@@ -128,7 +128,7 @@ class LocationBackgroundService : IntentService("LocationBackgroundService"), Lo
       .setContentTitle(getString(R.string.gps_activation))
       //  .setContentText("Background location service is getting location...")
       .setContentIntent(pendingIntent)
-      .setSmallIcon(R.mipmap.ic_launcher_tracer)
+      .setSmallIcon(R.mipmap.ic_launcher_tracer_final)
       .setTicker("Ticker text")
       .build()
   }

@@ -41,7 +41,7 @@ class ProfileRecordActivity : AppCompatActivity() {
         } else if (!profileRecyclerRecord.canScrollVertically(1)) {
           // 리사이클러뷰가 맨 아래로 이동했을 경우
           if (!isLoding) {
-            userActivityRepo.getUserMakingActivity(activityListener, 15)
+            userActivityRepo.listUserMakingActivity(activityListener, 15)
           }
           isLoding = true
         }
@@ -55,7 +55,7 @@ class ProfileRecordActivity : AppCompatActivity() {
     if (limit == 0L) limit = 15L
     else rootActivityDatas.clear()
 
-    userActivityRepo.getUserMakingActivityFirst(activityListener, limit)
+    userActivityRepo.listUserMakingActivityFirst(activityListener, limit)
     super.onResume()
   }
 
@@ -73,7 +73,6 @@ class ProfileRecordActivity : AppCompatActivity() {
           profileRecyclerRecord.layoutManager = LinearLayoutManager(activity)
           profileRecyclerActivityisEmpty.visibility = View.GONE
         } else {
-          Logg.d("ssmm11 else 문에서 size = $rootActivityDatas")
           profileRecyclerRecord.adapter!!.notifyDataSetChanged()
         }
         isLoding = false

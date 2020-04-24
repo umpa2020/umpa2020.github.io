@@ -18,7 +18,6 @@ import com.umpa2020.tracer.constant.Constants.Companion.MAX_SEEKERBAR
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.network.FBRankingRepository
 import com.umpa2020.tracer.network.RankingListener
-import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.UserInfo
@@ -59,7 +58,7 @@ class RankingFragment : Fragment(), OnSingleClickListener {
           if (requireView().tuneRadioBtnExecute.isChecked) {
             requireView().rankingfiltermode.text = getString(R.string.execute)
             if (!isLoding) {
-              rankingRepo.getFilterRange(
+              rankingRepo.listFilterRange(
                 UserInfo.rankingLatLng!!,
                 tuneDistance,
                 "execute",
@@ -69,7 +68,7 @@ class RankingFragment : Fragment(), OnSingleClickListener {
           } else {
             requireView().rankingfiltermode.text = getString(R.string.likes)
             if (!isLoding) {
-              rankingRepo.getFilterRange(
+              rankingRepo.listFilterRange(
                 UserInfo.rankingLatLng!!,
                 tuneDistance,
                 "likes",
@@ -139,7 +138,7 @@ class RankingFragment : Fragment(), OnSingleClickListener {
           if (requireView().tuneRadioBtnExecute.isChecked) {
             requireView().rankingfiltermode.text = getString(R.string.execute)
 
-            rankingRepo.getRanking(
+            rankingRepo.listRanking(
               UserInfo.rankingLatLng!!,
               tuneDistance,
               "execute",
@@ -148,7 +147,7 @@ class RankingFragment : Fragment(), OnSingleClickListener {
           } else {
             requireView().rankingfiltermode.text = getString(R.string.likes)
 
-            rankingRepo.getRanking(
+            rankingRepo.listRanking(
               UserInfo.rankingLatLng!!,
               tuneDistance,
               "likes",
@@ -177,7 +176,7 @@ class RankingFragment : Fragment(), OnSingleClickListener {
         if (requireView().tuneRadioBtnExecute.isChecked) {
           requireView().rankingfiltermode.text = getString(R.string.execute)
 
-          rankingRepo.getRanking(
+          rankingRepo.listRanking(
             UserInfo.rankingLatLng!!,
             tuneDistance,
             "execute",
@@ -186,7 +185,7 @@ class RankingFragment : Fragment(), OnSingleClickListener {
         } else {
           requireView().rankingfiltermode.text = getString(R.string.likes)
 
-          rankingRepo.getRanking(
+          rankingRepo.listRanking(
             UserInfo.rankingLatLng!!,
             tuneDistance,
             "likes",

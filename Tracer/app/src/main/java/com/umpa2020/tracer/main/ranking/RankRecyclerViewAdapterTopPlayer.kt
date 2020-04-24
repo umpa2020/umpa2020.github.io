@@ -16,7 +16,8 @@ import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.recycler_rankfragment_topplayer_item.view.*
 import java.util.*
 
-class RankRecyclerViewAdapterTopPlayer(val mydata: ArrayList<RankingData>, val mapTitle: String) : RecyclerView.Adapter<RankRecyclerViewAdapterTopPlayer.myViewHolder>() {
+class RankRecyclerViewAdapterTopPlayer(val mydata: ArrayList<RankingData>, val mapTitle: String) :
+  RecyclerView.Adapter<RankRecyclerViewAdapterTopPlayer.myViewHolder>() {
   var context: Context? = null
 
   //생성된 뷰 홀더에 데이터를 바인딩 해줌.
@@ -43,7 +44,7 @@ class RankRecyclerViewAdapterTopPlayer(val mydata: ArrayList<RankingData>, val m
       holder.rank.setBackgroundResource(R.drawable.ic_4)
 
     //클릭하면 맵 상세보기 페이지로 이동
-    holder.itemView.setOnClickListener(object : OnSingleClickListener{
+    holder.itemView.setOnClickListener(object : OnSingleClickListener {
       override fun onSingleClick(v: View?) {
         //TODO 상대방 프로필 넘어가게 해야함
         val nextIntent = Intent(context, OtherProfileActivity::class.java)
@@ -57,7 +58,8 @@ class RankRecyclerViewAdapterTopPlayer(val mydata: ArrayList<RankingData>, val m
 
   //뷰 홀더 생성
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): myViewHolder {
-    val view = LayoutInflater.from(parent.context).inflate(R.layout.recycler_rankfragment_topplayer_item, parent, false)
+    val view = LayoutInflater.from(parent.context)
+      .inflate(R.layout.recycler_rankfragment_topplayer_item, parent, false)
     context = parent.context
     Logg.d("onCreateViewHolder호출")
     return myViewHolder(view) //view 객체는 한개의 리사이클러뷰가 디자인 되어 있는 레이아웃을 의미
@@ -76,7 +78,5 @@ class RankRecyclerViewAdapterTopPlayer(val mydata: ArrayList<RankingData>, val m
     var nickname = view.rankRecyclerItemClickChallengerNicknameTextView
     var time = view.rankRecyclerItemClickTimeTextView
   }
-
-
 }
 

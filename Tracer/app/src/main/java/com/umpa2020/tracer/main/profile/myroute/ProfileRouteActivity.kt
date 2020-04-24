@@ -78,10 +78,12 @@ class ProfileRouteActivity : AppCompatActivity() {
    */
 
   private val profileRouteListener = object : ProfileRouteListener {
-    override fun getProfileRoute(infoDatas: ArrayList<InfoData>) {
+    override fun listProfileRoute(infoDatas: ArrayList<InfoData>) {
+
+      Logg.d("ssmm11 infoData size = ${infoDatas.size}")
       rootInfoDatas.addAll(infoDatas)
 
-      if (infoDatas.isEmpty()) {
+      if (rootInfoDatas.isEmpty()) {
         profileRecyclerRouteisEmpty.visibility = View.VISIBLE
         progressbar.dismiss()
       } else {

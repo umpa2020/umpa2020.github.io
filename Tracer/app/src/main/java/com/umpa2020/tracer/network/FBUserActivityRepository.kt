@@ -4,6 +4,9 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.umpa2020.tracer.dataClass.ActivityData
 import com.umpa2020.tracer.util.Logg
+import com.umpa2020.tracer.network.BaseFB.Companion.UID
+import com.umpa2020.tracer.network.BaseFB.Companion.USER_ACTIVITY
+import com.umpa2020.tracer.network.BaseFB.Companion.USER_INFO
 import com.umpa2020.tracer.util.UserInfo
 
 /**
@@ -22,15 +25,15 @@ class FBUserActivityRepository {
 
 
 
-  fun setUserHistory(activityData: ActivityData) {
-    db.collection("userinfo").whereEqualTo("UID", UserInfo.autoLoginKey)
+  fun createUserHistory(activityData: ActivityData) {
+    db.collection(USER_INFO).whereEqualTo(UID, UserInfo.autoLoginKey)
       .get()
       .addOnSuccessListener {
-        it.documents.last().reference.collection("user activity").add(activityData)
+        it.documents.last().reference.collection(USER_ACTIVITY).add(activityData)
       }
   }
 
-  fun getUserMakingActivityFirst(activityListener: ActivityListener, limit: Long) {
+  fun listUserMakingActivityFirst(activityListener: ActivityListener, limit: Long) {
 
     Logg.d("ssmm11 limit = $limit")
     db.collection("userinfo").whereEqualTo("UID", UserInfo.autoLoginKey)
@@ -51,12 +54,8 @@ class FBUserActivityRepository {
       }
   }
 
-  fun getUserMakingActivity(activityListener: ActivityListener, limit: Long) {
+  fun listUserMakingActivity(activityListener: ActivityListener, limit: Long) {
     val activityDatas = arrayListOf<ActivityData>()
-
-    Logg.d("ssmm11 limit = $limit")
-    Logg.d("ssmm11 global = $globalStartAfter")
-
 
     db.collection("userinfo").whereEqualTo("UID", UserInfo.autoLoginKey)
       .get()
@@ -71,7 +70,6 @@ class FBUserActivityRepository {
               activityDatas.add(activityData!!)
               globalStartAfter = result
             }
-
             activityListener.activityList(activityDatas)
           }
       }
