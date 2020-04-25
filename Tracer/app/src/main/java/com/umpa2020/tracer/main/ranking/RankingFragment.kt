@@ -40,9 +40,6 @@ class RankingFragment : Fragment(), OnSingleClickListener {
   var isLoding = false
   var limit = 0L
 
-
-  //TODO : 예외 처리 (필터눌렀을때 rootinfodatas 초기화 하고 notify)
-
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
   ): View? {
@@ -129,11 +126,12 @@ class RankingFragment : Fragment(), OnSingleClickListener {
       }
 
       R.id.applyButton -> { //적용 버튼 누를때
-        val tuneDistance = distance
+        tuneDistance = distance
         progressbar.show()
+
         rootInfoDatas.clear()
-        rank_recycler_map.adapter!!.notifyDataSetChanged()
         rankingRepo = FBRankingRepository(rankingListener)
+
 
         if (UserInfo.rankingLatLng != null) {
           //실행순 버튼에 체크가 되어 있을 경우
@@ -191,7 +189,7 @@ class RankingFragment : Fragment(), OnSingleClickListener {
             UserInfo.rankingLatLng!!,
             tuneDistance,
             "likes",
-            15
+            limit
           )
         }
       }
