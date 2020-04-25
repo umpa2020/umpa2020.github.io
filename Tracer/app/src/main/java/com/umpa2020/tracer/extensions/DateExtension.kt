@@ -3,7 +3,6 @@ package com.umpa2020.tracer.extensions
 import java.text.SimpleDateFormat
 import java.util.*
 
-const val ISO8601 = "yyyy-MM-dd'T'HH:mm:ssZ"
 const val YEAR_MONTH_DAY_KR = "yyyy년 MM월 dd일"
 const val MONTH_DAY_KR = "MM월 dd일"
 const val YEAR_MONTH_DAY = "MMM dd, yyyy"
@@ -28,7 +27,10 @@ fun Long.format(pattern: Int): String {
   val locale = Locale.getDefault()
   val type = when (pattern) {
     Y_M_D -> {
-      YEAR_MONTH_DAY_KR
+      when(locale){
+        Locale.KOREA-> YEAR_MONTH_DAY_KR
+        else-> YEAR_MONTH_DAY
+      }
     }
     //올해면 월, 일 만
     M_D -> {
@@ -49,9 +51,8 @@ fun Long.format(pattern: Int): String {
       }
     }
     m_s -> mm_ss
-    else -> {
-      YEAR_MONTH_DAY
-    }
+    else -> YEAR_MONTH_DAY
+
   }
   return this.format(type)
 }

@@ -18,6 +18,7 @@ import com.umpa2020.tracer.dataClass.ChallengeData
 import com.umpa2020.tracer.extensions.M_D
 import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.extensions.mm_ss
+import com.umpa2020.tracer.util.Logg
 import kotlinx.android.synthetic.main.fragment_challenge.*
 import kotlinx.android.synthetic.main.fragment_challenge.view.*
 import java.text.SimpleDateFormat
@@ -34,12 +35,13 @@ class ChallengeFragment : Fragment() {
     val view: View = inflater.inflate(R.layout.fragment_challenge, container, false)
     val now = Calendar.getInstance()
 
-    adChallengeList.add(AdChallengeData("test", R.drawable.first_ad_image_isics))
-    adChallengeList.add(AdChallengeData("test2", R.drawable.second_ad_image_spartan))
-    adChallengeList.add(AdChallengeData("test2", R.drawable.third_image_korea50k))
-    adChallengeList.add(AdChallengeData("test2", R.drawable.ic_start_point))
+    adChallengeList.add(AdChallengeData(R.drawable.first_ad_image_isics,"asd"))
+    adChallengeList.add(AdChallengeData( R.drawable.second_ad_image_spartan,"zxc"))
+    adChallengeList.add(AdChallengeData( R.drawable.third_image_korea50k,"qwe"))
+    adChallengeList.add(AdChallengeData( R.drawable.ic_start_point,"ert"))
     view.adChallengeScrollViewPager.adapter = AdChallengePageAdapter(adChallengeList, requireContext())
     view.adChallengeScrollViewPager.startAutoScroll()
+
     //view.adChallengeCountTextView.text="${view.adChallengeScrollViewPager.currentItem}/${adChallengeList.size}"
 
     val a=view.adChallengeScrollViewPager.currentItem

@@ -13,7 +13,9 @@ class ChallengeDataSettingActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_challenge_data_setting)
-
+    intent.getStringExtra("challengeId")?.let {
+      challenge1.hint=it
+    }
 
     val dt = Date()
     val timeStamp = dt.time
