@@ -190,4 +190,6 @@
   <string name="select_people">Virtual Racer Selection</string>
   <string name="max_five">Up to 5 people can be chosen</string>
 
+  
+ <string name="challenge">Challenge</string>
 </resources>
