@@ -54,6 +54,15 @@ val Double.prettyDistance: String
 
 val  Double.prettySpeed : String
   get() =  String.format("%.1f", this) + "km/h"
+val Double.lockDistance: String
+  get() = if (this < 1000) {
+    String.format("%.0f", this)
+  } else {
+    String.format("%.2f", this / 1000)
+  }
+
+val Double.lockSpeed: String
+  get() = String.format("%.1f", this)
 
 
 fun Double.prettyDistance(): String {

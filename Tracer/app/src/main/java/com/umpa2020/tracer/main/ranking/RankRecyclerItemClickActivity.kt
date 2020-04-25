@@ -92,8 +92,6 @@ class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener
    */
 
   private val likedMapListener = object : LikedMapListener {
-    override fun likedList(likedMaps: List<LikedMapData>) {
-    }
 
     override fun liked(liked: Boolean, getlikes: Int) {
       rankRecyclerHeartCount.text = getlikes.toString()

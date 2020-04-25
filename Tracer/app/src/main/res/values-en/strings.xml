@@ -83,6 +83,7 @@
   <string name="yes1">Yes</string>
   <string name="no1">No</string>
   <string name="noroute">There are currently no saved routes.</string>
+  <string name="no_activity">There ar currently no activities.</string>
   <string name="profile_information">My Profile</string>
   <string name="profile_image_change">Image Change</string>
   <string name="email_">EMAIL</string>
@@ -117,7 +118,14 @@
   <string name="noticeSetting">Notification Settings</string>
   <string name="noticeSound">Receive notifications by sound</string>
   <string name="noticeCheck">Notification</string>
+  <string name="lockScreenSetting">LockScreen Setting</string>
+  <string name="lockScreenBody">Record measurement is possible when setting the lock screen</string>
+  <string name="lockScreenCheck">Lock Screen</string>
 
+  <!-- LcokScreen -->
+  <string name="km">Km</string>
+  <string name="km_h">Km/h</string>
+  <string name="unlock">Unlock</string>
   <!-- TTS -->
   <string name="pushthestartbutton">push the start button</string>
   <string name="startRunning">"Let's start running"</string>
@@ -176,4 +184,12 @@
   <string name="max_speed">Max Speed</string>
   <string name="avg_speed">Average Speed</string>
 
+  <!--activity_racing_select_people-->
+  <string name="selection_complete">Complete</string>
+  <string name="max_five_select">Choose up to 5 virtual racer</string>
+  <string name="select_people">Virtual Racer Selection</string>
+  <string name="max_five">Up to 5 people can be chosen</string>
+
+  
+ <string name="challenge">Challenge</string>
 </resources>
