@@ -2,15 +2,19 @@ package com.umpa2020.tracer.main.challenge
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.ChallengeData
+<<<<<<< HEAD
 import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.network.FBChallengeImageRepository
+=======
+import com.umpa2020.tracer.util.OnSingleClickListener
+>>>>>>> fdff82f5076d689fdfd5b410394f0cdcb570fe94
 import kotlinx.android.synthetic.main.recycler_challengefragment_item.view.*
 
 class ChallengeRecyclerViewAdapter(var challenge: MutableList<ChallengeData>) :
@@ -22,13 +26,20 @@ class ChallengeRecyclerViewAdapter(var challenge: MutableList<ChallengeData>) :
 
   @SuppressLint("SetTextI18n")
   override fun onBindViewHolder(holder: ItemHolder, position: Int) {
+    val singleItem1 = challenge[position]
 
-    val challengeData: ChallengeData = challenge.get(position)
+    FBChallengeImageRepository().getChallengeImage(holder.icons, singleItem1.imagePath!!)
+    holder.name.text = singleItem1.name
+    holder.date.text = singleItem1.date!!.format()
+    holder.locale.text = "${singleItem1.locale!![0]} ${singleItem1.locale!![1]}"
 
-    FBChallengeImageRepository().getChallengeImage(holder.icons, challengeData.imagePath!!)
-    holder.name.text = challengeData.name
-    holder.date.text = challengeData.date!!.format()
-    holder.locale.text = "${challengeData.locale!![0]} ${challengeData.locale!![1]}"
+    holder.itemView.setOnClickListener(object : OnSingleClickListener {
+      override fun onSingleClick(v: View?) {
+        val nextIntent = Intent(context, ChallengeRecycleritemClickActivity::class.java)
+        nextIntent.putExtra("challengeId", singleItem1.id)
+        context!!.startActivity(nextIntent)
+      }
+    })
 
   }
 

@@ -8,7 +8,8 @@
   app:cardElevation="5dp"
   app:cardPreventCornerOverlap="true"
   app:cardUseCompatPadding="true"
-  android:orientation="vertical">
+  android:orientation="vertical"
+  android:id="@+id/challenge_cardview">
 
 
 

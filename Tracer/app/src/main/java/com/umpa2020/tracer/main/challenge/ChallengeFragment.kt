@@ -7,8 +7,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.size
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.umpa2020.tracer.App
@@ -65,6 +63,8 @@ class ChallengeFragment : Fragment() {
       adChallengeCountTextView.text =
         "${(view.adChallengeScrollViewPager.currentItem - a) % adChallengeList.size + 1}/${adChallengeList.size}"
     }
+
+
 
     view.btn_challenge_from.setOnClickListener {
       val datePicker = DatePickerDialog(
