@@ -5,8 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.size
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.umpa2020.tracer.R
@@ -50,6 +48,8 @@ class ChallengeFragment : Fragment() {
     challengeDatas.add(challengeData)
     challengeData = ChallengeData(R.drawable.button_background,"화천 DMZ 랠리","2019. 06. 21","강원")
     challengeDatas.add(challengeData)
+
+
 
     view.btn_challenge_from.setOnClickListener {
      val datePicker = DatePickerDialog(
