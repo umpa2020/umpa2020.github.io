@@ -23,11 +23,11 @@ import com.umpa2020.tracer.extensions.MM_SS
 import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.extensions.gpxToClass
 import com.umpa2020.tracer.main.start.racing.RacingActivity
+import com.umpa2020.tracer.main.start.racing.RacingSelectPeopleActivity
 import com.umpa2020.tracer.map.TraceMap
 import com.umpa2020.tracer.network.FBProfileRepository
 import com.umpa2020.tracer.util.Chart
 import com.umpa2020.tracer.util.ChoicePopup
-import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.activity_ranking_map_detail.*
 import java.io.File
@@ -80,7 +80,7 @@ class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener, OnM
             val infoData = document.toObject(InfoData::class.java)
 
             val storage = FirebaseStorage.getInstance()
-            val routeRef = storage.reference.child("mapRoute").child(mapTitle)
+            val routeRef = storage.reference.child(infoData.routeGPXPath.toString())
             val localFile = File.createTempFile("routeGpx", "xml")
             routeRef.getFile(Uri.fromFile(localFile)).addOnSuccessListener {
               routeGPX = localFile.path.gpxToClass()
@@ -118,9 +118,17 @@ class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener, OnM
   }
 
   override fun onSingleClick(v: View?) {
-    when (v!!.id) {
-      R.id.rankingDetailRaceButton -> { //버튼 누르면 연습용, 랭킹 기록용 선택 팝업 띄우기
-        showPopup()
+    when(v!!.id){
+      R.id.rankingDetailRaceButton->{ //버튼 누르면 연습용, 랭킹 기록용 선택 팝업 띄우기
+        //showPopup()
+
+        val intent = intent
+        //전달 받은 값으로 Title 설정
+        val mapTitle = intent.extras?.getString("MapTitle").toString()
+        val nextIntent = Intent(this, RacingSelectPeopleActivity::class.java)
+        nextIntent.putExtra("MapTitle", mapTitle)
+        nextIntent.putExtra("RouteGPX",routeGPX)
+        startActivity(nextIntent)
       }
     }
   }

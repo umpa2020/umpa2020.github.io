@@ -30,9 +30,12 @@ import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.extensions.toLatLng
 import com.umpa2020.tracer.main.start.BaseRunningActivity
 import com.umpa2020.tracer.network.FBMapRepository
+import com.umpa2020.tracer.network.FBRacingRepository
+import com.umpa2020.tracer.network.RacingListener
 import com.umpa2020.tracer.util.ChoicePopup
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.TTS
+import io.jenetics.jpx.WayPoint
 import kotlinx.android.synthetic.main.activity_ranking_recode_racing.*
 import kotlinx.coroutines.*
 import kotlin.math.roundToLong
@@ -48,14 +51,22 @@ class RacingActivity : BaseRunningActivity() {
   var track: MutableList<LatLng> = mutableListOf()
   var nextWP: Int = 1
   var nextTP: Int = 0
-  lateinit var racingGPXs: ArrayList<RouteGPX>
+  var racerGPXList:Array<RouteGPX>?=null
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
     setContentView(R.layout.activity_ranking_recode_racing)
     mapRouteGPX = intent.getParcelableExtra("RouteGPX") as RouteGPX
     mapTitle = intent.getStringExtra("mapTitle")!!
-    racingGPXs = intent.getParcelableArrayListExtra<RouteGPX>("RacingGPXs")
+    val racerList=intent.getStringArrayExtra("RacerList")
+    //TODO:: racerList로 racingGPX 가져오기 FireBase
+    Logg.d(racerList.joinToString())
+    FBRacingRepository().listRacingGPX(mapTitle,racerList,object : RacingListener{
+      override fun racingList(gpxList: Array<RouteGPX>) {
+        racerGPXList=gpxList
+        Logg.d("${racerGPXList!!.size}")
+      }
+    })
     init()
 
     // 시작 포인트로 이동
@@ -183,13 +194,26 @@ class RacingActivity : BaseRunningActivity() {
     FBMapRepository().updateExecute(mapTitle)
     // 레이싱 시작 TTS
     TTS.speech(getString(R.string.startRacing))
-    virtualRacing()
+    wpList.add(
+      WayPoint.builder()
+        .lat(currentLatLng.latitude)
+        .lon(currentLatLng.longitude)
+        .name("Start")
+        .desc("Start Description")
+        .time(System.currentTimeMillis())
+        .type(START_POINT)
+        .build())
+
+    if(!racerGPXList.isNullOrEmpty()) {
+      Logg.d("Start Virtual Racing")
+      virtualRacing()
+    }
   }
 
   @RequiresApi(Build.VERSION_CODES.O)
   private fun virtualRacing() {
     val checkPoints = arrayOf(DISTANCE_POINT, START_POINT, FINISH_POINT)
-    racingGPXs.forEachIndexed { racerNo, racingGPX ->
+    racerGPXList!!.forEachIndexed { racerNo, racingGPX ->
       GlobalScope.launch {
         val wpts = racingGPX.wptList.filter { checkPoints.contains(it.type.get()) }
         var temp_index = 1
@@ -231,7 +255,17 @@ class RacingActivity : BaseRunningActivity() {
 
   override fun stop() {
     super.stop()
-
+    wpList.add(
+      WayPoint.builder()
+        .lat(currentLatLng.latitude)
+        .lon(currentLatLng.longitude)
+        .name("Finish")
+        .desc("Finish Description")
+        .time(System.currentTimeMillis())
+        .type(FINISH_POINT)
+        .build()
+    )
+    
     // 레이싱 끝 TTS
     TTS.speech(getString(R.string.finishRacing))
 
@@ -275,6 +309,14 @@ class RacingActivity : BaseRunningActivity() {
     ) {
       traceMap.changeMarkerIcon(nextWP)
       nextWP++
+      wpList.add(WayPoint.builder()
+        .lat(currentLatLng.latitude)
+        .lon(currentLatLng.longitude)
+        .name("WayPoint")
+        .desc("wayway...")
+        .time((System.currentTimeMillis()))
+        .type(DISTANCE_POINT)
+        .build())
       if (nextWP == markerList.size) {
         stop()
       }

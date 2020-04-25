@@ -184,4 +184,11 @@
   <string name="max_speed">최고 속력</string>
   <string name="avg_speed">평균 속룍</string>
 
+  <!--activity_racing_select_people-->
+  <string name="selection_complete">선택 완료</string>
+  <string name="max_five_select">가상 레이싱 할 상대를 최대 5명 선택해주세요</string>
+  <string name="select_people">가상 레이싱 상대방 선택</string>
+  <string name="max_five">최대 5명까지만 선택 가능합니다</string>
+
+
 </resources>

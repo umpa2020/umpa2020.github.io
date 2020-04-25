@@ -81,6 +81,7 @@ class RunningActivity : BaseRunningActivity() {
         stop()
       true
     }
+    super.init()
   }
 
   var cameraZoomSize = 0.0f

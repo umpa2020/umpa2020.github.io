@@ -51,6 +51,7 @@
       android:showOnLockScreen="true"
       android:theme="@style/lockscreenView"/>
     <activity android:name=".main.start.racing.AllRanking" />
+    <activity android:name=".main.start.racing.RacingSelectPeopleActivity"></activity>
     <activity android:name=".main.profile.myrecord.ProfileRecordActivity" />
     <activity android:name=".main.profile.settting.MyInformationActivity" />
     <activity android:name=".main.profile.settting.AppSettingActivity" />
@@ -64,7 +65,7 @@
     <activity android:name=".main.start.racing.RacingFinishActivity" />
     <activity android:name=".main.start.racing.RacingActivity" />
     <activity android:name=".login.join.GenderSelectActivity" />
-    <activity android:name=".login.join.SignUpActivity"/>
+    <activity android:name=".login.join.SignUpActivity" />
     <activity android:name=".login.splash.SplashActivity">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
