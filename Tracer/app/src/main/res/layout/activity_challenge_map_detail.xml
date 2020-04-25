@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@color/white"
+  tools:context=".main.ranking.RankingMapDetailActivity">
+
+  <Toolbar
+    android:id="@+id/rankingDetailToolBar"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:layout_alignParentTop="true"
+    android:background="@color/white"
+    android:elevation="1dp">
+
+    <TextView
+      style="@style/appBarText"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginRight="12dp"
+      android:gravity="center"
+      android:text="대회 상세정보"/>
+  </Toolbar>
+
+  <ScrollView
+    android:id="@+id/rankingDetailScrollView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_below="@+id/rankingDetailToolBar"
+    android:paddingBottom="?actionBarSize">
+
+    <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent">
+
+      <LinearLayout
+        android:id="@+id/rankingDetailTitleLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:orientation="horizontal">
+
+        <ImageView
+          android:src="@mipmap/ic_launcher_tracer_final"
+          android:layout_width="match_parent"
+          android:layout_height="150dp"
+          android:scaleType="fitXY"
+          />
+
+      </LinearLayout>
+
+      <TextView
+        android:id="@+id/rankingDetailMapDetailItem0"
+        style="@style/ListTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rankingDetailTitleLinearLayout"
+        android:layout_marginTop="10dp"
+        android:background="@color/lightgray"
+        android:paddingLeft="20dp"
+        android:text="대회 이름"
+        android:textColor="@android:color/black" />
+
+
+      <TextView
+        android:id="@+id/rankingDetailMapTitle"
+        style="@style/ListTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rankingDetailMapDetailItem0"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:textColor="@android:color/black" />
+
+      <TextView
+        android:id="@+id/rankingDetailMapDetailItem"
+        style="@style/ListTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rankingDetailMapTitle"
+        android:background="@color/lightgray"
+        android:paddingLeft="20dp"
+        android:text="개최일"
+        android:textColor="@android:color/black" />
+
+      <TextView
+        android:id="@+id/rankingDetailMapDetail"
+        style="@style/ListDetail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rankingDetailMapDetailItem"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp" />
+
+      <TextView
+        android:id="@+id/rankingDetailMapDetailItem1"
+        style="@style/ListTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rankingDetailMapDetail"
+        android:background="@color/lightgray"
+        android:paddingLeft="20dp"
+        android:text="접수 기간"
+        android:textColor="@android:color/black" />
+
+      <TextView
+        android:id="@+id/rankingDetailInfoLinearLayout"
+        style="@style/ListDetail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rankingDetailMapDetailItem1"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp" />
+
+      <TextView
+        android:id="@+id/challenge_address"
+        style="@style/ListTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rankingDetailInfoLinearLayout"
+        android:background="@color/lightgray"
+        android:paddingLeft="20dp"
+        android:text="주소"
+        android:textColor="@android:color/black" />
+
+      <TextView
+        android:id="@+id/rankingDetailInfoLinearLayout2"
+        style="@style/ListDetail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/challenge_address"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp" />
+
+      <TextView
+        android:id="@+id/challenge_address11"
+        style="@style/ListTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rankingDetailInfoLinearLayout2"
+        android:background="@color/lightgray"
+        android:paddingLeft="20dp"
+        android:text="주관"
+        android:textColor="@android:color/black" />
+
+      <TextView
+        android:id="@+id/rankingDetailInfoLinearLayout211"
+        style="@style/ListDetail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/challenge_address11"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp" />
+
+      <TextView
+        android:id="@+id/challenge_address11111"
+        style="@style/ListTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rankingDetailInfoLinearLayout211"
+        android:background="@color/lightgray"
+        android:paddingLeft="20dp"
+        android:text="대회 정보"
+        android:textColor="@android:color/black" />
+
+      <TextView
+        android:id="@+id/rankingDetailInfoLinearLayout211111"
+        style="@style/ListDetail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/challenge_address11111"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp" />
+
+
+
+
+<!--      <fragment-->
+<!--        android:id="@+id/rankingDetailMapViewer"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="250dp"-->
+<!--        android:layout_below="@+id/rankingDetailMapDetailItem2"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        android:layout_marginBottom="10dp"-->
+<!--        class="com.umpa2020.tracer.customUI.WorkaroundMapFragment"-->
+<!--        />-->
+
+<!--      <TextView-->
+<!--        android:id="@+id/rankingDetailMapDetailItem3"-->
+<!--        style="@style/ListTitle"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_below="@+id/rankingDetailMapViewer"-->
+<!--        android:background="@color/lightgray"-->
+<!--        android:paddingLeft="20dp"-->
+<!--        android:text="@string/altitude_sppedchart"-->
+<!--        android:textColor="@android:color/black" />-->
+
+<!--      <com.github.mikephil.charting.charts.LineChart-->
+<!--        android:id="@+id/rankingDetailChart"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="200dp"-->
+<!--        android:layout_below="@+id/rankingDetailMapDetailItem3"-->
+<!--        android:layout_marginLeft="20dp"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        android:layout_marginRight="20dp"-->
+<!--        android:layout_marginBottom="50dp"></com.github.mikephil.charting.charts.LineChart>-->
+
+
+    </RelativeLayout>
+  </ScrollView>
+
+  <Button
+    android:id="@+id/rankingDetailRaceButton"
+    style="@style/buttonText"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp"
+    android:layout_marginBottom="10dp"
+    android:background="@drawable/button_background"
+    android:text="@string/matchstart" />
+
+</RelativeLayout>

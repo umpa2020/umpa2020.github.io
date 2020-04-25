@@ -25,7 +25,7 @@ class AdChallengePageAdapter(
     view.adChallengeImgView.setImageDrawable(context.getDrawable(adChallengeList[position].img))
     view.setOnClickListener {
       Logg.d(position.toString())
-        val intent = Intent(context,ChallengeDataSettingActivity::class.java)
+        val intent = Intent(context,ChallengeRecycleritemClickActivity::class.java)
         intent.putExtra("challengeId",adChallengeList[position].challengeId)
         context.startActivity(intent)
     }
