@@ -31,6 +31,16 @@
   </PreferenceCategory>
 
   <PreferenceCategory
+    android:title="@string/lockScreenSetting">
+    <SwitchPreference
+      android:defaultValue="true"
+      android:key="LockScreenStatus"
+      android:title="@string/lockScreenCheck"
+      android:summary="@string/lockScreenBody"
+      android:switchTextOff="OFF"
+      android:switchTextOn="ON" />
+  </PreferenceCategory>
+  <PreferenceCategory
     android:title="@string/noticeSetting">
     <SwitchPreference
       android:defaultValue="true"

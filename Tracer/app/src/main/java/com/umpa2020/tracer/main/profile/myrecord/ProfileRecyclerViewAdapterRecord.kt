@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.umpa2020.tracer.R
+import com.umpa2020.tracer.constant.Constants.Companion.TIMESTAMP_LENGTH
 import com.umpa2020.tracer.dataClass.ActivityData
 import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.main.ranking.RankRecyclerItemClickActivity
@@ -16,7 +17,7 @@ import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.recycler_profile_user_record_item.view.*
 import java.util.*
 
-class ProfileRecyclerViewAdapterRecord(private var datas: ArrayList<ActivityData>) :
+class ProfileRecyclerViewAdapterRecord(val datas: ArrayList<ActivityData>) :
   RecyclerView.Adapter<ProfileRecyclerViewAdapterRecord.MyViewHolder>() {
   var context: Context? = null
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -30,15 +31,14 @@ class ProfileRecyclerViewAdapterRecord(private var datas: ArrayList<ActivityData
     return datas.size
   }
 
-  @SuppressLint("SetTextI18n")
   override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
     val singleItem1 = datas[position]
 
-    val cutted = singleItem1.mapTitle!!.subSequence(0, singleItem1.mapTitle.length-13) as String
+    val cutted = singleItem1.mapTitle!!.subSequence(0, singleItem1.mapTitle.length- TIMESTAMP_LENGTH) as String
     val time = singleItem1.time!!.toLong().format(Locale.getDefault())
 
     //데이터 바인딩
-    FBMapImageRepository().getMapImage(holder.mapImageView, singleItem1.mapTitle)
+    FBMapImageRepository().getMapImage(holder.mapImageView, singleItem1.mapTitle.toString())
 
     when (singleItem1.mode) {
       "racing go the distance" -> {

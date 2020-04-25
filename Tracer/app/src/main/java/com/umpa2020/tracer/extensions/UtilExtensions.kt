@@ -16,19 +16,19 @@ fun String.show() {
 }
 
 fun Int.toRank(): String {
-  when (this % 10) {
-    1 -> return "${this}st"
-    2 -> return "${this}nd"
-    3 -> return "${this}rd"
-    else -> return "${this}th"
+  return when (this % 10) {
+    1 -> "${this}st"
+    2 -> "${this}nd"
+    3 -> "${this}rd"
+    else -> "${this}th"
   }
 }
 
 fun Int.makingIcon(): BitmapDescriptor {
   // 기본 마커 활용해서
   val circleDrawable = App.instance.context().getDrawable(this)
-  var canvas = Canvas()
-  var bitmap = Bitmap.createBitmap(
+  val canvas = Canvas()
+  val bitmap = Bitmap.createBitmap(
     circleDrawable!!.intrinsicWidth,
     circleDrawable.intrinsicHeight,
     Bitmap.Config.ARGB_8888
@@ -51,6 +51,16 @@ val Double.prettyDistance: String
   } else {
     String.format("%.2f", this / 1000) + " km"
   }
+
+val Double.lockDistance: String
+  get() = if (this < 1000) {
+    String.format("%.0f", this)
+  } else {
+    String.format("%.2f", this / 1000)
+  }
+
+val Double.lockSpeed: String
+  get() = String.format("%.1f", this)
 
 
 //TODO : 아래 코드 사용하는 부분 위 포멧으로 변경

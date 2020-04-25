@@ -25,6 +25,21 @@ class SettingPreferenceFragment : PreferenceFragmentCompat() {
     setPreferencesFromResource(R.xml.fragment_setting_preference, rootKey)
     mAuth = FirebaseAuth.getInstance() // FirebaseAuth를 사용하기 위해서 인스턴스를 꼭 받아오기
 
+
+    // TTS 스위치 버튼
+    val switchTTS: SwitchPreference? = findPreference("ttsNotificationSetting") as SwitchPreference?
+
+    // Switch preference change listener
+    switchTTS?.setOnPreferenceChangeListener{ preference, newValue ->
+      if (newValue == true){
+      }else{
+      }
+
+      true
+    }
+
+    // 잠금 화면 스위치 버튼
+
     // 알람 스위치 버튼
     val switchNotification: SwitchPreference? = findPreference("notificationSetting") as SwitchPreference?
 
@@ -39,8 +54,6 @@ class SettingPreferenceFragment : PreferenceFragmentCompat() {
       true
     }
   }
-
-
 
   /**
    * preference 클릭할 때
@@ -58,7 +71,6 @@ class SettingPreferenceFragment : PreferenceFragmentCompat() {
         startActivity(intent)
       }
     }
-
 
     //로그아웃 눌렀을 때
     if (preference?.key.equals("logout")) {

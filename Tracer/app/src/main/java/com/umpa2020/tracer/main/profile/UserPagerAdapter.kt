@@ -15,7 +15,8 @@ class UserPagerAdapter(fm: FragmentManager) :
     mFragmentInfoList.add(info)
   }
 
-  override fun getItem(position: Int): Fragment {
+  override fun
+    getItem(position: Int): Fragment {
     return mFragmentInfoList[position].fragment
   }
 

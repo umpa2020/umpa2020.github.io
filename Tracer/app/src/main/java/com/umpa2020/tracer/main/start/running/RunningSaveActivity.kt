@@ -173,7 +173,8 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
 
     // storage에 이미지 업로드 모든 맵 이미지는 mapimage/maptitle로 업로드가 된다.
     val fstorage = FirebaseStorage.getInstance()
-    val fRef = fstorage.reference.child("mapRoute").child(infoData.mapTitle!!)
+    val fRef = fstorage.reference.child("mapRoute")
+      .child(infoData.mapTitle!!).child(infoData.mapTitle!!)
     infoData.routeGPXPath = fRef.path
 
     val fuploadTask = fRef.putFile(routeGpxFile)
@@ -193,10 +194,11 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
 
     // 히스토리 업로드
     val activityData = ActivityData(infoData.mapTitle, timestamp.toString(), "map save")
-    FBUserActivityRepository().setUserHistory(activityData)
+    FBUserActivityRepository().createUserHistory(activityData)
 
     val rankingData = RankingData(
       UserInfo.nickname,
+      UserInfo.autoLoginKey,
       UserInfo.nickname,
       infoData.time,
       1,

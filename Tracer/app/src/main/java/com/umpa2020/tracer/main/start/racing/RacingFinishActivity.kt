@@ -3,9 +3,6 @@ package com.umpa2020.tracer.main.start.racing
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.os.Message
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
@@ -51,9 +48,9 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
     // Racing Activity 에서 넘겨준 infoData를 받아서 활용
     racerData = intent.getParcelableExtra("InfoData") as InfoData
     val result = intent.extras!!.getBoolean("Result")
-    val routeGPX = intent.getParcelableExtra<RouteGPX>("RouteGPX")
+    val racerGPX = intent.getParcelableExtra<RouteGPX>("RouteGPX")
     val mapRouteGPX = intent.getParcelableExtra<RouteGPX>("MapRouteGPX")
-    racerSpeeds = routeGPX!!.getSpeed()
+    racerSpeeds = racerGPX!!.getSpeed()
     makerSpeeds = mapRouteGPX!!.getSpeed()
 
 
@@ -62,24 +59,26 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
 
     // 유저 인포에 해당 유저가 이 맵을 뛰었다는
     // 히스토리를 더하는 함수
-    FBRacingRepository().setUserInfoRacing(racerData)
+    FBRacingRepository().createUserInfoRacing(racerData)
     val timestamp = Date().time
 
     if (result) {
       val activityData =
         ActivityData(racerData.mapTitle, timestamp.toString(), "racing go the distance")
-      FBUserActivityRepository().setUserHistory(activityData)
+
+      FBUserActivityRepository().createUserHistory(activityData)
     } else {
       val activityData = ActivityData(racerData.mapTitle, timestamp.toString(), "racing fail")
-      FBUserActivityRepository().setUserHistory(activityData)
+      FBUserActivityRepository().createUserHistory(activityData)
     }
 
 
-    FBRacingRepository().setRankingData(
+    FBRacingRepository().createRankingData(
       result,
       racerData,
       racingFinishListener,
-      racerSpeeds
+      racerSpeeds,
+      racerGPX
     )
 
     OKButton.setOnClickListener(this)

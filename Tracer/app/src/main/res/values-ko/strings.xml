@@ -83,6 +83,7 @@
   <string name="yes1">예</string>
   <string name="no1">아니오</string>
   <string name="noroute">현재 저장된 루트가 없습니다.</string>
+  <string name="no_activity">현재 저장된 경로가 없습니다.</string>
   <string name="profile_information">내 정보</string>
   <string name="profile_image_change">프로필 이미지 변경</string>
   <string name="email_">이메일</string>
@@ -117,7 +118,14 @@
   <string name="noticeSetting">알림 설정</string>
   <string name="noticeSound">알림을 소리로 받습니다</string>
   <string name="noticeCheck">알림 여부</string>
+  <string name="lockScreenSetting">잠금화면 설정</string>
+  <string name="lockScreenBody">잠금화면 설정 시 기록 측정 가능</string>
+  <string name="lockScreenCheck">잠금화면 여부</string>
 
+  <!-- LcokScreen -->
+  <string name="km">Km</string>
+  <string name="km_h">Km/h</string>
+  <string name="unlock">슬래이드해서 잠금해체</string>
   <!-- TTS -->
   <string name="pushthestartbutton">시작버튼을 누르면 러닝이 시작됩니다</string>
   <string name="startRunning">러닝을 시작합니다</string>
@@ -174,6 +182,12 @@
   <string name="record_comparison">기록 비교</string>
   <string name="max_speed">최고 속력</string>
   <string name="avg_speed">평균 속룍</string>
+
+  <!--activity_racing_select_people-->
+  <string name="selection_complete">선택 완료</string>
+  <string name="max_five_select">가상 레이싱 할 상대를 최대 5명 선택해주세요</string>
+  <string name="select_people">가상 레이싱 상대방 선택</string>
+  <string name="max_five">최대 5명까지만 선택 가능합니다</string>
   
   <string name="challenge">챌린지</string>
 </resources>

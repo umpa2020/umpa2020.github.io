@@ -9,7 +9,7 @@ interface ProfileRouteListener {
   /**
    * 프로필 루트 받아오면 전달
    */
-  fun getProfileRoute(infoDatas: ArrayList<InfoData>)
+  fun listProfileRoute(infoDatas: ArrayList<InfoData>)
 
 
 }

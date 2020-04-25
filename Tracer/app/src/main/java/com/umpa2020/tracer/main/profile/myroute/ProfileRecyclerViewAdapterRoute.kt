@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.umpa2020.tracer.R
+import com.umpa2020.tracer.constant.Constants.Companion.TIMESTAMP_LENGTH
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.extensions.MM_SS
 import com.umpa2020.tracer.extensions.format
@@ -28,8 +29,8 @@ class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) :
 
     val singleItem = mdata[position]
 
-    val cutted = singleItem.mapTitle!!.subSequence(0, singleItem.mapTitle!!.length-13) as String
-    val time = singleItem.mapTitle!!.subSequence(singleItem.mapTitle!!.length-13, singleItem.mapTitle!!.length) as String
+    val cutted = singleItem.mapTitle!!.subSequence(0, singleItem.mapTitle!!.length- TIMESTAMP_LENGTH) as String
+    val time = singleItem.mapTitle!!.subSequence(singleItem.mapTitle!!.length- TIMESTAMP_LENGTH, singleItem.mapTitle!!.length) as String
 
     //데이터 바인딩
     // glide imageview 소스
@@ -67,14 +68,14 @@ class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) :
 
           }
           R.drawable.ic_favorite_border_black_24dp -> {
-            FBLikesRepository().setLikes(singleItem.mapTitle!!, likes)
+            FBLikesRepository().updateLikes(singleItem.mapTitle!!, likes)
             holder.heart.setImageResource(R.drawable.ic_favorite_red_24dp)
             holder.heart.tag = R.drawable.ic_favorite_red_24dp
             likes++
             holder.likes.text = likes.toString()
           }
           R.drawable.ic_favorite_red_24dp -> {
-            FBLikesRepository().setminusLikes(singleItem.mapTitle!!, likes)
+            FBLikesRepository().updateNotLikes(singleItem.mapTitle!!, likes)
             holder.heart.setImageResource(R.drawable.ic_favorite_border_black_24dp)
             holder.heart.tag = R.drawable.ic_favorite_border_black_24dp
             likes--

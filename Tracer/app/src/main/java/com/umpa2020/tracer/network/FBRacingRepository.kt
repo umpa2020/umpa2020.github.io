@@ -1,17 +1,21 @@
 package com.umpa2020.tracer.network
 
-import android.os.Handler
-import android.os.Message
-import com.google.firebase.firestore.FirebaseFirestore
+import android.net.Uri
 import com.google.firebase.firestore.Query
+import com.google.firebase.storage.FirebaseStorage
+import com.umpa2020.tracer.App
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.RanMapsData
 import com.umpa2020.tracer.dataClass.RankingData
+import com.umpa2020.tracer.dataClass.RouteGPX
+import com.umpa2020.tracer.extensions.classToGpx
+import com.umpa2020.tracer.extensions.gpxToClass
+import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.UserInfo
+import java.io.File
 import java.util.*
 
-class FBRacingRepository {
-  val db = FirebaseFirestore.getInstance()
+class FBRacingRepository : BaseFB() {
 
   /**
    * 첫 번째 실행 되어야하는 함수
@@ -20,11 +24,12 @@ class FBRacingRepository {
    * 최고 기록이 아닐 경우 bestTime을 0으로 설정하여
    * ranking 에 등록하는 함수
    */
-  fun setRankingData(
+  fun createRankingData(
     result: Boolean,
     racerData: InfoData,
     racingFinishListener: RacingFinishListener,
-    racerSpeeds: MutableList<Double>
+    racerSpeeds: MutableList<Double>,
+    racerGPX: RouteGPX
   ) {
     // 타임스탬프
     val timestamp = Date().time
@@ -32,28 +37,51 @@ class FBRacingRepository {
     if (result) {
       val rankingData = RankingData(
         racerData.makersNickname,
+        UserInfo.autoLoginKey,
         UserInfo.nickname,
         racerData.time,
         1,
         racerSpeeds.max().toString(),
-        racerSpeeds.average().toString()
+        racerSpeeds.average().toString(),
+        null
       )
       // 랭킹 맵에서
-      db.collection("rankingMap").document(racerData.mapTitle!!).collection("ranking")
-        .whereEqualTo("bestTime", 1)
+      db.collection(RANKING_MAP).document(racerData.mapTitle!!).collection(RANKING)
+        .whereEqualTo(BEST_TIME, 1)
         .get()
         .addOnSuccessListener {
           for (document in it) {
             if (document.get("challengerNickname") == UserInfo.nickname) {
-              if (racerData.time!!.toLong() < document.get("challengerTime") as Long) {
-                db.collection("rankingMap").document(racerData.mapTitle!!).collection("ranking")
-                  .document(document.id).update("bestTime", 0)
+              if (racerData.time!!.toLong() < document.get(CHALLENGER_TIME) as Long) {
+                db.collection(RANKING_MAP).document(racerData.mapTitle!!).collection(RANKING)
+                  .document(document.id).update(BEST_TIME, 0)
+
+                val saveFolder = File(App.instance.filesDir, "routeGPX") // 저장 경로
+                if (!saveFolder.exists()) {       //폴더 없으면 생성
+                  saveFolder.mkdir()
+                }
+
+                val racerGpxFile = racerGPX.classToGpx(saveFolder.path)
+
+                // storage에 이미지 업로드 모든 맵 이미지는 mapimage/maptitle로 업로드가 된다.
+                val fstorage = FirebaseStorage.getInstance()
+                val fRef = fstorage.reference.child("mapRoute")
+                  .child(racerData.mapTitle!!).child("racingGPX").child(UserInfo.autoLoginKey)
+                rankingData.racerGPX = fRef.path
+
+                val fuploadTask = fRef.putFile(racerGpxFile)
+
+                fuploadTask.addOnFailureListener {
+                  Logg.d("Success to upload racerGPX")
+                }.addOnSuccessListener {
+                  Logg.d("Fail : $it")
+                }
               } else {
                 rankingData.bestTime = 0
               }
             }
           }
-          db.collection("rankingMap").document(racerData.mapTitle!!).collection("ranking")
+          db.collection(RANKING_MAP).document(racerData.mapTitle!!).collection(RANKING)
             .document(UserInfo.autoLoginKey + timestamp).set(rankingData)
 
           getRacingFinishRank(result, racerData, racingFinishListener)
@@ -77,8 +105,8 @@ class FBRacingRepository {
     val arrRankingData: ArrayList<RankingData> = arrayListOf()
     var arg = 0
 
-    db.collection("rankingMap").document(racerData.mapTitle!!).collection("ranking")
-      .orderBy("challengerTime", Query.Direction.ASCENDING)
+    db.collection(RANKING_MAP).document(racerData.mapTitle!!).collection(RANKING)
+      .orderBy(CHALLENGER_TIME, Query.Direction.ASCENDING)
       .get()
       .addOnSuccessListener { resultdb ->
         var index = 1
@@ -105,7 +133,7 @@ class FBRacingRepository {
   fun getMakerData(racerData: InfoData, getMakerDataListener: GetMakerDataListener) {
     lateinit var makerData: InfoData
 
-    db.collection("mapInfo").document(racerData.mapTitle!!)
+    db.collection(MAP_INFO).document(racerData.mapTitle!!)
       .get()
       .addOnSuccessListener { document ->
         makerData = document.toObject(InfoData::class.java)!!
@@ -118,9 +146,9 @@ class FBRacingRepository {
    */
   fun getOtherData(mapTitle: String, nickname: String, racingFinishListener: RacingFinishListener) {
 
-    db.collection("rankingMap").document(mapTitle)
-      .collection("ranking").whereEqualTo("challengerNickname", nickname)
-      .whereEqualTo("bestTime", 1)
+    db.collection(RANKING_MAP).document(mapTitle)
+      .collection(RANKING).whereEqualTo("challengerNickname", nickname)
+      .whereEqualTo(BEST_TIME, 1)
       .get()
       .addOnSuccessListener {
         val rankingData = it.documents.last().toObject(RankingData::class.java)
@@ -128,14 +156,29 @@ class FBRacingRepository {
       }
   }
 
-
   /**
    * 유저 인포에 해당 유저가 이 맵을 뛰었다는
    * 히스토리를 더하는 함수
    */
-  fun setUserInfoRacing(racerData: InfoData) {
+  fun createUserInfoRacing(racerData: InfoData) {
     val ranMapsData = RanMapsData(racerData.mapTitle, racerData.distance, racerData.time)
-    db.collection("userinfo").document(UserInfo.autoLoginKey).collection("user ran these maps")
+    db.collection(USER_INFO).document(UserInfo.autoLoginKey).collection(USER_RAN_THESE_MAPS)
       .add(ranMapsData)
+  }
+
+  fun listRacingGPX(mapTitle: String, racerIdList: Array<String>,listener:RacingListener) {
+    val racerGPXList = mutableListOf<RouteGPX>()
+    var count=0
+    racerIdList.forEach {
+      val routeRef = mapRouteStorageRef.child(mapTitle).child(RACING_GPX).child(it)
+      val localFile = File.createTempFile("routeGpx", "xml")
+      routeRef.getFile(Uri.fromFile(localFile)).addOnSuccessListener {
+        racerGPXList.add(localFile.path.gpxToClass())
+        count++
+        if(racerGPXList.size==racerIdList.size){
+          listener.racingList(racerGPXList.toTypedArray())
+        }
+      }
+    }
   }
 }

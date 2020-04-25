@@ -9,6 +9,11 @@ class App : Application() {
   companion object {
     lateinit var instance: App
       private set
+
+    fun applicationContext() : Context? {
+      return instance.applicationContext
+    }
+    const val notificationId: Int = 1 // 잠금화면 알림창 Id
   }
 
   private var activityCount = 0
@@ -16,7 +21,7 @@ class App : Application() {
 
   override fun onCreate() {
     super.onCreate()
-    instance = this
+    instance = this@App
 
     registerActivityLifecycleCallbacks(activityLifecycleCallbacks)
   }
