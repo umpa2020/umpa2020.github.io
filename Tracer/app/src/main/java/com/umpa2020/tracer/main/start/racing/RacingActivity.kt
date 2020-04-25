@@ -172,6 +172,7 @@ class RacingActivity : BaseRunningActivity() {
         Logg.d("NORMAL")
         checkIsReady()
       }
+
       UserState.READYTORACING -> {
         Logg.d("READYTORACING")
         checkIsReadyToRacing()
