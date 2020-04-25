@@ -38,6 +38,20 @@ class SettingPreferenceFragment : PreferenceFragmentCompat() {
 
     mGoogleSignInClient = GoogleSignIn.getClient(App.instance, googleSignInOptions) //구글 로그인 클래스
 
+    // TTS 스위치 버튼
+    val switchTTS: SwitchPreference? = findPreference("ttsNotificationSetting") as SwitchPreference?
+
+    // Switch preference change listener
+    switchTTS?.setOnPreferenceChangeListener{ preference, newValue ->
+      if (newValue == true){
+      }else{
+      }
+
+      true
+    }
+
+    // 잠금 화면 스위치 버튼
+
     // 알람 스위치 버튼
     val switchNotification: SwitchPreference? = findPreference("notificationSetting") as SwitchPreference?
 
@@ -121,5 +135,3 @@ class SettingPreferenceFragment : PreferenceFragmentCompat() {
 
 
 }
-
-
