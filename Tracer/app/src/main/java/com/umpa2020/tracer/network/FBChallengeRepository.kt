@@ -26,6 +26,15 @@ class FBChallengeRepository : BaseFB() {
 
   }
 
+  fun getChallengeData(challengeId: String, challengeDataListener: ChallengeDataListener) {
+    db.collection("challenges")
+      .whereEqualTo("id", challengeId)
+      .get()
+      .addOnSuccessListener {
+        challengeDataListener.challengeData(it.documents.last().toObject(ChallengeData::class.java)!!)
+      }
+  }
+
 
   /**
    * 복합 색인 되면 이걸로
@@ -63,41 +72,4 @@ class FBChallengeRepository : BaseFB() {
     }
   }
 
-  /**
-   * 복합 색인 안되가지고 이걸로 진행하겠음..
-   *//*
-
-  fun listChallengeData(
-    fromDate: Long,
-    toDate: Long,
-    region: String,
-    challengeDataListener: ChallengeDataListener
-  ) {
-    val listChallengeData = mutableListOf<ChallengeData>()
-
-
-    db.collection("challenges")
-      .whereGreaterThan("from", fromDate)
-      .get()
-      .addOnSuccessListener {
-        it.documents.forEach { document ->
-          val to = document.get("to") as Long
-          Logg.d("to = $to")
-          if (region != "전체") {
-
-            val regionList = document.get("locale") as MutableList<String>
-            if (to < toDate && regionList.contains(region)) {
-              listChallengeData.add(document.toObject(ChallengeData::class.java)!!)
-            }
-          }
-          else {
-
-            if (to < toDate) {
-              listChallengeData.add(document.toObject(ChallengeData::class.java)!!)
-            }
-          }
-        }
-        challengeDataListener.challengeDataList(listChallengeData)
-      }
-  }*/
 }
