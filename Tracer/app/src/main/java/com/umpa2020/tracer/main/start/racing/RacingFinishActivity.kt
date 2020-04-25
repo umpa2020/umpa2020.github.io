@@ -14,8 +14,8 @@ import com.umpa2020.tracer.dataClass.ActivityData
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.RankingData
 import com.umpa2020.tracer.dataClass.RouteGPX
-import com.umpa2020.tracer.extensions.MM_SS
 import com.umpa2020.tracer.extensions.format
+import com.umpa2020.tracer.extensions.m_s
 import com.umpa2020.tracer.extensions.prettyDistance
 import com.umpa2020.tracer.extensions.toRank
 import com.umpa2020.tracer.main.MainActivity
@@ -181,7 +181,7 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
       resultRankTextView.text = resultRankText.toRank()
     }
 
-    RacingFinishMyLapTime.text = makerData.time!!.format(MM_SS)
+    RacingFinishMyLapTime.text = makerData.time!!.format(m_s)
 
     FBProfileRepository().getProfileImage(RacingFinishAnalysisMyProfile, UserInfo.nickname)
     RacingFinishAnalysisMyNickname.text = UserInfo.nickname
@@ -194,11 +194,11 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
     )
     RacingFinishAnalysisOtherNickname.text = makerData.makersNickname
 
-    makerLapTimeTextView.text = makerData.time!!.format(MM_SS)
+    makerLapTimeTextView.text = makerData.time!!.format(m_s)
     makerMaxSpeedTextView.text = makerSpeeds.max()!!.prettyDistance
     makerAvgSpeedTextView.text = makerSpeeds.average().prettyDistance
 
-    racerLapTimeTextView.text = racerData.time!!.format(MM_SS)
+    racerLapTimeTextView.text = racerData.time!!.format(m_s)
     racerMaxSpeedTextView.text = racerSpeeds.max()!!.prettyDistance
     racerAvgSpeedTextView.text = racerSpeeds.average().prettyDistance
     progressbar.dismiss()
@@ -215,7 +215,7 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
           arrRankingData[0].challengerNickname!!
         )
         racingFinishNicknameFirst.text = arrRankingData[0].challengerNickname
-        racingFinishLapTimeFirst.text = arrRankingData[0].challengerTime!!.format(MM_SS)
+        racingFinishLapTimeFirst.text = arrRankingData[0].challengerTime!!.format(m_s)
       }
 
       if (arrRankingData.size >= 2) {
@@ -224,7 +224,7 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
           arrRankingData[1].challengerNickname!!
         )
         racingFinishNicknameSecond.text = arrRankingData[1].challengerNickname
-        racingFinishLapTimeSecond.text = arrRankingData[1].challengerTime!!.format(MM_SS)
+        racingFinishLapTimeSecond.text = arrRankingData[1].challengerTime!!.format(m_s)
       }
 
       if (arrRankingData.size >= 3) {
@@ -233,12 +233,12 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
           arrRankingData[2].challengerNickname!!
         )
         racingFinishNicknameThird.text = arrRankingData[2].challengerNickname
-        racingFinishLapTimeThird.text = arrRankingData[2].challengerTime!!.format(MM_SS)
+        racingFinishLapTimeThird.text = arrRankingData[2].challengerTime!!.format(m_s)
       }
     }
 
     override fun getOtherRacing(otherData: RankingData) {
-      makerLapTimeTextView.text = otherData.challengerTime!!.format(MM_SS)
+      makerLapTimeTextView.text = otherData.challengerTime!!.format(m_s)
       makerMaxSpeedTextView.text = otherData.maxSpeed!!.toDouble().prettyDistance
       makerAvgSpeedTextView.text = otherData.averageSpeed!!.toDouble().prettyDistance
     }
