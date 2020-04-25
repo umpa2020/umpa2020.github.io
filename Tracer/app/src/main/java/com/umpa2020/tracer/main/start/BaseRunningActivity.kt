@@ -10,6 +10,7 @@ import android.widget.Button
 import android.widget.Chronometer
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.preference.PreferenceManager
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -24,6 +25,7 @@ import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.constant.UserState
 import com.umpa2020.tracer.extensions.*
 import com.umpa2020.tracer.lockscreen.util.LockScreen
+import com.umpa2020.tracer.main.MainActivity.Companion.gpsViewModel
 import com.umpa2020.tracer.map.TraceMap
 import com.umpa2020.tracer.roomDatabase.entity.MapRecordData
 import com.umpa2020.tracer.roomDatabase.viewModel.RecordViewModel
@@ -36,7 +38,6 @@ import hollowsoft.slidingdrawer.OnDrawerOpenListener
 import hollowsoft.slidingdrawer.OnDrawerScrollListener
 import hollowsoft.slidingdrawer.SlidingDrawer
 import io.jenetics.jpx.WayPoint
-import kotlinx.android.synthetic.main.activity_ranking_recode_racing.*
 
 
 open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDrawerScrollListener,
@@ -75,7 +76,7 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
   var unPassedIcon = R.drawable.ic_checkpoint_gray.makingIcon()
   var passedIcon = R.drawable.ic_checkpoint_red.makingIcon()
 
-
+//  private lateinit var gpsViewModel: GpsViewModel
   private lateinit var recordViewModel: RecordViewModel
   open fun init() {
     drawer.setOnDrawerScrollListener(this)
@@ -88,9 +89,22 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     pauseButton.setOnClickListener(this)
     stopButton.setOnClickListener(this)
     Logg.d("onMapReady")
-    traceMap = TraceMap(googleMap) //구글맵
-    traceMap.mMap.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
 
+    traceMap = TraceMap(googleMap) //구글맵
+
+    var i = 0
+    // startFragment의 마지막 위치를 가져와서 카메라 설정
+    gpsViewModel.allGps.observe(this, Observer { lastPos ->
+      lastPos?.let {
+        val latlng = LatLng(it.lat, it.lng)
+        Logg.d("abcd ${latlng.toString()}")
+        Logg.d("abcd ${i++}")
+        val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latlng, 17f)
+        traceMap.mMap.moveCamera(cameraUpdate)
+      }
+    })
+
+    traceMap.mMap.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
     traceMap.mMap.setOnCameraMoveListener {
       wedgedCamera = false
     }
@@ -103,6 +117,7 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
   }
 
   open fun updateLocation(curLoc: Location) {
+    currentLocation = curLoc
     distanceTextView.text = distance.prettyDistance
     speedTextView.text = speed.prettySpeed()
 
@@ -178,9 +193,9 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     Logg.d(chronometer.text.toString())
     timeWhenStopped = chronometer.base - SystemClock.elapsedRealtime()
 
-   recordViewModel.updateTimeText(chronometer.text.toString())
+    recordViewModel.updateTimeText(chronometer.text.toString())
     // 시간 통제 업데이트
-    recordViewModel.updateTimeControl(timeWhenStopped,false)
+    recordViewModel.updateTimeControl(timeWhenStopped, false)
     chronometer.stop()
     pauseButton.text = getString(R.string.restart)
 
@@ -190,11 +205,11 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
   open fun restart() {
     userState = UserState.RUNNING
     pauseButton.text = getString(R.string.pause)
-    val restartTime=SystemClock.elapsedRealtime()
+    val restartTime = SystemClock.elapsedRealtime()
     chronometer.base = restartTime + timeWhenStopped
 
     // 시간 통제 업데이트
-    recordViewModel.updateTimeControl(timeWhenStopped,true)
+    recordViewModel.updateTimeControl(timeWhenStopped, true)
     recordViewModel.updateStartTime(restartTime)
     chronometer.start()
 
@@ -205,7 +220,7 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
   open fun stop() {
     userState = UserState.STOP
     // 시간 통제 업데이트
-    recordViewModel.updateTimeControl(0L,false)
+    recordViewModel.updateTimeControl(0L, false)
 
     chronometer.stop()
     lockScreen(false)
@@ -258,14 +273,23 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     LocalBroadcastManager.getInstance(this)
       .registerReceiver(locationBroadcastReceiver, IntentFilter("custom-event-name"))
 
-    recordViewModel =
-      RecordViewModel(this.application)
+//    gpsViewModel = ViewModelProvider(this).get(GpsViewModel::class.java)
+
+    recordViewModel = RecordViewModel(this.application)
     recordViewModel.deleteAll()
   }
+
+  var currentLocation: Location? = null
   override fun onDestroy() {
     super.onDestroy()
     LocalBroadcastManager.getInstance(this).unregisterReceiver(locationBroadcastReceiver)
+
+    // 마지막 위치 roomDB에 업데이트
+    if (currentLocation != null)
+      gpsViewModel.updateLastPosition(currentLocation!!.latitude, currentLocation!!.longitude)
+    Logg.d("abcd onpause ${gpsViewModel.allGps.value!!.lat}")
   }
+
   override fun onPause() {
     super.onPause()
   }

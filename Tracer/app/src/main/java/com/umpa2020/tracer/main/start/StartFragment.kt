@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.pm.PackageInfo
 import android.location.Geocoder
 import android.location.Location
 import android.net.Uri
@@ -18,7 +19,9 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
@@ -36,6 +39,7 @@ import com.umpa2020.tracer.extensions.gpxToClass
 import com.umpa2020.tracer.extensions.prettyDistance
 import com.umpa2020.tracer.extensions.show
 import com.umpa2020.tracer.extensions.toLatLng
+import com.umpa2020.tracer.main.MainActivity.Companion.gpsViewModel
 import com.umpa2020.tracer.main.ranking.RankingMapDetailActivity
 import com.umpa2020.tracer.main.start.racing.RacingActivity
 import com.umpa2020.tracer.main.start.running.RunningActivity
@@ -44,7 +48,6 @@ import com.umpa2020.tracer.network.FBMapRepository
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.OnSingleClickListener
-import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.fragment_start.*
 import kotlinx.android.synthetic.main.fragment_start.view.*
 import java.io.File
@@ -53,7 +56,7 @@ import java.io.File
 class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
   val TAG = "StartFragment"
 
-  lateinit var traceMap: TraceMap
+  var traceMap: TraceMap? = null
   var currentLocation: Location? = null
 
 
@@ -66,6 +69,10 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
   var wedgedCamera = true
   val progressBar = MyProgressBar()
   var firstFlag = true
+
+  //  companion object{
+//    var gpsViewModel = GpsViewModel(App.instance.currentActivity()!!.application)
+//  }
   override fun onSingleClick(v: View?) {
     when (v!!.id) {
       R.id.mainStartRunning -> {
@@ -104,7 +111,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
    */
   private fun searchThisArea() {
     progressBar.show()
-    val bound = traceMap.mMap.projection.visibleRegion.latLngBounds
+    val bound = traceMap!!.mMap.projection.visibleRegion.latLngBounds
 
     val mHandler = object : Handler(Looper.getMainLooper()) {
       override fun handleMessage(msg: Message) {
@@ -126,7 +133,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
 
               //데이터 바인딩
               routeMarkers.add(
-                traceMap.mMap.addMarker(
+                traceMap!!.mMap.addMarker(
                   MarkerOptions()
                     .position(it.latLng)
                     .title(cutted.toString())
@@ -138,7 +145,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
               //TODO: 윈도우 커스터마이즈
               routeMarkers.last().tag = it.mapTitle
 
-              traceMap.mMap.setOnInfoWindowClickListener { it2 ->
+              traceMap!!.mMap.setOnInfoWindowClickListener { it2 ->
                 val intent = Intent(activity, RankingMapDetailActivity::class.java)
                 intent.putExtra("MapTitle", it2.tag.toString())
                 startActivity(intent)
@@ -178,7 +185,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
       getString(R.string.cannot_find).show()
     } else {
       // mainStartSearchTextView.setText(addressList[0].getAddressLine(0))
-      traceMap.moveCamera(LatLng(addressList[0].latitude, addressList[0].longitude))
+      traceMap!!.moveCamera(LatLng(addressList[0].latitude, addressList[0].longitude))
       searchThisArea()
     }
 
@@ -188,10 +195,9 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
   }
 
   override fun onCreateView(
-    inflater: LayoutInflater,
-    container: ViewGroup?,
-    savedInstanceState: Bundle?
+    inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
   ): View? {
+
     Logg.d("onCreateView()")
     val view = inflater.inflate(R.layout.fragment_start, container, false)
     view.test.setOnClickListener {
@@ -202,16 +208,19 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
         val routeGPX = localFile.path.gpxToClass()
         val intent = Intent(App.instance.context(), RacingActivity::class.java)
         intent.putExtra("RouteGPX", routeGPX)
-        val racingGPXs= ArrayList<RouteGPX>()
+        val racingGPXs = ArrayList<RouteGPX>()
         racingGPXs.add(routeGPX)
         racingGPXs.add(routeGPX)
         racingGPXs.add(routeGPX)
 
-        intent.putExtra("RacingGPXs",racingGPXs)
+        intent.putExtra("RacingGPXs", racingGPXs)
         intent.putExtra("mapTitle", "asdasdqwe1587633430060")
         startActivity(intent)
       }
     }
+
+    // gps viewModel 정의
+//    gpsViewModel = GpsViewModel(requireActivity().application)
 
     // 검색 창 키보드에서 엔터키 리스너
     view.mainStartSearchTextView.setOnEditorActionListener(
@@ -234,15 +243,61 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
   override fun onMapReady(googleMap: GoogleMap) {
     Logg.d("onMapReady")
     traceMap = TraceMap(googleMap) //구글맵
-    traceMap.mMap.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
-    traceMap.mMap.setOnCameraMoveListener {
+    traceMap!!.mMap.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
+    gpsViewModel.allGps.observe(this, Observer { gpsData ->
+      gpsData?.let {
+        Logg.d("실행 돼??")
+        val latlng = LatLng(it.lat, it.lng)
+        Logg.d("abcd ${latlng.toString()}")
+        val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latlng, 17f)
+        traceMap!!.mMap.moveCamera(cameraUpdate)
+      }
+    })
+
+//    val prefs = PreferenceManager.getDefaultSharedPreferences(App.instance.context())
+//    if (prefs.getBoolean("appFirstDown", true)) {
+//      setDefaultLocation()
+//      prefs.edit().let {
+//        it.putBoolean("appFirstDown", false)
+//        it.apply()
+//      }
+//      Logg.d("앱 처음 설치")
+//    } else {
+//      gpsViewModel.allGps.observe(this, Observer {gpsData->
+//        gpsData?.let {
+//          Logg.d("실행 돼??")
+//          val latlng = LatLng(it.lat, it.lng)
+//          Logg.d("abcd ${latlng.toString()}")
+//          val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latlng, 17f)
+//          traceMap!!.mMap.moveCamera(cameraUpdate)
+//        }
+//      })
+//      Logg.d("앱 처음 설치 뒤")
+//    }
+//
+//    if(gpsViewModel.isUid.value == null){
+//      Logg.d("값이 없음")
+//    }else{
+//      Logg.d("값이 있음")
+//    }
+
+    traceMap!!.mMap.setOnCameraMoveListener {
       wedgedCamera = false
       mainStartSearchAreaButton.visibility = View.VISIBLE
     }
-    traceMap.mMap.setOnMyLocationButtonClickListener {
+    traceMap!!.mMap.setOnMyLocationButtonClickListener {
       wedgedCamera = true
       true
     }
+
+
+  }
+
+  fun getVersionInfo() {
+    val info: PackageInfo =
+      requireContext().packageManager.getPackageInfo(App.instance.packageName, 0)
+    val version = info.versionName
+    Logg.d(version.toString())
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -259,36 +314,49 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
       .registerReceiver(locationBroadcastReceiver, IntentFilter("custom-event-name"))
   }
 
-  override fun onResume() {
-    super.onResume()
-
-  }
-
   override fun onPause() {
     super.onPause()
-    UserInfo.rankingLatLng = currentLocation?.toLatLng()
-    //        브로드 캐스트 해제 - 전역 context로 수정해야함
+    // 브로드 캐스트 해제
+    LocalBroadcastManager.getInstance(this.requireContext())
+      .unregisterReceiver(locationBroadcastReceiver)
 
+    // 마지막 위치 roomDB에 업데이트
+    if (currentLocation != null)
+      gpsViewModel.updateLastPosition(currentLocation!!.latitude, currentLocation!!.longitude)
+    Logg.d("abcd onpause ${gpsViewModel.allGps.value!!.lat}")
   }
 
   override fun onDestroy() {
     super.onDestroy()
     Logg.d("onDestroy()")
-    LocalBroadcastManager.getInstance(this.requireContext())
-      .unregisterReceiver(locationBroadcastReceiver)
   }
 
+  // 초기에 위치 받아오면 카메라 설정.
   var locationBroadcastReceiver = object : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
       val message = intent?.getParcelableExtra<Location>("message")
       currentLocation = message as Location
-      if (wedgedCamera) traceMap.moveCamera(currentLocation!!.toLatLng())
-      if (firstFlag) {
-        searchThisArea()
-        firstFlag = false
-        traceMap.initCamera(currentLocation!!.toLatLng())
+      traceMap?.let {
+        if (wedgedCamera) it.moveCamera(currentLocation!!.toLatLng())
+        if (firstFlag) {
+          searchThisArea()
+          firstFlag = false
+          it.initCamera(currentLocation!!.toLatLng())
+        }
+        Logg.d("${currentLocation}")
       }
-      Logg.d("${currentLocation}")
     }
+  }
+
+  private fun setDefaultLocation() {
+
+
+    //디폴트 위치, Seoul
+    val DEFAULT_LOCATION = LatLng(37.621664, 127.0561576)
+
+
+    val cameraUpdate = CameraUpdateFactory.newLatLngZoom(DEFAULT_LOCATION, 15f)
+    traceMap!!.mMap.moveCamera(cameraUpdate)
+
   }
 }
