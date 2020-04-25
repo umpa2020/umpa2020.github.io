@@ -51,6 +51,7 @@ class RacingActivity : BaseRunningActivity() {
   var track: MutableList<LatLng> = mutableListOf()
   var nextWP: Int = 1
   var nextTP: Int = 0
+  lateinit var racerList:Array<String>
   var racerGPXList:Array<RouteGPX>?=null
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -58,7 +59,7 @@ class RacingActivity : BaseRunningActivity() {
     setContentView(R.layout.activity_ranking_recode_racing)
     mapRouteGPX = intent.getParcelableExtra("RouteGPX") as RouteGPX
     mapTitle = intent.getStringExtra("mapTitle")!!
-    val racerList=intent.getStringArrayExtra("RacerList")
+    racerList=intent.getStringArrayExtra("RacerList")
     //TODO:: racerList로 racingGPX 가져오기 FireBase
     Logg.d(racerList.joinToString())
     FBRacingRepository().listRacingGPX(mapTitle,racerList,object : RacingListener{
@@ -230,11 +231,11 @@ class RacingActivity : BaseRunningActivity() {
             MarkerOptions()
               .zIndex(3.4f)
               .position(wpts[0].toLatLng())
-              .title("Maker!!!!")
+              .title(racerList[racerNo])
           )
 
           wpts.forEachIndexed { index, it ->
-            if (index < wpts.size - 1) {
+            if (index < wpts.size - 2) {
               val duration = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 ((wpts[index + 1].time.get().toEpochSecond() - wpts[index].time.get()
                   .toEpochSecond()) + racerNo)*1000/ (wptIndexs[index + 1] - wptIndexs[index])
@@ -248,6 +249,7 @@ class RacingActivity : BaseRunningActivity() {
               }
             }
           }
+          TTS.speech("${racerList[racerNo]} is arrive")
         }
       }
     }
@@ -257,8 +259,8 @@ class RacingActivity : BaseRunningActivity() {
     super.stop()
     wpList.add(
       WayPoint.builder()
-        .lat(currentLatLng.latitude)
-        .lon(currentLatLng.longitude)
+        .lat(mapRouteGPX.trkList.last().latitude)
+        .lon(mapRouteGPX.trkList.last().longitude)
         .name("Finish")
         .desc("Finish Description")
         .time(System.currentTimeMillis())
