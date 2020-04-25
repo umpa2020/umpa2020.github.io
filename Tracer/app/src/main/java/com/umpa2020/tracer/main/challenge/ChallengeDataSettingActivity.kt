@@ -20,14 +20,15 @@ class ChallengeDataSettingActivity : AppCompatActivity() {
     challengeButton.setOnClickListener {
 
       val cutted = challenge12.text.toString().split(",").toMutableList()
+      val cuttedLocale = challenge5.textLocale.toString().split(" ").toMutableList()
 
       val challengeData = ChallengeData(
-        "${challenge1.text}+$timeStamp",
+        "${challenge1.text}$timeStamp",
         "${challenge1.text}",
-        "${challenge2.text}",
-        "${challenge3.text}",
-        "${challenge4.text}",
-        "${challenge5.text}",
+        challenge2.text.toString().toLong(),
+        challenge3.text.toString().toLong(),
+        challenge4.text.toString().toLong(),
+        cuttedLocale,
         "${challenge6.text}",
         "${challenge7.text}",
         "${challenge8.text}",
@@ -35,8 +36,8 @@ class ChallengeDataSettingActivity : AppCompatActivity() {
         "${challenge10.text}",
         "${challenge11.text}",
         cutted,
-        "Challenge/$timeStamp",
-        "Challenge/$timeStamp/$timeStamp.jpg"
+        "challenge/$timeStamp",
+        "challenge/$timeStamp/$timeStamp.jpg"
       )
 
 

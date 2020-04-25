@@ -2,6 +2,7 @@ package com.umpa2020.tracer.extensions
 
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.xml.transform.SourceLocator
 
 const val ISO8601 = "yyyy-MM-dd'T'HH:mm:ssZ"
 const val YEAR_MONTH_DAY_KR = "yyyy년 MM월 dd일"
@@ -22,17 +23,27 @@ fun Long.format(pattern: String): String {
   return SimpleDateFormat(pattern, Locale.getDefault()).format(this)
 }
 
+fun Long.format(): String {
+  return if (Locale.getDefault() == Locale.KOREA) {
+    SimpleDateFormat(YEAR_MONTH_DAY_KR, Locale.getDefault()).format(this)
+  } else
+    SimpleDateFormat(YEAR_MONTH_DAY, Locale.getDefault()).format(this)
+}
+
 fun Long.format(locale: Locale): String {
   val date = Date()
-  if (SimpleDateFormat(YEAR, Locale.getDefault()).format(this) == SimpleDateFormat(YEAR, Locale.getDefault()).format(date.time)) {
+  if (SimpleDateFormat(YEAR, Locale.getDefault()).format(this) == SimpleDateFormat(
+      YEAR,
+      Locale.getDefault()
+    ).format(date.time)
+  ) {
     return when (locale) {
       Locale.KOREA -> SimpleDateFormat(MONTH_DAY_KR, locale).format(this)
       else -> {
         SimpleDateFormat(MONTH_DAY, locale).format(this)
       }
     }
-  }
-  else {
+  } else {
     return when (locale) {
       Locale.KOREA -> SimpleDateFormat(YEAR_MONTH_DAY_KR, locale).format(this)
       else -> {
