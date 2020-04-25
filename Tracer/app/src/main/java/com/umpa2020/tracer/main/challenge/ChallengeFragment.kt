@@ -15,7 +15,9 @@ import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.AdChallengeData
 import com.umpa2020.tracer.dataClass.ChallengeData
+import com.umpa2020.tracer.extensions.M_D
 import com.umpa2020.tracer.extensions.format
+import com.umpa2020.tracer.extensions.mm_ss
 import kotlinx.android.synthetic.main.fragment_challenge.*
 import kotlinx.android.synthetic.main.fragment_challenge.view.*
 import java.text.SimpleDateFormat
@@ -40,11 +42,6 @@ class ChallengeFragment : Fragment() {
     view.adChallengeScrollViewPager.startAutoScroll()
     //view.adChallengeCountTextView.text="${view.adChallengeScrollViewPager.currentItem}/${adChallengeList.size}"
 
-    view.challengeAppBarText.setOnClickListener {
-      val intent = Intent(context, ChallengeDataSettingActivity::class.java)
-      startActivity(intent)
-    }
-
     val a=view.adChallengeScrollViewPager.currentItem
     view.adChallengeScrollViewPager.addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
       adChallengeCountTextView.text="${(view.adChallengeScrollViewPager.currentItem-a)%adChallengeList.size+1}/${adChallengeList.size}"
@@ -57,7 +54,7 @@ class ChallengeFragment : Fragment() {
          selectedDate.set(Calendar.YEAR, year)
          selectedDate.set(Calendar.MONTH, month)
          selectedDate.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-         btn_challenge_from.text = selectedDate.time.time.format(Locale.getDefault())
+         btn_challenge_from.text = selectedDate.time.time.format(M_D)
        },
        now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH)
      )

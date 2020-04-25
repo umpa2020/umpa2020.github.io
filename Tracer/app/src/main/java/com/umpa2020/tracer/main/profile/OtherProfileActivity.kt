@@ -5,8 +5,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.umpa2020.tracer.R
-import com.umpa2020.tracer.extensions.MM_SS
 import com.umpa2020.tracer.extensions.format
+import com.umpa2020.tracer.extensions.m_s
 import com.umpa2020.tracer.extensions.prettyDistance
 import com.umpa2020.tracer.main.profile.myroute.ProfileRouteActivity
 import com.umpa2020.tracer.network.FBProfileRepository
@@ -52,7 +52,7 @@ class OtherProfileActivity : AppCompatActivity(), OnSingleClickListener {
     override fun getProfile(distance: Double, time: Double) {
       // 총 거리와 시간을 띄워줌
       profileFragmentTotalDistance.text = distance.prettyDistance
-      profileFragmentTotalTime.text = time.toLong().format(MM_SS)
+      profileFragmentTotalTime.text = time.toLong().format(m_s)
     }
 
     override fun changeProfile() {
