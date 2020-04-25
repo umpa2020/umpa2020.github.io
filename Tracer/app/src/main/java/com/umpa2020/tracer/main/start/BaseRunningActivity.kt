@@ -239,7 +239,7 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
 
   fun lockScreen(flag: Boolean) {
     val prefs = PreferenceManager.getDefaultSharedPreferences(App.instance.context())
-    if (prefs.getBoolean("LockScreenStatus", false)) {
+    if (prefs.getBoolean("LockScreenStatus", true)) {
       if (flag) {
         Logg.d("서비스 실행")
         LockScreen.active()

@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.umpa2020.tracer.R
 import kotlinx.android.synthetic.main.challenge_loaclpopup.*
@@ -84,7 +85,7 @@ class RegionChoicePopup(context: Context) : AlertDialog(context) {
     window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
 
-    challenge_local.layoutManager = LinearLayoutManager(context)
+    challenge_local.layoutManager = GridLayoutManager(context, 2)
 
     Seoul.setOnClickListener {
       challenge_local.adapter = localAdapter(seoulList)
