@@ -25,6 +25,8 @@ import kotlinx.android.synthetic.main.activity_login.*
 
 
 class LoginActivity : AppCompatActivity(), OnSingleClickListener {
+
+
   // firebase Auth
   private var mAuth: FirebaseAuth? = null
   private var mGoogleSignInClient: GoogleSignInClient? = null
@@ -54,7 +56,8 @@ class LoginActivity : AppCompatActivity(), OnSingleClickListener {
      *  b. 웹 애플리케이션 유형의 클라이언트 ID가 백엔드 서버의 OAuth 2.0 클라이언트 ID입니다.
      */
     mAuth = FirebaseAuth.getInstance() // FirebaseAuth를 사용하기 위해서 인스턴스를 꼭 받아오기
-    signInButton = googleSignInButton // googleSignInButton 사용. Gradle에서 implementation을 해줘야 사용 가능.
+
+   // signInButton = googleSignInButton // googleSignInButton 사용. Gradle에서 implementation을 해줘야 사용 가능.
 
     //  Configure Google Sign In
     // 구글 로그인 옵션

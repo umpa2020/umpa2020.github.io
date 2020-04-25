@@ -68,5 +68,6 @@ class Constants {
     const val TURNING_RIGHT_POINT = "4"
 
     const val TIMESTAMP_LENGTH = 13
+    var testId = 0
   }
 }

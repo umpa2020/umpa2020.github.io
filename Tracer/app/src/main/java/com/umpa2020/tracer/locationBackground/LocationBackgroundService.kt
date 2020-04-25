@@ -17,7 +17,7 @@ import com.umpa2020.tracer.util.Logg
  *  만약 메인 스레드와 관련된 작업을 해야 한다면 메인스레드 Handler나 Boradcast intent를 이용해야 한다.
  *  출처: https://fullstatck.tistory.com/23 [풀스택 엔지니어]
  */
-class LocationBackgroundService : IntentService("LocationBackgroundService"), LocationUpdatesComponent.ILocationProvider {
+class LocationBackgroundService : IntentService("LocationBackgroundService"), LocationUpdatesComponent.ILocationProvider{
   /**
    * Activity와 Service 통신
    *  1. Activity는 Service에 이벤트를 전달
@@ -25,7 +25,6 @@ class LocationBackgroundService : IntentService("LocationBackgroundService"), Lo
    *  3. Service는 Activity로 결과 이벤트를 전달
    */
   var notification: Notification? = null
-
   override fun onCreate() {
     super.onCreate()
     Logg.i( "onCreate ")
@@ -33,6 +32,8 @@ class LocationBackgroundService : IntentService("LocationBackgroundService"), Lo
     /**
      *  위치 관련 생성.
      */
+
+
 
     Logg.d(this.toString())
     LocationUpdatesComponent.setILocationProvider(this)
@@ -71,11 +72,12 @@ class LocationBackgroundService : IntentService("LocationBackgroundService"), Lo
    * @param messageID
    * 액티비티에 브로드캐스트를 이용해 message 보내기.
    */
+
   private fun sendMessage(location: Location) {
     try {
       val intent = Intent("custom-event-name")
       intent.putExtra("message", location)
-//      Logg.d( location.toString())
+      Logg.d( location.toString())
       LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
 
     } catch (e: RemoteException) {
@@ -128,7 +130,7 @@ class LocationBackgroundService : IntentService("LocationBackgroundService"), Lo
       .setContentTitle(getString(R.string.gps_activation))
       //  .setContentText("Background location service is getting location...")
       .setContentIntent(pendingIntent)
-      .setSmallIcon(R.mipmap.ic_launcher_tracer)
+      .setSmallIcon(R.mipmap.ic_launcher_tracer_final)
       .setTicker("Ticker text")
       .build()
   }
@@ -148,4 +150,5 @@ class LocationBackgroundService : IntentService("LocationBackgroundService"), Lo
     private val TAG = "LocationBackground"
     const val LOCATION_MESSAGE = 999
   }
+
 }

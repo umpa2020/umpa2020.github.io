@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.SystemClock
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -13,6 +14,7 @@ import com.umpa2020.tracer.locationBackground.LocationBackgroundService
 import com.umpa2020.tracer.locationBackground.ServiceStatus
 import com.umpa2020.tracer.main.profile.ProfileFragment
 import com.umpa2020.tracer.main.ranking.RankingFragment
+import com.umpa2020.tracer.main.challenge.ChallengeFragment
 import com.umpa2020.tracer.main.start.StartFragment
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.TTS
@@ -36,6 +38,7 @@ class MainActivity : AppCompatActivity() {
         R.id.navigation_start -> selectedFragment = StartFragment()
         R.id.navigation_profile -> selectedFragment = ProfileFragment()
         R.id.navigation_ranking -> selectedFragment = RankingFragment()
+        R.id.navigation_challenge -> selectedFragment = ChallengeFragment()
       }
 
       Logg.i("프래그먼트 개수 : " + supportFragmentManager.backStackEntryCount.toString())
@@ -44,6 +47,7 @@ class MainActivity : AppCompatActivity() {
         R.id.container,
         selectedFragment!!
       ).commit()
+    
     }
     true
   }

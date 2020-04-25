@@ -1,24 +1,21 @@
 package com.umpa2020.tracer.network
 
-import android.os.Handler
-import android.os.Message
-import com.google.firebase.firestore.FirebaseFirestore
+import android.net.Uri
 import com.google.firebase.firestore.Query
+import com.google.firebase.storage.FirebaseStorage
+import com.umpa2020.tracer.App
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.RanMapsData
 import com.umpa2020.tracer.dataClass.RankingData
-import com.umpa2020.tracer.network.BaseFB.Companion.BEST_TIME
-import com.umpa2020.tracer.network.BaseFB.Companion.CHALLENGER_TIME
-import com.umpa2020.tracer.network.BaseFB.Companion.MAP_INFO
-import com.umpa2020.tracer.network.BaseFB.Companion.RANKING
-import com.umpa2020.tracer.network.BaseFB.Companion.RANKING_MAP
-import com.umpa2020.tracer.network.BaseFB.Companion.USER_INFO
-import com.umpa2020.tracer.network.BaseFB.Companion.USER_RAN_THESE_MAPS
+import com.umpa2020.tracer.dataClass.RouteGPX
+import com.umpa2020.tracer.extensions.classToGpx
+import com.umpa2020.tracer.extensions.gpxToClass
+import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.UserInfo
+import java.io.File
 import java.util.*
 
-class FBRacingRepository {
-  val db = FirebaseFirestore.getInstance()
+class FBRacingRepository : BaseFB() {
 
   /**
    * 첫 번째 실행 되어야하는 함수
@@ -31,7 +28,8 @@ class FBRacingRepository {
     result: Boolean,
     racerData: InfoData,
     racingFinishListener: RacingFinishListener,
-    racerSpeeds: MutableList<Double>
+    racerSpeeds: MutableList<Double>,
+    racerGPX: RouteGPX
   ) {
     // 타임스탬프
     val timestamp = Date().time
@@ -39,11 +37,13 @@ class FBRacingRepository {
     if (result) {
       val rankingData = RankingData(
         racerData.makersNickname,
+        UserInfo.autoLoginKey,
         UserInfo.nickname,
         racerData.time,
         1,
         racerSpeeds.max().toString(),
-        racerSpeeds.average().toString()
+        racerSpeeds.average().toString(),
+        null
       )
       // 랭킹 맵에서
       db.collection(RANKING_MAP).document(racerData.mapTitle!!).collection(RANKING)
@@ -55,6 +55,27 @@ class FBRacingRepository {
               if (racerData.time!!.toLong() < document.get(CHALLENGER_TIME) as Long) {
                 db.collection(RANKING_MAP).document(racerData.mapTitle!!).collection(RANKING)
                   .document(document.id).update(BEST_TIME, 0)
+
+                val saveFolder = File(App.instance.filesDir, "routeGPX") // 저장 경로
+                if (!saveFolder.exists()) {       //폴더 없으면 생성
+                  saveFolder.mkdir()
+                }
+
+                val racerGpxFile = racerGPX.classToGpx(saveFolder.path)
+
+                // storage에 이미지 업로드 모든 맵 이미지는 mapimage/maptitle로 업로드가 된다.
+                val fstorage = FirebaseStorage.getInstance()
+                val fRef = fstorage.reference.child("mapRoute")
+                  .child(racerData.mapTitle!!).child("racingGPX").child(UserInfo.autoLoginKey)
+                rankingData.racerGPX = fRef.path
+
+                val fuploadTask = fRef.putFile(racerGpxFile)
+
+                fuploadTask.addOnFailureListener {
+                  Logg.d("Success to upload racerGPX")
+                }.addOnSuccessListener {
+                  Logg.d("Fail : $it")
+                }
               } else {
                 rankingData.bestTime = 0
               }
@@ -143,5 +164,21 @@ class FBRacingRepository {
     val ranMapsData = RanMapsData(racerData.mapTitle, racerData.distance, racerData.time)
     db.collection(USER_INFO).document(UserInfo.autoLoginKey).collection(USER_RAN_THESE_MAPS)
       .add(ranMapsData)
+  }
+
+  fun listRacingGPX(mapTitle: String, racerIdList: Array<String>,listener:RacingListener) {
+    val racerGPXList = mutableListOf<RouteGPX>()
+    var count=0
+    racerIdList.forEach {
+      val routeRef = mapRouteStorageRef.child(mapTitle).child(RACING_GPX).child(it)
+      val localFile = File.createTempFile("routeGpx", "xml")
+      routeRef.getFile(Uri.fromFile(localFile)).addOnSuccessListener {
+        racerGPXList.add(localFile.path.gpxToClass())
+        count++
+        if(racerGPXList.size==racerIdList.size){
+          listener.racingList(racerGPXList.toTypedArray())
+        }
+      }
+    }
   }
 }
