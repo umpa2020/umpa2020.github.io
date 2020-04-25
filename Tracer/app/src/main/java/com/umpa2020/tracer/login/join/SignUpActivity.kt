@@ -461,7 +461,7 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
 
         if (textInputLayoutArray[0].error != getString(R.string.nickname_available)) { //무조건 중복 확인 버튼을 눌러야만 회원가입 가능하게 함
           Logg.d(textInputLayoutArray[0].error.toString() + "if문 검사")
-          getString(R.string.check_duplicates1).show()
+          getString(R.string.check_duplicates).show()
         } else { // 중복 확인 통과
           Logg.d(isInputCorrectData[0].toString() + ", " + age!!.isNotEmpty().toString() + ", " + gender!!.isNotEmpty().toString())
           if (isInputCorrectData[0] && age!!.isNotEmpty() && gender!!.isNotEmpty()) {

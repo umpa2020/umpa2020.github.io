@@ -153,7 +153,7 @@ class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener, OnM
      */
     noticePopup = ChoicePopup(this, getString(R.string.select_type),
       getString(R.string.how_type),
-      getString(R.string.recording), getString(R.string.public1),
+      getString(R.string.recording), getString(R.string.public_),
       View.OnClickListener {
         //랭킹 기록용 버튼 눌렀을 때
         val intent = Intent(App.instance.context(), RacingActivity::class.java)

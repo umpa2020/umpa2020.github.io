@@ -79,9 +79,6 @@
   <string name="distance_display">Distance display</string>
   <string name="yes">Yes</string>
   <string name="no">No</string>
-  <string name="please_select1">Please select</string>
-  <string name="yes1">Yes</string>
-  <string name="no1">No</string>
   <string name="noroute">There are currently no saved routes.</string>
   <string name="no_activity">There ar currently no activities.</string>
   <string name="profile_information">My Profile</string>
@@ -92,7 +89,6 @@
   <string name="check_duplicates">Please check for duplicates.</string>
   <string name="nickname_already_using">this nickname is already using.</string>
   <string name="nickname_available">Available nickname.</string>
-  <string name="check_duplicates1">Please double-check.</string>
   <string name="please_select">Please select</string>
   <string name="set_default_image">Would you like to set it as the default image?</string>
   <string name="gps_activation">GPS activation</string>
@@ -139,7 +135,6 @@
   <string name="select_type">Please select a type.</string>
   <string name="recording">Recording</string>
   <string name="around">Around</string>
-  <string name="ranking1">Rank</string>
   <string name="start_running">Press the start button to start running.</string>
   <string name="Distance_km">Distance (km)</string>
   <string name="Time">Time</string>
@@ -164,7 +159,6 @@
   <string name="only_start">m of the starting point.</string>
   <string name="move_startpoint">Go to the starting point.\nDistance left to the starting point\n</string>
   <string name="how_type">What type would you like to play?\n\nRanking records: Ranking registration possible</string>
-  <string name="public1">Public</string>
   <string name="want_start">If you want to start, press the start button</string>
   <string name="deselect_photo">Deselect photos</string>
   <string name="cannot_save">If you stop now, saving is not possible.\n\nAre you sure you want to stop?</string>

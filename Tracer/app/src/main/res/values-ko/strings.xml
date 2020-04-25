@@ -79,9 +79,6 @@
   <string name="distance_display">떨어진 거리 표시</string>
   <string name="yes">예</string>
   <string name="no">아니오</string>
-  <string name="please_select1">선택해주세요.</string>
-  <string name="yes1">예</string>
-  <string name="no1">아니오</string>
   <string name="noroute">현재 저장된 루트가 없습니다.</string>
   <string name="no_activity">현재 저장된 경로가 없습니다.</string>
   <string name="profile_information">내 정보</string>
@@ -92,7 +89,6 @@
   <string name="check_duplicates">중복 확인을 해주십시오.</string>
   <string name="nickname_already_using">이미 사용중인 닉네임입니다.</string>
   <string name="nickname_available">사용 가능한 닉네임입니다.</string>
-  <string name="check_duplicates1">중복 확인을 해주세요.</string>
   <string name="please_select">선택해주세요.</string>
   <string name="set_default_image">기본 이미지로 설정하시겠습니까?</string>
   <string name="gps_activation">GPS 활성화</string>
@@ -139,7 +135,6 @@
   <string name="select_type">유형을 선택해주세요.</string>
   <string name="recording">기록용</string>
   <string name="around">주변</string>
-  <string name="ranking1">순위</string>
   <string name="start_running">시작버튼을 누르면 러닝이 시작됩니다</string>
   <string name="Distance_km">거리 (km)</string>
   <string name="Time">시간</string>
@@ -164,7 +159,6 @@
   <string name="only_start">m 안에서만 시작할 수 있습니다</string>
   <string name="move_startpoint">시작 포인트로 이동하십시오.\n시작포인트까지 남은거리\n</string>
   <string name="how_type">어떤 유형으로 경기하시겠습니까?\n\n랭킹 기록용 : 랭킹 등록 가능</string>
-  <string name="public1">일반</string>
   <string name="want_start">시작을 원하시면 START를 누르세요</string>
   <string name="deselect_photo">사진 선택 취소</string>
   <string name="cannot_save">지금 정지하시면 저장이 불가능합니다.\n\n정지하시겠습니까?</string>
