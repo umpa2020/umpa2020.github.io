@@ -9,12 +9,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.ChallengeData
-<<<<<<< HEAD
 import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.network.FBChallengeImageRepository
-=======
 import com.umpa2020.tracer.util.OnSingleClickListener
->>>>>>> fdff82f5076d689fdfd5b410394f0cdcb570fe94
 import kotlinx.android.synthetic.main.recycler_challengefragment_item.view.*
 
 class ChallengeRecyclerViewAdapter(var challenge: MutableList<ChallengeData>) :
