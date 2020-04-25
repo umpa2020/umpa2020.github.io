@@ -22,7 +22,7 @@
       android:layout_width="150dp"
       android:layout_height="150dp"
       android:layout_marginTop="5dp"
-      android:src="@mipmap/ic_launcher_tracer"/>
+      android:src="@drawable/login_image"/>
 
     <TextView
       android:id="@+id/challenge_race_name"

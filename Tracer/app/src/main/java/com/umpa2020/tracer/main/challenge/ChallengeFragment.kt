@@ -30,9 +30,9 @@ class ChallengeFragment : Fragment() {
     val now = Calendar.getInstance()
 
     adChallengeList.add(AdChallengeData("test", R.drawable.ic_checkpoint_red))
-    adChallengeList.add(AdChallengeData("test2", R.drawable.ic_racing_finishpoint))
+    adChallengeList.add(AdChallengeData("test2", R.drawable.ic_finish_point))
     adChallengeList.add(AdChallengeData("test2", R.drawable.ic_checkpoint_gray))
-    adChallengeList.add(AdChallengeData("test2", R.drawable.ic_racing_startpoint))
+    adChallengeList.add(AdChallengeData("test2", R.drawable.ic_start_point))
     view.adChallengeScrollViewPager.adapter = AdChallengePageAdapter(adChallengeList, requireContext())
     view.adChallengeScrollViewPager.startAutoScroll()
     //view.adChallengeCountTextView.text="${view.adChallengeScrollViewPager.currentItem}/${adChallengeList.size}"
