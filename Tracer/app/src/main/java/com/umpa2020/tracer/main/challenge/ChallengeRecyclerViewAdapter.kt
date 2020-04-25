@@ -30,7 +30,7 @@ class ChallengeRecyclerViewAdapter(var challenge: ArrayList<ChallengeData>) :
     holder.itemView.setOnClickListener(object : OnSingleClickListener {
       override fun onSingleClick(v: View?) {
         val nextIntent = Intent(context, ChallengeRecycleritemClickActivity::class.java)
-        nextIntent.putExtra("challenge", singleItem1.nametxt) //????????
+        nextIntent.putExtra("challenge", singleItem1.name) //????????
         context!!.startActivity(nextIntent)
       }
     })
