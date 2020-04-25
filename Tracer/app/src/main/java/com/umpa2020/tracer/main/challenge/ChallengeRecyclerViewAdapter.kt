@@ -21,10 +21,10 @@ class ChallengeRecyclerViewAdapter(var challenge: ArrayList<ChallengeData>) :
 
     val ChallengeData: ChallengeData = challenge.get(position)
 
-    holder.icons.setImageResource(ChallengeData.iconsBar!!)
-    holder.recename.text = ChallengeData.nametxt
-    holder.racedate.text = ChallengeData.datetxt
-    holder.raceweek.text = ChallengeData.dateweek
+    //holder.icons.setImageResource(ChallengeData.iconsBar!!)
+    holder.name.text = ChallengeData.name
+    holder.date.text = ChallengeData.date
+    holder.locale.text = ChallengeData.locale
 
   }
 
@@ -43,9 +43,9 @@ class ChallengeRecyclerViewAdapter(var challenge: ArrayList<ChallengeData>) :
 
   inner class ItemHolder(view: View) : RecyclerView.ViewHolder(view){
     var icons = view.challenge_map
-    var recename = view.challenge_race_name
-    var racedate = view.challenge_date
-    var raceweek = view.challenge_week
+    var name = view.challenge_race_name
+    var date = view.challenge_date
+    var locale = view.challenge_locale
   }
 
 }
