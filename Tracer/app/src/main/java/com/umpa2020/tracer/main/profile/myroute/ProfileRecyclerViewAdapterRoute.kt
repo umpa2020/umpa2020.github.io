@@ -43,7 +43,7 @@ class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) :
     FBMapImageRepository().getMapImage(holder.image, singleItem.mapTitle!!)
 
     holder.maptitle.text = cutted
-    holder.distance.text = singleItem.distance!!.prettyDistance()
+    holder.distance.text = singleItem.distance!!.prettyDistance
     holder.time.text = singleItem.time!!.format(MM_SS)
     holder.likes.text = singleItem.likes.toString()
     holder.excutes.text = singleItem.execute.toString()

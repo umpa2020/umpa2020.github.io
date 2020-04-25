@@ -98,8 +98,8 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
       wedgedCamera = true
       true
     }
-    traceMap.mMap.uiSettings.isCompassEnabled=true
-    traceMap.mMap.uiSettings.isZoomControlsEnabled=true
+    traceMap.mMap.uiSettings.isCompassEnabled = true
+    traceMap.mMap.uiSettings.isZoomControlsEnabled = true
   }
 
   open fun updateLocation(curLoc: Location) {
@@ -230,7 +230,6 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     currentLatLng = location.toLatLng()
     if (previousLatLng == currentLatLng) {
       moving = false
-    } else if (false) { //TODO:비정상적인 움직임일 경우 + finish에 도착한 경우
     } else {
       moving = true
       if (wedgedCamera) traceMap.mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLatLng))

@@ -130,7 +130,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
                   MarkerOptions()
                     .position(it.latLng)
                     .title(cutted.toString())
-                    .snippet(it.distance.prettyDistance())
+                    .snippet(it.distance.prettyDistance)
                     .icon(icon)
                 )
               )

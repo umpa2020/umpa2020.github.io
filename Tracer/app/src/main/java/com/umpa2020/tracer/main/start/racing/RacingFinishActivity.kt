@@ -195,12 +195,12 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
     RacingFinishAnalysisOtherNickname.text = makerData.makersNickname
 
     makerLapTimeTextView.text = makerData.time!!.format(MM_SS)
-    makerMaxSpeedTextView.text = makerSpeeds.max()!!.prettyDistance()
-    makerAvgSpeedTextView.text = makerSpeeds.average().prettyDistance()
+    makerMaxSpeedTextView.text = makerSpeeds.max()!!.prettyDistance
+    makerAvgSpeedTextView.text = makerSpeeds.average().prettyDistance
 
     racerLapTimeTextView.text = racerData.time!!.format(MM_SS)
-    racerMaxSpeedTextView.text = racerSpeeds.max()!!.prettyDistance()
-    racerAvgSpeedTextView.text = racerSpeeds.average().prettyDistance()
+    racerMaxSpeedTextView.text = racerSpeeds.max()!!.prettyDistance
+    racerAvgSpeedTextView.text = racerSpeeds.average().prettyDistance
     progressbar.dismiss()
   }
 
@@ -239,8 +239,8 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
 
     override fun getOtherRacing(otherData: RankingData) {
       makerLapTimeTextView.text = otherData.challengerTime!!.format(MM_SS)
-      makerMaxSpeedTextView.text = otherData.maxSpeed!!.toDouble().prettyDistance()
-      makerAvgSpeedTextView.text = otherData.averageSpeed!!.toDouble().prettyDistance()
+      makerMaxSpeedTextView.text = otherData.maxSpeed!!.toDouble().prettyDistance
+      makerAvgSpeedTextView.text = otherData.averageSpeed!!.toDouble().prettyDistance
     }
   }
 

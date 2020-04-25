@@ -46,7 +46,7 @@ class RankRecyclerViewAdapterTopPlayer(val mydata: ArrayList<RankingData>, val m
     //클릭하면 맵 상세보기 페이지로 이동
     holder.itemView.setOnClickListener(object : OnSingleClickListener {
       override fun onSingleClick(v: View?) {
-        //TODO 상대방 프로필 넘어가게 해야함
+
         val nextIntent = Intent(context, OtherProfileActivity::class.java)
         nextIntent.putExtra("mapTitle", mapTitle) //nickname 정보 인텐트로 넘김
         nextIntent.putExtra("nickname", holder.nickname.text.toString())

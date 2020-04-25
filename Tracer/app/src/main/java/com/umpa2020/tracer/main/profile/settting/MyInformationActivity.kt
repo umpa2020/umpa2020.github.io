@@ -32,7 +32,6 @@ class MyInformationActivity : AppCompatActivity(), OnSingleClickListener {
     // 프로필 이미지 서버에서 가져와서 화면에 설정
     FBProfileRepository().getProfileImage(profileImage, UserInfo.nickname)
 
-    // TODO : 프로필 이미지 변경.
     // Shared에 저장된 유저 정보 설정정
     emailTextView.text = UserInfo.email
     nickNameTextView.text = UserInfo.nickname
