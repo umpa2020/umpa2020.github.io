@@ -10,9 +10,30 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.umpa2020.tracer.R
 import kotlinx.android.synthetic.main.challenge_loaclpopup.*
 
-class RegionChoicePopup(context: Context,val onClickListener: View.OnClickListener) : AlertDialog(context) {
+class RegionChoicePopup(context: Context, val onClickListener: View.OnClickListener) :
+  AlertDialog(context) {
 
-  val localeList= arrayOf("전국","서울","경기","강원","충북","충남","전남","전북","경북","경남","부산","대구","인천","광주","대전","울산","세종","제주")
+  val localeList = arrayOf(
+    "전국",
+    "서울",
+    "경기",
+    "강원",
+    "충북",
+    "충남",
+    "전남",
+    "전북",
+    "경북",
+    "경남",
+    "부산",
+    "대구",
+    "인천",
+    "광주",
+    "대전",
+    "울산",
+    "세종",
+    "제주"
+  )
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.challenge_loaclpopup)
@@ -20,6 +41,6 @@ class RegionChoicePopup(context: Context,val onClickListener: View.OnClickListen
 
 
     challenge_local.layoutManager = GridLayoutManager(context, 3)
-    challenge_local.adapter = LocalAdapter(localeList,onClickListener)
+    challenge_local.adapter = LocalAdapter(localeList, onClickListener)
   }
 }
