@@ -116,6 +116,8 @@ class LockScreenService : Service() {
   }
   override fun onDestroy() {
     super.onDestroy()
+    Logg.d("onDestroy()")
+    MyNotificationManager.cancelnNotificationChannel(this@LockScreenService)
     stateReceiver(false)
   }
 
