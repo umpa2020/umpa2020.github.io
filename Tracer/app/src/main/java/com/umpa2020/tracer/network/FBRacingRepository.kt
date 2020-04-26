@@ -102,28 +102,20 @@ class FBRacingRepository : BaseFB() {
     racerData: InfoData,
     racingFinishListener: RacingFinishListener
   ) {
-    val arrRankingData: ArrayList<RankingData> = arrayListOf()
-    var arg = 0
-
     db.collection(RANKING_MAP).document(racerData.mapTitle!!).collection(RANKING)
       .orderBy(CHALLENGER_TIME, Query.Direction.ASCENDING)
+      .whereEqualTo("bestTime", 1)
       .get()
       .addOnSuccessListener { resultdb ->
         var index = 1
-        for (document2 in resultdb) {
-          val recycleRankingData: RankingData = document2.toObject(RankingData::class.java)
-          if (recycleRankingData.bestTime == 1) {
-            if (document2.get("challengerNickname") == UserInfo.nickname) {
-              if (result) {
-                arg = index
-              }
-            }
-
-            arrRankingData.add(recycleRankingData)
+        val arrRankingData = resultdb.map {
+          val rankData: RankingData = it.toObject(RankingData::class.java)
+          if (racerData.time!! >= rankData.challengerTime!!) {
             index++
           }
+          rankData
         }
-        racingFinishListener.getRacingFinish(arrRankingData, arg)
+        racingFinishListener.getRacingFinish(ArrayList(arrRankingData), index)
       }
   }
 
@@ -166,16 +158,16 @@ class FBRacingRepository : BaseFB() {
       .add(ranMapsData)
   }
 
-  fun listRacingGPX(mapTitle: String, racerIdList: Array<String>,listener:RacingListener) {
+  fun listRacingGPX(mapTitle: String, racerIdList: Array<String>, listener: RacingListener) {
     val racerGPXList = mutableListOf<RouteGPX>()
-    var count=0
+    var count = 0
     racerIdList.forEach {
       val routeRef = mapRouteStorageRef.child(mapTitle).child(RACING_GPX).child(it)
       val localFile = File.createTempFile("routeGpx", "xml")
       routeRef.getFile(Uri.fromFile(localFile)).addOnSuccessListener {
         racerGPXList.add(localFile.path.gpxToClass())
         count++
-        if(racerGPXList.size==racerIdList.size){
+        if (racerGPXList.size == racerIdList.size) {
           listener.racingList(racerGPXList.toTypedArray())
         }
       }

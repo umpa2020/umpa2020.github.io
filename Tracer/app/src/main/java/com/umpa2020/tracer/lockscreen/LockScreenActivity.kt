@@ -103,7 +103,8 @@ class LockScreenActivity : AppCompatActivity() {
     // ViewModelProviders를 사용하여 ViewModel을 Activity와 연관시켜준다.
     //
     //Activity가 처음 시작되면 ViewModelProviders가 ViewModel을 만든다. 예를 들어 configuration change을
-    // 통해 Activity가 destory됬을 때 ViewModel은 지속된다. Activity가 다시 생성되면 ViewModelProviders는 기존 ViewModel을 반환한다. 자세한 내용은 ViewModel을 참조하면 된다.
+    // 통해 Activity가 destory됬을 때 ViewModel은 지속된다. Activity가 다시 생성되면 ViewModelProviders는 기존 ViewModel을 반환한다.
+    // 자세한 내용은 ViewModel을 참조하면 된다.
     //
     // RecyclerView 코드 블록 아래의 onCreate ()에서 ViewModelProvider에서 ViewModel을 가져온다.
     recordViewModel = ViewModelProvider(this).get(RecordViewModel::class.java)

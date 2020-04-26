@@ -2,6 +2,7 @@ package com.umpa2020.tracer.network
 
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import java.io.File
 
 open class BaseFB {
   val db = FirebaseFirestore.getInstance()
@@ -9,6 +10,10 @@ open class BaseFB {
   val userInfoColRef = db.collection(USER_INFO)
   val mapInfoColRef = db.collection(MAP_INFO)
   val mapRouteStorageRef=storage.reference.child(MAP_ROUTE)
+
+  fun uploadFile(path:String,file: File){
+
+  }
   companion object {
     const val MAP_TITLE = "mapTitle"
 

@@ -9,9 +9,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants.Companion.TIMESTAMP_LENGTH
-import com.umpa2020.tracer.dataClass.LikedMapData
 import com.umpa2020.tracer.dataClass.RankingData
 import com.umpa2020.tracer.network.*
+import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.ProgressBar
 import kotlinx.android.synthetic.main.activity_rank_recycler_item_click.*
@@ -27,6 +27,7 @@ class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener
     progressbar = ProgressBar(this)
     rankRecyclerMoreButton.setOnClickListener(this)
     rankRecyclerHeart.setOnClickListener(this)
+
     progressbar.show()
     val intent = intent
     //전달 받은 값으로 Title 설정
@@ -58,6 +59,21 @@ class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener
           )
         }
       }
+  }
+
+  override fun onResume() {
+    super.onResume()
+    Logg.d("onResume()")
+  }
+
+  override fun onPause() {
+    super.onPause()
+    Logg.d("onPause()")
+  }
+
+  override fun onDestroy() {
+    super.onDestroy()
+    Logg.d("onDestroy()")
   }
 
   override fun onSingleClick(v: View?) {
@@ -92,7 +108,6 @@ class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener
    */
 
   private val likedMapListener = object : LikedMapListener {
-
     override fun liked(liked: Boolean, getlikes: Int) {
       rankRecyclerHeartCount.text = getlikes.toString()
       //adpater 추가

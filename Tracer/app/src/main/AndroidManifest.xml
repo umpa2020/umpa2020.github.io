@@ -43,8 +43,8 @@
       android:name=".lockscreen.LockScreenActivity"
       android:launchMode="singleInstance"
       android:showOnLockScreen="true"
-      android:theme="@style/lockscreenView" />
-    <activity android:name=".main.start.racing.AllRanking" />
+      android:theme="@style/lockscreenView"/>
+    <activity android:name=".main.start.racing.AllRankingActivity" />
     <activity android:name=".main.start.racing.RacingSelectPeopleActivity" />
     <activity android:name=".main.profile.myrecord.ProfileRecordActivity" />
     <activity android:name=".main.profile.settting.MyInformationActivity" />
