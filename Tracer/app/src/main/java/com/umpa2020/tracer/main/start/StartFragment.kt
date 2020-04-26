@@ -35,11 +35,9 @@ import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants.Companion.TIMESTAMP_LENGTH
 import com.umpa2020.tracer.dataClass.NearMap
 import com.umpa2020.tracer.dataClass.RouteGPX
-import com.umpa2020.tracer.extensions.gpxToClass
-import com.umpa2020.tracer.extensions.prettyDistance
-import com.umpa2020.tracer.extensions.show
-import com.umpa2020.tracer.extensions.toLatLng
+import com.umpa2020.tracer.extensions.*
 import com.umpa2020.tracer.main.MainActivity.Companion.gpsViewModel
+import com.umpa2020.tracer.main.challenge.ChallengeDataSettingActivity
 import com.umpa2020.tracer.main.ranking.RankingMapDetailActivity
 import com.umpa2020.tracer.main.start.racing.RacingActivity
 import com.umpa2020.tracer.main.start.running.RunningActivity
@@ -100,7 +98,17 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
 
         // EditText 초기화
         mainStartSearchTextView.setText("")
-
+      }
+      R.id.upload->{
+        val intent = Intent(context, ChallengeDataSettingActivity::class.java)
+        startActivity(intent)
+      }
+      R.id.gpxTest->{
+        val path = "/data/data/com.umpa2020.tracer/files/originGPX/2020korea50k_10kfinal.gpx"
+        val gpx = path.gpxToClass()
+        gpx.addCheckPoint()
+        gpx.addDirectionSign()
+        gpx.wptList.forEachIndexed{i,it-> Logg.d("${it.type.get()} $i") }
       }
     }
   }
@@ -309,6 +317,8 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
     view.mainStartSearchButton.setOnClickListener(this)
     view.mainStartBackButton.setOnClickListener(this)
 
+    view.gpxTest.setOnClickListener(this)
+    view.upload.setOnClickListener(this)
     // 브로드 캐스트 등록 - 전역 context로 수정해야함
     LocalBroadcastManager.getInstance(this.requireContext())
       .registerReceiver(locationBroadcastReceiver, IntentFilter("custom-event-name"))

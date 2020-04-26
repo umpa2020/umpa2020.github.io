@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.RankingData
-import com.umpa2020.tracer.extensions.MM_SS
 import com.umpa2020.tracer.extensions.format
+import com.umpa2020.tracer.extensions.m_s
 import com.umpa2020.tracer.main.profile.OtherProfileActivity
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.OnSingleClickListener
@@ -28,7 +28,7 @@ class RankRecyclerViewAdapterTopPlayer(val mydata: ArrayList<RankingData>, val m
     //데이터 바인딩
     holder.rank.text = ranking.toString()
     holder.nickname.text = singleItem1.challengerNickname
-    holder.time.text = singleItem1.challengerTime!!.toLong().format(MM_SS)
+    holder.time.text = singleItem1.challengerTime!!.toLong().format(m_s)
 
     //ranking에 따라 트로피 색 바뀌게 하는 부분
     if (ranking == 1) {

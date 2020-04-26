@@ -16,23 +16,16 @@
 앱이 Android 10 이상을 타겟팅하는 경우 앱이 백그라운드에 있는 동안 정기 위치 업데이트를 받으려면
    앱의 manifest 파일에 ACCESS_BACKGROUND_LOCATION 권한을 선언하고 사용자 권한을 수신해야 합니다.
     -->
-  <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
-  <!-- 카메라 권한 -->
+  <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" /> <!-- 카메라 권한 -->
   <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
   <uses-permission android:name="android.permission.CAMERA" />
-  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-  <!-- foreground service -->
-  <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-
-  <!-- LockScreen Permission -->
+  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- foreground service -->
+  <uses-permission android:name="android.permission.FOREGROUND_SERVICE" /> <!-- LockScreen Permission -->
   <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" />
-  <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+  <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" /> <!-- 전화 수신 권한 체크 https://jwandroid.tistory.com/152 -->
+  <uses-permission android:name="android.permission.PHONE_STATE_STATE" /> <!-- 핸드폰 진동 -->
+  <uses-permission android:name="android.permission.VIBRATE" />
 
-  <!-- 전화 수신 권한 체크 https://jwandroid.tistory.com/152 -->
-  <uses-permission android:name="android.permission.PHONE_STATE_STATE" />
-
-  <!-- 핸드폰 진동 -->
-  <uses-permission android:name = "android.permission.VIBRATE"/>
   <application
     android:name=".App"
     android:allowBackup="true"
@@ -42,16 +35,17 @@
     android:supportsRtl="true"
     android:theme="@style/AppTheme"
     tools:ignore="GoogleAppIndexingWarning">
-
+    <activity android:name=".main.challenge.ChallengeDataSettingActivity"></activity>
 
     <service android:name=".lockscreen.service.LockScreenService" />
 
-    <activity android:name=".lockscreen.LockScreenActivity"
+    <activity
+      android:name=".lockscreen.LockScreenActivity"
       android:launchMode="singleInstance"
       android:showOnLockScreen="true"
       android:theme="@style/lockscreenView"/>
     <activity android:name=".main.start.racing.AllRankingActivity" />
-    <activity android:name=".main.start.racing.RacingSelectPeopleActivity"></activity>
+    <activity android:name=".main.start.racing.RacingSelectPeopleActivity" />
     <activity android:name=".main.profile.myrecord.ProfileRecordActivity" />
     <activity android:name=".main.profile.settting.MyInformationActivity" />
     <activity android:name=".main.profile.settting.AppSettingActivity" />
@@ -81,6 +75,7 @@
     <activity android:name=".main.start.running.RunningActivity" />
     <activity android:name=".main.MainActivity" />
     <activity android:name=".login.LoginActivity" />
+    <activity android:name=".main.challenge.ChallengeRecycleritemClickActivity" />
 
     <meta-data
       android:name="com.google.android.geo.API_KEY"
