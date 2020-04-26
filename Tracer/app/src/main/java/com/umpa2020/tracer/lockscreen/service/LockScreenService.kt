@@ -99,7 +99,7 @@ class LockScreenService : Service() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       // 포그라운드 서비스는 알림창이 있어야 실행 가능.
       MyNotificationManager.createMainNotificationChannel(this@LockScreenService)
-      startForeground( App.notificationId, createNotificationCompatBuilder().build())
+      startForeground( App.LocationNitificationId, createNotificationCompatBuilder().build())
     }
   }
 

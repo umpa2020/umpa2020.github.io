@@ -15,7 +15,7 @@ object MyNotificationManager {
 
   private val CHANNEL_ID = "LockScreen Example ID"
   private val CHANNEL_NAME = "LockScreen Example CHANEL"
-  private val CHANNEL_DESCRIPTION = "This is LockScreen Example CHANEL"
+
   var mNotificationManager: NotificationManager? = null
 
   fun getMainNotificationId(): String {
@@ -26,14 +26,13 @@ object MyNotificationManager {
   fun createMainNotificationChannel(context: Context?) {
     val id = CHANNEL_ID
     val name = CHANNEL_NAME
-    val importance = android.app.NotificationManager.IMPORTANCE_HIGH
+    val importance = android.app.NotificationManager.IMPORTANCE_DEFAULT
     val mChannel = NotificationChannel(id, name, importance)
 
     mChannel.enableVibration(false)
     mChannel.enableLights(false)
 
-    mNotificationManager =
-      context?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    mNotificationManager = context?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     mNotificationManager!!.createNotificationChannel(mChannel)
   }
 
@@ -43,6 +42,6 @@ object MyNotificationManager {
 //    NotificationManagerCompat.from(App.instance).cancel(App.notificationId)
     mNotificationManager =
       context?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-    mNotificationManager!!.cancel(CHANNEL_ID, App.notificationId)
+    mNotificationManager!!.cancel(CHANNEL_ID, App.LocationNitificationId)
   }
 }
