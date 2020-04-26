@@ -42,8 +42,8 @@ class FBChallengeRepository : BaseFB() {
 
   fun listChallengeData(fromDate: Long, toDate: Long, region: String, challengeDataListener: ChallengeDataListener) {
     val listChallengeData = mutableListOf<ChallengeData>()
-
-    if (region == "전체") {
+    Logg.d("search $fromDate ~ $toDate $region")
+    if (region == "전국") {
       db.collection("challenges")
         .whereGreaterThan("date", fromDate)
         .whereLessThan("date", toDate)
