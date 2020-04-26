@@ -17,6 +17,7 @@ import com.umpa2020.tracer.dataClass.AdChallengeData
 import com.umpa2020.tracer.dataClass.BannerData
 import com.umpa2020.tracer.dataClass.ChallengeData
 import com.umpa2020.tracer.extensions.M_D
+import com.umpa2020.tracer.extensions.Y_M_D
 import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.extensions.mm_ss
 import com.umpa2020.tracer.network.*
@@ -42,8 +43,8 @@ class ChallengeFragment : Fragment() {
     val view: View = inflater.inflate(R.layout.fragment_challenge, container, false)
     val now = Calendar.getInstance()
 
-    view.btn_challenge_from.text = from.format(M_D)
-    view.btn_challenge_to.text = to.format(M_D)
+    view.btn_challenge_from.text = from.format(Y_M_D)
+    view.btn_challenge_to.text = to.format(Y_M_D)
     view.btn_challenge_region.text=locale
 
     FBChallengeBannerRepository().listChallengeBannerImagePath(bannerDataListener)
@@ -112,7 +113,6 @@ class ChallengeFragment : Fragment() {
   private val bannerDataListener = object : BannerDataListener {
     override fun bannerDataList(listBannerData: ArrayList<BannerData>) {
       adChallengeList = listBannerData
-      Logg.d("ssmm11 list = $adChallengeList")
       adChallengeScrollViewPager.adapter = AdChallengePageAdapter(adChallengeList, requireContext())
       adChallengeScrollViewPager.startAutoScroll()
     }
