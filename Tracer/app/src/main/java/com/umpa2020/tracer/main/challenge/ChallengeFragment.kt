@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.umpa2020.tracer.App
@@ -33,7 +34,8 @@ class ChallengeFragment : Fragment() {
   var adChallengeList = ArrayList<AdChallengeData>()
   var from = 1546300800000
   var to = 1609372800000
-
+  var locale="전국"
+  lateinit var regionChoicePopup : RegionChoicePopup
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
   ): View? {
@@ -48,10 +50,11 @@ class ChallengeFragment : Fragment() {
     view.adChallengeScrollViewPager.adapter = AdChallengePageAdapter(adChallengeList, requireContext())
     view.btn_challenge_from.text = from.format(M_D)
     view.btn_challenge_to.text = to.format(M_D)
+    view.btn_challenge_region.text=locale
     view.adChallengeScrollViewPager.startAutoScroll()
 
-
-    FBChallengeRepository().listChallengeData(from, to, "전체", challengeDataListener)
+    FBChallengeRepository().listChallengeData(from, to, "전국", challengeDataListener)
+    
     view.challengeAppBarText.setOnClickListener {
       val intent = Intent(context, ChallengeDataSettingActivity::class.java)
       startActivity(intent)
@@ -96,13 +99,17 @@ class ChallengeFragment : Fragment() {
     }
 
     view.btn_challenge_region.setOnClickListener {
-      val regionChoicePopup = RegionChoicePopup(requireContext())
+      regionChoicePopup = RegionChoicePopup(requireContext(),View.OnClickListener {localeButton->
+        locale = (localeButton as Button).text.toString()
+        btn_challenge_region.text=locale
+        regionChoicePopup.dismiss()
+      })
       regionChoicePopup.show()
     }
 
     view.btn_challenge_search.setOnClickListener {
-      FBChallengeRepository().listChallengeData(from, to, "전체", challengeDataListener)
-
+      Logg.d("search!!!")
+      FBChallengeRepository().listChallengeData(from, to, locale, challengeDataListener)
     }
 
     return view
