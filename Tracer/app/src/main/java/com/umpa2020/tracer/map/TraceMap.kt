@@ -24,7 +24,13 @@ class TraceMap(val mMap: GoogleMap) {
 
   lateinit var loadTrack: Polyline
   val passedIcon = R.drawable.ic_passed_circle.makingIcon()
-
+  val racerIcons = arrayOf(
+    R.drawable.ic_racer0.makingIcon(),
+    R.drawable.ic_racer1.makingIcon(),
+    R.drawable.ic_racer2.makingIcon(),
+    R.drawable.ic_racer3.makingIcon(),
+    R.drawable.ic_racer4.makingIcon()
+  )
   var markerList = mutableListOf<Marker>()
   var turningPointList = mutableListOf<Marker>()
   fun drawRoute(
@@ -32,7 +38,7 @@ class TraceMap(val mMap: GoogleMap) {
     wptList: MutableList<WayPoint>
   ): Pair<MutableList<Marker>, MutableList<Marker>> {
     Logg.d("Map is draw")
-    val track=trkList.map{it.toLatLng()}
+    val track = trkList.map { it.toLatLng() }
     loadTrack =
       mMap.addPolyline(
         PolylineOptions()
@@ -72,7 +78,7 @@ class TraceMap(val mMap: GoogleMap) {
                 .position(it.toLatLng())
                 .title(it.name.get())
                 .icon(unPassedIcon)
-                .anchor(0f,0.5f)
+                .anchor(0f, 0.5f)
             )
           )
         }
@@ -96,7 +102,8 @@ class TraceMap(val mMap: GoogleMap) {
             )
           )
         }
-        else -> { }
+        else -> {
+        }
       }
     }
     val trackBounds = track.toMutableList().bounds()
@@ -104,16 +111,26 @@ class TraceMap(val mMap: GoogleMap) {
     return Pair(markerList, turningPointList)
   }
 
+  var polyFlag = true
+  lateinit var poly: Polyline
   fun drawPolyLine(preLoc: LatLng, curLoc: LatLng) {
     Logg.d("making polyline $preLoc $curLoc")
 
-    //polyline 그리기
-    mMap.addPolyline(
-      PolylineOptions().add(
-        preLoc,
-        curLoc
+    if (polyFlag) {
+      //polyline 그리기
+      poly = mMap.addPolyline(
+        PolylineOptions().add(
+          preLoc,
+          curLoc
+        )
       )
-    )
+      polyFlag=false
+    }else{
+      val a=poly.points
+      a.add(curLoc)
+      poly.points=a
+      Logg.d("add new point $curLoc")
+    }
   }
 
   fun moveCamera(latlng: LatLng) {
@@ -121,30 +138,28 @@ class TraceMap(val mMap: GoogleMap) {
   }
 
   fun changeMarkerIcon(nextWP: Int) {
-    markerList[nextWP].remove()
-    markerList[nextWP] = mMap.addMarker(
-      MarkerOptions()
-        .position(markerList[nextWP].position)
-        .title(markerList[nextWP].title)
-        .icon(passedIcon)
-        .anchor(0f,0.5f)
-    )
+    markerList[nextWP].setIcon(passedIcon)
   }
 
   fun initCamera(latlng: LatLng) {
-    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng,17F))
+    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, 17F))
   }
 
-  var racerList= mutableListOf<Marker>()
+  var racerList = mutableListOf<Marker>()
 
-  suspend fun updateMarker(i:Int,latlng:LatLng){
-    racerList[i].remove()
-    racerList[i]= mMap.addMarker(MarkerOptions()
-      .position(latlng)
-      .title(racerList[i].title))
+  suspend fun updateMarker(i: Int, latlng: LatLng) {
+    racerList[i].position = latlng
   }
 
-  suspend fun addRacer(marker: MarkerOptions?) {
-    racerList.add(mMap.addMarker(marker))
+  suspend fun addRacer(latlng: LatLng, name: String, racerNo: Int) {
+    racerList.add(
+      mMap.addMarker(
+        MarkerOptions()
+          .position(latlng)
+          .title(name)
+          .icon(racerIcons[racerNo])
+          .draggable(true)
+      )
+    )
   }
 }
