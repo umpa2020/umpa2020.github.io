@@ -181,7 +181,7 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
       resultRankTextView.text = resultRankText.toRank()
     }
 
-    RacingFinishMyLapTime.text = makerData.time!!.format(MM_SS)
+    RacingFinishMyLapTime.text = racerData.time!!.format(MM_SS)
 
     FBProfileRepository().getProfileImage(RacingFinishAnalysisMyProfile, UserInfo.nickname)
     RacingFinishAnalysisMyNickname.text = UserInfo.nickname
