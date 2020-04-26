@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants.Companion.TIMESTAMP_LENGTH
 import com.umpa2020.tracer.dataClass.ActivityData
+import com.umpa2020.tracer.extensions.Y_M_D
 import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.main.ranking.RankRecyclerItemClickActivity
 import com.umpa2020.tracer.network.FBMapImageRepository
@@ -35,7 +36,7 @@ class ProfileRecyclerViewAdapterRecord(val datas: ArrayList<ActivityData>) :
     val singleItem1 = datas[position]
 
     val cutted = singleItem1.mapTitle!!.subSequence(0, singleItem1.mapTitle.length- TIMESTAMP_LENGTH) as String
-    val time = singleItem1.time!!.toLong().format(Locale.getDefault())
+    val time = singleItem1.time!!.toLong().format(Y_M_D)
 
     //데이터 바인딩
     FBMapImageRepository().getMapImage(holder.mapImageView, singleItem1.mapTitle.toString())

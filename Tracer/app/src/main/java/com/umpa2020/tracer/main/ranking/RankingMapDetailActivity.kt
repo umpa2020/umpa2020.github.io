@@ -19,9 +19,9 @@ import com.umpa2020.tracer.constant.Constants.Companion.TIMESTAMP_LENGTH
 import com.umpa2020.tracer.customUI.WorkaroundMapFragment
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.RouteGPX
-import com.umpa2020.tracer.extensions.MM_SS
 import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.extensions.gpxToClass
+import com.umpa2020.tracer.extensions.m_s
 import com.umpa2020.tracer.main.start.racing.RacingActivity
 import com.umpa2020.tracer.main.start.racing.RacingSelectPeopleActivity
 import com.umpa2020.tracer.map.TraceMap
@@ -102,7 +102,7 @@ class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener, OnM
                 rankingDetailNickname.text = infoData.makersNickname
                 rankingDetailMapDetail.text = infoData.mapExplanation
                 rankingDetailDistance.text = String.format("%.2f", infoData.distance!! / 1000)
-                rankingDetailTime.text = infoData.time!!.format(MM_SS)
+                rankingDetailTime.text = infoData.time!!.format(m_s)
                 rankingDetailSpeed.text = String.format("%.2f", speedList.average())
                 val chart = Chart(elevationList, speedList, rankingDetailChart)
                 chart.setChart()

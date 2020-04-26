@@ -4,24 +4,27 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.SystemClock
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.locationBackground.LocationBackgroundService
 import com.umpa2020.tracer.locationBackground.ServiceStatus
+import com.umpa2020.tracer.main.challenge.ChallengeFragment
 import com.umpa2020.tracer.main.profile.ProfileFragment
 import com.umpa2020.tracer.main.ranking.RankingFragment
-import com.umpa2020.tracer.main.challenge.ChallengeFragment
 import com.umpa2020.tracer.main.start.StartFragment
+import com.umpa2020.tracer.roomDatabase.entity.GPSData
+import com.umpa2020.tracer.roomDatabase.viewModel.GpsViewModel
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.TTS
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(){
   private var doubleBackToExitPressedOnce1 = false
 
   var selectedFragment: Fragment? = null//선택된 프래그먼트 저장하는 변수
@@ -51,11 +54,46 @@ class MainActivity : AppCompatActivity() {
     }
     true
   }
+  companion object {
+    lateinit var gpsViewModel: GpsViewModel
+  }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     Logg.d("Hello I'm New")
     setContentView(R.layout.activity_main)
+
+    gpsViewModel = ViewModelProvider(this).get(GpsViewModel::class.java)
+
+
+    gpsViewModel.allGps.observe(this, Observer {gpsData->
+      if(gpsData==null){
+        Logg.d("값 없음")
+        gpsViewModel.insert(GPSData(0,15.0,15.0))
+      }else{
+        //TODO: 옵저버 해제
+        gpsViewModel.allGps.removeObservers(this)
+        Logg.d("값 있음 $gpsData")
+      }
+//      gpsData?.let {
+//        Logg.d("실행 돼??")
+//        val latlng = LatLng(it.lat, it.lng)
+//        Logg.d("abcd ${latlng.toString()}")
+//        val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latlng, 17f)
+//        traceMap!!.mMap.moveCamera(cameraUpdate)
+//      }
+    })
+
+//
+//    if(gpsViewModel.isUid.value == null){
+//      Logg.d("값이 없음")
+//      val gpsData = GPSData(0, 0.0,0.0  )
+//      gpsViewModel.insert(gpsData)
+//    }else {
+//      Logg.d("값이 있었음")
+//    }
+
+
     TTS.speech(" ")
     startService() // 서비스 시작.
 
@@ -145,12 +183,6 @@ class MainActivity : AppCompatActivity() {
       Logg.d(action.toString())
       startService(it)
     }
-  }
-
-  companion object {
-    val TAG = "service"
-    private const val REQUEST_PERMISSIONS_REQUEST_CODE = 34
-    const val MESSENGER_INTENT_KEY = "msg-intent-key"
   }
 
   override fun onBackPressed() {

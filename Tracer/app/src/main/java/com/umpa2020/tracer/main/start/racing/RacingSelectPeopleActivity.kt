@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import co.lujun.androidtagview.TagView.OnTagClickListener
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
+import com.umpa2020.tracer.dataClass.RacerData
 import com.umpa2020.tracer.dataClass.RankingData
 import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.network.*
@@ -71,11 +72,12 @@ class RacingSelectPeopleActivity : AppCompatActivity(), OnSingleClickListener {
   override fun onSingleClick(v: View?) {
     when(v!!.id){
       R.id.racingSelectButton->{
-        val idList= tagcontainerLayout1.tags.toTypedArray().map {nickName->
-          rankingDataList.find { it.challengerNickname==nickName }!!.challengerId }
+        val racerList= tagcontainerLayout1.tags.toTypedArray().map {nickName->
+          RacerData(
+          rankingDataList.find { it.challengerNickname==nickName }!!.challengerId,nickName)}
         val intent = Intent(App.instance.context(), RacingActivity::class.java)
         intent.putExtra("RouteGPX", routeGPX)
-        intent.putExtra("RacerList",idList.toTypedArray())
+        intent.putExtra("RacerList",racerList.toTypedArray())
         intent.putExtra("mapTitle", mapTitle)
         startActivity(intent)
       }

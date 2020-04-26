@@ -16,6 +16,6 @@
     android:title="@string/ranking" />
   <item
     android:id="@+id/navigation_challenge"
-    android:icon="@drawable/ranking_icon_text_x"
+    android:icon="@drawable/challenge"
     android:title="@string/challenge" />
 </menu>

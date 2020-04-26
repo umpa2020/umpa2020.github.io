@@ -5,6 +5,8 @@ import android.net.Uri
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.maps.android.PolyUtil
+import com.google.maps.android.SphericalUtil
+import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.constant.Constants.Companion.TURNING_ANGLE
 import com.umpa2020.tracer.constant.Constants.Companion.TURNING_LEFT_POINT
 import com.umpa2020.tracer.constant.Constants.Companion.TURNING_RIGHT_POINT
@@ -40,11 +42,60 @@ fun MutableList<LatLng>.bounds(): LatLngBounds {
   return LatLngBounds(LatLng(minlat, minlon), LatLng(maxlat, maxlon))
 }
 
+fun RouteGPX.addCheckPoint(): RouteGPX {
+  if (wptList.isNullOrEmpty()) wptList = mutableListOf()
+  this.wptList.add(
+    WayPoint.builder()
+      .lat(trkList.first().latitude)
+      .lon(trkList.first().longitude)
+      .name("Start")
+      .desc("Start Description")
+      .type(Constants.START_POINT)
+      .build()
+  )
+
+  val latlngs = mutableListOf<LatLng>()
+  var distance = 0.0
+  trkList.forEachIndexed { i, it ->
+    if (i > 0) {
+      if (i == trkList.size - 1) {
+        wptList.add(
+          WayPoint.builder()
+            .lat(it.latitude)
+            .lon(it.longitude)
+            .name("Finish")
+            .desc("Finish Description")
+            .type(Constants.FINISH_POINT)
+            .build()
+        )
+      } else {
+        distance += SphericalUtil.computeDistanceBetween(
+          trkList[i - 1].toLatLng(),
+          it.toLatLng()
+        )
+        if (distance > 500) {
+          distance = 0.0
+          wptList.add(
+            WayPoint.builder()
+              .lat(it.latitude)
+              .lon(it.longitude)
+              .name("WayPoint")
+              .desc("wayway...")
+              .type(Constants.DISTANCE_POINT)
+              .build()
+          )
+        }
+      }
+    }
+  }
+  return this
+}
+
 fun RouteGPX.addDirectionSign(): RouteGPX {
   val latlngs = mutableListOf<LatLng>()
   this.trkList.forEach { latlngs.add(it.toLatLng()) }
   val simplifyLatLngs = PolyUtil.simplify(latlngs, 20.0)
-
+  if (wptList.isNullOrEmpty()) wptList = mutableListOf()
   for (i in 1 until simplifyLatLngs.size - 1) {
     val a = simplifyLatLngs[i - 1]
     val b = simplifyLatLngs[i]
