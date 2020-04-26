@@ -227,12 +227,7 @@ class RacingActivity : BaseRunningActivity() {
           } else null
         }.filterNotNull())
         withContext(Dispatchers.Main) {
-          traceMap.addRacer(
-            MarkerOptions()
-              .zIndex(3.4f)
-              .position(wpts[0].toLatLng())
-              .title(racerList[racerNo])
-          )
+          traceMap.addRacer(wpts[0].toLatLng(),racerList[racerNo],racerNo)
 
           wpts.forEachIndexed { index, it ->
             if (index < wpts.size - 2) {
