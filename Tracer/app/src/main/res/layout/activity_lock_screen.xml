@@ -51,7 +51,7 @@
         style="@style/whiteText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/km"
+        android:text="@string/m"
         android:gravity="center"
         android:textSize="30sp" />
     </LinearLayout>

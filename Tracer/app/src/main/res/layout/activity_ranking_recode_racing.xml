@@ -12,13 +12,13 @@
     android:layout_height="50dp"
     android:layout_alignParentTop="true"
     android:background="@color/white"
-    android:elevation="1dp">
+    android:elevation="1dp"
+    android:contentInsetStart="0dp">
 
     <TextView
       style="@style/appBarText"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginEnd="12dp"
       android:gravity="center"
       android:text="@string/rankingrecords"/>
   </Toolbar>

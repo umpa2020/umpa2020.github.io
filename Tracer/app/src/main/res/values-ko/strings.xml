@@ -119,7 +119,7 @@
   <string name="lockScreenCheck">잠금화면 여부</string>
 
   <!-- LcokScreen -->
-  <string name="km">Km</string>
+  <string name="m">m</string>
   <string name="km_h">Km/h</string>
   <string name="unlock">슬래이드해서 잠금해체</string>
   <!-- TTS -->
