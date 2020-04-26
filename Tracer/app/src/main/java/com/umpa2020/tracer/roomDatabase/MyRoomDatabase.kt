@@ -5,17 +5,20 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.umpa2020.tracer.roomDatabase.Dao.GpsDao
 import com.umpa2020.tracer.roomDatabase.Dao.RecordDao
+import com.umpa2020.tracer.roomDatabase.entity.GPSData
 import com.umpa2020.tracer.roomDatabase.entity.MapRecordData
 import com.umpa2020.tracer.util.Logg
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 // Annotates class to be a Room Database with a table (entity) of the Word class
-@Database(entities = arrayOf(MapRecordData::class), version = 1)
+@Database(entities = arrayOf(MapRecordData::class, GPSData::class), version = 1)
 abstract class MyRoomDatabase : RoomDatabase() {
 
   abstract fun recordDao(): RecordDao
+  abstract fun gpsDao(): GpsDao
 
   private class RecordDatabaseCallback(private val scope: CoroutineScope) :
     RoomDatabase.Callback() {
@@ -23,7 +26,7 @@ abstract class MyRoomDatabase : RoomDatabase() {
       super.onOpen(db)
       INSTANCE?.let { database ->
         scope.launch {
-          val recordDao = database.recordDao()
+//          val recordDao = database.recordDao()
 
           // Delete all content here.
 //          recordDao.deleteAll()
@@ -61,7 +64,7 @@ abstract class MyRoomDatabase : RoomDatabase() {
           RecordDatabaseCallback(
             scope
           )
-        )
+        ).addCallback(RecordDatabaseCallback(scope))
           .build()
         INSTANCE = instance
         return instance
