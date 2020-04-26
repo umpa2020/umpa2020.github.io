@@ -14,13 +14,12 @@ import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.ActivityData
 import com.umpa2020.tracer.dataClass.AdChallengeData
+import com.umpa2020.tracer.dataClass.BannerData
 import com.umpa2020.tracer.dataClass.ChallengeData
 import com.umpa2020.tracer.extensions.M_D
 import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.extensions.mm_ss
-import com.umpa2020.tracer.network.ActivityListener
-import com.umpa2020.tracer.network.ChallengeDataListener
-import com.umpa2020.tracer.network.FBChallengeRepository
+import com.umpa2020.tracer.network.*
 import com.umpa2020.tracer.util.Logg
 import kotlinx.android.synthetic.main.fragment_challenge.*
 import kotlinx.android.synthetic.main.fragment_challenge.view.*
@@ -31,7 +30,7 @@ import kotlin.collections.ArrayList
 class ChallengeFragment : Fragment() {
 
   var dateFormat = SimpleDateFormat("dd MMM, YYY", Locale.KOREA)
-  var adChallengeList = ArrayList<AdChallengeData>()
+  var adChallengeList = ArrayList<BannerData>()
   var from = 1546300800000
   var to = 1609372800000
   var locale="전국"
@@ -43,18 +42,13 @@ class ChallengeFragment : Fragment() {
     val view: View = inflater.inflate(R.layout.fragment_challenge, container, false)
     val now = Calendar.getInstance()
 
-    adChallengeList.add(AdChallengeData(R.drawable.first_ad_image_isics,"asd"))
-    adChallengeList.add(AdChallengeData( R.drawable.second_ad_image_spartan,"zxc"))
-    adChallengeList.add(AdChallengeData( R.drawable.third_image_korea50k,"qwe"))
-    adChallengeList.add(AdChallengeData( R.drawable.ic_start_point,"ert"))
-    view.adChallengeScrollViewPager.adapter = AdChallengePageAdapter(adChallengeList, requireContext())
     view.btn_challenge_from.text = from.format(M_D)
     view.btn_challenge_to.text = to.format(M_D)
     view.btn_challenge_region.text=locale
-    view.adChallengeScrollViewPager.startAutoScroll()
 
+    FBChallengeBannerRepository().listChallengeBannerImagePath(bannerDataListener)
     FBChallengeRepository().listChallengeData(from, to, "전국", challengeDataListener)
-    
+
     view.challengeAppBarText.setOnClickListener {
       val intent = Intent(context, ChallengeDataSettingActivity::class.java)
       startActivity(intent)
@@ -62,8 +56,8 @@ class ChallengeFragment : Fragment() {
 
     val a = view.adChallengeScrollViewPager.currentItem
     view.adChallengeScrollViewPager.addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
-      adChallengeCountTextView.text =
-        "${(view.adChallengeScrollViewPager.currentItem - a) % adChallengeList.size + 1}/${adChallengeList.size}"
+      /*adChallengeCountTextView.text =
+        "${(view.adChallengeScrollViewPager.currentItem - a) % adChallengeList.size + 1}/${adChallengeList.size}"*/
     }
 
 
@@ -115,6 +109,14 @@ class ChallengeFragment : Fragment() {
     return view
   }
 
+  private val bannerDataListener = object : BannerDataListener {
+    override fun bannerDataList(listBannerData: ArrayList<BannerData>) {
+      adChallengeList = listBannerData
+      Logg.d("ssmm11 list = $adChallengeList")
+      adChallengeScrollViewPager.adapter = AdChallengePageAdapter(adChallengeList, requireContext())
+      adChallengeScrollViewPager.startAutoScroll()
+    }
+  }
 
   private val challengeDataListener = object : ChallengeDataListener {
     override fun challengeDataList(listChallengeData: MutableList<ChallengeData>) {

@@ -4,7 +4,7 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class BennerData(
+data class BannerData(
   val bannerId: String? = null,
   val bannerImagePath: String? = null
 ) : Parcelable
