@@ -119,7 +119,7 @@
   <string name="lockScreenCheck">Lock Screen</string>
 
   <!-- LcokScreen -->
-  <string name="km">Km</string>
+  <string name="m">m</string>
   <string name="km_h">Km/h</string>
   <string name="unlock">Unlock</string>
   <!-- TTS -->

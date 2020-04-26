@@ -63,8 +63,7 @@
 
     <TableLayout
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:padding="15dp">
+      android:layout_height="wrap_content">
 
       <!-- 첫번쨰 행-->
       <TableRow
@@ -74,13 +73,13 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:text="@string/email_"
-          android:textSize="17dp"/>
+          android:textSize="16sp"/>
         <TextView
           android:layout_weight="3"
           android:id="@+id/emailTextView"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:textSize="17dp"/>
+          android:textSize="15dp"/>
       </TableRow>
       <View
         android:layout_marginTop="5dp"
@@ -96,13 +95,13 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:text="@string/nick_name"
-          android:textSize="17dp"/>
+          android:textSize="16sp"/>
         <TextView
           android:layout_weight="3"
           android:id="@+id/nickNameTextView"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:textSize="17dp"/>
+          android:textSize="16sp"/>
       </TableRow>
       <View
         android:layout_marginTop="5dp"
@@ -118,13 +117,13 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:text="@string/age_"
-          android:textSize="17dp"/>
+          android:textSize="16sp"/>
         <TextView
           android:layout_weight="3"
           android:id="@+id/ageTextView"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:textSize="17dp"/>
+          android:textSize="16sp"/>
       </TableRow>
       <View
         android:layout_marginTop="5dp"
@@ -140,13 +139,13 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:text="@string/gender_"
-          android:textSize="17dp"/>
+          android:textSize="16sp"/>
         <TextView
           android:layout_weight="3"
           android:id="@+id/genderTextView"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:textSize="17dp"/>
+          android:textSize="16sp"/>
       </TableRow>
       <View
         android:layout_marginTop="5dp"
