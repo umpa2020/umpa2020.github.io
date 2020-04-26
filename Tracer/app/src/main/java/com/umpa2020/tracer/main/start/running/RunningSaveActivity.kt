@@ -23,6 +23,7 @@ import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.extensions.*
 import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.map.TraceMap
+import com.umpa2020.tracer.network.FBRacingRepository
 import com.umpa2020.tracer.network.FBUserActivityRepository
 import com.umpa2020.tracer.util.*
 import kotlinx.android.synthetic.main.activity_running_save.*
@@ -196,6 +197,16 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
     val activityData = ActivityData(infoData.mapTitle, timestamp.toString(), "map save")
     FBUserActivityRepository().createUserHistory(activityData)
 
+    val fRefRanking = fstorage.reference.child("mapRoute")
+      .child(infoData.mapTitle!!).child("racingGPX").child(UserInfo.autoLoginKey)
+    val fRankinguploadTask = fRefRanking.putFile(routeGpxFile)
+    fRankinguploadTask.addOnFailureListener {
+      Logg.d("Success")
+    }.addOnSuccessListener {
+      Logg.d("Fail : $it")
+    }
+    // db에 그려진 맵 저장하는 스레드 - 여기서는 실제 그려진 것 보다 후 보정을 통해서
+    // 간략화 된 맵을 업로드 합니다.
     val rankingData = RankingData(
       UserInfo.nickname,
       UserInfo.autoLoginKey,
@@ -203,8 +214,11 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
       infoData.time,
       1,
       speedList.max().toString(),
-      speedList.average().toString()
+      speedList.average().toString(),
+      fRef.path
     )
+
+    //TODO : firebase로
     db.collection("rankingMap").document(infoData.mapTitle!!).set(rankingData)
     db.collection("rankingMap").document(infoData.mapTitle!!).collection("ranking")
       .document(UserInfo.autoLoginKey + timestamp).set(rankingData)
