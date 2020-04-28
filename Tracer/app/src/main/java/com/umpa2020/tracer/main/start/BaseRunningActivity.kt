@@ -39,6 +39,7 @@ import hollowsoft.slidingdrawer.OnDrawerOpenListener
 import hollowsoft.slidingdrawer.OnDrawerScrollListener
 import hollowsoft.slidingdrawer.SlidingDrawer
 import io.jenetics.jpx.WayPoint
+import kotlinx.android.synthetic.main.fragment_start.*
 
 
 open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDrawerScrollListener,
@@ -105,16 +106,17 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
       }
     })
 
-    traceMap.mMap.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
-    traceMap.mMap.setOnCameraMoveListener {
+    traceMap.mMap.setOnCameraMoveCanceledListener {
       wedgedCamera = false
     }
     traceMap.mMap.setOnMyLocationButtonClickListener {
       wedgedCamera = true
       true
     }
+    traceMap.mMap.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
     traceMap.mMap.uiSettings.isCompassEnabled = true
     traceMap.mMap.uiSettings.isZoomControlsEnabled = true
+    wedgedCamera=true
   }
 
   open fun updateLocation(curLoc: Location) {
@@ -128,7 +130,6 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     if (setLocation(curLoc)) {
       when (userState) {
         UserState.NORMAL -> {
-          traceMap.initCamera(curLoc.toLatLng())
         }
         UserState.READYTORUNNING -> {
         }
@@ -248,7 +249,7 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
       moving = false
     } else {
       moving = true
-      if (wedgedCamera) traceMap.mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLatLng))
+      if (wedgedCamera) traceMap.moveCamera(location)
     }
     return moving
   }

@@ -1,6 +1,7 @@
 package com.umpa2020.tracer.map
 
 import android.graphics.Color
+import android.location.Location
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.*
@@ -124,13 +125,22 @@ class TraceMap(val mMap: GoogleMap) {
           curLoc
         )
       )
-      polyFlag=false
-    }else{
-      val a=poly.points
+      polyFlag = false
+    } else {
+      val a = poly.points
       a.add(curLoc)
-      poly.points=a
+      poly.points = a
       Logg.d("add new point $curLoc")
     }
+  }
+
+  fun moveCamera(curLoc: Location) {
+    Logg.d("move camera $curLoc")
+    mMap.moveCamera(
+      CameraUpdateFactory.newCameraPosition(
+        CameraPosition(curLoc.toLatLng(), 17F, 0F, curLoc.bearing)
+      )
+    )
   }
 
   fun moveCamera(latlng: LatLng) {
@@ -162,4 +172,5 @@ class TraceMap(val mMap: GoogleMap) {
       )
     )
   }
+
 }
