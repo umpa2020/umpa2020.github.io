@@ -288,8 +288,8 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
 //    }else{
 //      Logg.d("값이 있음")
 //    }
-
-    traceMap!!.mMap.setOnCameraMoveListener {
+    wedgedCamera=true
+    traceMap!!.mMap.setOnCameraMoveCanceledListener {
       wedgedCamera = false
       mainStartSearchAreaButton.visibility = View.VISIBLE
     }
@@ -297,8 +297,8 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
       wedgedCamera = true
       true
     }
-
-
+    traceMap!!.mMap.uiSettings.isCompassEnabled = true
+    traceMap!!.mMap.uiSettings.isZoomControlsEnabled = true
   }
 
   fun getVersionInfo() {
@@ -347,7 +347,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
       val message = intent?.getParcelableExtra<Location>("message")
       currentLocation = message as Location
       traceMap?.let {
-        if (wedgedCamera) it.moveCamera(currentLocation!!.toLatLng())
+        if (wedgedCamera) it.moveCamera(currentLocation!!)
         if (firstFlag) {
           searchThisArea()
           firstFlag = false
