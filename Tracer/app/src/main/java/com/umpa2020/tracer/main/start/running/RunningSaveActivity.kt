@@ -212,7 +212,7 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
       UserInfo.autoLoginKey,
       UserInfo.nickname,
       infoData.time,
-      1,
+      true,
       speedList.max().toString(),
       speedList.average().toString(),
       fRef.path

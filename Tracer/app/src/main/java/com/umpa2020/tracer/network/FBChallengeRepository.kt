@@ -15,7 +15,7 @@ class FBChallengeRepository : BaseFB() {
    *
    */
   fun createChallengeData(challengeData: ChallengeData) {
-    db.collection("challenges").add(challengeData)
+    db.collection(CHALLENGES).add(challengeData)
   }
 
 
@@ -27,8 +27,8 @@ class FBChallengeRepository : BaseFB() {
   }
 
   fun getChallengeData(challengeId: String, challengeDataListener: ChallengeDataListener) {
-    db.collection("challenges")
-      .whereEqualTo("id", challengeId)
+    db.collection(CHALLENGES)
+      .whereEqualTo(ID, challengeId)
       .get()
       .addOnSuccessListener {
         challengeDataListener.challengeData(it.documents.last().toObject(ChallengeData::class.java)!!)
@@ -42,11 +42,10 @@ class FBChallengeRepository : BaseFB() {
 
   fun listChallengeData(fromDate: Long, toDate: Long, region: String, challengeDataListener: ChallengeDataListener) {
     val listChallengeData = mutableListOf<ChallengeData>()
-    Logg.d("search $fromDate ~ $toDate $region")
     if (region == "전국") {
-      db.collection("challenges")
-        .whereGreaterThan("date", fromDate)
-        .whereLessThan("date", toDate)
+      db.collection(CHALLENGES)
+        .whereGreaterThan(DATE, fromDate)
+        .whereLessThan(DATE, toDate)
         .get()
         .addOnSuccessListener {
           it.documents.forEach { document ->
@@ -57,10 +56,10 @@ class FBChallengeRepository : BaseFB() {
         }
     }
     else {
-      db.collection("challenges")
-        .whereGreaterThan("date", fromDate)
-        .whereLessThan("date", toDate)
-        .whereArrayContains("locale", region)
+      db.collection(CHALLENGES)
+        .whereGreaterThan(DATE, fromDate)
+        .whereLessThan(DATE, toDate)
+        .whereArrayContains(LOCALE, region)
         .get()
         .addOnSuccessListener {
           it.documents.forEach { document ->

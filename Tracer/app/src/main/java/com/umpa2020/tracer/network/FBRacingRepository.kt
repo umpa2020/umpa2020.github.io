@@ -40,21 +40,21 @@ class FBRacingRepository : BaseFB() {
         UserInfo.autoLoginKey,
         UserInfo.nickname,
         racerData.time,
-        1,
+        true,
         racerSpeeds.max().toString(),
         racerSpeeds.average().toString(),
         null
       )
       // 랭킹 맵에서
       db.collection(RANKING_MAP).document(racerData.mapTitle!!).collection(RANKING)
-        .whereEqualTo(BEST_TIME, 1)
+        .whereEqualTo(BEST_TIME, true)
         .get()
         .addOnSuccessListener {
           for (document in it) {
-            if (document.get("challengerNickname") == UserInfo.nickname) {
+            if (document.get(CHALLENGER_NICKNAME) == UserInfo.nickname) {
               if (racerData.time!!.toLong() < document.get(CHALLENGER_TIME) as Long) {
                 db.collection(RANKING_MAP).document(racerData.mapTitle!!).collection(RANKING)
-                  .document(document.id).update(BEST_TIME, 0)
+                  .document(document.id).update(BEST_TIME, false)
 
                 val saveFolder = File(App.instance.filesDir, "routeGPX") // 저장 경로
                 if (!saveFolder.exists()) {       //폴더 없으면 생성
@@ -65,8 +65,8 @@ class FBRacingRepository : BaseFB() {
 
                 // storage에 이미지 업로드 모든 맵 이미지는 mapimage/maptitle로 업로드가 된다.
                 val fstorage = FirebaseStorage.getInstance()
-                val fRef = fstorage.reference.child("mapRoute")
-                  .child(racerData.mapTitle!!).child("racingGPX").child(UserInfo.autoLoginKey)
+                val fRef = fstorage.reference.child(MAP_ROUTE)
+                  .child(racerData.mapTitle!!).child(RACING_GPX).child(UserInfo.autoLoginKey)
                 rankingData.racerGPX = fRef.path
 
                 val fuploadTask = fRef.putFile(racerGpxFile)
@@ -77,7 +77,7 @@ class FBRacingRepository : BaseFB() {
                   Logg.d("Fail : $it")
                 }
               } else {
-                rankingData.bestTime = 0
+                rankingData.bestTime = false
               }
             }
           }
@@ -104,7 +104,7 @@ class FBRacingRepository : BaseFB() {
   ) {
     db.collection(RANKING_MAP).document(racerData.mapTitle!!).collection(RANKING)
       .orderBy(CHALLENGER_TIME, Query.Direction.ASCENDING)
-      .whereEqualTo("bestTime", 1)
+      .whereEqualTo(BEST_TIME, true)
       .get()
       .addOnSuccessListener { resultdb ->
         var index = 1
@@ -139,8 +139,8 @@ class FBRacingRepository : BaseFB() {
   fun getOtherData(mapTitle: String, nickname: String, racingFinishListener: RacingFinishListener) {
 
     db.collection(RANKING_MAP).document(mapTitle)
-      .collection(RANKING).whereEqualTo("challengerNickname", nickname)
-      .whereEqualTo(BEST_TIME, 1)
+      .collection(RANKING).whereEqualTo(CHALLENGER_NICKNAME, nickname)
+      .whereEqualTo(BEST_TIME, true)
       .get()
       .addOnSuccessListener {
         val rankingData = it.documents.last().toObject(RankingData::class.java)

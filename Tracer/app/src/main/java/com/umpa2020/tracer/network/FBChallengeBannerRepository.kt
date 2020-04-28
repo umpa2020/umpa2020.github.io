@@ -22,7 +22,7 @@ class FBChallengeBannerRepository : BaseFB() {
 
   fun listChallengeBannerImagePath(bannerDataListener: BannerDataListener) {
     val listBannerData = arrayListOf<BannerData>()
-    db.collection("challengeBanners").get()
+    db.collection(CHALLENGE_BANNERS).get()
       .addOnSuccessListener {
         it.documents.forEach { document ->
           listBannerData.add(document.toObject(BannerData::class.java)!!)
