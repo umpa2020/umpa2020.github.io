@@ -34,10 +34,10 @@ class FBUserActivityRepository {
   fun listUserMakingActivityFirst(activityListener: ActivityListener, limit: Long) {
 
     Logg.d("ssmm11 limit = $limit")
-    db.collection("userinfo").whereEqualTo("UID", UserInfo.autoLoginKey)
+    db.collection(USER_INFO).whereEqualTo(UID, UserInfo.autoLoginKey)
       .get()
       .addOnSuccessListener {
-        it.documents.last().reference.collection("user activity")
+        it.documents.last().reference.collection(USER_ACTIVITY)
           .limit(limit)
           .get()
           .addOnSuccessListener {
@@ -51,10 +51,10 @@ class FBUserActivityRepository {
 
   fun listUserMakingActivity(activityListener: ActivityListener, limit: Long) {
 
-    db.collection("userinfo").whereEqualTo("UID", UserInfo.autoLoginKey)
+    db.collection(USER_INFO).whereEqualTo(UID, UserInfo.autoLoginKey)
       .get()
       .addOnSuccessListener { it ->
-        it.documents.last().reference.collection("user activity")
+        it.documents.last().reference.collection(USER_ACTIVITY)
           .startAfter(globalStartAfter)
           .limit(limit)
           .get()
