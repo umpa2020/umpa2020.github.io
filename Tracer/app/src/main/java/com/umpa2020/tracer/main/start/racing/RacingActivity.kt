@@ -43,6 +43,7 @@ class RacingActivity : BaseRunningActivity() {
   companion object {
     const val ROUTE_GPX = "RouteGPX"
   }
+
   lateinit var mapRouteGPX: RouteGPX
   lateinit var mapTitle: String
   var racingResult = true
@@ -243,24 +244,26 @@ class RacingActivity : BaseRunningActivity() {
 
         withContext(Dispatchers.Main) {
           traceMap.addRacer(wpts[0].toLatLng(), racerList[racerNo].racerName!!, racerNo)
-          wpts.forEachIndexed { index, it ->
-            if (index + 2 == wpts.size) return@forEachIndexed
+          run loop@{
+            wpts.forEachIndexed { index, it ->
+              if (index + 2 == wpts.size) return@loop
 
-            val duration = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+              val duration = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 //              TimeUnit.MILLISECONDS.toSeconds(
 //                ((wpts[index + 1].time.get().toEpochSecond() - wpts[index].time.get()
 //                  .toEpochSecond()))
 //              )
-              ((wpts[index + 1].time.get().toEpochSecond() - wpts[index].time.get()
-                .toEpochSecond())) * 1000 / (wptIndices[index + 1] - wptIndices[index])
-            } else {
-              TODO("VERSION.SDK_INT < O")
-            }
+                ((wpts[index + 1].time.get().toEpochSecond() - wpts[index].time.get()
+                  .toEpochSecond())) * 1000 / (wptIndices[index + 1] - wptIndices[index])
+              } else {
+                TODO("VERSION.SDK_INT < O")
+              }
 
-            Logg.d("기간 $duration  1 : ${wpts[index + 1].time.get()}   2: ${wpts[index].time.get()}")
-            (wptIndices[index]..wptIndices[index + 1]).forEach {
-              delay(duration)
-              traceMap.updateMarker(racerNo, racingGPX.trkList[it].toLatLng())
+              Logg.d("기간 $duration  1 : ${wpts[index + 1].time.get()}   2: ${wpts[index].time.get()}")
+              (wptIndices[index]..wptIndices[index + 1]).forEach {
+                delay(duration)
+                traceMap.updateMarker(racerNo, racingGPX.trkList[it].toLatLng())
+              }
             }
           }
           TTS.speech("${racerList[racerNo].racerName} is arrive")
