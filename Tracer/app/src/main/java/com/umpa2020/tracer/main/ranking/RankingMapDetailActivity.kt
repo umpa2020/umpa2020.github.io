@@ -181,7 +181,7 @@ class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener, OnM
         0 -> {
           if (bDraw) {
             //TODO : 이렇게 해야하나..?
-            traceMap.drawRoute(routeGPX.trkList, routeGPX.wptList)
+            traceMap.drawRoute(routeGPX.trkList.toList(), routeGPX.wptList.filter { it.type.get()== START_POINT||it.type.get()==FINISH_POINT})
           } else bDraw = true
         }
       }
