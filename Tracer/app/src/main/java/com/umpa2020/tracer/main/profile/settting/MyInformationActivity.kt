@@ -2,8 +2,7 @@ package com.umpa2020.tracer.main.profile.settting
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
@@ -19,11 +18,15 @@ import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_my_information.*
+import kotlinx.android.synthetic.main.activity_my_information.app_toolbar
+import kotlinx.android.synthetic.main.activity_my_information.profileImage
+import kotlinx.android.synthetic.main.activity_sign_up.*
 import kotlinx.android.synthetic.main.signup_toolbar.*
 import kotlinx.android.synthetic.main.signup_toolbar.view.*
 
 class MyInformationActivity : AppCompatActivity(), OnSingleClickListener {
   lateinit var progressBar: ProgressBar
+  private var selectedImageUri: Uri? = null
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -54,11 +57,11 @@ class MyInformationActivity : AppCompatActivity(), OnSingleClickListener {
         goToAlbum()
       }
       R.id.profileChangeButton -> {
-        if (bitmapImg != null) { // 사진을 고르면
+        if (selectedImageUri != null) { // 사진을 고르면
           progressBar = ProgressBar(App.instance.currentActivity() as Activity)
           progressBar.show()
 
-          FBProfileRepository().updateProfileImage(bitmapImg!!, profileListener)
+          FBProfileRepository().updateProfileImage(selectedImageUri, profileListener)
         } else { // 사진을 안고르면
           finish()
         }
@@ -71,12 +74,9 @@ class MyInformationActivity : AppCompatActivity(), OnSingleClickListener {
    */
   private fun goToAlbum() {
     val intent = Intent(Intent.ACTION_PICK)
-    intent.type = MediaStore.Images.Media.CONTENT_TYPE
+    intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
     startActivityForResult(intent, PICK_FROM_ALBUM)
   }
-
-  var options: BitmapFactory.Options? = null
-  private var bitmapImg: Bitmap? = null
 
   // intent 결과 받기
   override fun onActivityResult(requestCode: Int, resultCode: Int, intentData: Intent?) {
@@ -84,18 +84,10 @@ class MyInformationActivity : AppCompatActivity(), OnSingleClickListener {
     // 앨범
     if (requestCode == PICK_FROM_ALBUM) {
       if (resultCode == RESULT_OK) {
-        try {
-          val inputStream = intentData!!.data?.let { contentResolver.openInputStream(it) }
-
-          // 프로필 사진을 비트맵으로 변환
-          options = BitmapFactory.Options()
-          options!!.inSampleSize = 2
-          bitmapImg = BitmapFactory.decodeStream(inputStream, null, options)
-          inputStream!!.close()
-
-          profileImage.setImageBitmap(bitmapImg)
+        if (intentData != null) {
+          selectedImageUri = intentData.data
+          profileImage.setImageURI(selectedImageUri)
           profileImage.scaleType = ImageView.ScaleType.CENTER_CROP
-        } catch (e: java.lang.Exception) {
 
         }
       } else if (resultCode == RESULT_CANCELED) {
@@ -107,7 +99,7 @@ class MyInformationActivity : AppCompatActivity(), OnSingleClickListener {
 
   companion object {
     // 카메라 requestCode
-    private val PICK_FROM_ALBUM = 1
+    private const val PICK_FROM_ALBUM = 1
   }
 
   private val profileListener = object : ProfileListener {
