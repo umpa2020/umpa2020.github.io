@@ -1,33 +1,18 @@
 package com.umpa2020.tracer.network
 
 import android.app.Activity
-import android.graphics.Bitmap
+import android.net.Uri
 import android.view.View
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.LikedMapData
-import com.umpa2020.tracer.network.BaseFB.Companion.DISTANCE
-import com.umpa2020.tracer.network.BaseFB.Companion.MAKERS_NICKNAME
-import com.umpa2020.tracer.network.BaseFB.Companion.MAP_INFO
-import com.umpa2020.tracer.network.BaseFB.Companion.NICKNAME
-import com.umpa2020.tracer.network.BaseFB.Companion.PRIVACY
-import com.umpa2020.tracer.network.BaseFB.Companion.PROFILE
-import com.umpa2020.tracer.network.BaseFB.Companion.PROFILE_IMAGE_PATH
-import com.umpa2020.tracer.network.BaseFB.Companion.RACING
-import com.umpa2020.tracer.network.BaseFB.Companion.TIME
-import com.umpa2020.tracer.network.BaseFB.Companion.UID
-import com.umpa2020.tracer.network.BaseFB.Companion.USER_INFO
-import com.umpa2020.tracer.network.BaseFB.Companion.USER_RAN_THESE_MAPS
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
-import java.io.ByteArrayOutputStream
 import java.util.*
 
 /**
@@ -35,8 +20,7 @@ import java.util.*
  *
  */
 
-class FBProfileRepository {
-  val db = FirebaseFirestore.getInstance()
+class FBProfileRepository : BaseFB() {
   var profileImagePath = "init"
   lateinit var globalStartAfter: DocumentSnapshot
 
@@ -99,7 +83,6 @@ class FBProfileRepository {
         }
         // glide imageview 소스
         // 프사 설정하는 코드 db -> imageView glide
-        val storage = FirebaseStorage.getInstance()
         val profileRef = storage.reference.child(profileImagePath)
 
         profileRef.downloadUrl.addOnCompleteListener { task ->
@@ -123,34 +106,42 @@ class FBProfileRepository {
    * 사진 변경 시, 해당 사진을 storage에 업로드하고
    * 그 경로를 db에 update하는 함수
    */
-  fun updateProfileImage(bitmapImg: Bitmap, profileListener: ()->Unit) {
+  fun updateProfileImage(selectedImageUri: Uri?, profileListener: ProfileListener) {
     val dt = Date()
     // 현재 날짜를 프로필 이름으로 nickname/Profile/현재날짜(영어).jpg 경로 만들기
 
-    val mStorage = FirebaseStorage.getInstance()
-    val mStorageReference = mStorage.reference
 
     val profileRef =
-      mStorageReference.child(PROFILE).child(UserInfo.autoLoginKey).child("${dt.time}.jpg")
+      storage.reference.child(PROFILE).child(UserInfo.autoLoginKey).child(dt.time.toString())
     // 이미지
-    val baos = ByteArrayOutputStream()
-    bitmapImg.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-    val imageData = baos.toByteArray()
 
     // storage에 이미지 올리는 거
-    val uploadTask = profileRef.putBytes(imageData)
+    val uploadTask = profileRef.putFile(selectedImageUri!!)
     uploadTask
       .addOnCompleteListener {
         if (it.isSuccessful) {
-          val mFirestoreDB = FirebaseFirestore.getInstance()
-
-          mFirestoreDB.collection(USER_INFO).document(UserInfo.autoLoginKey)
-            .update(PROFILE_IMAGE_PATH, "$PROFILE/${UserInfo.autoLoginKey}/${dt.time}.jpg")
+          db.collection(USER_INFO).document(UserInfo.autoLoginKey)
+            .update(PROFILE_IMAGE_PATH, "$PROFILE/${UserInfo.autoLoginKey}/${dt.time}")
             .addOnSuccessListener {
-              profileListener()
+              profileListener.changeProfile()
             }
         }
       }
+  }
+
+  /**
+   * 회원 가입 시 프로필 이미지 storage에 등록
+   */
+  fun uploadProfileImage(imageUri: Uri, timestamp: String) {
+    // 현재 날짜를 프로필 이름으로 nickname/Profile/현재날짜 경로 만들기
+
+    val profileRef = storage.reference.child(PROFILE).child(UserInfo.autoLoginKey).child(timestamp)
+    // 이미지
+    val uploadTask = profileRef.putFile(imageUri)
+    uploadTask.addOnFailureListener {
+    }.addOnSuccessListener {
+
+    }
   }
 
   /**
@@ -194,7 +185,7 @@ class FBProfileRepository {
   fun getRoute(profileRouteListener: ProfileRouteListener, nickname: String, limit: Long) {
     val infoDatas = arrayListOf<InfoData>()
 
-    Logg.d("ssmm11 startAfter = $globalStartAfter" )
+    Logg.d("ssmm11 startAfter = $globalStartAfter")
     db.collection("mapInfo").whereEqualTo("makersNickname", nickname)
       .whereEqualTo("privacy", "RACING")
       .startAfter(globalStartAfter)
