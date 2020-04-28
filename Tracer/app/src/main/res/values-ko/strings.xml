@@ -136,9 +136,9 @@
   <string name="recording">기록용</string>
   <string name="around">주변</string>
   <string name="start_running">시작버튼을 누르면 러닝이 시작됩니다</string>
-  <string name="Distance_km">거리 (km)</string>
+  <string name="Distance_km">거리</string>
   <string name="Time">시간</string>
-  <string name="speed_km">속력 (km/h)</string>
+  <string name="speed_km">속력</string>
   <string name="pause_mode">일시정지를 하게 되면\n경쟁 모드 업로드가 불가합니다.\n\n일시정지를 하시겠습니까?</string>
   <string name="stop_save">지금 정지하시면 저장이 불가능합니다.\n\n정지하시겠습니까?</string>
   <string name="twohundred_save">거리가 200m 미만일때\n정지하시면 저장이 불가능합니다.\n\n정지하시겠습니까?</string>
