@@ -4,9 +4,6 @@ class Constants {
   companion object {
     const val NICKNAME_RULE = "^(?=.*\\W).{3,12}\$"
 
-    //이메일 정규식
-    const val EMAIL_RULE = "^[a-z0-9_+.-]+@([a-z0-9-]+\\.)+[a-z0-9]{2,4}\$"
-
     // 성별 제한
     const val GENDER_RULE = "^(?=.*[a-zA-Z]).{0,10}\$"
 

@@ -76,7 +76,7 @@ class RacingSelectPeopleActivity : AppCompatActivity(), OnSingleClickListener {
           RacerData(
           rankingDataList.find { it.challengerNickname==nickName }!!.challengerId,nickName)}
         val intent = Intent(App.instance.context(), RacingActivity::class.java)
-        intent.putExtra("RouteGPX", routeGPX)
+        intent.putExtra(RacingActivity.ROUTE_GPX, routeGPX)
         intent.putExtra("RacerList",racerList.toTypedArray())
         intent.putExtra("mapTitle", mapTitle)
         startActivity(intent)

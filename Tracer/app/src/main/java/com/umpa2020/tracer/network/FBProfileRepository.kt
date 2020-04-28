@@ -47,7 +47,7 @@ class FBProfileRepository {
    * 해당 사용자가 뛴 거리, 뛴
    */
 
-  fun getProfile(view: View, nickname: String, profileListener: ProfileListener) {
+  fun getProfile(view: View, nickname: String, profileListener: (Double,Double) -> Unit) {
     var uid = "init"
     db.collection(USER_INFO).whereEqualTo(NICKNAME, nickname)
       .get()
@@ -75,7 +75,8 @@ class FBProfileRepository {
                   sumDistance += document2.get(DISTANCE) as Double
                   sumTime += document2.get(TIME) as Long
                 }
-                profileListener.getProfile(sumDistance, sumTime)
+                profileListener(sumDistance, sumTime)
+
               }
           }
         val imageView = view.findViewById<ImageView>(R.id.profileImageView)
@@ -122,7 +123,7 @@ class FBProfileRepository {
    * 사진 변경 시, 해당 사진을 storage에 업로드하고
    * 그 경로를 db에 update하는 함수
    */
-  fun updateProfileImage(bitmapImg: Bitmap, profileListener: ProfileListener) {
+  fun updateProfileImage(bitmapImg: Bitmap, profileListener: ()->Unit) {
     val dt = Date()
     // 현재 날짜를 프로필 이름으로 nickname/Profile/현재날짜(영어).jpg 경로 만들기
 
@@ -146,7 +147,7 @@ class FBProfileRepository {
           mFirestoreDB.collection(USER_INFO).document(UserInfo.autoLoginKey)
             .update(PROFILE_IMAGE_PATH, "$PROFILE/${UserInfo.autoLoginKey}/${dt.time}.jpg")
             .addOnSuccessListener {
-              profileListener.changeProfile()
+              profileListener()
             }
         }
       }

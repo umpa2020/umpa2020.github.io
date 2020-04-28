@@ -66,12 +66,13 @@ class ChallengeFragment : Fragment() {
     view.btn_challenge_from.setOnClickListener {
       val datePicker = DatePickerDialog(
         requireContext(), DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-          val selectedDate = Calendar.getInstance()
-          selectedDate.set(Calendar.YEAR, year)
-          selectedDate.set(Calendar.MONTH, month)
-          selectedDate.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-          btn_challenge_from.text = selectedDate.time.time.format(M_D)
-          from = selectedDate.time.time
+          val selectedDate = Calendar.getInstance().apply {
+            set(Calendar.YEAR, year)
+            set(Calendar.MONTH, month)
+            set(Calendar.DAY_OF_MONTH, dayOfMonth)
+          }.timeInMillis
+          btn_challenge_from.text = selectedDate.format(M_D)
+          from = selectedDate
         },
         now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH)
       )

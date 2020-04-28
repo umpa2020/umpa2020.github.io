@@ -204,30 +204,35 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
     //Nickname
     val disposableNick = RxTextView.textChanges(inputDataField[0])
       .map { t -> t.isEmpty() || !Pattern.matches(Constants.NICKNAME_RULE, t) }
-      .subscribe({ it ->
+      .subscribe({
         //inputDataField[2].setText("")
         reactiveInputTextViewData(0, it)
       }) {
         //Error Block
+        it.printStackTrace()
       }
 
     val disposableAge = RxTextView.textChanges(inputDataField[1])
       .map { t -> t.isEmpty() || Pattern.matches(Constants.AGE_RULE, t) }
-      .subscribe({ it ->
+      .subscribe({
         //inputDataField[2].setText("")
         reactiveInputTextViewData(1, it)
       }) {
         //Error Block
+        it.printStackTrace()
       }
+
+//    val compositeDisposable=CompositeDisposable()
 
     val disposableGender = RxTextView.textChanges(inputDataField[2])
       .map { t -> t.isEmpty() || Pattern.matches(Constants.GENDER_RULE, t) }
-      .subscribe({ it ->
+      .subscribe({
         //inputDataField[2].setText("")
         Logg.d("성별 : " + it.toString())
         reactiveInputTextViewData(2, it)
       }) {
         //Error Block
+        it.printStackTrace()
       }
     viewDisposables.addAll(
       disposableNick,

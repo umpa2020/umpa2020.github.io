@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.extensions.format
@@ -37,8 +36,7 @@ class ProfileFragment : Fragment(), OnSingleClickListener {
     root = view
 
     // 공유 프리페런스에 있는 닉네임을 반영
-    val profileNickname = view.findViewById<TextView>(R.id.profileIdTextView)
-    profileNickname.text = UserInfo.nickname
+    view.profileIdTextView.text = UserInfo.nickname
 
     // 설정 버튼 누르면
     view.appSettingButton.setOnClickListener(this)
@@ -60,19 +58,19 @@ class ProfileFragment : Fragment(), OnSingleClickListener {
   }
 
   override fun onSingleClick(v: View?) {
-    when(v!!.id){
-      R.id.appSettingButton->{  // 설정 버튼 누르면
+    when (v!!.id) {
+      R.id.appSettingButton -> {  // 설정 버튼 누르면
         val nextIntent = Intent(activity, AppSettingActivity::class.java)
         startActivity(nextIntent)
       }
 
-      R.id.profileRouteTextView->{ // 나의 루트 액티비티
+      R.id.profileRouteTextView -> { // 나의 루트 액티비티
         val nextIntent = Intent(activity, ProfileRouteActivity::class.java)
         nextIntent.putExtra("nickname", UserInfo.nickname)
         startActivity(nextIntent)
       }
 
-      R.id.profileRecordTextView->{ // 나의 활동 액티비티
+      R.id.profileRecordTextView -> { // 나의 활동 액티비티
         val nextIntent = Intent(activity, ProfileRecordActivity::class.java)
         //nextIntent.putExtra("nickname", UserInfo.nickname)
         startActivity(nextIntent)
@@ -99,7 +97,10 @@ class ProfileFragment : Fragment(), OnSingleClickListener {
      * 프로필 변경을 하고 나오는 경우에도 적용된
      * 사진을 바로 보기 위해 Resume에서 적용
      */
-    FBProfileRepository().getProfile(root, UserInfo.nickname, profileListener)
+    FBProfileRepository().getProfile(root, UserInfo.nickname) { distance, time ->
+      root.profileFragmentTotalDistance.text = distance.prettyDistance
+      root.profileFragmentTotalTime.text = time.toLong().format(m_s)
+    }
     super.onResume()
   }
 

@@ -276,7 +276,7 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
 
 //    gpsViewModel = ViewModelProvider(this).get(GpsViewModel::class.java)
 
-    recordViewModel = RecordViewModel(this.application)
+    recordViewModel = RecordViewModel(application)
     recordViewModel.deleteAll()
   }
 
@@ -289,15 +289,6 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     if (currentLocation != null)
       gpsViewModel.updateLastPosition(currentLocation!!.latitude, currentLocation!!.longitude)
     Logg.d("abcd onpause ${gpsViewModel.allGps.value!!.lat}")
-  }
-
-  override fun onPause() {
-    super.onPause()
-  }
-
-  override fun onResume() {
-    super.onResume()
-
   }
 
   lateinit var noticePopup: ChoicePopup
