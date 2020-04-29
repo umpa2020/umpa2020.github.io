@@ -34,8 +34,8 @@ class TraceMap(val mMap: GoogleMap) {
   var markerList = mutableListOf<Marker>()
   var turningPointList = mutableListOf<Marker>()
   fun drawRoute(
-    trkList: MutableList<WayPoint>,
-    wptList: MutableList<WayPoint>
+    trkList: List<WayPoint>,
+    wptList: List<WayPoint>
   ): Pair<MutableList<Marker>, MutableList<Marker>> {
     Logg.d("Map is draw")
     val track = trkList.map { it.toLatLng() }
@@ -162,4 +162,9 @@ class TraceMap(val mMap: GoogleMap) {
       )
     )
   }
+
+  fun removeRacer(racerNo: Int) {
+    racerList[racerNo].remove()
+  }
+
 }

@@ -15,6 +15,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
+import com.umpa2020.tracer.constant.Constants.Companion.FINISH_POINT
+import com.umpa2020.tracer.constant.Constants.Companion.START_POINT
 import com.umpa2020.tracer.constant.Constants.Companion.TIMESTAMP_LENGTH
 import com.umpa2020.tracer.customUI.WorkaroundMapFragment
 import com.umpa2020.tracer.dataClass.InfoData
@@ -181,7 +183,7 @@ class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener, OnM
         0 -> {
           if (bDraw) {
             //TODO : 이렇게 해야하나..?
-            traceMap.drawRoute(routeGPX.trkList, routeGPX.wptList)
+            traceMap.drawRoute(routeGPX.trkList.toList(), routeGPX.wptList.filter { it.type.get()== START_POINT||it.type.get()==FINISH_POINT})
           } else bDraw = true
         }
       }
