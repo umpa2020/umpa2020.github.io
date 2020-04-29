@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants.Companion.TIMESTAMP_LENGTH
 import com.umpa2020.tracer.dataClass.InfoData
-import com.umpa2020.tracer.extensions.MM_SS
+import com.umpa2020.tracer.extensions.Y_M_D
 import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.extensions.prettyDistance
 import com.umpa2020.tracer.main.ranking.RankRecyclerItemClickActivity
@@ -44,7 +44,7 @@ class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) :
 
     holder.maptitle.text = cutted
     holder.distance.text = singleItem.distance!!.prettyDistance
-    holder.time.text = singleItem.time!!.format(MM_SS)
+    holder.time.text = singleItem.time!!.format(Y_M_D)
     holder.likes.text = singleItem.likes.toString()
     holder.excutes.text = singleItem.execute.toString()
     holder.date.text = time.toLong().format("yyyy-MM-dd HH:mm:ss")

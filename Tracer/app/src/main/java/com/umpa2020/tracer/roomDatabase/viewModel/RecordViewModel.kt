@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 
 class RecordViewModel(application: Application) : AndroidViewModel(application) {
   // The ViewModel maintains a reference to the repository to get data.
-  private val repository: RecordRepository
+  private val repository =  RecordRepository()
 
   // LiveData gives us updated words when they change.
   val allRecords: LiveData<MapRecordData>
@@ -20,9 +20,8 @@ class RecordViewModel(application: Application) : AndroidViewModel(application) 
   init {
     // Gets reference to RecordDeo from RecordRoomDatabase to construct
     // the correct RecordRepository.
-    val recordDao = MyRoomDatabase.getDatabase(application, viewModelScope).recordDao()
-    repository =
-      RecordRepository(recordDao)
+    //val recordDao = MyRoomDatabase.getDatabase(application, viewModelScope).recordDao()
+
     allRecords = repository.allRecord
 //    allTimes = repository.allTime
   }

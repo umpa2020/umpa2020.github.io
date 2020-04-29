@@ -67,7 +67,7 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
     }
     distance_tv.text = infoData.distance!!.prettyDistance
 
-    time_tv.text = infoData.time!!.format(MM_SS)
+    time_tv.text = infoData.time!!.format(m_s)
     speed_tv.text = String.format("%.2f", speedList.average())
     if (infoData.privacy == Privacy.PUBLIC) {
       racingRadio.isChecked = false
@@ -215,7 +215,7 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
       UserInfo.autoLoginKey,
       UserInfo.nickname,
       infoData.time,
-      1,
+      true,
       speedList.max().toString(),
       speedList.average().toString(),
       fRef.path

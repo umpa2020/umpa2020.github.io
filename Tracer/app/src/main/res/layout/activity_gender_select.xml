@@ -12,7 +12,8 @@
     android:id="@+id/app_toolbar"
     layout="@layout/signup_toolbar"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content" />
+    android:layout_height="wrap_content"
+    android:contentInsetStart="0dp" />
 
   <LinearLayout
     android:layout_width="wrap_content"

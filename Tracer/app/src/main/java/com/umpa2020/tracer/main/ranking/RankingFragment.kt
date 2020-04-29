@@ -77,7 +77,7 @@ class RankingFragment : Fragment(), OnSingleClickListener {
                 rankingLatLng!!,
                 tuneDistance,
                 "execute",
-                15
+                20
               )
             }
           } else {
@@ -87,7 +87,7 @@ class RankingFragment : Fragment(), OnSingleClickListener {
                 rankingLatLng!!,
                 tuneDistance,
                 "likes",
-                15
+                20
               )
             }
           }
@@ -157,7 +157,7 @@ class RankingFragment : Fragment(), OnSingleClickListener {
               rankingLatLng!!,
               tuneDistance,
               "execute",
-              15
+              20
             )
           } else {
             requireView().rankingfiltermode.text = getString(R.string.likes)
@@ -166,7 +166,7 @@ class RankingFragment : Fragment(), OnSingleClickListener {
               rankingLatLng!!,
               tuneDistance,
               "likes",
-              15
+              20
             )
           }
           disappearAnimation()
@@ -182,7 +182,7 @@ class RankingFragment : Fragment(), OnSingleClickListener {
       progressbar.show()
       limit = rootInfoDatas.size.toLong()
 
-      if (limit == 0L) limit = 15L
+      if (limit == 0L) limit = 20L
       else rootInfoDatas.clear()
 
       rankingRepo = FBRankingRepository(rankingListener)
@@ -249,7 +249,7 @@ class RankingFragment : Fragment(), OnSingleClickListener {
         progressbar.dismiss()
       } else {
         //레이아웃 매니저, 어댑터 추가
-        if (rootInfoDatas.size < 16) {
+        if (rootInfoDatas.size < 21) {
           rank_recycler_map.layoutManager = LinearLayoutManager(context)
           rank_recycler_map.adapter = MapRankingAdapter(rootInfoDatas, mode, progressbar)
         } else {

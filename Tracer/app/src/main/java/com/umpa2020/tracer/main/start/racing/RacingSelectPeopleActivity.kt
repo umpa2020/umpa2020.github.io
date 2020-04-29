@@ -24,13 +24,13 @@ class RacingSelectPeopleActivity : AppCompatActivity(), OnSingleClickListener {
   val activity = this
   var likes = 0
   var mapTitle = ""
-  lateinit var routeGPX:RouteGPX
+  lateinit var routeGPX: RouteGPX
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_racing_select_people)
 
     mapTitle = intent.extras?.getString("MapTitle").toString()
-    routeGPX=intent.getParcelableExtra("RouteGPX")
+    routeGPX = intent.getParcelableExtra("RouteGPX")
 
     FBMapRankingRepository().listMapRanking(mapTitle, mapRankingListener)
 
@@ -57,11 +57,12 @@ class RacingSelectPeopleActivity : AppCompatActivity(), OnSingleClickListener {
 
     racingSelectButton.setOnClickListener(this)
   }
+
   lateinit var rankingDataList: ArrayList<RankingData>
   private val mapRankingListener = object : MapRankingListener {
     override fun getMapRank(arrRankingData: ArrayList<RankingData>) {
       //레이아웃 매니저 추가
-      rankingDataList=arrRankingData
+      rankingDataList = arrRankingData
       racingSelectRecyclerView.layoutManager = LinearLayoutManager(activity)
       //adpater 추가
       racingSelectRecyclerView.adapter =
@@ -70,14 +71,16 @@ class RacingSelectPeopleActivity : AppCompatActivity(), OnSingleClickListener {
   }
 
   override fun onSingleClick(v: View?) {
-    when(v!!.id){
-      R.id.racingSelectButton->{
-        val racerList= tagcontainerLayout1.tags.toTypedArray().map {nickName->
+    when (v!!.id) {
+      R.id.racingSelectButton -> {
+        val racerList = tagcontainerLayout1.tags.toTypedArray().map { nickName ->
           RacerData(
-          rankingDataList.find { it.challengerNickname==nickName }!!.challengerId,nickName)}
+            rankingDataList.find { it.challengerNickname == nickName }!!.challengerId, nickName
+          )
+        }
         val intent = Intent(App.instance.context(), RacingActivity::class.java)
-        intent.putExtra("RouteGPX", routeGPX)
-        intent.putExtra("RacerList",racerList.toTypedArray())
+        intent.putExtra(RacingActivity.ROUTE_GPX, routeGPX)
+        intent.putExtra("RacerList", racerList.toTypedArray())
         intent.putExtra("mapTitle", mapTitle)
         startActivity(intent)
       }

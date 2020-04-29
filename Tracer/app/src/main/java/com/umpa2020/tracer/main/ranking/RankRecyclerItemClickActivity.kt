@@ -9,6 +9,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants.Companion.TIMESTAMP_LENGTH
+import com.umpa2020.tracer.dataClass.LikedMapData
 import com.umpa2020.tracer.dataClass.RankingData
 import com.umpa2020.tracer.network.*
 import com.umpa2020.tracer.util.Logg
@@ -108,6 +109,10 @@ class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener
    */
 
   private val likedMapListener = object : LikedMapListener {
+    override fun likedList(likedMaps: List<LikedMapData>) {
+      TODO("Not yet implemented")
+    }
+
     override fun liked(liked: Boolean, getlikes: Int) {
       rankRecyclerHeartCount.text = getlikes.toString()
       //adpater 추가

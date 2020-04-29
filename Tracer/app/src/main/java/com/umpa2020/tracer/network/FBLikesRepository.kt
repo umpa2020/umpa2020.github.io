@@ -79,10 +79,10 @@ class FBLikesRepository : BaseFB() {
       .whereEqualTo(MAP_TITLE, maptitle)
       .get()
       .addOnSuccessListener { result ->
-        val documentid = result.documents[0].id
+        val documentId = result.documents[0].id
 
         mapInfoColRef.document(maptitle).collection(LIKES)
-          .document(documentid).delete()
+          .document(documentId).delete()
       }
     mapInfoColRef.document(maptitle).update(LIKES, likes - 1)
   }

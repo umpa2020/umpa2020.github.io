@@ -9,11 +9,8 @@ open class BaseFB {
   val storage = FirebaseStorage.getInstance()
   val userInfoColRef = db.collection(USER_INFO)
   val mapInfoColRef = db.collection(MAP_INFO)
-  val mapRouteStorageRef=storage.reference.child(MAP_ROUTE)
+  val mapRouteStorageRef = storage.reference.child(MAP_ROUTE)
 
-  fun uploadFile(path:String,file: File){
-
-  }
   companion object {
     const val MAP_TITLE = "mapTitle"
 
@@ -43,6 +40,10 @@ open class BaseFB {
     const val TIME = "time"
     const val MAKERS_NICKNAME = "makersNickname"
 
+    //
+    const val CHALLENGER_NICKNAME = "challengerNickname"
+
+    // for profile
     const val PROFILE_IMAGE_PATH = "profileImagePath"
     const val PROFILE = "Profile"
 
@@ -51,7 +52,16 @@ open class BaseFB {
     const val PRIVACY = "privacy"
     const val RACING = "RACING"
 
-    const val MAP_ROUTE="mapRoute"
-    const val RACING_GPX="racingGPX"
+
+    // for racing
+    const val MAP_ROUTE = "mapRoute"
+    const val RACING_GPX = "racingGPX"
+
+    // for challenge
+    const val CHALLENGE_BANNERS = "challengeBanners"
+    const val CHALLENGES = "challenges"
+    const val ID = "id"
+    const val DATE = "date"
+    const val LOCALE = "locale"
   }
 }

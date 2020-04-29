@@ -17,6 +17,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.maps.android.SphericalUtil
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
@@ -38,6 +39,7 @@ import hollowsoft.slidingdrawer.OnDrawerOpenListener
 import hollowsoft.slidingdrawer.OnDrawerScrollListener
 import hollowsoft.slidingdrawer.SlidingDrawer
 import io.jenetics.jpx.WayPoint
+import kotlinx.android.synthetic.main.fragment_start.*
 
 
 open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDrawerScrollListener,
@@ -104,16 +106,17 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
       }
     })
 
-    traceMap.mMap.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
-    traceMap.mMap.setOnCameraMoveListener {
+    traceMap.mMap.setOnCameraMoveCanceledListener {
       wedgedCamera = false
     }
     traceMap.mMap.setOnMyLocationButtonClickListener {
       wedgedCamera = true
       true
     }
+    traceMap.mMap.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
     traceMap.mMap.uiSettings.isCompassEnabled = true
     traceMap.mMap.uiSettings.isZoomControlsEnabled = true
+    wedgedCamera=true
   }
 
   open fun updateLocation(curLoc: Location) {
@@ -127,7 +130,6 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     if (setLocation(curLoc)) {
       when (userState) {
         UserState.NORMAL -> {
-          traceMap.initCamera(curLoc.toLatLng())
         }
         UserState.READYTORUNNING -> {
         }
@@ -247,7 +249,7 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
       moving = false
     } else {
       moving = true
-      if (wedgedCamera) traceMap.mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLatLng))
+      if (wedgedCamera) traceMap.moveCamera(location)
     }
     return moving
   }
@@ -275,7 +277,7 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
 
 //    gpsViewModel = ViewModelProvider(this).get(GpsViewModel::class.java)
 
-    recordViewModel = RecordViewModel(this.application)
+    recordViewModel = RecordViewModel(application)
     recordViewModel.deleteAll()
   }
 
@@ -288,15 +290,6 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     if (currentLocation != null)
       gpsViewModel.updateLastPosition(currentLocation!!.latitude, currentLocation!!.longitude)
     Logg.d("abcd onpause ${gpsViewModel.allGps.value!!.lat}")
-  }
-
-  override fun onPause() {
-    super.onPause()
-  }
-
-  override fun onResume() {
-    super.onResume()
-
   }
 
   lateinit var noticePopup: ChoicePopup

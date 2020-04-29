@@ -63,6 +63,7 @@ class ProfileRecordActivity : AppCompatActivity() {
     override fun activityList(activityDatas: ArrayList<ActivityData>) {
       rootActivityDatas.addAll(activityDatas)
 
+      Logg.d("ssmm11 size = ${activityDatas.size}")
       if (activityDatas.isEmpty()) {
         profileRecyclerActivityisEmpty.visibility = View.VISIBLE
         progressbar.dismiss()
