@@ -267,6 +267,7 @@ class RacingActivity : BaseRunningActivity() {
             }
           }
           TTS.speech("${racerList[racerNo].racerName} is arrive")
+          traceMap.removeRacer(racerNo)
         }
       }
     }
