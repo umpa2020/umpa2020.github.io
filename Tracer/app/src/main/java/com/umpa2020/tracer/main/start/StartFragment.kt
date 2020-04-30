@@ -108,7 +108,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
         val gpx = path.gpxToClass()
         gpx.addCheckPoint()
         gpx.addDirectionSign()
-        gpx.wptList.forEachIndexed{i,it-> Logg.d("${it.type.get()} $i") }
+        gpx.wptList.forEachIndexed{i,it-> Logg.d("${it.type} $i") }
       }
     }
   }

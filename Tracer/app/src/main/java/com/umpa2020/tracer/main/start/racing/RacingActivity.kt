@@ -18,9 +18,6 @@ import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.constant.Constants.Companion.ARRIVE_BOUNDARY
 import com.umpa2020.tracer.constant.Constants.Companion.DEVIATION_COUNT
-import com.umpa2020.tracer.constant.Constants.Companion.DISTANCE_POINT
-import com.umpa2020.tracer.constant.Constants.Companion.FINISH_POINT
-import com.umpa2020.tracer.constant.Constants.Companion.START_POINT
 import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.constant.UserState
 import com.umpa2020.tracer.dataClass.InfoData
@@ -28,6 +25,9 @@ import com.umpa2020.tracer.dataClass.RacerData
 import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.extensions.prettyDistance
 import com.umpa2020.tracer.extensions.toLatLng
+import com.umpa2020.tracer.extensions.toWayPoint
+import com.umpa2020.tracer.gpx.WayPoint
+import com.umpa2020.tracer.gpx.WayPointType
 import com.umpa2020.tracer.main.start.BaseRunningActivity
 import com.umpa2020.tracer.network.FBMapRepository
 import com.umpa2020.tracer.network.FBRacingRepository
@@ -35,9 +35,9 @@ import com.umpa2020.tracer.network.RacingListener
 import com.umpa2020.tracer.util.ChoicePopup
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.TTS
-import io.jenetics.jpx.WayPoint
 import kotlinx.android.synthetic.main.activity_ranking_recode_racing.*
 import kotlinx.coroutines.*
+import com.umpa2020.tracer.gpx.WayPointType.*
 
 class RacingActivity : BaseRunningActivity() {
   companion object {
@@ -129,7 +129,7 @@ class RacingActivity : BaseRunningActivity() {
 
   fun loadRoute() {
     mapRouteGPX.trkList.forEach {
-      track.add(LatLng(it.latitude.toDouble(), it.longitude.toDouble()))
+      track.add(it.toLatLng())
     }
     mapRouteGPX.wptList.let { startPoint = it.first() }
   }
@@ -206,15 +206,7 @@ class RacingActivity : BaseRunningActivity() {
     FBMapRepository().updateExecute(mapTitle)
     // 레이싱 시작 TTS
     TTS.speech(getString(R.string.startRacing))
-    wpList.add(
-      WayPoint.builder()
-        .lat(currentLatLng.latitude)
-        .lon(currentLatLng.longitude)
-        .name("Start")
-        .desc("Start Description")
-        .time(System.currentTimeMillis())
-        .type(START_POINT)
-        .build()
+    wpList.add(currentLocation.toWayPoint(START_POINT)
     )
 
     if (!racerGPXList.isNullOrEmpty()) {
@@ -231,7 +223,7 @@ class RacingActivity : BaseRunningActivity() {
     val checkPoints = arrayOf(DISTANCE_POINT, START_POINT, FINISH_POINT)
     racerGPXList?.forEachIndexed { racerNo, racingGPX ->
       GlobalScope.launch {
-        val wpts = racingGPX.wptList.filter { checkPoints.contains(it.type.get()) }
+        val wpts = racingGPX.wptList.filter { checkPoints.contains(it.type) }
         var tempIndex = 1
         val wptIndices = mutableListOf<Int>()
         wptIndices.add(0)
@@ -248,18 +240,15 @@ class RacingActivity : BaseRunningActivity() {
             wpts.forEachIndexed { index, it ->
               if (index + 2 == wpts.size) return@loop
 
-              val duration = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+              val duration =
 //              TimeUnit.MILLISECONDS.toSeconds(
 //                ((wpts[index + 1].time.get().toEpochSecond() - wpts[index].time.get()
 //                  .toEpochSecond()))
 //              )
-                ((wpts[index + 1].time.get().toEpochSecond() - wpts[index].time.get()
-                  .toEpochSecond())) * 1000 / (wptIndices[index + 1] - wptIndices[index])
-              } else {
-                TODO("VERSION.SDK_INT < O")
-              }
+                ((wpts[index + 1].time - wpts[index].time) * 1000 / (wptIndices[index + 1] - wptIndices[index]))
 
-              Logg.d("기간 $duration  1 : ${wpts[index + 1].time.get()}   2: ${wpts[index].time.get()}")
+
+              Logg.d("기간 $duration  1 : ${wpts[index + 1].time}   2: ${wpts[index].time}")
               (wptIndices[index]..wptIndices[index + 1]).forEach {
                 delay(duration)
                 traceMap.updateMarker(racerNo, racingGPX.trkList[it].toLatLng())
@@ -275,15 +264,8 @@ class RacingActivity : BaseRunningActivity() {
 
   override fun stop() {
     super.stop()
-    wpList.add(
-      WayPoint.builder()
-        .lat(mapRouteGPX.trkList.last().latitude)
-        .lon(mapRouteGPX.trkList.last().longitude)
-        .name("Finish")
-        .desc("Finish Description")
-        .time(System.currentTimeMillis())
-        .type(FINISH_POINT)
-        .build()
+    //TODO: FINISH POINT 변경
+    wpList.add(currentLocation.toWayPoint(FINISH_POINT)
     )
 
     // 레이싱 끝 TTS
@@ -294,7 +276,7 @@ class RacingActivity : BaseRunningActivity() {
     infoData.mapTitle = mapTitle
     infoData.distance = distance
     //infoData.distance = calcLeftDistance()
-    val routeGPX = RouteGPX(infoData.time.toString(), "", wpList, trkList)
+    val routeGPX = RouteGPX(infoData.time!!, "", wpList, trkList)
 
     val newIntent = Intent(this, RacingFinishActivity::class.java)
     newIntent.putExtra("Result", racingResult)
@@ -329,16 +311,7 @@ class RacingActivity : BaseRunningActivity() {
     ) {
       traceMap.changeMarkerIcon(nextWP)
       nextWP++
-      wpList.add(
-        WayPoint.builder()
-          .lat(currentLatLng.latitude)
-          .lon(currentLatLng.longitude)
-          .name("WayPoint")
-          .desc("wayway...")
-          .time((System.currentTimeMillis()))
-          .type(DISTANCE_POINT)
-          .build()
-      )
+      wpList.add(currentLocation.toWayPoint(DISTANCE_POINT)      )
       if (nextWP == markerList.size) {
         stop()
       }

@@ -6,15 +6,12 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.maps.android.PolyUtil
 import com.google.maps.android.SphericalUtil
-import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.constant.Constants.Companion.TURNING_ANGLE
-import com.umpa2020.tracer.constant.Constants.Companion.TURNING_LEFT_POINT
-import com.umpa2020.tracer.constant.Constants.Companion.TURNING_RIGHT_POINT
 import com.umpa2020.tracer.dataClass.RouteGPX
+import com.umpa2020.tracer.gpx.WayPoint
+import com.umpa2020.tracer.gpx.WayPointType
+import com.umpa2020.tracer.gpx.WayPointType.*
 import com.umpa2020.tracer.util.Logg
-import io.jenetics.jpx.GPX
-import io.jenetics.jpx.TrackSegment
-import io.jenetics.jpx.WayPoint
 import java.io.File
 import kotlin.math.PI
 import kotlin.math.abs
@@ -25,7 +22,7 @@ fun Location.toLatLng(): LatLng {
 }
 
 fun WayPoint.toLatLng(): LatLng {
-  return LatLng(latitude.toDouble(), longitude.toDouble())
+  return LatLng(lat, lon)
 }
 
 fun MutableList<LatLng>.bounds(): LatLngBounds {
@@ -44,30 +41,22 @@ fun MutableList<LatLng>.bounds(): LatLngBounds {
 
 fun RouteGPX.addCheckPoint(): RouteGPX {
   if (wptList.isNullOrEmpty()) wptList = mutableListOf()
-  this.wptList.add(
-    WayPoint.builder()
-      .lat(trkList.first().latitude)
-      .lon(trkList.first().longitude)
-      .name("Start")
-      .desc("Start Description")
-      .type(Constants.START_POINT)
-      .build()
-  )
+  this.wptList.add(trkList.first().apply {
+    name = "Start"
+    desc = "Start Point"
+    type = START_POINT
+  })
 
   val latlngs = mutableListOf<LatLng>()
   var distance = 0.0
   trkList.forEachIndexed { i, it ->
     if (i > 0) {
       if (i == trkList.size - 1) {
-        wptList.add(
-          WayPoint.builder()
-            .lat(it.latitude)
-            .lon(it.longitude)
-            .name("Finish")
-            .desc("Finish Description")
-            .type(Constants.FINISH_POINT)
-            .build()
-        )
+        wptList.add(it.apply {
+          name = "Finish"
+          desc = "Finish Point"
+          type = FINISH_POINT
+        })
       } else {
         distance += SphericalUtil.computeDistanceBetween(
           trkList[i - 1].toLatLng(),
@@ -75,15 +64,11 @@ fun RouteGPX.addCheckPoint(): RouteGPX {
         )
         if (distance > 500) {
           distance = 0.0
-          wptList.add(
-            WayPoint.builder()
-              .lat(it.latitude)
-              .lon(it.longitude)
-              .name("WayPoint")
-              .desc("wayway...")
-              .type(Constants.DISTANCE_POINT)
-              .build()
-          )
+          wptList.add(it.apply {
+            name = "Distance point"
+            desc = "100m"
+            type = DISTANCE_POINT
+          })
         }
       }
     }
@@ -119,23 +104,11 @@ fun RouteGPX.addDirectionSign(): RouteGPX {
     if (abs(angle) >= TURNING_ANGLE) {
       if (angle > 0) {
         this.wptList.add(
-          WayPoint.builder()
-            .lat(b.latitude)
-            .lon(b.longitude)
-            .name("Turning Point")
-            .desc("Turn Left")
-            .type(TURNING_LEFT_POINT)
-            .build()
+          WayPoint(b.latitude, b.longitude, 0.0, 0.0, "Turning Point", "Turn Left", 0L, TURNING_LEFT_POINT)
         )
       } else {
         this.wptList.add(
-          WayPoint.builder()
-            .lat(b.latitude)
-            .lon(b.longitude)
-            .name("Turning Point")
-            .desc("Turn Right")
-            .type(TURNING_RIGHT_POINT)
-            .build()
+          WayPoint(b.latitude, b.longitude, 0.0, 0.0, "Turning Point", "Turn Right", 0L, TURNING_RIGHT_POINT)
         )
       }
 
@@ -146,7 +119,7 @@ fun RouteGPX.addDirectionSign(): RouteGPX {
 
 //TODO : Kotlin scope 적용
 fun RouteGPX.classToGpx(folderPath: String): Uri {
-  val gpxBuilder = GPX.builder()
+ /* val gpxBuilder = GPX.builder()
     .addTrack { it.addSegment(TrackSegment.of(trkList)).build() }
   wptList.forEach { gpxBuilder.addWayPoint(it) }
   val gpx = gpxBuilder.build()
@@ -163,11 +136,22 @@ fun RouteGPX.classToGpx(folderPath: String): Uri {
     return Uri.fromFile(myfile)
   } catch (e: Exception) {
     Logg.d(e.toString());
-  }
+  }*/
   return Uri.EMPTY
 }
 
 fun String.gpxToClass(): RouteGPX {
-  val gpx = GPX.read(this)
-  return RouteGPX("test", "Test", gpx.wayPoints, gpx.tracks[0].segments[0].points)
+  /*val gpx = GPX.read(this)
+  return RouteGPX("test", "Test", gpx.wayPoints, gpx.tracks[0].segments[0].points)*/
+  return RouteGPX(0,"", mutableListOf(), mutableListOf())
+}
+fun Location.toWayPoint(type:WayPointType):WayPoint{
+  return when(type){
+    START_POINT-> WayPoint(latitude, longitude, altitude, speed.toDouble(), "Start", "Start Point", time, type)
+    FINISH_POINT -> WayPoint(latitude, longitude, altitude, speed.toDouble(), "Finish", "Finish Point", time, type)
+    DISTANCE_POINT -> WayPoint(latitude, longitude, altitude, speed.toDouble(), "Distance", "Distance Point", time, type)
+    TURNING_LEFT_POINT -> WayPoint(latitude, longitude, altitude, speed.toDouble(), "Turning Point", "Turn Left", time, type)
+    TURNING_RIGHT_POINT -> WayPoint(latitude, longitude, altitude, speed.toDouble(), "Turning Point", "Turn Right", time, type)
+    TRACK_POINT -> WayPoint(latitude, longitude, altitude, speed.toDouble(), "Track Point", "Track Point", time, type)
+  }
 }

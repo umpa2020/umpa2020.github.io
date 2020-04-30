@@ -25,6 +25,8 @@ import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.constant.UserState
 import com.umpa2020.tracer.extensions.*
+import com.umpa2020.tracer.gpx.WayPoint
+import com.umpa2020.tracer.gpx.WayPointType
 import com.umpa2020.tracer.lockscreen.util.LockScreen
 import com.umpa2020.tracer.main.MainActivity.Companion.gpsViewModel
 import com.umpa2020.tracer.map.TraceMap
@@ -38,7 +40,7 @@ import hollowsoft.slidingdrawer.OnDrawerCloseListener
 import hollowsoft.slidingdrawer.OnDrawerOpenListener
 import hollowsoft.slidingdrawer.OnDrawerScrollListener
 import hollowsoft.slidingdrawer.SlidingDrawer
-import io.jenetics.jpx.WayPoint
+import com.umpa2020.tracer.gpx.WayPointType.*
 import kotlinx.android.synthetic.main.fragment_start.*
 
 
@@ -137,15 +139,7 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
           distance += SphericalUtil.computeDistanceBetween(previousLatLng, currentLatLng)
           traceMap.drawPolyLine(previousLatLng, currentLatLng)
           //tplist에 추가
-          trkList.add(
-            WayPoint.builder()
-              .lat(currentLatLng.latitude)
-              .lon(currentLatLng.longitude)
-              .ele(elevation)
-              .speed(speed)
-              .name("track point")
-              .build()
-          )
+          trkList.add(curLoc.toWayPoint(TRACK_POINT))
         }
         UserState.PAUSED -> {
         }
@@ -281,7 +275,7 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     recordViewModel.deleteAll()
   }
 
-  var currentLocation: Location? = null
+  lateinit var currentLocation: Location
   override fun onDestroy() {
     super.onDestroy()
     LocalBroadcastManager.getInstance(this).unregisterReceiver(locationBroadcastReceiver)

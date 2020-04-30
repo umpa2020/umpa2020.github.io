@@ -16,7 +16,6 @@ import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.network.*
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.OnSingleClickListener
-import io.jenetics.jpx.Route
 import kotlinx.android.synthetic.main.activity_racing_select_people.*
 import java.util.*
 
