@@ -13,6 +13,13 @@ import com.umpa2020.tracer.gpx.WayPointType
 import com.umpa2020.tracer.gpx.WayPointType.*
 import com.umpa2020.tracer.util.Logg
 import java.io.File
+import java.io.FileOutputStream
+import java.lang.Exception
+import javax.xml.parsers.DocumentBuilderFactory
+import javax.xml.transform.OutputKeys
+import javax.xml.transform.TransformerFactory
+import javax.xml.transform.dom.DOMSource
+import javax.xml.transform.stream.StreamResult
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.atan2
@@ -119,7 +126,37 @@ fun RouteGPX.addDirectionSign(): RouteGPX {
 
 //TODO : Kotlin scope 적용
 fun RouteGPX.classToGpx(folderPath: String): Uri {
- /* val gpxBuilder = GPX.builder()
+  /*try {
+    val document =
+      DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument()
+    val trkpt = document.createElement("trkpt")
+    trkpt.setAttribute("lat", "-33.626932")
+    trkpt.setAttribute("lon", "-33.626932")
+    val ele = document.createElement("ele")
+    ele.appendChild(document.createTextNode("-6"))
+    trkpt.appendChild(ele)
+    document.appendChild(trkpt)
+    val transformer = TransformerFactory.newInstance().newTransformer()
+    transformer.setOutputProperty(OutputKeys.METHOD,"gpx")
+    transformer.setOutputProperty(OutputKeys.)
+    val saveFolder = File(folderPath) // 저장 경로
+    if (!saveFolder.exists()) {       //폴더 없으면 생성
+      saveFolder.mkdir()
+    }
+    val path = "route_${System.currentTimeMillis()}.gpx"
+    val file = File(saveFolder, path)         //로컬에 파일저장
+
+    val source = DOMSource(document)
+    //val result = StreamResult(FileOutputStream(file))
+    val result = StreamResult(System.out)
+    transformer.transform(source, result)
+    return Uri.fromFile(file)
+  }catch(e:Exception){
+    e.printStackTrace()
+  }*/
+
+/*
+  val gpxBuilder = GPX.builder()
     .addTrack { it.addSegment(TrackSegment.of(trkList)).build() }
   wptList.forEach { gpxBuilder.addWayPoint(it) }
   val gpx = gpxBuilder.build()
@@ -143,11 +180,12 @@ fun RouteGPX.classToGpx(folderPath: String): Uri {
 fun String.gpxToClass(): RouteGPX {
   /*val gpx = GPX.read(this)
   return RouteGPX("test", "Test", gpx.wayPoints, gpx.tracks[0].segments[0].points)*/
-  return RouteGPX(0,"", mutableListOf(), mutableListOf())
+  return RouteGPX(0, "", mutableListOf(), mutableListOf())
 }
-fun Location.toWayPoint(type:WayPointType):WayPoint{
-  return when(type){
-    START_POINT-> WayPoint(latitude, longitude, altitude, speed.toDouble(), "Start", "Start Point", time, type)
+
+fun Location.toWayPoint(type: WayPointType): WayPoint {
+  return when (type) {
+    START_POINT -> WayPoint(latitude, longitude, altitude, speed.toDouble(), "Start", "Start Point", time, type)
     FINISH_POINT -> WayPoint(latitude, longitude, altitude, speed.toDouble(), "Finish", "Finish Point", time, type)
     DISTANCE_POINT -> WayPoint(latitude, longitude, altitude, speed.toDouble(), "Distance", "Distance Point", time, type)
     TURNING_LEFT_POINT -> WayPoint(latitude, longitude, altitude, speed.toDouble(), "Turning Point", "Turn Left", time, type)
