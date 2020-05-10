@@ -1,7 +1,7 @@
 package com.umpa2020.tracer.locationBackground
 
 import android.app.IntentService
-import android.app.Notification
+import android.app.PendingIntent
 import android.content.Intent
 import android.location.Location
 import android.os.Build
@@ -10,6 +10,9 @@ import androidx.core.app.NotificationCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.location.LocationRequest
 import com.umpa2020.tracer.App
+import com.umpa2020.tracer.R
+import com.umpa2020.tracer.lockscreen.service.NotificationManager
+import com.umpa2020.tracer.main.start.running.RunningActivity
 import com.umpa2020.tracer.util.Logg
 
 /**
@@ -17,24 +20,29 @@ import com.umpa2020.tracer.util.Logg
  *  만약 메인 스레드와 관련된 작업을 해야 한다면 메인스레드 Handler나 Boradcast intent를 이용해야 한다.
  *  출처: https://fullstatck.tistory.com/23 [풀스택 엔지니어]
  */
-class LocationBackgroundService : IntentService("LocationBackgroundService"), LocationUpdatesComponent.ILocationProvider{
+class LocationBackgroundService : IntentService("LocationBackgroundService"),
+  LocationUpdatesComponent.ILocationProvider {
+  companion object {
+    var aa : NotificationCompat.Builder? = null
+  }
   /**
    * Activity와 Service 통신
    *  1. Activity는 Service에 이벤트를 전달
    *  2. Service는 이벤트를 받고 어떤 동작을 수행
    *  3. Service는 Activity로 결과 이벤트를 전달
    */
-  var notification: Notification? = null
+  // notification을 클릭하면 지정한 액티비티로 이동.
+
   override fun onCreate() {
     super.onCreate()
-    Logg.i( "onCreate ")
-
+    Logg.i("onCreate ")
+    val pendingIntent: PendingIntent =
+      Intent(this, RunningActivity::class.java).let { notificationIntent ->
+        PendingIntent.getActivity(this, 0, notificationIntent, 0)
+      }
     /**
      *  위치 관련 생성.
      */
-
-
-
     Logg.d(this.toString())
     LocationUpdatesComponent.setILocationProvider(this)
     LocationUpdatesComponent.onCreate(this)
@@ -45,19 +53,24 @@ class LocationBackgroundService : IntentService("LocationBackgroundService"), Lo
      */
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       // 포그라운드 서비스는 알림창이 있어야 실행 가능.
-      LocationNotificationManager.createNotification(this@LocationBackgroundService)
-      startForeground( App.LocationNitificationId, createNotificationCompatBuilder().build())
+      NotificationManager.createMainNotificationChannel(this@LocationBackgroundService)
+
+      startForeground(
+        App.locationNitificationId, createNotificationCompatBuilder()
+          .build()
+      )
+      aa = createNotificationCompatBuilder()
     }
   }
 
   // this makes service running continuously,commenting this start command method service runs only once
   // action에 따른 service 실행 유무
   override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-    Logg.i( "onStartCommand Service started....")
+    Logg.i("onStartCommand Service started....")
 
     if (intent != null) {
       val action = intent.action
-      Logg.i( "onStartCommand action $action")
+      Logg.i("onStartCommand action $action")
       when (action) {
         ServiceStatus.START.name -> startService()
         ServiceStatus.STOP.name -> stopService()
@@ -68,7 +81,7 @@ class LocationBackgroundService : IntentService("LocationBackgroundService"), Lo
 
 
   override fun onHandleIntent(intent: Intent?) {
-    Logg.i( "onHandleIntent $intent")
+    Logg.i("onHandleIntent $intent")
   }
 
   /**
@@ -82,11 +95,11 @@ class LocationBackgroundService : IntentService("LocationBackgroundService"), Lo
     try {
       val intent = Intent("custom-event-name")
       intent.putExtra("message", location)
-      Logg.d( location.toString())
+      Logg.d(location.toString())
       LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
 
     } catch (e: RemoteException) {
-      Logg.e( "Error passing service object back to activity.")
+      Logg.e("Error passing service object back to activity.")
     }
   }
 
@@ -101,11 +114,16 @@ class LocationBackgroundService : IntentService("LocationBackgroundService"), Lo
   }
 
   private fun createNotificationCompatBuilder(): NotificationCompat.Builder {
+
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       val mBuilder = NotificationCompat.Builder(
         this@LocationBackgroundService,
-        LocationNotificationManager.getNotificationId()
-      )
+        NotificationManager.getMainNotificationId()
+      ) .setContentTitle(getString(R.string.gps_activation))
+//        .setContentIntent(pendingIntent)
+        .setGroup("groups")
+        .setSmallIcon(R.mipmap.ic_launcher_tracer_final)
+        .setTicker("Ticker text")
       mBuilder
     } else {
       NotificationCompat.Builder(this@LocationBackgroundService, "")
@@ -162,10 +180,4 @@ class LocationBackgroundService : IntentService("LocationBackgroundService"), Lo
     stopForeground(true)
     stopSelf() // 이건 뭐지??
   }
-
-  companion object {
-    private val TAG = "LocationBackground"
-    const val LOCATION_MESSAGE = 999
-  }
-
 }

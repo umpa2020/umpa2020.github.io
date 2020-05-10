@@ -30,6 +30,9 @@ object LocationNotificationManager {
 
     val mChannel = NotificationChannel(id, name, impotance)
 
+    mChannel.enableVibration(false)
+    mChannel.enableLights(false)
+
     mNotificationManager =
       context?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     mNotificationManager!!.createNotificationChannel(mChannel)

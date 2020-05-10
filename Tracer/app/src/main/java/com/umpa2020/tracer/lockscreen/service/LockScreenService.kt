@@ -10,11 +10,14 @@ import android.os.IBinder
 import android.telephony.PhoneStateListener
 import android.telephony.TelephonyManager
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import com.umpa2020.tracer.App
+import com.umpa2020.tracer.locationBackground.LocationBackgroundService
 import com.umpa2020.tracer.lockscreen.LockScreenActivity
 import com.umpa2020.tracer.util.Logg
 
 class LockScreenService : Service() {
+
   private var isPhoneIdleNum: Int? = null
 
   // by lazy : 호출 시점에 by lazy 정의에 의해서 초기화를 진행한다.
@@ -74,18 +77,42 @@ class LockScreenService : Service() {
     }
   }
 
+  val SUMMARY_ID = 0
+  val GROUP_KEY_WORK_EMAIL = "com.android.example.WORK_EMAIL"
+  var bb: NotificationCompat.Builder? = null
 
   private fun createNotificationCompatBuilder(): NotificationCompat.Builder {
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       Logg.d("zzzzzz")
       val mBuilder = NotificationCompat.Builder(
         this@LockScreenService,
-        MyNotificationManager.getMainNotificationId()
+        NotificationManager.getMainNotificationId()
       )
       mBuilder
     } else {
       Logg.d("ddddd")
       NotificationCompat.Builder(this@LockScreenService, "")
+    }
+  }
+
+  private fun group() {
+    val summaryNotification =
+      NotificationCompat.Builder(this, NotificationManager.getMainNotificationId())
+//      .setContentTitle(emailObject.getSummary())
+        //set content text to support devices running API level < 24
+        .setContentText("Two new messages")
+//      .setSmallIcon(R.drawable.ic_notify_summary_status)
+        //build summary info into InboxStyle template
+        //specify which group this notification belongs to
+        .setGroup("groups")
+        //set this notification as the summary for the group
+        .setGroupSummary(true)
+        .build()
+
+    NotificationManagerCompat.from(this).apply {
+      notify(App.locationNitificationId, LocationBackgroundService.aa!!.build())
+      notify(App.lockScreenNotificationId, bb!!.build())
+      notify(SUMMARY_ID, summaryNotification)
     }
   }
 
@@ -98,10 +125,20 @@ class LockScreenService : Service() {
      */
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       // 포그라운드 서비스는 알림창이 있어야 실행 가능.
-      MyNotificationManager.createMainNotificationChannel(this@LockScreenService)
-      startForeground( App.LocationNitificationId, createNotificationCompatBuilder().build())
+      NotificationManager.createMainNotificationChannel(this@LockScreenService)
+      startForeground(
+        App.lockScreenNotificationId, createNotificationCompatBuilder()
+          .setGroup("groups")
+          .build()
+      )
     }
+    bb = createNotificationCompatBuilder()
+    Logg.d(bb.toString())
+    group()
   }
+
+
+
 
   override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 //        return super.onStartCommand(intent, flags, startId) // 이걸 지우면 코드에 노란 박스 사라짐.
@@ -114,10 +151,11 @@ class LockScreenService : Service() {
   override fun onBind(intent: Intent): IBinder {
     TODO("Return the communication channel to the service.")
   }
+
   override fun onDestroy() {
     super.onDestroy()
     Logg.d("onDestroy()")
-    MyNotificationManager.cancelnNotificationChannel(this@LockScreenService)
+    NotificationManager.cancelnNotificationChannel(this@LockScreenService)
     stateReceiver(false)
   }
 

@@ -1,10 +1,10 @@
 package com.umpa2020.tracer.main
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.SystemClock
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -12,9 +12,9 @@ import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.locationBackground.LocationBackgroundService
 import com.umpa2020.tracer.locationBackground.ServiceStatus
+import com.umpa2020.tracer.main.challenge.ChallengeFragment
 import com.umpa2020.tracer.main.profile.ProfileFragment
 import com.umpa2020.tracer.main.ranking.RankingFragment
-import com.umpa2020.tracer.main.challenge.ChallengeFragment
 import com.umpa2020.tracer.main.start.StartFragment
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.TTS
@@ -143,7 +143,12 @@ class MainActivity : AppCompatActivity() {
     Intent(applicationContext, LocationBackgroundService::class.java).also {
       it.action = action.name
       Logg.d(action.toString())
-      startService(it)
+
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        startForegroundService(it)
+      }else {
+        startService(it)
+      }
     }
   }
 
