@@ -36,6 +36,8 @@ import com.umpa2020.tracer.constant.Constants.Companion.TIMESTAMP_LENGTH
 import com.umpa2020.tracer.dataClass.NearMap
 import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.extensions.*
+import com.umpa2020.tracer.gpx.WayPoint
+import com.umpa2020.tracer.gpx.WayPointType
 import com.umpa2020.tracer.main.MainActivity.Companion.gpsViewModel
 import com.umpa2020.tracer.main.challenge.ChallengeDataSettingActivity
 import com.umpa2020.tracer.main.ranking.RankingMapDetailActivity
@@ -99,16 +101,39 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
         // EditText 초기화
         mainStartSearchTextView.setText("")
       }
-      R.id.upload->{
+      R.id.upload -> {
         val intent = Intent(context, ChallengeDataSettingActivity::class.java)
         startActivity(intent)
       }
-      R.id.gpxTest->{
-        val path = "/data/data/com.umpa2020.tracer/files/originGPX/2020korea50k_10kfinal.gpx"
-        val gpx = path.gpxToClass()
-        gpx.addCheckPoint()
-        gpx.addDirectionSign()
-        gpx.wptList.forEachIndexed{i,it-> Logg.d("${it.type} $i") }
+      R.id.gpxTest -> {
+        /* val path = "/data/data/com.umpa2020.tracer/files/originGPX/2020korea50k_10kfinal.gpx"
+         val gpx = path.gpxToClass()
+         gpx.addCheckPoint()
+         gpx.addDirectionSign()
+         gpx.wptList.forEachIndexed{i,it-> Logg.d("${it.type} $i")
+
+      }
+      */
+        val saveFolder = File(requireContext().filesDir, "routeGPX") // 저장 경로
+        if (!saveFolder.exists()) {       //폴더 없으면 생성
+          saveFolder.mkdir()
+        }
+        val wptList= mutableListOf<WayPoint>()
+        wptList.add(WayPoint(1.0,1.0,1.0,1.0,"1","1",0,WayPointType.START_POINT))
+        wptList.add(WayPoint(2.0,2.0,2.0,2.0,"2","2",0,WayPointType.DISTANCE_POINT))
+        wptList.add(WayPoint(3.0,3.0,3.0,3.0,"3","3",0,WayPointType.DISTANCE_POINT))
+        wptList.add(WayPoint(4.0,4.0,4.0,4.0,"4","4",0,WayPointType.FINISH_POINT))
+
+
+        val trkList= mutableListOf<WayPoint>()
+        trkList.add(WayPoint(1.0,1.0,1.0,1.0,"1","1",0,WayPointType.TRACK_POINT))
+        trkList.add(WayPoint(2.0,2.0,2.0,2.0,"2","2",0,WayPointType.TRACK_POINT))
+        trkList.add(WayPoint(3.0,3.0,3.0,3.0,"3","3",0,WayPointType.TRACK_POINT))
+        trkList.add(WayPoint(4.0,4.0,4.0,4.0,"4","4",0,WayPointType.TRACK_POINT))
+
+        val routeGPX=RouteGPX(0,"0", wptList, trkList)
+        routeGPX.addDirectionSign()
+        val routeGpxFile = routeGPX.classToGpx(saveFolder.path)
       }
     }
   }
@@ -288,7 +313,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
 //    }else{
 //      Logg.d("값이 있음")
 //    }
-    wedgedCamera=true
+    wedgedCamera = true
     traceMap!!.mMap.setOnCameraMoveCanceledListener {
       wedgedCamera = false
       mainStartSearchAreaButton.visibility = View.VISIBLE

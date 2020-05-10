@@ -182,9 +182,9 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
     val fuploadTask = fRef.putFile(routeGpxFile)
 
     fuploadTask.addOnFailureListener {
-      Logg.d("Success")
-    }.addOnSuccessListener {
       Logg.d("Fail : $it")
+    }.addOnSuccessListener {
+      Logg.d("Success")
     }
     // db에 그려진 맵 저장하는 스레드 - 여기서는 실제 그려진 것 보다 후 보정을 통해서
     // 간략화 된 맵을 업로드 합니다.
@@ -202,9 +202,9 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
       .child(infoData.mapTitle!!).child("racingGPX").child(UserInfo.autoLoginKey)
     val fRankinguploadTask = fRefRanking.putFile(routeGpxFile)
     fRankinguploadTask.addOnFailureListener {
-      Logg.d("Success")
-    }.addOnSuccessListener {
       Logg.d("Fail : $it")
+    }.addOnSuccessListener {
+      Logg.d("Success")
     }
     // db에 그려진 맵 저장하는 스레드 - 여기서는 실제 그려진 것 보다 후 보정을 통해서
     // 간략화 된 맵을 업로드 합니다.

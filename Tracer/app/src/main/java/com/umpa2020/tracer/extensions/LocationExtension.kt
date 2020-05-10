@@ -14,9 +14,7 @@ import com.umpa2020.tracer.gpx.WayPointType.*
 import com.umpa2020.tracer.util.Logg
 import java.io.File
 import java.io.FileOutputStream
-import java.lang.Exception
 import javax.xml.parsers.DocumentBuilderFactory
-import javax.xml.transform.OutputKeys
 import javax.xml.transform.TransformerFactory
 import javax.xml.transform.dom.DOMSource
 import javax.xml.transform.stream.StreamResult
@@ -124,21 +122,34 @@ fun RouteGPX.addDirectionSign(): RouteGPX {
   return this
 }
 
-//TODO : Kotlin scope 적용
 fun RouteGPX.classToGpx(folderPath: String): Uri {
-  /*try {
+  try {
     val document =
-      DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument()
-    val trkpt = document.createElement("trkpt")
-    trkpt.setAttribute("lat", "-33.626932")
-    trkpt.setAttribute("lon", "-33.626932")
-    val ele = document.createElement("ele")
-    ele.appendChild(document.createTextNode("-6"))
-    trkpt.appendChild(ele)
-    document.appendChild(trkpt)
-    val transformer = TransformerFactory.newInstance().newTransformer()
-    transformer.setOutputProperty(OutputKeys.METHOD,"gpx")
-    transformer.setOutputProperty(OutputKeys.)
+      DocumentBuilderFactory.newInstance().newDocumentBuilder()
+        .domImplementation.createDocument("test", "gpx", null)
+    wptList.forEach { wpt ->
+      document.documentElement.appendChild(
+        document.createElement("wpt").apply {
+          setAttribute("lat", "${wpt.lat}")
+          setAttribute("lon", "${wpt.lon}")
+          appendChild(document.createElement("ele").apply { appendChild(document.createTextNode("${wpt.alt}")) })
+          appendChild(document.createElement("time").apply { appendChild(document.createTextNode("${wpt.time}")) })
+          appendChild(document.createElement("name").apply { appendChild(document.createTextNode(wpt.name)) })
+          appendChild(document.createElement("desc").apply { appendChild(document.createTextNode(wpt.desc)) })
+          appendChild(document.createElement("type").apply { appendChild(document.createTextNode("${wpt.type.ordinal}")) })
+        })
+    }
+
+    val trkseg = document.createElement("trkseg")
+    trkList.forEach { wpt ->
+      trkseg.appendChild(document.createElement("trkpt").apply {
+        setAttribute("lat", "${wpt.lat}")
+        setAttribute("lon", "${wpt.lon}")
+        appendChild(document.createElement("ele").apply { appendChild(document.createTextNode("${wpt.alt}")) })
+      })
+    }
+    document.documentElement.appendChild(document.createElement("trk").appendChild(trkseg))
+
     val saveFolder = File(folderPath) // 저장 경로
     if (!saveFolder.exists()) {       //폴더 없으면 생성
       saveFolder.mkdir()
@@ -146,14 +157,16 @@ fun RouteGPX.classToGpx(folderPath: String): Uri {
     val path = "route_${System.currentTimeMillis()}.gpx"
     val file = File(saveFolder, path)         //로컬에 파일저장
 
+    val transformer = TransformerFactory.newInstance().newTransformer()
     val source = DOMSource(document)
-    //val result = StreamResult(FileOutputStream(file))
-    val result = StreamResult(System.out)
+    val result = StreamResult(FileOutputStream(file))
+   // val result = StreamResult(System.out)
     transformer.transform(source, result)
+    Logg.d("tlqkf")
     return Uri.fromFile(file)
-  }catch(e:Exception){
+  } catch (e: Exception) {
     e.printStackTrace()
-  }*/
+  }
 
 /*
   val gpxBuilder = GPX.builder()
