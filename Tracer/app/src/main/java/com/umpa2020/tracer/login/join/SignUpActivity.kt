@@ -26,6 +26,7 @@ import com.google.firebase.storage.StorageReference
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants
+import com.umpa2020.tracer.extensions.ToAge
 import com.umpa2020.tracer.extensions.show
 import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.network.FBProfileRepository
@@ -225,7 +226,7 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
 //    val compositeDisposable=CompositeDisposable()
 
     val disposableGender = RxTextView.textChanges(inputDataField[2])
-      .map { t -> t.isEmpty() || Pattern.matches(Constants.GENDER_RULE, t) }
+      .map { t -> t.isEmpty() || !Pattern.matches(Constants.GENDER_RULE, t) }
       .subscribe({
         //inputDataField[2].setText("")
         Logg.d("성별 : " + it.toString())
@@ -269,6 +270,13 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
     // 성별
     if (requestCode == 102 && resultCode == RESULT_OK) {
       editGender.setText(intentData!!.getStringExtra("Gender"))
+    }
+    // 생년월일 yyyyMMdd 형식으로 전달 받음.
+    if (requestCode == 101 && resultCode == RESULT_OK) {
+      Logg.d(intentData!!.getStringExtra("Age"))
+      val age = ToAge(intentData.getStringExtra("Age")!!)
+
+      editAge.setText(age)
     }
 
     // 앨범
@@ -409,7 +417,8 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
         finish()
       }
       R.id.editAge -> {
-
+        val intent = Intent(this, AgeSelectActivity::class.java)
+        startActivityForResult(intent, 101)
       }
       R.id.editGender -> {
         val intent = Intent(this, GenderSelectActivity::class.java)
@@ -431,6 +440,7 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
         }
 
       }
+      // TODO: 나이는 yyyyMMdd형식으로 가져와서 나이로 변환함. 서버에 저장할때는 TextView 입력된 걸 읽어와서 저장하는데 뭘 저장해야 할까요??
       R.id.sign_up_button -> {
 
         nickname = editNickname.text.toString()

@@ -15,8 +15,6 @@ import kotlinx.android.synthetic.main.signup_toolbar.*
 import kotlinx.android.synthetic.main.signup_toolbar.view.*
 
 class GenderSelectActivity : AppCompatActivity(), OnSingleClickListener {
-  val WSY = "WSY"
-
   var isMan = false
   var isWoman = false
 
@@ -43,9 +41,9 @@ class GenderSelectActivity : AppCompatActivity(), OnSingleClickListener {
         try {
           val intent = Intent()
           if (isMan)
-            intent.putExtra("Gender", "Man")
+            intent.putExtra("Gender", getString(R.string.man))
           else
-            intent.putExtra("Gender", "Woman")
+            intent.putExtra("Gender", getString(R.string.woman))
           setResult(RESULT_OK, intent)
           finish()
         } catch (e: Exception) {
