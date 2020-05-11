@@ -38,6 +38,7 @@ import com.umpa2020.tracer.util.TTS
 import kotlinx.android.synthetic.main.activity_ranking_recode_racing.*
 import kotlinx.coroutines.*
 import com.umpa2020.tracer.gpx.WayPointType.*
+import java.util.concurrent.TimeUnit
 
 class RacingActivity : BaseRunningActivity() {
   companion object {
@@ -239,18 +240,12 @@ class RacingActivity : BaseRunningActivity() {
           run loop@{
             wpts.forEachIndexed { index, it ->
               if (index + 2 == wpts.size) return@loop
-
-              val duration =
-//              TimeUnit.MILLISECONDS.toSeconds(
-//                ((wpts[index + 1].time.get().toEpochSecond() - wpts[index].time.get()
-//                  .toEpochSecond()))
-//              )
-                ((wpts[index + 1].time!! - wpts[index].time!!) * 1000 / (wptIndices[index + 1] - wptIndices[index]))
-
-
-              Logg.d("기간 $duration  1 : ${wpts[index + 1].time}   2: ${wpts[index].time}")
+              val duration =  TimeUnit.MILLISECONDS.toSeconds((wpts[index + 1].time!! - wpts[index].time!!))
+              val unitDuration= duration/ (wptIndices[index + 1] - wptIndices[index])
+              
+              Logg.d("기간 $unitDuration  1 : ${wpts[index + 1].time}   2: ${wpts[index].time}")
               (wptIndices[index]..wptIndices[index + 1]).forEach {
-                delay(duration)
+                delay(unitDuration)
                 traceMap.updateMarker(racerNo, racingGPX.trkList[it].toLatLng())
               }
             }
