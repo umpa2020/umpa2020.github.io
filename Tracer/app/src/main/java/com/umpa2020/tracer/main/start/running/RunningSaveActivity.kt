@@ -60,7 +60,7 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
 
     val elevationList = mutableListOf<Double>()
     routeGPX.trkList.forEach {
-      speedList.add(it.speed)
+      speedList.add(it.speed!!)
       elevationList.add(it.alt)
     }
     distance_tv.text = infoData.distance!!.prettyDistance

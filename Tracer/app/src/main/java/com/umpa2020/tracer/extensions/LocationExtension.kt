@@ -12,7 +12,9 @@ import com.umpa2020.tracer.gpx.WayPoint
 import com.umpa2020.tracer.gpx.WayPointType
 import com.umpa2020.tracer.gpx.WayPointType.*
 import com.umpa2020.tracer.util.Logg
+import org.w3c.dom.Node
 import java.io.File
+import java.io.FileInputStream
 import java.io.FileOutputStream
 import javax.xml.parsers.DocumentBuilderFactory
 import javax.xml.transform.TransformerFactory
@@ -136,7 +138,7 @@ fun RouteGPX.classToGpx(folderPath: String): Uri {
           appendChild(document.createElement("time").apply { appendChild(document.createTextNode("${wpt.time}")) })
           appendChild(document.createElement("name").apply { appendChild(document.createTextNode(wpt.name)) })
           appendChild(document.createElement("desc").apply { appendChild(document.createTextNode(wpt.desc)) })
-          appendChild(document.createElement("type").apply { appendChild(document.createTextNode("${wpt.type.ordinal}")) })
+          appendChild(document.createElement("type").apply { appendChild(document.createTextNode("${wpt.type?.ordinal}")) })
         })
     }
 
@@ -146,6 +148,8 @@ fun RouteGPX.classToGpx(folderPath: String): Uri {
         setAttribute("lat", "${wpt.lat}")
         setAttribute("lon", "${wpt.lon}")
         appendChild(document.createElement("ele").apply { appendChild(document.createTextNode("${wpt.alt}")) })
+        appendChild(document.createElement("speed").apply { appendChild(document.createTextNode("${wpt.speed}")) })
+        appendChild(document.createElement("type").apply { appendChild(document.createTextNode("${wpt.type?.ordinal}")) })
       })
     }
     document.documentElement.appendChild(document.createElement("trk").appendChild(trkseg))
@@ -160,7 +164,7 @@ fun RouteGPX.classToGpx(folderPath: String): Uri {
     val transformer = TransformerFactory.newInstance().newTransformer()
     val source = DOMSource(document)
     val result = StreamResult(FileOutputStream(file))
-   // val result = StreamResult(System.out)
+    // val result = StreamResult(System.out)
     transformer.transform(source, result)
     Logg.d("tlqkf")
     return Uri.fromFile(file)
@@ -191,9 +195,76 @@ fun RouteGPX.classToGpx(folderPath: String): Uri {
 }
 
 fun String.gpxToClass(): RouteGPX {
-  /*val gpx = GPX.read(this)
-  return RouteGPX("test", "Test", gpx.wayPoints, gpx.tracks[0].segments[0].points)*/
-  return RouteGPX(0, "", mutableListOf(), mutableListOf())
+  val inputStream = FileInputStream(this)
+  val dom = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(inputStream)
+  val wptList = mutableListOf<WayPoint>()
+  dom.documentElement.getElementsByTagName("wpt").let {
+    for (i in 0 until it.length) {
+      wptList.add(
+        it.item(i).let { node ->
+          node.toWayPoint()
+        })
+      /*WayPoint(
+        node.value("lat").toDouble(),
+        node.value("lon").toDouble(),
+        node.value("ele").toDouble(),
+        node.value("speed").toDouble(),
+        node.value("name"),
+        node.value("desc"),
+        node.value("time").toLong(),
+        WayPointType.values()[node.value("type").toInt()]
+      )*/
+    }
+  }
+  val trkList = mutableListOf<WayPoint>()
+  dom.documentElement.getElementsByTagName("trkpt").let {
+    for (i in 0 until it.length) {
+      trkList.add(it.item(i).toWayPoint())
+    }
+  }
+  return RouteGPX(0, "", wptList, trkList)
+}
+
+fun Node.toWayPoint(): WayPoint {
+  val lat = value("lat")!!.toDouble()
+  val lng = value("lon")!!.toDouble()
+  var ele: Double? = null
+  var speed: Double? = null
+  var time: Long? = null
+  var name: String? = null
+  var desc: String? = null
+  var type: WayPointType? = null
+  for (i in 0 until childNodes.length) {
+    val item = childNodes.item(i)
+    when (item.nodeName) {
+      "ele" -> {
+        ele = item.textContent.toDouble()
+      }
+      "speed" -> {
+        speed = item.textContent.toDouble()
+      }
+      "time" -> {
+        time = item.textContent.toLong()
+      }
+      "name" -> {
+        name = item.textContent
+      }
+      "desc" -> {
+        desc = item.textContent
+      }
+      "type" -> {
+        type = values()[item.textContent.toInt()]
+      }
+      else -> {
+      }
+    }
+  }
+  return WayPoint(lat, lng, ele!!, speed, name, desc, time, type)
+}
+
+fun Node.value(name: String): String? {
+  return attributes.getNamedItem(name)?.nodeValue
+
 }
 
 fun Location.toWayPoint(type: WayPointType): WayPoint {

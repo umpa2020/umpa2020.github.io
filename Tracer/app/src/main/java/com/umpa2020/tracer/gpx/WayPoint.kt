@@ -9,9 +9,9 @@ class WayPoint (
   var lat:Double,
   var lon:Double,
   var alt:Double,
-  var speed:Double,
-  var name:String,
-  var desc:String,
-  var time:Long,
-  var type:Enum<WayPointType>
+  var speed:Double?,
+  var name:String?,
+  var desc:String?,
+  var time:Long?,
+  var type:Enum<WayPointType>?
 ):Parcelable

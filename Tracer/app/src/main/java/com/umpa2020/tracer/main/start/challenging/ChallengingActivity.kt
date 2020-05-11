@@ -245,7 +245,7 @@ class ChallengingActivity : BaseRunningActivity() {
 //                ((wpts[index + 1].time.get().toEpochSecond() - wpts[index].time.get()
 //                  .toEpochSecond()))
 //              )
-                ((wpts[index + 1].time - wpts[index].time) * 1000 / (wptIndices[index + 1] - wptIndices[index]))
+                ((wpts[index + 1].time!! - wpts[index].time!!) * 1000 / (wptIndices[index + 1] - wptIndices[index]))
 
 
               Logg.d("기간 $duration  1 : ${wpts[index + 1].time}   2: ${wpts[index].time}")
