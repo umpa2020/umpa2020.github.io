@@ -16,7 +16,7 @@ import com.umpa2020.tracer.dataClass.RankingData
 import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.extensions.*
 import com.umpa2020.tracer.main.MainActivity
-import com.umpa2020.tracer.network.BaseFB.Companion.USER_INFO
+import com.umpa2020.tracer.network.BaseFB.Companion.USERS
 import com.umpa2020.tracer.network.FBProfileRepository
 import com.umpa2020.tracer.network.FBRacingRepository
 import com.umpa2020.tracer.network.FBUserActivityRepository
@@ -60,10 +60,10 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
 
     if (result) {
       val activityData =
-        ActivityData(racerData.mapTitle, timestamp.toString(), "racing go the distance")
+        ActivityData(racerData.mapId, timestamp, racerData.distance, "racing go the distance")
       FBUserActivityRepository().createUserHistory(activityData)
     } else {
-      val activityData = ActivityData(racerData.mapTitle, timestamp.toString(), "racing fail")
+      val activityData = ActivityData(racerData.mapId, timestamp, racerData.distance, "racing fail")
       FBUserActivityRepository().createUserHistory(activityData)
     }
 
@@ -116,7 +116,7 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
          */
         val db = FirebaseFirestore.getInstance()
         var profileImagePath = "init"
-        db.collection(USER_INFO).whereEqualTo("nickname", getNickname)
+        db.collection(USERS).whereEqualTo("nickname", getNickname)
           .get()
           .addOnSuccessListener { result ->
             if (!result.isEmpty) {

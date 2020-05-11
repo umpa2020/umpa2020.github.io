@@ -66,11 +66,7 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
 
     time_tv.text = infoData.time!!.format(m_s)
     speed_tv.text = String.format("%.2f", speedList.average())
-    if (infoData.privacy == Privacy.PUBLIC) {
-      racingRadio.isChecked = false
-      racingRadio.isEnabled = false
-      publicRadio.isChecked = true
-    }
+
     val myChart = Chart(elevationList, speedList, chart)
     myChart.setChart()
     save_btn.setOnClickListener(this)
@@ -147,19 +143,12 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
     val timestamp = Date().time
 
     // 인포데이터에 필요한 내용을 저장하고
-    infoData.makersNickname = UserInfo.nickname
+    infoData.makerId = UserInfo.nickname
     infoData.mapTitle = mapTitleEdit.text.toString() + timestamp.toString()
-    infoData.mapImage = "mapImage/${infoData.mapTitle}"
+    infoData.mapImagePath = "mapImage/${infoData.mapTitle}"
     infoData.mapExplanation = mapExplanationEdit.text.toString()
-    infoData.makersNickname = UserInfo.nickname
-    infoData.execute = 0
+    infoData.plays = 0
     infoData.likes = 0
-
-    when (privacyRadioGroup.checkedRadioButtonId) {
-      R.id.racingRadio -> infoData.privacy = Privacy.RACING
-      R.id.publicRadio -> infoData.privacy = Privacy.PUBLIC
-      R.id.privateRadio -> infoData.privacy = Privacy.PRIVATE
-    }
 
     // 맵 타이틀과, 랭킹 중복 방지를 위해서 시간 값을 넣어서 중복 방지
     val saveFolder = File(baseContext.filesDir, "routeGPX") // 저장 경로
@@ -191,7 +180,7 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
     db.collection("mapInfo").document(infoData.mapTitle!!).set(infoData)
 
     // 히스토리 업로드
-    val activityData = ActivityData(infoData.mapTitle, timestamp.toString(), "map save")
+    val activityData = ActivityData(infoData.mapTitle, timestamp, infoData.distance, "map save")
     FBUserActivityRepository().createUserHistory(activityData)
 
     val fRefRanking = fstorage.reference.child("mapRoute")
@@ -224,7 +213,7 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
 
     // storage에 이미지 업로드 모든 맵 이미지는 mapimage/maptitle로 업로드가 된다.
     val storage = FirebaseStorage.getInstance()
-    val mapImageRef = storage.reference.child(infoData.mapImage.toString())
+    val mapImageRef = storage.reference.child(infoData.mapImagePath.toString())
     val uploadTask = mapImageRef.putFile(Uri.fromFile(File(imgPath)))
     uploadTask.addOnFailureListener {
       Logg.d("스토리지 실패 = " + it.toString())

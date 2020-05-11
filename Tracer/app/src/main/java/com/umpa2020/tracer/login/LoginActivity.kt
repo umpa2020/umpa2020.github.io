@@ -145,7 +145,7 @@ class LoginActivity : AppCompatActivity(), OnSingleClickListener {
           Logg.d("signInWithCredential:success")
           // 로그인 성공
           uid = mAuth!!.uid.toString()
-          mFirestoreDB!!.collection("userinfo").whereEqualTo("UID", uid).get()
+          mFirestoreDB!!.collection("userinfo").whereEqualTo("USER_ID", uid).get()
             .addOnSuccessListener { result ->
               // Document found in the offline cache
               if (result.isEmpty) {

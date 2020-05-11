@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.okhttp.Dispatcher
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants.Companion.TIMESTAMP_LENGTH
 import com.umpa2020.tracer.dataClass.ActivityData
@@ -13,9 +14,14 @@ import com.umpa2020.tracer.extensions.Y_M_D
 import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.main.ranking.RankRecyclerItemClickActivity
 import com.umpa2020.tracer.network.FBImageRepository
+import com.umpa2020.tracer.network.FBMapRepository
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.recycler_profile_user_record_item.view.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.*
 
 class ProfileRecyclerViewAdapterRecord(val datas: ArrayList<ActivityData>) :
@@ -35,37 +41,36 @@ class ProfileRecyclerViewAdapterRecord(val datas: ArrayList<ActivityData>) :
   override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
     val singleItem1 = datas[position]
 
-    val cutted = singleItem1.mapTitle!!.subSequence(0, singleItem1.mapTitle.length- TIMESTAMP_LENGTH) as String
-    val time = singleItem1.time!!.toLong().format(Y_M_D)
-
-    //데이터 바인딩
-    FBImageRepository().getMapImagePath(holder.mapImageView, singleItem1.mapTitle.toString())
-
-    Logg.d("ssmm11 maptitle = ${singleItem1.mapTitle}")
-
-    when (singleItem1.mode) {
-      "racing go the distance" -> {
-        holder.activityText.text =
-          String.format(context!!.getString(R.string.racing_go_the_distance), cutted, time)
-      }
-      "racing fail" -> {
-        holder.activityText.text =
-          String.format(context!!.getString(R.string.racing_fail), cutted, time)
-      }
-      "map save" -> {
-        holder.activityText.text =
-          String.format(context!!.getString(R.string.map_save), cutted, time)
-
-        //클릭하면 맵 상세보기 페이지로 이동
+    MainScope().launch {
+      withContext(Dispatchers.IO) {
+        FBMapRepository().getMapTitle(singleItem1.mapId!!)
+      }?.let {
+        val time = singleItem1.time!!.toLong().format(Y_M_D)
+        when (singleItem1.mode) {
+          "racing go the distance" -> {
+            holder.activityText.text =
+              String.format(context!!.getString(R.string.racing_go_the_distance), it, time)
+          }
+          "racing fail" -> {
+            holder.activityText.text =
+              String.format(context!!.getString(R.string.racing_fail), it, time)
+          }
+          "map save" -> {
+            holder.activityText.text =
+              String.format(context!!.getString(R.string.map_save), it, time)
+          }
+        }
       }
     }
+
+    FBImageRepository().getMapImagePath(holder.mapImageView, singleItem1.mapId.toString())
 
 
     //클릭하면 맵 상세보기 페이지로 이동
     holder.itemView.setOnClickListener(object : OnSingleClickListener {
       override fun onSingleClick(v: View?) {
         val nextIntent = Intent(context, RankRecyclerItemClickActivity::class.java)
-        nextIntent.putExtra("MapTitle", singleItem1.mapTitle) //mapTitle 정보 인텐트로 넘김
+        nextIntent.putExtra("MapId", singleItem1.mapId) //mapTitle 정보 인텐트로 넘김
         context!!.startActivity(nextIntent)
       }
     })

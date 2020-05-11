@@ -47,9 +47,9 @@ class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) :
     holder.distance.text = singleItem.distance!!.prettyDistance
     holder.time.text = singleItem.time!!.format(mm_ss)
     holder.likes.text = singleItem.likes.toString()
-    holder.excutes.text = singleItem.execute.toString()
+    holder.excutes.text = singleItem.plays.toString()
     holder.date.text = time.toLong().format("yyyy-MM-dd HH:mm:ss")
-    if (singleItem.myLiked) {
+    if (singleItem.isLiked) {
       holder.heart.setImageResource(R.drawable.ic_favorite_red_24dp)
       holder.heart.tag = R.drawable.ic_favorite_red_24dp
     }

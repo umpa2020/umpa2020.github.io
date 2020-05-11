@@ -4,10 +4,7 @@ import android.net.Uri
 import com.google.firebase.firestore.Query
 import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.App
-import com.umpa2020.tracer.dataClass.InfoData
-import com.umpa2020.tracer.dataClass.RanMapsData
-import com.umpa2020.tracer.dataClass.RankingData
-import com.umpa2020.tracer.dataClass.RouteGPX
+import com.umpa2020.tracer.dataClass.*
 import com.umpa2020.tracer.extensions.classToGpx
 import com.umpa2020.tracer.extensions.gpxToClass
 import com.umpa2020.tracer.util.UserInfo
@@ -35,7 +32,7 @@ class FBRacingRepository : BaseFB() {
 
     if (result) {
       val rankingData = RankingData(
-        racerData.makersNickname,
+        racerData.makerId,
         UserInfo.autoLoginKey,
         UserInfo.nickname,
         racerData.time,
@@ -45,15 +42,15 @@ class FBRacingRepository : BaseFB() {
         null
       )
       // 랭킹 맵에서
-      db.collection(RANKING_MAP).document(racerData.mapTitle!!).collection(RANKING)
-        .whereEqualTo(BEST_TIME, true)
+      db.collection(MAPS).document(racerData.mapTitle!!).collection(RANKING)
+        .whereEqualTo(IS_BEST_TIME, true)
         .get()
         .addOnSuccessListener {
           for (document in it) {
-            if (document.get(CHALLENGER_NICKNAME) == UserInfo.nickname) {
+            if (document.get(CHALLENGER_Id) == UserInfo.nickname) {
               if (racerData.time!!.toLong() < document.get(CHALLENGER_TIME) as Long) {
-                db.collection(RANKING_MAP).document(racerData.mapTitle!!).collection(RANKING)
-                  .document(document.id).update(BEST_TIME, false)
+                db.collection(MAPS).document(racerData.mapTitle!!).collection(RANKING)
+                  .document(document.id).update(IS_BEST_TIME, false)
 
                 val saveFolder = File(App.instance.filesDir, "routeGPX") // 저장 경로
                 if (!saveFolder.exists()) {       //폴더 없으면 생성
@@ -76,7 +73,7 @@ class FBRacingRepository : BaseFB() {
               }
             }
           }
-          db.collection(RANKING_MAP).document(racerData.mapTitle!!).collection(RANKING)
+          db.collection(MAPS).document(racerData.mapTitle!!).collection(RANKING)
             .document(UserInfo.autoLoginKey + timestamp).set(rankingData)
 
           getRacingFinishRank(result, racerData, racingFinishListener)
@@ -97,9 +94,9 @@ class FBRacingRepository : BaseFB() {
     racerData: InfoData,
     racingFinishListener: RacingFinishListener
   ) {
-    db.collection(RANKING_MAP).document(racerData.mapTitle!!).collection(RANKING)
+    db.collection(MAPS).document(racerData.mapTitle!!).collection(RANKING)
       .orderBy(CHALLENGER_TIME, Query.Direction.ASCENDING)
-      .whereEqualTo(BEST_TIME, true)
+      .whereEqualTo(IS_BEST_TIME, true)
       .get()
       .addOnSuccessListener { resultdb ->
         var index = 1
@@ -120,7 +117,7 @@ class FBRacingRepository : BaseFB() {
   fun getMakerData(racerData: InfoData, getMakerDataListener: GetMakerDataListener) {
     lateinit var makerData: InfoData
 
-    db.collection(MAP_INFO).document(racerData.mapTitle!!)
+    db.collection(MAPS).document(racerData.mapTitle!!)
       .get()
       .addOnSuccessListener { document ->
         makerData = document.toObject(InfoData::class.java)!!
@@ -133,9 +130,9 @@ class FBRacingRepository : BaseFB() {
    */
   fun getOtherData(mapTitle: String, nickname: String, racingFinishListener: RacingFinishListener) {
 
-    db.collection(RANKING_MAP).document(mapTitle)
-      .collection(RANKING).whereEqualTo(CHALLENGER_NICKNAME, nickname)
-      .whereEqualTo(BEST_TIME, true)
+    db.collection(MAPS).document(mapTitle)
+      .collection(RANKING).whereEqualTo(CHALLENGER_Id, nickname)
+      .whereEqualTo(IS_BEST_TIME, true)
       .get()
       .addOnSuccessListener {
         val rankingData = it.documents.last().toObject(RankingData::class.java)
@@ -148,9 +145,9 @@ class FBRacingRepository : BaseFB() {
    * 히스토리를 더하는 함수
    */
   fun createUserInfoRacing(racerData: InfoData) {
-    val ranMapsData = RanMapsData(racerData.mapTitle, racerData.distance, racerData.time)
-    db.collection(USER_INFO).document(UserInfo.autoLoginKey).collection(USER_RAN_THESE_MAPS)
-      .add(ranMapsData)
+    val activityData = ActivityData(racerData.mapId, racerData.time, racerData.distance, "racing go the distance")
+    db.collection(USERS).document(UserInfo.autoLoginKey).collection(ACTIVITIES)
+      .add(activityData)
   }
 
   fun listRacingGPX(mapTitle: String, racerIdList: Array<String>, listener: RacingListener) {

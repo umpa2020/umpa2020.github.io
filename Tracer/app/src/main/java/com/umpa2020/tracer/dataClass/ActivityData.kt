@@ -5,7 +5,8 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class ActivityData(
-  val mapTitle: String? = null,
-  val time: String? = null,
+  val mapId: String? = null,
+  val time: Long? = null,
+  val distance: Double? = null,
   var mode: String? = null
 ) : Parcelable

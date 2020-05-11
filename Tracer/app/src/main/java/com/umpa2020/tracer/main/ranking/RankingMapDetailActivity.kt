@@ -27,7 +27,7 @@ import com.umpa2020.tracer.gpx.WayPointType.START_POINT
 import com.umpa2020.tracer.main.start.racing.RacingActivity
 import com.umpa2020.tracer.main.start.racing.RacingSelectPeopleActivity
 import com.umpa2020.tracer.map.TraceMap
-import com.umpa2020.tracer.network.BaseFB.Companion.MAKERS_NICKNAME
+import com.umpa2020.tracer.network.BaseFB.Companion.MAKER_ID
 import com.umpa2020.tracer.network.FBProfileRepository
 import com.umpa2020.tracer.util.Chart
 import com.umpa2020.tracer.util.ChoicePopup
@@ -70,7 +70,7 @@ class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener, OnM
       .addOnSuccessListener { result ->
         for (document in result) {
           MainScope().launch {
-            FBProfileRepository().getProfileImage(document.getString(MAKERS_NICKNAME)!!)?.let {
+            FBProfileRepository().getProfileImage(document.getString(MAKER_ID)!!)?.let {
               rankingDetailProfileImage.image(it)
             }
           }
@@ -105,7 +105,8 @@ class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener, OnM
 
               // ui 스레드 따로 빼주기
               runOnUiThread {
-                rankingDetailNickname.text = infoData.makersNickname
+                // TODO : 유저 아이디로 유저 닉네임 찾기
+                rankingDetailNickname.text = infoData.makerId
                 rankingDetailMapDetail.text = infoData.mapExplanation
                 rankingDetailDistance.text = String.format("%.2f", infoData.distance!! / 1000)
                 rankingDetailTime.text = infoData.time!!.format(m_s)

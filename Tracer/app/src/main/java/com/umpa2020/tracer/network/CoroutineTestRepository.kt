@@ -30,16 +30,16 @@ class CoroutineTestRepository : BaseFB() {
    * 해당 사용자가 뛴 거리, 뛴
    */
   suspend fun getProfileImage(uid: String) :Uri?{
-    return db.collection(USER_INFO).whereEqualTo(UID, uid)
+    return db.collection(USERS).whereEqualTo(USER_ID, uid)
         .get().await().let {
           FBStorageRepository().downloadFile(it.first().getString(PROFILE_IMAGE_PATH)!!)
         }
   }
   suspend fun getProfile(uid: String): ProfileData {
-    return db.collection(USER_INFO).document(uid).get().await().let {
+    return db.collection(USERS).document(uid).get().await().let {
       var sumDistance = 0.0
       var sumTime = 0L
-      it.reference.collection(USER_RAN_THESE_MAPS).get().await().documents.forEach {
+      it.reference.collection(ACTIVITIES).get().await().documents.forEach {
         sumDistance += it.get(DISTANCE) as Double
         sumTime += it.get(TIME) as Long
       }
@@ -49,7 +49,7 @@ class CoroutineTestRepository : BaseFB() {
 
   fun getProfileImage(imageView: ImageView, nickname: String) {
     // storage 에 올린 경로를 db에 저장해두었으니 다시 역 추적 하여 프로필 이미지 반영
-    db.collection(USER_INFO).whereEqualTo(NICKNAME, nickname)
+    db.collection(USERS).whereEqualTo(NICKNAME, nickname)
       .get()
       .addOnSuccessListener { result ->
         for (document in result) {
@@ -68,7 +68,7 @@ class CoroutineTestRepository : BaseFB() {
     val dt = Date()
     // 현재 날짜를 프로필 이름으로 nickname/Profile/현재날짜(영어).jpg 경로 만들기
 
-    db.collection(USER_INFO).document(UserInfo.autoLoginKey)
+    db.collection(USERS).document(UserInfo.autoLoginKey)
       .update(PROFILE_IMAGE_PATH, "$PROFILE/${UserInfo.autoLoginKey}/${dt.time}")
       .addOnSuccessListener {
         profileListener.changeProfile()
@@ -107,7 +107,7 @@ class CoroutineTestRepository : BaseFB() {
             infoDatas.filter { infoData ->
               likedMaps.map { it.mapTitle }
                 .contains(infoData.mapTitle)
-            }.map { it.myLiked = true }
+            }.map { it.isLiked = true }
             profileRouteListener.listProfileRoute(infoDatas)
           }
 
@@ -145,7 +145,7 @@ class CoroutineTestRepository : BaseFB() {
             infoDatas.filter { infoData ->
               likedMaps.map { it.mapTitle }
                 .contains(infoData.mapTitle)
-            }.map { it.myLiked = true }
+            }.map { it.isLiked = true }
             profileRouteListener.listProfileRoute(infoDatas)
           }
 
