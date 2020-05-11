@@ -15,8 +15,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
-import com.umpa2020.tracer.constant.Constants.Companion.FINISH_POINT
-import com.umpa2020.tracer.constant.Constants.Companion.START_POINT
 import com.umpa2020.tracer.constant.Constants.Companion.TIMESTAMP_LENGTH
 import com.umpa2020.tracer.customUI.WorkaroundMapFragment
 import com.umpa2020.tracer.dataClass.InfoData
@@ -33,7 +31,7 @@ import com.umpa2020.tracer.util.ChoicePopup
 import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.activity_ranking_map_detail.*
 import java.io.File
-
+import com.umpa2020.tracer.gpx.WayPointType.*
 class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener, OnMapReadyCallback {
   lateinit var routeGPX: RouteGPX
   var dbMapTitle = ""
@@ -90,8 +88,8 @@ class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener, OnM
               val speedList = mutableListOf<Double>()
               val elevationList = mutableListOf<Double>()
               routeGPX.trkList.forEach {
-                speedList.add(it.speed.get().toDouble())
-                elevationList.add(it.elevation.get().toDouble())
+                speedList.add(it.speed)
+                elevationList.add(it.alt)
               }
 
               // 실행 수 및 db에 있는 맵타이틀을 알기위해서 (구분 시간 값 포함)
@@ -183,7 +181,7 @@ class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener, OnM
         0 -> {
           if (bDraw) {
             //TODO : 이렇게 해야하나..?
-            traceMap.drawRoute(routeGPX.trkList.toList(), routeGPX.wptList.filter { it.type.get()== START_POINT||it.type.get()==FINISH_POINT})
+            traceMap.drawRoute(routeGPX.trkList.toList(), routeGPX.wptList.filter { it.type== START_POINT||it.type== FINISH_POINT })
           } else bDraw = true
         }
       }

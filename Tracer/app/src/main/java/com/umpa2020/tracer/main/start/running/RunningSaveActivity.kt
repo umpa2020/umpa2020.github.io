@@ -15,8 +15,6 @@ import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants
-import com.umpa2020.tracer.constant.Constants.Companion.FINISH_POINT
-import com.umpa2020.tracer.constant.Constants.Companion.START_POINT
 import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.customUI.WorkaroundMapFragment
 import com.umpa2020.tracer.dataClass.ActivityData
@@ -33,7 +31,7 @@ import kotlinx.android.synthetic.main.activity_running_save.*
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
-
+import com.umpa2020.tracer.gpx.WayPointType.*
 
 class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleClickListener {
   var switch = 0
@@ -62,8 +60,8 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
 
     val elevationList = mutableListOf<Double>()
     routeGPX.trkList.forEach {
-      speedList.add(it.speed.get().toDouble())
-      elevationList.add(it.elevation.get().toDouble())
+      speedList.add(it.speed!!)
+      elevationList.add(it.alt)
     }
     distance_tv.text = infoData.distance!!.prettyDistance
 
@@ -171,7 +169,7 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
     }
     routeGPX.addDirectionSign()
     routeGPX.wptList.forEach {
-      Logg.d("lat : ${it.latitude} lon : ${it.longitude} desc : ${it.description} ")
+      Logg.d("lat : ${it.lat} lon : ${it.lon} desc : ${it.desc} ")
     }
     val routeGpxFile = routeGPX.classToGpx(saveFolder.path)
 
@@ -184,9 +182,9 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
     val fuploadTask = fRef.putFile(routeGpxFile)
 
     fuploadTask.addOnFailureListener {
-      Logg.d("Success")
-    }.addOnSuccessListener {
       Logg.d("Fail : $it")
+    }.addOnSuccessListener {
+      Logg.d("Success")
     }
     // db에 그려진 맵 저장하는 스레드 - 여기서는 실제 그려진 것 보다 후 보정을 통해서
     // 간략화 된 맵을 업로드 합니다.
@@ -204,9 +202,9 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
       .child(infoData.mapTitle!!).child("racingGPX").child(UserInfo.autoLoginKey)
     val fRankinguploadTask = fRefRanking.putFile(routeGpxFile)
     fRankinguploadTask.addOnFailureListener {
-      Logg.d("Success")
-    }.addOnSuccessListener {
       Logg.d("Fail : $it")
+    }.addOnSuccessListener {
+      Logg.d("Success")
     }
     // db에 그려진 맵 저장하는 스레드 - 여기서는 실제 그려진 것 보다 후 보정을 통해서
     // 간략화 된 맵을 업로드 합니다.
@@ -245,6 +243,6 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
   override fun onMapReady(googleMap: GoogleMap) {
     Logg.d("onMapReady")
     traceMap = TraceMap(googleMap) //구글맵
-    traceMap.drawRoute(routeGPX.trkList.toList(), routeGPX.wptList.filter { it.type.get()== START_POINT||it.type.get()==FINISH_POINT})
+    traceMap.drawRoute(routeGPX.trkList.toList(), routeGPX.wptList.filter { it.type== START_POINT||it.type==FINISH_POINT})
   }
 }

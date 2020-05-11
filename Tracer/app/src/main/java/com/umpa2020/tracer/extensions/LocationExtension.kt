@@ -6,16 +6,20 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.maps.android.PolyUtil
 import com.google.maps.android.SphericalUtil
-import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.constant.Constants.Companion.TURNING_ANGLE
-import com.umpa2020.tracer.constant.Constants.Companion.TURNING_LEFT_POINT
-import com.umpa2020.tracer.constant.Constants.Companion.TURNING_RIGHT_POINT
 import com.umpa2020.tracer.dataClass.RouteGPX
+import com.umpa2020.tracer.gpx.WayPoint
+import com.umpa2020.tracer.gpx.WayPointType
+import com.umpa2020.tracer.gpx.WayPointType.*
 import com.umpa2020.tracer.util.Logg
-import io.jenetics.jpx.GPX
-import io.jenetics.jpx.TrackSegment
-import io.jenetics.jpx.WayPoint
+import org.w3c.dom.Node
 import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import javax.xml.parsers.DocumentBuilderFactory
+import javax.xml.transform.TransformerFactory
+import javax.xml.transform.dom.DOMSource
+import javax.xml.transform.stream.StreamResult
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.atan2
@@ -25,7 +29,7 @@ fun Location.toLatLng(): LatLng {
 }
 
 fun WayPoint.toLatLng(): LatLng {
-  return LatLng(latitude.toDouble(), longitude.toDouble())
+  return LatLng(lat, lon)
 }
 
 fun MutableList<LatLng>.bounds(): LatLngBounds {
@@ -44,30 +48,22 @@ fun MutableList<LatLng>.bounds(): LatLngBounds {
 
 fun RouteGPX.addCheckPoint(): RouteGPX {
   if (wptList.isNullOrEmpty()) wptList = mutableListOf()
-  this.wptList.add(
-    WayPoint.builder()
-      .lat(trkList.first().latitude)
-      .lon(trkList.first().longitude)
-      .name("Start")
-      .desc("Start Description")
-      .type(Constants.START_POINT)
-      .build()
-  )
+  this.wptList.add(trkList.first().apply {
+    name = "Start"
+    desc = "Start Point"
+    type = START_POINT
+  })
 
   val latlngs = mutableListOf<LatLng>()
   var distance = 0.0
   trkList.forEachIndexed { i, it ->
     if (i > 0) {
       if (i == trkList.size - 1) {
-        wptList.add(
-          WayPoint.builder()
-            .lat(it.latitude)
-            .lon(it.longitude)
-            .name("Finish")
-            .desc("Finish Description")
-            .type(Constants.FINISH_POINT)
-            .build()
-        )
+        wptList.add(it.apply {
+          name = "Finish"
+          desc = "Finish Point"
+          type = FINISH_POINT
+        })
       } else {
         distance += SphericalUtil.computeDistanceBetween(
           trkList[i - 1].toLatLng(),
@@ -75,15 +71,11 @@ fun RouteGPX.addCheckPoint(): RouteGPX {
         )
         if (distance > 500) {
           distance = 0.0
-          wptList.add(
-            WayPoint.builder()
-              .lat(it.latitude)
-              .lon(it.longitude)
-              .name("WayPoint")
-              .desc("wayway...")
-              .type(Constants.DISTANCE_POINT)
-              .build()
-          )
+          wptList.add(it.apply {
+            name = "Distance point"
+            desc = "100m"
+            type = DISTANCE_POINT
+          })
         }
       }
     }
@@ -119,23 +111,11 @@ fun RouteGPX.addDirectionSign(): RouteGPX {
     if (abs(angle) >= TURNING_ANGLE) {
       if (angle > 0) {
         this.wptList.add(
-          WayPoint.builder()
-            .lat(b.latitude)
-            .lon(b.longitude)
-            .name("Turning Point")
-            .desc("Turn Left")
-            .type(TURNING_LEFT_POINT)
-            .build()
+          WayPoint(b.latitude, b.longitude, 0.0, 0.0, "Turning Point", "Turn Left", 0L, TURNING_LEFT_POINT)
         )
       } else {
         this.wptList.add(
-          WayPoint.builder()
-            .lat(b.latitude)
-            .lon(b.longitude)
-            .name("Turning Point")
-            .desc("Turn Right")
-            .type(TURNING_RIGHT_POINT)
-            .build()
+          WayPoint(b.latitude, b.longitude, 0.0, 0.0, "Turning Point", "Turn Right", 0L, TURNING_RIGHT_POINT)
         )
       }
 
@@ -144,8 +124,55 @@ fun RouteGPX.addDirectionSign(): RouteGPX {
   return this
 }
 
-//TODO : Kotlin scope 적용
 fun RouteGPX.classToGpx(folderPath: String): Uri {
+  try {
+    val document =
+      DocumentBuilderFactory.newInstance().newDocumentBuilder()
+        .domImplementation.createDocument("test", "gpx", null)
+    wptList.forEach { wpt ->
+      document.documentElement.appendChild(
+        document.createElement("wpt").apply {
+          setAttribute("lat", "${wpt.lat}")
+          setAttribute("lon", "${wpt.lon}")
+          appendChild(document.createElement("ele").apply { appendChild(document.createTextNode("${wpt.alt}")) })
+          appendChild(document.createElement("time").apply { appendChild(document.createTextNode("${wpt.time}")) })
+          appendChild(document.createElement("name").apply { appendChild(document.createTextNode(wpt.name)) })
+          appendChild(document.createElement("desc").apply { appendChild(document.createTextNode(wpt.desc)) })
+          appendChild(document.createElement("type").apply { appendChild(document.createTextNode("${wpt.type?.ordinal}")) })
+        })
+    }
+
+    val trkseg = document.createElement("trkseg")
+    trkList.forEach { wpt ->
+      trkseg.appendChild(document.createElement("trkpt").apply {
+        setAttribute("lat", "${wpt.lat}")
+        setAttribute("lon", "${wpt.lon}")
+        appendChild(document.createElement("ele").apply { appendChild(document.createTextNode("${wpt.alt}")) })
+        appendChild(document.createElement("speed").apply { appendChild(document.createTextNode("${wpt.speed}")) })
+        appendChild(document.createElement("type").apply { appendChild(document.createTextNode("${wpt.type?.ordinal}")) })
+      })
+    }
+    document.documentElement.appendChild(document.createElement("trk").appendChild(trkseg))
+
+    val saveFolder = File(folderPath) // 저장 경로
+    if (!saveFolder.exists()) {       //폴더 없으면 생성
+      saveFolder.mkdir()
+    }
+    val path = "route_${System.currentTimeMillis()}.gpx"
+    val file = File(saveFolder, path)         //로컬에 파일저장
+
+    val transformer = TransformerFactory.newInstance().newTransformer()
+    val source = DOMSource(document)
+    val result = StreamResult(FileOutputStream(file))
+    // val result = StreamResult(System.out)
+    transformer.transform(source, result)
+    Logg.d("tlqkf")
+    return Uri.fromFile(file)
+  } catch (e: Exception) {
+    e.printStackTrace()
+  }
+
+/*
   val gpxBuilder = GPX.builder()
     .addTrack { it.addSegment(TrackSegment.of(trkList)).build() }
   wptList.forEach { gpxBuilder.addWayPoint(it) }
@@ -163,11 +190,90 @@ fun RouteGPX.classToGpx(folderPath: String): Uri {
     return Uri.fromFile(myfile)
   } catch (e: Exception) {
     Logg.d(e.toString());
-  }
+  }*/
   return Uri.EMPTY
 }
 
 fun String.gpxToClass(): RouteGPX {
-  val gpx = GPX.read(this)
-  return RouteGPX("test", "Test", gpx.wayPoints, gpx.tracks[0].segments[0].points)
+  val inputStream = FileInputStream(this)
+  val dom = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(inputStream)
+  val wptList = mutableListOf<WayPoint>()
+  dom.documentElement.getElementsByTagName("wpt").let {
+    for (i in 0 until it.length) {
+      wptList.add(
+        it.item(i).let { node ->
+          node.toWayPoint()
+        })
+      /*WayPoint(
+        node.value("lat").toDouble(),
+        node.value("lon").toDouble(),
+        node.value("ele").toDouble(),
+        node.value("speed").toDouble(),
+        node.value("name"),
+        node.value("desc"),
+        node.value("time").toLong(),
+        WayPointType.values()[node.value("type").toInt()]
+      )*/
+    }
+  }
+  val trkList = mutableListOf<WayPoint>()
+  dom.documentElement.getElementsByTagName("trkpt").let {
+    for (i in 0 until it.length) {
+      trkList.add(it.item(i).toWayPoint())
+    }
+  }
+  return RouteGPX(0, "", wptList, trkList)
+}
+
+fun Node.toWayPoint(): WayPoint {
+  val lat = value("lat")!!.toDouble()
+  val lng = value("lon")!!.toDouble()
+  var ele: Double? = null
+  var speed: Double? = null
+  var time: Long? = null
+  var name: String? = null
+  var desc: String? = null
+  var type: WayPointType? = null
+  for (i in 0 until childNodes.length) {
+    val item = childNodes.item(i)
+    when (item.nodeName) {
+      "ele" -> {
+        ele = item.textContent.toDouble()
+      }
+      "speed" -> {
+        speed = item.textContent.toDouble()
+      }
+      "time" -> {
+        time = item.textContent.toLong()
+      }
+      "name" -> {
+        name = item.textContent
+      }
+      "desc" -> {
+        desc = item.textContent
+      }
+      "type" -> {
+        type = values()[item.textContent.toInt()]
+      }
+      else -> {
+      }
+    }
+  }
+  return WayPoint(lat, lng, ele!!, speed, name, desc, time, type)
+}
+
+fun Node.value(name: String): String? {
+  return attributes.getNamedItem(name)?.nodeValue
+
+}
+
+fun Location.toWayPoint(type: WayPointType): WayPoint {
+  return when (type) {
+    START_POINT -> WayPoint(latitude, longitude, altitude, speed.toDouble(), "Start", "Start Point", time, type)
+    FINISH_POINT -> WayPoint(latitude, longitude, altitude, speed.toDouble(), "Finish", "Finish Point", time, type)
+    DISTANCE_POINT -> WayPoint(latitude, longitude, altitude, speed.toDouble(), "Distance", "Distance Point", time, type)
+    TURNING_LEFT_POINT -> WayPoint(latitude, longitude, altitude, speed.toDouble(), "Turning Point", "Turn Left", time, type)
+    TURNING_RIGHT_POINT -> WayPoint(latitude, longitude, altitude, speed.toDouble(), "Turning Point", "Turn Right", time, type)
+    TRACK_POINT -> WayPoint(latitude, longitude, altitude, speed.toDouble(), "Track Point", "Track Point", time, type)
+  }
 }
