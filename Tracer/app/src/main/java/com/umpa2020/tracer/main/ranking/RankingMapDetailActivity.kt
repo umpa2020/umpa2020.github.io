@@ -87,9 +87,9 @@ class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener, OnM
               // 1차원 배열인 고도는 그대로 받아오면 되고
               val speedList = mutableListOf<Double>()
               val elevationList = mutableListOf<Double>()
-              routeGPX.trkList.forEach {
-                speedList.add(it.speed)
-                elevationList.add(it.alt)
+              routeGPX.trkList.forEach { wpt ->
+                wpt.speed?.let{speedList.add(it)}
+                elevationList.add(wpt.alt)
               }
 
               // 실행 수 및 db에 있는 맵타이틀을 알기위해서 (구분 시간 값 포함)
