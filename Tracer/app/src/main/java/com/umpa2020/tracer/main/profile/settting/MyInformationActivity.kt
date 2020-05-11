@@ -11,7 +11,9 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
+import com.umpa2020.tracer.network.BaseFB
 import com.umpa2020.tracer.network.FBProfileRepository
+import com.umpa2020.tracer.network.FBStorageFileUploadRepository
 import com.umpa2020.tracer.network.ProfileListener
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.OnSingleClickListener
@@ -61,6 +63,7 @@ class MyInformationActivity : AppCompatActivity(), OnSingleClickListener {
           progressBar = ProgressBar(App.instance.currentActivity() as Activity)
           progressBar.show()
           FBProfileRepository().updateProfileImage(selectedImageUri, profileListener)
+
         } else { // 사진을 안고르면
           finish()
         }

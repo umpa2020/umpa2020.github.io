@@ -32,6 +32,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.util.*
 import com.umpa2020.tracer.gpx.WayPointType.*
+import com.umpa2020.tracer.network.FBStorageFileUploadRepository
 
 class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleClickListener {
   var switch = 0
@@ -179,13 +180,10 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
       .child(infoData.mapTitle!!).child(infoData.mapTitle!!)
     infoData.routeGPXPath = fRef.path
 
-    val fuploadTask = fRef.putFile(routeGpxFile)
+    Logg.d("ssmm11 fRef . ? = ${fRef.path}")
 
-    fuploadTask.addOnFailureListener {
-      Logg.d("Fail : $it")
-    }.addOnSuccessListener {
-      Logg.d("Success")
-    }
+    FBStorageFileUploadRepository().uploadFile(routeGpxFile, "mapRoute/" + infoData.mapTitle!! + "/" + infoData.mapTitle!!)
+
     // db에 그려진 맵 저장하는 스레드 - 여기서는 실제 그려진 것 보다 후 보정을 통해서
     // 간략화 된 맵을 업로드 합니다.
     val db = FirebaseFirestore.getInstance()
@@ -243,6 +241,6 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
   override fun onMapReady(googleMap: GoogleMap) {
     Logg.d("onMapReady")
     traceMap = TraceMap(googleMap) //구글맵
-    traceMap.drawRoute(routeGPX.trkList.toList(), routeGPX.wptList.filter { it.type== START_POINT||it.type==FINISH_POINT})
+    traceMap.drawRoute(routeGPX.trkList.toList(), routeGPX.wptList.filter { it.type == START_POINT || it.type == FINISH_POINT })
   }
 }

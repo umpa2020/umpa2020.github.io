@@ -69,13 +69,9 @@ class FBRacingRepository : BaseFB() {
                   .child(racerData.mapTitle!!).child(RACING_GPX).child(UserInfo.autoLoginKey)
                 rankingData.racerGPX = fRef.path
 
-                val fuploadTask = fRef.putFile(racerGpxFile)
 
-                fuploadTask.addOnFailureListener {
-                  Logg.d("Success to upload racerGPX")
-                }.addOnSuccessListener {
-                  Logg.d("Fail : $it")
-                }
+                FBStorageFileUploadRepository().uploadFile(racerGpxFile, MAP_ROUTE + "/" + racerData.mapTitle!! + "/" + RACING_GPX + "/" + UserInfo.autoLoginKey)
+
               } else {
                 rankingData.bestTime = false
               }

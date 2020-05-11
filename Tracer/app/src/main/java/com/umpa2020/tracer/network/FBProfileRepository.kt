@@ -1,17 +1,13 @@
 package com.umpa2020.tracer.network
 
-import android.app.Activity
 import android.net.Uri
 import android.view.View
 import android.widget.ImageView
-import com.bumptech.glide.Glide
 import com.google.firebase.firestore.DocumentSnapshot
-import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.LikedMapData
 import com.umpa2020.tracer.util.Logg
-import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
 import java.util.*
 
@@ -31,7 +27,7 @@ class FBProfileRepository : BaseFB() {
    * 해당 사용자가 뛴 거리, 뛴
    */
 
-  fun getProfile(view: View, nickname: String, profileListener: (Double,Double) -> Unit) {
+  fun getProfile(view: View, nickname: String, profileListener: (Double, Double) -> Unit) {
     var uid = "init"
     db.collection(USER_INFO).whereEqualTo(NICKNAME, nickname)
       .get()
@@ -69,19 +65,15 @@ class FBProfileRepository : BaseFB() {
   }
 
   fun getProfileImage(imageView: ImageView, nickname: String) {
-
-    var uid = "init"
     // storage 에 올린 경로를 db에 저장해두었으니 다시 역 추적 하여 프로필 이미지 반영
     db.collection(USER_INFO).whereEqualTo(NICKNAME, nickname)
       .get()
       .addOnSuccessListener { result ->
         for (document in result) {
           profileImagePath = document.get(PROFILE_IMAGE_PATH) as String
-          uid = document.get(UID) as String
           break
         }
         FBImageRepository().getImage(imageView, profileImagePath)
-
       }
   }
 
@@ -93,23 +85,12 @@ class FBProfileRepository : BaseFB() {
     val dt = Date()
     // 현재 날짜를 프로필 이름으로 nickname/Profile/현재날짜(영어).jpg 경로 만들기
 
-
-    val profileRef =
-      storage.reference.child(PROFILE).child(UserInfo.autoLoginKey).child(dt.time.toString())
-    // 이미지
-
-    // storage에 이미지 올리는 거
-    val uploadTask = profileRef.putFile(selectedImageUri!!)
-    uploadTask
-      .addOnCompleteListener {
-        if (it.isSuccessful) {
-          db.collection(USER_INFO).document(UserInfo.autoLoginKey)
-            .update(PROFILE_IMAGE_PATH, "$PROFILE/${UserInfo.autoLoginKey}/${dt.time}")
-            .addOnSuccessListener {
-              profileListener.changeProfile()
-            }
-        }
+    db.collection(USER_INFO).document(UserInfo.autoLoginKey)
+      .update(PROFILE_IMAGE_PATH, "$PROFILE/${UserInfo.autoLoginKey}/${dt.time}")
+      .addOnSuccessListener {
+        profileListener.changeProfile()
       }
+    FBStorageFileUploadRepository().uploadFile(selectedImageUri!!, BaseFB.PROFILE + "/" + UserInfo.autoLoginKey + "/" + dt.time.toString())
   }
 
   /**
@@ -117,14 +98,7 @@ class FBProfileRepository : BaseFB() {
    */
   fun uploadProfileImage(imageUri: Uri, timestamp: String) {
     // 현재 날짜를 프로필 이름으로 nickname/Profile/현재날짜 경로 만들기
-
-    val profileRef = storage.reference.child(PROFILE).child(UserInfo.autoLoginKey).child(timestamp)
-    // 이미지
-    val uploadTask = profileRef.putFile(imageUri)
-    uploadTask.addOnFailureListener {
-    }.addOnSuccessListener {
-
-    }
+    FBStorageFileUploadRepository().uploadFile(imageUri, PROFILE + "/" + UserInfo.autoLoginKey + "/" + timestamp)
   }
 
   /**
