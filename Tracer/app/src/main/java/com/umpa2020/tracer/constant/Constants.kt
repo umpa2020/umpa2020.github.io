@@ -57,12 +57,7 @@ class Constants {
     const val MIN_CLICK_INTERVAL: Long = 600
     var mLastClickTime: Long = 0
 
-    //Waypoint 타입
-    const val START_POINT = "0"
-    const val FINISH_POINT = "1"
-    const val DISTANCE_POINT = "2"
-    const val TURNING_LEFT_POINT = "3"
-    const val TURNING_RIGHT_POINT = "4"
+
 
     const val TIMESTAMP_LENGTH = 13
     var testId = 0

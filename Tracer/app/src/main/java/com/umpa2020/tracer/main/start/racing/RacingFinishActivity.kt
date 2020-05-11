@@ -152,7 +152,7 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
   private fun RouteGPX.getSpeed(): MutableList<Double> {
     val speeds = mutableListOf<Double>()
     trkList.forEach {
-      speeds.add(it.speed.get().toDouble())
+      speeds.add(it.speed!!)
     }
     return speeds
   }
