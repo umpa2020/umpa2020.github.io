@@ -39,7 +39,7 @@ class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener
 
     // 맵 이미지 DB에서 받아와서 설정
     val imageView = rankRoutePriview
-    FBMapImageRepository().getMapImage(imageView, mapTitle)
+    FBImageRepository().getMapImagePath(imageView, mapTitle)
 
     // 해당 맵 좋아요 눌렀는지 확인
     FBLikesRepository().getMapLike(mapTitle, likedMapListener)

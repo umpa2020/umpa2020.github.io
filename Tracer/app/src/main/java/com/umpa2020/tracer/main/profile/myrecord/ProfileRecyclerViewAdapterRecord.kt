@@ -1,6 +1,5 @@
 package com.umpa2020.tracer.main.profile.myrecord
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
@@ -13,7 +12,8 @@ import com.umpa2020.tracer.dataClass.ActivityData
 import com.umpa2020.tracer.extensions.Y_M_D
 import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.main.ranking.RankRecyclerItemClickActivity
-import com.umpa2020.tracer.network.FBMapImageRepository
+import com.umpa2020.tracer.network.FBImageRepository
+import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.recycler_profile_user_record_item.view.*
 import java.util.*
@@ -39,7 +39,9 @@ class ProfileRecyclerViewAdapterRecord(val datas: ArrayList<ActivityData>) :
     val time = singleItem1.time!!.toLong().format(Y_M_D)
 
     //데이터 바인딩
-    FBMapImageRepository().getMapImage(holder.mapImageView, singleItem1.mapTitle.toString())
+    FBImageRepository().getMapImagePath(holder.mapImageView, singleItem1.mapTitle.toString())
+
+    Logg.d("ssmm11 maptitle = ${singleItem1.mapTitle}")
 
     when (singleItem1.mode) {
       "racing go the distance" -> {

@@ -69,8 +69,7 @@ class FBProfileRepository : BaseFB() {
   }
 
   fun getProfileImage(imageView: ImageView, nickname: String) {
-    val progressbar = ProgressBar(App.instance.currentActivity() as Activity)
-    progressbar.show()
+
     var uid = "init"
     // storage 에 올린 경로를 db에 저장해두었으니 다시 역 추적 하여 프로필 이미지 반영
     db.collection(USER_INFO).whereEqualTo(NICKNAME, nickname)
@@ -81,24 +80,8 @@ class FBProfileRepository : BaseFB() {
           uid = document.get(UID) as String
           break
         }
-        // glide imageview 소스
-        // 프사 설정하는 코드 db -> imageView glide
-        val profileRef = storage.reference.child(profileImagePath)
+        FBImageRepository().getImage(imageView, profileImagePath)
 
-        profileRef.downloadUrl.addOnCompleteListener { task ->
-          if (task.isSuccessful) {
-            // Glide 이용하여 이미지뷰에 로딩
-            Glide.with(App.instance.currentActivity() as Activity)
-              .load(task.result)
-              .override(1024, 980)
-              .into(imageView)
-            progressbar.dismiss()
-          } else {
-            progressbar.dismiss()
-          }
-        }
-      }
-      .addOnFailureListener { exception ->
       }
   }
 

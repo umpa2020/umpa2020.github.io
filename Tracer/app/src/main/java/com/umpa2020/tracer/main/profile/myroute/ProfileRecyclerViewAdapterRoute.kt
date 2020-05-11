@@ -9,13 +9,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants.Companion.TIMESTAMP_LENGTH
 import com.umpa2020.tracer.dataClass.InfoData
-import com.umpa2020.tracer.extensions.Y_M_D
 import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.extensions.mm_ss
 import com.umpa2020.tracer.extensions.prettyDistance
 import com.umpa2020.tracer.main.ranking.RankRecyclerItemClickActivity
 import com.umpa2020.tracer.network.FBLikesRepository
-import com.umpa2020.tracer.network.FBMapImageRepository
+import com.umpa2020.tracer.network.FBImageRepository
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.recycler_profilefragment_route_grid_image.view.*
@@ -24,6 +23,7 @@ import java.util.*
 class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) :
   RecyclerView.Adapter<ProfileRecyclerViewAdapterRoute.mViewHolder>() {
   var context: Context? = null
+  var imageRepository = FBImageRepository()
 
   //생성된 뷰 홀더에 데이터를 바인딩 해줌.
   override fun onBindViewHolder(holder: mViewHolder, position: Int) {
@@ -41,7 +41,7 @@ class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) :
     // string에 저장해서 사용 해보았으나
     // Please use a gs:// URL for your Firebase Storage bucket. 에러가 뜨면서 실행이 안되는 문제..
     // val storage = FirebaseStorage.getInstance(R.string.google_storage_bucket_string.toString()) // debug용, release용 구분
-    FBMapImageRepository().getMapImage(holder.image, singleItem.mapTitle!!)
+    imageRepository.getMapImagePath(holder.image, singleItem.mapTitle!!)
 
     holder.maptitle.text = cutted
     holder.distance.text = singleItem.distance!!.prettyDistance
