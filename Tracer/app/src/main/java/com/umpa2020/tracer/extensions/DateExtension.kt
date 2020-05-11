@@ -87,7 +87,24 @@ fun String.toMillisecond(pattern: String): Long? {
 fun String.format(from: String, to: String): String? {
   return toMillisecond(from)?.format(to)
 }
+/**
+ * Int형 yyyy m d 를 String형 yyyyMMdd로 변환.
+ * 십의 자리 미만의 월, 일 앞에 0을 붙이는 함수.
+ */
 
+fun IntToyyyyMMdd(year : Int, month : Int, day : Int) : String?{
+  val mm = if (month < 10)
+    "0$month"
+  else
+    month.toString()
+
+  val dd = if(day < 10)
+    "0$day"
+  else
+    day.toString()
+
+  return "$year$mm$dd"
+}
 /**
  *  년월일을 나이로 변경
  *
@@ -97,7 +114,7 @@ fun String.format(from: String, to: String): String? {
  */
 
 @SuppressLint("SimpleDateFormat")
-  fun ToAge(birth : String): String? {
+fun ToAge(birth: String): String? {
   var today = "" // 오늘 날짜
   var manAge = 0 // 만 나이
 
@@ -107,7 +124,7 @@ fun String.format(from: String, to: String): String? {
   val todayMonth = Integer.parseInt(today.substring(4, 6))
   val todayDay = Integer.parseInt(today.substring(6, 8))
 
-  val year = Integer.parseInt(birth.substring(0,4))
+  val year = Integer.parseInt(birth.substring(0, 4))
   val month = Integer.parseInt(birth.substring(4, 6))
   val day = Integer.parseInt(birth.substring(6, 8))
 

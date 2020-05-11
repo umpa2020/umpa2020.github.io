@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
+import com.umpa2020.tracer.extensions.ToAge
 import com.umpa2020.tracer.network.FBProfileRepository
 import com.umpa2020.tracer.network.ProfileListener
 import com.umpa2020.tracer.util.Logg
@@ -18,9 +19,6 @@ import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_my_information.*
-import kotlinx.android.synthetic.main.activity_my_information.app_toolbar
-import kotlinx.android.synthetic.main.activity_my_information.profileImage
-import kotlinx.android.synthetic.main.activity_sign_up.*
 import kotlinx.android.synthetic.main.signup_toolbar.*
 import kotlinx.android.synthetic.main.signup_toolbar.view.*
 
@@ -38,7 +36,7 @@ class MyInformationActivity : AppCompatActivity(), OnSingleClickListener {
     // Shared에 저장된 유저 정보 설정정
     emailTextView.text = UserInfo.email
     nickNameTextView.text = UserInfo.nickname
-    ageTextView.text = UserInfo.age
+    ageTextView.text = ToAge(UserInfo.birth)
     genderTextView.text = UserInfo.gender
 
     // 버튼 리스너 초기화

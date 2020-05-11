@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.NumberPicker
 import androidx.appcompat.app.AppCompatActivity
 import com.umpa2020.tracer.R
+import com.umpa2020.tracer.extensions.IntToyyyyMMdd
 import com.umpa2020.tracer.extensions.ToAge
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.OnSingleClickListener
@@ -59,27 +60,16 @@ class AgeSelectActivity : AppCompatActivity(), OnSingleClickListener {
       R.id.nextButton -> {
         try {
           val intent = Intent()
-          var month = ""
-          var day = ""
 
           // numberPicker에서 Int형으로 값을 가져오므로 1 -> 01과 같은 형식으로 변환.
           // 나중에 이런 yyyyDDmm형식으로 쓰일꺼 같아서 변환해둠.
-          month = if(monthPicker.value < 10)
-            "0${monthPicker.value}"
-          else
-            monthPicker.value.toString()
+          val birth = IntToyyyyMMdd(yearPicker.value, monthPicker.value, dayPicker.value)
+          Logg.d(IntToyyyyMMdd(yearPicker.value, monthPicker.value, dayPicker.value)) // 19900102 or 19900112
 
-          day = if(dayPicker.value < 10)
-            "0${dayPicker.value}"
-          else
-            dayPicker.value.toString()
+          Logg.d("만" + ToAge(birth!!)) // 19900102 => 나이로
 
-          Logg.d("${yearPicker.value}${month}${day}") // 19900102 or 19900112
-
-          Logg.d("만" + ToAge("${yearPicker.value}${month}${day}")) // 19900102 => 나이로
-
-          // 지금은 나이만 전달했는데 나중엔
-          intent.putExtra("Age", "${yearPicker.value}${month}${day}")
+          // yyyyMMdd 형식 전달.
+          intent.putExtra("Age", birth)
           setResult(RESULT_OK, intent)
           finish()
         } catch (e: Exception) {
