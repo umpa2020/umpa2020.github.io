@@ -25,13 +25,13 @@ class FBProfileRepository : BaseFB() {
    * 해당 사용자가 뛴 거리, 뛴
    */
   fun getProfile(uid: String, profileListener: (Double, Long, Uri) -> Unit) {
-    db.collection(USER_INFO).document(uid).get()
+    db.collection(USERS).document(uid).get()
       .addOnSuccessListener { it ->
         // 총 거리, 총 시간을 구하기 위해서 db에 접근하여 일단 먼저
         // 이용자가 뛴 다른 사람의 맵을 구함
         var sumDistance = 0.0
         var sumTime = 0L
-        it.reference.collection(USER_RAN_THESE_MAPS).get().addOnSuccessListener {
+        it.reference.collection(ACTIVITIES).get().addOnSuccessListener {
           it.forEach {
             sumDistance += it.get(DISTANCE) as Double
             sumTime += it.get(TIME) as Long
@@ -45,7 +45,7 @@ class FBProfileRepository : BaseFB() {
 
   fun getProfileImage(imageView: ImageView, nickname: String) {
     // storage 에 올린 경로를 db에 저장해두었으니 다시 역 추적 하여 프로필 이미지 반영
-    db.collection(USER_INFO).whereEqualTo(NICKNAME, nickname)
+    db.collection(USERS).whereEqualTo(NICKNAME, nickname)
       .get()
       .addOnSuccessListener { result ->
         for (document in result) {
@@ -64,7 +64,7 @@ class FBProfileRepository : BaseFB() {
     val dt = Date()
     // 현재 날짜를 프로필 이름으로 nickname/Profile/현재날짜(영어).jpg 경로 만들기
 
-    db.collection(USER_INFO).document(UserInfo.autoLoginKey)
+    db.collection(USERS).document(UserInfo.autoLoginKey)
       .update(PROFILE_IMAGE_PATH, "$PROFILE/${UserInfo.autoLoginKey}/${dt.time}")
       .addOnSuccessListener {
         profileListener.changeProfile()
@@ -103,7 +103,7 @@ class FBProfileRepository : BaseFB() {
             infoDatas.filter { infoData ->
               likedMaps.map { it.mapTitle }
                 .contains(infoData.mapTitle)
-            }.map { it.myLiked = true }
+            }.map { it.isLiked = true }
             profileRouteListener.listProfileRoute(infoDatas)
           }
 
@@ -141,7 +141,7 @@ class FBProfileRepository : BaseFB() {
             infoDatas.filter { infoData ->
               likedMaps.map { it.mapTitle }
                 .contains(infoData.mapTitle)
-            }.map { it.myLiked = true }
+            }.map { it.isLiked = true }
             profileRouteListener.listProfileRoute(infoDatas)
           }
 

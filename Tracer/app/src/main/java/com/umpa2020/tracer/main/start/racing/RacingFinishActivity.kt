@@ -57,10 +57,10 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
 
     if (result) {
       val activityData =
-        ActivityData(racerData.mapTitle, timestamp.toString(), "racing go the distance")
+        ActivityData(racerData.mapId, timestamp, racerData.distance, "racing go the distance")
       FBUserActivityRepository().createUserHistory(activityData)
     } else {
-      val activityData = ActivityData(racerData.mapTitle, timestamp.toString(), "racing fail")
+      val activityData = ActivityData(racerData.mapId, timestamp, racerData.distance, "racing fail")
       FBUserActivityRepository().createUserHistory(activityData)
     }
 

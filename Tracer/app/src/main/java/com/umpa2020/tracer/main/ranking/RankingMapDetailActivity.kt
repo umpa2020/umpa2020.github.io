@@ -99,7 +99,8 @@ class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener, OnM
 
               // ui 스레드 따로 빼주기
               runOnUiThread {
-                rankingDetailNickname.text = infoData.makersNickname
+                // TODO : 유저 아이디로 유저 닉네임 찾기
+                rankingDetailNickname.text = infoData.makerId
                 rankingDetailMapDetail.text = infoData.mapExplanation
                 rankingDetailDistance.text = String.format("%.2f", infoData.distance!! / 1000)
                 rankingDetailTime.text = infoData.time!!.format(m_s)

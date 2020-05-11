@@ -3,9 +3,9 @@ package com.umpa2020.tracer.network
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.umpa2020.tracer.dataClass.ActivityData
-import com.umpa2020.tracer.network.BaseFB.Companion.UID
-import com.umpa2020.tracer.network.BaseFB.Companion.USER_ACTIVITY
-import com.umpa2020.tracer.network.BaseFB.Companion.USER_INFO
+import com.umpa2020.tracer.network.BaseFB.Companion.USER_ID
+import com.umpa2020.tracer.network.BaseFB.Companion.ACTIVITIES
+import com.umpa2020.tracer.network.BaseFB.Companion.USERS
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.UserInfo
 
@@ -24,20 +24,20 @@ class FBUserActivityRepository {
 
 
   fun createUserHistory(activityData: ActivityData) {
-    db.collection(USER_INFO).whereEqualTo(UID, UserInfo.autoLoginKey)
+    db.collection(USERS).whereEqualTo(USER_ID, UserInfo.autoLoginKey)
       .get()
       .addOnSuccessListener {
-        it.documents.last().reference.collection(USER_ACTIVITY).add(activityData)
+        it.documents.last().reference.collection(ACTIVITIES).add(activityData)
       }
   }
 
   fun listUserMakingActivityFirst(activityListener: ActivityListener, limit: Long) {
 
     Logg.d("ssmm11 limit = $limit")
-    db.collection(USER_INFO).whereEqualTo(UID, UserInfo.autoLoginKey)
+    db.collection(USERS).whereEqualTo(USER_ID, UserInfo.autoLoginKey)
       .get()
       .addOnSuccessListener {
-        it.documents.last().reference.collection(USER_ACTIVITY)
+        it.documents.last().reference.collection(ACTIVITIES)
           .limit(limit)
           .get()
           .addOnSuccessListener {
@@ -51,10 +51,10 @@ class FBUserActivityRepository {
 
   fun listUserMakingActivity(activityListener: ActivityListener, limit: Long) {
 
-    db.collection(USER_INFO).whereEqualTo(UID, UserInfo.autoLoginKey)
+    db.collection(USERS).whereEqualTo(USER_ID, UserInfo.autoLoginKey)
       .get()
       .addOnSuccessListener { it ->
-        it.documents.last().reference.collection(USER_ACTIVITY)
+        it.documents.last().reference.collection(ACTIVITIES)
           .startAfter(globalStartAfter)
           .limit(limit)
           .get()

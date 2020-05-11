@@ -47,12 +47,12 @@ class MapRankingAdapter(
       holder.modeIcon.setImageResource(R.drawable.ic_sneaker_for_running)
       holder.modeIcon.tag = R.drawable.ic_sneaker_for_running
 
-      if (infoData.played) {
+      if (infoData.isPlayed) {
         holder.modeIcon.setColorFilter(R.color.green)
       }
-      holder.modeNo.text = infoData.execute.toString()
+      holder.modeNo.text = infoData.plays.toString()
     } else if (mode.equals("likes")) {
-      if (infoData.myLiked) {
+      if (infoData.isLiked) {
         holder.modeIcon.setImageResource(R.drawable.ic_favorite_red_24dp)
         holder.modeIcon.tag = R.drawable.ic_favorite_red_24dp
       } else {
@@ -98,7 +98,7 @@ class MapRankingAdapter(
             }
             R.drawable.ic_favorite_border_black_24dp -> {
               FBLikesRepository().updateLikes(infoData.mapTitle!!, likes)
-              infoDatas[position].myLiked = true
+              infoDatas[position].isLiked = true
               infoDatas[position].likes = ++likes
               holder.modeIcon.setImageResource(R.drawable.ic_favorite_red_24dp)
               holder.modeIcon.tag = R.drawable.ic_favorite_red_24dp
@@ -106,7 +106,7 @@ class MapRankingAdapter(
             }
             R.drawable.ic_favorite_red_24dp -> {
               FBLikesRepository().updateNotLikes(infoData.mapTitle!!, likes)
-              infoDatas[position].myLiked = false
+              infoDatas[position].isLiked = false
               infoDatas[position].likes = --likes
               holder.modeIcon.setImageResource(R.drawable.ic_favorite_border_black_24dp)
               holder.modeIcon.tag = R.drawable.ic_favorite_border_black_24dp

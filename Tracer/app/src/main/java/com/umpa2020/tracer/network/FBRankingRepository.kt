@@ -8,9 +8,9 @@ import com.google.maps.android.SphericalUtil
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.LikedMapData
 import com.umpa2020.tracer.dataClass.PlayedMapData
-import com.umpa2020.tracer.network.BaseFB.Companion.EXECUTE
+import com.umpa2020.tracer.network.BaseFB.Companion.PLAYS
 import com.umpa2020.tracer.network.BaseFB.Companion.LIKES
-import com.umpa2020.tracer.network.BaseFB.Companion.MAP_INFO
+import com.umpa2020.tracer.network.BaseFB.Companion.MAPS
 
 
 /**
@@ -36,7 +36,7 @@ class FBRankingRepository(rankingListener: RankingListener) {
     //Location 형태로 받아오고 싶다면 아래처럼
     //var getintentLocation = current
 
-    db.collection(MAP_INFO)
+    db.collection(MAPS)
       .orderBy(mode, Query.Direction.DESCENDING)
       .limit(limit)
       .get()
@@ -55,7 +55,7 @@ class FBRankingRepository(rankingListener: RankingListener) {
           }
           globalStartAfter = document
         }
-        if (mode == EXECUTE) {
+        if (mode == PLAYS) {
           FBPlayedRepository().listPlayed(playedMapListener)
         } else if (mode == LIKES) {
           FBLikesRepository().listLikedMap(likedMapListener)
@@ -73,7 +73,7 @@ class FBRankingRepository(rankingListener: RankingListener) {
     //Location 형태로 받아오고 싶다면 아래처럼
     //var getintentLocation = current
 
-    db.collection(MAP_INFO)
+    db.collection(MAPS)
       .orderBy(mode, Query.Direction.DESCENDING)
       .startAfter(globalStartAfter)
       .limit(limit)
@@ -93,7 +93,7 @@ class FBRankingRepository(rankingListener: RankingListener) {
           }
           globalStartAfter = document
         }
-        if (mode == EXECUTE) {
+        if (mode == PLAYS) {
           FBPlayedRepository().listPlayed(playedMapListener)
         } else if (mode == LIKES) {
           FBLikesRepository().listLikedMap(likedMapListener)
@@ -106,9 +106,9 @@ class FBRankingRepository(rankingListener: RankingListener) {
       infoDatas.filter { infoData ->
         playedMapDatas.map { it.mapTitle }
           .contains(infoData.mapTitle)
-      }.map { it.played = true }
+      }.map { it.isPlayed = true }
 
-      rankingListener.getRank(infoDatas, EXECUTE)
+      rankingListener.getRank(infoDatas, PLAYS)
     }
   }
 
@@ -118,7 +118,7 @@ class FBRankingRepository(rankingListener: RankingListener) {
       infoDatas.filter { infoData ->
         likedMaps.map { it.mapTitle }
           .contains(infoData.mapTitle)
-      }.map { it.myLiked = true }
+      }.map { it.isLiked = true }
       rankingListener.getRank(infoDatas, LIKES)
     }
 

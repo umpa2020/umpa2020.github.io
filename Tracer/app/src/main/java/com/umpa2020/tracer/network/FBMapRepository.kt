@@ -7,22 +7,29 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.umpa2020.tracer.dataClass.NearMap
 import com.umpa2020.tracer.network.BaseFB.Companion.DISTANCE
-import com.umpa2020.tracer.network.BaseFB.Companion.EXECUTE
-import com.umpa2020.tracer.network.BaseFB.Companion.MAP_INFO
+import com.umpa2020.tracer.network.BaseFB.Companion.PLAYS
+import com.umpa2020.tracer.network.BaseFB.Companion.MAPS
 import com.umpa2020.tracer.network.BaseFB.Companion.START_LATITUDE
 import com.umpa2020.tracer.network.BaseFB.Companion.START_LONGITUDE
 import com.umpa2020.tracer.util.Logg
+import kotlinx.coroutines.tasks.await
 
-class FBMapRepository {
+class FBMapRepository : BaseFB() {
   val NEARMAPFALSE = 41
   val STRAT_FRAGMENT_NEARMAP = 30
-  val db = FirebaseFirestore.getInstance()
   private var nearMaps: ArrayList<NearMap> = arrayListOf()
+
+  suspend fun getMapTitle(mapId: String): String? {
+    return db.collection(MAPS)
+      .whereEqualTo(MAP_ID, mapId)
+      .get()
+      .await().documents.first().getString(MAP_TITLE)
+  }
 
   fun listNearMap(southwest: LatLng, northeast: LatLng, mHandler: Handler) {
     // 경도선에 걸린 좌표 값
 
-    db.collection(MAP_INFO)
+    db.collection(MAPS)
       .whereGreaterThan(START_LATITUDE, southwest.latitude)
       .whereLessThan(START_LATITUDE, northeast.latitude)
       .get()
@@ -62,8 +69,8 @@ class FBMapRepository {
   fun updateExecute(mapTitle: String) {
     val db = FirebaseFirestore.getInstance()
 
-    db.collection(MAP_INFO).document(mapTitle)
-      .update(EXECUTE, FieldValue.increment(1))
+    db.collection(MAPS).document(mapTitle)
+      .update(PLAYS, FieldValue.increment(1))
       .addOnSuccessListener { Logg.d("DocumentSnapshot successfully updated!") }
       .addOnFailureListener { e -> Logg.w("Error updating document$e") }
   }

@@ -1,14 +1,6 @@
 package com.umpa2020.tracer.network
 
-import android.widget.ImageView
-import com.bumptech.glide.Glide
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.storage.FirebaseStorage
-import com.umpa2020.tracer.App
 import com.umpa2020.tracer.dataClass.BannerData
-import com.umpa2020.tracer.network.BaseFB.Companion.MAP_IMAGE
-import com.umpa2020.tracer.network.BaseFB.Companion.MAP_INFO
-import com.umpa2020.tracer.network.BaseFB.Companion.MAP_TITLE
 
 /**
  * 배너 이미지 가져오는 Repository

@@ -16,23 +16,23 @@ class FBLikesRepository : BaseFB() {
    * -> 리사이클러뷰에서 해당 유저가 좋아요한 맵에 대해서 이미지 작업을 한다.
    */
   fun listLikedMap(listener: LikedMapListener) {
-    userInfoColRef.document(UserInfo.autoLoginKey).collection(USER_LIKED_THESE_MAPS)
+    userInfoColRef.document(UserInfo.autoLoginKey).collection(LIKED_MAP)
       .get()
       .addOnSuccessListener { result ->
         listener.likedList(result.map {
           LikedMapData(
-            it.getString(MAP_TITLE)
+            it.getString(MAP_ID)
           )
         })
       }
   }
 
   fun getMapLike(mapTitle: String, listener: LikedMapListener) {
-    userInfoColRef.document(UserInfo.autoLoginKey).collection(USER_LIKED_THESE_MAPS)
-      .whereEqualTo(MAP_TITLE, mapTitle)
+    userInfoColRef.document(UserInfo.autoLoginKey).collection(LIKED_MAP)
+      .whereEqualTo(MAP_ID, mapTitle)
       .get()
       .addOnSuccessListener {
-        mapInfoColRef.whereEqualTo(MAP_TITLE, mapTitle)
+        mapInfoColRef.whereEqualTo(MAP_ID, mapTitle)
           .get()
           .addOnSuccessListener { result ->
             for (document in result) {
@@ -52,7 +52,7 @@ class FBLikesRepository : BaseFB() {
    */
   fun updateLikes(maptitle: String, likes: Int) {
     val likeMapsData = LikedMapData(maptitle)
-    db.collection(USER_INFO).document(UserInfo.autoLoginKey).collection(USER_LIKED_THESE_MAPS)
+    db.collection(USERS).document(UserInfo.autoLoginKey).collection(LIKED_MAP)
       .add(likeMapsData)
     mapInfoColRef.document(maptitle).collection(LIKES).add(likeMapsData)
     mapInfoColRef.document(maptitle).update(LIKES, likes + 1)
@@ -65,18 +65,18 @@ class FBLikesRepository : BaseFB() {
    */
   fun updateNotLikes(maptitle: String, likes: Int) {
 
-    userInfoColRef.document(UserInfo.autoLoginKey).collection(USER_LIKED_THESE_MAPS)
-      .whereEqualTo(MAP_TITLE, maptitle)
+    userInfoColRef.document(UserInfo.autoLoginKey).collection(LIKED_MAP)
+      .whereEqualTo(MAP_ID, maptitle)
       .get()
       .addOnSuccessListener { result ->
         val documentid = result.documents[0].id
         userInfoColRef.document(UserInfo.autoLoginKey)
-          .collection(USER_LIKED_THESE_MAPS)
+          .collection(LIKED_MAP)
           .document(documentid).delete()
       }
 
     mapInfoColRef.document(maptitle).collection(LIKES)
-      .whereEqualTo(MAP_TITLE, maptitle)
+      .whereEqualTo(MAP_ID, maptitle)
       .get()
       .addOnSuccessListener { result ->
         val documentId = result.documents[0].id
