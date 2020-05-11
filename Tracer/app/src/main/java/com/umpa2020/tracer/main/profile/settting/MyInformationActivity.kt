@@ -11,9 +11,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
-import com.umpa2020.tracer.network.BaseFB
 import com.umpa2020.tracer.network.FBProfileRepository
-import com.umpa2020.tracer.network.FBStorageFileUploadRepository
 import com.umpa2020.tracer.network.ProfileListener
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.OnSingleClickListener
@@ -22,7 +20,6 @@ import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_my_information.*
 import kotlinx.android.synthetic.main.activity_my_information.app_toolbar
 import kotlinx.android.synthetic.main.activity_my_information.profileImage
-import kotlinx.android.synthetic.main.activity_sign_up.*
 import kotlinx.android.synthetic.main.signup_toolbar.*
 import kotlinx.android.synthetic.main.signup_toolbar.view.*
 

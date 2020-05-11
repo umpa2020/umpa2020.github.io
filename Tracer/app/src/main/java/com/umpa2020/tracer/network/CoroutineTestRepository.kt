@@ -5,8 +5,10 @@ import android.widget.ImageView
 import com.google.firebase.firestore.DocumentSnapshot
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.LikedMapData
+import com.umpa2020.tracer.dataClass.ProfileData
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.UserInfo
+import kotlinx.coroutines.tasks.await
 import java.util.*
 
 /**
@@ -14,7 +16,7 @@ import java.util.*
  *
  */
 
-class FBProfileRepository : BaseFB() {
+class CoroutineTestRepository : BaseFB() {
   var profileImagePath = "init"
   lateinit var globalStartAfter: DocumentSnapshot
 
@@ -24,23 +26,17 @@ class FBProfileRepository : BaseFB() {
    * 받은 닉네임으로 uid를 db에서 찾아서
    * 해당 사용자가 뛴 거리, 뛴
    */
-  fun getProfile(uid: String, profileListener: (Double, Long, Uri) -> Unit) {
-    db.collection(USER_INFO).document(uid).get()
-      .addOnSuccessListener { it ->
-        // 총 거리, 총 시간을 구하기 위해서 db에 접근하여 일단 먼저
-        // 이용자가 뛴 다른 사람의 맵을 구함
-        var sumDistance = 0.0
-        var sumTime = 0L
-        it.reference.collection(USER_RAN_THESE_MAPS).get().addOnSuccessListener {
-          it.forEach {
-            sumDistance += it.get(DISTANCE) as Double
-            sumTime += it.get(TIME) as Long
-          }
-        }
-        FBStorageRepository().downloadFile1(it.getString(PROFILE_IMAGE_PATH)!!).addOnSuccessListener {
-          profileListener(sumDistance, sumTime, it)
-        }
+
+  suspend fun getProfile(uid: String): ProfileData {
+    return db.collection(USER_INFO).document(uid).get().await().let {
+      var sumDistance = 0.0
+      var sumTime = 0L
+      it.reference.collection(USER_RAN_THESE_MAPS).get().await().documents.forEach {
+        sumDistance += it.get(DISTANCE) as Double
+        sumTime += it.get(TIME) as Long
       }
+      ProfileData(sumDistance, sumTime,FBStorageRepository().downloadFile(it.getString(PROFILE_IMAGE_PATH)!!)!! )
+    }
   }
 
   fun getProfileImage(imageView: ImageView, nickname: String) {

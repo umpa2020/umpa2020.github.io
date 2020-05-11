@@ -14,7 +14,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
-import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.customUI.WorkaroundMapFragment
 import com.umpa2020.tracer.dataClass.ActivityData
@@ -24,7 +23,6 @@ import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.extensions.*
 import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.map.TraceMap
-import com.umpa2020.tracer.network.FBRacingRepository
 import com.umpa2020.tracer.network.FBUserActivityRepository
 import com.umpa2020.tracer.util.*
 import kotlinx.android.synthetic.main.activity_running_save.*
@@ -32,7 +30,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.util.*
 import com.umpa2020.tracer.gpx.WayPointType.*
-import com.umpa2020.tracer.network.FBStorageFileUploadRepository
+import com.umpa2020.tracer.network.FBStorageRepository
 
 class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleClickListener {
   var switch = 0
@@ -182,7 +180,7 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
 
     Logg.d("ssmm11 fRef . ? = ${fRef.path}")
 
-    FBStorageFileUploadRepository().uploadFile(routeGpxFile, "mapRoute/" + infoData.mapTitle!! + "/" + infoData.mapTitle!!)
+    FBStorageRepository().uploadFile(routeGpxFile, "mapRoute/" + infoData.mapTitle!! + "/" + infoData.mapTitle!!)
 
     // db에 그려진 맵 저장하는 스레드 - 여기서는 실제 그려진 것 보다 후 보정을 통해서
     // 간략화 된 맵을 업로드 합니다.

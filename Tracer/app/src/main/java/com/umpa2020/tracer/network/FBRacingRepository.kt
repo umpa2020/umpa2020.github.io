@@ -10,7 +10,6 @@ import com.umpa2020.tracer.dataClass.RankingData
 import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.extensions.classToGpx
 import com.umpa2020.tracer.extensions.gpxToClass
-import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.UserInfo
 import java.io.File
 import java.util.*
@@ -70,7 +69,7 @@ class FBRacingRepository : BaseFB() {
                 rankingData.racerGPX = fRef.path
 
 
-                FBStorageFileUploadRepository().uploadFile(racerGpxFile, MAP_ROUTE + "/" + racerData.mapTitle!! + "/" + RACING_GPX + "/" + UserInfo.autoLoginKey)
+                FBStorageRepository().uploadFile(racerGpxFile, MAP_ROUTE + "/" + racerData.mapTitle!! + "/" + RACING_GPX + "/" + UserInfo.autoLoginKey)
 
               } else {
                 rankingData.bestTime = false

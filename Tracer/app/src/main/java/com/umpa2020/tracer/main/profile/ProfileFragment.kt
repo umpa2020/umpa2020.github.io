@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
+import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.extensions.m_s
@@ -14,12 +16,18 @@ import com.umpa2020.tracer.extensions.prettyDistance
 import com.umpa2020.tracer.main.profile.myrecord.ProfileRecordActivity
 import com.umpa2020.tracer.main.profile.myroute.ProfileRouteActivity
 import com.umpa2020.tracer.main.profile.settting.AppSettingActivity
+import com.umpa2020.tracer.network.CoroutineTestRepository
 import com.umpa2020.tracer.network.FBProfileRepository
 import com.umpa2020.tracer.network.ProfileListener
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.UserInfo
+import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.fragment_profile.view.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 /**
@@ -94,9 +102,26 @@ class ProfileFragment : Fragment(), OnSingleClickListener {
      * 프로필 변경을 하고 나오는 경우에도 적용된
      * 사진을 바로 보기 위해 Resume에서 적용
      */
-    FBProfileRepository().getProfile(root, UserInfo.nickname) { distance, time ->
-      root.profileFragmentTotalDistance.text = distance.prettyDistance
-      root.profileFragmentTotalTime.text = time.toLong().format(m_s)
+    MainScope().launch {
+      withContext(Dispatchers.IO) {
+        CoroutineTestRepository().getProfile(UserInfo.autoLoginKey)
+      }.let {
+        Glide.with(App.instance.context())
+          .load(it.imgPath)
+          .override (1024, 980)
+          .into(profileImageView)
+        profileFragmentTotalDistance.text = it.distance.prettyDistance
+        profileFragmentTotalTime.text = it.time.format(m_s)
+      }
+    }
+
+    FBProfileRepository().getProfile(UserInfo.autoLoginKey) { distance, time,imgUri ->
+      profileFragmentTotalDistance.text = distance.prettyDistance
+      profileFragmentTotalTime.text = time.format(m_s)
+      Glide.with(App.instance.context())
+        .load(imgUri)
+        .override (1024, 980)
+        .into(profileImageView)
     }
     super.onResume()
   }
