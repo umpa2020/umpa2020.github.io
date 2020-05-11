@@ -8,6 +8,9 @@ import com.umpa2020.tracer.dataClass.LikedMapData
 import com.umpa2020.tracer.dataClass.ProfileData
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.UserInfo
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.tasks.await
 import java.util.*
 
@@ -26,7 +29,12 @@ class CoroutineTestRepository : BaseFB() {
    * 받은 닉네임으로 uid를 db에서 찾아서
    * 해당 사용자가 뛴 거리, 뛴
    */
-
+  suspend fun getProfileImage(uid: String) :Uri?{
+    return db.collection(USER_INFO).whereEqualTo(UID, uid)
+        .get().await().let {
+          FBStorageRepository().downloadFile(it.first().getString(PROFILE_IMAGE_PATH)!!)
+        }
+  }
   suspend fun getProfile(uid: String): ProfileData {
     return db.collection(USER_INFO).document(uid).get().await().let {
       var sumDistance = 0.0

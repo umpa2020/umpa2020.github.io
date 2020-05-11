@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.extensions.format
+import com.umpa2020.tracer.extensions.image
 import com.umpa2020.tracer.extensions.m_s
 import com.umpa2020.tracer.extensions.prettyDistance
 import com.umpa2020.tracer.main.profile.myrecord.ProfileRecordActivity
@@ -104,24 +105,12 @@ class ProfileFragment : Fragment(), OnSingleClickListener {
      */
     MainScope().launch {
       withContext(Dispatchers.IO) {
-        CoroutineTestRepository().getProfile(UserInfo.autoLoginKey)
+        FBProfileRepository().getProfile(UserInfo.autoLoginKey)
       }.let {
-        Glide.with(App.instance.context())
-          .load(it.imgPath)
-          .override (1024, 980)
-          .into(profileImageView)
+        profileImageView.image(it.imgPath)
         profileFragmentTotalDistance.text = it.distance.prettyDistance
         profileFragmentTotalTime.text = it.time.format(m_s)
       }
-    }
-
-    FBProfileRepository().getProfile(UserInfo.autoLoginKey) { distance, time,imgUri ->
-      profileFragmentTotalDistance.text = distance.prettyDistance
-      profileFragmentTotalTime.text = time.format(m_s)
-      Glide.with(App.instance.context())
-        .load(imgUri)
-        .override (1024, 980)
-        .into(profileImageView)
     }
     super.onResume()
   }

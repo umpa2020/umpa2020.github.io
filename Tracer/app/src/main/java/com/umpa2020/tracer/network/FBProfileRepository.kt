@@ -5,8 +5,11 @@ import android.widget.ImageView
 import com.google.firebase.firestore.DocumentSnapshot
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.LikedMapData
+import com.umpa2020.tracer.dataClass.ProfileData
+import com.umpa2020.tracer.extensions.image
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.UserInfo
+import kotlinx.coroutines.tasks.await
 import java.util.*
 
 /**
@@ -24,35 +27,22 @@ class FBProfileRepository : BaseFB() {
    * 받은 닉네임으로 uid를 db에서 찾아서
    * 해당 사용자가 뛴 거리, 뛴
    */
-  fun getProfile(uid: String, profileListener: (Double, Long, Uri) -> Unit) {
-    db.collection(USER_INFO).document(uid).get()
-      .addOnSuccessListener { it ->
-        // 총 거리, 총 시간을 구하기 위해서 db에 접근하여 일단 먼저
-        // 이용자가 뛴 다른 사람의 맵을 구함
-        var sumDistance = 0.0
-        var sumTime = 0L
-        it.reference.collection(USER_RAN_THESE_MAPS).get().addOnSuccessListener {
-          it.forEach {
-            sumDistance += it.get(DISTANCE) as Double
-            sumTime += it.get(TIME) as Long
-          }
-        }
-        FBStorageRepository().downloadFile1(it.getString(PROFILE_IMAGE_PATH)!!).addOnSuccessListener {
-          profileListener(sumDistance, sumTime, it)
-        }
+  suspend fun getProfile(uid: String): ProfileData {
+    return db.collection(USER_INFO).document(uid).get().await().let {
+      var sumDistance = 0.0
+      var sumTime = 0L
+      it.reference.collection(USER_RAN_THESE_MAPS).get().await().documents.forEach {
+        sumDistance += it.get(DISTANCE) as Double
+        sumTime += it.get(TIME) as Long
       }
+      ProfileData(sumDistance, sumTime,FBStorageRepository().downloadFile(it.getString(PROFILE_IMAGE_PATH)!!)!! )
+    }
   }
-
-  fun getProfileImage(imageView: ImageView, nickname: String) {
-    // storage 에 올린 경로를 db에 저장해두었으니 다시 역 추적 하여 프로필 이미지 반영
-    db.collection(USER_INFO).whereEqualTo(NICKNAME, nickname)
-      .get()
-      .addOnSuccessListener { result ->
-        for (document in result) {
-          profileImagePath = document.get(PROFILE_IMAGE_PATH) as String
-          break
-        }
-        FBImageRepository().getImage(imageView, profileImagePath)
+  //TODO:Usage로 nickname으로 받는곳들 uid로 바꾸기
+  suspend fun getProfileImage(uid: String) :Uri?{
+    return db.collection(USER_INFO).whereEqualTo(UID, uid)
+      .get().await().let {
+        FBStorageRepository().downloadFile(it.first().getString(PROFILE_IMAGE_PATH)!!)
       }
   }
 
@@ -60,16 +50,12 @@ class FBProfileRepository : BaseFB() {
    * 사진 변경 시, 해당 사진을 storage에 업로드하고
    * 그 경로를 db에 update하는 함수
    */
-  fun updateProfileImage(selectedImageUri: Uri?, profileListener: ProfileListener) {
-    val dt = Date()
+  suspend fun updateProfileImage(selectedImageUri: Uri) {
     // 현재 날짜를 프로필 이름으로 nickname/Profile/현재날짜(영어).jpg 경로 만들기
-
+    val dt=Date()
+    FBStorageRepository().uploadFile(selectedImageUri, PROFILE + "/" + UserInfo.autoLoginKey + "/" + dt.time.toString())
     db.collection(USER_INFO).document(UserInfo.autoLoginKey)
-      .update(PROFILE_IMAGE_PATH, "$PROFILE/${UserInfo.autoLoginKey}/${dt.time}")
-      .addOnSuccessListener {
-        profileListener.changeProfile()
-      }
-    FBStorageRepository().uploadFile(selectedImageUri!!, BaseFB.PROFILE + "/" + UserInfo.autoLoginKey + "/" + dt.time.toString())
+      .update(PROFILE_IMAGE_PATH, "$PROFILE/${UserInfo.autoLoginKey}/${dt.time}").await()
   }
 
   /**

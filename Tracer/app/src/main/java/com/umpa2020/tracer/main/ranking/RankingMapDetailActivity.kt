@@ -1,6 +1,5 @@
 package com.umpa2020.tracer.main.ranking
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -21,17 +20,23 @@ import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.extensions.gpxToClass
+import com.umpa2020.tracer.extensions.image
 import com.umpa2020.tracer.extensions.m_s
+import com.umpa2020.tracer.gpx.WayPointType.FINISH_POINT
+import com.umpa2020.tracer.gpx.WayPointType.START_POINT
 import com.umpa2020.tracer.main.start.racing.RacingActivity
 import com.umpa2020.tracer.main.start.racing.RacingSelectPeopleActivity
 import com.umpa2020.tracer.map.TraceMap
+import com.umpa2020.tracer.network.BaseFB.Companion.MAKERS_NICKNAME
 import com.umpa2020.tracer.network.FBProfileRepository
 import com.umpa2020.tracer.util.Chart
 import com.umpa2020.tracer.util.ChoicePopup
 import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.activity_ranking_map_detail.*
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import java.io.File
-import com.umpa2020.tracer.gpx.WayPointType.*
+
 class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener, OnMapReadyCallback {
   lateinit var routeGPX: RouteGPX
   var dbMapTitle = ""
@@ -64,10 +69,11 @@ class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener, OnM
       .get()
       .addOnSuccessListener { result ->
         for (document in result) {
-          FBProfileRepository().getProfileImage(
-            rankingDetailProfileImage,
-            document.get("makersNickname") as String
-          )
+          MainScope().launch {
+            FBProfileRepository().getProfileImage(document.getString(MAKERS_NICKNAME)!!)?.let {
+              rankingDetailProfileImage.image(it)
+            }
+          }
           break
         }
       }
@@ -88,7 +94,7 @@ class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener, OnM
               val speedList = mutableListOf<Double>()
               val elevationList = mutableListOf<Double>()
               routeGPX.trkList.forEach { wpt ->
-                wpt.speed?.let{speedList.add(it)}
+                wpt.speed?.let { speedList.add(it) }
                 elevationList.add(wpt.alt)
               }
 
@@ -118,8 +124,8 @@ class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener, OnM
   }
 
   override fun onSingleClick(v: View?) {
-    when(v!!.id){
-      R.id.rankingDetailRaceButton->{ //버튼 누르면 연습용, 랭킹 기록용 선택 팝업 띄우기
+    when (v!!.id) {
+      R.id.rankingDetailRaceButton -> { //버튼 누르면 연습용, 랭킹 기록용 선택 팝업 띄우기
         //showPopup()
 
         val intent = intent
@@ -127,7 +133,7 @@ class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener, OnM
         val mapTitle = intent.extras?.getString("MapTitle").toString()
         val nextIntent = Intent(this, RacingSelectPeopleActivity::class.java)
         nextIntent.putExtra("MapTitle", mapTitle)
-        nextIntent.putExtra("RouteGPX",routeGPX)
+        nextIntent.putExtra("RouteGPX", routeGPX)
         startActivity(nextIntent)
       }
     }
@@ -174,6 +180,7 @@ class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener, OnM
     traceMap = TraceMap(googleMap) //구글맵
     handler.sendEmptyMessage(0)
   }
+
   var bDraw = false
   val handler = object : Handler() {
     override fun handleMessage(msg: Message) {
@@ -181,7 +188,7 @@ class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener, OnM
         0 -> {
           if (bDraw) {
             //TODO : 이렇게 해야하나..?
-            traceMap.drawRoute(routeGPX.trkList.toList(), routeGPX.wptList.filter { it.type== START_POINT||it.type== FINISH_POINT })
+            traceMap.drawRoute(routeGPX.trkList.toList(), routeGPX.wptList.filter { it.type == START_POINT || it.type == FINISH_POINT })
           } else bDraw = true
         }
       }

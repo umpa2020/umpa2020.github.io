@@ -11,11 +11,14 @@ import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants.Companion.TIMESTAMP_LENGTH
 import com.umpa2020.tracer.dataClass.LikedMapData
 import com.umpa2020.tracer.dataClass.RankingData
+import com.umpa2020.tracer.extensions.image
 import com.umpa2020.tracer.network.*
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.ProgressBar
 import kotlinx.android.synthetic.main.activity_rank_recycler_item_click.*
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 
 class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener {
   lateinit var progressbar: ProgressBar
@@ -54,10 +57,11 @@ class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener
         for (document in result) {
           // 해당 맵의 메이커 닉네임, 프로필 이미지 주소를 받아온다.
           rankRecyclerNickname.text = document.get("makersNickname") as String
-          FBProfileRepository().getProfileImage(
-            rankRecyclerProfileImage,
-            rankRecyclerNickname.text.toString()
-          )
+          MainScope().launch {
+            FBProfileRepository().getProfileImage(rankRecyclerNickname.text.toString())?.let{
+              rankRecyclerProfileImage.image(it)
+            }
+          }
         }
       }
   }
