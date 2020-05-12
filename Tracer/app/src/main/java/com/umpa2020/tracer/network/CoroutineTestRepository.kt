@@ -5,11 +5,11 @@ import android.widget.ImageView
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Query
-import com.google.maps.android.SphericalUtil
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.LikedMapData
 import com.umpa2020.tracer.dataClass.PlayedMapData
 import com.umpa2020.tracer.dataClass.ProfileData
+import com.umpa2020.tracer.dataClass.RankingData
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.coroutines.tasks.await
@@ -37,6 +37,16 @@ class CoroutineTestRepository : BaseFB() {
       }
   }
 
+  suspend fun listMapRanking(mapId: String) :MutableList<RankingData>{
+    // 베스트 타임이 랭킹 가지고 있는 것 중에서 이것이 베스트 타임인가를 나타내주는 1,0 값입니다.
+    // 그래서 한 사용자의 베스트 타임만 가져오고 또 그것들 중에서 오름차순해서 순위 나타냄
+    return db.collection(MAPS).document(mapId).collection(RANKING)
+      .whereEqualTo(BEST_TIME, true)
+      .orderBy(CHALLENGER_TIME, Query.Direction.ASCENDING)
+      .get().await().let{
+       (it.map { it.toObject(RankingData::class.java) })
+      }.toMutableList()
+  }
   suspend fun getProfile(uid: String): ProfileData {
     return db.collection(USERS).document(uid).get().await().let {
       var sumDistance = 0.0

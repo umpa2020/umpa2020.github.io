@@ -10,7 +10,7 @@ import kotlinx.coroutines.tasks.await
  */
 
 class FBMapRankingRepository : BaseFB() {
-  suspend fun listMapRanking(mapId: String) :MutableList<RankingData> {
+  suspend fun listMapRanking(mapId: String): MutableList<RankingData> {
     // 베스트 타임이 랭킹 가지고 있는 것 중에서 이것이 베스트 타임인가를 나타내주는 1,0 값입니다.
     // 그래서 한 사용자의 베스트 타임만 가져오고 또 그것들 중에서 오름차순해서 순위 나타냄
 
@@ -18,9 +18,6 @@ class FBMapRankingRepository : BaseFB() {
       .whereEqualTo(BEST_TIME, true)
       .orderBy(CHALLENGER_TIME, Query.Direction.ASCENDING)
       .get()
-      .await()
-      .documents.map {
-        it.toObject(RankingData::class.java)!!
-      }.toMutableList()
+      .await().toObjects(RankingData::class.java)
   }
 }

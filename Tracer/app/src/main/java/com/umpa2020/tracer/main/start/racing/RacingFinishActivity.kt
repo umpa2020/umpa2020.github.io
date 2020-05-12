@@ -1,11 +1,9 @@
 package com.umpa2020.tracer.main.start.racing
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.App
@@ -17,16 +15,17 @@ import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.extensions.*
 import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.network.BaseFB.Companion.USERS
+import com.umpa2020.tracer.network.CoroutineTestRepository
 import com.umpa2020.tracer.network.FBProfileRepository
 import com.umpa2020.tracer.network.FBRacingRepository
 import com.umpa2020.tracer.network.FBUserActivityRepository
-import com.umpa2020.tracer.network.RacingFinishListener
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_racing_finish.*
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+import java.io.File
 import java.util.*
 
 
@@ -34,7 +33,7 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
 
   var activity = this
   lateinit var racerData: InfoData
-  var arrRankingData: ArrayList<RankingData> = arrayListOf()
+  lateinit var arrRankingData: MutableList<RankingData>
   lateinit var progressbar: ProgressBar
 
   var racerSpeeds = mutableListOf<Double>()
@@ -50,32 +49,35 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
     racerData = intent.getParcelableExtra("InfoData") as InfoData
     val result = intent.extras!!.getBoolean("Result")
     val racerGPX = intent.getParcelableExtra<RouteGPX>("RouteGPX")
-    val mapRouteGPX = intent.getParcelableExtra<RouteGPX>("MapRouteGPX")
     racerSpeeds = racerGPX!!.getSpeed()
-
-    // 유저 인포에 해당 유저가 이 맵을 뛰었다는
-    // 히스토리를 더하는 함수
-    FBRacingRepository().createUserInfoRacing(racerData)
-    val timestamp = Date().time
-
-    if (result) {
-      val activityData =
-        ActivityData(racerData.mapId, timestamp, racerData.distance, "racing go the distance")
-      FBUserActivityRepository().createUserHistory(activityData)
-    } else {
-      val activityData = ActivityData(racerData.mapId, timestamp, racerData.distance, "racing fail")
-      FBUserActivityRepository().createUserHistory(activityData)
-    }
-
-
-    FBRacingRepository().createRankingData(
-      result,
-      racerData,
-      racingFinishListener,
-      racerSpeeds,
-      racerGPX
+    val rankingData = RankingData(
+      racerData.makerId,
+      UserInfo.autoLoginKey,
+      UserInfo.nickname,
+      racerData.time,
+      true,
+      racerSpeeds.max().toString(),
+      racerSpeeds.average().toString(),
+      null
     )
 
+    val saveFolder = File(App.instance.filesDir, "routeGPX") // 저장 경로
+    if (!saveFolder.exists()) {       //폴더 없으면 생성
+      saveFolder.mkdir()
+    }
+    val racerGpxFile = racerGPX.classToGpx(saveFolder.path)
+
+    MainScope().launch {
+      // 유저 히스토리 등록
+      FBUserActivityRepository().createUserHistory(
+        ActivityData(racerData.mapId, Date().time, racerData.distance, if (result) "racing go the distance" else "racing fail")
+      )
+      //성공했다면 랭킹에 등록
+      if (result) FBRacingRepository().createRankingData(racerData, rankingData, racerGpxFile)
+      arrRankingData = CoroutineTestRepository().listMapRanking(racerData.mapId!!)
+      updateRankingUI(arrRankingData)
+      progressbar.dismiss()
+    }
     OKButton.setOnClickListener(this)
     otherPeopleProfileSelect.setOnClickListener(this)
   }
@@ -92,12 +94,12 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
       // 리스트 선택화면으로 넘어감
       R.id.otherPeopleProfileSelect -> {
         val intent = Intent(this, AllRankingActivity::class.java)
-        intent.putExtra("arrRankingData", arrRankingData)
+        intent.putExtra("arrRankingData", arrRankingData.toTypedArray())
         startActivityForResult(intent, 100)
       }
     }
   }
-
+/*
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     if (resultCode == 100) {
       if (resultCode == 100) {
@@ -105,7 +107,7 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
         RacingFinishAnalysisOtherNickname.text = getNickname
 
         progressbar.show()
-        FBRacingRepository().getOtherData(racerData.mapTitle!!, getNickname!!, racingFinishListener)
+        FBRacingRepository().getOtherData(racerData.mapTitle!!, getNickname!!)
         /**
          * TODO 아래 코드 원래 있던 코드를 재활용 안하고 새로 했는데 - 정빈
          *
@@ -149,14 +151,7 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
     super.onActivityResult(requestCode, resultCode, data)
   }
 
-  private fun RouteGPX.getSpeed(): MutableList<Double> {
-    val speeds = mutableListOf<Double>()
-    trkList.forEach {
-      speeds.add(it.speed!!)
-    }
-    return speeds
-  }
-
+*/
   private fun setMyUiData(
     racerSpeeds: MutableList<Double>,
     resultRankText: Int
@@ -174,7 +169,7 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
 
       RacingFinishMyLapTime.text = racerData.time!!.format(m_s)
 
-      FBProfileRepository().getProfileImage(UserInfo.autoLoginKey)?.let{RacingFinishAnalysisMyProfile.image(it)}
+      FBProfileRepository().getProfileImage(UserInfo.autoLoginKey)?.let { RacingFinishAnalysisMyProfile.image(it) }
       RacingFinishAnalysisMyNickname.text = UserInfo.nickname
 
       racerLapTimeTextView.text = racerData.time!!.format(m_s)
@@ -184,47 +179,51 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
     }
   }
 
-  private val racingFinishListener = object : RacingFinishListener {
-    override fun getRacingFinish(rankingDatas: ArrayList<RankingData>, resultRank: Int) {
-      MainScope().launch {
-        arrRankingData = rankingDatas
-        setMyUiData(racerSpeeds, resultRank)
+  private suspend fun updateRankingUI(rankingDatas: MutableList<RankingData>) {
 
-        if (arrRankingData.size >= 1) {
-            FBProfileRepository().getProfileImage(arrRankingData[0].challengerNickname!!)
-              ?.let { racingFinishProfileFirst.image(it) }
-            racingFinishNicknameFirst.text = arrRankingData[0].challengerNickname
-            racingFinishLapTimeFirst.text = arrRankingData[0].challengerTime!!.format(m_s)
+    var resultRank = 1
+    rankingDatas.forEach {
+      if (racerData.time!! >= it.challengerTime!!) {
+        resultRank++
+      }
 
-            FBProfileRepository().getProfileImage(arrRankingData[0].challengerNickname!!)
-              ?.let { RacingFinishAnalysisOtherProfile.image(it) }
+      arrRankingData = rankingDatas
+      setMyUiData(racerSpeeds, resultRank)
 
-            RacingFinishAnalysisOtherNickname.text = arrRankingData[0].challengerNickname
-            otherLapTimeTextView.text = arrRankingData[0].challengerTime!!.format(m_s)
-            otherMaxSpeedTextView.text = arrRankingData[0].maxSpeed!!.toDouble().prettyDistance
-            otherAvgSpeedTextView.text = arrRankingData[0].averageSpeed!!.toDouble().prettyDistance
-        }
+      if (arrRankingData.size >= 1) {
+        FBProfileRepository().getProfileImage(arrRankingData[0].challengerId!!)
+          ?.let { racingFinishProfileFirst.image(it) }
+        racingFinishNicknameFirst.text = arrRankingData[0].challengerNickname
+        racingFinishLapTimeFirst.text = arrRankingData[0].challengerTime!!.format(m_s)
 
-        if (arrRankingData.size >= 2) {
-          FBProfileRepository().getProfileImage(arrRankingData[1].challengerNickname!!)
-            ?.let { racingFinishProfileSecond.image(it) }
-          racingFinishNicknameSecond.text = arrRankingData[1].challengerNickname
-          racingFinishLapTimeSecond.text = arrRankingData[1].challengerTime!!.format(m_s)
-        }
+        FBProfileRepository().getProfileImage(arrRankingData[0].challengerId!!)
+          ?.let { RacingFinishAnalysisOtherProfile.image(it) }
 
-        if (arrRankingData.size >= 3) {
-          FBProfileRepository().getProfileImage(arrRankingData[2].challengerNickname!!)
-            ?.let{ racingFinishProfileThird.image(it)}
-          racingFinishNicknameThird.text = arrRankingData[2].challengerNickname
-          racingFinishLapTimeThird.text = arrRankingData[2].challengerTime!!.format(m_s)
-        }
+        RacingFinishAnalysisOtherNickname.text = arrRankingData[0].challengerNickname
+        otherLapTimeTextView.text = arrRankingData[0].challengerTime!!.format(m_s)
+        otherMaxSpeedTextView.text = arrRankingData[0].maxSpeed!!.toDouble().prettyDistance
+        otherAvgSpeedTextView.text = arrRankingData[0].averageSpeed!!.toDouble().prettyDistance
+      }
+
+      if (arrRankingData.size >= 2) {
+        FBProfileRepository().getProfileImage(arrRankingData[1].challengerId!!)
+          ?.let { racingFinishProfileSecond.image(it) }
+        racingFinishNicknameSecond.text = arrRankingData[1].challengerNickname
+        racingFinishLapTimeSecond.text = arrRankingData[1].challengerTime!!.format(m_s)
+      }
+
+      if (arrRankingData.size >= 3) {
+        FBProfileRepository().getProfileImage(arrRankingData[2].challengerId!!)
+          ?.let { racingFinishProfileThird.image(it) }
+        racingFinishNicknameThird.text = arrRankingData[2].challengerNickname
+        racingFinishLapTimeThird.text = arrRankingData[2].challengerTime!!.format(m_s)
       }
     }
+  }
 
-    override fun getOtherRacing(otherData: RankingData) {
-      otherLapTimeTextView.text = otherData.challengerTime!!.format(m_s)
-      otherMaxSpeedTextView.text = otherData.maxSpeed!!.toDouble().prettyDistance
-      otherAvgSpeedTextView.text = otherData.averageSpeed!!.toDouble().prettyDistance
-    }
+  fun getOtherRacing(otherData: RankingData) {
+    otherLapTimeTextView.text = otherData.challengerTime!!.format(m_s)
+    otherMaxSpeedTextView.text = otherData.maxSpeed!!.toDouble().prettyDistance
+    otherAvgSpeedTextView.text = otherData.averageSpeed!!.toDouble().prettyDistance
   }
 }

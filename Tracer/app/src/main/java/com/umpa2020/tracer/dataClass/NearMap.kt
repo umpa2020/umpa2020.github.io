@@ -6,6 +6,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class NearMap(
+  var mapId:String,
   var mapTitle: String,
   var latLng: LatLng,
   var distance: Double
