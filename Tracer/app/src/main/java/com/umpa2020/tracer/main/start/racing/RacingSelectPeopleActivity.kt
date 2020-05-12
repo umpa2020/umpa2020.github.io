@@ -17,6 +17,8 @@ import com.umpa2020.tracer.network.*
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.activity_racing_select_people.*
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import java.util.*
 
 class RacingSelectPeopleActivity : AppCompatActivity(), OnSingleClickListener {
@@ -31,7 +33,17 @@ class RacingSelectPeopleActivity : AppCompatActivity(), OnSingleClickListener {
     mapTitle = intent.extras?.getString("MapTitle").toString()
     routeGPX = intent.getParcelableExtra("RouteGPX")
 
-    FBMapRankingRepository().listMapRanking(mapTitle, mapRankingListener)
+    MainScope().launch {
+      FBMapRankingRepository().listMapRanking(mapTitle).let {
+        //레이아웃 매니저 추가
+        rankingDataList = it
+        racingSelectRecyclerView.layoutManager = LinearLayoutManager(activity)
+        //adpater 추가
+        racingSelectRecyclerView.adapter =
+          RacingRecyclerViewAdapterMultiSelect(it, mapTitle, tagcontainerLayout1)
+      }
+    }
+
 
     // Set custom click listener
     tagcontainerLayout1.setOnTagClickListener(object : OnTagClickListener {
@@ -57,17 +69,7 @@ class RacingSelectPeopleActivity : AppCompatActivity(), OnSingleClickListener {
     racingSelectButton.setOnClickListener(this)
   }
 
-  lateinit var rankingDataList: ArrayList<RankingData>
-  private val mapRankingListener = object : MapRankingListener {
-    override fun getMapRank(arrRankingData: ArrayList<RankingData>) {
-      //레이아웃 매니저 추가
-      rankingDataList = arrRankingData
-      racingSelectRecyclerView.layoutManager = LinearLayoutManager(activity)
-      //adpater 추가
-      racingSelectRecyclerView.adapter =
-        RacingRecyclerViewAdapterMultiSelect(arrRankingData, mapTitle, tagcontainerLayout1)
-    }
-  }
+  lateinit var rankingDataList: MutableList<RankingData>
 
   override fun onSingleClick(v: View?) {
     when (v!!.id) {

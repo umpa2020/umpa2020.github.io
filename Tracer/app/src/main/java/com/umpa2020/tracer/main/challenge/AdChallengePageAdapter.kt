@@ -14,7 +14,7 @@ import com.umpa2020.tracer.util.Logg
 import kotlinx.android.synthetic.main.fragment_adchallenge.view.*
 
 class AdChallengePageAdapter(
-  val adChallengeList: ArrayList<BannerData>,
+  val adChallengeList: MutableList<BannerData>,
   val context: Context
 ) : InfinitePagerAdapter() {
   override fun getItemCount(): Int {

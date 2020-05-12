@@ -112,20 +112,6 @@ class FBRacingRepository : BaseFB() {
   }
 
   /**
-   * 메이커 인포데이터를 가져오는 함수
-   */
-  fun getMakerData(racerData: InfoData, getMakerDataListener: GetMakerDataListener) {
-    lateinit var makerData: InfoData
-
-    db.collection(MAPS).document(racerData.mapTitle!!)
-      .get()
-      .addOnSuccessListener { document ->
-        makerData = document.toObject(InfoData::class.java)!!
-        getMakerDataListener.makerData(makerData)
-      }
-  }
-
-  /**
    * 다른 사람 인포데이터를 가져오는 함수
    */
   fun getOtherData(mapTitle: String, nickname: String, racingFinishListener: RacingFinishListener) {

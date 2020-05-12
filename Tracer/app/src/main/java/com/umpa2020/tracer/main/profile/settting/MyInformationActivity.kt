@@ -14,8 +14,6 @@ import com.umpa2020.tracer.R
 import com.umpa2020.tracer.extensions.image
 import com.umpa2020.tracer.network.CoroutineTestRepository
 import com.umpa2020.tracer.network.FBProfileRepository
-import com.umpa2020.tracer.network.FBStorageRepository
-import com.umpa2020.tracer.network.ProfileListener
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.ProgressBar
@@ -25,8 +23,6 @@ import kotlinx.android.synthetic.main.activity_my_information.app_toolbar
 import kotlinx.android.synthetic.main.activity_my_information.profileImage
 import kotlinx.android.synthetic.main.signup_toolbar.*
 import kotlinx.android.synthetic.main.signup_toolbar.view.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
@@ -112,14 +108,5 @@ class MyInformationActivity : AppCompatActivity(), OnSingleClickListener {
   companion object {
     // 카메라 requestCode
     private const val PICK_FROM_ALBUM = 1
-  }
-
-  private val profileListener = object : ProfileListener {
-    override fun getProfile(distance: Double, time: Double) {
-    }
-
-    override fun changeProfile() {
-
-    }
   }
 }

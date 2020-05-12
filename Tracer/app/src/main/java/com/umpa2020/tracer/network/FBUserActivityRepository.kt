@@ -8,6 +8,7 @@ import com.umpa2020.tracer.network.BaseFB.Companion.ACTIVITIES
 import com.umpa2020.tracer.network.BaseFB.Companion.USERS
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.UserInfo
+import kotlinx.coroutines.tasks.await
 
 /**
  * 유저 히스토리 관련 클래스
@@ -31,39 +32,38 @@ class FBUserActivityRepository {
       }
   }
 
-  fun listUserMakingActivityFirst(activityListener: ActivityListener, limit: Long) {
-
-    Logg.d("ssmm11 limit = $limit")
-    db.collection(USERS).whereEqualTo(USER_ID, UserInfo.autoLoginKey)
-      .get()
-      .addOnSuccessListener {
+  suspend fun listUserMakingActivityFirst(limit: Long): MutableList<ActivityData>? {
+    return db.collection(USERS).whereEqualTo(USER_ID, UserInfo.autoLoginKey)
+      .get().await().let {
         it.documents.last().reference.collection(ACTIVITIES)
           .limit(limit)
           .get()
-          .addOnSuccessListener {
-            activityListener.activityList(ArrayList(it.documents.map {
-              globalStartAfter = it
-              it.toObject(ActivityData::class.java)!!
-            }))
-          }
+          .await()
+          .documents.map {
+            globalStartAfter = it
+            it.toObject(ActivityData::class.java)!!
+          }.toMutableList()
       }
   }
 
-  fun listUserMakingActivity(activityListener: ActivityListener, limit: Long) {
-
-    db.collection(USERS).whereEqualTo(USER_ID, UserInfo.autoLoginKey)
+  /*suspend fun getMapTitle(mapId: String): String? {
+    return db.collection(BaseFB.MAPS)
+      .whereEqualTo(BaseFB.MAP_ID, mapId)
       .get()
-      .addOnSuccessListener { it ->
+      .await().documents.first().getString(BaseFB.MAP_TITLE)
+  }*/
+
+  suspend fun listUserMakingActivity(limit: Long): MutableList<ActivityData>? {
+    return db.collection(USERS).whereEqualTo(USER_ID, UserInfo.autoLoginKey)
+      .get().await().let {
         it.documents.last().reference.collection(ACTIVITIES)
           .startAfter(globalStartAfter)
           .limit(limit)
-          .get()
-          .addOnSuccessListener {
-            activityListener.activityList(ArrayList(it.documents.map {
-              globalStartAfter = it
-              it.toObject(ActivityData::class.java)!!
-            }))
-          }
+          .get().await()
+          .documents.map {
+            globalStartAfter = it
+            it.toObject(ActivityData::class.java)!!
+          }.toMutableList()
       }
   }
 }

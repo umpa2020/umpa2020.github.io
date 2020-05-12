@@ -4,6 +4,7 @@ import com.umpa2020.tracer.dataClass.ChallengeData
 import com.umpa2020.tracer.dataClass.LikedMapData
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.UserInfo
+import kotlinx.coroutines.tasks.await
 
 /**
  *
@@ -18,57 +19,37 @@ class FBChallengeRepository : BaseFB() {
     db.collection(CHALLENGES).add(challengeData)
   }
 
-
-  /**
-   *
-   */
-  fun createBanner(challengeData: ChallengeData) {
-
-  }
-
-  fun getChallengeData(challengeId: String, challengeDataListener: ChallengeDataListener) {
-    db.collection(CHALLENGES)
+  suspend fun getChallengeData(challengeId: String): ChallengeData {
+    return db.collection(CHALLENGES)
       .whereEqualTo(ID, challengeId)
       .get()
-      .addOnSuccessListener {
-        challengeDataListener.challengeData(it.documents.last().toObject(ChallengeData::class.java)!!)
-      }
+      .await()
+      .documents.last().toObject(ChallengeData::class.java)!!
   }
-
 
   /**
    * 복합 색인 되면 이걸로
    */
 
-  fun listChallengeData(fromDate: Long, toDate: Long, region: String, challengeDataListener: ChallengeDataListener) {
-    val listChallengeData = mutableListOf<ChallengeData>()
-    if (region == "전국") {
+  suspend fun listChallengeData(fromDate: Long, toDate: Long, region: String): MutableList<ChallengeData>? {
+    return if (region == "전국") {
       db.collection(CHALLENGES)
         .whereGreaterThan(DATE, fromDate)
         .whereLessThan(DATE, toDate)
         .get()
-        .addOnSuccessListener {
-          it.documents.forEach { document ->
-            listChallengeData.add(document.toObject(ChallengeData::class.java)!!)
-          }
-
-          challengeDataListener.challengeDataList(listChallengeData)
-        }
-    }
-    else {
+        .await().documents.map {
+          it.toObject(ChallengeData::class.java)!!
+        }.toMutableList()
+    } else {
       db.collection(CHALLENGES)
         .whereGreaterThan(DATE, fromDate)
         .whereLessThan(DATE, toDate)
         .whereArrayContains(LOCALE, region)
         .get()
-        .addOnSuccessListener {
-          it.documents.forEach { document ->
-            listChallengeData.add(document.toObject(ChallengeData::class.java)!!)
-          }
-
-          challengeDataListener.challengeDataList(listChallengeData)
-        }
+        .await().documents.map {
+          it.toObject(ChallengeData::class.java)!!
+        }.toMutableList()
     }
   }
-
 }
+

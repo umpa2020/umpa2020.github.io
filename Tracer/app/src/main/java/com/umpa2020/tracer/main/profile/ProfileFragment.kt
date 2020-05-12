@@ -19,7 +19,6 @@ import com.umpa2020.tracer.main.profile.myroute.ProfileRouteActivity
 import com.umpa2020.tracer.main.profile.settting.AppSettingActivity
 import com.umpa2020.tracer.network.CoroutineTestRepository
 import com.umpa2020.tracer.network.FBProfileRepository
-import com.umpa2020.tracer.network.ProfileListener
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.UserInfo

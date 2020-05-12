@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.*
 
-class ProfileRecyclerViewAdapterRecord(val datas: ArrayList<ActivityData>) :
+class ProfileRecyclerViewAdapterRecord(val datas: MutableList<ActivityData>) :
   RecyclerView.Adapter<ProfileRecyclerViewAdapterRecord.MyViewHolder>() {
   var context: Context? = null
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {

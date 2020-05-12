@@ -69,7 +69,17 @@ class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener
     // 해당 맵 좋아요 눌렀는지 확인
     FBLikesRepository().getMapLike(mapId, likedMapListener)
 
-    FBMapRankingRepository().listMapRanking(mapId, mapRankingListener)
+    MainScope().launch {
+      FBMapRankingRepository().listMapRanking(mapId).let {
+        //레이아웃 매니저 추가
+        rankRecyclerItemClickRecyclerView.layoutManager = LinearLayoutManager(activity)
+        //adpater 추가
+        rankRecyclerItemClickRecyclerView.adapter =
+          RankRecyclerViewAdapterTopPlayer(it, mapId)
+      }
+    }
+
+
 
   }
 
@@ -120,16 +130,6 @@ class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener
         rankRecyclerHeart.setImageResource(R.drawable.ic_favorite_border_black_24dp)
         rankRecyclerHeartSwitch.text = "off"
       }
-    }
-  }
-
-  private val mapRankingListener = object : MapRankingListener {
-    override fun getMapRank(arrRankingData: ArrayList<RankingData>) {
-      //레이아웃 매니저 추가
-      rankRecyclerItemClickRecyclerView.layoutManager = LinearLayoutManager(activity)
-      //adpater 추가
-      rankRecyclerItemClickRecyclerView.adapter =
-        RankRecyclerViewAdapterTopPlayer(arrRankingData, mapId)
     }
   }
 }

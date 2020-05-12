@@ -16,7 +16,7 @@ import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.recycler_rankfragment_topplayer_item.view.*
 import java.util.*
 
-class RankRecyclerViewAdapterTopPlayer(val mydata: ArrayList<RankingData>, val mapId: String) :
+class RankRecyclerViewAdapterTopPlayer(val mydata: MutableList<RankingData>, val mapId: String) :
   RecyclerView.Adapter<RankRecyclerViewAdapterTopPlayer.myViewHolder>() {
   var context: Context? = null
 
