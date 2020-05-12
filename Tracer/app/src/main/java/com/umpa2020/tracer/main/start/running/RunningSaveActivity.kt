@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.firebase.firestore.FirebaseFirestore
@@ -30,6 +31,10 @@ import java.io.File
 import java.io.FileOutputStream
 import java.util.*
 import com.umpa2020.tracer.gpx.WayPointType.*
+import com.umpa2020.tracer.network.BaseFB
+import com.umpa2020.tracer.network.BaseFB.Companion.MAPS
+import com.umpa2020.tracer.network.BaseFB.Companion.MAP_ROUTE
+import com.umpa2020.tracer.network.FBMapRepository
 import com.umpa2020.tracer.network.FBStorageRepository
 
 class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleClickListener {
@@ -139,18 +144,7 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
 
   fun save(imgPath: String) {
     Logg.d("Start Saving")
-    // 타임스탬프 찍는 코드
-    val timestamp = Date().time
 
-    // 인포데이터에 필요한 내용을 저장하고
-    infoData.makerId = UserInfo.nickname
-    infoData.mapTitle = mapTitleEdit.text.toString() + timestamp.toString()
-    infoData.mapImagePath = "mapImage/${infoData.mapTitle}"
-    infoData.mapExplanation = mapExplanationEdit.text.toString()
-    infoData.plays = 0
-    infoData.likes = 0
-
-    // 맵 타이틀과, 랭킹 중복 방지를 위해서 시간 값을 넣어서 중복 방지
     val saveFolder = File(baseContext.filesDir, "routeGPX") // 저장 경로
     if (!saveFolder.exists()) {       //폴더 없으면 생성
       saveFolder.mkdir()
@@ -161,38 +155,19 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
     }
     val routeGpxFile = routeGPX.classToGpx(saveFolder.path)
 
-    // storage에 이미지 업로드 모든 맵 이미지는 mapimage/maptitle로 업로드가 된다.
-    val fstorage = FirebaseStorage.getInstance()
-    val fRef = fstorage.reference.child("mapRoute")
-      .child(infoData.mapTitle!!).child(infoData.mapTitle!!)
-    infoData.routeGPXPath = fRef.path
+    // 타임스탬프 찍는 코드
+    val timestamp = Date().time
 
-    Logg.d("ssmm11 fRef . ? = ${fRef.path}")
+    // 인포데이터에 필요한 내용을 저장하고
+    infoData.mapId=mapTitleEdit.text.toString() + timestamp.toString()
+    infoData.makerId = UserInfo.nickname
+    infoData.mapTitle = mapTitleEdit.text.toString()
+    infoData.mapImagePath = "mapImage/${infoData.mapTitle}"
+    infoData.mapExplanation = mapExplanationEdit.text.toString()
+    infoData.plays = 0
+    infoData.likes = 0
+    infoData.routeGPXPath = "$MAP_ROUTE/${infoData.mapId}/${infoData.mapTitle!!}"
 
-    FBStorageRepository().uploadFile(routeGpxFile, "mapRoute/" + infoData.mapTitle!! + "/" + infoData.mapTitle!!)
-
-    // db에 그려진 맵 저장하는 스레드 - 여기서는 실제 그려진 것 보다 후 보정을 통해서
-    // 간략화 된 맵을 업로드 합니다.
-    val db = FirebaseFirestore.getInstance()
-
-    // InfoData class upload to database 참조 - 루트를 제외한 맵 정보 기술
-    //TODO: routeGPX 파일로 스토리지에 업로드 후 경로 infoData에 넣어서 set
-    db.collection("mapInfo").document(infoData.mapTitle!!).set(infoData)
-
-    // 히스토리 업로드
-    val activityData = ActivityData(infoData.mapTitle, timestamp, infoData.distance, "map save")
-    FBUserActivityRepository().createUserHistory(activityData)
-
-    val fRefRanking = fstorage.reference.child("mapRoute")
-      .child(infoData.mapTitle!!).child("racingGPX").child(UserInfo.autoLoginKey)
-    val fRankinguploadTask = fRefRanking.putFile(routeGpxFile)
-    fRankinguploadTask.addOnFailureListener {
-      Logg.d("Fail : $it")
-    }.addOnSuccessListener {
-      Logg.d("Success")
-    }
-    // db에 그려진 맵 저장하는 스레드 - 여기서는 실제 그려진 것 보다 후 보정을 통해서
-    // 간략화 된 맵을 업로드 합니다.
     val rankingData = RankingData(
       UserInfo.nickname,
       UserInfo.autoLoginKey,
@@ -201,28 +176,15 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
       true,
       speedList.max().toString(),
       speedList.average().toString(),
-      fRef.path
+      "${BaseFB.MAP_ROUTE}/${infoData.mapId}/racingGPX/${UserInfo.autoLoginKey}"
     )
+    val activityData = ActivityData(infoData.mapTitle, timestamp, infoData.distance, "map save")
+    Logg.d("Start Upload")
 
-    //TODO : firebase로
-    db.collection("rankingMap").document(infoData.mapTitle!!).set(rankingData)
-    db.collection("rankingMap").document(infoData.mapTitle!!).collection("ranking")
-      .document(UserInfo.autoLoginKey + timestamp).set(rankingData)
-
-    // db에 원하는 경로 및, 문서로 업로드
-
-    // storage에 이미지 업로드 모든 맵 이미지는 mapimage/maptitle로 업로드가 된다.
-    val storage = FirebaseStorage.getInstance()
-    val mapImageRef = storage.reference.child(infoData.mapImagePath.toString())
-    val uploadTask = mapImageRef.putFile(Uri.fromFile(File(imgPath)))
-    uploadTask.addOnFailureListener {
-      Logg.d("스토리지 실패 = " + it.toString())
-    }.addOnSuccessListener {
-      progressBar.dismiss()
-      finish()
-    }
-
-    // 위에 지정한 스레드 스타트
+    FBMapRepository().uploadMap(infoData,rankingData,activityData,timestamp.toString(),routeGpxFile,Uri.fromFile(File(imgPath)))
+    Logg.d("Finish Upload")
+    progressBar.dismiss()
+    finish()
   }
 
   override fun onMapReady(googleMap: GoogleMap) {
