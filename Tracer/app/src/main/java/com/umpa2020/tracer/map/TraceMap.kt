@@ -6,16 +6,12 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.*
 import com.umpa2020.tracer.R
-import com.umpa2020.tracer.constant.Constants.Companion.DISTANCE_POINT
-import com.umpa2020.tracer.constant.Constants.Companion.FINISH_POINT
-import com.umpa2020.tracer.constant.Constants.Companion.START_POINT
-import com.umpa2020.tracer.constant.Constants.Companion.TURNING_LEFT_POINT
-import com.umpa2020.tracer.constant.Constants.Companion.TURNING_RIGHT_POINT
 import com.umpa2020.tracer.extensions.bounds
 import com.umpa2020.tracer.extensions.makingIcon
 import com.umpa2020.tracer.extensions.toLatLng
+import com.umpa2020.tracer.gpx.WayPoint
+import com.umpa2020.tracer.gpx.WayPointType.*
 import com.umpa2020.tracer.util.Logg
-import io.jenetics.jpx.WayPoint
 
 class TraceMap(val mMap: GoogleMap) {
 
@@ -50,13 +46,13 @@ class TraceMap(val mMap: GoogleMap) {
       )        //경로를 그릴 폴리라인 집합
     val unPassedIcon = R.drawable.ic_unpassed_circle.makingIcon()
     wptList.forEachIndexed { i, it ->
-      when (it.type.get()) {
+      when (it.type) {
         START_POINT -> {
           markerList.add(
             mMap.addMarker(
               MarkerOptions()
                 .position(it.toLatLng())
-                .title(it.name.get())
+                .title(it.name)
                 .icon(R.drawable.ic_start_point.makingIcon())
             )
           )
@@ -67,7 +63,7 @@ class TraceMap(val mMap: GoogleMap) {
             mMap.addMarker(
               MarkerOptions()
                 .position(it.toLatLng())
-                .title(it.name.get())
+                .title(it.name)
                 .icon(R.drawable.ic_finish_point.makingIcon())
             )
           )
@@ -77,7 +73,7 @@ class TraceMap(val mMap: GoogleMap) {
             mMap.addMarker(
               MarkerOptions()
                 .position(it.toLatLng())
-                .title(it.name.get())
+                .title(it.name)
                 .icon(unPassedIcon)
                 .anchor(0f, 0.5f)
             )
@@ -88,7 +84,7 @@ class TraceMap(val mMap: GoogleMap) {
             mMap.addMarker(
               MarkerOptions()
                 .position(it.toLatLng())
-                .title(it.description.get())
+                .title(it.desc)
                 .icon(R.drawable.ic_turn_left.makingIcon())
             )
           )
@@ -98,7 +94,7 @@ class TraceMap(val mMap: GoogleMap) {
             mMap.addMarker(
               MarkerOptions()
                 .position(it.toLatLng())
-                .title(it.description.get())
+                .title(it.desc)
                 .icon(R.drawable.ic_turn_right.makingIcon())
             )
           )

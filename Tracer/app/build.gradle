@@ -153,8 +153,6 @@ dependencies {
 
     //coordinatorlayout
     implementation "androidx.coordinatorlayout:coordinatorlayout:1.1.0"
-    //GPX
-    implementation "io.jenetics:jpx:1.7.0"
     implementation files('libs/org.motechproject.com.bea.xml.stream-1.2.0.jar')
     implementation 'javax.xml.stream:stax-api:1.0'
 

@@ -12,20 +12,20 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.roomDatabase.viewModel.RecordViewModel
 import com.umpa2020.tracer.constant.Constants
-import com.umpa2020.tracer.constant.Constants.Companion.DISTANCE_POINT
-import com.umpa2020.tracer.constant.Constants.Companion.FINISH_POINT
-import com.umpa2020.tracer.constant.Constants.Companion.START_POINT
 import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.constant.UserState
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.extensions.makingIcon
+import com.umpa2020.tracer.extensions.toWayPoint
+import com.umpa2020.tracer.gpx.WayPoint
+import com.umpa2020.tracer.gpx.WayPointType
 import com.umpa2020.tracer.main.start.BaseRunningActivity
 import com.umpa2020.tracer.util.*
-import io.jenetics.jpx.WayPoint
 import kotlinx.android.synthetic.main.activity_running.*
 import kotlin.time.milliseconds
+import com.umpa2020.tracer.gpx.WayPointType.*
 
 
 class RunningActivity : BaseRunningActivity() {
@@ -96,16 +96,7 @@ class RunningActivity : BaseRunningActivity() {
       Logg.i(traceMap.mMap.cameraPosition.zoom.toString())
       cameraZoomSize = traceMap.mMap.cameraPosition.zoom
     }
-    wpList.add(
-      WayPoint.builder()
-        .lat(currentLatLng.latitude)
-        .lon(currentLatLng.longitude)
-        .name("Start")
-        .desc("Start Description")
-        .time(System.currentTimeMillis())
-        .type(START_POINT)
-        .build()
-    )
+    wpList.add(currentLocation?.toWayPoint(START_POINT)!!)
   }
 
   override fun stop() {
@@ -114,23 +105,14 @@ class RunningActivity : BaseRunningActivity() {
     // stop tts 설정
     TTS.speech(getString(R.string.finishRunning))
 
-    wpList.add(
-      WayPoint.builder()
-        .lat(currentLatLng.latitude)
-        .lon(currentLatLng.longitude)
-        .name("Finish")
-        .desc("Finish Description")
-        .time(System.currentTimeMillis())
-        .type(FINISH_POINT)
-        .build()
-    )
+    wpList.add(currentLocation.toWayPoint(FINISH_POINT))
     val infoData = InfoData()
     infoData.distance = distance
     infoData.time = SystemClock.elapsedRealtime() - chronometer.base
     infoData.privacy = privacy
-    infoData.startLatitude = trkList.first().latitude.toDouble()
-    infoData.startLongitude = trkList.first().longitude.toDouble()
-    val routeGPX = RouteGPX(infoData.time.toString(), "", wpList, trkList)
+    infoData.startLatitude = trkList.first().lat
+    infoData.startLongitude = trkList.first().lon
+    val routeGPX = RouteGPX(infoData.time!!, "", wpList, trkList)
 
     val intent = Intent(this, RunningSaveActivity::class.java)
     intent.putExtra("RouteGPX", routeGPX)
@@ -152,16 +134,7 @@ class RunningActivity : BaseRunningActivity() {
             .icon(passedIcon)
             .anchor(0f,0.5f)
         )
-        wpList.add(
-          WayPoint.builder()
-            .lat(currentLatLng.latitude)
-            .lon(currentLatLng.longitude)
-            .name("WayPoint")
-            .desc("wayway...")
-            .time((System.currentTimeMillis()))
-            .type(DISTANCE_POINT)
-            .build()
-        )
+        wpList.add(curLoc.toWayPoint(DISTANCE_POINT))
         markerCount++
       }
     }
