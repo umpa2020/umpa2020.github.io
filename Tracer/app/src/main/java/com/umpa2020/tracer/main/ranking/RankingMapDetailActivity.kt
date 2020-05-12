@@ -28,19 +28,24 @@ import com.umpa2020.tracer.main.start.racing.RacingActivity
 import com.umpa2020.tracer.main.start.racing.RacingSelectPeopleActivity
 import com.umpa2020.tracer.map.TraceMap
 import com.umpa2020.tracer.network.BaseFB.Companion.MAKER_ID
+import com.umpa2020.tracer.network.FBMapRepository
 import com.umpa2020.tracer.network.FBProfileRepository
 import com.umpa2020.tracer.util.Chart
 import com.umpa2020.tracer.util.ChoicePopup
 import com.umpa2020.tracer.util.OnSingleClickListener
+import kotlinx.android.synthetic.main.activity_rank_recycler_item_click.*
 import kotlinx.android.synthetic.main.activity_ranking_map_detail.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 
 class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener, OnMapReadyCallback {
   lateinit var routeGPX: RouteGPX
-  var dbMapTitle = ""
+  var dbMapId = ""
   lateinit var traceMap: TraceMap
+  var mapId = ""
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_ranking_map_detail)
@@ -51,11 +56,11 @@ class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener, OnM
 
     val intent = intent
     //전달 받은 값으로 Title 설정
-    val mapTitle = intent.extras?.getString("MapTitle").toString()
-    val cutted = mapTitle.subSequence(0, mapTitle.length - TIMESTAMP_LENGTH)
-    val time = mapTitle.subSequence(mapTitle.length - TIMESTAMP_LENGTH, mapTitle.length) as String
+    mapId = intent.extras?.getString("mapId").toString()
+    val mapTitle = mapId.subSequence(0, mapId.length - TIMESTAMP_LENGTH)
+    val time = mapId.subSequence(mapId.length - TIMESTAMP_LENGTH, mapId.length) as String
     intent.getStringExtra("asd")
-    rankingDetailMapTitle.text = cutted
+    rankingDetailMapTitle.text = mapTitle
 
     rankingDetailDate.text = time.toLong().format("yyyy-MM-dd HH:mm:ss")
     (smf as WorkaroundMapFragment)
@@ -64,61 +69,60 @@ class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener, OnM
           rankingDetailScrollView.requestDisallowInterceptTouchEvent(true);
         }
       })
+
+    // TODO : 윤권이랑 같이 빼자 이거
+
     val db = FirebaseFirestore.getInstance()
-    db.collection("mapInfo").whereEqualTo("mapTitle", mapTitle)
+
+    db.collection("maps")
+      .whereEqualTo("mapId", mapId)
       .get()
-      .addOnSuccessListener { result ->
-        for (document in result) {
+      .addOnSuccessListener {
+          val infoData = it.documents.first().toObject(InfoData::class.java)
           MainScope().launch {
-            FBProfileRepository().getProfileImage(document.getString(MAKER_ID)!!)?.let {
+            FBProfileRepository().getProfileImage(infoData!!.makerId!!)?.let {
               rankingDetailProfileImage.image(it)
             }
           }
-          break
-        }
-      }
-
-    db.collection("mapInfo")
-      .get()
-      .addOnSuccessListener { result ->
-        for (document in result) {
-          if (document.id == mapTitle) {
-            val infoData = document.toObject(InfoData::class.java)
-
-            val storage = FirebaseStorage.getInstance()
-            val routeRef = storage.reference.child(infoData.routeGPXPath.toString())
-            val localFile = File.createTempFile("routeGpx", "xml")
-            routeRef.getFile(Uri.fromFile(localFile)).addOnSuccessListener {
-              routeGPX = localFile.path.gpxToClass()
-              // 1차원 배열인 고도는 그대로 받아오면 되고
-              val speedList = mutableListOf<Double>()
-              val elevationList = mutableListOf<Double>()
-              routeGPX.trkList.forEach { wpt ->
-                wpt.speed?.let { speedList.add(it) }
-                elevationList.add(wpt.alt)
-              }
-
-              // 실행 수 및 db에 있는 맵타이틀을 알기위해서 (구분 시간 값 포함)
-              dbMapTitle = document.id
-
-              handler.sendEmptyMessage(0)
-
-              // ui 스레드 따로 빼주기
-              runOnUiThread {
-                // TODO : 유저 아이디로 유저 닉네임 찾기
-                rankingDetailNickname.text = infoData.makerId
-                rankingDetailMapDetail.text = infoData.mapExplanation
-                rankingDetailDistance.text = String.format("%.2f", infoData.distance!! / 1000)
-                rankingDetailTime.text = infoData.time!!.format(m_s)
-                rankingDetailSpeed.text = String.format("%.2f", speedList.average())
-                val chart = Chart(elevationList, speedList, rankingDetailChart)
-                chart.setChart()
-              }
-
+          val storage = FirebaseStorage.getInstance()
+          val routeRef = storage.reference.child(infoData!!.routeGPXPath.toString())
+          val localFile = File.createTempFile("routeGpx", "xml")
+          routeRef.getFile(Uri.fromFile(localFile)).addOnSuccessListener {
+            routeGPX = localFile.path.gpxToClass()
+            // 1차원 배열인 고도는 그대로 받아오면 되고
+            val speedList = mutableListOf<Double>()
+            val elevationList = mutableListOf<Double>()
+            routeGPX.trkList.forEach { wpt ->
+              wpt.speed?.let { speedList.add(it) }
+              elevationList.add(wpt.alt)
             }
+
+            // 실행 수 및 db에 있는 맵타이틀을 알기위해서 (구분 시간 값 포함)
+            dbMapId = infoData!!.mapId!!
+
+            handler.sendEmptyMessage(0)
+
+            // ui 스레드 따로 빼주기
+            runOnUiThread {
+              MainScope().launch {
+                withContext(Dispatchers.IO) {
+                  FBProfileRepository().getUserNickname(infoData.makerId!!)
+                }.let {
+                  rankingDetailNickname.text = it
+                }
+              }
+              rankingDetailMapDetail.text = infoData.mapExplanation
+              rankingDetailDistance.text = String.format("%.2f", infoData.distance!! / 1000)
+              rankingDetailTime.text = infoData.time!!.format(m_s)
+              rankingDetailSpeed.text = String.format("%.2f", speedList.average())
+              val chart = Chart(elevationList, speedList, rankingDetailChart)
+              chart.setChart()
+            }
+
           }
-        }
-        //FBMapImage().getMapImage(rankingDetailGoogleMap, mapTitle)
+
+
+        //FBMapImage().getMapImage(rankingDetailGoogleMap, mapId)
 
         rankingDetailRaceButton.setOnClickListener(this)
       }
@@ -129,11 +133,8 @@ class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener, OnM
       R.id.rankingDetailRaceButton -> { //버튼 누르면 연습용, 랭킹 기록용 선택 팝업 띄우기
         //showPopup()
 
-        val intent = intent
-        //전달 받은 값으로 Title 설정
-        val mapTitle = intent.extras?.getString("MapTitle").toString()
         val nextIntent = Intent(this, RacingSelectPeopleActivity::class.java)
-        nextIntent.putExtra("MapTitle", mapTitle)
+        nextIntent.putExtra("mapId", mapId)
         nextIntent.putExtra("RouteGPX", routeGPX)
         startActivity(nextIntent)
       }
@@ -144,20 +145,6 @@ class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener, OnM
   lateinit var noticePopup: ChoicePopup // 전역으로 선언하지 않으면 리스너에서 dismiss 사용 불가.
 
   private fun showPopup() {
-
-
-    //TODO. 연습용 만들면 밑의 주석 지워서 사용
-    /*
-    //연습용 버튼 눌렀을 때
-    val practiceButton = view.findViewById<Button>(R.id.rankingMapDetailPracticeButton)
-    practiceButton.setOnClickListener {
-        val nextIntent = Intent(this, PracticeRacingActivity::class.java)
-        nextIntent.putExtra("makerRouteData", routeData)
-        nextIntent.putExtra("maptitle", dbMapTitle)
-        startActivity(nextIntent)
-    }
-
-     */
     noticePopup = ChoicePopup(this, getString(R.string.select_type),
       getString(R.string.how_type),
       getString(R.string.recording), getString(R.string.public_),
@@ -165,7 +152,7 @@ class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener, OnM
         //랭킹 기록용 버튼 눌렀을 때
         val intent = Intent(App.instance.context(), RacingActivity::class.java)
         intent.putExtra("RouteGPX", routeGPX)
-        intent.putExtra("mapTitle", dbMapTitle)
+        intent.putExtra("mapId", dbMapId)
         noticePopup.dismiss()
         startActivity(intent)
         finish()

@@ -20,8 +20,7 @@ import kotlinx.android.synthetic.main.recycler_rankfragment_item.view.*
  */
 class MapRankingAdapter(
   val infoDatas: ArrayList<InfoData>,
-  val mode: String,
-  val progressBar: MyProgressBar
+  val mode: String
 ) : RecyclerView.Adapter<MapRankingAdapter.mViewHolder>() {
 
   var context: Context? = null
@@ -35,13 +34,12 @@ class MapRankingAdapter(
     val infoData = infoDatas[position]
     val ranking = position + 1
 
-
-    val cutted = infoData.mapTitle!!.subSequence(0, infoData.mapTitle!!.length - TIMESTAMP_LENGTH)
+    val mapTitle = infoData.mapId!!.subSequence(0, infoData.mapId!!.length - TIMESTAMP_LENGTH)
 
     //데이터 바인딩
     holder.rank.text = ranking.toString()
 
-    holder.maptitle.text = cutted
+    holder.maptitle.text = mapTitle
     holder.distance.text = infoData.distance!!.prettyDistance
     if (mode == "plays") {
       holder.modeIcon.setImageResource(R.drawable.ic_sneaker_for_running)
@@ -115,17 +113,6 @@ class MapRankingAdapter(
           }
         }
       })
-
-    // 정보를 다 표현하면 dismiss
-    // > 5를 한 이유는 recyclerview 특성 상 모든 정보를 한 번에 담는게 아니라
-    // 스크롤이 내려가면 달게 posiotion이 증가 되어서 mdata.size 까지
-    // 도달하지 못하는 경우가 있음
-    // 추후에 코드 정리 할 예정 - 정빈
-    if (position == infoDatas.size - 1 || position > 5) {
-      if (progressBar.mprogressBar.isShowing) {
-        progressBar.dismiss()
-      }
-    }
   }
 
   //뷰 홀더 생성

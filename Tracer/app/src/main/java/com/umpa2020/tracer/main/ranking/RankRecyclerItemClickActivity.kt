@@ -29,7 +29,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener {
-  lateinit var progressbar: ProgressBar
   val activity = this
   var likes = 0
   var mapTitle = ""
@@ -38,11 +37,9 @@ class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_rank_recycler_item_click)
-    progressbar = ProgressBar(this)
     rankRecyclerMoreButton.setOnClickListener(this)
     rankRecyclerHeart.setOnClickListener(this)
 
-    progressbar.show()
     val intent = intent
     //전달 받은 값으로 Title 설정
     mapId = intent.extras?.getString("mapId").toString()
@@ -60,7 +57,6 @@ class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener
             rankRecyclerProfileImage.image(it)
           }
         }
-
       }
     }
 
@@ -75,21 +71,6 @@ class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener
 
     FBMapRankingRepository().listMapRanking(mapId, mapRankingListener)
 
-  }
-
-  override fun onResume() {
-    super.onResume()
-    Logg.d("onResume()")
-  }
-
-  override fun onPause() {
-    super.onPause()
-    Logg.d("onPause()")
-  }
-
-  override fun onDestroy() {
-    super.onDestroy()
-    Logg.d("onDestroy()")
   }
 
   override fun onSingleClick(v: View?) {
@@ -139,7 +120,6 @@ class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener
         rankRecyclerHeart.setImageResource(R.drawable.ic_favorite_border_black_24dp)
         rankRecyclerHeartSwitch.text = "off"
       }
-      progressbar.dismiss()
     }
   }
 

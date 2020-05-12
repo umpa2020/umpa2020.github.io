@@ -21,7 +21,6 @@ import com.umpa2020.tracer.main.MainActivity.Companion.gpsViewModel
 import com.umpa2020.tracer.network.FBRankingRepository
 import com.umpa2020.tracer.network.RankingListener
 import com.umpa2020.tracer.util.Logg
-import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.fragment_ranking.*
 import kotlinx.android.synthetic.main.fragment_ranking.view.*
@@ -37,7 +36,6 @@ class RankingFragment : Fragment(), OnSingleClickListener {
 
   var rootInfoDatas = arrayListOf<InfoData>()
   var distance = MAX_DISTANCE
-  val progressbar = MyProgressBar()
   var tuneDistance = 0
   var isLoding = false
   var limit = 0L
@@ -142,7 +140,6 @@ class RankingFragment : Fragment(), OnSingleClickListener {
 
       R.id.applyButton -> { //적용 버튼 누를때
         tuneDistance = distance
-        progressbar.show()
 
         rootInfoDatas.clear()
         rankingRepo = FBRankingRepository(rankingListener)
@@ -178,7 +175,6 @@ class RankingFragment : Fragment(), OnSingleClickListener {
   override fun onResume() {
     if (rankingLatLng != null) {
       tuneDistance = distance
-      progressbar.show()
       limit = rootInfoDatas.size.toLong()
 
       if (limit == 0L) limit = 20L
@@ -245,12 +241,11 @@ class RankingFragment : Fragment(), OnSingleClickListener {
       rootInfoDatas.addAll(infoDatas)
       if (rootInfoDatas.isEmpty()) {
         rankingRecyclerRouteisEmpty.visibility = View.VISIBLE
-        progressbar.dismiss()
       } else {
         //레이아웃 매니저, 어댑터 추가
         if (rootInfoDatas.size < 21) {
           rank_recycler_map.layoutManager = LinearLayoutManager(context)
-          rank_recycler_map.adapter = MapRankingAdapter(rootInfoDatas, mode, progressbar)
+          rank_recycler_map.adapter = MapRankingAdapter(rootInfoDatas, mode)
         } else {
           rank_recycler_map.adapter!!.notifyDataSetChanged()
         }
