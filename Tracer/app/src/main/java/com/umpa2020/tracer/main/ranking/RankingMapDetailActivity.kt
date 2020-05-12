@@ -118,12 +118,8 @@ class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener, OnM
               val chart = Chart(elevationList, speedList, rankingDetailChart)
               chart.setChart()
             }
-
           }
-
-
         //FBMapImage().getMapImage(rankingDetailGoogleMap, mapId)
-
         rankingDetailRaceButton.setOnClickListener(this)
       }
   }

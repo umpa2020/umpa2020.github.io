@@ -13,8 +13,8 @@ import com.umpa2020.tracer.util.MyProgressBar
 class FBImageRepository: BaseFB() {
   val progressbar = MyProgressBar()
 
-  fun getMapImagePath(imageView: ImageView, mapTitle: String) {
-    db.collection(MAPS).whereEqualTo(MAP_ID, mapTitle)
+  fun getMapImagePath(imageView: ImageView, mapId: String) {
+    db.collection(MAPS).whereEqualTo(MAP_ID, mapId)
       .get()
       .addOnSuccessListener {
         val mapImagePath = it.documents.last().get(MAP_IMAGE_PATH) as String

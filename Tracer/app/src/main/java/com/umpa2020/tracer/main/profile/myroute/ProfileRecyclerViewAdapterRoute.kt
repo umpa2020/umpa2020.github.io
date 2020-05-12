@@ -30,8 +30,8 @@ class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) :
 
     val singleItem = mdata[position]
 
-    val cutted = singleItem.mapTitle!!.subSequence(0, singleItem.mapTitle!!.length- TIMESTAMP_LENGTH) as String
-    val time = singleItem.mapTitle!!.subSequence(singleItem.mapTitle!!.length- TIMESTAMP_LENGTH, singleItem.mapTitle!!.length) as String
+    val mapTitle = singleItem.mapId!!.subSequence(0, singleItem.mapId!!.length- TIMESTAMP_LENGTH) as String
+    val time = singleItem.mapId!!.subSequence(singleItem.mapId!!.length- TIMESTAMP_LENGTH, singleItem.mapId!!.length) as String
 
     //데이터 바인딩
     // glide imageview 소스
@@ -41,9 +41,9 @@ class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) :
     // string에 저장해서 사용 해보았으나
     // Please use a gs:// URL for your Firebase Storage bucket. 에러가 뜨면서 실행이 안되는 문제..
     // val storage = FirebaseStorage.getInstance(R.string.google_storage_bucket_string.toString()) // debug용, release용 구분
-    imageRepository.getMapImagePath(holder.image, singleItem.mapTitle!!)
+    imageRepository.getMapImagePath(holder.image, singleItem.mapId!!)
 
-    holder.maptitle.text = cutted
+    holder.maptitle.text = mapTitle
     holder.distance.text = singleItem.distance!!.prettyDistance
     holder.time.text = singleItem.time!!.format(mm_ss)
     holder.likes.text = singleItem.likes.toString()
@@ -88,7 +88,7 @@ class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) :
     holder.itemView.setOnClickListener(object : OnSingleClickListener {
       override fun onSingleClick(v: View?) {
         val nextIntent = Intent(context, RankRecyclerItemClickActivity::class.java)
-        nextIntent.putExtra("MapId", singleItem.mapId) //mapTitle 정보 인텐트로 넘김
+        nextIntent.putExtra("mapId", singleItem.mapId) //mapTitle 정보 인텐트로 넘김
         context!!.startActivity(nextIntent)
       }
     })

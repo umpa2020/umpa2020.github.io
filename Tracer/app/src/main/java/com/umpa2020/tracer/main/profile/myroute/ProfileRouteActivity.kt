@@ -9,19 +9,20 @@ import androidx.recyclerview.widget.RecyclerView
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.InfoData
-import com.umpa2020.tracer.main.ranking.MapRankingAdapter
+import com.umpa2020.tracer.extensions.image
 import com.umpa2020.tracer.network.FBProfileRepository
 import com.umpa2020.tracer.network.ProfileRouteListener
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_profile_route.*
-import kotlinx.android.synthetic.main.fragment_ranking.*
-import kotlinx.android.synthetic.main.fragment_ranking.view.*
-import kotlinx.android.synthetic.main.fragment_ranking.view.rank_recycler_map
+import kotlinx.android.synthetic.main.activity_ranking_map_detail.*
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 
 class ProfileRouteActivity : AppCompatActivity() {
   val progressbar = ProgressBar(App.instance.currentActivity() as Activity)
+  var uid = ""
   var nickname = ""
   var isLoding = false
   val routeRepo = FBProfileRepository()
@@ -38,7 +39,7 @@ class ProfileRouteActivity : AppCompatActivity() {
 
     val intent = intent
     //전달 받은 값으로 Title 설정
-    nickname = intent.extras?.getString("nickname").toString()
+    uid = intent.extras?.getString("UID").toString()
 
     profileRecyclerRoute.addOnScrollListener(object : RecyclerView.OnScrollListener() {
       override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -47,7 +48,7 @@ class ProfileRouteActivity : AppCompatActivity() {
         } else if (!profileRecyclerRoute.canScrollVertically(1)) {
           // 리사이클러뷰가 맨 아래로 이동했을 경우
           if (!isLoding) {
-            routeRepo.getRoute(profileRouteListener, nickname, 5)
+            routeRepo.getRoute(profileRouteListener, uid, 5)
           }
           isLoding = true
         }
@@ -56,7 +57,7 @@ class ProfileRouteActivity : AppCompatActivity() {
 
     // 나의 루트가 아닌 다른 사람의 루트를 볼 경우
     // 텍스트 변한
-    if (nickname != UserInfo.nickname) {
+    if (uid != UserInfo.nickname) {
       profileRouteMyRoute.text = getString(R.string.other_route)
     }
   }
@@ -68,7 +69,7 @@ class ProfileRouteActivity : AppCompatActivity() {
     if (limit == 0L) limit = 5L
     else rootInfoDatas.clear()
 
-    routeRepo.getRouteFirst(profileRouteListener, nickname, limit)
+    routeRepo.getRouteFirst(profileRouteListener, uid, limit)
     super.onResume()
   }
 
@@ -80,7 +81,6 @@ class ProfileRouteActivity : AppCompatActivity() {
   private val profileRouteListener = object : ProfileRouteListener {
     override fun listProfileRoute(infoDatas: ArrayList<InfoData>) {
 
-      Logg.d("ssmm11 infoData size = ${infoDatas.size}")
       rootInfoDatas.addAll(infoDatas)
 
       if (rootInfoDatas.isEmpty()) {

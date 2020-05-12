@@ -76,11 +76,10 @@ class FBProfileRepository : BaseFB() {
   /**
    * 처음만 프로필에서 해당 유저가 만든 맵 띄우기
    */
-  fun getRouteFirst(profileRouteListener: ProfileRouteListener, nickname: String, limit: Long) {
+  fun getRouteFirst(profileRouteListener: ProfileRouteListener, uid: String, limit: Long) {
     val infoDatas = arrayListOf<InfoData>()
 
-    db.collection("mapInfo").whereEqualTo("makersNickname", nickname)
-      .whereEqualTo("privacy", "RACING")
+    db.collection(MAPS).whereEqualTo(MAKER_ID, uid)
       .limit(limit)
       .get()
       .addOnSuccessListener { result ->
@@ -111,12 +110,10 @@ class FBProfileRepository : BaseFB() {
   /**
    * 프로필에서 해당 유저가 만든 맵 띄우기
    */
-  fun getRoute(profileRouteListener: ProfileRouteListener, nickname: String, limit: Long) {
+  fun getRoute(profileRouteListener: ProfileRouteListener, uid: String, limit: Long) {
     val infoDatas = arrayListOf<InfoData>()
 
-    Logg.d("ssmm11 startAfter = $globalStartAfter")
-    db.collection("mapInfo").whereEqualTo("makersNickname", nickname)
-      .whereEqualTo("privacy", "RACING")
+    db.collection(MAPS).whereEqualTo(MAKER_ID, uid)
       .startAfter(globalStartAfter)
       .limit(limit)
       .get()
@@ -126,7 +123,6 @@ class FBProfileRepository : BaseFB() {
           infoDatas.add(data)
           globalStartAfter = document
         }
-        Logg.d("ssmm11 result size = ${result.size()}")
 
         // 좋아요 필터를 눌렀을 때, 유저가 좋아요 누른 맵들을 가져오는 리스너
         val likedMapListener = object : LikedMapListener {

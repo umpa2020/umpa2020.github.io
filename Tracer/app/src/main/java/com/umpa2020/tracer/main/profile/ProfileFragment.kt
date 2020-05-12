@@ -56,13 +56,6 @@ class ProfileFragment : Fragment(), OnSingleClickListener {
     // 나의 활동 액티비티
     view.profileRecordTextView.setOnClickListener(this)
 
-
-    /*val recordTextView = view.findViewById<TextView>(R.id.profileRecordTextView)
-    recordTextView.setOnClickListener {
-      val nextIntent = Intent(activity, ProfileRecordActivity::class.java)
-      startActivity(nextIntent)
-    }*/
-
     return view
   }
 
@@ -75,7 +68,7 @@ class ProfileFragment : Fragment(), OnSingleClickListener {
 
       R.id.profileRouteTextView -> { // 나의 루트 액티비티
         val nextIntent = Intent(activity, ProfileRouteActivity::class.java)
-        nextIntent.putExtra("nickname", UserInfo.nickname)
+        nextIntent.putExtra("UID", UserInfo.autoLoginKey)
         startActivity(nextIntent)
       }
 
@@ -85,15 +78,6 @@ class ProfileFragment : Fragment(), OnSingleClickListener {
         startActivity(nextIntent)
       }
     }
-  }
-
-  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-    super.onActivityResult(requestCode, resultCode, data)
-  }
-
-  override fun onStart() {
-    Logg.i("onStart()")
-    super.onStart()
   }
 
   override fun onResume() {
@@ -114,26 +98,4 @@ class ProfileFragment : Fragment(), OnSingleClickListener {
     }
     super.onResume()
   }
-
-  override fun onPause() {
-    Logg.i("onPause()")
-    super.onPause()
-  }
-
-  override fun onStop() {
-    Logg.i("onStop()")
-    super.onStop()
-  }
-
-  private val profileListener = object : ProfileListener {
-    override fun getProfile(distance: Double, time: Double) {
-      // 총 거리와 시간을 띄워줌
-      root.profileFragmentTotalDistance.text = distance.prettyDistance
-      root.profileFragmentTotalTime.text = time.toLong().format(m_s)
-    }
-
-    override fun changeProfile() {
-    }
-  }
-
 }

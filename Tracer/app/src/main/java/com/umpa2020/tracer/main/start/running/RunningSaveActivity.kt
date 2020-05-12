@@ -178,7 +178,7 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
       speedList.average().toString(),
       "${BaseFB.MAP_ROUTE}/${infoData.mapId}/racingGPX/${UserInfo.autoLoginKey}"
     )
-    val activityData = ActivityData(infoData.mapTitle, timestamp, infoData.distance, "map save")
+    val activityData = ActivityData(infoData.mapId, timestamp, infoData.distance, "map save")
     Logg.d("Start Upload")
 
     FBMapRepository().uploadMap(infoData,rankingData,activityData,timestamp.toString(),routeGpxFile,Uri.fromFile(File(imgPath)))
