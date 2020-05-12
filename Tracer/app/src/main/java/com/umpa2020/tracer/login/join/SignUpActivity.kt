@@ -26,7 +26,7 @@ import com.google.firebase.storage.StorageReference
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants
-import com.umpa2020.tracer.extensions.ToAge
+import com.umpa2020.tracer.extensions.toAge
 import com.umpa2020.tracer.extensions.show
 import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.network.FBProfileRepository
@@ -277,7 +277,7 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
       // 년월일 yyyymmdd로 전달 받음
       Logg.d(intentData!!.getStringExtra("Age"))
       birth = intentData!!.getStringExtra("Age")
-      val age = ToAge(intentData.getStringExtra("Age")!!)
+      val age = toAge(intentData.getStringExtra("Age")!!)
 
       editAge.setText(age)
     }

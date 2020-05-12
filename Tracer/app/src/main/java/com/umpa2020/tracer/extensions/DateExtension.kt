@@ -92,7 +92,7 @@ fun String.format(from: String, to: String): String? {
  * 십의 자리 미만의 월, 일 앞에 0을 붙이는 함수.
  */
 
-fun IntToyyyyMMdd(year : Int, month : Int, day : Int) : String?{
+fun intToyyyyMMdd(year : Int, month : Int, day : Int) : String?{
   val mm = if (month < 10)
     "0$month"
   else
@@ -114,7 +114,7 @@ fun IntToyyyyMMdd(year : Int, month : Int, day : Int) : String?{
  */
 
 @SuppressLint("SimpleDateFormat")
-fun ToAge(birth: String): String? {
+fun toAge(birth: String): String? {
   var today = "" // 오늘 날짜
   var manAge = 0 // 만 나이
 

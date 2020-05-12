@@ -11,7 +11,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
-import com.umpa2020.tracer.extensions.ToAge
+import com.umpa2020.tracer.extensions.toAge
 import com.umpa2020.tracer.network.FBProfileRepository
 import com.umpa2020.tracer.network.ProfileListener
 import com.umpa2020.tracer.util.Logg
@@ -36,7 +36,7 @@ class MyInformationActivity : AppCompatActivity(), OnSingleClickListener {
     // Shared에 저장된 유저 정보 설정정
     emailTextView.text = UserInfo.email
     nickNameTextView.text = UserInfo.nickname
-    ageTextView.text = ToAge(UserInfo.birth)
+    ageTextView.text = toAge(UserInfo.birth)
     genderTextView.text = UserInfo.gender
 
     // 버튼 리스너 초기화

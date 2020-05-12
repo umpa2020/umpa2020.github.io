@@ -6,8 +6,8 @@ import android.view.View
 import android.widget.NumberPicker
 import androidx.appcompat.app.AppCompatActivity
 import com.umpa2020.tracer.R
-import com.umpa2020.tracer.extensions.IntToyyyyMMdd
-import com.umpa2020.tracer.extensions.ToAge
+import com.umpa2020.tracer.extensions.intToyyyyMMdd
+import com.umpa2020.tracer.extensions.toAge
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.activity_age_select.*
@@ -62,11 +62,11 @@ class AgeSelectActivity : AppCompatActivity(), OnSingleClickListener {
           val intent = Intent()
 
           // numberPicker에서 Int형으로 값을 가져오므로 1 -> 01과 같은 형식으로 변환.
-          // 나중에 이런 yyyyDDmm형식으로 쓰일꺼 같아서 변환해둠.
-          val birth = IntToyyyyMMdd(yearPicker.value, monthPicker.value, dayPicker.value)
-          Logg.d(IntToyyyyMMdd(yearPicker.value, monthPicker.value, dayPicker.value)) // 19900102 or 19900112
+          // 나중에 이런 yyyyMMdd형식으로 쓰일꺼 같아서 변환해둠.
+          val birth = intToyyyyMMdd(yearPicker.value, monthPicker.value, dayPicker.value)
+          Logg.d(intToyyyyMMdd(yearPicker.value, monthPicker.value, dayPicker.value)) // 19900102 or 19900112
 
-          Logg.d("만" + ToAge(birth!!)) // 19900102 => 나이로
+          Logg.d("만" + toAge(birth!!)) // 19900102 => 나이로
 
           // yyyyMMdd 형식 전달.
           intent.putExtra("Age", birth)
