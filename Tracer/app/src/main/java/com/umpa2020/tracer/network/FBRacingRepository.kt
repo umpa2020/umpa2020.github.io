@@ -8,6 +8,7 @@ import com.umpa2020.tracer.dataClass.*
 import com.umpa2020.tracer.extensions.classToGpx
 import com.umpa2020.tracer.extensions.gpxToClass
 import com.umpa2020.tracer.util.UserInfo
+import kotlinx.coroutines.tasks.await
 import java.io.File
 import java.util.*
 
@@ -20,96 +21,31 @@ class FBRacingRepository : BaseFB() {
    * 최고 기록이 아닐 경우 bestTime을 0으로 설정하여
    * ranking 에 등록하는 함수
    */
-  fun createRankingData(
-    result: Boolean,
+  suspend fun createRankingData(
     racerData: InfoData,
-    racingFinishListener: RacingFinishListener,
-    racerSpeeds: MutableList<Double>,
-    racerGPX: RouteGPX
+    rankingData:RankingData,
+    racerGpxFile:Uri
   ) {
-    // 타임스탬프
     val timestamp = Date().time
-
-    if (result) {
-      val rankingData = RankingData(
-        racerData.makerId,
-        UserInfo.autoLoginKey,
-        UserInfo.nickname,
-        racerData.time,
-        true,
-        racerSpeeds.max().toString(),
-        racerSpeeds.average().toString(),
-        null
-      )
-      // 랭킹 맵에서
-      db.collection(MAPS).document(racerData.mapTitle!!).collection(RANKING)
-        .whereEqualTo(BEST_TIME, true)
-        .get()
-        .addOnSuccessListener {
-          for (document in it) {
-            if (document.get(CHALLENGER_Id) == UserInfo.nickname) {
-              if (racerData.time!!.toLong() < document.get(CHALLENGER_TIME) as Long) {
-                db.collection(MAPS).document(racerData.mapTitle!!).collection(RANKING)
-                  .document(document.id).update(BEST_TIME, false)
-
-                val saveFolder = File(App.instance.filesDir, "routeGPX") // 저장 경로
-                if (!saveFolder.exists()) {       //폴더 없으면 생성
-                  saveFolder.mkdir()
-                }
-
-                val racerGpxFile = racerGPX.classToGpx(saveFolder.path)
-
-                // storage에 이미지 업로드 모든 맵 이미지는 mapimage/maptitle로 업로드가 된다.
-                val fstorage = FirebaseStorage.getInstance()
-                val fRef = fstorage.reference.child(MAP_ROUTE)
-                  .child(racerData.mapTitle!!).child(RACING_GPX).child(UserInfo.autoLoginKey)
-                rankingData.racerGPX = fRef.path
-
-
-                FBStorageRepository().uploadFile(racerGpxFile, MAP_ROUTE + "/" + racerData.mapTitle!! + "/" + RACING_GPX + "/" + UserInfo.autoLoginKey)
-
-              } else {
-                rankingData.BestTime = false
-              }
-            }
-          }
-          db.collection(MAPS).document(racerData.mapTitle!!).collection(RANKING)
-            .document(UserInfo.autoLoginKey + timestamp).set(rankingData)
-
-          getRacingFinishRank(result, racerData, racingFinishListener)
-        }
-    } else {
-      getRacingFinishRank(result, racerData, racingFinishListener)
-    }
-  }
-
-  /**
-   * 랭킹맵에서 올라와 있는 기록들을
-   * 1. 동일한 유저의 기록은 최고 기록만 저장
-   * 2. 성공했을 때에만 N등
-   * 3. 실패했을 경우 실패
-   */
-  private fun getRacingFinishRank(
-    result: Boolean,
-    racerData: InfoData,
-    racingFinishListener: RacingFinishListener
-  ) {
-    db.collection(MAPS).document(racerData.mapTitle!!).collection(RANKING)
-      .orderBy(CHALLENGER_TIME, Query.Direction.ASCENDING)
+    //besttime인지 체크
+    db.collection(MAPS).document(racerData.mapId!!).collection(RANKING)
       .whereEqualTo(BEST_TIME, true)
-      .get()
-      .addOnSuccessListener { resultdb ->
-        var index = 1
-        val arrRankingData = resultdb.map {
-          val rankData: RankingData = it.toObject(RankingData::class.java)
-          if (racerData.time!! >= rankData.challengerTime!!) {
-            index++
+      .get().await().let {
+        it.documents.filter {
+          it.get(CHALLENGER_Id) == UserInfo.nickname &&
+          it.getLong(CHALLENGER_TIME)!! > racerData.time!!.toLong()}.forEach {
+            it.reference.update(BEST_TIME, false)
+          rankingData.BestTime = false
           }
-          rankData
-        }
-        racingFinishListener.getRacingFinish(ArrayList(arrRankingData), index)
       }
+    rankingData.racerGPX = "$MAP_ROUTE/${racerData.mapId}/$RACING_GPX/$UserInfo.autoLoginKey"
+    db.collection(MAPS).document(racerData.mapId!!).collection(RANKING)
+      .document(UserInfo.autoLoginKey + timestamp).set(rankingData)
+
+    //upload racerGpxFile
+    FBStorageRepository().uploadFile(racerGpxFile, rankingData.racerGPX!!)
   }
+
 
   /**
    * 다른 사람 인포데이터를 가져오는 함수

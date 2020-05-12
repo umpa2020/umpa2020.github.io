@@ -44,6 +44,7 @@ import com.umpa2020.tracer.main.ranking.RankingMapDetailActivity
 import com.umpa2020.tracer.main.start.racing.RacingActivity
 import com.umpa2020.tracer.main.start.running.RunningActivity
 import com.umpa2020.tracer.map.TraceMap
+import com.umpa2020.tracer.network.BaseFB.Companion.MAP_ID
 import com.umpa2020.tracer.network.FBMapRepository
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.MyProgressBar
@@ -161,26 +162,21 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
               it.remove()
             }
             routeMarkers.clear()
-            nearMaps.forEach {
-              val cutted = it.mapTitle.subSequence(0, it.mapTitle.length - TIMESTAMP_LENGTH)
-
+            nearMaps.forEach {nearMap->
               //데이터 바인딩
               routeMarkers.add(
                 traceMap!!.mMap.addMarker(
                   MarkerOptions()
-                    .position(it.latLng)
-                    .title(cutted.toString())
-                    .snippet(it.distance.prettyDistance)
+                    .position(nearMap.latLng)
+                    .title(nearMap.mapTitle)
+                    .snippet(nearMap.distance.prettyDistance)
                     .icon(icon)
-                )
+                ).apply { tag=nearMap.mapId }
               )
 
-              //TODO: 윈도우 커스터마이즈
-              routeMarkers.last().tag = it.mapTitle
-
-              traceMap!!.mMap.setOnInfoWindowClickListener { it2 ->
+              traceMap!!.mMap.setOnInfoWindowClickListener { marker ->
                 val intent = Intent(activity, RankingMapDetailActivity::class.java)
-                intent.putExtra("MapTitle", it2.tag.toString())
+                intent.putExtra(MAP_ID, marker.tag.toString())
                 startActivity(intent)
               }
             }

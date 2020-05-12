@@ -47,7 +47,8 @@ class FBMapRepository : BaseFB() {
           if (southwest.longitude > 0 && northeast.longitude < 0) {
             if (southwest.longitude < startLongitude || startLongitude < northeast.longitude) {
               val nearMap = NearMap(
-                document.id,
+                document.getString(MAP_ID)!!,
+                document.getString(MAP_TITLE)!!,
                 LatLng(startLatitude, startLongitude),
                 document.get(DISTANCE) as Double
               )
@@ -55,7 +56,8 @@ class FBMapRepository : BaseFB() {
             }
           } else if (southwest.longitude < startLongitude && startLongitude < northeast.longitude) {
             val nearMap = NearMap(
-              document.id,
+              document.getString(MAP_ID)!!,
+              document.getString(MAP_TITLE)!!,
               LatLng(startLatitude, startLongitude),
               document.get(DISTANCE) as Double
             )
