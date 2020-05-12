@@ -106,7 +106,7 @@ class FBRankingRepository(rankingListener: RankingListener) {
       infoDatas.filter { infoData ->
         playedMapDatas.map { it.mapTitle }
           .contains(infoData.mapTitle)
-      }.map { it.isPlayed = true }
+      }.map { it.played = true }
 
       rankingListener.getRank(infoDatas, PLAYS)
     }
@@ -116,9 +116,9 @@ class FBRankingRepository(rankingListener: RankingListener) {
   private val likedMapListener = object : LikedMapListener {
     override fun likedList(likedMaps: List<LikedMapData>) {
       infoDatas.filter { infoData ->
-        likedMaps.map { it.mapTitle }
-          .contains(infoData.mapTitle)
-      }.map { it.isLiked = true }
+        likedMaps.map { it.mapId }
+          .contains(infoData.mapId)
+      }.map { it.liked = true }
       rankingListener.getRank(infoDatas, LIKES)
     }
 

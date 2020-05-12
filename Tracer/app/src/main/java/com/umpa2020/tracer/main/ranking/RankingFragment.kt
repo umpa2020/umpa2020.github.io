@@ -76,7 +76,7 @@ class RankingFragment : Fragment(), OnSingleClickListener {
               rankingRepo.listFilterRange(
                 rankingLatLng!!,
                 tuneDistance,
-                "execute",
+                "plays",
                 20
               )
             }
@@ -156,7 +156,7 @@ class RankingFragment : Fragment(), OnSingleClickListener {
             rankingRepo.listRanking(
               rankingLatLng!!,
               tuneDistance,
-              "execute",
+              "plays",
               20
             )
           } else {
@@ -176,7 +176,6 @@ class RankingFragment : Fragment(), OnSingleClickListener {
   }
 
   override fun onResume() {
-
     if (rankingLatLng != null) {
       tuneDistance = distance
       progressbar.show()
@@ -195,7 +194,7 @@ class RankingFragment : Fragment(), OnSingleClickListener {
           rankingRepo.listRanking(
             rankingLatLng!!,
             tuneDistance,
-            "execute",
+            "plays",
             limit
           )
         } else {

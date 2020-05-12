@@ -1,12 +1,10 @@
 package com.umpa2020.tracer.network
 
 import android.net.Uri
-import android.widget.ImageView
 import com.google.firebase.firestore.DocumentSnapshot
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.LikedMapData
 import com.umpa2020.tracer.dataClass.ProfileData
-import com.umpa2020.tracer.extensions.image
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.coroutines.tasks.await
@@ -20,6 +18,14 @@ import java.util.*
 class FBProfileRepository : BaseFB() {
   var profileImagePath = "init"
   lateinit var globalStartAfter: DocumentSnapshot
+
+
+  suspend fun getUserNickname(uid: String): String {
+    return db.collection(USERS).whereEqualTo(USER_ID, uid)
+      .get()
+      .await()
+      .documents.first().getString(NICKNAME)?:""
+  }
 
   /**
    * 프로필 프래그먼트, 다른 사람 프로필 액티비티의
@@ -35,11 +41,12 @@ class FBProfileRepository : BaseFB() {
         sumDistance += it.get(DISTANCE) as Double
         sumTime += it.get(TIME) as Long
       }
-      ProfileData(sumDistance, sumTime,FBStorageRepository().downloadFile(it.getString(PROFILE_IMAGE_PATH)!!)!! )
+      ProfileData(sumDistance, sumTime, FBStorageRepository().downloadFile(it.getString(PROFILE_IMAGE_PATH)!!)!!)
     }
   }
+
   //TODO:Usage로 nickname으로 받는곳들 uid로 바꾸기
-  suspend fun getProfileImage(uid: String) :Uri?{
+  suspend fun getProfileImage(uid: String): Uri? {
     return db.collection(USERS).whereEqualTo(USER_ID, uid)
       .get().await().let {
         FBStorageRepository().downloadFile(it.first().getString(PROFILE_IMAGE_PATH)!!)
@@ -52,7 +59,7 @@ class FBProfileRepository : BaseFB() {
    */
   suspend fun updateProfileImage(selectedImageUri: Uri) {
     // 현재 날짜를 프로필 이름으로 nickname/Profile/현재날짜(영어).jpg 경로 만들기
-    val dt=Date()
+    val dt = Date()
     FBStorageRepository().uploadFile(selectedImageUri, PROFILE + "/" + UserInfo.autoLoginKey + "/" + dt.time.toString())
     db.collection(USERS).document(UserInfo.autoLoginKey)
       .update(PROFILE_IMAGE_PATH, "$PROFILE/${UserInfo.autoLoginKey}/${dt.time}").await()
@@ -87,9 +94,9 @@ class FBProfileRepository : BaseFB() {
         val likedMapListener = object : LikedMapListener {
           override fun likedList(likedMaps: List<LikedMapData>) {
             infoDatas.filter { infoData ->
-              likedMaps.map { it.mapTitle }
-                .contains(infoData.mapTitle)
-            }.map { it.isLiked = true }
+              likedMaps.map { it.mapId }
+                .contains(infoData.mapId)
+            }.map { it.liked = true }
             profileRouteListener.listProfileRoute(infoDatas)
           }
 
@@ -125,9 +132,9 @@ class FBProfileRepository : BaseFB() {
         val likedMapListener = object : LikedMapListener {
           override fun likedList(likedMaps: List<LikedMapData>) {
             infoDatas.filter { infoData ->
-              likedMaps.map { it.mapTitle }
-                .contains(infoData.mapTitle)
-            }.map { it.isLiked = true }
+              likedMaps.map { it.mapId }
+                .contains(infoData.mapId)
+            }.map { it.liked = true }
             profileRouteListener.listProfileRoute(infoDatas)
           }
 

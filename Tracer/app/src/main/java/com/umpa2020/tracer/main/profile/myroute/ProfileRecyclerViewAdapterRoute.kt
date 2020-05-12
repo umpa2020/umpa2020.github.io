@@ -49,7 +49,7 @@ class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) :
     holder.likes.text = singleItem.likes.toString()
     holder.excutes.text = singleItem.plays.toString()
     holder.date.text = time.toLong().format("yyyy-MM-dd HH:mm:ss")
-    if (singleItem.isLiked) {
+    if (singleItem.liked) {
       holder.heart.setImageResource(R.drawable.ic_favorite_red_24dp)
       holder.heart.tag = R.drawable.ic_favorite_red_24dp
     }
@@ -69,14 +69,14 @@ class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) :
 
           }
           R.drawable.ic_favorite_border_black_24dp -> {
-            FBLikesRepository().updateLikes(singleItem.mapTitle!!, likes)
+            FBLikesRepository().updateLikes(singleItem.mapId!!, likes)
             holder.heart.setImageResource(R.drawable.ic_favorite_red_24dp)
             holder.heart.tag = R.drawable.ic_favorite_red_24dp
             likes++
             holder.likes.text = likes.toString()
           }
           R.drawable.ic_favorite_red_24dp -> {
-            FBLikesRepository().updateNotLikes(singleItem.mapTitle!!, likes)
+            FBLikesRepository().updateNotLikes(singleItem.mapId!!, likes)
             holder.heart.setImageResource(R.drawable.ic_favorite_border_black_24dp)
             holder.heart.tag = R.drawable.ic_favorite_border_black_24dp
             likes--
@@ -88,7 +88,7 @@ class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) :
     holder.itemView.setOnClickListener(object : OnSingleClickListener {
       override fun onSingleClick(v: View?) {
         val nextIntent = Intent(context, RankRecyclerItemClickActivity::class.java)
-        nextIntent.putExtra("MapTitle", singleItem.mapTitle) //mapTitle 정보 인텐트로 넘김
+        nextIntent.putExtra("MapId", singleItem.mapId) //mapTitle 정보 인텐트로 넘김
         context!!.startActivity(nextIntent)
       }
     })

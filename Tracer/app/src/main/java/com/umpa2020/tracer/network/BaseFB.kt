@@ -20,7 +20,7 @@ open class BaseFB {
     const val LIKED_MAP = "likedMap"
     const val LIKES = "likes"
 
-    const val IS_BEST_TIME = "isBestTime"
+    const val BEST_TIME = "bestTime"
     const val CHALLENGER_TIME = "challengerTime"
     const val RANKING = "ranking"
 

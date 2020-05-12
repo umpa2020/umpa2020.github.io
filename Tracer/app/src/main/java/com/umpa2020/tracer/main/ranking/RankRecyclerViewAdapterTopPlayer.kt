@@ -16,7 +16,7 @@ import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.recycler_rankfragment_topplayer_item.view.*
 import java.util.*
 
-class RankRecyclerViewAdapterTopPlayer(val mydata: ArrayList<RankingData>, val mapTitle: String) :
+class RankRecyclerViewAdapterTopPlayer(val mydata: ArrayList<RankingData>, val mapId: String) :
   RecyclerView.Adapter<RankRecyclerViewAdapterTopPlayer.myViewHolder>() {
   var context: Context? = null
 
@@ -48,7 +48,7 @@ class RankRecyclerViewAdapterTopPlayer(val mydata: ArrayList<RankingData>, val m
       override fun onSingleClick(v: View?) {
 
         val nextIntent = Intent(context, OtherProfileActivity::class.java)
-        nextIntent.putExtra("mapTitle", mapTitle) //nickname 정보 인텐트로 넘김
+        nextIntent.putExtra("mapId", mapId) //nickname 정보 인텐트로 넘김
         nextIntent.putExtra("nickname", holder.nickname.text.toString())
         context!!.startActivity(nextIntent)
       }

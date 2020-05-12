@@ -43,16 +43,16 @@ class MapRankingAdapter(
 
     holder.maptitle.text = cutted
     holder.distance.text = infoData.distance!!.prettyDistance
-    if (mode.equals("execute")) {
+    if (mode == "plays") {
       holder.modeIcon.setImageResource(R.drawable.ic_sneaker_for_running)
       holder.modeIcon.tag = R.drawable.ic_sneaker_for_running
 
-      if (infoData.isPlayed) {
+      if (infoData.played) {
         holder.modeIcon.setColorFilter(R.color.green)
       }
       holder.modeNo.text = infoData.plays.toString()
-    } else if (mode.equals("likes")) {
-      if (infoData.isLiked) {
+    } else if (mode == "likes") {
+      if (infoData.liked) {
         holder.modeIcon.setImageResource(R.drawable.ic_favorite_red_24dp)
         holder.modeIcon.tag = R.drawable.ic_favorite_red_24dp
       } else {
@@ -81,7 +81,7 @@ class MapRankingAdapter(
       object : OnSingleClickListener {
         override fun onSingleClick(v: View?) {
           val nextIntent = Intent(context, RankRecyclerItemClickActivity::class.java)
-          nextIntent.putExtra("MapTitle", infoData.mapTitle) //mapTitle 정보 인텐트로 넘김
+          nextIntent.putExtra("mapId", infoData.mapId) //mapTitle 정보 인텐트로 넘김
           context!!.startActivity(nextIntent)
         }
       }
@@ -97,16 +97,16 @@ class MapRankingAdapter(
 
             }
             R.drawable.ic_favorite_border_black_24dp -> {
-              FBLikesRepository().updateLikes(infoData.mapTitle!!, likes)
-              infoDatas[position].isLiked = true
+              FBLikesRepository().updateLikes(infoData.mapId!!, likes)
+              infoDatas[position].liked = true
               infoDatas[position].likes = ++likes
               holder.modeIcon.setImageResource(R.drawable.ic_favorite_red_24dp)
               holder.modeIcon.tag = R.drawable.ic_favorite_red_24dp
               holder.modeNo.text = likes.toString()
             }
             R.drawable.ic_favorite_red_24dp -> {
-              FBLikesRepository().updateNotLikes(infoData.mapTitle!!, likes)
-              infoDatas[position].isLiked = false
+              FBLikesRepository().updateNotLikes(infoData.mapId!!, likes)
+              infoDatas[position].liked = false
               infoDatas[position].likes = --likes
               holder.modeIcon.setImageResource(R.drawable.ic_favorite_border_black_24dp)
               holder.modeIcon.tag = R.drawable.ic_favorite_border_black_24dp

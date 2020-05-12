@@ -160,7 +160,7 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
 
     // 인포데이터에 필요한 내용을 저장하고
     infoData.mapId=mapTitleEdit.text.toString() + timestamp.toString()
-    infoData.makerId = UserInfo.nickname
+    infoData.makerId = UserInfo.autoLoginKey
     infoData.mapTitle = mapTitleEdit.text.toString()
     infoData.mapImagePath = "mapImage/${infoData.mapTitle}"
     infoData.mapExplanation = mapExplanationEdit.text.toString()

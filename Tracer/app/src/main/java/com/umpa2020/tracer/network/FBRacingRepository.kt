@@ -43,14 +43,14 @@ class FBRacingRepository : BaseFB() {
       )
       // 랭킹 맵에서
       db.collection(MAPS).document(racerData.mapTitle!!).collection(RANKING)
-        .whereEqualTo(IS_BEST_TIME, true)
+        .whereEqualTo(BEST_TIME, true)
         .get()
         .addOnSuccessListener {
           for (document in it) {
             if (document.get(CHALLENGER_Id) == UserInfo.nickname) {
               if (racerData.time!!.toLong() < document.get(CHALLENGER_TIME) as Long) {
                 db.collection(MAPS).document(racerData.mapTitle!!).collection(RANKING)
-                  .document(document.id).update(IS_BEST_TIME, false)
+                  .document(document.id).update(BEST_TIME, false)
 
                 val saveFolder = File(App.instance.filesDir, "routeGPX") // 저장 경로
                 if (!saveFolder.exists()) {       //폴더 없으면 생성
@@ -69,7 +69,7 @@ class FBRacingRepository : BaseFB() {
                 FBStorageRepository().uploadFile(racerGpxFile, MAP_ROUTE + "/" + racerData.mapTitle!! + "/" + RACING_GPX + "/" + UserInfo.autoLoginKey)
 
               } else {
-                rankingData.bestTime = false
+                rankingData.BestTime = false
               }
             }
           }
@@ -96,7 +96,7 @@ class FBRacingRepository : BaseFB() {
   ) {
     db.collection(MAPS).document(racerData.mapTitle!!).collection(RANKING)
       .orderBy(CHALLENGER_TIME, Query.Direction.ASCENDING)
-      .whereEqualTo(IS_BEST_TIME, true)
+      .whereEqualTo(BEST_TIME, true)
       .get()
       .addOnSuccessListener { resultdb ->
         var index = 1
@@ -132,7 +132,7 @@ class FBRacingRepository : BaseFB() {
 
     db.collection(MAPS).document(mapTitle)
       .collection(RANKING).whereEqualTo(CHALLENGER_Id, nickname)
-      .whereEqualTo(IS_BEST_TIME, true)
+      .whereEqualTo(BEST_TIME, true)
       .get()
       .addOnSuccessListener {
         val rankingData = it.documents.last().toObject(RankingData::class.java)

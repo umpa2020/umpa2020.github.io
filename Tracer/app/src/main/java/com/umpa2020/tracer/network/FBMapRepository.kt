@@ -6,25 +6,25 @@ import android.os.Message
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.dataClass.ActivityData
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.NearMap
 import com.umpa2020.tracer.dataClass.RankingData
-import com.umpa2020.tracer.network.BaseFB.Companion.DISTANCE
-import com.umpa2020.tracer.network.BaseFB.Companion.PLAYS
-import com.umpa2020.tracer.network.BaseFB.Companion.MAPS
-import com.umpa2020.tracer.network.BaseFB.Companion.START_LATITUDE
-import com.umpa2020.tracer.network.BaseFB.Companion.START_LONGITUDE
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.coroutines.tasks.await
-import java.io.File
 
 class FBMapRepository : BaseFB() {
   val NEARMAPFALSE = 41
   val STRAT_FRAGMENT_NEARMAP = 30
   private var nearMaps: ArrayList<NearMap> = arrayListOf()
+
+  suspend fun getMapInfo(mapId: String): InfoData? {
+    return db.collection(MAPS)
+      .whereEqualTo(MAP_ID, mapId)
+      .get()
+      .await().documents.first().toObject(InfoData::class.java)
+  }
 
   suspend fun getMapTitle(mapId: String): String? {
     return db.collection(MAPS)
@@ -91,6 +91,7 @@ class FBMapRepository : BaseFB() {
     FBStorageRepository().uploadFile(gpxUri,rankingData.racerGPX!!)
     db.collection(MAPS).document(infoData.mapId!!).collection(RANKING)
       .document(UserInfo.autoLoginKey + timestamp).set(rankingData)
+    Logg.d("ssmm11 베타 = ${rankingData.BestTime}")
     // 히스토리 업로드
     FBUserActivityRepository().createUserHistory(activityData)
   }

@@ -18,8 +18,8 @@ data class InfoData(
   var likes: Int? = null,
   var startLatitude: Double? = null,
   var startLongitude: Double? = null,
-  var isLiked: Boolean = false,
-  var isPlayed: Boolean = false,
+  var liked: Boolean = false,
+  var played: Boolean = false,
   var averageSpeed: Double? = null,
   var maxSpeed: Double? = null
 ) : Parcelable

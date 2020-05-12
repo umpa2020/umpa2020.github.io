@@ -8,9 +8,6 @@ import com.umpa2020.tracer.dataClass.LikedMapData
 import com.umpa2020.tracer.dataClass.ProfileData
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.UserInfo
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.tasks.await
 import java.util.*
 
@@ -105,9 +102,9 @@ class CoroutineTestRepository : BaseFB() {
         val likedMapListener = object : LikedMapListener {
           override fun likedList(likedMaps: List<LikedMapData>) {
             infoDatas.filter { infoData ->
-              likedMaps.map { it.mapTitle }
-                .contains(infoData.mapTitle)
-            }.map { it.isLiked = true }
+              likedMaps.map { it.mapId }
+                .contains(infoData.mapId)
+            }.map { it.liked = true }
             profileRouteListener.listProfileRoute(infoDatas)
           }
 
@@ -143,9 +140,9 @@ class CoroutineTestRepository : BaseFB() {
         val likedMapListener = object : LikedMapListener {
           override fun likedList(likedMaps: List<LikedMapData>) {
             infoDatas.filter { infoData ->
-              likedMaps.map { it.mapTitle }
-                .contains(infoData.mapTitle)
-            }.map { it.isLiked = true }
+              likedMaps.map { it.mapId }
+                .contains(infoData.mapId)
+            }.map { it.liked = true }
             profileRouteListener.listProfileRoute(infoDatas)
           }
 
