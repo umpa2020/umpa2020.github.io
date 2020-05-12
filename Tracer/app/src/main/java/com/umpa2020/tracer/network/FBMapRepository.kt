@@ -95,4 +95,19 @@ class FBMapRepository : BaseFB() {
     // 히스토리 업로드
     FBUserActivityRepository().createUserHistory(activityData)
   }
+
+  suspend fun listPlayed(): List<String> {
+    return db.collection(BaseFB.USERS).document(UserInfo.autoLoginKey).collection(BaseFB.ACTIVITIES)
+      .get()
+      .await()
+      .documents.map {
+        it.getString(BaseFB.MAP_ID)!!
+      }
+  }
+  suspend fun listLikedMap() : List<String>  {
+    return db.collection(BaseFB.USERS).document(UserInfo.autoLoginKey).collection(BaseFB.LIKED_MAP)
+      .get().await().documents.map {
+        it.getString(BaseFB.MAP_ID)!!
+      }
+  }
 }

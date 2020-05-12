@@ -11,13 +11,15 @@ import com.umpa2020.tracer.dataClass.PlayedMapData
 import com.umpa2020.tracer.network.BaseFB.Companion.PLAYS
 import com.umpa2020.tracer.network.BaseFB.Companion.LIKES
 import com.umpa2020.tracer.network.BaseFB.Companion.MAPS
+import com.umpa2020.tracer.util.UserInfo
+import kotlinx.coroutines.tasks.await
 
 
 /**
  * 랭킹 네트워크 클래스 - 랭킹에 관련한
  * 네트워크 접근 함수는 이 곳에 정의
  */
-class FBRankingRepository(rankingListener: RankingListener) {
+class FBRankingRepository() {
   lateinit var infoData: InfoData
   lateinit var infoDatas: ArrayList<InfoData>
   val db = FirebaseFirestore.getInstance()
@@ -26,103 +28,70 @@ class FBRankingRepository(rankingListener: RankingListener) {
   /**
    * 현재 위치를 받아서 현재 위치와 필터에 적용한 위치 만큼 떨어져 있는 구간에서 실행순으로 정렬한 코드
    */
-  fun listRanking(
+  suspend fun listRanking(
     cur_loc: LatLng,
-    distance: Int,
+    boundary: Int,
     mode: String,
     limit: Long
-  ) {
+  ): MutableList<InfoData> {
     //결과로 가져온 location에서 정보추출 / 이건 위도 경도 형태로 받아오는 형식
     //Location 형태로 받아오고 싶다면 아래처럼
     //var getintentLocation = current
 
-    db.collection(MAPS)
+    val infoDatas = db.collection(MAPS)
       .orderBy(mode, Query.Direction.DESCENDING)
       .limit(limit)
-      .get()
-      .addOnSuccessListener { result ->
-        infoDatas = arrayListOf()
-
-        for (document in result) {
-          infoData = document.toObject(InfoData::class.java)
-          infoData.mapTitle = document.id
-          infoData.distance = SphericalUtil.computeDistanceBetween(
+      .get().await().documents.map {
+        globalStartAfter = it
+        it.toObject(InfoData::class.java)!!.apply {
+          distance = SphericalUtil.computeDistanceBetween(
             cur_loc,
-            LatLng(infoData.startLatitude!!, infoData.startLongitude!!)
+            LatLng(startLatitude!!, startLongitude!!)
           )
-          if (infoData.distance!! < distance * 1000) {
-            infoDatas.add(infoData)
-          }
-          globalStartAfter = document
         }
-        if (mode == PLAYS) {
-          FBPlayedRepository().listPlayed(playedMapListener)
-        } else if (mode == LIKES) {
-          FBLikesRepository().listLikedMap(likedMapListener)
-        }
-      }
+      }.filter {
+        it.distance!! < boundary * 1000
+      }.toMutableList()
+
+    val playedMapIdList = FBMapRepository().listPlayed()
+    val likedMapIdList = FBMapRepository().listLikedMap()
+    infoDatas.filter { playedMapIdList.contains(it.mapId) }.forEach { it.played = true }
+    infoDatas.filter { likedMapIdList.contains(it.mapId) }.forEach { it.liked = true }
+    return infoDatas
   }
 
-  fun listFilterRange(
+  suspend fun listFilterRange(
     cur_loc: LatLng,
-    distance: Int,
+    boundary: Int,
     mode: String,
     limit: Long
-  ) {
+  ): MutableList<InfoData> {
     //결과로 가져온 location에서 정보추출 / 이건 위도 경도 형태로 받아오는 형식
     //Location 형태로 받아오고 싶다면 아래처럼
     //var getintentLocation = current
 
-    db.collection(MAPS)
+    val infoDatas = db.collection(MAPS)
       .orderBy(mode, Query.Direction.DESCENDING)
       .startAfter(globalStartAfter)
       .limit(limit)
-      .get()
-      .addOnSuccessListener { result ->
-        infoDatas = arrayListOf()
-
-        for (document in result) {
-          infoData = document.toObject(InfoData::class.java)
-          infoData.mapTitle = document.id
-          infoData.distance = SphericalUtil.computeDistanceBetween(
+      .get().await().documents.map {
+        globalStartAfter = it
+        it.toObject(InfoData::class.java)!!.apply {
+          distance = SphericalUtil.computeDistanceBetween(
             cur_loc,
-            LatLng(infoData.startLatitude!!, infoData.startLongitude!!)
+            LatLng(startLatitude!!, startLongitude!!)
           )
-          if (infoData.distance!! < distance * 1000) {
-            infoDatas.add(infoData)
-          }
-          globalStartAfter = document
         }
-        if (mode == PLAYS) {
-          FBPlayedRepository().listPlayed(playedMapListener)
-        } else if (mode == LIKES) {
-          FBLikesRepository().listLikedMap(likedMapListener)
-        }
-      }
+      }.filter {
+        it.distance!! < boundary * 1000
+      }.toMutableList()
+
+    val playedMapIdList = FBMapRepository().listPlayed()
+    val likedMapIdList = FBMapRepository().listLikedMap()
+    infoDatas.filter { playedMapIdList.contains(it.mapId) }.forEach { it.played = true }
+    infoDatas.filter { likedMapIdList.contains(it.mapId) }.forEach { it.liked = true }
+    return infoDatas
   }
 
-  private val playedMapListener = object : PlayedMapListener {
-    override fun played(playedMapDatas: ArrayList<PlayedMapData>) {
-      infoDatas.filter { infoData ->
-        playedMapDatas.map { it.mapTitle }
-          .contains(infoData.mapTitle)
-      }.map { it.played = true }
 
-      rankingListener.getRank(infoDatas, PLAYS)
-    }
-  }
-
-  // 좋아요 필터를 눌렀을 때, 유저가 좋아요 누른 맵들을 가져오는 리스너
-  private val likedMapListener = object : LikedMapListener {
-    override fun likedList(likedMaps: List<LikedMapData>) {
-      infoDatas.filter { infoData ->
-        likedMaps.map { it.mapId }
-          .contains(infoData.mapId)
-      }.map { it.liked = true }
-      rankingListener.getRank(infoDatas, LIKES)
-    }
-
-    override fun liked(liked: Boolean, likes: Int) {
-    }
-  }
 }

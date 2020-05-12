@@ -19,11 +19,12 @@ import com.umpa2020.tracer.constant.Constants.Companion.MAX_SEEKERBAR
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.main.MainActivity.Companion.gpsViewModel
 import com.umpa2020.tracer.network.FBRankingRepository
-import com.umpa2020.tracer.network.RankingListener
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.fragment_ranking.*
 import kotlinx.android.synthetic.main.fragment_ranking.view.*
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 
 
 /**
@@ -40,7 +41,7 @@ class RankingFragment : Fragment(), OnSingleClickListener {
   var isLoding = false
   var limit = 0L
 
-  var rankingLatLng : LatLng? = null
+  var rankingLatLng: LatLng? = null
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -60,8 +61,6 @@ class RankingFragment : Fragment(), OnSingleClickListener {
     val view = inflater.inflate(R.layout.fragment_ranking, container, false)
     root = view
 
-    rankingRepo = FBRankingRepository(rankingListener)
-
     view.rank_recycler_map.addOnScrollListener(object : RecyclerView.OnScrollListener() {
       override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
         if (!rank_recycler_map.canScrollVertically(-1)) {
@@ -71,22 +70,20 @@ class RankingFragment : Fragment(), OnSingleClickListener {
           if (requireView().tuneRadioBtnExecute.isChecked) {
             requireView().rankingfiltermode.text = getString(R.string.execute)
             if (!isLoding) {
-              rankingRepo.listFilterRange(
-                rankingLatLng!!,
-                tuneDistance,
-                "plays",
-                20
-              )
+              MainScope().launch {
+                FBRankingRepository().listFilterRange(rankingLatLng!!, tuneDistance, "plays", limit).let {
+                  getRank(it, "plays")
+                }
+              }
             }
           } else {
             requireView().rankingfiltermode.text = getString(R.string.likes)
             if (!isLoding) {
-              rankingRepo.listFilterRange(
-                rankingLatLng!!,
-                tuneDistance,
-                "likes",
-                20
-              )
+              MainScope().launch {
+                FBRankingRepository().listFilterRange(rankingLatLng!!, tuneDistance, "likes", limit).let {
+                  getRank(it, "likes")
+                }
+              }
             }
           }
           isLoding = true
@@ -142,29 +139,25 @@ class RankingFragment : Fragment(), OnSingleClickListener {
         tuneDistance = distance
 
         rootInfoDatas.clear()
-        rankingRepo = FBRankingRepository(rankingListener)
-
 
         if (rankingLatLng != null) {
           //실행순 버튼에 체크가 되어 있을 경우
           if (requireView().tuneRadioBtnExecute.isChecked) {
             requireView().rankingfiltermode.text = getString(R.string.execute)
 
-            rankingRepo.listRanking(
-              rankingLatLng!!,
-              tuneDistance,
-              "plays",
-              20
-            )
+            MainScope().launch {
+              FBRankingRepository().listRanking(rankingLatLng!!, tuneDistance, "plays", limit).let {
+                getRank(it, "plays")
+              }
+            }
           } else {
             requireView().rankingfiltermode.text = getString(R.string.likes)
 
-            rankingRepo.listRanking(
-              rankingLatLng!!,
-              tuneDistance,
-              "likes",
-              20
-            )
+            MainScope().launch {
+              FBRankingRepository().listRanking(rankingLatLng!!, tuneDistance, "likes", limit).let {
+                getRank(it, "likes")
+              }
+            }
           }
           disappearAnimation()
         }
@@ -180,28 +173,24 @@ class RankingFragment : Fragment(), OnSingleClickListener {
       if (limit == 0L) limit = 20L
       else rootInfoDatas.clear()
 
-      rankingRepo = FBRankingRepository(rankingListener)
-
       if (rankingLatLng != null) {
         //실행순 버튼에 체크가 되어 있을 경우
         if (requireView().tuneRadioBtnExecute.isChecked) {
           requireView().rankingfiltermode.text = getString(R.string.execute)
 
-          rankingRepo.listRanking(
-            rankingLatLng!!,
-            tuneDistance,
-            "plays",
-            limit
-          )
+          MainScope().launch {
+            FBRankingRepository().listRanking(rankingLatLng!!, tuneDistance, "plays", limit).let {
+              getRank(it, "plays")
+            }
+          }
         } else {
           requireView().rankingfiltermode.text = getString(R.string.likes)
 
-          rankingRepo.listRanking(
-            rankingLatLng!!,
-            tuneDistance,
-            "likes",
-            limit
-          )
+          MainScope().launch {
+            FBRankingRepository().listRanking(rankingLatLng!!, tuneDistance, "likes", limit).let {
+              getRank(it, "likes")
+            }
+          }
         }
       }
     }
@@ -236,21 +225,19 @@ class RankingFragment : Fragment(), OnSingleClickListener {
     requireView().tuneLinearLayout.startAnimation(animate)
   }
 
-  private val rankingListener = object : RankingListener {
-    override fun getRank(infoDatas: ArrayList<InfoData>, mode: String) {
-      rootInfoDatas.addAll(infoDatas)
-      if (rootInfoDatas.isEmpty()) {
-        rankingRecyclerRouteisEmpty.visibility = View.VISIBLE
+  fun getRank(infoDatas: MutableList<InfoData>, mode: String) {
+    rootInfoDatas.addAll(infoDatas)
+    if (rootInfoDatas.isEmpty()) {
+      rankingRecyclerRouteisEmpty.visibility = View.VISIBLE
+    } else {
+      //레이아웃 매니저, 어댑터 추가
+      if (rootInfoDatas.size < 21) {
+        rank_recycler_map.layoutManager = LinearLayoutManager(context)
+        rank_recycler_map.adapter = MapRankingAdapter(rootInfoDatas, mode)
       } else {
-        //레이아웃 매니저, 어댑터 추가
-        if (rootInfoDatas.size < 21) {
-          rank_recycler_map.layoutManager = LinearLayoutManager(context)
-          rank_recycler_map.adapter = MapRankingAdapter(rootInfoDatas, mode)
-        } else {
-          rank_recycler_map.adapter!!.notifyDataSetChanged()
-        }
-        isLoding = false
+        rank_recycler_map.adapter!!.notifyDataSetChanged()
       }
+      isLoding = false
     }
   }
 }

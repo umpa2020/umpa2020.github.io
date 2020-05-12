@@ -2,9 +2,13 @@ package com.umpa2020.tracer.network
 
 import android.net.Uri
 import android.widget.ImageView
+import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.Query
+import com.google.maps.android.SphericalUtil
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.LikedMapData
+import com.umpa2020.tracer.dataClass.PlayedMapData
 import com.umpa2020.tracer.dataClass.ProfileData
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.UserInfo
@@ -26,12 +30,13 @@ class CoroutineTestRepository : BaseFB() {
    * 받은 닉네임으로 uid를 db에서 찾아서
    * 해당 사용자가 뛴 거리, 뛴
    */
-  suspend fun getProfileImage(uid: String) :Uri?{
+  suspend fun getProfileImage(uid: String): Uri? {
     return db.collection(USERS).whereEqualTo(USER_ID, uid)
-        .get().await().let {
-          FBStorageRepository().downloadFile(it.first().getString(PROFILE_IMAGE_PATH)!!)
-        }
+      .get().await().let {
+        FBStorageRepository().downloadFile(it.first().getString(PROFILE_IMAGE_PATH)!!)
+      }
   }
+
   suspend fun getProfile(uid: String): ProfileData {
     return db.collection(USERS).document(uid).get().await().let {
       var sumDistance = 0.0
@@ -40,7 +45,7 @@ class CoroutineTestRepository : BaseFB() {
         sumDistance += it.get(DISTANCE) as Double
         sumTime += it.get(TIME) as Long
       }
-      ProfileData(sumDistance, sumTime,FBStorageRepository().downloadFile(it.getString(PROFILE_IMAGE_PATH)!!)!! )
+      ProfileData(sumDistance, sumTime, FBStorageRepository().downloadFile(it.getString(PROFILE_IMAGE_PATH)!!)!!)
     }
   }
 
@@ -153,4 +158,6 @@ class CoroutineTestRepository : BaseFB() {
         FBLikesRepository().listLikedMap(likedMapListener)
       }
   }
+
+
 }

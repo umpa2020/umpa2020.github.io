@@ -143,8 +143,6 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
 
 
   fun save(imgPath: String) {
-    Logg.d("Start Saving")
-
     val saveFolder = File(baseContext.filesDir, "routeGPX") // 저장 경로
     if (!saveFolder.exists()) {       //폴더 없으면 생성
       saveFolder.mkdir()
@@ -159,12 +157,12 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
     val timestamp = Date().time
 
     // 인포데이터에 필요한 내용을 저장하고
-    infoData.mapId=mapTitleEdit.text.toString() + timestamp.toString()
+    infoData.mapId = mapTitleEdit.text.toString() + timestamp.toString()
     infoData.makerId = UserInfo.autoLoginKey
     infoData.mapTitle = mapTitleEdit.text.toString()
     infoData.mapImagePath = "mapImage/${infoData.mapTitle}"
     infoData.mapExplanation = mapExplanationEdit.text.toString()
-    infoData.plays = 0
+    infoData.plays = 1
     infoData.likes = 0
     infoData.routeGPXPath = "$MAP_ROUTE/${infoData.mapId}/${infoData.mapTitle!!}"
 
@@ -181,7 +179,7 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
     val activityData = ActivityData(infoData.mapId, timestamp, infoData.distance, "map save")
     Logg.d("Start Upload")
 
-    FBMapRepository().uploadMap(infoData,rankingData,activityData,timestamp.toString(),routeGpxFile,Uri.fromFile(File(imgPath)))
+    FBMapRepository().uploadMap(infoData, rankingData, activityData, timestamp.toString(), routeGpxFile, Uri.fromFile(File(imgPath)))
     Logg.d("Finish Upload")
     progressBar.dismiss()
     finish()
