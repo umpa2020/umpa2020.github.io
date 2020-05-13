@@ -2,6 +2,7 @@ package com.umpa2020.tracer.main.ranking
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -49,7 +50,7 @@ class MapRankingAdapter(
       holder.modeIcon.tag = R.drawable.ic_sneaker_for_running
 
       if (infoData.played) {
-        holder.modeIcon.setColorFilter(R.color.green)
+        holder.modeIcon.setColorFilter(Color.CYAN)
       }
       holder.modeNo.text = infoData.plays.toString()
     } else if (mode == "likes") {

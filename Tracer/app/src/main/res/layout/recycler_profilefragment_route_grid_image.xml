@@ -103,6 +103,7 @@
           android:id="@+id/profileFragmentLike"/>
 
         <ImageView
+          android:id="@+id/profileFragmentPlay"
           android:layout_width="26dp"
           android:layout_height="26dp"
           android:scaleType="fitXY"

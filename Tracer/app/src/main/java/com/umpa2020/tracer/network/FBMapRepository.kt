@@ -48,6 +48,13 @@ class FBMapRepository : BaseFB() {
   }
 
   /**
+   * mapId의 plays를 반환
+   */
+  suspend fun getMapPlays(mapId: String): Int {
+    return mapsCollectionRef.document(mapId).get().await().getLong(PLAYS)!!.toInt()
+  }
+
+  /**
    * StartFragment 에서 현재 화면에 보이는 지도 안에서
    * Tracer 에서 만들어진 맵이 있다면 찾아와서 마커에 표현할 수 있도록
    * 리스트로 받아오는 함수
@@ -88,12 +95,12 @@ class FBMapRepository : BaseFB() {
    */
   fun uploadMap(infoData: InfoData, rankingData: RankingData, activityData: ActivityData, timestamp: String, gpxUri: Uri, imgPath: Uri) {
     //Maps/mapId에 새로운 맵 정보 생성
-    mapsCollectionRef.document(infoData.mapId!!).set(infoData)
+    mapsCollectionRef.document(infoData.mapId).set(infoData)
     //racerGPX
-    FBStorageRepository().uploadFile(imgPath, infoData.mapImagePath!!)
-    FBStorageRepository().uploadFile(gpxUri, infoData.routeGPXPath!!)
+    FBStorageRepository().uploadFile(imgPath, infoData.mapImagePath)
+    FBStorageRepository().uploadFile(gpxUri, infoData.routeGPXPath)
     FBStorageRepository().uploadFile(gpxUri, rankingData.racerGPX!!)
-    mapsCollectionRef.document(infoData.mapId!!).collection(RANKING)
+    mapsCollectionRef.document(infoData.mapId).collection(RANKING)
       .document(UserInfo.autoLoginKey + timestamp).set(rankingData)
     // 히스토리 업로드
     FBUsersRepository().createUserHistory(activityData)

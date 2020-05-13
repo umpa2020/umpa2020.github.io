@@ -20,8 +20,7 @@ import kotlinx.coroutines.tasks.await
  * 3. 유저가 challenge 한 맵 history 저장
  */
 
-class FBUsersRepository {
-  val db = FirebaseFirestore.getInstance()
+class FBUsersRepository: BaseFB() {
   var globalStartAfter: DocumentSnapshot? = null
 
   fun createUserInfo(data: HashMap<String, String?>) {
@@ -40,7 +39,7 @@ class FBUsersRepository {
 
   suspend fun listUserMakingActivity(limit: Long): List<ActivityData>? {
     return (if (globalStartAfter == null) db.collection(USERS).document(UserInfo.autoLoginKey).collection(ACTIVITIES)
-    else db.collection(USERS).document(UserInfo.autoLoginKey).collection(ACTIVITIES).startAfter(globalStartAfter!!))
+    else usersCollectionRef.document(UserInfo.autoLoginKey).collection(ACTIVITIES).startAfter(globalStartAfter!!))
       .limit(limit).get().await().apply {
         globalStartAfter = last()
       }.toObjects(ActivityData::class.java)
@@ -49,20 +48,28 @@ class FBUsersRepository {
   suspend fun listUserRoute(uid: String, limit: Long): List<InfoData>? {
     val infoDatas =
       if (globalStartAfter == null) {
-        db.collection(BaseFB.MAPS).whereEqualTo(BaseFB.MAKER_ID, uid)
+        mapsCollectionRef.whereEqualTo(BaseFB.MAKER_ID, uid)
       } else {
-        db.collection(BaseFB.MAPS).whereEqualTo(BaseFB.MAKER_ID, uid).startAfter(globalStartAfter!!)
+        mapsCollectionRef.whereEqualTo(BaseFB.MAKER_ID, uid).startAfter(globalStartAfter!!)
       }.limit(limit).get().await().apply {
         if (documents.size == 0)
           return null
         globalStartAfter = documents.last()
       }.toObjects(InfoData::class.java)
 
-
     val playedMapIdList = FBMapRepository().listPlayed()
     val likedMapIdList = FBMapRepository().listLikedMap()
     infoDatas.filter { playedMapIdList.contains(it.mapId) }.forEach { it.played = true }
     infoDatas.filter { likedMapIdList.contains(it.mapId) }.forEach { it.liked = true }
     return infoDatas
+  }
+
+  /**
+   * uid가 mapid를 like 했는지 Boolean으로 반환
+   */
+  suspend fun isPlayed(uid: String, mapId: String): Boolean {
+    return !usersCollectionRef.document(uid).collection(ACTIVITIES)
+      .whereEqualTo(MAP_ID, mapId)
+      .get().await().isEmpty
   }
 }
