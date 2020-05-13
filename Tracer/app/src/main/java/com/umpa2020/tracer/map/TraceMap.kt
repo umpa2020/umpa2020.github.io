@@ -30,6 +30,8 @@ class TraceMap(val mMap: GoogleMap) {
   )
   var markerList = mutableListOf<Marker>()
   var turningPointList = mutableListOf<Marker>()
+  val unPassedIcon = R.drawable.ic_unpassed_circle.makingIcon()
+
   fun drawRoute(
     trkList: List<WayPoint>,
     wptList: List<WayPoint>
@@ -44,65 +46,8 @@ class TraceMap(val mMap: GoogleMap) {
           .startCap(RoundCap() as Cap)
           .endCap(RoundCap())
       )        //경로를 그릴 폴리라인 집합
-    val unPassedIcon = R.drawable.ic_unpassed_circle.makingIcon()
-    wptList.forEachIndexed { i, it ->
-      when (it.type) {
-        START_POINT -> {
-          markerList.add(
-            mMap.addMarker(
-              MarkerOptions()
-                .position(it.toLatLng())
-                .title(it.name)
-                .icon(R.drawable.ic_start_point.makingIcon())
-            )
-          )
 
-        }
-        FINISH_POINT -> {
-          markerList.add(
-            mMap.addMarker(
-              MarkerOptions()
-                .position(it.toLatLng())
-                .title(it.name)
-                .icon(R.drawable.ic_finish_point.makingIcon())
-            )
-          )
-        }
-        DISTANCE_POINT -> {
-          markerList.add(
-            mMap.addMarker(
-              MarkerOptions()
-                .position(it.toLatLng())
-                .title(it.name)
-                .icon(unPassedIcon)
-                .anchor(0f, 0.5f)
-            )
-          )
-        }
-        TURNING_LEFT_POINT -> {
-          turningPointList.add(
-            mMap.addMarker(
-              MarkerOptions()
-                .position(it.toLatLng())
-                .title(it.desc)
-                .icon(R.drawable.ic_turn_left.makingIcon())
-            )
-          )
-        }
-        TURNING_RIGHT_POINT -> {
-          turningPointList.add(
-            mMap.addMarker(
-              MarkerOptions()
-                .position(it.toLatLng())
-                .title(it.desc)
-                .icon(R.drawable.ic_turn_right.makingIcon())
-            )
-          )
-        }
-        else -> {
-        }
-      }
-    }
+    wptList.forEach { addMarker(it) }
     val trackBounds = track.toMutableList().bounds()
     mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(trackBounds, 1080, 300, 100))
     return Pair(markerList, turningPointList)
@@ -173,4 +118,62 @@ class TraceMap(val mMap: GoogleMap) {
     racerList[racerNo].remove()
   }
 
+  fun addMarker(wpt:WayPoint){
+    when (wpt.type) {
+      START_POINT -> {
+        markerList.add(
+          mMap.addMarker(
+            MarkerOptions()
+              .position(wpt.toLatLng())
+              .title(wpt.name)
+              .icon(R.drawable.ic_start_point.makingIcon())
+          )
+        )
+
+      }
+      FINISH_POINT -> {
+        markerList.add(
+          mMap.addMarker(
+            MarkerOptions()
+              .position(wpt.toLatLng())
+              .title(wpt.name)
+              .icon(R.drawable.ic_finish_point.makingIcon())
+          )
+        )
+      }
+      DISTANCE_POINT -> {
+        markerList.add(
+          mMap.addMarker(
+            MarkerOptions()
+              .position(wpt.toLatLng())
+              .title(wpt.name)
+              .icon(unPassedIcon)
+              .anchor(0f, 0.5f)
+          )
+        )
+      }
+      TURNING_LEFT_POINT -> {
+        turningPointList.add(
+          mMap.addMarker(
+            MarkerOptions()
+              .position(wpt.toLatLng())
+              .title(wpt.desc)
+              .icon(R.drawable.ic_turn_left.makingIcon())
+          )
+        )
+      }
+      TURNING_RIGHT_POINT -> {
+        turningPointList.add(
+          mMap.addMarker(
+            MarkerOptions()
+              .position(wpt.toLatLng())
+              .title(wpt.desc)
+              .icon(R.drawable.ic_turn_right.makingIcon())
+          )
+        )
+      }
+      else -> {
+      }
+    }
+  }
 }

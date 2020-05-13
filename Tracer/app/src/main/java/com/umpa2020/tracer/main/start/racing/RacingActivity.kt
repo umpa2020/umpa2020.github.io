@@ -232,7 +232,7 @@ class RacingActivity : BaseRunningActivity() {
           run loop@{
             wpts.forEachIndexed { index, it ->
               if (index + 2 == wpts.size) return@loop
-              val duration =  TimeUnit.MILLISECONDS.toSeconds((wpts[index + 1].time!! - wpts[index].time!!))
+              val duration =  (wpts[index + 1].time!! - wpts[index].time!!)
               val unitDuration= duration/ (wptIndices[index + 1] - wptIndices[index])
               
               Logg.d("기간 $unitDuration  1 : ${wpts[index + 1].time}   2: ${wpts[index].time}")
@@ -298,7 +298,7 @@ class RacingActivity : BaseRunningActivity() {
     ) {
       traceMap.changeMarkerIcon(nextWP)
       nextWP++
-      wpList.add(currentLocation.toWayPoint(DISTANCE_POINT)      )
+      wpList.add(currentLocation.toWayPoint(DISTANCE_POINT))
       if (nextWP == markerList.size) {
         stop()
       }
