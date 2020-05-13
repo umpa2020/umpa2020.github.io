@@ -32,6 +32,7 @@ import com.umpa2020.tracer.network.FBProfileRepository
 import com.umpa2020.tracer.network.FBStorageRepository
 import com.umpa2020.tracer.util.Chart
 import com.umpa2020.tracer.util.ChoicePopup
+import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.activity_rank_recycler_item_click.*
 import kotlinx.android.synthetic.main.activity_ranking_map_detail.*
@@ -49,8 +50,11 @@ class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener, OnM
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_ranking_map_detail)
+    val progressBar = MyProgressBar()
+    progressBar.show()
     //전달 받은 값으로 Title 설정
     mapId = intent.extras?.getString("mapId").toString()
+    val time = mapId.subSequence(mapId.length - TIMESTAMP_LENGTH, mapId.length).toString()
 
     val smf =
       supportFragmentManager.findFragmentById(R.id.rankingDetailMapViewer) as SupportMapFragment
@@ -68,7 +72,7 @@ class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener, OnM
 
       FBMapRepository().getMapInfo(mapId)?.let {
         rankingDetailMapTitle.text = it.mapTitle
-        rankingDetailDate.text = it.time.format(Y_M_D)
+        rankingDetailDate.text = time.toLong().format(Y_M_D)
         rankingDetailMapDetail.text = it.mapExplanation
         rankingDetailDistance.text = String.format("%.2f", it.distance / 1000)
         rankingDetailTime.text = it.time.format(m_s)
@@ -91,6 +95,7 @@ class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener, OnM
         }
         FBProfileRepository().getUserNickname(it.makerId).let {
           rankingDetailNickname.text = it
+          progressBar.dismiss()
         }
       }
     }

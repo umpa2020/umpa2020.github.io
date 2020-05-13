@@ -6,6 +6,7 @@ import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.RankingData
 import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.extensions.gpxToClass
+import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.coroutines.tasks.await
 import java.util.*
@@ -26,19 +27,19 @@ class FBRacingRepository : BaseFB() {
   ) {
     val timestamp = Date().time
     //besttime인지 체크
-    db.collection(MAPS).document(racerData.mapId!!).collection(RANKING)
+    db.collection(MAPS).document(racerData.mapId).collection(RANKING)
       .whereEqualTo(BEST_TIME, true)
+      .whereEqualTo(CHALLENGER_Id, UserInfo.autoLoginKey)
       .get().await().let {
         it.documents.filter {
-          it.get(CHALLENGER_Id) == UserInfo.nickname &&
-            it.getLong(CHALLENGER_TIME)!! > racerData.time!!.toLong()
+          it.getLong(CHALLENGER_TIME)!! > racerData.time
         }.forEach {
           it.reference.update(BEST_TIME, false)
-          rankingData.BestTime = false
+          rankingData.BestTime = true
         }
       }
     rankingData.racerGPX = "$MAP_ROUTE/${racerData.mapId}/$RACING_GPX/$UserInfo.autoLoginKey"
-    db.collection(MAPS).document(racerData.mapId!!).collection(RANKING)
+    db.collection(MAPS).document(racerData.mapId).collection(RANKING)
       .document(UserInfo.autoLoginKey + timestamp).set(rankingData)
 
     //upload racerGpxFile

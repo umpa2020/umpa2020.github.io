@@ -9,7 +9,7 @@ data class RankingData(
   val challengerId: String?=null,
   val challengerNickname: String? = null,
   val challengerTime: Long? = null,
-  var BestTime: Boolean? = null,
+  var BestTime: Boolean = false,
   val maxSpeed: String? = null,
   val averageSpeed: String? = null,
   var racerGPX:String?=null

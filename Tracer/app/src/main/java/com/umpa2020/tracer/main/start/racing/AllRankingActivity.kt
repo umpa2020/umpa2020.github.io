@@ -12,7 +12,7 @@ class AllRankingActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_all_ranking)
 
-    val arrRankingData: ArrayList<RankingData> = intent.getParcelableArrayListExtra("arrRankingData")!!
+    val arrRankingData = intent.getParcelableArrayListExtra<RankingData>("arrRankingData")!!
     resultPlayerRankingRecycler.layoutManager = LinearLayoutManager(this)
     resultPlayerRankingRecycler.adapter = AllRankingRecyclerViewAdapter(arrRankingData)
   }

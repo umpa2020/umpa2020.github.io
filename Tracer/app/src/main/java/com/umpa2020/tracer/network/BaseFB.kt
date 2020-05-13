@@ -45,6 +45,7 @@ open class BaseFB {
     const val MAP_IMAGE_PATH = "mapImagePath"
 
     const val TIME = "time"
+    const val PLAY_TIME = "playTime"
     const val MAKER_ID = "makerId"
 
     const val CHALLENGER_Id = "challengerId"

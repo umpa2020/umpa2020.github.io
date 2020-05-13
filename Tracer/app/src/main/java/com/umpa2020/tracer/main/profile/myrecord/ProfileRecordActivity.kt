@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.ActivityData
 import com.umpa2020.tracer.network.FBUsersRepository
+import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.MyProgressBar
 import kotlinx.android.synthetic.main.activity_profile_record.*
 import kotlinx.coroutines.MainScope
@@ -65,9 +66,12 @@ class ProfileRecordActivity : AppCompatActivity() {
     /**
      * 나의 활동 리스트를 가져오기
      */
+
     MainScope().launch {
       userActivityRepo.listUserMakingActivity(limit)?.let {
         activityList(it)
+      } ?: kotlin.run {
+        activityList(rootActivityDatas)
       }
     }
     super.onResume()

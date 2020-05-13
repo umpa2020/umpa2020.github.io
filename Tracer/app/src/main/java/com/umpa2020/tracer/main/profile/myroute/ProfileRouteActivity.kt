@@ -78,9 +78,8 @@ class ProfileRouteActivity : AppCompatActivity() {
    * 리사이클러뷰에 띄워줌
    */
   fun listProfileRoute(infoDatas: List<InfoData>?) {
-    if (infoDatas == null)
-      return
-    rootInfoDatas.addAll(infoDatas)
+    if (infoDatas != null)
+      rootInfoDatas.addAll(infoDatas)
 
     if (rootInfoDatas.isEmpty()) {
       profileRecyclerRouteisEmpty.visibility = View.VISIBLE

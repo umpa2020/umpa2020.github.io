@@ -37,6 +37,8 @@ class FBUsersRepository : BaseFB() {
     return (if (globalStartAfter == null) db.collection(USERS).document(UserInfo.autoLoginKey).collection(ACTIVITIES)
     else usersCollectionRef.document(UserInfo.autoLoginKey).collection(ACTIVITIES).startAfter(globalStartAfter!!))
       .limit(limit).get().await().apply {
+        if (documents.isEmpty())
+          return null
         globalStartAfter = last()
       }.toObjects(ActivityData::class.java)
   }

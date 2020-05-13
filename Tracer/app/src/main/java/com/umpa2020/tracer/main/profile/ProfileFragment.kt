@@ -48,9 +48,6 @@ class ProfileFragment() : Fragment(), OnSingleClickListener, Parcelable {
     val view = inflater.inflate(R.layout.fragment_profile, container, false)
     root = view
 
-    Logg.d("ssmm11 birth = ${UserInfo.birth}")
-
-
     // 공유 프리페런스에 있는 닉네임을 반영
     view.profileIdTextView.text = UserInfo.nickname
 
