@@ -25,6 +25,7 @@ class ProfileRouteActivity : AppCompatActivity() {
   val routeRepo = FBProfileRepository()
   val rootInfoDatas = arrayListOf<InfoData>()
   var limit = 0L
+  val repository = FBUsersRepository()
 
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,7 +47,7 @@ class ProfileRouteActivity : AppCompatActivity() {
           // 리사이클러뷰가 맨 아래로 이동했을 경우
           if (!isLoding) {
             MainScope().launch {
-              listProfileRoute(FBUsersRepository().listUserRoute(uid, 5))
+              listProfileRoute(repository.listUserRoute(uid, 5))
             }
 
           }
@@ -69,7 +70,7 @@ class ProfileRouteActivity : AppCompatActivity() {
     if (limit == 0L) limit = 5L
     else rootInfoDatas.clear()
     MainScope().launch {
-      listProfileRoute(FBUsersRepository().listUserRoute(uid, limit))
+      listProfileRoute(repository.listUserRoute(uid, limit))
     }
     super.onResume()
   }
@@ -78,22 +79,24 @@ class ProfileRouteActivity : AppCompatActivity() {
    * 리스너로 받아온 루트 데이터들을
    * 리사이클러뷰에 띄워줌
    */
-  fun listProfileRoute(infoDatas: List<InfoData>) {
-      rootInfoDatas.addAll(infoDatas)
+  fun listProfileRoute(infoDatas: List<InfoData>?) {
+    if (infoDatas == null)
+      return
+    rootInfoDatas.addAll(infoDatas)
 
-      if (rootInfoDatas.isEmpty()) {
-        profileRecyclerRouteisEmpty.visibility = View.VISIBLE
-        progressbar.dismiss()
+    if (rootInfoDatas.isEmpty()) {
+      profileRecyclerRouteisEmpty.visibility = View.VISIBLE
+      progressbar.dismiss()
+    } else {
+      if (rootInfoDatas.size < 6) {
+        profileRecyclerRoute.adapter = ProfileRecyclerViewAdapterRoute(rootInfoDatas)
+        profileRecyclerRoute.layoutManager = LinearLayoutManager(App.instance)
+        profileRecyclerRouteisEmpty.visibility = View.GONE
       } else {
-        if (rootInfoDatas.size < 6) {
-          profileRecyclerRoute.adapter = ProfileRecyclerViewAdapterRoute(rootInfoDatas)
-          profileRecyclerRoute.layoutManager = LinearLayoutManager(App.instance)
-          profileRecyclerRouteisEmpty.visibility = View.GONE
-        } else {
-          profileRecyclerRoute.adapter!!.notifyDataSetChanged()
-        }
-        isLoding = false
-        progressbar.dismiss()
+        profileRecyclerRoute.adapter!!.notifyDataSetChanged()
+      }
+      isLoding = false
+      progressbar.dismiss()
     }
   }
 }

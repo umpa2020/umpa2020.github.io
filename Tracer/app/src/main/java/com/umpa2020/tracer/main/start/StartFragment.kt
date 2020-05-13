@@ -137,7 +137,6 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
     }
   }
 
-
   /**
    *  현재 맵 보이는 범위로 루트 검색
    */
@@ -212,7 +211,8 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
 
     Logg.d("onCreateView()")
     val view = inflater.inflate(R.layout.fragment_start, container, false)
-    view.test.setOnClickListener {
+    view.test.
+    setOnClickListener {
       val storage = FirebaseStorage.getInstance()
       val routeRef = storage.reference.child("mapRoute").child("asdasdqwe1587633430060")
       val localFile = File.createTempFile("routeGpx", "xml")

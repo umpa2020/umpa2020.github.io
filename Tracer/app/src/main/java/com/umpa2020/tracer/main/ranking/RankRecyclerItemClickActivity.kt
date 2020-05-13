@@ -10,6 +10,7 @@ import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants.Companion.TIMESTAMP_LENGTH
 import com.umpa2020.tracer.extensions.image
 import com.umpa2020.tracer.network.*
+import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_rank_recycler_item_click.*
@@ -27,6 +28,10 @@ class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_rank_recycler_item_click)
+
+    val progressBar = MyProgressBar()
+    progressBar.show()
+
     rankRecyclerMoreButton.setOnClickListener(this)
     rankRecyclerHeart.setOnClickListener(this)
 
@@ -34,6 +39,8 @@ class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener
     //전달 받은 값으로 Title 설정
     mapId = intent.extras?.getString("mapId").toString()
     mapTitle = mapId.subSequence(0, mapId.length - TIMESTAMP_LENGTH).toString()
+
+
 
     MainScope().launch {
       withContext(Dispatchers.IO) {
@@ -53,13 +60,14 @@ class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener
     rankRecyclerMapTitle.text = mapTitle
     MainScope().launch {
       rankRoutePriview.image(FBMapRepository().getMapImage(mapId))
-      setLiked( FBLikesRepository().isLiked(UserInfo.autoLoginKey,mapId),FBLikesRepository().getMapLikes(mapId))
+      setLiked(FBLikesRepository().isLiked(UserInfo.autoLoginKey, mapId), FBLikesRepository().getMapLikes(mapId))
       FBMapRepository().listMapRanking(mapId).let {
         //레이아웃 매니저 추가
         rankRecyclerItemClickRecyclerView.layoutManager = LinearLayoutManager(activity)
         //adpater 추가
         rankRecyclerItemClickRecyclerView.adapter =
           RankRecyclerViewAdapterTopPlayer(it, mapId)
+        progressBar.dismiss()
       }
     }
 
@@ -108,5 +116,6 @@ class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener
       rankRecyclerHeart.setImageResource(R.drawable.ic_favorite_border_black_24dp)
       rankRecyclerHeartSwitch.text = "off"
     }
+
   }
 }

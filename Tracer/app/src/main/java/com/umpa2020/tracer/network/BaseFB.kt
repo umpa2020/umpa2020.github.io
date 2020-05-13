@@ -3,6 +3,13 @@ package com.umpa2020.tracer.network
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 
+/**
+ * 파이어베이스 통신 기본 통신 규약
+ *
+ * 상수 같은 내용이나 Instance 를 담고 있어
+ * 이 클래스를 상속 받아 사용한다.
+ */
+
 open class BaseFB {
   val db = FirebaseFirestore.getInstance()
   val storage = FirebaseStorage.getInstance()
@@ -11,11 +18,13 @@ open class BaseFB {
   val mapRouteStorageRef = storage.reference.child(MAP_ROUTE)
 
   companion object {
+    /**
+     * mapId 가 기본키 mapTitle + timeStamp = mapId
+     */
     const val MAP_ID = "mapId"
     const val MAP_TITLE = "mapTitle"
 
     const val USERS = "users"
-
 
     const val LIKED_MAP = "likedMap"
     const val LIKES = "likes"
@@ -45,10 +54,6 @@ open class BaseFB {
     const val PROFILE = "Profile"
 
     const val NICKNAME = "nickname"
-
-    const val PRIVACY = "privacy"
-    const val RACING = "RACING"
-
 
     // for racing
     const val MAP_ROUTE = "mapRoute"

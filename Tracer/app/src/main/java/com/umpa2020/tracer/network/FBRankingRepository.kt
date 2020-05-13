@@ -19,7 +19,7 @@ import kotlinx.coroutines.tasks.await
  * 랭킹 네트워크 클래스 - 랭킹에 관련한
  * 네트워크 접근 함수는 이 곳에 정의
  */
-class FBRankingRepository:BaseFB(){
+class FBRankingRepository : BaseFB() {
   lateinit var globalStartAfter: DocumentSnapshot
 
   /**
@@ -31,9 +31,11 @@ class FBRankingRepository:BaseFB(){
     mode: String,
     limit: Long
   ): MutableList<InfoData> {
-    //결과로 가져온 location에서 정보추출 / 이건 위도 경도 형태로 받아오는 형식
-    //Location 형태로 받아오고 싶다면 아래처럼
-    //var getintentLocation = current
+    /**
+     * 결과로 가져온 location에서 정보추출 / 이건 위도 경도 형태로 받아오는 형식
+     * Location 형태로 받아오고 싶다면 아래처럼
+     * var getintentLocation = current
+     */
 
     val infoDatas = db.collection(MAPS)
       .orderBy(mode, Query.Direction.DESCENDING)
@@ -43,7 +45,7 @@ class FBRankingRepository:BaseFB(){
         it.toObject(InfoData::class.java)!!.apply {
           distance = SphericalUtil.computeDistanceBetween(
             cur_loc,
-            LatLng(startLatitude!!, startLongitude!!)
+            LatLng(startLatitude, startLongitude)
           )
         }
       }.filter {

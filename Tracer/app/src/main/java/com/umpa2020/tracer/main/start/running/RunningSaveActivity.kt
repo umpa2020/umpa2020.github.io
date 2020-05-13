@@ -157,7 +157,9 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
     infoData.mapExplanation = mapExplanationEdit.text.toString()
     infoData.plays = 1
     infoData.likes = 0
-    infoData.routeGPXPath = "$MAP_ROUTE/${infoData.mapId}/${infoData.mapId!!}"
+    infoData.maxSpeed = speedList.max()!!
+    infoData.averageSpeed = speedList.average()
+    infoData.routeGPXPath = "$MAP_ROUTE/${infoData.mapId}/${infoData.mapId}"
 
     val rankingData = RankingData(
       UserInfo.nickname,

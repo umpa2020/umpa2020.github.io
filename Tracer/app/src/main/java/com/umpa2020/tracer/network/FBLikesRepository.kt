@@ -35,10 +35,10 @@ class FBLikesRepository : BaseFB() {
     if (isLiked(uid, mapId)) {
       usersCollectionRef.document(uid).collection(LIKED_MAP).whereEqualTo(MAP_ID, mapId)
         .get().await().documents.first().reference.delete()
-      mapsCollectionRef.document(mapId).collection(LIKES).whereEqualTo(USER_ID,uid)
+      mapsCollectionRef.document(mapId).collection(LIKES).whereEqualTo(USER_ID, uid)
         .get().await().documents.first().reference.delete()
       mapsCollectionRef.document(mapId).update(LIKES, FieldValue.increment(-1))
-    }else{
+    } else {
       usersCollectionRef.document(UserInfo.autoLoginKey).collection(LIKED_MAP)
         .add(LikedMapData(mapId))
       mapsCollectionRef.document(mapId).collection(LIKES).add(UserId(uid))

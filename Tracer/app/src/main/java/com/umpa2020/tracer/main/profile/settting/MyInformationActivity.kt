@@ -12,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.extensions.image
-import com.umpa2020.tracer.network.CoroutineTestRepository
 import com.umpa2020.tracer.network.FBProfileRepository
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.OnSingleClickListener

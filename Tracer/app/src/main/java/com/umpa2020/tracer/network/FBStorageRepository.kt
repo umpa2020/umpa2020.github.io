@@ -23,9 +23,10 @@ class FBStorageRepository : BaseFB() {
    * storage에서 path를 넘겨주면 해당 파일을 uri로 반환
    */
   suspend fun downloadFile(path: String): Uri? {
-    return  storage.reference.child(path).downloadUrl.await()
+    return storage.reference.child(path).downloadUrl.await()
   }
-  suspend fun getFile(path: String):String{
+
+  suspend fun getFile(path: String): String {
     val localFile = File.createTempFile("routeGpx", "gpx")
     storage.reference.child(path).getFile(localFile).await()
     return localFile.path

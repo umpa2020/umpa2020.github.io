@@ -20,6 +20,7 @@ import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.main.MainActivity.Companion.gpsViewModel
 import com.umpa2020.tracer.network.FBRankingRepository
 import com.umpa2020.tracer.util.Logg
+import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.fragment_ranking.*
 import kotlinx.android.synthetic.main.fragment_ranking.view.*
@@ -42,6 +43,8 @@ class RankingFragment : Fragment(), OnSingleClickListener {
   var limit = 0L
 
   var rankingLatLng: LatLng? = null
+
+  val progressBar = MyProgressBar()
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -71,6 +74,7 @@ class RankingFragment : Fragment(), OnSingleClickListener {
             requireView().rankingfiltermode.text = getString(R.string.execute)
             if (!isLoding) {
               MainScope().launch {
+                progressBar.show()
                 FBRankingRepository().listFilterRange(rankingLatLng!!, tuneDistance, "plays", limit).let {
                   getRank(it, "plays")
                 }
@@ -80,6 +84,7 @@ class RankingFragment : Fragment(), OnSingleClickListener {
             requireView().rankingfiltermode.text = getString(R.string.likes)
             if (!isLoding) {
               MainScope().launch {
+                progressBar.show()
                 FBRankingRepository().listFilterRange(rankingLatLng!!, tuneDistance, "likes", limit).let {
                   getRank(it, "likes")
                 }
@@ -146,6 +151,7 @@ class RankingFragment : Fragment(), OnSingleClickListener {
             requireView().rankingfiltermode.text = getString(R.string.execute)
 
             MainScope().launch {
+              progressBar.show()
               FBRankingRepository().listRanking(rankingLatLng!!, tuneDistance, "plays", limit).let {
                 getRank(it, "plays")
               }
@@ -154,6 +160,7 @@ class RankingFragment : Fragment(), OnSingleClickListener {
             requireView().rankingfiltermode.text = getString(R.string.likes)
 
             MainScope().launch {
+              progressBar.show()
               FBRankingRepository().listRanking(rankingLatLng!!, tuneDistance, "likes", limit).let {
                 getRank(it, "likes")
               }
@@ -179,6 +186,7 @@ class RankingFragment : Fragment(), OnSingleClickListener {
           requireView().rankingfiltermode.text = getString(R.string.execute)
 
           MainScope().launch {
+            progressBar.show()
             FBRankingRepository().listRanking(rankingLatLng!!, tuneDistance, "plays", limit).let {
               getRank(it, "plays")
             }
@@ -187,6 +195,7 @@ class RankingFragment : Fragment(), OnSingleClickListener {
           requireView().rankingfiltermode.text = getString(R.string.likes)
 
           MainScope().launch {
+            progressBar.show()
             FBRankingRepository().listRanking(rankingLatLng!!, tuneDistance, "likes", limit).let {
               getRank(it, "likes")
             }
@@ -226,6 +235,8 @@ class RankingFragment : Fragment(), OnSingleClickListener {
   }
 
   fun getRank(infoDatas: MutableList<InfoData>, mode: String) {
+    progressBar.dismiss()
+
     rootInfoDatas.addAll(infoDatas)
     if (rootInfoDatas.isEmpty()) {
       rankingRecyclerRouteisEmpty.visibility = View.VISIBLE

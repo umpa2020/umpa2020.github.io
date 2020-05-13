@@ -12,19 +12,16 @@ import java.util.*
 
 /**
  * Profile fragment 에서 프로필을 설정하는 네트워크 클래스
- *
  */
 
 class FBProfileRepository : BaseFB() {
-  var profileImagePath = "init"
   lateinit var globalStartAfter: DocumentSnapshot
-
 
   suspend fun getUserNickname(uid: String): String {
     return db.collection(USERS).whereEqualTo(USER_ID, uid)
       .get()
       .await()
-      .documents.first().getString(NICKNAME)?:""
+      .documents.first().getString(NICKNAME) ?: ""
   }
 
   /**
@@ -44,9 +41,12 @@ class FBProfileRepository : BaseFB() {
       ProfileData(sumDistance, sumTime, FBStorageRepository().downloadFile(it.getString(PROFILE_IMAGE_PATH)!!)!!)
     }
   }
+
   suspend fun getProfileImage(uid: String): Uri? {
-    return FBStorageRepository().downloadFile(db.collection(USERS).whereEqualTo(USER_ID, uid)
-      .get().await().documents.first().getString(PROFILE_IMAGE_PATH)!!)
+    return FBStorageRepository().downloadFile(
+      db.collection(USERS).whereEqualTo(USER_ID, uid)
+        .get().await().documents.first().getString(PROFILE_IMAGE_PATH)!!
+    )
   }
 
 

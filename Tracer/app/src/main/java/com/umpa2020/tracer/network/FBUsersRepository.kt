@@ -29,6 +29,7 @@ class FBUsersRepository {
       .addOnSuccessListener { Logg.d("DocumentSnapshot successfully written!") }
       .addOnFailureListener { e -> Logg.w("Error writing document$e") }
   }
+
   fun createUserHistory(activityData: ActivityData) {
     db.collection(USERS).whereEqualTo(USER_ID, UserInfo.autoLoginKey)
       .get()
@@ -45,15 +46,20 @@ class FBUsersRepository {
       }.toObjects(ActivityData::class.java)
   }
 
-  suspend fun listUserRoute(uid: String, limit: Long): List<InfoData> {
+  suspend fun listUserRoute(uid: String, limit: Long): List<InfoData>? {
     val infoDatas =
       if (globalStartAfter == null) {
+        Logg.d("ssmm11 위")
         db.collection(BaseFB.MAPS).whereEqualTo(BaseFB.MAKER_ID, uid)
       } else {
+        Logg.d("ssmm11 아래")
         db.collection(BaseFB.MAPS).whereEqualTo(BaseFB.MAKER_ID, uid).startAfter(globalStartAfter!!)
       }.limit(limit).get().await().apply {
+        if (documents.size == 0)
+          return null
         globalStartAfter = documents.last()
       }.toObjects(InfoData::class.java)
+
 
     val playedMapIdList = FBMapRepository().listPlayed()
     val likedMapIdList = FBMapRepository().listLikedMap()

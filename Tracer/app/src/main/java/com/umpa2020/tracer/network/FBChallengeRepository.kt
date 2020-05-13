@@ -8,17 +8,25 @@ import com.umpa2020.tracer.util.UserInfo
 import kotlinx.coroutines.tasks.await
 
 /**
- *
+ * Challenge Tab 전용 Repository
  */
 
 class FBChallengeRepository : BaseFB() {
 
   /**
-   *
+   * Challenge Mode 데이터 추가하는 함수
+   * 현재 Challenge Tool bar 누르면 실행
+   * Release 에서는 닫아놓을 것
    */
+
   fun createChallengeData(challengeData: ChallengeData) {
     db.collection(CHALLENGES).add(challengeData)
   }
+
+  /**
+   * Challenge Mode 에서 하나의 챌린지가 선택되면
+   * Challenge ID 를 통해서 하나의 챌린지 데이터를 받아오는 함수
+   */
 
   suspend fun getChallengeData(challengeId: String): ChallengeData {
     return db.collection(CHALLENGES)
@@ -29,7 +37,8 @@ class FBChallengeRepository : BaseFB() {
   }
 
   /**
-   * 복합 색인 되면 이걸로
+   * Challenge Data 를 list 형태로 받아오는 함수
+   * 주로 필터링의 결과 값을 가져오는 데 사용
    */
 
   suspend fun listChallengeData(fromDate: Long, toDate: Long, region: String): MutableList<ChallengeData>? {
@@ -52,7 +61,9 @@ class FBChallengeRepository : BaseFB() {
         }.toMutableList()
     }
   }
+
   /**
+   * Challenge mode 첫 화면 배너들의 이미지 Path 를 전부 가져오는 함수
    * 바로 imageView 를 가져와서 등록한다.
    */
 

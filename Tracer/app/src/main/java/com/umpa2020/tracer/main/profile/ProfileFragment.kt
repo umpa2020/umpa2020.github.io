@@ -7,8 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.bumptech.glide.Glide
-import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.extensions.image
@@ -17,7 +15,6 @@ import com.umpa2020.tracer.extensions.prettyDistance
 import com.umpa2020.tracer.main.profile.myrecord.ProfileRecordActivity
 import com.umpa2020.tracer.main.profile.myroute.ProfileRouteActivity
 import com.umpa2020.tracer.main.profile.settting.AppSettingActivity
-import com.umpa2020.tracer.network.CoroutineTestRepository
 import com.umpa2020.tracer.network.FBProfileRepository
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.OnSingleClickListener
