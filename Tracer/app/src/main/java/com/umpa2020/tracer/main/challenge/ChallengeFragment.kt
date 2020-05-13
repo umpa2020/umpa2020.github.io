@@ -24,6 +24,8 @@ import com.umpa2020.tracer.network.*
 import com.umpa2020.tracer.util.Logg
 import kotlinx.android.synthetic.main.fragment_challenge.*
 import kotlinx.android.synthetic.main.fragment_challenge.view.*
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -48,8 +50,22 @@ class ChallengeFragment : Fragment() {
     view.btn_challenge_to.text = to.format(Y_M_D)
     view.btn_challenge_region.text = locale
 
-    FBChallengeBannerRepository().listChallengeBannerImagePath(bannerDataListener)
-    FBChallengeRepository().listChallengeData(from, to, "전국", challengeDataListener)
+    /**
+     * 배너에 들어가는 이미지와 아이디를 가져오는 리스너
+     */
+    MainScope().launch {
+      FBChallengeRepository().listChallengeBannerImagePath()?.let {
+        adChallengeScrollViewPager.adapter = AdChallengePageAdapter(it, requireContext())
+        adChallengeScrollViewPager.startAutoScroll()
+      }
+    }
+
+    MainScope().launch {
+      FBChallengeRepository().listChallengeData(from, to, "전국").let {
+        challengeDataList(it!!)
+      }
+    }
+
 
     view.challengeAppBarText.setOnClickListener {
       val intent = Intent(context, ChallengeDataSettingActivity::class.java)
@@ -113,31 +129,22 @@ class ChallengeFragment : Fragment() {
     }
 
     view.btn_challenge_search.setOnClickListener {
-      FBChallengeRepository().listChallengeData(from, to, locale, challengeDataListener)
+      MainScope().launch {
+        FBChallengeRepository().listChallengeData(from, to, locale).let {
+          challengeDataList(it!!)
+        }
+      }
     }
     return view
   }
 
   /**
-   * 배너에 들어가는 이미지와 아이디를 가져오는 리스너
-   */
-  private val bannerDataListener = object : BannerDataListener {
-    override fun bannerDataList(listBannerData: ArrayList<BannerData>) {
-      adChallengeList = listBannerData
-      adChallengeScrollViewPager.adapter = AdChallengePageAdapter(adChallengeList, requireContext())
-      adChallengeScrollViewPager.startAutoScroll()
-    }
-  }
-
-  /**
    * 챌린지 프래그먼트 리사이클러 등록하는 리스너
    */
-  private val challengeDataListener = object : ChallengeDataListener {
-    override fun challengeDataList(listChallengeData: MutableList<ChallengeData>) {
+    fun challengeDataList(listChallengeData: MutableList<ChallengeData>) {
       challenge_recycler_view.adapter = ChallengeRecyclerViewAdapter(listChallengeData)
       challenge_recycler_view.layoutManager = GridLayoutManager(context, 2)
     }
-  }
 }
 
 

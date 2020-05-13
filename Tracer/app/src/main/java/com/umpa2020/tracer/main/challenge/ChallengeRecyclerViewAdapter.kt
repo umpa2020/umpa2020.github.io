@@ -11,9 +11,12 @@ import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.ChallengeData
 import com.umpa2020.tracer.extensions.M_D
 import com.umpa2020.tracer.extensions.format
-import com.umpa2020.tracer.network.FBChallengeImageRepository
+import com.umpa2020.tracer.extensions.image
+import com.umpa2020.tracer.network.FBStorageRepository
 import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.recycler_challengefragment_item.view.*
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 
 class ChallengeRecyclerViewAdapter(var challenge: MutableList<ChallengeData>) :
   RecyclerView.Adapter<ChallengeRecyclerViewAdapter.ItemHolder>() {
@@ -25,8 +28,10 @@ class ChallengeRecyclerViewAdapter(var challenge: MutableList<ChallengeData>) :
   @SuppressLint("SetTextI18n")
   override fun onBindViewHolder(holder: ItemHolder, position: Int) {
     val singleItem1 = challenge[position]
+    MainScope().launch {
+      holder.icons.image(FBStorageRepository().downloadFile(singleItem1.imagePath!!))
+    }
 
-    FBChallengeImageRepository().getChallengeImage(holder.icons, singleItem1.imagePath!!)
     holder.name.text = singleItem1.name
     holder.date.text = singleItem1.date!!.format(M_D)
     holder.locale.text = "${singleItem1.locale!![0]} ${singleItem1.locale!![1]}"

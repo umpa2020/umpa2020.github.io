@@ -109,7 +109,6 @@ class RunningActivity : BaseRunningActivity() {
     val infoData = InfoData()
     infoData.distance = distance
     infoData.time = SystemClock.elapsedRealtime() - chronometer.base
-    infoData.privacy = privacy
     infoData.startLatitude = trkList.first().lat
     infoData.startLongitude = trkList.first().lon
     val routeGPX = RouteGPX(infoData.time!!, "", wpList, trkList)

@@ -71,7 +71,7 @@ fun Long.format(pattern: String): String {
  */
 fun String.toMillisecond(pattern: String): Long? {
   try {
-    return SimpleDateFormat(pattern, Locale.getDefault()).parse(this).time
+    return SimpleDateFormat(pattern, Locale.getDefault()).parse(this)!!.time
   } catch (ignore: Exception) {
   }
   return null
