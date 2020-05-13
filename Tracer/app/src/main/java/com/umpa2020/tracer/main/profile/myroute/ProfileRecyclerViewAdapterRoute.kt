@@ -2,6 +2,7 @@ package com.umpa2020.tracer.main.profile.myroute
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,8 +32,8 @@ class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) :
   //생성된 뷰 홀더에 데이터를 바인딩 해줌.
   override fun onBindViewHolder(holder: mViewHolder, position: Int) {
     val singleItem = mdata[position]
-    val mapTitle = singleItem.mapId!!.subSequence(0, singleItem.mapId!!.length - TIMESTAMP_LENGTH) as String
-    val time = singleItem.mapId!!.subSequence(singleItem.mapId!!.length - TIMESTAMP_LENGTH, singleItem.mapId!!.length) as String
+    val mapTitle = singleItem.mapId.subSequence(0, singleItem.mapId.length - TIMESTAMP_LENGTH) as String
+    val time = singleItem.mapId.subSequence(singleItem.mapId.length - TIMESTAMP_LENGTH, singleItem.mapId.length) as String
 
     //데이터 바인딩
     // glide imageview 소스
@@ -43,14 +44,18 @@ class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) :
     // Please use a gs:// URL for your Firebase Storage bucket. 에러가 뜨면서 실행이 안되는 문제..
     // val storage = FirebaseStorage.getInstance(R.string.google_storage_bucket_string.toString()) // debug용, release용 구분
     MainScope().launch {
-      holder.image.image(FBMapRepository().getMapImage(singleItem.mapId!!))
+      holder.image.image(FBMapRepository().getMapImage(singleItem.mapId))
     }
     holder.maptitle.text = mapTitle
-    holder.distance.text = singleItem.distance!!.prettyDistance
-    holder.time.text = singleItem.time!!.format(mm_ss)
+    holder.distance.text = singleItem.distance.prettyDistance
+    holder.time.text = singleItem.time.format(mm_ss)
     holder.likes.text = singleItem.likes.toString()
     holder.excutes.text = singleItem.plays.toString()
     holder.date.text = time.toLong().format("yyyy-MM-dd HH:mm:ss")
+    if (singleItem.played) {
+      holder.play.setColorFilter(Color.CYAN)
+    }
+
     if (singleItem.liked) {
       holder.heart.setImageResource(R.drawable.ic_favorite_red_24dp)
       holder.heart.tag = R.drawable.ic_favorite_red_24dp
@@ -121,6 +126,7 @@ class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) :
     var likes = view.profileFragmentLike
     var excutes = view.profileFragmentExecutes
     var heart = view.profileHeartImage
+    var play = view.profileFragmentPlay
   }
 }
 

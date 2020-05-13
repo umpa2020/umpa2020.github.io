@@ -17,6 +17,7 @@ import com.umpa2020.tracer.main.profile.myroute.ProfileRouteActivity
 import com.umpa2020.tracer.main.profile.settting.AppSettingActivity
 import com.umpa2020.tracer.network.FBProfileRepository
 import com.umpa2020.tracer.util.Logg
+import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.fragment_profile.*
@@ -33,6 +34,7 @@ import kotlinx.coroutines.withContext
 class ProfileFragment : Fragment(), OnSingleClickListener {
   lateinit var root: View
   var bundle = Bundle()
+  val progressBar = MyProgressBar()
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
     Logg.i("onCreateView()")
@@ -77,7 +79,12 @@ class ProfileFragment : Fragment(), OnSingleClickListener {
   }
 
   override fun onResume() {
+    super.onResume()
+
     Logg.i("onResume()")
+
+    progressBar.show()
+
     /**
      * 프로필 이미지랑 총 시간,거리 셋팅을 하는 함수
      * 프로필 변경을 하고 나오는 경우에도 적용된
@@ -90,8 +97,8 @@ class ProfileFragment : Fragment(), OnSingleClickListener {
         profileImageView.image(it.imgPath)
         profileFragmentTotalDistance.text = it.distance.prettyDistance
         profileFragmentTotalTime.text = it.time.format(m_s)
+        progressBar.dismiss()
       }
     }
-    super.onResume()
   }
 }
