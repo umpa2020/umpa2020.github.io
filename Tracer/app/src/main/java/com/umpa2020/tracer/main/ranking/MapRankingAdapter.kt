@@ -13,7 +13,10 @@ import com.umpa2020.tracer.extensions.prettyDistance
 import com.umpa2020.tracer.network.FBLikesRepository
 import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.OnSingleClickListener
+import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.recycler_rankfragment_item.view.*
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 
 /**
  * 맵 랭킹 목록 어댑터
@@ -95,7 +98,7 @@ class MapRankingAdapter(
 
             }
             R.drawable.ic_favorite_border_black_24dp -> {
-              FBLikesRepository().updateLikes(infoData.mapId!!, likes)
+              MainScope().launch { FBLikesRepository().toggleLikes(UserInfo.autoLoginKey, infoData.mapId!!) }
               infoDatas[position].liked = true
               infoDatas[position].likes = ++likes
               holder.modeIcon.setImageResource(R.drawable.ic_favorite_red_24dp)
@@ -103,7 +106,7 @@ class MapRankingAdapter(
               holder.modeNo.text = likes.toString()
             }
             R.drawable.ic_favorite_red_24dp -> {
-              FBLikesRepository().updateNotLikes(infoData.mapId!!, likes)
+              MainScope().launch { FBLikesRepository().toggleLikes(UserInfo.autoLoginKey, infoData.mapId!!) }
               infoDatas[position].liked = false
               infoDatas[position].likes = --likes
               holder.modeIcon.setImageResource(R.drawable.ic_favorite_border_black_24dp)

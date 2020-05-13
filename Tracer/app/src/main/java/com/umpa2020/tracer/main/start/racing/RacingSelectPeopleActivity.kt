@@ -31,7 +31,7 @@ class RacingSelectPeopleActivity : AppCompatActivity(), OnSingleClickListener {
     routeGPX = intent.getParcelableExtra("RouteGPX")
 
     MainScope().launch {
-      FBMapRankingRepository().listMapRanking(mapId).let {
+      FBMapRepository().listMapRanking(mapId).let {
         //레이아웃 매니저 추가
         rankingDataList = it
         racingSelectRecyclerView.layoutManager = LinearLayoutManager(activity)

@@ -6,8 +6,8 @@ import com.google.firebase.storage.FirebaseStorage
 open class BaseFB {
   val db = FirebaseFirestore.getInstance()
   val storage = FirebaseStorage.getInstance()
-  val userInfoColRef = db.collection(USERS)
-  val mapInfoColRef = db.collection(MAPS)
+  val usersCollectionRef = db.collection(USERS)
+  val mapsCollectionRef = db.collection(MAPS)
   val mapRouteStorageRef = storage.reference.child(MAP_ROUTE)
 
   companion object {

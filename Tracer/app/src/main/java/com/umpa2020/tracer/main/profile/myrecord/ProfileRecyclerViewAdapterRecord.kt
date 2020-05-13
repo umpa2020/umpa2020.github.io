@@ -6,23 +6,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.squareup.okhttp.Dispatcher
 import com.umpa2020.tracer.R
-import com.umpa2020.tracer.constant.Constants.Companion.TIMESTAMP_LENGTH
 import com.umpa2020.tracer.dataClass.ActivityData
 import com.umpa2020.tracer.extensions.Y_M_D
 import com.umpa2020.tracer.extensions.format
+import com.umpa2020.tracer.extensions.image
 import com.umpa2020.tracer.main.ranking.RankRecyclerItemClickActivity
-import com.umpa2020.tracer.network.FBImageRepository
 import com.umpa2020.tracer.network.FBMapRepository
-import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.recycler_profile_user_record_item.view.*
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.util.*
 
 class ProfileRecyclerViewAdapterRecord(val datas: MutableList<ActivityData>) :
   RecyclerView.Adapter<ProfileRecyclerViewAdapterRecord.MyViewHolder>() {
@@ -42,9 +36,8 @@ class ProfileRecyclerViewAdapterRecord(val datas: MutableList<ActivityData>) :
     val singleItem1 = datas[position]
 
     MainScope().launch {
-      withContext(Dispatchers.IO) {
-        FBMapRepository().getMapTitle(singleItem1.mapId!!)
-      }?.let {
+      holder.mapImageView.image(FBMapRepository().getMapImage(singleItem1.mapId!!))
+        FBMapRepository().getMapTitle(singleItem1.mapId!!)?.let {
         val time = singleItem1.time!!.toLong().format(Y_M_D)
         when (singleItem1.mode) {
           "racing go the distance" -> {
@@ -62,9 +55,6 @@ class ProfileRecyclerViewAdapterRecord(val datas: MutableList<ActivityData>) :
         }
       }
     }
-
-    FBImageRepository().getMapImagePath(holder.mapImageView, singleItem1.mapId.toString())
-
 
     //클릭하면 맵 상세보기 페이지로 이동
     holder.itemView.setOnClickListener(object : OnSingleClickListener {

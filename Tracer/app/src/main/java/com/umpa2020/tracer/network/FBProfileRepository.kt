@@ -44,14 +44,11 @@ class FBProfileRepository : BaseFB() {
       ProfileData(sumDistance, sumTime, FBStorageRepository().downloadFile(it.getString(PROFILE_IMAGE_PATH)!!)!!)
     }
   }
-
-  //TODO:Usage로 nickname으로 받는곳들 uid로 바꾸기
   suspend fun getProfileImage(uid: String): Uri? {
-    return db.collection(USERS).whereEqualTo(USER_ID, uid)
-      .get().await().let {
-        FBStorageRepository().downloadFile(it.first().getString(PROFILE_IMAGE_PATH)!!)
-      }
+    return FBStorageRepository().downloadFile(db.collection(USERS).whereEqualTo(USER_ID, uid)
+      .get().await().documents.first().getString(PROFILE_IMAGE_PATH)!!)
   }
+
 
   /**
    * 사진 변경 시, 해당 사진을 storage에 업로드하고
@@ -71,74 +68,5 @@ class FBProfileRepository : BaseFB() {
   fun uploadProfileImage(imageUri: Uri, timestamp: String) {
     // 현재 날짜를 프로필 이름으로 nickname/Profile/현재날짜 경로 만들기
     FBStorageRepository().uploadFile(imageUri, PROFILE + "/" + UserInfo.autoLoginKey + "/" + timestamp)
-  }
-
-  /**
-   * 처음만 프로필에서 해당 유저가 만든 맵 띄우기
-   */
-  fun getRouteFirst(profileRouteListener: ProfileRouteListener, uid: String, limit: Long) {
-    val infoDatas = arrayListOf<InfoData>()
-
-    db.collection(MAPS).whereEqualTo(MAKER_ID, uid)
-      .limit(limit)
-      .get()
-      .addOnSuccessListener { result ->
-        for (document in result) {
-          val data = document.toObject(InfoData::class.java)
-          infoDatas.add(data)
-          globalStartAfter = document
-        }
-
-        // 좋아요 필터를 눌렀을 때, 유저가 좋아요 누른 맵들을 가져오는 리스너
-        val likedMapListener = object : LikedMapListener {
-          override fun likedList(likedMaps: List<LikedMapData>) {
-            infoDatas.filter { infoData ->
-              likedMaps.map { it.mapId }
-                .contains(infoData.mapId)
-            }.map { it.liked = true }
-            profileRouteListener.listProfileRoute(infoDatas)
-          }
-
-          override fun liked(liked: Boolean, likes: Int) {
-          }
-        }
-        // 받아온 자신이 만든 맵 리스너로 보내기
-        FBLikesRepository().listLikedMap(likedMapListener)
-      }
-  }
-
-  /**
-   * 프로필에서 해당 유저가 만든 맵 띄우기
-   */
-  fun getRoute(profileRouteListener: ProfileRouteListener, uid: String, limit: Long) {
-    val infoDatas = arrayListOf<InfoData>()
-
-    db.collection(MAPS).whereEqualTo(MAKER_ID, uid)
-      .startAfter(globalStartAfter)
-      .limit(limit)
-      .get()
-      .addOnSuccessListener { result ->
-        for (document in result) {
-          val data = document.toObject(InfoData::class.java)
-          infoDatas.add(data)
-          globalStartAfter = document
-        }
-
-        // 좋아요 필터를 눌렀을 때, 유저가 좋아요 누른 맵들을 가져오는 리스너
-        val likedMapListener = object : LikedMapListener {
-          override fun likedList(likedMaps: List<LikedMapData>) {
-            infoDatas.filter { infoData ->
-              likedMaps.map { it.mapId }
-                .contains(infoData.mapId)
-            }.map { it.liked = true }
-            profileRouteListener.listProfileRoute(infoDatas)
-          }
-
-          override fun liked(liked: Boolean, likes: Int) {
-          }
-        }
-        // 받아온 자신이 만든 맵 리스너로 보내기
-        FBLikesRepository().listLikedMap(likedMapListener)
-      }
   }
 }

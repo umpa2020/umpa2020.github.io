@@ -19,10 +19,7 @@ import kotlinx.coroutines.tasks.await
  * 랭킹 네트워크 클래스 - 랭킹에 관련한
  * 네트워크 접근 함수는 이 곳에 정의
  */
-class FBRankingRepository() {
-  lateinit var infoData: InfoData
-  lateinit var infoDatas: ArrayList<InfoData>
-  val db = FirebaseFirestore.getInstance()
+class FBRankingRepository:BaseFB(){
   lateinit var globalStartAfter: DocumentSnapshot
 
   /**

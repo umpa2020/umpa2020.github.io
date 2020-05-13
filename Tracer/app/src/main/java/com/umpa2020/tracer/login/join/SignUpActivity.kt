@@ -29,7 +29,7 @@ import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.extensions.show
 import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.network.FBProfileRepository
-import com.umpa2020.tracer.network.FBUserInfoRepository
+import com.umpa2020.tracer.network.FBUsersRepository
 import com.umpa2020.tracer.util.*
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_sign_up.*
@@ -400,7 +400,7 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
       "nickname" to nickname,
       "profileImagePath" to "Profile/$uid/$dt"
     )
-    FBUserInfoRepository().createUserInfo(data)
+    FBUsersRepository().createUserInfo(data)
   }
 
   override fun onSingleClick(v: View?) {

@@ -35,7 +35,7 @@ class MyInformationActivity : AppCompatActivity(), OnSingleClickListener {
     setContentView(R.layout.activity_my_information)
     app_toolbar.titleText.text = getString(R.string.my_information)
     MainScope().launch {
-      CoroutineTestRepository().getProfileImage(UserInfo.autoLoginKey)?.let{
+      FBProfileRepository().getProfileImage(UserInfo.autoLoginKey)?.let{
         profileImage.image(it)
       }
     }

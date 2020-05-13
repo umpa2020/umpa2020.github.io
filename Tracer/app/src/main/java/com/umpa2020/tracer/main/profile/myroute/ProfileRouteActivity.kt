@@ -9,14 +9,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.InfoData
-import com.umpa2020.tracer.extensions.image
 import com.umpa2020.tracer.network.FBProfileRepository
-import com.umpa2020.tracer.network.ProfileRouteListener
-import com.umpa2020.tracer.util.Logg
+import com.umpa2020.tracer.network.FBUsersRepository
 import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_profile_route.*
-import kotlinx.android.synthetic.main.activity_ranking_map_detail.*
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
@@ -48,7 +45,10 @@ class ProfileRouteActivity : AppCompatActivity() {
         } else if (!profileRecyclerRoute.canScrollVertically(1)) {
           // 리사이클러뷰가 맨 아래로 이동했을 경우
           if (!isLoding) {
-            routeRepo.getRoute(profileRouteListener, uid, 5)
+            MainScope().launch {
+              listProfileRoute(FBUsersRepository().listUserRoute(uid, 5))
+            }
+
           }
           isLoding = true
         }
@@ -68,8 +68,9 @@ class ProfileRouteActivity : AppCompatActivity() {
 
     if (limit == 0L) limit = 5L
     else rootInfoDatas.clear()
-
-    routeRepo.getRouteFirst(profileRouteListener, uid, limit)
+    MainScope().launch {
+      listProfileRoute(FBUsersRepository().listUserRoute(uid, limit))
+    }
     super.onResume()
   }
 
@@ -77,10 +78,7 @@ class ProfileRouteActivity : AppCompatActivity() {
    * 리스너로 받아온 루트 데이터들을
    * 리사이클러뷰에 띄워줌
    */
-
-  private val profileRouteListener = object : ProfileRouteListener {
-    override fun listProfileRoute(infoDatas: ArrayList<InfoData>) {
-
+  fun listProfileRoute(infoDatas: List<InfoData>) {
       rootInfoDatas.addAll(infoDatas)
 
       if (rootInfoDatas.isEmpty()) {
@@ -96,7 +94,6 @@ class ProfileRouteActivity : AppCompatActivity() {
         }
         isLoding = false
         progressbar.dismiss()
-      }
     }
   }
 }

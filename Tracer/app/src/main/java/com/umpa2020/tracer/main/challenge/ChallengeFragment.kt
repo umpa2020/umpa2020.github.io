@@ -54,7 +54,7 @@ class ChallengeFragment : Fragment() {
      * 배너에 들어가는 이미지와 아이디를 가져오는 리스너
      */
     MainScope().launch {
-      FBChallengeBannerRepository().listChallengeBannerImagePath()?.let {
+      FBChallengeRepository().listChallengeBannerImagePath()?.let {
         adChallengeScrollViewPager.adapter = AdChallengePageAdapter(it, requireContext())
         adChallengeScrollViewPager.startAutoScroll()
       }

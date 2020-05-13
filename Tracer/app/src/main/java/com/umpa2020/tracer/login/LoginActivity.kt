@@ -151,7 +151,7 @@ class LoginActivity : AppCompatActivity(), OnSingleClickListener {
               if (result.isEmpty) {
                 Logg.d("초기 가입인가")
                 val nextIntent = Intent(this@LoginActivity, SignUpActivity::class.java)
-                nextIntent.putExtra("user UID", mAuth!!.uid.toString())
+                nextIntent.putExtra("user UID", mAuth!!.uid)
                 nextIntent.putExtra("email", email)
                 startActivity(nextIntent)
                 finish()

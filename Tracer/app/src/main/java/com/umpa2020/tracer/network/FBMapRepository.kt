@@ -1,11 +1,9 @@
 package com.umpa2020.tracer.network
 
 import android.net.Uri
-import android.os.Handler
-import android.os.Message
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.umpa2020.tracer.dataClass.ActivityData
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.NearMap
@@ -33,83 +31,72 @@ class FBMapRepository : BaseFB() {
       .await().documents.first().getString(MAP_TITLE)
   }
 
-  fun listNearMap(southwest: LatLng, northeast: LatLng, mHandler: Handler) {
-    // 경도선에 걸린 좌표 값
+  suspend fun getMapImage(mapId: String): Uri? {
+    return db.collection(MAPS).document(mapId).get().await().let {
+      FBStorageRepository().downloadFile(it.getString(MAP_IMAGE_PATH)!!)
+    }
+  }
 
-    db.collection(MAPS)
+  suspend fun listNearMap(southwest: LatLng, northeast: LatLng): List<NearMap>? {
+    return mapsCollectionRef
       .whereGreaterThan(START_LATITUDE, southwest.latitude)
       .whereLessThan(START_LATITUDE, northeast.latitude)
-      .get()
-      .addOnSuccessListener { result ->
-        for (document in result) {
-          val startLongitude = document.get(START_LONGITUDE) as Double
-          val startLatitude = document.get(START_LATITUDE) as Double
-          if (southwest.longitude > 0 && northeast.longitude < 0) {
-            if (southwest.longitude < startLongitude || startLongitude < northeast.longitude) {
-              val nearMap = NearMap(
-                document.getString(MAP_ID)!!,
-                document.getString(MAP_TITLE)!!,
-                LatLng(startLatitude, startLongitude),
-                document.get(DISTANCE) as Double
-              )
-              nearMaps.add(nearMap)
-            }
-          } else if (southwest.longitude < startLongitude && startLongitude < northeast.longitude) {
-            val nearMap = NearMap(
-              document.getString(MAP_ID)!!,
-              document.getString(MAP_TITLE)!!,
-              LatLng(startLatitude, startLongitude),
-              document.get(DISTANCE) as Double
-            )
-            nearMaps.add(nearMap)
-          }
-        }
-        val msg: Message = if (nearMaps.isEmpty()) {
-          mHandler.obtainMessage(NEARMAPFALSE)
-        } else {
-          mHandler.obtainMessage(STRAT_FRAGMENT_NEARMAP)
-        }
-        msg.obj = nearMaps
-        mHandler.sendMessage(msg)
-
+      .get().await().documents.filter {
+        val startLongitude = it.getDouble(START_LONGITUDE)!!
+        ((southwest.longitude > 0 && northeast.longitude < 0) &&
+          (southwest.longitude < startLongitude || startLongitude < northeast.longitude))
+          || (southwest.longitude < startLongitude && startLongitude < northeast.longitude)
+      }.map {
+        NearMap(
+          it.getString(MAP_ID)!!,
+          it.getString(MAP_TITLE)!!,
+          LatLng(it.getDouble(START_LATITUDE)!!, it.getDouble(START_LONGITUDE)!!),
+          it.get(DISTANCE) as Double
+        )
       }
   }
 
-  fun updateExecute(mapTitle: String) {
-    val db = FirebaseFirestore.getInstance()
-
-    db.collection(MAPS).document(mapTitle)
-      .update(PLAYS, FieldValue.increment(1))
-      .addOnSuccessListener { Logg.d("DocumentSnapshot successfully updated!") }
-      .addOnFailureListener { e -> Logg.w("Error updating document$e") }
+  fun incrementExecute(mapTitle: String) {
+    mapsCollectionRef.document(mapTitle).update(PLAYS, FieldValue.increment(1))
   }
 
-  fun uploadMap(infoData:InfoData,rankingData: RankingData,activityData:ActivityData,timestamp:String,gpxUri:Uri,imgPath:Uri) {
+  fun uploadMap(infoData: InfoData, rankingData: RankingData, activityData: ActivityData, timestamp: String, gpxUri: Uri, imgPath: Uri) {
     //Maps/mapId에 새로운 맵 정보 생성
     db.collection(MAPS).document(infoData.mapId!!).set(infoData)
     //racerGPX
-    FBStorageRepository().uploadFile(imgPath,infoData.mapImagePath!!)
+    FBStorageRepository().uploadFile(imgPath, infoData.mapImagePath!!)
     FBStorageRepository().uploadFile(gpxUri, infoData.routeGPXPath!!)
-    FBStorageRepository().uploadFile(gpxUri,rankingData.racerGPX!!)
+    FBStorageRepository().uploadFile(gpxUri, rankingData.racerGPX!!)
     db.collection(MAPS).document(infoData.mapId!!).collection(RANKING)
       .document(UserInfo.autoLoginKey + timestamp).set(rankingData)
-    Logg.d("ssmm11 베타 = ${rankingData.BestTime}")
     // 히스토리 업로드
-    FBUserActivityRepository().createUserHistory(activityData)
+    FBUsersRepository().createUserHistory(activityData)
   }
 
   suspend fun listPlayed(): List<String> {
-    return db.collection(BaseFB.USERS).document(UserInfo.autoLoginKey).collection(BaseFB.ACTIVITIES)
+    return db.collection(USERS).document(UserInfo.autoLoginKey).collection(ACTIVITIES)
       .get()
       .await()
       .documents.map {
-        it.getString(BaseFB.MAP_ID)!!
+        it.getString(MAP_ID)!!
       }
   }
-  suspend fun listLikedMap() : List<String>  {
+
+  suspend fun listLikedMap(): List<String> {
     return db.collection(BaseFB.USERS).document(UserInfo.autoLoginKey).collection(BaseFB.LIKED_MAP)
       .get().await().documents.map {
         it.getString(BaseFB.MAP_ID)!!
       }
+  }
+
+  suspend fun listMapRanking(mapId: String): MutableList<RankingData> {
+    // 베스트 타임이 랭킹 가지고 있는 것 중에서 이것이 베스트 타임인가를 나타내주는 1,0 값입니다.
+    // 그래서 한 사용자의 베스트 타임만 가져오고 또 그것들 중에서 오름차순해서 순위 나타냄
+
+    return db.collection(MAPS).document(mapId).collection(RANKING)
+      .whereEqualTo(BEST_TIME, true)
+      .orderBy(CHALLENGER_TIME, Query.Direction.ASCENDING)
+      .get()
+      .await().toObjects(RankingData::class.java)
   }
 }

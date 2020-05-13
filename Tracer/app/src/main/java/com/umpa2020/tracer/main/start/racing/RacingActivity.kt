@@ -29,7 +29,6 @@ import com.umpa2020.tracer.gpx.WayPoint
 import com.umpa2020.tracer.main.start.BaseRunningActivity
 import com.umpa2020.tracer.network.FBMapRepository
 import com.umpa2020.tracer.network.FBRacingRepository
-import com.umpa2020.tracer.network.RacingListener
 import com.umpa2020.tracer.util.ChoicePopup
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.TTS
@@ -55,7 +54,7 @@ class RacingActivity : BaseRunningActivity() {
   var nextWP: Int = 1
   var nextTP: Int = 0
   lateinit var racerList: Array<RacerData>
-  var racerGPXList: Array<RouteGPX>? = null
+  var racerGPXList: List<RouteGPX>? = null
   lateinit var startPoint: WayPoint
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,15 +67,9 @@ class RacingActivity : BaseRunningActivity() {
 
     //TODO:: racerList로 racingGPX 가져오기 FireBase
     Logg.d(racerList.joinToString())
-    FBRacingRepository().listRacingGPX(
-      mapId,
-      racerList.map { it.racerId!! }.toTypedArray(),
-      object : RacingListener {
-        override fun racingList(gpxList: Array<RouteGPX>) {
-          racerGPXList = gpxList
-          Logg.d("${racerGPXList!!.size}")
-        }
-      })
+    MainScope().launch {
+      racerGPXList =FBRacingRepository().listRacingGPX(mapId, racerList.map { it.racerId!! })
+    }
     init()
 
     // 시작 포인트로 이동
@@ -203,7 +196,7 @@ class RacingActivity : BaseRunningActivity() {
 
   override fun start() {
     super.start()
-    FBMapRepository().updateExecute(mapId)
+    FBMapRepository().incrementExecute(mapId)
     // 레이싱 시작 TTS
     TTS.speech(getString(R.string.startRacing))
     wpList.add(currentLocation.toWayPoint(START_POINT)

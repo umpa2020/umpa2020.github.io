@@ -7,8 +7,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.extensions.Y_M_D
 import com.umpa2020.tracer.extensions.format
-import com.umpa2020.tracer.network.FBChallengeImageRepository
+import com.umpa2020.tracer.extensions.image
 import com.umpa2020.tracer.network.FBChallengeRepository
+import com.umpa2020.tracer.network.FBStorageRepository
 import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.activity_challenge_map_detail.*
 import kotlinx.coroutines.MainScope
@@ -26,8 +27,7 @@ class ChallengeRecycleritemClickActivity : AppCompatActivity(), OnSingleClickLis
 
     MainScope().launch {
       FBChallengeRepository().getChallengeData(challengeId).let {
-        FBChallengeImageRepository().getChallengeImage(challengeDetailImageView, it.imagePath!!)
-
+        challengeDetailImageView.image(FBStorageRepository().downloadFile(it.imagePath!!))
         challengeDetailCompetitionName.text = it.name
         challengeDetailCompetitionDate.text = it.date!!.format(Y_M_D)
         challengeDetailCompetitionPeriod.text = it.from!!.format(Y_M_D) + " ~ " + it.to!!.format(Y_M_D)

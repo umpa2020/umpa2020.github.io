@@ -8,14 +8,10 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.net.toUri
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
-import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.customUI.WorkaroundMapFragment
 import com.umpa2020.tracer.dataClass.ActivityData
 import com.umpa2020.tracer.dataClass.InfoData
@@ -24,7 +20,6 @@ import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.extensions.*
 import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.map.TraceMap
-import com.umpa2020.tracer.network.FBUserActivityRepository
 import com.umpa2020.tracer.util.*
 import kotlinx.android.synthetic.main.activity_running_save.*
 import java.io.File
@@ -32,10 +27,8 @@ import java.io.FileOutputStream
 import java.util.*
 import com.umpa2020.tracer.gpx.WayPointType.*
 import com.umpa2020.tracer.network.BaseFB
-import com.umpa2020.tracer.network.BaseFB.Companion.MAPS
 import com.umpa2020.tracer.network.BaseFB.Companion.MAP_ROUTE
 import com.umpa2020.tracer.network.FBMapRepository
-import com.umpa2020.tracer.network.FBStorageRepository
 
 class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleClickListener {
   var switch = 0
@@ -164,7 +157,7 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
     infoData.mapExplanation = mapExplanationEdit.text.toString()
     infoData.plays = 1
     infoData.likes = 0
-    infoData.routeGPXPath = "$MAP_ROUTE/${infoData.mapId}/${infoData.mapTitle!!}"
+    infoData.routeGPXPath = "$MAP_ROUTE/${infoData.mapId}/${infoData.mapId!!}"
 
     val rankingData = RankingData(
       UserInfo.nickname,

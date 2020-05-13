@@ -1,5 +1,6 @@
 package com.umpa2020.tracer.network
 
+import com.umpa2020.tracer.dataClass.BannerData
 import com.umpa2020.tracer.dataClass.ChallengeData
 import com.umpa2020.tracer.dataClass.LikedMapData
 import com.umpa2020.tracer.util.Logg
@@ -50,6 +51,14 @@ class FBChallengeRepository : BaseFB() {
           it.toObject(ChallengeData::class.java)!!
         }.toMutableList()
     }
+  }
+  /**
+   * 바로 imageView 를 가져와서 등록한다.
+   */
+
+  suspend fun listChallengeBannerImagePath(): MutableList<BannerData>? {
+    return db.collection(CHALLENGE_BANNERS).get().await()
+      .documents.map { it.toObject(BannerData::class.java)!! }.toMutableList()
   }
 }
 

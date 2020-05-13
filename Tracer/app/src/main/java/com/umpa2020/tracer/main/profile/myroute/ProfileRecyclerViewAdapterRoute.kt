@@ -10,28 +10,29 @@ import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants.Companion.TIMESTAMP_LENGTH
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.extensions.format
+import com.umpa2020.tracer.extensions.image
 import com.umpa2020.tracer.extensions.mm_ss
 import com.umpa2020.tracer.extensions.prettyDistance
 import com.umpa2020.tracer.main.ranking.RankRecyclerItemClickActivity
 import com.umpa2020.tracer.network.FBLikesRepository
-import com.umpa2020.tracer.network.FBImageRepository
+import com.umpa2020.tracer.network.FBMapRepository
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.OnSingleClickListener
+import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.recycler_profilefragment_route_grid_image.view.*
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import java.util.*
 
 class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) :
   RecyclerView.Adapter<ProfileRecyclerViewAdapterRoute.mViewHolder>() {
   var context: Context? = null
-  var imageRepository = FBImageRepository()
 
   //생성된 뷰 홀더에 데이터를 바인딩 해줌.
   override fun onBindViewHolder(holder: mViewHolder, position: Int) {
-
     val singleItem = mdata[position]
-
-    val mapTitle = singleItem.mapId!!.subSequence(0, singleItem.mapId!!.length- TIMESTAMP_LENGTH) as String
-    val time = singleItem.mapId!!.subSequence(singleItem.mapId!!.length- TIMESTAMP_LENGTH, singleItem.mapId!!.length) as String
+    val mapTitle = singleItem.mapId!!.subSequence(0, singleItem.mapId!!.length - TIMESTAMP_LENGTH) as String
+    val time = singleItem.mapId!!.subSequence(singleItem.mapId!!.length - TIMESTAMP_LENGTH, singleItem.mapId!!.length) as String
 
     //데이터 바인딩
     // glide imageview 소스
@@ -41,8 +42,9 @@ class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) :
     // string에 저장해서 사용 해보았으나
     // Please use a gs:// URL for your Firebase Storage bucket. 에러가 뜨면서 실행이 안되는 문제..
     // val storage = FirebaseStorage.getInstance(R.string.google_storage_bucket_string.toString()) // debug용, release용 구분
-    imageRepository.getMapImagePath(holder.image, singleItem.mapId!!)
-
+    MainScope().launch {
+      holder.image.image(FBMapRepository().getMapImage(singleItem.mapId!!))
+    }
     holder.maptitle.text = mapTitle
     holder.distance.text = singleItem.distance!!.prettyDistance
     holder.time.text = singleItem.time!!.format(mm_ss)
@@ -52,8 +54,7 @@ class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) :
     if (singleItem.liked) {
       holder.heart.setImageResource(R.drawable.ic_favorite_red_24dp)
       holder.heart.tag = R.drawable.ic_favorite_red_24dp
-    }
-    else {
+    } else {
       holder.heart.tag = R.drawable.ic_favorite_border_black_24dp
     }
 
@@ -69,14 +70,14 @@ class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) :
 
           }
           R.drawable.ic_favorite_border_black_24dp -> {
-            FBLikesRepository().updateLikes(singleItem.mapId!!, likes)
+            MainScope().launch { FBLikesRepository().toggleLikes(UserInfo.autoLoginKey, singleItem.mapId!!) }
             holder.heart.setImageResource(R.drawable.ic_favorite_red_24dp)
             holder.heart.tag = R.drawable.ic_favorite_red_24dp
             likes++
             holder.likes.text = likes.toString()
           }
           R.drawable.ic_favorite_red_24dp -> {
-            FBLikesRepository().updateNotLikes(singleItem.mapId!!, likes)
+            MainScope().launch { FBLikesRepository().toggleLikes(UserInfo.autoLoginKey, singleItem.mapId!!) }
             holder.heart.setImageResource(R.drawable.ic_favorite_border_black_24dp)
             holder.heart.tag = R.drawable.ic_favorite_border_black_24dp
             likes--

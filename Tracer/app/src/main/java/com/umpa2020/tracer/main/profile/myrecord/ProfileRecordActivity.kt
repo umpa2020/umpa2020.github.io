@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.ActivityData
-import com.umpa2020.tracer.network.FBUserActivityRepository
+import com.umpa2020.tracer.network.FBUsersRepository
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.MyProgressBar
 import kotlinx.android.synthetic.main.activity_profile_record.*
@@ -19,7 +19,7 @@ class ProfileRecordActivity : AppCompatActivity() {
   val rootActivityDatas = arrayListOf<ActivityData>()
   val progressbar = MyProgressBar()
   var isLoding = false
-  val userActivityRepo = FBUserActivityRepository()
+  val userActivityRepo = FBUsersRepository()
   var limit = 0L
 
 
@@ -54,14 +54,14 @@ class ProfileRecordActivity : AppCompatActivity() {
     else rootActivityDatas.clear()
 
     MainScope().launch {
-      userActivityRepo.listUserMakingActivityFirst(limit)?.let {
+      userActivityRepo.listUserMakingActivity(limit)?.let {
         activityList(it)
       }
     }
     super.onResume()
   }
 
-  fun activityList(activityDatas: MutableList<ActivityData>) {
+  fun activityList(activityDatas: List<ActivityData>) {
     rootActivityDatas.addAll(activityDatas)
     Logg.d("ssmm11 size = ${activityDatas.size}")
     if (rootActivityDatas.isEmpty()) {

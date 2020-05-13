@@ -4,8 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.ActivityData
@@ -14,11 +12,7 @@ import com.umpa2020.tracer.dataClass.RankingData
 import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.extensions.*
 import com.umpa2020.tracer.main.MainActivity
-import com.umpa2020.tracer.network.BaseFB.Companion.USERS
-import com.umpa2020.tracer.network.CoroutineTestRepository
-import com.umpa2020.tracer.network.FBProfileRepository
-import com.umpa2020.tracer.network.FBRacingRepository
-import com.umpa2020.tracer.network.FBUserActivityRepository
+import com.umpa2020.tracer.network.*
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
@@ -69,12 +63,12 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
 
     MainScope().launch {
       // 유저 히스토리 등록
-      FBUserActivityRepository().createUserHistory(
+      FBUsersRepository().createUserHistory(
         ActivityData(racerData.mapId, Date().time, racerData.distance, if (result) "racing go the distance" else "racing fail")
       )
       //성공했다면 랭킹에 등록
       if (result) FBRacingRepository().createRankingData(racerData, rankingData, racerGpxFile)
-      arrRankingData = CoroutineTestRepository().listMapRanking(racerData.mapId!!)
+      arrRankingData = FBMapRepository().listMapRanking(racerData.mapId!!)
       updateRankingUI(arrRankingData)
       progressbar.dismiss()
     }
