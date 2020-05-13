@@ -8,13 +8,16 @@ import com.umpa2020.tracer.network.FBChallengeRepository
 import kotlinx.android.synthetic.main.activity_challenge_data_setting.*
 import java.util.*
 
+/**
+ * 챌린지 데이터 셋팅 액티비티, 등록된 값을 넣어주기만 함.
+ */
 class ChallengeDataSettingActivity : AppCompatActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_challenge_data_setting)
     intent.getStringExtra("challengeId")?.let {
-      challenge1.hint=it
+      challenge1.hint = it
     }
 
     val dt = Date()
@@ -42,14 +45,7 @@ class ChallengeDataSettingActivity : AppCompatActivity() {
         "challenge/$timeStamp/$timeStamp.jpg"
       )
 
-
       FBChallengeRepository().createChallengeData(challengeData)
-
-
-
-
     }
-
-
   }
 }

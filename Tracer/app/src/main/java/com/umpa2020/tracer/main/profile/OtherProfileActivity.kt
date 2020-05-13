@@ -32,8 +32,8 @@ class OtherProfileActivity : AppCompatActivity(), OnSingleClickListener {
   }
 
   override fun onSingleClick(v: View?) {
-    when(v!!.id){
-      R.id.otherProfileRouteTextView->{
+    when (v!!.id) {
+      R.id.otherProfileRouteTextView -> {
         // 루트 클릭하면 해당 사용자가 만든 루트 볼 수 잇는 페이지로 이동
         val nextIntent = Intent(this, ProfileRouteActivity::class.java)
         nextIntent.putExtra("nickname", nickname)

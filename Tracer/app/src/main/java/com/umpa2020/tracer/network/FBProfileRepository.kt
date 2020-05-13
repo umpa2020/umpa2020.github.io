@@ -49,7 +49,6 @@ class FBProfileRepository : BaseFB() {
     )
   }
 
-
   /**
    * 사진 변경 시, 해당 사진을 storage에 업로드하고
    * 그 경로를 db에 update하는 함수

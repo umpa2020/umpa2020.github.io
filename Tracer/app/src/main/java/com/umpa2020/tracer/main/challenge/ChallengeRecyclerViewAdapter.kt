@@ -21,9 +21,7 @@ import kotlinx.coroutines.launch
 class ChallengeRecyclerViewAdapter(var challenge: MutableList<ChallengeData>) :
   RecyclerView.Adapter<ChallengeRecyclerViewAdapter.ItemHolder>() {
 
-
   var context: Context? = null
-
 
   @SuppressLint("SetTextI18n")
   override fun onBindViewHolder(holder: ItemHolder, position: Int) {
@@ -43,7 +41,6 @@ class ChallengeRecyclerViewAdapter(var challenge: MutableList<ChallengeData>) :
         context!!.startActivity(nextIntent)
       }
     })
-
   }
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemHolder {
@@ -57,12 +54,10 @@ class ChallengeRecyclerViewAdapter(var challenge: MutableList<ChallengeData>) :
     return challenge.size
   }
 
-
   inner class ItemHolder(view: View) : RecyclerView.ViewHolder(view) {
     var icons = view.challenge_map
     var name = view.challenge_race_name
     var date = view.challenge_date
     var locale = view.challenge_locale
   }
-
 }

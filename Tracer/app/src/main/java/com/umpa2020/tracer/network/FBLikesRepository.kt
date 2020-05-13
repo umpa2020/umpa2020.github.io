@@ -28,8 +28,6 @@ class FBLikesRepository : BaseFB() {
     return mapsCollectionRef.document(mapId).get().await().getLong(LIKES)!!.toInt()
   }
 
-
-
   /**
    * uid의 mapId 좋아요 상태를 바꾼다
    */

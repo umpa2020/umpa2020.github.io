@@ -5,8 +5,6 @@ import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
-import com.jakewharton.rxbinding2.widget.color
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.OnSingleClickListener
@@ -96,8 +94,6 @@ class GenderSelectActivity : AppCompatActivity(), OnSingleClickListener {
           isWoman = false
           isMan = true
         }
-        Logg.d("여자 : $isWoman")
-        Logg.d("남자 : " + isMan.toString())
       }
 
     }

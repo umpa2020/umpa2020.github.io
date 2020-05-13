@@ -22,7 +22,6 @@ class ProfileRouteActivity : AppCompatActivity() {
   var uid = ""
   var nickname = ""
   var isLoding = false
-  val routeRepo = FBProfileRepository()
   val rootInfoDatas = arrayListOf<InfoData>()
   var limit = 0L
   val repository = FBUsersRepository()
@@ -49,7 +48,6 @@ class ProfileRouteActivity : AppCompatActivity() {
             MainScope().launch {
               listProfileRoute(repository.listUserRoute(uid, 5))
             }
-
           }
           isLoding = true
         }

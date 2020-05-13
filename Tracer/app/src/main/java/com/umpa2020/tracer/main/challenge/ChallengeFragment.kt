@@ -2,7 +2,6 @@ package com.umpa2020.tracer.main.challenge
 
 import android.app.DatePickerDialog
 import android.content.Intent
-import android.content.pm.ApplicationInfo
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,29 +9,21 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
-import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
-import com.umpa2020.tracer.dataClass.ActivityData
-import com.umpa2020.tracer.dataClass.AdChallengeData
 import com.umpa2020.tracer.dataClass.BannerData
 import com.umpa2020.tracer.dataClass.ChallengeData
 import com.umpa2020.tracer.extensions.M_D
 import com.umpa2020.tracer.extensions.Y_M_D
 import com.umpa2020.tracer.extensions.format
-import com.umpa2020.tracer.extensions.mm_ss
 import com.umpa2020.tracer.network.*
-import com.umpa2020.tracer.util.Logg
 import kotlinx.android.synthetic.main.fragment_challenge.*
 import kotlinx.android.synthetic.main.fragment_challenge.view.*
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
 class ChallengeFragment : Fragment() {
-  var adChallengeList = ArrayList<BannerData>()
-
   var from = 1546300800000 // 경기 시작일 기본 값 (2019년 1월 1일)
   var to = 1609372800000 // 경기 종료일 기본 값 (2020년 12월 31일)
   var locale = "전국" // 필터링 지역 기본 값
@@ -65,7 +56,6 @@ class ChallengeFragment : Fragment() {
         challengeDataList(it!!)
       }
     }
-
 
     view.challengeAppBarText.setOnClickListener {
       val intent = Intent(context, ChallengeDataSettingActivity::class.java)
@@ -141,10 +131,10 @@ class ChallengeFragment : Fragment() {
   /**
    * 챌린지 프래그먼트 리사이클러 등록하는 리스너
    */
-    fun challengeDataList(listChallengeData: MutableList<ChallengeData>) {
-      challenge_recycler_view.adapter = ChallengeRecyclerViewAdapter(listChallengeData)
-      challenge_recycler_view.layoutManager = GridLayoutManager(context, 2)
-    }
+  fun challengeDataList(listChallengeData: MutableList<ChallengeData>) {
+    challenge_recycler_view.adapter = ChallengeRecyclerViewAdapter(listChallengeData)
+    challenge_recycler_view.layoutManager = GridLayoutManager(context, 2)
+  }
 }
 
 

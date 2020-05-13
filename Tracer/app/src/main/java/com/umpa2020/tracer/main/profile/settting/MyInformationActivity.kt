@@ -27,7 +27,7 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
 class MyInformationActivity : AppCompatActivity(), OnSingleClickListener {
-  lateinit var progressBar: ProgressBar
+  //lateinit var progressBar: ProgressBar
   private var selectedImageUri: Uri? = null
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,11 +63,11 @@ class MyInformationActivity : AppCompatActivity(), OnSingleClickListener {
       }
       R.id.profileChangeButton -> {
         if (selectedImageUri != null) { // 사진을 고르면
-          progressBar = ProgressBar(App.instance.currentActivity() as Activity)
-          progressBar.show()
+          //progressBar = ProgressBar(App.instance.currentActivity() as Activity)
+          //progressBar.show()
           MainScope().launch {
             FBProfileRepository().updateProfileImage(selectedImageUri!!)
-            progressBar.dismiss()
+            //progressBar.dismiss()
             finish()
           }
         } else { // 사진을 안고르면

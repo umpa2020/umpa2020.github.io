@@ -3,6 +3,8 @@ package com.umpa2020.tracer.main.profile
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Parcel
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,16 +33,23 @@ import kotlinx.coroutines.withContext
 /**
  * A simple [Fragment] subclass.
  */
-class ProfileFragment : Fragment(), OnSingleClickListener {
+class ProfileFragment() : Fragment(), OnSingleClickListener, Parcelable {
   lateinit var root: View
   var bundle = Bundle()
   val progressBar = MyProgressBar()
+
+  constructor(parcel: Parcel) : this() {
+    bundle = parcel.readBundle(Bundle::class.java.classLoader)!!
+  }
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
     Logg.i("onCreateView()")
 
     val view = inflater.inflate(R.layout.fragment_profile, container, false)
     root = view
+
+    Logg.d("ssmm11 birth = ${UserInfo.birth}")
+
 
     // 공유 프리페런스에 있는 닉네임을 반영
     view.profileIdTextView.text = UserInfo.nickname
@@ -99,6 +108,24 @@ class ProfileFragment : Fragment(), OnSingleClickListener {
         profileFragmentTotalTime.text = it.time.format(m_s)
         progressBar.dismiss()
       }
+    }
+  }
+
+  override fun writeToParcel(parcel: Parcel, flags: Int) {
+    parcel.writeBundle(bundle)
+  }
+
+  override fun describeContents(): Int {
+    return 0
+  }
+
+  companion object CREATOR : Parcelable.Creator<ProfileFragment> {
+    override fun createFromParcel(parcel: Parcel): ProfileFragment {
+      return ProfileFragment(parcel)
+    }
+
+    override fun newArray(size: Int): Array<ProfileFragment?> {
+      return arrayOfNulls(size)
     }
   }
 }
