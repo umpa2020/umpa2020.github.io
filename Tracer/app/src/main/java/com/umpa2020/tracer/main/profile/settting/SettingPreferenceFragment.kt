@@ -90,6 +90,8 @@ class SettingPreferenceFragment : PreferenceFragmentCompat() {
     }
 
     //회원 탈퇴 눌렀을 때
+    // TODO : 회원 탈퇴 : 죽여 and Shared 값 삭제
+
     if (preference?.key.equals("unregister")) {
       //TODO. 회원 탈퇴 기능 만들기
     }

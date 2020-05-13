@@ -60,7 +60,6 @@ class MainActivity : AppCompatActivity(){
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    Logg.d("Hello I'm New")
     setContentView(R.layout.activity_main)
 
     gpsViewModel = ViewModelProvider(this).get(GpsViewModel::class.java)
