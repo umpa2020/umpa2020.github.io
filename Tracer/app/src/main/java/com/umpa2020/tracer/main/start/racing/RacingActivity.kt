@@ -3,7 +3,6 @@ package com.umpa2020.tracer.main.start.racing
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.location.Location
-import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.View
@@ -27,17 +26,16 @@ import com.umpa2020.tracer.extensions.prettyDistance
 import com.umpa2020.tracer.extensions.toLatLng
 import com.umpa2020.tracer.extensions.toWayPoint
 import com.umpa2020.tracer.gpx.WayPoint
-import com.umpa2020.tracer.gpx.WayPointType
 import com.umpa2020.tracer.main.start.BaseRunningActivity
 import com.umpa2020.tracer.network.FBMapRepository
 import com.umpa2020.tracer.network.FBRacingRepository
-import com.umpa2020.tracer.network.RacingListener
 import com.umpa2020.tracer.util.ChoicePopup
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.TTS
 import kotlinx.android.synthetic.main.activity_ranking_recode_racing.*
 import kotlinx.coroutines.*
 import com.umpa2020.tracer.gpx.WayPointType.*
+import com.umpa2020.tracer.network.BaseFB.Companion.MAP_ID
 import java.util.concurrent.TimeUnit
 
 class RacingActivity : BaseRunningActivity() {
@@ -46,7 +44,7 @@ class RacingActivity : BaseRunningActivity() {
   }
 
   lateinit var mapRouteGPX: RouteGPX
-  lateinit var mapTitle: String
+  lateinit var mapId: String
   var racingResult = true
   var deviationCount = 0
 
@@ -56,7 +54,7 @@ class RacingActivity : BaseRunningActivity() {
   var nextWP: Int = 1
   var nextTP: Int = 0
   lateinit var racerList: Array<RacerData>
-  var racerGPXList: Array<RouteGPX>? = null
+  var racerGPXList: List<RouteGPX>? = null
   lateinit var startPoint: WayPoint
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,20 +62,14 @@ class RacingActivity : BaseRunningActivity() {
     requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     setContentView(R.layout.activity_ranking_recode_racing)
     mapRouteGPX = intent.getParcelableExtra(ROUTE_GPX) as RouteGPX
-    mapTitle = intent.getStringExtra("mapTitle")!!
+    mapId = intent.getStringExtra(MAP_ID)!!
     racerList = intent.getSerializableExtra("RacerList") as Array<RacerData>
 
     //TODO:: racerList로 racingGPX 가져오기 FireBase
     Logg.d(racerList.joinToString())
-    FBRacingRepository().listRacingGPX(
-      mapTitle,
-      racerList.map { it.racerId!! }.toTypedArray(),
-      object : RacingListener {
-        override fun racingList(gpxList: Array<RouteGPX>) {
-          racerGPXList = gpxList
-          Logg.d("${racerGPXList!!.size}")
-        }
-      })
+    MainScope().launch {
+      racerGPXList =FBRacingRepository().listRacingGPX(mapId, racerList.map { it.racerId!! })
+    }
     init()
 
     // 시작 포인트로 이동
@@ -204,7 +196,7 @@ class RacingActivity : BaseRunningActivity() {
 
   override fun start() {
     super.start()
-    FBMapRepository().updateExecute(mapTitle)
+    FBMapRepository().incrementExecute(mapId)
     // 레이싱 시작 TTS
     TTS.speech(getString(R.string.startRacing))
     wpList.add(currentLocation.toWayPoint(START_POINT)
@@ -268,7 +260,7 @@ class RacingActivity : BaseRunningActivity() {
 
     val infoData = InfoData()
     infoData.time = SystemClock.elapsedRealtime() - chronometer.base
-    infoData.mapTitle = mapTitle
+    infoData.mapId=mapId
     infoData.distance = distance
     //infoData.distance = calcLeftDistance()
     val routeGPX = RouteGPX(infoData.time!!, "", wpList, trkList)

@@ -26,10 +26,11 @@ import com.google.firebase.storage.StorageReference
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants
+import com.umpa2020.tracer.extensions.toAge
 import com.umpa2020.tracer.extensions.show
 import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.network.FBProfileRepository
-import com.umpa2020.tracer.network.FBUserInfoRepository
+import com.umpa2020.tracer.network.FBUsersRepository
 import com.umpa2020.tracer.util.*
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_sign_up.*
@@ -56,7 +57,6 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
   private var selectedImageUri: Uri? = null
 
   private var nickname: String? = null
-  private var age: String? = null
   private var gender: String? = null
 
   // firebase DB
@@ -225,7 +225,7 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
 //    val compositeDisposable=CompositeDisposable()
 
     val disposableGender = RxTextView.textChanges(inputDataField[2])
-      .map { t -> t.isEmpty() || Pattern.matches(Constants.GENDER_RULE, t) }
+      .map { t -> t.isEmpty() || !Pattern.matches(Constants.GENDER_RULE, t) }
       .subscribe({
         //inputDataField[2].setText("")
         Logg.d("성별 : " + it.toString())
@@ -263,12 +263,22 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
   }
 
 
+  var birth : String? = null
   // intent 결과 받기
   override fun onActivityResult(requestCode: Int, resultCode: Int, intentData: Intent?) {
     super.onActivityResult(requestCode, resultCode, intentData)
     // 성별
     if (requestCode == 102 && resultCode == RESULT_OK) {
       editGender.setText(intentData!!.getStringExtra("Gender"))
+    }
+    // 생년월일 yyyyMMdd 형식으로 전달 받음.
+    if (requestCode == 101 && resultCode == RESULT_OK) {
+      // 년월일 yyyymmdd로 전달 받음
+      Logg.d(intentData!!.getStringExtra("Age"))
+      birth = intentData!!.getStringExtra("Age")
+      val age = toAge(intentData.getStringExtra("Age")!!)
+
+      editAge.setText(age)
     }
 
     // 앨범
@@ -311,11 +321,12 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
   }
 
   // 서버로의 회원가입 진행
-  private fun signUp(imageUri: Uri, nickname: String, age: String, gender: String) {
+  private fun signUp(imageUri: Uri, nickname: String, birth: String, gender: String) {
     if (flag == 1) {// false이면 닉네임 체크가 안된 것. 그러면 실행되면 안돼
+      Logg.d(birth)
       val timestamp = Date().time
-      uploadProfileImage(imageUri, nickname, age, gender, timestamp.toString())
-      uploadUserInfo(nickname, age, gender, timestamp.toString())
+      uploadProfileImage(imageUri, nickname, birth, gender, timestamp.toString())
+      uploadUserInfo(nickname, birth, gender, timestamp.toString())
     } else if (flag == 3) {
       textInputLayoutArray[0].setErrorTextColor(resources.getColorStateList(R.color.red, null))
       textInputLayoutArray[0].error = getString(R.string.check_duplicates)
@@ -350,7 +361,7 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
         }
       }
       .addOnFailureListener { exception ->
-        Logg.w("Error getting documents: " + exception)
+        Logg.w("Error getting documents: $exception")
       }
       .addOnCompleteListener {
         if (flag == 3) {
@@ -371,7 +382,7 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
   private fun uploadProfileImage(
     imageUri: Uri,
     nickname: String,
-    age: String,
+    birth: String,
     gender: String,
     timestamp: String
   ) {
@@ -380,7 +391,7 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
     UserInfo.autoLoginKey = uid!!
     UserInfo.email = email!!
     UserInfo.nickname = nickname // Shared에 nickname저장.
-    UserInfo.age = age
+    UserInfo.birth = birth
     UserInfo.gender = gender
 
     FBProfileRepository().uploadProfileImage(imageUri, timestamp)
@@ -391,16 +402,17 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
     finish()
   }
 
-  private fun uploadUserInfo(nickname: String, age: String, gender: String, dt: String) {
+  private fun uploadUserInfo(nickname: String, birth: String, gender: String, dt: String) {
     // 회원 정보
     val data = hashMapOf(
-      "UID" to uid,
+      "userId" to uid,
       "nickname" to nickname,
-      "age" to age,
+      "birth" to birth,
       "gender" to gender,
+      "nickname" to nickname,
       "profileImagePath" to "Profile/$uid/$dt"
     )
-    FBUserInfoRepository().createUserInfo(data)
+    FBUsersRepository().createUserInfo(data)
   }
 
   override fun onSingleClick(v: View?) {
@@ -409,7 +421,8 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
         finish()
       }
       R.id.editAge -> {
-
+        val intent = Intent(this, AgeSelectActivity::class.java)
+        startActivityForResult(intent, 101)
       }
       R.id.editGender -> {
         val intent = Intent(this, GenderSelectActivity::class.java)
@@ -434,26 +447,31 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
       R.id.sign_up_button -> {
 
         nickname = editNickname.text.toString()
-        age = editAge.text.toString()
+        birth = editAge.text.toString()
         gender = editGender.text.toString()
 
 
-        Logg.d("가입 버튼 눌렀을 때 : $nickname, $age, $gender")
+        Logg.d("가입 버튼 눌렀을 때 : $nickname, $birth, $gender")
 
         if (textInputLayoutArray[0].error != getString(R.string.nickname_available)) { //무조건 중복 확인 버튼을 눌러야만 회원가입 가능하게 함
           Logg.d(textInputLayoutArray[0].error.toString() + "if문 검사")
           getString(R.string.check_duplicates).show()
         } else { // 중복 확인 통과
           Logg.d(
-            isInputCorrectData[0].toString() + ", " + age!!.isNotEmpty()
+            isInputCorrectData[0].toString() + ", " + birth!!.isNotEmpty()
               .toString() + ", " + gender!!.isNotEmpty().toString()
           )
-          if (isInputCorrectData[0] && age!!.isNotEmpty() && gender!!.isNotEmpty()) {
+          if (isInputCorrectData[0] && birth!!.isNotEmpty() && gender!!.isNotEmpty()) {
+//          Logg.d(
+//            isInputCorrectData[0].toString() + ", " + age!!.isNotEmpty()
+//              .toString() + ", " + gender!!.isNotEmpty().toString()
+//          )
+          // 단순 editText의 Empty유무 확인 => age는 이곳에서만 쓰이고 안쓰임. -> birth로 나이 관리.
             if (selectedImageUri == null) // 프로필 이미지를 설정하지 않았을 때 = 사용자 입장에서 프로필 버튼을 누르지 않았음
             {
               basicProfileSettingPopup() //팝업창으로 물어봄
             } else { // 프로필 이미지 있는 경우 설정한 프로필로 가입하기
-              signUp(selectedImageUri!!, nickname!!, age!!, gender!!)
+              signUp(selectedImageUri!!, nickname!!, birth!!, gender!!)
               progressbar.show() //메인창으로 넘어가기 전까지 프로그래스 바 띄움
             }
           }
@@ -486,7 +504,7 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
         val basicImageUri = Uri.parse(
           "android.resource://" + this.packageName.toString() + "/drawable/basic_profile"
         )
-        signUp(basicImageUri!!, nickname!!, age!!, gender!!)
+        signUp(basicImageUri!!, nickname!!, birth!!, gender!!)
         noticePopup.dismiss()
         progressbar.show() //기본이미지로 회원가입이 바로 진행되도록 프로그레스바 띄움
       },

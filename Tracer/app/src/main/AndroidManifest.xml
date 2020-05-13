@@ -35,7 +35,8 @@
     android:supportsRtl="true"
     android:theme="@style/AppTheme"
     tools:ignore="GoogleAppIndexingWarning">
-    <activity android:name=".main.challenge.ChallengeDataSettingActivity"></activity>
+    <activity android:name=".login.join.AgeSelectActivity"></activity>
+    <activity android:name=".main.challenge.ChallengeDataSettingActivity" />
 
     <service android:name=".lockscreen.service.LockScreenService" />
 
@@ -43,7 +44,7 @@
       android:name=".lockscreen.LockScreenActivity"
       android:launchMode="singleInstance"
       android:showOnLockScreen="true"
-      android:theme="@style/lockscreenView"/>
+      android:theme="@style/lockscreenView" />
     <activity android:name=".main.start.racing.AllRankingActivity" />
     <activity android:name=".main.start.racing.RacingSelectPeopleActivity" />
     <activity android:name=".main.profile.myrecord.ProfileRecordActivity" />

@@ -106,7 +106,7 @@ class SettingPreferenceFragment : PreferenceFragmentCompat() {
         UserInfo.autoLoginKey = ""
         UserInfo.email = ""
         UserInfo.nickname = ""
-        UserInfo.age = ""
+        UserInfo.birth = ""
         UserInfo.gender = ""
         //TODO : 이건 정빈이가 추가한거 같은데 삭제 하니깐 약간 어플이 꼬이는거 같아서 물어보고 삭제하든가 하기
 //        UserInfo.permission = 0

@@ -9,17 +9,22 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.extensions.format
+import com.umpa2020.tracer.extensions.image
 import com.umpa2020.tracer.extensions.m_s
 import com.umpa2020.tracer.extensions.prettyDistance
 import com.umpa2020.tracer.main.profile.myrecord.ProfileRecordActivity
 import com.umpa2020.tracer.main.profile.myroute.ProfileRouteActivity
 import com.umpa2020.tracer.main.profile.settting.AppSettingActivity
 import com.umpa2020.tracer.network.FBProfileRepository
-import com.umpa2020.tracer.network.ProfileListener
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.UserInfo
+import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.fragment_profile.view.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 /**
@@ -47,13 +52,6 @@ class ProfileFragment : Fragment(), OnSingleClickListener {
     // 나의 활동 액티비티
     view.profileRecordTextView.setOnClickListener(this)
 
-
-    /*val recordTextView = view.findViewById<TextView>(R.id.profileRecordTextView)
-    recordTextView.setOnClickListener {
-      val nextIntent = Intent(activity, ProfileRecordActivity::class.java)
-      startActivity(nextIntent)
-    }*/
-
     return view
   }
 
@@ -66,7 +64,7 @@ class ProfileFragment : Fragment(), OnSingleClickListener {
 
       R.id.profileRouteTextView -> { // 나의 루트 액티비티
         val nextIntent = Intent(activity, ProfileRouteActivity::class.java)
-        nextIntent.putExtra("nickname", UserInfo.nickname)
+        nextIntent.putExtra("UID", UserInfo.autoLoginKey)
         startActivity(nextIntent)
       }
 
@@ -75,19 +73,7 @@ class ProfileFragment : Fragment(), OnSingleClickListener {
         //nextIntent.putExtra("nickname", UserInfo.nickname)
         startActivity(nextIntent)
       }
-
-
     }
-  }
-
-  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-    super.onActivityResult(requestCode, resultCode, data)
-
-  }
-
-  override fun onStart() {
-    Logg.i("onStart()")
-    super.onStart()
   }
 
   override fun onResume() {
@@ -97,32 +83,15 @@ class ProfileFragment : Fragment(), OnSingleClickListener {
      * 프로필 변경을 하고 나오는 경우에도 적용된
      * 사진을 바로 보기 위해 Resume에서 적용
      */
-    FBProfileRepository().getProfile(root, UserInfo.nickname) { distance, time ->
-      root.profileFragmentTotalDistance.text = distance.prettyDistance
-      root.profileFragmentTotalTime.text = time.toLong().format(m_s)
+    MainScope().launch {
+      withContext(Dispatchers.IO) {
+        FBProfileRepository().getProfile(UserInfo.autoLoginKey)
+      }.let {
+        profileImageView.image(it.imgPath)
+        profileFragmentTotalDistance.text = it.distance.prettyDistance
+        profileFragmentTotalTime.text = it.time.format(m_s)
+      }
     }
     super.onResume()
   }
-
-  override fun onPause() {
-    Logg.i("onPause()")
-    super.onPause()
-  }
-
-  override fun onStop() {
-    Logg.i("onStop()")
-    super.onStop()
-  }
-
-  private val profileListener = object : ProfileListener {
-    override fun getProfile(distance: Double, time: Double) {
-      // 총 거리와 시간을 띄워줌
-      root.profileFragmentTotalDistance.text = distance.prettyDistance
-      root.profileFragmentTotalTime.text = time.toLong().format(m_s)
-    }
-
-    override fun changeProfile() {
-    }
-  }
-
 }

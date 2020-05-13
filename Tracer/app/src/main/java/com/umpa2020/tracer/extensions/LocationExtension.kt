@@ -277,3 +277,10 @@ fun Location.toWayPoint(type: WayPointType): WayPoint {
     TRACK_POINT -> WayPoint(latitude, longitude, altitude, speed.toDouble(), "Track Point", "Track Point", time, type)
   }
 }
+fun RouteGPX.getSpeed(): MutableList<Double> {
+  val speeds = mutableListOf<Double>()
+  trkList.forEach {
+    speeds.add(it.speed!!)
+  }
+  return speeds
+}

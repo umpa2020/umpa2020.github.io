@@ -85,7 +85,7 @@ class MainActivity : AppCompatActivity(){
     })
 
 //
-//    if(gpsViewModel.isUid.value == null){
+//    if(gpsViewModel.isUSER_ID.value == null){
 //      Logg.d("값이 없음")
 //      val gpsData = GPSData(0, 0.0,0.0  )
 //      gpsViewModel.insert(gpsData)

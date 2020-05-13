@@ -15,7 +15,7 @@
   <string name="txtInputInfoNick">3-12 characters including uppercase, lowercase and numbers in English</string>
   <string name="txtInputInfoPWCHECK">Please check your password.</string>
   <string name="txtInputInfoEmail">This is not an exact email.</string>
-  <string name="txtInputInfoAge">Please enter your age.</string>
+  <string name="txtInputInfoAge">Select the date of birth.</string>
   <string name="txtInputInfoGender">Please select a gender.</string>
 
   <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyAymdWK_9DnHXKY19cuUvg0oMo_FItNvQ0</string>

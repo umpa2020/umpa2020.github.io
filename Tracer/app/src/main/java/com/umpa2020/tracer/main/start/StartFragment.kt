@@ -9,9 +9,6 @@ import android.location.Geocoder
 import android.location.Location
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.os.Message
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -32,7 +29,6 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
-import com.umpa2020.tracer.constant.Constants.Companion.TIMESTAMP_LENGTH
 import com.umpa2020.tracer.dataClass.NearMap
 import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.extensions.*
@@ -44,12 +40,15 @@ import com.umpa2020.tracer.main.ranking.RankingMapDetailActivity
 import com.umpa2020.tracer.main.start.racing.RacingActivity
 import com.umpa2020.tracer.main.start.running.RunningActivity
 import com.umpa2020.tracer.map.TraceMap
+import com.umpa2020.tracer.network.BaseFB.Companion.MAP_ID
 import com.umpa2020.tracer.network.FBMapRepository
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.fragment_start.*
 import kotlinx.android.synthetic.main.fragment_start.view.*
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import java.io.File
 
 
@@ -118,26 +117,25 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
         if (!saveFolder.exists()) {       //폴더 없으면 생성
           saveFolder.mkdir()
         }
-        val wptList= mutableListOf<WayPoint>()
-        wptList.add(WayPoint(1.0,1.0,1.0,1.0,"1","1",0,WayPointType.START_POINT))
-        wptList.add(WayPoint(2.0,2.0,2.0,2.0,"2","2",0,WayPointType.DISTANCE_POINT))
-        wptList.add(WayPoint(3.0,3.0,3.0,3.0,"3","3",0,WayPointType.DISTANCE_POINT))
-        wptList.add(WayPoint(4.0,4.0,4.0,4.0,"4","4",0,WayPointType.FINISH_POINT))
+        val wptList = mutableListOf<WayPoint>()
+        wptList.add(WayPoint(1.0, 1.0, 1.0, 1.0, "1", "1", 0, WayPointType.START_POINT))
+        wptList.add(WayPoint(2.0, 2.0, 2.0, 2.0, "2", "2", 0, WayPointType.DISTANCE_POINT))
+        wptList.add(WayPoint(3.0, 3.0, 3.0, 3.0, "3", "3", 0, WayPointType.DISTANCE_POINT))
+        wptList.add(WayPoint(4.0, 4.0, 4.0, 4.0, "4", "4", 0, WayPointType.FINISH_POINT))
 
 
-        val trkList= mutableListOf<WayPoint>()
-        trkList.add(WayPoint(1.0,1.0,1.0,1.0,"1","1",0,WayPointType.TRACK_POINT))
-        trkList.add(WayPoint(2.0,2.0,2.0,2.0,"2","2",0,WayPointType.TRACK_POINT))
-        trkList.add(WayPoint(3.0,3.0,3.0,3.0,"3","3",0,WayPointType.TRACK_POINT))
-        trkList.add(WayPoint(4.0,4.0,4.0,4.0,"4","4",0,WayPointType.TRACK_POINT))
+        val trkList = mutableListOf<WayPoint>()
+        trkList.add(WayPoint(1.0, 1.0, 1.0, 1.0, "1", "1", 0, WayPointType.TRACK_POINT))
+        trkList.add(WayPoint(2.0, 2.0, 2.0, 2.0, "2", "2", 0, WayPointType.TRACK_POINT))
+        trkList.add(WayPoint(3.0, 3.0, 3.0, 3.0, "3", "3", 0, WayPointType.TRACK_POINT))
+        trkList.add(WayPoint(4.0, 4.0, 4.0, 4.0, "4", "4", 0, WayPointType.TRACK_POINT))
 
-        val routeGPX=RouteGPX(0,"0", wptList, trkList)
+        val routeGPX = RouteGPX(0, "0", wptList, trkList)
         routeGPX.addDirectionSign()
         val routeGpxFile = routeGPX.classToGpx(saveFolder.path)
       }
     }
   }
-
 
   /**
    *  현재 맵 보이는 범위로 루트 검색
@@ -145,55 +143,35 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
   private fun searchThisArea() {
     progressBar.show()
     val bound = traceMap!!.mMap.projection.visibleRegion.latLngBounds
-
-    val mHandler = object : Handler(Looper.getMainLooper()) {
-      override fun handleMessage(msg: Message) {
-        when (msg.what) {
-          STRAT_FRAGMENT_NEARMAP -> {
-            mainStartSearchAreaButton.visibility = View.GONE
-
-            nearMaps = msg.obj as ArrayList<NearMap>
-            val icon =
-              BitmapDescriptorFactory
-                .defaultMarker(BitmapDescriptorFactory.HUE_ROSE)
-
-            routeMarkers.forEach {
-              it.remove()
-            }
-            routeMarkers.clear()
-            nearMaps.forEach {
-              val cutted = it.mapTitle.subSequence(0, it.mapTitle.length - TIMESTAMP_LENGTH)
-
-              //데이터 바인딩
-              routeMarkers.add(
-                traceMap!!.mMap.addMarker(
-                  MarkerOptions()
-                    .position(it.latLng)
-                    .title(cutted.toString())
-                    .snippet(it.distance.prettyDistance)
-                    .icon(icon)
-                )
-              )
-
-              //TODO: 윈도우 커스터마이즈
-              routeMarkers.last().tag = it.mapTitle
-
-              traceMap!!.mMap.setOnInfoWindowClickListener { it2 ->
-                val intent = Intent(activity, RankingMapDetailActivity::class.java)
-                intent.putExtra("MapTitle", it2.tag.toString())
-                startActivity(intent)
-              }
-            }
-            progressBar.dismiss()
+    MainScope().launch {
+      FBMapRepository().listNearMap(bound.southwest, bound.northeast).let { nearMapList ->
+        if (nearMapList == null) {
+          getString(R.string.not_search).show()
+          progressBar.dismiss()
+        } else {
+          mainStartSearchAreaButton.visibility = View.GONE
+          val icon =
+            BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE)
+          routeMarkers.forEach {
+            it.remove()
           }
-          NEARMAPFALSE -> {
-            getString(R.string.not_search).show()
-            progressBar.dismiss()
+          routeMarkers.clear()
+          nearMapList.forEach { nearMap ->
+            //데이터 바인딩
+            routeMarkers.add(
+              traceMap!!.mMap.addMarker(
+                MarkerOptions()
+                  .position(nearMap.latLng)
+                  .title(nearMap.mapTitle)
+                  .snippet(nearMap.distance.prettyDistance)
+                  .icon(icon)
+              ).apply { tag = nearMap.mapId }
+            )
           }
+          progressBar.dismiss()
         }
       }
     }
-    FBMapRepository().listNearMap(bound.southwest, bound.northeast, mHandler)
   }
 
   /**
@@ -233,7 +211,8 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
 
     Logg.d("onCreateView()")
     val view = inflater.inflate(R.layout.fragment_start, container, false)
-    view.test.setOnClickListener {
+    view.test.
+    setOnClickListener {
       val storage = FirebaseStorage.getInstance()
       val routeRef = storage.reference.child("mapRoute").child("asdasdqwe1587633430060")
       val localFile = File.createTempFile("routeGpx", "xml")
@@ -321,6 +300,11 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
     traceMap!!.mMap.setOnMyLocationButtonClickListener {
       wedgedCamera = true
       true
+    }
+    traceMap!!.mMap.setOnInfoWindowClickListener { marker ->
+      val intent = Intent(activity, RankingMapDetailActivity::class.java)
+      intent.putExtra(MAP_ID, marker.tag.toString())
+      startActivity(intent)
     }
     traceMap!!.mMap.uiSettings.isCompassEnabled = true
     traceMap!!.mMap.uiSettings.isZoomControlsEnabled = true

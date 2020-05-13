@@ -115,10 +115,8 @@
           android:id="@+id/editAge"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
+          android:focusableInTouchMode="false"
           android:hint="@string/age_"
-          android:inputType="number"
-          android:maxLength="2"
-
           android:singleLine="true" />
       </com.google.android.material.textfield.TextInputLayout>
 

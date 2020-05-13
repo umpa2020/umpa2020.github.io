@@ -10,37 +10,36 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
     <Toolbar
       android:layout_width="match_parent"
       android:layout_height="50dp"
       android:background="@color/white"
-      android:elevation="1dp"
-      android:contentInsetStart="0dp">
+      android:contentInsetStart="0dp"
+      android:elevation="1dp">
 
       <TextView
         style="@style/appBarText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="@string/my_activity"/>
+        android:text="@string/my_activity" />
     </Toolbar>
 
     <androidx.recyclerview.widget.RecyclerView
       android:id="@+id/profileRecyclerRecord"
       android:layout_width="match_parent"
-      android:layout_height="match_parent"/>
-
-    <TextView
-      android:id="@+id/profileRecyclerActivityisEmpty"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_gravity="center"
-      android:gravity="center"
-      android:text="@string/no_activity"
-      android:textSize="20dp"
-      android:visibility="gone" />
-
+      android:layout_height="match_parent" />
   </LinearLayout>
 
+  <TextView
+    android:id="@+id/profileRecyclerActivityisEmpty"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:text="@string/no_activity"
+    android:textSize="20dp"
+    android:visibility="gone" />
 
 </FrameLayout>

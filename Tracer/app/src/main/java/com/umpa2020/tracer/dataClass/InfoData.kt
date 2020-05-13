@@ -6,19 +6,20 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class InfoData(
-  var makersNickname: String? = null,
-  var makersUserNumber: String? = null,
-  var mapTitle: String? = null,
-  var mapExplanation: String? = null,
-  var mapImage: String? = null,
-  var routeGPXPath: String? = null,
-  var distance: Double? = null,
-  var time: Long? = null,
-  var execute: Int? = null,
-  var likes: Int? = null,
-  var privacy: Privacy = Privacy.PUBLIC,
-  var startLatitude: Double? = null,
-  var startLongitude: Double? = null,
-  var myLiked: Boolean = false,
-  var played: Boolean = false
+  var mapId: String = "",
+  var mapTitle: String = "",
+  var makerId: String = "",
+  var mapExplanation: String = "",
+  var mapImagePath: String = "",
+  var routeGPXPath: String = "",
+  var distance: Double = 0.0,
+  var time: Long = 0L,
+  var plays: Int = 1,
+  var likes: Int = 0,
+  var startLatitude: Double = 0.0,
+  var startLongitude: Double = 0.0,
+  var liked: Boolean = false,
+  var played: Boolean = false,
+  var averageSpeed: Double = 0.0,
+  var maxSpeed: Double = 0.0
 ) : Parcelable

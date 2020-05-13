@@ -145,13 +145,13 @@ class LoginActivity : AppCompatActivity(), OnSingleClickListener {
           Logg.d("signInWithCredential:success")
           // 로그인 성공
           uid = mAuth!!.uid.toString()
-          mFirestoreDB!!.collection("userinfo").whereEqualTo("UID", uid).get()
+          mFirestoreDB!!.collection("userinfo").whereEqualTo("USER_ID", uid).get()
             .addOnSuccessListener { result ->
               // Document found in the offline cache
               if (result.isEmpty) {
                 Logg.d("초기 가입인가")
                 val nextIntent = Intent(this@LoginActivity, SignUpActivity::class.java)
-                nextIntent.putExtra("user UID", mAuth!!.uid.toString())
+                nextIntent.putExtra("user UID", mAuth!!.uid)
                 nextIntent.putExtra("email", email)
                 startActivity(nextIntent)
                 finish()
@@ -170,7 +170,7 @@ class LoginActivity : AppCompatActivity(), OnSingleClickListener {
                   UserInfo.autoLoginKey = mAuth!!.uid.toString()
                   UserInfo.email = email
                   UserInfo.nickname = document.data["nickname"].toString() // Shared에 nickname저장.
-                  UserInfo.age = document.data["age"].toString()
+                  UserInfo.birth = document.data["age"].toString()
                   UserInfo.gender = document.data["gender"].toString()
 
                   val nextIntent = Intent(this@LoginActivity, MainActivity::class.java)
