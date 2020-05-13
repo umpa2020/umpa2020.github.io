@@ -5,7 +5,7 @@ class Constants {
     const val NICKNAME_RULE = "^(?=.*\\W).{3,12}\$"
 
     // 성별 제한
-    const val GENDER_RULE = "^(?=.*[a-zA-Z]).{0,10}\$"
+    const val GENDER_RULE = "^(?=.*[0-9]).{0,10}\$"
 
     // 나이 제한
     const val AGE_RULE = "^(?=.*\\d).{1,2}\$"

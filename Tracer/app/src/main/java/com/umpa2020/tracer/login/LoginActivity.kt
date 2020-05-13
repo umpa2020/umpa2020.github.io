@@ -170,7 +170,7 @@ class LoginActivity : AppCompatActivity(), OnSingleClickListener {
                   UserInfo.autoLoginKey = mAuth!!.uid.toString()
                   UserInfo.email = email
                   UserInfo.nickname = document.data["nickname"].toString() // Shared에 nickname저장.
-                  UserInfo.age = document.data["age"].toString()
+                  UserInfo.birth = document.data["age"].toString()
                   UserInfo.gender = document.data["gender"].toString()
 
                   val nextIntent = Intent(this@LoginActivity, MainActivity::class.java)

@@ -64,7 +64,6 @@ class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) :
     holder.heart.setOnClickListener(object : OnSingleClickListener {
       override fun onSingleClick(v: View?) {
         var likes = Integer.parseInt(holder.likes.text.toString())
-        Logg.d("ssmm11 눌림 tag = ${holder.heart.tag}")
         when (holder.heart.tag) {
           R.drawable.ic_sneaker_for_running -> {
 

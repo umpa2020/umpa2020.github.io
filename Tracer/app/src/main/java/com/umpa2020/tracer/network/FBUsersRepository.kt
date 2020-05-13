@@ -49,10 +49,8 @@ class FBUsersRepository {
   suspend fun listUserRoute(uid: String, limit: Long): List<InfoData>? {
     val infoDatas =
       if (globalStartAfter == null) {
-        Logg.d("ssmm11 위")
         db.collection(BaseFB.MAPS).whereEqualTo(BaseFB.MAKER_ID, uid)
       } else {
-        Logg.d("ssmm11 아래")
         db.collection(BaseFB.MAPS).whereEqualTo(BaseFB.MAKER_ID, uid).startAfter(globalStartAfter!!)
       }.limit(limit).get().await().apply {
         if (documents.size == 0)
