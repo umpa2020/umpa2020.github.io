@@ -19,7 +19,6 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -38,7 +37,6 @@ import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.extensions.*
 import com.umpa2020.tracer.gpx.WayPoint
 import com.umpa2020.tracer.gpx.WayPointType
-import com.umpa2020.tracer.main.MainActivity.Companion.gpsViewModel
 import com.umpa2020.tracer.main.challenge.ChallengeDataSettingActivity
 import com.umpa2020.tracer.main.ranking.RankingMapDetailActivity
 import com.umpa2020.tracer.main.start.racing.RacingActivity
@@ -48,6 +46,7 @@ import com.umpa2020.tracer.network.FBMapRepository
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.OnSingleClickListener
+import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.fragment_start.*
 import kotlinx.android.synthetic.main.fragment_start.view.*
 import java.io.File
@@ -70,9 +69,6 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
   val progressBar = MyProgressBar()
   var firstFlag = true
 
-  //  companion object{
-//    var gpsViewModel = GpsViewModel(App.instance.currentActivity()!!.application)
-//  }
   override fun onSingleClick(v: View?) {
     when (v!!.id) {
       R.id.mainStartRunning -> {
@@ -118,20 +114,20 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
         if (!saveFolder.exists()) {       //폴더 없으면 생성
           saveFolder.mkdir()
         }
-        val wptList= mutableListOf<WayPoint>()
-        wptList.add(WayPoint(1.0,1.0,1.0,1.0,"1","1",0,WayPointType.START_POINT))
-        wptList.add(WayPoint(2.0,2.0,2.0,2.0,"2","2",0,WayPointType.DISTANCE_POINT))
-        wptList.add(WayPoint(3.0,3.0,3.0,3.0,"3","3",0,WayPointType.DISTANCE_POINT))
-        wptList.add(WayPoint(4.0,4.0,4.0,4.0,"4","4",0,WayPointType.FINISH_POINT))
+        val wptList = mutableListOf<WayPoint>()
+        wptList.add(WayPoint(1.0, 1.0, 1.0, 1.0, "1", "1", 0, WayPointType.START_POINT))
+        wptList.add(WayPoint(2.0, 2.0, 2.0, 2.0, "2", "2", 0, WayPointType.DISTANCE_POINT))
+        wptList.add(WayPoint(3.0, 3.0, 3.0, 3.0, "3", "3", 0, WayPointType.DISTANCE_POINT))
+        wptList.add(WayPoint(4.0, 4.0, 4.0, 4.0, "4", "4", 0, WayPointType.FINISH_POINT))
 
 
-        val trkList= mutableListOf<WayPoint>()
-        trkList.add(WayPoint(1.0,1.0,1.0,1.0,"1","1",0,WayPointType.TRACK_POINT))
-        trkList.add(WayPoint(2.0,2.0,2.0,2.0,"2","2",0,WayPointType.TRACK_POINT))
-        trkList.add(WayPoint(3.0,3.0,3.0,3.0,"3","3",0,WayPointType.TRACK_POINT))
-        trkList.add(WayPoint(4.0,4.0,4.0,4.0,"4","4",0,WayPointType.TRACK_POINT))
+        val trkList = mutableListOf<WayPoint>()
+        trkList.add(WayPoint(1.0, 1.0, 1.0, 1.0, "1", "1", 0, WayPointType.TRACK_POINT))
+        trkList.add(WayPoint(2.0, 2.0, 2.0, 2.0, "2", "2", 0, WayPointType.TRACK_POINT))
+        trkList.add(WayPoint(3.0, 3.0, 3.0, 3.0, "3", "3", 0, WayPointType.TRACK_POINT))
+        trkList.add(WayPoint(4.0, 4.0, 4.0, 4.0, "4", "4", 0, WayPointType.TRACK_POINT))
 
-        val routeGPX=RouteGPX(0,"0", wptList, trkList)
+        val routeGPX = RouteGPX(0, "0", wptList, trkList)
         routeGPX.addDirectionSign()
         val routeGpxFile = routeGPX.classToGpx(saveFolder.path)
       }
@@ -252,9 +248,6 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
       }
     }
 
-    // gps viewModel 정의
-//    gpsViewModel = GpsViewModel(requireActivity().application)
-
     // 검색 창 키보드에서 엔터키 리스너
     view.mainStartSearchTextView.setOnEditorActionListener(
       object : TextView.OnEditorActionListener {
@@ -277,42 +270,13 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
     Logg.d("onMapReady")
     traceMap = TraceMap(googleMap) //구글맵
     traceMap!!.mMap.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
-    gpsViewModel.allGps.observe(this, Observer { gpsData ->
-      gpsData?.let {
-        Logg.d("실행 돼??")
-        val latlng = LatLng(it.lat, it.lng)
-        Logg.d("abcd ${latlng.toString()}")
-        val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latlng, 17f)
-        traceMap!!.mMap.moveCamera(cameraUpdate)
-      }
-    })
 
-//    val prefs = PreferenceManager.getDefaultSharedPreferences(App.instance.context())
-//    if (prefs.getBoolean("appFirstDown", true)) {
-//      setDefaultLocation()
-//      prefs.edit().let {
-//        it.putBoolean("appFirstDown", false)
-//        it.apply()
-//      }
-//      Logg.d("앱 처음 설치")
-//    } else {
-//      gpsViewModel.allGps.observe(this, Observer {gpsData->
-//        gpsData?.let {
-//          Logg.d("실행 돼??")
-//          val latlng = LatLng(it.lat, it.lng)
-//          Logg.d("abcd ${latlng.toString()}")
-//          val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latlng, 17f)
-//          traceMap!!.mMap.moveCamera(cameraUpdate)
-//        }
-//      })
-//      Logg.d("앱 처음 설치 뒤")
-//    }
-//
-//    if(gpsViewModel.isUid.value == null){
-//      Logg.d("값이 없음")
-//    }else{
-//      Logg.d("값이 있음")
-//    }
+    // Shared의 값을 받아와서 초기 카메라 위치 설정.
+    Logg.d("${UserInfo.lat} , ${UserInfo.lng}")
+    val latlng = LatLng(UserInfo.lat.toDouble(), UserInfo.lng.toDouble())
+    val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latlng, 17f)
+    traceMap!!.mMap.moveCamera(cameraUpdate)
+
     wedgedCamera = true
     traceMap!!.mMap.setOnCameraMoveCanceledListener {
       wedgedCamera = false
@@ -324,6 +288,16 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
     }
     traceMap!!.mMap.uiSettings.isCompassEnabled = true
     traceMap!!.mMap.uiSettings.isZoomControlsEnabled = true
+  }
+
+  override fun onResume() {
+    super.onResume()
+    // 브로드 캐스트 등록 - 전역 context로 수정해야함
+    LocalBroadcastManager.getInstance(this.requireContext())
+      .registerReceiver(locationBroadcastReceiver, IntentFilter("custom-event-name"))
+
+    // Shared의 마지막 위치였던거 확인.
+    Logg.d("${UserInfo.lat} , ${UserInfo.lng}")
   }
 
   fun getVersionInfo() {
@@ -344,9 +318,6 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
 
     view.gpxTest.setOnClickListener(this)
     view.upload.setOnClickListener(this)
-    // 브로드 캐스트 등록 - 전역 context로 수정해야함
-    LocalBroadcastManager.getInstance(this.requireContext())
-      .registerReceiver(locationBroadcastReceiver, IntentFilter("custom-event-name"))
   }
 
   override fun onPause() {
@@ -355,10 +326,12 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
     LocalBroadcastManager.getInstance(this.requireContext())
       .unregisterReceiver(locationBroadcastReceiver)
 
-    // 마지막 위치 roomDB에 업데이트
-    if (currentLocation != null)
-      gpsViewModel.updateLastPosition(currentLocation!!.latitude, currentLocation!!.longitude)
-    Logg.d("abcd onpause ${gpsViewModel.allGps.value!!.lat}")
+    //Shared로 마지막 위치 업데이트
+    if (currentLocation != null) {
+      Logg.d("마지막 위치 업데이트")
+      UserInfo.lat = currentLocation!!.latitude.toFloat()
+      UserInfo.lng = currentLocation!!.longitude.toFloat()
+    }
   }
 
   override fun onDestroy() {

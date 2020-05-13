@@ -17,7 +17,6 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.maps.android.SphericalUtil
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
@@ -26,22 +25,17 @@ import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.constant.UserState
 import com.umpa2020.tracer.extensions.*
 import com.umpa2020.tracer.gpx.WayPoint
-import com.umpa2020.tracer.gpx.WayPointType
+import com.umpa2020.tracer.gpx.WayPointType.TRACK_POINT
 import com.umpa2020.tracer.lockscreen.util.LockScreen
-import com.umpa2020.tracer.main.MainActivity.Companion.gpsViewModel
+import com.umpa2020.tracer.main.MainActivity.Companion.locationViewModel
 import com.umpa2020.tracer.map.TraceMap
 import com.umpa2020.tracer.roomDatabase.entity.MapRecordData
 import com.umpa2020.tracer.roomDatabase.viewModel.RecordViewModel
-import com.umpa2020.tracer.util.ChoicePopup
-import com.umpa2020.tracer.util.LocationBroadcastReceiver
-import com.umpa2020.tracer.util.Logg
-import com.umpa2020.tracer.util.OnSingleClickListener
+import com.umpa2020.tracer.util.*
 import hollowsoft.slidingdrawer.OnDrawerCloseListener
 import hollowsoft.slidingdrawer.OnDrawerOpenListener
 import hollowsoft.slidingdrawer.OnDrawerScrollListener
 import hollowsoft.slidingdrawer.SlidingDrawer
-import com.umpa2020.tracer.gpx.WayPointType.*
-import kotlinx.android.synthetic.main.fragment_start.*
 
 
 open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDrawerScrollListener,
@@ -80,8 +74,8 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
   var unPassedIcon = R.drawable.ic_checkpoint_gray.makingIcon()
   var passedIcon = R.drawable.ic_checkpoint_red.makingIcon()
 
-//  private lateinit var gpsViewModel: GpsViewModel
   private lateinit var recordViewModel: RecordViewModel
+
   open fun init() {
     drawer.setOnDrawerScrollListener(this)
     drawer.setOnDrawerOpenListener(this)
@@ -98,15 +92,9 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
 
     var i = 0
     // startFragment의 마지막 위치를 가져와서 카메라 설정
-    gpsViewModel.allGps.observe(this, Observer { lastPos ->
-      lastPos?.let {
-        val latlng = LatLng(it.lat, it.lng)
-        Logg.d("abcd ${latlng.toString()}")
-        Logg.d("abcd ${i++}")
-        val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latlng, 17f)
-        traceMap.mMap.moveCamera(cameraUpdate)
-      }
-    })
+    val latLng = LatLng(UserInfo.lat.toDouble(), UserInfo.lng.toDouble())
+    val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 17f)
+    traceMap.mMap.moveCamera(cameraUpdate)
 
     traceMap.mMap.setOnCameraMoveCanceledListener {
       wedgedCamera = false
@@ -118,10 +106,18 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     traceMap.mMap.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
     traceMap.mMap.uiSettings.isCompassEnabled = true
     traceMap.mMap.uiSettings.isZoomControlsEnabled = true
-    wedgedCamera=true
+    wedgedCamera = true
   }
 
+  // 위치를 브로드케스트에서 받아 지속적으로 업데이트
   open fun updateLocation(curLoc: Location) {
+
+    Logg.d(curLoc.toString())
+
+    locationViewModel.location.observe(this, Observer {
+      Logg.d(it.toString())
+    })
+
     currentLocation = curLoc
     distanceTextView.text = distance.prettyDistance
     speedTextView.text = speed.prettySpeed()
@@ -269,8 +265,6 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     LocalBroadcastManager.getInstance(this)
       .registerReceiver(locationBroadcastReceiver, IntentFilter("custom-event-name"))
 
-//    gpsViewModel = ViewModelProvider(this).get(GpsViewModel::class.java)
-
     recordViewModel = RecordViewModel(application)
     recordViewModel.deleteAll()
   }
@@ -280,10 +274,12 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     super.onDestroy()
     LocalBroadcastManager.getInstance(this).unregisterReceiver(locationBroadcastReceiver)
 
-    // 마지막 위치 roomDB에 업데이트
-    if (currentLocation != null)
-      gpsViewModel.updateLastPosition(currentLocation!!.latitude, currentLocation!!.longitude)
-    Logg.d("abcd onpause ${gpsViewModel.allGps.value!!.lat}")
+
+    // Shared에 마지막 위치 업데이트
+    Logg.d("마지막 위치 업데이트")
+    UserInfo.lat = currentLocation.latitude.toFloat()
+    UserInfo.lng = currentLocation.longitude.toFloat()
+
   }
 
   lateinit var noticePopup: ChoicePopup
