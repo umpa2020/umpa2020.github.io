@@ -27,8 +27,8 @@ class RacingSelectPeopleActivity : AppCompatActivity(), OnSingleClickListener {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_racing_select_people)
 
-    mapId = intent.getStringExtra(MAP_ID)
-    routeGPX = intent.getParcelableExtra("RouteGPX")
+    mapId = intent.getStringExtra(MAP_ID)!!
+    routeGPX = intent.getParcelableExtra("RouteGPX")!!
 
     MainScope().launch {
       FBMapRepository().listMapRanking(mapId).let {

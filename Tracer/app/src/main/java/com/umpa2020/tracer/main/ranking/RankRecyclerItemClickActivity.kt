@@ -40,7 +40,6 @@ class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener
     //전달 받은 값으로 Title 설정
     mapId = intent.extras?.getString("mapId").toString()
 
-
     MainScope().launch {
       withContext(Dispatchers.IO) {
         FBMapRepository().getMapInfo(mapId)

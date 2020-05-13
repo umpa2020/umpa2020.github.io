@@ -8,5 +8,6 @@ data class ActivityData(
   val mapId: String? = null,
   val time: Long? = null,
   val distance: Double? = null,
+  val playTime: Long? = null,
   var mode: String? = null
 ) : Parcelable

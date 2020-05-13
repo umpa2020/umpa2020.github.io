@@ -13,6 +13,7 @@ import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.extensions.*
 import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.network.*
+import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
@@ -49,7 +50,7 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
       UserInfo.autoLoginKey,
       UserInfo.nickname,
       racerData.time,
-      true,
+      false,
       racerSpeeds.max().toString(),
       racerSpeeds.average().toString(),
       null
@@ -64,11 +65,11 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
     MainScope().launch {
       // 유저 히스토리 등록
       FBUsersRepository().createUserHistory(
-        ActivityData(racerData.mapId, Date().time, racerData.distance, if (result) "racing go the distance" else "racing fail")
+        ActivityData(racerData.mapId, Date().time, racerData.distance, racerData.time, if (result) "racing go the distance" else "racing fail")
       )
       //성공했다면 랭킹에 등록
       if (result) FBRacingRepository().createRankingData(racerData, rankingData, racerGpxFile)
-      arrRankingData = FBMapRepository().listMapRanking(racerData.mapId!!)
+      arrRankingData = FBMapRepository().listMapRanking(racerData.mapId)
       updateRankingUI(arrRankingData)
       progressbar.dismiss()
     }
@@ -88,64 +89,65 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
       // 리스트 선택화면으로 넘어감
       R.id.otherPeopleProfileSelect -> {
         val intent = Intent(this, AllRankingActivity::class.java)
-        intent.putExtra("arrRankingData", arrRankingData.toTypedArray())
+        intent.putParcelableArrayListExtra("arrRankingData", ArrayList(arrRankingData))
         startActivityForResult(intent, 100)
       }
     }
   }
-/*
-  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-    if (resultCode == 100) {
+
+  /*
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
       if (resultCode == 100) {
-        val getNickname = data!!.getStringExtra("result")
-        RacingFinishAnalysisOtherNickname.text = getNickname
+        if (resultCode == 100) {
+          val getNickname = data!!.getStringExtra("result")
+          RacingFinishAnalysisOtherNickname.text = getNickname
 
-        progressbar.show()
-        FBRacingRepository().getOtherData(racerData.mapTitle!!, getNickname!!)
-        /**
-         * TODO 아래 코드 원래 있던 코드를 재활용 안하고 새로 했는데 - 정빈
-         *
-         * 1. AllRankingActivity 안에 RecyclerView에서 종료를 시키고 있어서
-         *    제대로 된 종료가 안되서
-         * 2. 원래 있던 코드를 사용하면 APP.instance 부분이 오류가 나게 됨
-         *
-         */
-        val db = FirebaseFirestore.getInstance()
-        var profileImagePath = "init"
-        db.collection(USERS).whereEqualTo("nickname", getNickname)
-          .get()
-          .addOnSuccessListener { result ->
-            if (!result.isEmpty) {
-              for (document in result) {
-                profileImagePath = document.get("profileImagePath") as String
-                break
-              }
-              // glide imageview 소스
-              // 프사 설정하는 코드 db -> imageView glide
-              val storage = FirebaseStorage.getInstance()
-              val profileRef = storage.reference.child(profileImagePath)
-
-              profileRef.downloadUrl.addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                  // Glide 이용하여 이미지뷰에 로딩
-                  RacingFinishAnalysisOtherProfile.image(task.result!!)
-                  progressbar.dismiss()
-                } else {
-                  progressbar.dismiss()
+          progressbar.show()
+          FBRacingRepository().getOtherData(racerData.mapTitle!!, getNickname!!)
+          /**
+           * TODO 아래 코드 원래 있던 코드를 재활용 안하고 새로 했는데 - 정빈
+           *
+           * 1. AllRankingActivity 안에 RecyclerView에서 종료를 시키고 있어서
+           *    제대로 된 종료가 안되서
+           * 2. 원래 있던 코드를 사용하면 APP.instance 부분이 오류가 나게 됨
+           *
+           */
+          val db = FirebaseFirestore.getInstance()
+          var profileImagePath = "init"
+          db.collection(USERS).whereEqualTo("nickname", getNickname)
+            .get()
+            .addOnSuccessListener { result ->
+              if (!result.isEmpty) {
+                for (document in result) {
+                  profileImagePath = document.get("profileImagePath") as String
+                  break
                 }
+                // glide imageview 소스
+                // 프사 설정하는 코드 db -> imageView glide
+                val storage = FirebaseStorage.getInstance()
+                val profileRef = storage.reference.child(profileImagePath)
+
+                profileRef.downloadUrl.addOnCompleteListener { task ->
+                  if (task.isSuccessful) {
+                    // Glide 이용하여 이미지뷰에 로딩
+                    RacingFinishAnalysisOtherProfile.image(task.result!!)
+                    progressbar.dismiss()
+                  } else {
+                    progressbar.dismiss()
+                  }
+                }
+              } else {
+                RacingFinishAnalysisOtherNickname.text = "탈퇴한 회원입니다."
               }
-            } else {
-              RacingFinishAnalysisOtherNickname.text = "탈퇴한 회원입니다."
+
             }
-
-          }
-        //FBProfileRepository().getProfileImage(RacingFinishAnalysisOtherProfile, getNickname!!)
+          //FBProfileRepository().getProfileImage(RacingFinishAnalysisOtherProfile, getNickname!!)
+        }
       }
+      super.onActivityResult(requestCode, resultCode, data)
     }
-    super.onActivityResult(requestCode, resultCode, data)
-  }
 
-*/
+  */
   private fun setMyUiData(
     racerSpeeds: MutableList<Double>,
     resultRankText: Int
@@ -177,7 +179,7 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
 
     var resultRank = 1
     rankingDatas.forEach {
-      if (racerData.time!! >= it.challengerTime!!) {
+      if (racerData.time > it.challengerTime!!) {
         resultRank++
       }
 

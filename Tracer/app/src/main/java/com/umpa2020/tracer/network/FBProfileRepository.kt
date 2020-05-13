@@ -36,7 +36,7 @@ class FBProfileRepository : BaseFB() {
       var sumTime = 0L
       it.reference.collection(ACTIVITIES).get().await().documents.forEach {
         sumDistance += it.get(DISTANCE) as Double
-        sumTime += it.get(TIME) as Long
+        sumTime += it.get(PLAY_TIME) as Long
       }
       ProfileData(sumDistance, sumTime, FBStorageRepository().downloadFile(it.getString(PROFILE_IMAGE_PATH)!!)!!)
     }
