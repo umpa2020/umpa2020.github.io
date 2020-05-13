@@ -97,7 +97,6 @@ class LoginActivity : AppCompatActivity(), OnSingleClickListener {
         // 구글 로그인에 성공했을때 넘어오는 토큰값을 가지고 있는 Task
         Logg.d(data.toString())
         val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-        Logg.d("여기까지 실행??")
         // Google Sign In was successful, authenticate with Firebase
         // 구글 로그인 성공
         // ApiException 캐스팅

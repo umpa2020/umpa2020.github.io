@@ -2,18 +2,10 @@ package com.umpa2020.tracer.network
 
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.maps.android.SphericalUtil
 import com.umpa2020.tracer.dataClass.InfoData
-import com.umpa2020.tracer.dataClass.LikedMapData
-import com.umpa2020.tracer.dataClass.PlayedMapData
-import com.umpa2020.tracer.network.BaseFB.Companion.PLAYS
-import com.umpa2020.tracer.network.BaseFB.Companion.LIKES
-import com.umpa2020.tracer.network.BaseFB.Companion.MAPS
-import com.umpa2020.tracer.util.UserInfo
 import kotlinx.coroutines.tasks.await
-
 
 /**
  * 랭킹 네트워크 클래스 - 랭킹에 관련한

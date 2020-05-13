@@ -67,12 +67,10 @@ class MainActivity : AppCompatActivity(){
 
     gpsViewModel.allGps.observe(this, Observer {gpsData->
       if(gpsData==null){
-        Logg.d("값 없음")
         gpsViewModel.insert(GPSData(0,15.0,15.0))
       }else{
         //TODO: 옵저버 해제
         gpsViewModel.allGps.removeObservers(this)
-        Logg.d("값 있음 $gpsData")
       }
 //      gpsData?.let {
 //        Logg.d("실행 돼??")
@@ -129,7 +127,6 @@ class MainActivity : AppCompatActivity(){
 
   override fun onStart() {
     super.onStart()
-    Logg.d("onStart()")
     Logg.d(selectedFragment.toString())
     Logg.d(selectedFragment!!.id.toString())
 

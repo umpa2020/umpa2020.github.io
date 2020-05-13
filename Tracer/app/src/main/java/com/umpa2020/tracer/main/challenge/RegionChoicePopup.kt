@@ -39,7 +39,6 @@ class RegionChoicePopup(context: Context, val onClickListener: View.OnClickListe
     setContentView(R.layout.challenge_loaclpopup)
     window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-
     challenge_local.layoutManager = GridLayoutManager(context, 3)
     challenge_local.adapter = LocalAdapter(localeList, onClickListener)
   }

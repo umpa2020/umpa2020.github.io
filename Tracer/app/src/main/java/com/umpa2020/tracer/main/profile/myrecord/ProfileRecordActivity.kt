@@ -8,12 +8,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.ActivityData
 import com.umpa2020.tracer.network.FBUsersRepository
-import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.MyProgressBar
 import kotlinx.android.synthetic.main.activity_profile_record.*
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
+/**
+ * 나의 활동 기록 액티비티
+ * 1. 내가 맵을 만들었는지
+ * 2. 레이싱 완주했는지
+ * 3. 레이싱 도중 포기했는지 맵 이미지와 함께 표기
+ */
 class ProfileRecordActivity : AppCompatActivity() {
   val activity = this
   val rootActivityDatas = arrayListOf<ActivityData>()
@@ -22,7 +27,11 @@ class ProfileRecordActivity : AppCompatActivity() {
   val userActivityRepo = FBUsersRepository()
   var limit = 0L
 
-
+  /**
+   * 순서
+   * 1. Resume 에서 값을 받아오고
+   * 2. 리사이클러뷰에 끝에 도달하면 더 가져오기
+   */
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_profile_record)
@@ -53,6 +62,9 @@ class ProfileRecordActivity : AppCompatActivity() {
     if (limit == 0L) limit = 15L
     else rootActivityDatas.clear()
 
+    /**
+     * 나의 활동 리스트를 가져오기
+     */
     MainScope().launch {
       userActivityRepo.listUserMakingActivity(limit)?.let {
         activityList(it)
@@ -61,6 +73,10 @@ class ProfileRecordActivity : AppCompatActivity() {
     super.onResume()
   }
 
+  /**
+   * 값을 받아온 뒤, 전역 list 에서 값을 바꾸고
+   * 알림을 주기
+   */
   fun activityList(activityDatas: List<ActivityData>) {
     rootActivityDatas.addAll(activityDatas)
     if (rootActivityDatas.isEmpty()) {

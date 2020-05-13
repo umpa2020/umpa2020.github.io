@@ -29,20 +29,11 @@ class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) :
   RecyclerView.Adapter<ProfileRecyclerViewAdapterRoute.mViewHolder>() {
   var context: Context? = null
 
-  //생성된 뷰 홀더에 데이터를 바인딩 해줌.
   override fun onBindViewHolder(holder: mViewHolder, position: Int) {
     val singleItem = mdata[position]
     val mapTitle = singleItem.mapId.subSequence(0, singleItem.mapId.length - TIMESTAMP_LENGTH) as String
     val time = singleItem.mapId.subSequence(singleItem.mapId.length - TIMESTAMP_LENGTH, singleItem.mapId.length) as String
 
-    //데이터 바인딩
-    // glide imageview 소스
-
-    //TODO: Network class 테이블에 맞게 클래스 다 만들어 놓기
-    // app.getString   google_storage_bucket
-    // string에 저장해서 사용 해보았으나
-    // Please use a gs:// URL for your Firebase Storage bucket. 에러가 뜨면서 실행이 안되는 문제..
-    // val storage = FirebaseStorage.getInstance(R.string.google_storage_bucket_string.toString()) // debug용, release용 구분
     MainScope().launch {
       holder.image.image(FBMapRepository().getMapImage(singleItem.mapId))
     }
@@ -52,6 +43,7 @@ class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) :
     holder.likes.text = singleItem.likes.toString()
     holder.excutes.text = singleItem.plays.toString()
     holder.date.text = time.toLong().format("yyyy-MM-dd HH:mm:ss")
+
     if (singleItem.played) {
       holder.play.setColorFilter(Color.CYAN)
     }
@@ -63,9 +55,7 @@ class ProfileRecyclerViewAdapterRoute(val mdata: ArrayList<InfoData>) :
       holder.heart.tag = R.drawable.ic_favorite_border_black_24dp
     }
 
-
     //클릭하면 맵 상세보기 페이지로 이동
-
     holder.heart.setOnClickListener(object : OnSingleClickListener {
       override fun onSingleClick(v: View?) {
         var likes = Integer.parseInt(holder.likes.text.toString())
