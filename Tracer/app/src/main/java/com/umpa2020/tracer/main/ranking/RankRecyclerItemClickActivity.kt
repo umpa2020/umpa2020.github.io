@@ -1,6 +1,7 @@
 package com.umpa2020.tracer.main.ranking
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -38,15 +39,14 @@ class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener
     val intent = intent
     //전달 받은 값으로 Title 설정
     mapId = intent.extras?.getString("mapId").toString()
-    mapTitle = mapId.subSequence(0, mapId.length - TIMESTAMP_LENGTH).toString()
-
 
 
     MainScope().launch {
       withContext(Dispatchers.IO) {
         FBMapRepository().getMapInfo(mapId)
       }?.let {
-        it.makerId?.let {
+        mapTitle = it.mapTitle
+        it.makerId.let {
           FBProfileRepository().getUserNickname(it).let {
             rankRecyclerNickname.text = it
           }
@@ -61,6 +61,7 @@ class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener
     MainScope().launch {
       rankRoutePriview.image(FBMapRepository().getMapImage(mapId))
       setLiked(FBLikesRepository().isLiked(UserInfo.autoLoginKey, mapId), FBLikesRepository().getMapLikes(mapId))
+      setPlayed(FBUsersRepository().isPlayed(UserInfo.autoLoginKey, mapId), FBMapRepository().getMapPlays(mapId))
       FBMapRepository().listMapRanking(mapId).let {
         //레이아웃 매니저 추가
         rankRecyclerItemClickRecyclerView.layoutManager = LinearLayoutManager(activity)
@@ -105,10 +106,10 @@ class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener
    * (이 작업이 조금 오래걸려서 프로그래스바를 여기서 dismiss)
    */
 
-  fun setLiked(liked: Boolean, getlikes: Int) {
-    rankRecyclerHeartCount.text = getlikes.toString()
+  private fun setLiked(liked: Boolean, getLikes: Int) {
+    rankRecyclerHeartCount.text = getLikes.toString()
     //adpater 추가
-    likes = getlikes
+    likes = getLikes
     if (liked) {
       rankRecyclerHeart.setImageResource(R.drawable.ic_favorite_red_24dp)
       rankRecyclerHeartSwitch.text = "on"
@@ -116,6 +117,13 @@ class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener
       rankRecyclerHeart.setImageResource(R.drawable.ic_favorite_border_black_24dp)
       rankRecyclerHeartSwitch.text = "off"
     }
+  }
 
+  private fun setPlayed(played: Boolean, getPlays: Int) {
+    rankRecyclerExecuteCount.text = getPlays.toString()
+
+    if (played) {
+      rankRecyclerExecute.setColorFilter(Color.CYAN)
+    }
   }
 }

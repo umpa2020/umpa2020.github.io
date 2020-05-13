@@ -91,6 +91,4 @@ class FBRankingRepository : BaseFB() {
     infoDatas.filter { likedMapIdList.contains(it.mapId) }.forEach { it.liked = true }
     return infoDatas
   }
-
-
 }
