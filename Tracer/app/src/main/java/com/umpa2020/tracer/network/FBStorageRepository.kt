@@ -1,9 +1,6 @@
 package com.umpa2020.tracer.network
 
 import android.net.Uri
-import com.google.android.gms.tasks.Task
-import com.umpa2020.tracer.extensions.gpxToClass
-import com.umpa2020.tracer.util.Logg
 import kotlinx.coroutines.tasks.await
 import java.io.File
 

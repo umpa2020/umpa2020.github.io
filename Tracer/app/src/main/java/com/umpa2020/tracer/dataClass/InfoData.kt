@@ -1,7 +1,6 @@
 package com.umpa2020.tracer.dataClass
 
 import android.os.Parcelable
-import com.umpa2020.tracer.constant.Privacy
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize

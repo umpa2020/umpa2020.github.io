@@ -15,6 +15,10 @@ import kotlinx.android.synthetic.main.activity_challenge_map_detail.*
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
+/**
+ * 하나의 대회를 선택하면 해당 대회의 정보를
+ * 자세히 보여주는 액티비티, 추 후에 뛸 수 있도록 연동
+ */
 class ChallengeRecycleritemClickActivity : AppCompatActivity(), OnSingleClickListener {
 
   @SuppressLint("SetTextI18n")
@@ -23,7 +27,6 @@ class ChallengeRecycleritemClickActivity : AppCompatActivity(), OnSingleClickLis
     setContentView(R.layout.activity_challenge_map_detail)
 
     val challengeId = intent.getStringExtra("challengeId")!!
-
 
     MainScope().launch {
       FBChallengeRepository().getChallengeData(challengeId).let {
@@ -36,11 +39,9 @@ class ChallengeRecycleritemClickActivity : AppCompatActivity(), OnSingleClickLis
         challengeDetailInformation.text = it.intro
       }
     }
-    
   }
 
   override fun onSingleClick(v: View?) {
   }
-
 }
 

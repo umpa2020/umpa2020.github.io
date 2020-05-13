@@ -1,17 +1,16 @@
 package com.umpa2020.tracer.main.challenge
 
 import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.umpa2020.tracer.R
-import com.umpa2020.tracer.util.Logg
-import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.recycler_localname_item.view.*
 
-
+/**
+ * 지역 선택에 지역을 붙혀주는 어댑터
+ */
 class LocalAdapter(var localeList: Array<String>, val onClickListener: View.OnClickListener) :
   RecyclerView.Adapter<LocalAdapter.ItemHolder>() {
   var context: Context? = null

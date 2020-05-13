@@ -14,6 +14,9 @@ import kotlinx.android.synthetic.main.fragment_adchallenge.view.*
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
+/**
+ * 챌린지 모드에서 자동으로 돌아가는 광고 쪽 페이지 어댑터
+ */
 class AdChallengePageAdapter(
   val adChallengeList: MutableList<BannerData>,
   val context: Context
@@ -38,5 +41,4 @@ class AdChallengePageAdapter(
     }
     return view
   }
-
 }

@@ -1,12 +1,8 @@
 package com.umpa2020.tracer.network
 
 import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FirebaseFirestore
 import com.umpa2020.tracer.dataClass.ActivityData
 import com.umpa2020.tracer.dataClass.InfoData
-import com.umpa2020.tracer.network.BaseFB.Companion.ACTIVITIES
-import com.umpa2020.tracer.network.BaseFB.Companion.USERS
-import com.umpa2020.tracer.network.BaseFB.Companion.USER_ID
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.coroutines.tasks.await
@@ -20,7 +16,7 @@ import kotlinx.coroutines.tasks.await
  * 3. 유저가 challenge 한 맵 history 저장
  */
 
-class FBUsersRepository: BaseFB() {
+class FBUsersRepository : BaseFB() {
   var globalStartAfter: DocumentSnapshot? = null
 
   fun createUserInfo(data: HashMap<String, String?>) {
