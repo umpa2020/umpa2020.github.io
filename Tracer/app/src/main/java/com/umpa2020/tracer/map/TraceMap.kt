@@ -49,7 +49,8 @@ class TraceMap(val mMap: GoogleMap) {
 
     wptList.forEach { addMarker(it) }
     val trackBounds = track.toMutableList().bounds()
-    mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(trackBounds, 1080, 300, 100))
+
+    mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(trackBounds, 1080, 300, 20))
     return Pair(markerList, turningPointList)
   }
 

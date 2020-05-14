@@ -216,10 +216,4 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
       }
     }
   }
-
-  fun getOtherRacing(otherData: RankingData) {
-    otherLapTimeTextView.text = otherData.challengerTime!!.format(m_s)
-    otherMaxSpeedTextView.text = otherData.maxSpeed!!.toDouble().prettyDistance
-    otherAvgSpeedTextView.text = otherData.averageSpeed!!.toDouble().prettyDistance
-  }
 }
