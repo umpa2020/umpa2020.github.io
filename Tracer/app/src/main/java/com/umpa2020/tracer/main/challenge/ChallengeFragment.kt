@@ -10,23 +10,27 @@ import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.umpa2020.tracer.R
-import com.umpa2020.tracer.dataClass.BannerData
 import com.umpa2020.tracer.dataClass.ChallengeData
 import com.umpa2020.tracer.extensions.M_D
 import com.umpa2020.tracer.extensions.Y_M_D
 import com.umpa2020.tracer.extensions.format
-import com.umpa2020.tracer.network.*
+import com.umpa2020.tracer.network.FBChallengeRepository
 import kotlinx.android.synthetic.main.fragment_challenge.*
 import kotlinx.android.synthetic.main.fragment_challenge.view.*
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import java.util.*
-import kotlin.collections.ArrayList
 
 class ChallengeFragment : Fragment() {
-  var from = 1546300800000 // 경기 시작일 기본 값 (2019년 1월 1일)
-  var to = 1609372800000 // 경기 종료일 기본 값 (2020년 12월 31일)
-  var locale = "전국" // 필터링 지역 기본 값
+  companion object {
+    const val DEFAULT_START_DATE = 1546300800000
+    const val DEFAULT_END_DATE = 1609372800000
+    const val DEFAULT_LOCALE = "전국"
+  }
+
+  var from = DEFAULT_START_DATE // 경기 시작일 기본 값 (2019년 1월 1일)
+  var to = DEFAULT_END_DATE// 경기 종료일 기본 값 (2020년 12월 31일)
+  var locale = DEFAULT_LOCALE // 필터링 지역 기본 값
 
   lateinit var regionChoicePopup: RegionChoicePopup // 지역 선택했을 때 팝업
 
@@ -48,10 +52,11 @@ class ChallengeFragment : Fragment() {
       FBChallengeRepository().listChallengeBannerImagePath()?.let {
         adChallengeScrollViewPager.adapter = AdChallengePageAdapter(it, requireContext())
         adChallengeScrollViewPager.startAutoScroll()
+        val a = view.adChallengeScrollViewPager.currentItem
+        view.adChallengeScrollViewPager.addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
+          adChallengeCountTextView.text = "${(view.adChallengeScrollViewPager.currentItem - a) % it.size + 1}/${it.size}"
+        }
       }
-    }
-
-    MainScope().launch {
       FBChallengeRepository().listChallengeData(from, to, "전국").let {
         challengeDataList(it!!)
       }
@@ -60,12 +65,6 @@ class ChallengeFragment : Fragment() {
     view.challengeAppBarText.setOnClickListener {
       val intent = Intent(context, ChallengeDataSettingActivity::class.java)
       startActivity(intent)
-    }
-
-    val a = view.adChallengeScrollViewPager.currentItem
-    view.adChallengeScrollViewPager.addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
-      /*adChallengeCountTextView.text =
-        "${(view.adChallengeScrollViewPager.currentItem - a) % adChallengeList.size + 1}/${adChallengeList.size}"*/
     }
 
     /**
@@ -120,8 +119,8 @@ class ChallengeFragment : Fragment() {
 
     view.btn_challenge_search.setOnClickListener {
       MainScope().launch {
-        FBChallengeRepository().listChallengeData(from, to, locale).let {
-          challengeDataList(it!!)
+        FBChallengeRepository().listChallengeData(from, to, locale)?.let {
+          challengeDataList(it)
         }
       }
     }
@@ -131,7 +130,7 @@ class ChallengeFragment : Fragment() {
   /**
    * 챌린지 프래그먼트 리사이클러 등록하는 리스너
    */
-  fun challengeDataList(listChallengeData: MutableList<ChallengeData>) {
+  private fun challengeDataList(listChallengeData: MutableList<ChallengeData>) {
     challenge_recycler_view.adapter = ChallengeRecyclerViewAdapter(listChallengeData)
     challenge_recycler_view.layoutManager = GridLayoutManager(context, 2)
   }

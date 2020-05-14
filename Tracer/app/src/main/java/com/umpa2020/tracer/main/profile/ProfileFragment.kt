@@ -14,9 +14,10 @@ import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.extensions.image
 import com.umpa2020.tracer.extensions.m_s
 import com.umpa2020.tracer.extensions.prettyDistance
-import com.umpa2020.tracer.main.profile.myrecord.ProfileRecordActivity
+import com.umpa2020.tracer.main.profile.myActivity.ProfileActivityActivity
 import com.umpa2020.tracer.main.profile.myroute.ProfileRouteActivity
 import com.umpa2020.tracer.main.profile.settting.AppSettingActivity
+import com.umpa2020.tracer.network.BaseFB
 import com.umpa2020.tracer.network.FBProfileRepository
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.MyProgressBar
@@ -43,24 +44,12 @@ class ProfileFragment() : Fragment(), OnSingleClickListener, Parcelable {
   }
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-    Logg.i("onCreateView()")
-
-    val view = inflater.inflate(R.layout.fragment_profile, container, false)
-    root = view
-
-    // 공유 프리페런스에 있는 닉네임을 반영
-    view.profileIdTextView.text = UserInfo.nickname
-
-    // 설정 버튼 누르면
-    view.appSettingButton.setOnClickListener(this)
-
-    // 나의 루트 액티비티
-    view.profileRouteTextView.setOnClickListener(this)
-
-    // 나의 활동 액티비티
-    view.profileRecordTextView.setOnClickListener(this)
-
-    return view
+    root = inflater.inflate(R.layout.fragment_profile, container, false)
+    root.profileIdTextView.text = UserInfo.nickname
+    root.appSettingButton.setOnClickListener(this)
+    root.profileRouteTextView.setOnClickListener(this)
+    root.profileRecordTextView.setOnClickListener(this)
+    return root
   }
 
   override fun onSingleClick(v: View?) {
@@ -72,13 +61,12 @@ class ProfileFragment() : Fragment(), OnSingleClickListener, Parcelable {
 
       R.id.profileRouteTextView -> { // 나의 루트 액티비티
         val nextIntent = Intent(activity, ProfileRouteActivity::class.java)
-        nextIntent.putExtra("UID", UserInfo.autoLoginKey)
+        nextIntent.putExtra(BaseFB.USER_ID, UserInfo.autoLoginKey)
         startActivity(nextIntent)
       }
 
       R.id.profileRecordTextView -> { // 나의 활동 액티비티
-        val nextIntent = Intent(activity, ProfileRecordActivity::class.java)
-        //nextIntent.putExtra("nickname", UserInfo.nickname)
+        val nextIntent = Intent(activity, ProfileActivityActivity::class.java)
         startActivity(nextIntent)
       }
     }
@@ -86,11 +74,7 @@ class ProfileFragment() : Fragment(), OnSingleClickListener, Parcelable {
 
   override fun onResume() {
     super.onResume()
-
-    Logg.i("onResume()")
-
     progressBar.show()
-
     /**
      * 프로필 이미지랑 총 시간,거리 셋팅을 하는 함수
      * 프로필 변경을 하고 나오는 경우에도 적용된

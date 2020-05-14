@@ -25,19 +25,17 @@ class ChallengeRecyclerViewAdapter(var challenge: MutableList<ChallengeData>) :
 
   @SuppressLint("SetTextI18n")
   override fun onBindViewHolder(holder: ItemHolder, position: Int) {
-    val singleItem1 = challenge[position]
+    val challengeData = challenge[position]
     MainScope().launch {
-      holder.icons.image(FBStorageRepository().downloadFile(singleItem1.imagePath!!))
+      holder.icons.image(FBStorageRepository().downloadFile(challengeData.imagePath!!))
     }
-
-    holder.name.text = singleItem1.name
-    holder.date.text = singleItem1.date!!.format(M_D)
-    holder.locale.text = "${singleItem1.locale!![0]} ${singleItem1.locale!![1]}"
-
+    holder.name.text = challengeData.name
+    holder.date.text = challengeData.date!!.format(M_D)
+    holder.locale.text = "${challengeData.locale!![0]} ${challengeData.locale!![1]}"
     holder.itemView.setOnClickListener(object : OnSingleClickListener {
       override fun onSingleClick(v: View?) {
         val nextIntent = Intent(context, ChallengeRecycleritemClickActivity::class.java)
-        nextIntent.putExtra("challengeId", singleItem1.id)
+        nextIntent.putExtra("challengeId", challengeData.id)
         context!!.startActivity(nextIntent)
       }
     })

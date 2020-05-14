@@ -11,6 +11,7 @@ import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants.Companion.TIMESTAMP_LENGTH
 import com.umpa2020.tracer.extensions.image
 import com.umpa2020.tracer.network.*
+import com.umpa2020.tracer.network.BaseFB.Companion.MAP_ID
 import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.UserInfo
@@ -38,7 +39,7 @@ class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener
 
     val intent = intent
     //전달 받은 값으로 Title 설정
-    mapId = intent.extras?.getString("mapId").toString()
+    mapId = intent.getStringExtra(MAP_ID)
 
     MainScope().launch {
       withContext(Dispatchers.IO) {

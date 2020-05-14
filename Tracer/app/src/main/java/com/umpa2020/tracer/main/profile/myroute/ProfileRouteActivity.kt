@@ -9,7 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.InfoData
-import com.umpa2020.tracer.network.FBProfileRepository
+import com.umpa2020.tracer.dataClass.UserId
+import com.umpa2020.tracer.network.BaseFB.Companion.USER_ID
 import com.umpa2020.tracer.network.FBUsersRepository
 import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
@@ -31,12 +32,9 @@ class ProfileRouteActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_profile_route)
 
-    // 프로그래스 바 띄우기
     progressbar.show()
-
     val intent = intent
-    //전달 받은 값으로 Title 설정
-    uid = intent.extras?.getString("UID").toString()
+    uid = intent.extras?.getString(USER_ID).toString()
 
     profileRecyclerRoute.addOnScrollListener(object : RecyclerView.OnScrollListener() {
       override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -56,7 +54,7 @@ class ProfileRouteActivity : AppCompatActivity() {
 
     // 나의 루트가 아닌 다른 사람의 루트를 볼 경우
     // 텍스트 변한
-    if (uid != UserInfo.nickname) {
+    if (uid != UserInfo.autoLoginKey) {
       profileRouteMyRoute.text = getString(R.string.other_route)
     }
   }
@@ -86,7 +84,7 @@ class ProfileRouteActivity : AppCompatActivity() {
       progressbar.dismiss()
     } else {
       if (rootInfoDatas.size < 6) {
-        profileRecyclerRoute.adapter = ProfileRecyclerViewAdapterRoute(rootInfoDatas)
+        profileRecyclerRoute.adapter = ProfileRouteRecyclerViewAdapter(rootInfoDatas)
         profileRecyclerRoute.layoutManager = LinearLayoutManager(App.instance)
         profileRecyclerRouteisEmpty.visibility = View.GONE
       } else {

@@ -11,6 +11,7 @@ import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.RacerData
 import com.umpa2020.tracer.dataClass.RankingData
 import com.umpa2020.tracer.dataClass.RouteGPX
+import com.umpa2020.tracer.main.start.racing.RacingActivity.Companion.ROUTE_GPX
 import com.umpa2020.tracer.network.*
 import com.umpa2020.tracer.network.BaseFB.Companion.MAP_ID
 import com.umpa2020.tracer.util.OnSingleClickListener
@@ -28,7 +29,7 @@ class RacingSelectPeopleActivity : AppCompatActivity(), OnSingleClickListener {
     setContentView(R.layout.activity_racing_select_people)
 
     mapId = intent.getStringExtra(MAP_ID)!!
-    routeGPX = intent.getParcelableExtra("RouteGPX")!!
+    routeGPX = intent.getParcelableExtra(ROUTE_GPX)!!
 
     MainScope().launch {
       FBMapRepository().listMapRanking(mapId).let {
@@ -77,11 +78,15 @@ class RacingSelectPeopleActivity : AppCompatActivity(), OnSingleClickListener {
           )
         }
         val intent = Intent(App.instance.context(), RacingActivity::class.java)
-        intent.putExtra(RacingActivity.ROUTE_GPX, routeGPX)
-        intent.putExtra("RacerList", racerList.toTypedArray())
+        intent.putExtra(ROUTE_GPX, routeGPX)
+        intent.putExtra(RACER_LIST, racerList.toTypedArray())
         intent.putExtra(MAP_ID, mapId)
         startActivity(intent)
       }
     }
+  }
+
+  companion object {
+    const val RACER_LIST="RacerList"
   }
 }
