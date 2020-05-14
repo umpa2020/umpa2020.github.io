@@ -29,14 +29,14 @@ class ChallengeRecycleritemClickActivity : AppCompatActivity(), OnSingleClickLis
     val challengeId = intent.getStringExtra("challengeId")!!
 
     MainScope().launch {
-      FBChallengeRepository().getChallengeData(challengeId).let {
-        challengeDetailImageView.image(FBStorageRepository().downloadFile(it.imagePath!!))
-        challengeDetailCompetitionName.text = it.name
-        challengeDetailCompetitionDate.text = it.date!!.format(Y_M_D)
-        challengeDetailCompetitionPeriod.text = it.from!!.format(Y_M_D) + " ~ " + it.to!!.format(Y_M_D)
-        challengeDetailAddress.text = it.address
-        challengeDetailHost.text = it.host
-        challengeDetailInformation.text = it.intro
+      FBChallengeRepository().getChallengeData(challengeId).run {
+        challengeDetailImageView.image(FBStorageRepository().downloadFile(imagePath!!))
+        challengeDetailCompetitionName.text = name
+        challengeDetailCompetitionDate.text = date!!.format(Y_M_D)
+        challengeDetailCompetitionPeriod.text = from!!.format(Y_M_D) + " ~ " + to!!.format(Y_M_D)
+        challengeDetailAddress.text = address
+        challengeDetailHost.text = host
+        challengeDetailInformation.text = intro
       }
     }
   }

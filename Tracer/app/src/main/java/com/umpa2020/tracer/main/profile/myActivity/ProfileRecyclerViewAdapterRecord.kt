@@ -1,4 +1,4 @@
-package com.umpa2020.tracer.main.profile.myrecord
+package com.umpa2020.tracer.main.profile.myActivity
 
 import android.content.Context
 import android.content.Intent

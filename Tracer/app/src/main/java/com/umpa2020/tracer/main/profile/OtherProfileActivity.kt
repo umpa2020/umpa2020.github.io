@@ -10,6 +10,8 @@ import com.umpa2020.tracer.extensions.image
 import com.umpa2020.tracer.extensions.m_s
 import com.umpa2020.tracer.extensions.prettyDistance
 import com.umpa2020.tracer.main.profile.myroute.ProfileRouteActivity
+import com.umpa2020.tracer.network.BaseFB
+import com.umpa2020.tracer.network.BaseFB.Companion.USER_ID
 import com.umpa2020.tracer.network.FBProfileRepository
 import com.umpa2020.tracer.network.FBUsersRepository
 import com.umpa2020.tracer.util.MyProgressBar
@@ -35,9 +37,7 @@ class OtherProfileActivity : AppCompatActivity(), OnSingleClickListener {
     setContentView(R.layout.activity_other_profile)
     progressBar.show()
 
-    val intent = intent
-    //전달 받은 값으로 Title 설정
-    userId = intent.extras?.getString("uid").toString()
+    userId = intent.extras?.getString(USER_ID).toString()
 
     MainScope().launch {
       withContext(Dispatchers.IO) {
@@ -61,7 +61,7 @@ class OtherProfileActivity : AppCompatActivity(), OnSingleClickListener {
       R.id.otherProfileRouteTextView -> {
         // 루트 클릭하면 해당 사용자가 만든 루트 볼 수 잇는 페이지로 이동
         val nextIntent = Intent(this, ProfileRouteActivity::class.java)
-        nextIntent.putExtra("UID", userId)
+        nextIntent.putExtra(BaseFB.USER_ID, userId)
         startActivity(nextIntent)
       }
     }

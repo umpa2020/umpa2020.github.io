@@ -1,4 +1,4 @@
-package com.umpa2020.tracer.main.profile.myrecord
+package com.umpa2020.tracer.main.profile.myActivity
 
 import android.os.Bundle
 import android.view.View
@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.ActivityData
 import com.umpa2020.tracer.network.FBUsersRepository
-import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.MyProgressBar
 import kotlinx.android.synthetic.main.activity_profile_record.*
 import kotlinx.coroutines.MainScope
@@ -20,8 +19,7 @@ import kotlinx.coroutines.launch
  * 2. 레이싱 완주했는지
  * 3. 레이싱 도중 포기했는지 맵 이미지와 함께 표기
  */
-class ProfileRecordActivity : AppCompatActivity() {
-  val activity = this
+class ProfileActivityActivity : AppCompatActivity() {
   val rootActivityDatas = arrayListOf<ActivityData>()
   val progressbar = MyProgressBar()
   var isLoding = false
@@ -90,7 +88,7 @@ class ProfileRecordActivity : AppCompatActivity() {
       if (rootActivityDatas.size < 16) {
         //adpater 추가
         profileRecyclerRecord.adapter = ProfileRecyclerViewAdapterRecord(rootActivityDatas)
-        profileRecyclerRecord.layoutManager = LinearLayoutManager(activity)
+        profileRecyclerRecord.layoutManager = LinearLayoutManager(this)
         profileRecyclerActivityisEmpty.visibility = View.GONE
       } else {
         profileRecyclerRecord.adapter!!.notifyDataSetChanged()

@@ -37,18 +37,14 @@ class MapRankingAdapter(
   ) {
     val infoData = infoDatas[position]
     val ranking = position + 1
+    val mapTitle = infoData.mapTitle
 
-    val mapTitle = infoData.mapId!!.subSequence(0, infoData.mapId!!.length - TIMESTAMP_LENGTH)
-
-    //데이터 바인딩
     holder.rank.text = ranking.toString()
-
     holder.maptitle.text = mapTitle
-    holder.distance.text = infoData.distance!!.prettyDistance
+    holder.distance.text = infoData.distance.prettyDistance
     if (mode == "plays") {
       holder.modeIcon.setImageResource(R.drawable.ic_sneaker_for_running)
       holder.modeIcon.tag = R.drawable.ic_sneaker_for_running
-
       if (infoData.played) {
         holder.modeIcon.setColorFilter(Color.CYAN)
       }
@@ -77,7 +73,6 @@ class MapRankingAdapter(
     } else
       holder.rank.setBackgroundResource(R.drawable.ic_4)
 
-
     //클릭하면 맵 상세보기 페이지로 이동
     holder.itemView.setOnClickListener(
       object : OnSingleClickListener {
@@ -92,29 +87,15 @@ class MapRankingAdapter(
     holder.modeIcon.setOnClickListener(
       object : OnSingleClickListener {
         override fun onSingleClick(v: View?) {
-          var likes = Integer.parseInt(holder.modeNo.text.toString())
-
-          when (holder.modeIcon.tag) {
-            R.drawable.ic_sneaker_for_running -> {
-
-            }
-            R.drawable.ic_favorite_border_black_24dp -> {
-              MainScope().launch { FBLikesRepository().toggleLikes(UserInfo.autoLoginKey, infoData.mapId!!) }
-              infoDatas[position].liked = true
-              infoDatas[position].likes = ++likes
-              holder.modeIcon.setImageResource(R.drawable.ic_favorite_red_24dp)
-              holder.modeIcon.tag = R.drawable.ic_favorite_red_24dp
-              holder.modeNo.text = likes.toString()
-            }
-            R.drawable.ic_favorite_red_24dp -> {
-              MainScope().launch { FBLikesRepository().toggleLikes(UserInfo.autoLoginKey, infoData.mapId!!) }
-              infoDatas[position].liked = false
-              infoDatas[position].likes = --likes
-              holder.modeIcon.setImageResource(R.drawable.ic_favorite_border_black_24dp)
-              holder.modeIcon.tag = R.drawable.ic_favorite_border_black_24dp
-              holder.modeNo.text = likes.toString()
-            }
+          MainScope().launch { FBLikesRepository().toggleLikes(UserInfo.autoLoginKey, infoData.mapId) }
+          if (infoData.liked) {
+            infoData.liked = false
+            infoData.likes--
+          } else {
+            infoData.liked = true
+            infoData.likes++
           }
+          notifyItemChanged(position)
         }
       })
   }
