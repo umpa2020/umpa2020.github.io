@@ -22,9 +22,11 @@ import com.umpa2020.tracer.extensions.*
 import com.umpa2020.tracer.gpx.WayPointType.FINISH_POINT
 import com.umpa2020.tracer.gpx.WayPointType.START_POINT
 import com.umpa2020.tracer.main.start.racing.RacingActivity
+import com.umpa2020.tracer.main.start.racing.RacingActivity.Companion.ROUTE_GPX
 import com.umpa2020.tracer.main.start.racing.RacingSelectPeopleActivity
 import com.umpa2020.tracer.map.TraceMap
 import com.umpa2020.tracer.network.BaseFB.Companion.MAKER_ID
+import com.umpa2020.tracer.network.BaseFB.Companion.MAP_ID
 import com.umpa2020.tracer.network.BaseFB.Companion.MAP_ROUTE
 import com.umpa2020.tracer.network.BaseFB.Companion.RACING_GPX
 import com.umpa2020.tracer.network.FBMapRepository
@@ -53,8 +55,7 @@ class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener, OnM
     val progressBar = MyProgressBar()
     progressBar.show()
     //전달 받은 값으로 Title 설정
-    mapId = intent.extras?.getString("mapId").toString()
-    val time = mapId.subSequence(mapId.length - TIMESTAMP_LENGTH, mapId.length).toString()
+    mapId = intent.extras?.getString(MAP_ID).toString()
 
     val smf =
       supportFragmentManager.findFragmentById(R.id.rankingDetailMapViewer) as SupportMapFragment
@@ -67,17 +68,14 @@ class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener, OnM
         }
       })
     rankingDetailRaceButton.setOnClickListener(this)
-
     MainScope().launch {
-
       FBMapRepository().getMapInfo(mapId)?.let {
         rankingDetailMapTitle.text = it.mapTitle
-        rankingDetailDate.text = time.toLong().format(Y_M_D)
+        rankingDetailDate.text = it.time.format(Y_M_D)
         rankingDetailMapDetail.text = it.mapExplanation
         rankingDetailDistance.text = String.format("%.2f", it.distance / 1000)
         rankingDetailTime.text = it.time.format(m_s)
         rankingDetailSpeed.text = it.averageSpeed.prettyDistance()
-
         FBStorageRepository().getFile(it.routeGPXPath).gpxToClass().let {
           routeGPX = it
           val speedList = mutableListOf<Double>()
@@ -105,8 +103,8 @@ class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener, OnM
     when (v!!.id) {
       R.id.rankingDetailRaceButton -> { //버튼 누르면 연습용, 랭킹 기록용 선택 팝업 띄우기
         val nextIntent = Intent(this, RacingSelectPeopleActivity::class.java)
-        nextIntent.putExtra("mapId", mapId)
-        nextIntent.putExtra("RouteGPX", routeGPX)
+        nextIntent.putExtra(MAP_ID, mapId)
+        nextIntent.putExtra(ROUTE_GPX, routeGPX)
         startActivity(nextIntent)
       }
     }

@@ -14,24 +14,7 @@ class RegionChoicePopup(context: Context, val onClickListener: View.OnClickListe
   AlertDialog(context) {
 
   val localeList = arrayOf(
-    "전국",
-    "서울",
-    "경기",
-    "강원",
-    "충북",
-    "충남",
-    "전남",
-    "전북",
-    "경북",
-    "경남",
-    "부산",
-    "대구",
-    "인천",
-    "광주",
-    "대전",
-    "울산",
-    "세종",
-    "제주"
+    "전국", "서울", "경기", "강원", "충북", "충남", "전남", "전북", "경북", "경남", "부산", "대구", "인천", "광주", "대전", "울산", "세종", "제주"
   )
 
   override fun onCreate(savedInstanceState: Bundle?) {

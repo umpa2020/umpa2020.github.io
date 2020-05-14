@@ -118,8 +118,7 @@ fun toAge(birth: String): String? {
   var today = "" // 오늘 날짜
   var manAge = 0 // 만 나이
 
-  val formatter = SimpleDateFormat("yyyyMMdd")
-  today = formatter.format(Date()) // 시스템 날짜를 가져와서 yyyyMMdd
+  today = SimpleDateFormat("yyyyMMdd").format(Date()) // 시스템 날짜를 가져와서 yyyyMMdd
   val todayYear = Integer.parseInt(today.substring(0, 4))
   val todayMonth = Integer.parseInt(today.substring(4, 6))
   val todayDay = Integer.parseInt(today.substring(6, 8))
@@ -129,8 +128,6 @@ fun toAge(birth: String): String? {
   val day = Integer.parseInt(birth.substring(6, 8))
 
   manAge = todayYear - year
-
-  Logg.d("${todayMonth} ")
 
   if (todayMonth < month) { // 생년월일 "월"이 지났는지 체크
     manAge--
