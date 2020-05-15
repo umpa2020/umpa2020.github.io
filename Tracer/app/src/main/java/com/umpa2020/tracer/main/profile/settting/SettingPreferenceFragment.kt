@@ -15,6 +15,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants
+import com.umpa2020.tracer.network.FBUsersRepository
 import com.umpa2020.tracer.util.ChoicePopup
 import com.umpa2020.tracer.util.UserInfo
 
@@ -90,10 +91,9 @@ class SettingPreferenceFragment : PreferenceFragmentCompat() {
     }
 
     //회원 탈퇴 눌렀을 때
-    // TODO : 회원 탈퇴 : 죽여 and Shared 값 삭제
-
     if (preference?.key.equals("unregister")) {
-      //TODO. 회원 탈퇴 기능 만들기
+      FBUsersRepository().userWithdrawal()
+      logOut()
     }
     return super.onPreferenceTreeClick(preference)
   }

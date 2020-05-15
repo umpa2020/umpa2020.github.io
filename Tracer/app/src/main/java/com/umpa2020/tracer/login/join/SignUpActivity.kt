@@ -26,8 +26,8 @@ import com.google.firebase.storage.StorageReference
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants
-import com.umpa2020.tracer.extensions.toAge
 import com.umpa2020.tracer.extensions.show
+import com.umpa2020.tracer.extensions.toAge
 import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.network.FBProfileRepository
 import com.umpa2020.tracer.network.FBUsersRepository
@@ -275,7 +275,7 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
     if (requestCode == 101 && resultCode == RESULT_OK) {
       // 년월일 yyyymmdd로 전달 받음
       Logg.d(intentData!!.getStringExtra("Age"))
-      birth = intentData!!.getStringExtra("Age")
+      birth = intentData.getStringExtra("Age")
       val age = toAge(intentData.getStringExtra("Age")!!)
 
       editAge.setText(age)
@@ -342,7 +342,7 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
      *  더 좋은 방법이 있을 지 모르지만 whereEqualTo는 db에 없는 것에 대한 검사는 안하는 듯
      *  그래서 flag로 억지로 유무 판단.
      */
-    mFirestoreDB!!.collection("userinfo").whereEqualTo("nickname", nickname).get()
+    mFirestoreDB!!.collection("users").whereEqualTo("nickname", nickname).get()
       .addOnSuccessListener { documents ->
         for (document in documents) {
           Logg.d(document.id)

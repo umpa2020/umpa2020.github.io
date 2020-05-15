@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
 import android.widget.SeekBar
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.maps.model.LatLng
@@ -17,11 +16,10 @@ import com.umpa2020.tracer.constant.Constants.Companion.ANIMATION_DURATION_TIME
 import com.umpa2020.tracer.constant.Constants.Companion.MAX_DISTANCE
 import com.umpa2020.tracer.constant.Constants.Companion.MAX_SEEKERBAR
 import com.umpa2020.tracer.dataClass.InfoData
-import com.umpa2020.tracer.main.MainActivity.Companion.gpsViewModel
 import com.umpa2020.tracer.network.FBRankingRepository
-import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.OnSingleClickListener
+import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.fragment_ranking.*
 import kotlinx.android.synthetic.main.fragment_ranking.view.*
 import kotlinx.coroutines.MainScope
@@ -48,13 +46,10 @@ class RankingFragment : Fragment(), OnSingleClickListener {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    gpsViewModel.allGps.observe(this, Observer { gpsData ->
-      gpsData?.let {
-        Logg.d("실행 돼??")
-        val latlng = LatLng(it.lat, it.lng)
-        rankingLatLng = latlng
-      }
-    })
+
+    // Shared에서 마지막 위치 가져오기
+    val latLng = LatLng(UserInfo.lat.toDouble(), UserInfo.lng.toDouble())
+    rankingLatLng = latLng
   }
 
   override fun onCreateView(
@@ -251,4 +246,5 @@ class RankingFragment : Fragment(), OnSingleClickListener {
       isLoding = false
     }
   }
+
 }
