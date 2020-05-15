@@ -14,20 +14,10 @@ import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.constant.UserState
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.RouteGPX
-<<<<<<< HEAD
-import com.umpa2020.tracer.extensions.makingIcon
 import com.umpa2020.tracer.extensions.toWayPoint
 import com.umpa2020.tracer.gpx.WayPointType.*
 import com.umpa2020.tracer.main.start.BaseRunningActivity
 import com.umpa2020.tracer.util.ChoicePopup
-import com.umpa2020.tracer.util.Logg
-=======
-import com.umpa2020.tracer.extensions.toWayPoint
-import com.umpa2020.tracer.gpx.WayPointType.*
-import com.umpa2020.tracer.main.start.BaseRunningActivity
-import com.umpa2020.tracer.roomDatabase.viewModel.RecordViewModel
-import com.umpa2020.tracer.util.ChoicePopup
->>>>>>> master
 import com.umpa2020.tracer.util.TTS
 import kotlinx.android.synthetic.main.activity_running.*
 
