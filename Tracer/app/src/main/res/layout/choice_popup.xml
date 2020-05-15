@@ -27,7 +27,6 @@
     android:layout_height="0dp"
     android:layout_marginTop="20dp"
     android:layout_weight="1"
-    android:fontFamily="@font/notosansmedium"
     android:gravity="center" />
 
 

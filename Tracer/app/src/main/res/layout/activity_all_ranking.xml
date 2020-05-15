@@ -26,9 +26,11 @@
   <TextView
     android:layout_marginTop="10dp"
     android:layout_marginStart="20dp"
+    android:layout_marginEnd="20dp"
     android:layout_below="@+id/AllRankingToolBar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:textSize="15sp"
     android:text="비교를 원하는 상대를 선택해주세요."
     android:id="@+id/allRankingTextView"/>
 
