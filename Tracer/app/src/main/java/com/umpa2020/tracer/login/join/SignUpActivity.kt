@@ -26,8 +26,6 @@ import com.google.firebase.storage.StorageReference
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants
-import com.umpa2020.tracer.dataClass.Users
-import com.umpa2020.tracer.extensions.toAge
 import com.umpa2020.tracer.extensions.show
 import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.network.FBProfileRepository
@@ -343,7 +341,7 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
      *  더 좋은 방법이 있을 지 모르지만 whereEqualTo는 db에 없는 것에 대한 검사는 안하는 듯
      *  그래서 flag로 억지로 유무 판단.
      */
-    mFirestoreDB!!.collection("users").whereEqualTo("nickname", nickname).get()
+    mFirestoreDB!!.collection("userinfo").whereEqualTo("nickname", nickname).get()
       .addOnSuccessListener { documents ->
         for (document in documents) {
           Logg.d(document.id)
@@ -405,9 +403,16 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
 
   private fun uploadUserInfo(nickname: String, birth: String, gender: String, dt: String) {
     // 회원 정보
-    val users = Users(uid!!,nickname,birth,gender, "Profile/$uid/$dt", true)
-
-    FBUsersRepository().createUserInfo(users)
+    val data = hashMapOf(
+      "userId" to uid,
+      "nickname" to nickname,
+      "birth" to birth,
+      "gender" to gender,
+      "nickname" to nickname,
+      "profileImagePath" to "Profile/$uid/$dt"
+    // TODO : 회원 탈퇴 : 얘가 살앗는지 죽었는지
+    )
+    FBUsersRepository().createUserInfo(data)
   }
 
   override fun onSingleClick(v: View?) {
