@@ -9,7 +9,6 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.SphericalUtil
 import com.umpa2020.tracer.LocationViewModel
 import com.umpa2020.tracer.extensions.toLatLng
-import com.umpa2020.tracer.main.MainActivity.Companion.locationViewModel
 import com.umpa2020.tracer.main.start.BaseRunningActivity
 
 /**
@@ -31,8 +30,6 @@ class LocationBroadcastReceiver(val activity: BaseRunningActivity) : BroadcastRe
   override fun onReceive(context: Context?, intent: Intent?) {
     val message = intent?.getParcelableExtra<Location>("message")
     currentLocation = message as Location
-
-    locationViewModel.setLocation(currentLocation!!)
 
 
     currentLatLng = currentLocation!!.toLatLng()

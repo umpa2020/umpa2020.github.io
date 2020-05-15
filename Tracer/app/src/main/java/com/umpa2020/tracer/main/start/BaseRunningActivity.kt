@@ -10,7 +10,6 @@ import android.widget.Button
 import android.widget.Chronometer
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.preference.PreferenceManager
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -19,7 +18,9 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.SphericalUtil
 import com.umpa2020.tracer.App
+import com.umpa2020.tracer.DistanceTimeData
 import com.umpa2020.tracer.R
+import com.umpa2020.tracer.TimeData
 import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.constant.UserState
@@ -29,8 +30,6 @@ import com.umpa2020.tracer.gpx.WayPointType.TRACK_POINT
 import com.umpa2020.tracer.lockscreen.util.LockScreen
 import com.umpa2020.tracer.main.MainActivity.Companion.locationViewModel
 import com.umpa2020.tracer.map.TraceMap
-import com.umpa2020.tracer.roomDatabase.entity.MapRecordData
-import com.umpa2020.tracer.roomDatabase.viewModel.RecordViewModel
 import com.umpa2020.tracer.util.*
 import hollowsoft.slidingdrawer.OnDrawerCloseListener
 import hollowsoft.slidingdrawer.OnDrawerOpenListener
@@ -74,7 +73,6 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
   var unPassedIcon = R.drawable.ic_checkpoint_gray.makingIcon()
   var passedIcon = R.drawable.ic_checkpoint_red.makingIcon()
 
-  private lateinit var recordViewModel: RecordViewModel
 
   open fun init() {
     drawer.setOnDrawerScrollListener(this)
@@ -111,19 +109,15 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
 
   // 위치를 브로드케스트에서 받아 지속적으로 업데이트
   open fun updateLocation(curLoc: Location) {
-
     Logg.d(curLoc.toString())
-
-    locationViewModel.location.observe(this, Observer {
-      Logg.d(it.toString())
-    })
 
     currentLocation = curLoc
     distanceTextView.text = distance.prettyDistance
     speedTextView.text = speed.prettySpeed()
 
     // room DB에 속도, 거리 데이터 업데이트.
-    recordViewModel.updateSpeedDistance(speed.lockSpeed, distance.lockDistance)
+//    recordViewModel.updateSpeedDistance(speed.lockSpeed, distance.lockDistance)
+    locationViewModel.setDistanceSpeed(DistanceTimeData(distance.lockDistance, speed.lockSpeed))
 
     if (setLocation(curLoc)) {
       when (userState) {
@@ -162,19 +156,8 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     notificationTextView.visibility = View.GONE
     lockScreen(true)
 
-    // DB 초기값 설정
-    val mapRecordDao = MapRecordData(
-      0,
-      "",
-      "",
-      chronometer.base,
-      true,
-      0L,
-      ""
-    )
-    Logg.d("처음에 데이터 삽입?")
-
-    recordViewModel.insert(mapRecordDao)
+    // DB 초기값 설정 => 시작 시간 설정
+    locationViewModel.setTimes(TimeData(chronometer.base, true, 0L, ""))
   }
 
   open fun pause() {
@@ -185,9 +168,9 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     Logg.d(chronometer.text.toString())
     timeWhenStopped = chronometer.base - SystemClock.elapsedRealtime()
 
-    recordViewModel.updateTimeText(chronometer.text.toString())
-    // 시간 통제 업데이트
-    recordViewModel.updateTimeControl(timeWhenStopped, false)
+    // 시간 텍스트 설정, 시간 통제 업데이트
+    locationViewModel.setTimes(TimeData(0L, false, timeWhenStopped, chronometer.text.toString()))
+
     chronometer.stop()
     pauseButton.text = getString(R.string.restart)
 
@@ -200,9 +183,9 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     val restartTime = SystemClock.elapsedRealtime()
     chronometer.base = restartTime + timeWhenStopped
 
-    // 시간 통제 업데이트
-    recordViewModel.updateTimeControl(timeWhenStopped, true)
-    recordViewModel.updateStartTime(restartTime)
+    // 시간 통제 업데이트, 재시작 업데이트
+    locationViewModel.setTimes(TimeData(restartTime, true, timeWhenStopped, ""))
+
     chronometer.start()
 
     pauseNotificationTextView.visibility = View.INVISIBLE
@@ -211,8 +194,9 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
 
   open fun stop() {
     userState = UserState.STOP
+
     // 시간 통제 업데이트
-    recordViewModel.updateTimeControl(0L, false)
+    locationViewModel.setTimes(TimeData(0L, false, 0L, ""))
 
     chronometer.stop()
     lockScreen(false)
@@ -265,8 +249,13 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     LocalBroadcastManager.getInstance(this)
       .registerReceiver(locationBroadcastReceiver, IntentFilter("custom-event-name"))
 
-    recordViewModel = RecordViewModel(application)
-    recordViewModel.deleteAll()
+
+    // 거리, 속도, 시간 관련 데이터 초기 설정.
+    locationViewModel.init(DistanceTimeData("0.0", "0.0"), TimeData(0L, false, 0L, "0.0"))
+
+
+//    recordViewModel = RecordViewModel(application)
+//    recordViewModel.deleteAll()
   }
 
   lateinit var currentLocation: Location

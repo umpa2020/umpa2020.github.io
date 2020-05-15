@@ -54,6 +54,7 @@ class MainActivity : AppCompatActivity() {
   }
 
   companion object {
+
     lateinit var locationViewModel: LocationViewModel
   }
 
