@@ -196,7 +196,6 @@
     android:layout_width="match_parent"
     android:layout_height="50dp"
     android:background="#990044FF"
-    android:fontFamily="@font/notosansmedium"
     android:gravity="center"
     android:textColor="@color/white"
     android:textSize="20sp" />
@@ -211,7 +210,6 @@
     android:layout_marginRight="20dp"
     android:layout_marginTop="50dp"
     android:background="#990044FF"
-    android:fontFamily="@font/notosansmedium"
     android:gravity="center"
     android:textColor="@color/white"
     android:textSize="20dp" />
