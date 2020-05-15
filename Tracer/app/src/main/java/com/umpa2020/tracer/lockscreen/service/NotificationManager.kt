@@ -5,7 +5,6 @@ import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
-import com.umpa2020.tracer.App
 import com.umpa2020.tracer.util.Logg
 
 /**
@@ -24,30 +23,25 @@ object NotificationManager {
 
   @RequiresApi(Build.VERSION_CODES.O)
   fun createMainNotificationChannel(context: Context?) {
-    val id = CHANNEL_ID
-    val name = CHANNEL_NAME
     val importance = android.app.NotificationManager.IMPORTANCE_HIGH
-    val mChannel = NotificationChannel(id, name, importance)
+    val mChannel = NotificationChannel(CHANNEL_ID, CHANNEL_NAME, importance).apply {
+      this.enableVibration(false)
+      this.enableLights(false)
+    }
 
-    val groupId = "group"
-    val groupName = "groups"
-
-    mChannel.enableVibration(false)
-    mChannel.enableLights(false)
-
+    // Register the channel with the system
     mNotificationManager = context?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     mNotificationManager!!.createNotificationChannel(mChannel)
-//    mNotificationManager!!.createNotificationChannelGroup(NotificationChannelGroup(groupId, groupName))
-
   }
 
 
+  @RequiresApi(Build.VERSION_CODES.O)
   fun cancelnNotificationChannel(context: Context?) {
     Logg.d("실행돼??")
 //    mNotificationManager!!.cancel(App.notificationId)
 //    NotificationManagerCompat.from(App.instance).cancel(App.notificationId)
     mNotificationManager =
       context?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-    mNotificationManager!!.cancel(CHANNEL_ID, App.notificationId)
+    mNotificationManager!!.deleteNotificationChannel(CHANNEL_ID)
   }
 }

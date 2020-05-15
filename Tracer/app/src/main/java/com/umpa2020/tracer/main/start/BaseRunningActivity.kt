@@ -18,12 +18,13 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.SphericalUtil
 import com.umpa2020.tracer.App
-import com.umpa2020.tracer.dataClass.DistanceTimeData
 import com.umpa2020.tracer.R
-import com.umpa2020.tracer.dataClass.TimeData
+import com.umpa2020.tracer.broadcastReceiver.LocationBroadcastReceiver
 import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.constant.UserState
+import com.umpa2020.tracer.dataClass.DistanceTimeData
+import com.umpa2020.tracer.dataClass.TimeData
 import com.umpa2020.tracer.extensions.*
 import com.umpa2020.tracer.gpx.WayPoint
 import com.umpa2020.tracer.gpx.WayPointType.TRACK_POINT
@@ -92,6 +93,7 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     var i = 0
     // startFragment의 마지막 위치를 가져와서 카메라 설정
     val latLng = LatLng(UserInfo.lat.toDouble(), UserInfo.lng.toDouble())
+    Logg.d("시작 위치 가져오기 : $latLng")
     val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 17f)
     traceMap.mMap.moveCamera(cameraUpdate)
 

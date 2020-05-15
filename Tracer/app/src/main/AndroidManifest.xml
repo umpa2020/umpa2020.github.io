@@ -35,7 +35,7 @@
     android:supportsRtl="true"
     android:theme="@style/AppTheme"
     tools:ignore="GoogleAppIndexingWarning">
-    <activity android:name=".login.join.AgeSelectActivity"></activity>
+    <activity android:name=".login.join.AgeSelectActivity"/>
     <activity android:name=".main.challenge.ChallengeDataSettingActivity" />
 
     <service android:name=".lockscreen.service.LockScreenService" />
@@ -73,6 +73,7 @@
     <activity
       android:name=".main.start.running.RunningSaveActivity"
       android:windowSoftInputMode="adjustPan" />
+<!--    <activity android:name=".main.start.BaseRunningActivity"/>-->
     <activity android:name=".main.start.running.RunningActivity" />
     <activity android:name=".main.MainActivity" />
     <activity android:name=".login.LoginActivity" />

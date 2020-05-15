@@ -9,8 +9,8 @@ import android.os.RemoteException
 import androidx.core.app.NotificationCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.location.LocationRequest
-import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
+import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.lockscreen.service.NotificationManager
 import com.umpa2020.tracer.main.start.running.RunningActivity
 import com.umpa2020.tracer.util.Logg
@@ -53,13 +53,12 @@ class LocationBackgroundService : IntentService("LocationBackgroundService"),
      */
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       // 포그라운드 서비스는 알림창이 있어야 실행 가능.
+      // 채널 생성은 한번만 해도 됌.
       NotificationManager.createMainNotificationChannel(this@LocationBackgroundService)
 
-      startForeground(
-        App.locationNitificationId, createNotificationCompatBuilder()
+      startForeground( Constants.FOREGROUND_ID, createNotificationCompatBuilder()
           .build()
       )
-      aa = createNotificationCompatBuilder()
     }
   }
 
@@ -112,17 +111,19 @@ class LocationBackgroundService : IntentService("LocationBackgroundService"),
     location?.let { sendMessage(it) }
   }
 
+  // 알림의 콘텐츠와 채널 설정
   private fun createNotificationCompatBuilder(): NotificationCompat.Builder {
 
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       val mBuilder = NotificationCompat.Builder(
         this@LocationBackgroundService,
         NotificationManager.getMainNotificationId()
-      ) .setContentTitle(getString(R.string.gps_activation))
+      )
+        .setContentTitle(getString(R.string.gps_activation))
 //        .setContentIntent(pendingIntent)
-        .setGroup("groups")
         .setSmallIcon(R.mipmap.ic_launcher_tracer_final)
         .setTicker("Ticker text")
+        .setAutoCancel(true) // 사용자가 탭하면 자동으로 알림을 삭제하는 setAutoCancel()을 호출
       mBuilder
     } else {
       NotificationCompat.Builder(this@LocationBackgroundService, "")

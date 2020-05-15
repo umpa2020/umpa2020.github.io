@@ -9,10 +9,10 @@ import android.os.Build
 import android.os.IBinder
 import android.telephony.PhoneStateListener
 import android.telephony.TelephonyManager
+import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
-import com.umpa2020.tracer.App
-import com.umpa2020.tracer.locationBackground.LocationBackgroundService
+import com.umpa2020.tracer.R
+import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.lockscreen.LockScreenActivity
 import com.umpa2020.tracer.util.Logg
 
@@ -77,10 +77,6 @@ class LockScreenService : Service() {
     }
   }
 
-  val SUMMARY_ID = 0
-  val GROUP_KEY_WORK_EMAIL = "com.android.example.WORK_EMAIL"
-  var bb: NotificationCompat.Builder? = null
-
   private fun createNotificationCompatBuilder(): NotificationCompat.Builder {
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       Logg.d("zzzzzz")
@@ -88,6 +84,10 @@ class LockScreenService : Service() {
         this@LockScreenService,
         NotificationManager.getMainNotificationId()
       )
+        .setContentTitle(getString(R.string.gps_activation))
+        .setSmallIcon(R.mipmap.ic_launcher_tracer_final)
+        .setTicker("Ticker text")
+        .setAutoCancel(true) // 사용자가 탭하면 자동으로 알림을 삭제하는 setAutoCancel()을 호출
       mBuilder
     } else {
       Logg.d("ddddd")
@@ -95,26 +95,6 @@ class LockScreenService : Service() {
     }
   }
 
-  private fun group() {
-    val summaryNotification =
-      NotificationCompat.Builder(this, NotificationManager.getMainNotificationId())
-//      .setContentTitle(emailObject.getSummary())
-        //set content text to support devices running API level < 24
-        .setContentText("Two new messages")
-//      .setSmallIcon(R.drawable.ic_notify_summary_status)
-        //build summary info into InboxStyle template
-        //specify which group this notification belongs to
-        .setGroup("groups")
-        //set this notification as the summary for the group
-        .setGroupSummary(true)
-        .build()
-
-    NotificationManagerCompat.from(this).apply {
-      notify(App.locationNitificationId, LocationBackgroundService.aa!!.build())
-      notify(App.lockScreenNotificationId, bb!!.build())
-      notify(SUMMARY_ID, summaryNotification)
-    }
-  }
 
   override fun onCreate() {
     super.onCreate()
@@ -125,19 +105,14 @@ class LockScreenService : Service() {
      */
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       // 포그라운드 서비스는 알림창이 있어야 실행 가능.
-      NotificationManager.createMainNotificationChannel(this@LockScreenService)
+      Logg.d("이거 실행 안돼??")
+      // 서비스 id는 0이 아니여야 한다.
       startForeground(
-        App.lockScreenNotificationId, createNotificationCompatBuilder()
-          .setGroup("groups")
+        Constants.FOREGROUND_ID, createNotificationCompatBuilder()
           .build()
       )
     }
-    bb = createNotificationCompatBuilder()
-    Logg.d(bb.toString())
-    group()
   }
-
-
 
 
   override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -152,6 +127,7 @@ class LockScreenService : Service() {
     TODO("Return the communication channel to the service.")
   }
 
+  @RequiresApi(Build.VERSION_CODES.O)
   override fun onDestroy() {
     super.onDestroy()
     Logg.d("onDestroy()")

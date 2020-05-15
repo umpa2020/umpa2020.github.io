@@ -13,9 +13,8 @@ class App : Application() {
     fun applicationContext() : Context? {
       return instance.applicationContext
     }
-    const val locationNitificationId : Int = 1 // GPS 알림창 Id
-    const val lockScreenNotificationId: Int = 2 // 잠금화면 알림창 Id
-    const val notificationId : Int = 0 // 알림창 Id 통일.
+
+    const val notificationId : Int = 1 // 알림창 Id 통일.
   }
 
   private var activityCount = 0
