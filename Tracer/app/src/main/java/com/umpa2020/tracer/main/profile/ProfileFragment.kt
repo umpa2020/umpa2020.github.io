@@ -49,6 +49,9 @@ class ProfileFragment() : Fragment(), OnSingleClickListener, Parcelable {
     root.appSettingButton.setOnClickListener(this)
     root.profileRouteTextView.setOnClickListener(this)
     root.profileRecordTextView.setOnClickListener(this)
+
+    Logg.d("ssmm11 userinfo = ${UserInfo.birth} / ${UserInfo.autoLoginKey}")
+
     return root
   }
 

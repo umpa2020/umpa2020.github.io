@@ -42,6 +42,7 @@ open class BaseFB {
     const val PLAYS = "plays"
     const val ACTIVITIES = "activities"
     const val USER_ID = "userId"
+    const val USER_STATE = "userState"
     const val MAP_IMAGE_PATH = "mapImagePath"
 
     const val TIME = "time"
