@@ -448,7 +448,6 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
       R.id.sign_up_button -> {
 
         nickname = editNickname.text.toString()
-        birth = editAge.text.toString()
         gender = editGender.text.toString()
 
 
