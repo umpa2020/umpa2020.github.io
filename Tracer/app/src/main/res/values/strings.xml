@@ -15,7 +15,7 @@
   <string name="txtInputInfoNick">영문 대문자, 소문자, 숫자를 포함하여 3~12자</string>
   <string name="txtInputInfoPWCHECK">비밀 번호를 확인하세요.</string>
   <string name="txtInputInfoEmail">정확한 이메일이 아닙니다.</string>
-  <string name="txtInputInfoAge">나이를 입력하세요.</string>
+  <string name="txtInputInfoAge">생년월일을 선택하세요.</string>
   <string name="txtInputInfoGender">성별을 선택하세요.</string>
 
   <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyAymdWK_9DnHXKY19cuUvg0oMo_FItNvQ0</string>
@@ -33,7 +33,7 @@
   <string name="record">기록</string>
   <string name="my">나</string>
   <string name="maker">게시자</string>
-  <string name="ranking">랭킹</string>
+  <string name="rank">순위</string>
   <string name="player">플레이어</string>
   <string name="laptime">랩 타임</string>
   <string name="map_record">맵 기록</string>
@@ -65,7 +65,7 @@
   <string name="signup">회원가입</string>
   <string name="selcetimage">프로필 이미지를\n선택해주세요</string>
   <string name="nick_name">닉네임</string>
-  <string name="age_">나이</string>
+  <string name="age_">(만)나이</string>
   <string name="gender_">성별</string>
   <string name="sign_up">회원가입</string>
   <string name="map_title">맵 제목</string>
@@ -139,9 +139,9 @@
   <string name="recording">기록용</string>
   <string name="around">주변</string>
   <string name="start_running">시작버튼을 누르면 러닝이 시작됩니다</string>
-  <string name="Distance_km">거리 (km)</string>
+  <string name="Distance_km">거리</string>
   <string name="Time">시간</string>
-  <string name="speed_km">속력 (km/h)</string>
+  <string name="speed_km">속력</string>
   <string name="pause_mode">일시정지를 하게 되면\n경쟁 모드 업로드가 불가합니다.\n\n일시정지를 하시겠습니까?</string>
   <string name="twohundred_save">거리가 200m 미만일때\n정지하시면 저장이 불가능합니다.\n\n정지하시겠습니까?</string>
   <string name="stop_save">지금 정지하시면 저장이 불가능합니다.\n\n정지하시겠습니까?</string>

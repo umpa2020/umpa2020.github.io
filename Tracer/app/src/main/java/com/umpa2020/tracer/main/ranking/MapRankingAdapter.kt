@@ -2,6 +2,7 @@ package com.umpa2020.tracer.main.ranking
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,15 +14,17 @@ import com.umpa2020.tracer.extensions.prettyDistance
 import com.umpa2020.tracer.network.FBLikesRepository
 import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.OnSingleClickListener
+import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.recycler_rankfragment_item.view.*
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 
 /**
  * 맵 랭킹 목록 어댑터
  */
 class MapRankingAdapter(
   val infoDatas: ArrayList<InfoData>,
-  val mode: String,
-  val progressBar: MyProgressBar
+  val mode: String
 ) : RecyclerView.Adapter<MapRankingAdapter.mViewHolder>() {
 
   var context: Context? = null
@@ -34,25 +37,20 @@ class MapRankingAdapter(
   ) {
     val infoData = infoDatas[position]
     val ranking = position + 1
+    val mapTitle = infoData.mapTitle
 
-
-    val cutted = infoData.mapTitle!!.subSequence(0, infoData.mapTitle!!.length - TIMESTAMP_LENGTH)
-
-    //데이터 바인딩
     holder.rank.text = ranking.toString()
-
-    holder.maptitle.text = cutted
-    holder.distance.text = infoData.distance!!.prettyDistance
-    if (mode.equals("execute")) {
+    holder.maptitle.text = mapTitle
+    holder.distance.text = infoData.distance.prettyDistance
+    if (mode == "plays") {
       holder.modeIcon.setImageResource(R.drawable.ic_sneaker_for_running)
       holder.modeIcon.tag = R.drawable.ic_sneaker_for_running
-
       if (infoData.played) {
-        holder.modeIcon.setColorFilter(R.color.green)
+        holder.modeIcon.setColorFilter(Color.CYAN)
       }
-      holder.modeNo.text = infoData.execute.toString()
-    } else if (mode.equals("likes")) {
-      if (infoData.myLiked) {
+      holder.modeNo.text = infoData.plays.toString()
+    } else if (mode == "likes") {
+      if (infoData.liked) {
         holder.modeIcon.setImageResource(R.drawable.ic_favorite_red_24dp)
         holder.modeIcon.tag = R.drawable.ic_favorite_red_24dp
       } else {
@@ -75,13 +73,12 @@ class MapRankingAdapter(
     } else
       holder.rank.setBackgroundResource(R.drawable.ic_4)
 
-
     //클릭하면 맵 상세보기 페이지로 이동
     holder.itemView.setOnClickListener(
       object : OnSingleClickListener {
         override fun onSingleClick(v: View?) {
           val nextIntent = Intent(context, RankRecyclerItemClickActivity::class.java)
-          nextIntent.putExtra("MapTitle", infoData.mapTitle) //mapTitle 정보 인텐트로 넘김
+          nextIntent.putExtra("mapId", infoData.mapId) //mapTitle 정보 인텐트로 넘김
           context!!.startActivity(nextIntent)
         }
       }
@@ -90,42 +87,17 @@ class MapRankingAdapter(
     holder.modeIcon.setOnClickListener(
       object : OnSingleClickListener {
         override fun onSingleClick(v: View?) {
-          var likes = Integer.parseInt(holder.modeNo.text.toString())
-
-          when (holder.modeIcon.tag) {
-            R.drawable.ic_sneaker_for_running -> {
-
-            }
-            R.drawable.ic_favorite_border_black_24dp -> {
-              FBLikesRepository().updateLikes(infoData.mapTitle!!, likes)
-              infoDatas[position].myLiked = true
-              infoDatas[position].likes = ++likes
-              holder.modeIcon.setImageResource(R.drawable.ic_favorite_red_24dp)
-              holder.modeIcon.tag = R.drawable.ic_favorite_red_24dp
-              holder.modeNo.text = likes.toString()
-            }
-            R.drawable.ic_favorite_red_24dp -> {
-              FBLikesRepository().updateNotLikes(infoData.mapTitle!!, likes)
-              infoDatas[position].myLiked = false
-              infoDatas[position].likes = --likes
-              holder.modeIcon.setImageResource(R.drawable.ic_favorite_border_black_24dp)
-              holder.modeIcon.tag = R.drawable.ic_favorite_border_black_24dp
-              holder.modeNo.text = likes.toString()
-            }
+          MainScope().launch { FBLikesRepository().toggleLikes(UserInfo.autoLoginKey, infoData.mapId) }
+          if (infoData.liked) {
+            infoData.liked = false
+            infoData.likes--
+          } else {
+            infoData.liked = true
+            infoData.likes++
           }
+          notifyItemChanged(position)
         }
       })
-
-    // 정보를 다 표현하면 dismiss
-    // > 5를 한 이유는 recyclerview 특성 상 모든 정보를 한 번에 담는게 아니라
-    // 스크롤이 내려가면 달게 posiotion이 증가 되어서 mdata.size 까지
-    // 도달하지 못하는 경우가 있음
-    // 추후에 코드 정리 할 예정 - 정빈
-    if (position == infoDatas.size - 1 || position > 5) {
-      if (progressBar.mprogressBar.isShowing) {
-        progressBar.dismiss()
-      }
-    }
   }
 
   //뷰 홀더 생성

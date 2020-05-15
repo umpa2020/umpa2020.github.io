@@ -8,24 +8,19 @@ import android.os.SystemClock
 import android.view.View
 import android.widget.Toast
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.MarkerOptions
 import com.umpa2020.tracer.R
-import com.umpa2020.tracer.roomDatabase.viewModel.RecordViewModel
 import com.umpa2020.tracer.constant.Constants
-import com.umpa2020.tracer.constant.Constants.Companion.DISTANCE_POINT
-import com.umpa2020.tracer.constant.Constants.Companion.FINISH_POINT
-import com.umpa2020.tracer.constant.Constants.Companion.START_POINT
 import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.constant.UserState
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.RouteGPX
-import com.umpa2020.tracer.extensions.format
-import com.umpa2020.tracer.extensions.makingIcon
+import com.umpa2020.tracer.extensions.toWayPoint
+import com.umpa2020.tracer.gpx.WayPointType.*
 import com.umpa2020.tracer.main.start.BaseRunningActivity
-import com.umpa2020.tracer.util.*
-import io.jenetics.jpx.WayPoint
+import com.umpa2020.tracer.roomDatabase.viewModel.RecordViewModel
+import com.umpa2020.tracer.util.ChoicePopup
+import com.umpa2020.tracer.util.TTS
 import kotlinx.android.synthetic.main.activity_running.*
-import kotlin.time.milliseconds
 
 
 class RunningActivity : BaseRunningActivity() {
@@ -36,12 +31,14 @@ class RunningActivity : BaseRunningActivity() {
     setContentView(R.layout.activity_running)
     supportActionBar?.title = "RUNNING"
     init()
-
     notice(getString(R.string.start_running))
-
     TTS.speech(getString(R.string.pushthestartbutton))
   }
 
+  /**
+   * BaseRunning 에서 업데이트 해줘야 하는 View 할당
+   * stop 리스너 설정
+   */
   override fun init() {
     val smf = supportFragmentManager.findFragmentById(R.id.map_viewer) as SupportMapFragment
     smf.getMapAsync(this)
@@ -54,8 +51,8 @@ class RunningActivity : BaseRunningActivity() {
     drawerHandle = runningHandle
     drawer = runningDrawer
     chronometer = runningTimerTextView
-    speedTextView=runningSpeedTextView
-    distanceTextView=runningDistanceTextView
+    speedTextView = runningSpeedTextView
+    distanceTextView = runningDistanceTextView
     /**
     Stop 팝업 띄우기
      */
@@ -81,56 +78,33 @@ class RunningActivity : BaseRunningActivity() {
     super.init()
   }
 
-  var cameraZoomSize = 0.0f
+  /**
+   * 러닝 이 시작될 때
+   */
   override fun start() {
     super.start()
 
-   traceMap.mMap.addMarker(MarkerOptions()
-     .zIndex(3.4f)
-     .position(currentLatLng)
-     .title("Start")
-     .icon( R.drawable.ic_start_point.makingIcon()))
+    wpList.add(currentLocation.toWayPoint(START_POINT))
+    traceMap.addMarker(wpList.first())
     TTS.speech(getString(R.string.startRunning))
-
-    traceMap.mMap.setOnCameraMoveListener {
-      Logg.i(traceMap.mMap.cameraPosition.zoom.toString())
-      cameraZoomSize = traceMap.mMap.cameraPosition.zoom
-    }
-    wpList.add(
-      WayPoint.builder()
-        .lat(currentLatLng.latitude)
-        .lon(currentLatLng.longitude)
-        .name("Start")
-        .desc("Start Description")
-        .time(System.currentTimeMillis())
-        .type(START_POINT)
-        .build()
-    )
   }
 
+  /**
+   * 러닝이 종료될 때
+   * 현재 위치를 finish point로 설정
+   * InfoData와 RouteGPX를 생성해서 RunningSaveActivity에게 전달함
+   */
   override fun stop() {
     super.stop()
-
-    // stop tts 설정
     TTS.speech(getString(R.string.finishRunning))
 
-    wpList.add(
-      WayPoint.builder()
-        .lat(currentLatLng.latitude)
-        .lon(currentLatLng.longitude)
-        .name("Finish")
-        .desc("Finish Description")
-        .time(System.currentTimeMillis())
-        .type(FINISH_POINT)
-        .build()
-    )
+    wpList.add(currentLocation.toWayPoint(FINISH_POINT))
     val infoData = InfoData()
     infoData.distance = distance
     infoData.time = SystemClock.elapsedRealtime() - chronometer.base
-    infoData.privacy = privacy
-    infoData.startLatitude = trkList.first().latitude.toDouble()
-    infoData.startLongitude = trkList.first().longitude.toDouble()
-    val routeGPX = RouteGPX(infoData.time.toString(), "", wpList, trkList)
+    infoData.startLatitude = trkList.first().lat
+    infoData.startLongitude = trkList.first().lon
+    val routeGPX = RouteGPX(infoData.time!!, "", wpList, trkList)
 
     val intent = Intent(this, RunningSaveActivity::class.java)
     intent.putExtra("RouteGPX", routeGPX)
@@ -139,29 +113,17 @@ class RunningActivity : BaseRunningActivity() {
     finish()
   }
 
+  /**
+   * 위치가 업데이트 되면, 거리를 측정해 distance Point 생성
+   */
   override fun updateLocation(curLoc: Location) {
     super.updateLocation(curLoc)
     //WPINTERVAL마다 waypoint 추가
     if (userState == UserState.RUNNING) {
       if (distance.toInt() / Constants.WPINTERVAL >= markerCount) {
         if (distance > 0) markerCount = distance.toInt() / Constants.WPINTERVAL
-        traceMap.mMap.addMarker(
-          MarkerOptions()
-            .position(currentLatLng)
-            .title(markerCount.toString())
-            .icon(passedIcon)
-            .anchor(0f,0.5f)
-        )
-        wpList.add(
-          WayPoint.builder()
-            .lat(currentLatLng.latitude)
-            .lon(currentLatLng.longitude)
-            .name("WayPoint")
-            .desc("wayway...")
-            .time((System.currentTimeMillis()))
-            .type(DISTANCE_POINT)
-            .build()
-        )
+        wpList.add(curLoc.toWayPoint(DISTANCE_POINT))
+        traceMap.addMarker(wpList.last())
         markerCount++
       }
     }
@@ -174,14 +136,10 @@ class RunningActivity : BaseRunningActivity() {
       }
       R.id.runningPauseButton -> {
         if (privacy == Privacy.RACING) {
-          showPausePopup(
-            getString(R.string.pause_mode)
-          )
+          showPausePopup(getString(R.string.pause_mode))
         } else {
-          if (userState == UserState.PAUSED)
-            restart()
-          else
-            pause()
+          if (userState == UserState.PAUSED) restart()
+          else pause()
         }
       }
       R.id.runningStopButton -> {

@@ -12,7 +12,6 @@
     android:background="@color/white"
     android:elevation="1dp"
     android:contentInsetStart="0dp">
-
     <TextView
       style="@style/appBarText"
       android:layout_width="match_parent"
@@ -45,7 +44,7 @@
         <LinearLayout
           android:id="@+id/linearlayout"
           android:layout_marginTop="10dp"
-          android:layout_width="match_parent"
+          android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:orientation="horizontal">
 
@@ -64,25 +63,50 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:text="test"
-            android:textSize="18sp"
-            android:layout_weight="1"
+            android:textSize="18dp"
             android:textColor="#808080"/>
-
-          <ImageView
-            android:id="@+id/rankRecyclerHeart"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_favorite_border_black_24dp" />
-
-          <TextView
-            android:layout_marginLeft="5dp"
-            android:id="@+id/rankRecyclerHeartCount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:textSize="20sp"/>
         </LinearLayout>
+
+        <ImageView
+          android:layout_marginTop="10dp"
+          android:layout_toLeftOf="@+id/rankRecyclerHeartCount"
+          android:id="@+id/rankRecyclerHeart"
+          android:layout_width="20dp"
+          android:layout_height="20dp"
+          android:src="@drawable/ic_favorite_border_black_24dp" />
+
+        <TextView
+          android:layout_marginLeft="5dp"
+          android:layout_marginTop="10dp"
+          android:layout_alignParentRight="true"
+          android:layout_marginRight="20dp"
+          android:id="@+id/rankRecyclerHeartCount"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center_vertical"
+          android:textSize="20dp"/>
+
+        <ImageView
+          android:id="@+id/rankRecyclerExecute"
+          android:layout_width="20dp"
+          android:layout_height="20dp"
+          android:layout_marginTop="15dp"
+          android:layout_below="@id/rankRecyclerHeart"
+          android:src="@drawable/ic_sneaker_for_running"
+          android:layout_toLeftOf="@+id/rankRecyclerExecuteCount"/>
+
+        <TextView
+          android:layout_marginLeft="5dp"
+          android:layout_marginTop="15dp"
+          android:layout_alignParentRight="true"
+          android:id="@+id/rankRecyclerExecuteCount"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_below="@id/rankRecyclerHeart"
+          android:textSize="20dp"
+          android:layout_marginRight="20dp"/>
+
+
 
         <TextView
           android:layout_marginTop="10dp"
@@ -105,6 +129,8 @@
       </RelativeLayout>
 
       <RelativeLayout
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:id="@+id/RelativeLayout"
         android:layout_width="match_parent"
         android:layout_height="300dp">
@@ -150,7 +176,7 @@
         -->
 
       <LinearLayout
-        android:background="@color/white"
+        android:background="@drawable/textline_background_up"
         android:id="@+id/infolayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -166,7 +192,7 @@
           android:layout_height="wrap_content"
           android:layout_weight="0.4"
           android:gravity="left"
-          android:text="@string/ranking" />
+          android:text="@string/rank" />
 
         <TextView
           style="@style/ListTitle"
@@ -186,8 +212,9 @@
       </LinearLayout>
 
       <androidx.recyclerview.widget.RecyclerView
-        android:background="@drawable/textline_background_down"
+        android:background="@drawable/textlines"
         android:paddingBottom="1dp"
+        android:paddingTop="1dp"
         android:id="@+id/rankRecyclerItemClickRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

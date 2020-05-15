@@ -41,9 +41,9 @@ class SettingPreferenceFragment : PreferenceFragmentCompat() {
     val switchTTS: SwitchPreference? = findPreference("ttsNotificationSetting") as SwitchPreference?
 
     // Switch preference change listener
-    switchTTS?.setOnPreferenceChangeListener{ preference, newValue ->
-      if (newValue == true){
-      }else{
+    switchTTS?.setOnPreferenceChangeListener { preference, newValue ->
+      if (newValue == true) {
+      } else {
       }
 
       true
@@ -55,10 +55,10 @@ class SettingPreferenceFragment : PreferenceFragmentCompat() {
     val switchNotification: SwitchPreference? = findPreference("notificationSetting") as SwitchPreference?
 
     // Switch preference change listener
-    switchNotification?.setOnPreferenceChangeListener{ preference, newValue ->
-      if (newValue == true){
+    switchNotification?.setOnPreferenceChangeListener { preference, newValue ->
+      if (newValue == true) {
         //TODO 알람 ON 기능 추가
-      }else{
+      } else {
         //TODO 알람 OFF 기능 추가
       }
 
@@ -89,6 +89,8 @@ class SettingPreferenceFragment : PreferenceFragmentCompat() {
     }
 
     //회원 탈퇴 눌렀을 때
+    // TODO : 회원 탈퇴 : 죽여 and Shared 값 삭제
+
     if (preference?.key.equals("unregister")) {
       //TODO. 회원 탈퇴 기능 만들기
     }
@@ -105,7 +107,7 @@ class SettingPreferenceFragment : PreferenceFragmentCompat() {
         UserInfo.autoLoginKey = ""
         UserInfo.email = ""
         UserInfo.nickname = ""
-        UserInfo.age = ""
+        UserInfo.birth = ""
         UserInfo.gender = ""
         //TODO : 이건 정빈이가 추가한거 같은데 삭제 하니깐 약간 어플이 꼬이는거 같아서 물어보고 삭제하든가 하기
 //        UserInfo.permission = 0

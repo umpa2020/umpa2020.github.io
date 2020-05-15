@@ -5,8 +5,6 @@ import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
-import com.jakewharton.rxbinding2.widget.color
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.OnSingleClickListener
@@ -15,8 +13,6 @@ import kotlinx.android.synthetic.main.signup_toolbar.*
 import kotlinx.android.synthetic.main.signup_toolbar.view.*
 
 class GenderSelectActivity : AppCompatActivity(), OnSingleClickListener {
-  val WSY = "WSY"
-
   var isMan = false
   var isWoman = false
 
@@ -43,9 +39,9 @@ class GenderSelectActivity : AppCompatActivity(), OnSingleClickListener {
         try {
           val intent = Intent()
           if (isMan)
-            intent.putExtra("Gender", "Man")
+            intent.putExtra("Gender", getString(R.string.man))
           else
-            intent.putExtra("Gender", "Woman")
+            intent.putExtra("Gender", getString(R.string.woman))
           setResult(RESULT_OK, intent)
           finish()
         } catch (e: Exception) {
@@ -98,8 +94,6 @@ class GenderSelectActivity : AppCompatActivity(), OnSingleClickListener {
           isWoman = false
           isMan = true
         }
-        Logg.d("여자 : $isWoman")
-        Logg.d("남자 : " + isMan.toString())
       }
 
     }

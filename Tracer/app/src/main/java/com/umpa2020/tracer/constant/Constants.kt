@@ -4,11 +4,8 @@ class Constants {
   companion object {
     const val NICKNAME_RULE = "^(?=.*\\W).{3,12}\$"
 
-    //이메일 정규식
-    const val EMAIL_RULE = "^[a-z0-9_+.-]+@([a-z0-9-]+\\.)+[a-z0-9]{2,4}\$"
-
     // 성별 제한
-    const val GENDER_RULE = "^(?=.*[a-zA-Z]).{0,10}\$"
+    const val GENDER_RULE = "^(?=.*[0-9]).{0,10}\$"
 
     // 나이 제한
     const val AGE_RULE = "^(?=.*\\d).{1,2}\$"
@@ -60,12 +57,7 @@ class Constants {
     const val MIN_CLICK_INTERVAL: Long = 600
     var mLastClickTime: Long = 0
 
-    //Waypoint 타입
-    const val START_POINT = "0"
-    const val FINISH_POINT = "1"
-    const val DISTANCE_POINT = "2"
-    const val TURNING_LEFT_POINT = "3"
-    const val TURNING_RIGHT_POINT = "4"
+
 
     const val TIMESTAMP_LENGTH = 13
     var testId = 0

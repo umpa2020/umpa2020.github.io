@@ -2,6 +2,7 @@ package com.umpa2020.tracer.roomDatabase.repository
 
 import androidx.lifecycle.LiveData
 import com.umpa2020.tracer.roomDatabase.Dao.RecordDao
+import com.umpa2020.tracer.roomDatabase.MyRoomDatabase
 import com.umpa2020.tracer.roomDatabase.entity.MapRecordData
 
 /**
@@ -13,7 +14,8 @@ import com.umpa2020.tracer.roomDatabase.entity.MapRecordData
  *  libraries에 속하지는 않지만 코드 분리 및 아키텍처에 대해 제안된 best practice이다.
  *  레포지토리 클래스는 rest of the application에 대한 데이터 엑세스를 위한 클린한 API를 제공한다.
  */
-class RecordRepository(private val recordDao: RecordDao) {
+class RecordRepository() {
+  val recordDao=MyRoomDatabase.instance.recordDao()
   // Room executes all queries on a separate thread.
   // Observed LiveData will notify the observer when the data has changed.
   val allRecord : LiveData<MapRecordData> = recordDao.getAll()

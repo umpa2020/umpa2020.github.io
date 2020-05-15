@@ -7,14 +7,18 @@ import android.view.View
 import android.view.ViewGroup
 import com.github.demono.adapter.InfinitePagerAdapter
 import com.umpa2020.tracer.R
-import com.umpa2020.tracer.dataClass.AdChallengeData
 import com.umpa2020.tracer.dataClass.BannerData
-import com.umpa2020.tracer.network.FBChallengeImageRepository
-import com.umpa2020.tracer.util.Logg
+import com.umpa2020.tracer.extensions.image
+import com.umpa2020.tracer.network.FBStorageRepository
 import kotlinx.android.synthetic.main.fragment_adchallenge.view.*
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 
+/**
+ * 챌린지 모드에서 자동으로 돌아가는 광고 쪽 페이지 어댑터
+ */
 class AdChallengePageAdapter(
-  val adChallengeList: ArrayList<BannerData>,
+  val adChallengeList: MutableList<BannerData>,
   val context: Context
 ) : InfinitePagerAdapter() {
   override fun getItemCount(): Int {
@@ -25,18 +29,16 @@ class AdChallengePageAdapter(
     val view = LayoutInflater.from(container!!.context)
       .inflate(R.layout.fragment_adchallenge, container, false)
 
-    Logg.d("ssmm11 position = $position / imagePath = ${adChallengeList[position].bannerImagePath!!}")
-    FBChallengeImageRepository().getChallengeImage(
-      view.adChallengeImgView,
-      adChallengeList[position].bannerImagePath!!
-    )
+    MainScope().launch {
+      view.adChallengeImgView.image(FBStorageRepository().downloadFile(adChallengeList[position].bannerImagePath!!))
+    }
     view.setOnClickListener {
-      Logg.d(position.toString())
-      val intent = Intent(context, ChallengeRecycleritemClickActivity::class.java)
-      intent.putExtra("challengeId", adChallengeList[position].bannerId)
-      context.startActivity(intent)
+      if (position != 0) { // 코로나 안내이면 안 넘기도록 추후에 else 해서 자세한 안내 띄우도록
+        val intent = Intent(context, ChallengeRecycleritemClickActivity::class.java)
+        intent.putExtra("challengeId", adChallengeList[position].bannerId)
+        context.startActivity(intent)
+      }
     }
     return view
   }
-
 }

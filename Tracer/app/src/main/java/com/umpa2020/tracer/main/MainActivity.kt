@@ -60,7 +60,6 @@ class MainActivity : AppCompatActivity(){
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    Logg.d("Hello I'm New")
     setContentView(R.layout.activity_main)
 
     gpsViewModel = ViewModelProvider(this).get(GpsViewModel::class.java)
@@ -68,12 +67,10 @@ class MainActivity : AppCompatActivity(){
 
     gpsViewModel.allGps.observe(this, Observer {gpsData->
       if(gpsData==null){
-        Logg.d("값 없음")
         gpsViewModel.insert(GPSData(0,15.0,15.0))
       }else{
         //TODO: 옵저버 해제
         gpsViewModel.allGps.removeObservers(this)
-        Logg.d("값 있음 $gpsData")
       }
 //      gpsData?.let {
 //        Logg.d("실행 돼??")
@@ -85,7 +82,7 @@ class MainActivity : AppCompatActivity(){
     })
 
 //
-//    if(gpsViewModel.isUid.value == null){
+//    if(gpsViewModel.isUSER_ID.value == null){
 //      Logg.d("값이 없음")
 //      val gpsData = GPSData(0, 0.0,0.0  )
 //      gpsViewModel.insert(gpsData)
@@ -130,7 +127,6 @@ class MainActivity : AppCompatActivity(){
 
   override fun onStart() {
     super.onStart()
-    Logg.d("onStart()")
     Logg.d(selectedFragment.toString())
     Logg.d(selectedFragment!!.id.toString())
 

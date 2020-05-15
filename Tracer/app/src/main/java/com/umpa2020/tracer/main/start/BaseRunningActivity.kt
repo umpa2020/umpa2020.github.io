@@ -25,6 +25,8 @@ import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.constant.UserState
 import com.umpa2020.tracer.extensions.*
+import com.umpa2020.tracer.gpx.WayPoint
+import com.umpa2020.tracer.gpx.WayPointType
 import com.umpa2020.tracer.lockscreen.util.LockScreen
 import com.umpa2020.tracer.main.MainActivity.Companion.gpsViewModel
 import com.umpa2020.tracer.map.TraceMap
@@ -38,7 +40,8 @@ import hollowsoft.slidingdrawer.OnDrawerCloseListener
 import hollowsoft.slidingdrawer.OnDrawerOpenListener
 import hollowsoft.slidingdrawer.OnDrawerScrollListener
 import hollowsoft.slidingdrawer.SlidingDrawer
-import io.jenetics.jpx.WayPoint
+import com.umpa2020.tracer.gpx.WayPointType.*
+import kotlinx.android.synthetic.main.fragment_start.*
 
 
 open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDrawerScrollListener,
@@ -50,17 +53,18 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
   var time = 0.0
   var previousLatLng = LatLng(0.0, 0.0)          //이전위
   var currentLatLng = LatLng(37.619742, 127.060836)
-
   var elevation = 0.0
   var speed = 0.0
 
   var userState = UserState.NORMAL       //사용자의 현재상태 달리기
-  var moving = false
-  var trkList: MutableList<WayPoint> = mutableListOf()
-  var wpList: MutableList<WayPoint> = mutableListOf()
-  var markerCount = 1
-  var timeWhenStopped: Long = 0
+  var moving = false  //유저가 움직인건지 gps가 튄건지 잡는 flag
+  var trkList: MutableList<WayPoint> = mutableListOf()  //사용자의 이동 경로 리스트
+  var wpList: MutableList<WayPoint> = mutableListOf()   //사용자의 체크포인트 리스트
+  var markerCount = 1   //현재 찍힌 마커의 개수
+  var timeWhenStopped: Long = 0   //일시정지된 시간
+  var cameraZoomSize = 0.0f   //camera zoom size
 
+  //공통으로 업데이트 해주는 View
   lateinit var chronometer: Chronometer
   lateinit var startButton: Button
   lateinit var stopButton: Button
@@ -105,16 +109,17 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
       }
     })
 
-    traceMap.mMap.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
-    traceMap.mMap.setOnCameraMoveListener {
+    traceMap.mMap.setOnCameraMoveCanceledListener {
       wedgedCamera = false
     }
     traceMap.mMap.setOnMyLocationButtonClickListener {
       wedgedCamera = true
       true
     }
+    traceMap.mMap.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
     traceMap.mMap.uiSettings.isCompassEnabled = true
     traceMap.mMap.uiSettings.isZoomControlsEnabled = true
+    wedgedCamera=true
   }
 
   open fun updateLocation(curLoc: Location) {
@@ -128,7 +133,6 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     if (setLocation(curLoc)) {
       when (userState) {
         UserState.NORMAL -> {
-          traceMap.initCamera(curLoc.toLatLng())
         }
         UserState.READYTORUNNING -> {
         }
@@ -136,15 +140,7 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
           distance += SphericalUtil.computeDistanceBetween(previousLatLng, currentLatLng)
           traceMap.drawPolyLine(previousLatLng, currentLatLng)
           //tplist에 추가
-          trkList.add(
-            WayPoint.builder()
-              .lat(currentLatLng.latitude)
-              .lon(currentLatLng.longitude)
-              .ele(elevation)
-              .speed(speed)
-              .name("track point")
-              .build()
-          )
+          trkList.add(curLoc.toWayPoint(TRACK_POINT))
         }
         UserState.PAUSED -> {
         }
@@ -161,13 +157,11 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
   open fun start() {
     userState = UserState.RUNNING
     anim()
-
     Logg.d(chronometer.base.toString())
     chronometer.base = SystemClock.elapsedRealtime()
+    chronometer.start()
 
     // DB에 시작 시간 업데이트
-
-    chronometer.start()
     notificationTextView.visibility = View.GONE
     lockScreen(true)
 
@@ -182,8 +176,15 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
       ""
     )
     Logg.d("처음에 데이터 삽입?")
-
     recordViewModel.insert(mapRecordDao)
+
+    /**
+     * camera가 변화 될 때 마다 zoomsize업데이트
+     */
+    traceMap.mMap.setOnCameraMoveListener {
+      Logg.i(traceMap.mMap.cameraPosition.zoom.toString())
+      cameraZoomSize = traceMap.mMap.cameraPosition.zoom
+    }
   }
 
   open fun pause() {
@@ -248,7 +249,7 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
       moving = false
     } else {
       moving = true
-      if (wedgedCamera) traceMap.mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLatLng))
+      if (wedgedCamera) traceMap.moveCamera(location)
     }
     return moving
   }
@@ -276,11 +277,11 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
 
 //    gpsViewModel = ViewModelProvider(this).get(GpsViewModel::class.java)
 
-    recordViewModel = RecordViewModel(this.application)
+    recordViewModel = RecordViewModel(application)
     recordViewModel.deleteAll()
   }
 
-  var currentLocation: Location? = null
+  lateinit var currentLocation: Location
   override fun onDestroy() {
     super.onDestroy()
     LocalBroadcastManager.getInstance(this).unregisterReceiver(locationBroadcastReceiver)
@@ -289,15 +290,6 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     if (currentLocation != null)
       gpsViewModel.updateLastPosition(currentLocation!!.latitude, currentLocation!!.longitude)
     Logg.d("abcd onpause ${gpsViewModel.allGps.value!!.lat}")
-  }
-
-  override fun onPause() {
-    super.onPause()
-  }
-
-  override fun onResume() {
-    super.onResume()
-
   }
 
   lateinit var noticePopup: ChoicePopup

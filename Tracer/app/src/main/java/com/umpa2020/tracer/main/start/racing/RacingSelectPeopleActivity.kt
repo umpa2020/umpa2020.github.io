@@ -3,9 +3,7 @@ package com.umpa2020.tracer.main.start.racing
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.get
 import androidx.recyclerview.widget.LinearLayoutManager
 import co.lujun.androidtagview.TagView.OnTagClickListener
 import com.umpa2020.tracer.App
@@ -13,26 +11,37 @@ import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.RacerData
 import com.umpa2020.tracer.dataClass.RankingData
 import com.umpa2020.tracer.dataClass.RouteGPX
+import com.umpa2020.tracer.main.start.racing.RacingActivity.Companion.ROUTE_GPX
 import com.umpa2020.tracer.network.*
-import com.umpa2020.tracer.util.Logg
+import com.umpa2020.tracer.network.BaseFB.Companion.MAP_ID
 import com.umpa2020.tracer.util.OnSingleClickListener
-import io.jenetics.jpx.Route
 import kotlinx.android.synthetic.main.activity_racing_select_people.*
-import java.util.*
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 
 class RacingSelectPeopleActivity : AppCompatActivity(), OnSingleClickListener {
   val activity = this
   var likes = 0
-  var mapTitle = ""
-  lateinit var routeGPX:RouteGPX
+  var mapId = ""
+  lateinit var routeGPX: RouteGPX
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_racing_select_people)
 
-    mapTitle = intent.extras?.getString("MapTitle").toString()
-    routeGPX=intent.getParcelableExtra("RouteGPX")
+    mapId = intent.getStringExtra(MAP_ID)!!
+    routeGPX = intent.getParcelableExtra(ROUTE_GPX)!!
 
-    FBMapRankingRepository().listMapRanking(mapTitle, mapRankingListener)
+    MainScope().launch {
+      FBMapRepository().listMapRanking(mapId).let {
+        //레이아웃 매니저 추가
+        rankingDataList = it
+        racingSelectRecyclerView.layoutManager = LinearLayoutManager(activity)
+        //adpater 추가
+        racingSelectRecyclerView.adapter =
+          RacingRecyclerViewAdapterMultiSelect(it, mapId, tagcontainerLayout1)
+      }
+    }
+
 
     // Set custom click listener
     tagcontainerLayout1.setOnTagClickListener(object : OnTagClickListener {
@@ -57,30 +66,27 @@ class RacingSelectPeopleActivity : AppCompatActivity(), OnSingleClickListener {
 
     racingSelectButton.setOnClickListener(this)
   }
-  lateinit var rankingDataList: ArrayList<RankingData>
-  private val mapRankingListener = object : MapRankingListener {
-    override fun getMapRank(arrRankingData: ArrayList<RankingData>) {
-      //레이아웃 매니저 추가
-      rankingDataList=arrRankingData
-      racingSelectRecyclerView.layoutManager = LinearLayoutManager(activity)
-      //adpater 추가
-      racingSelectRecyclerView.adapter =
-        RacingRecyclerViewAdapterMultiSelect(arrRankingData, mapTitle, tagcontainerLayout1)
-    }
-  }
+
+  lateinit var rankingDataList: MutableList<RankingData>
 
   override fun onSingleClick(v: View?) {
-    when(v!!.id){
-      R.id.racingSelectButton->{
-        val racerList= tagcontainerLayout1.tags.toTypedArray().map {nickName->
+    when (v!!.id) {
+      R.id.racingSelectButton -> {
+        val racerList = tagcontainerLayout1.tags.toTypedArray().map { nickName ->
           RacerData(
-          rankingDataList.find { it.challengerNickname==nickName }!!.challengerId,nickName)}
+            rankingDataList.find { it.challengerNickname == nickName }!!.challengerId, nickName
+          )
+        }
         val intent = Intent(App.instance.context(), RacingActivity::class.java)
-        intent.putExtra("RouteGPX", routeGPX)
-        intent.putExtra("RacerList",racerList.toTypedArray())
-        intent.putExtra("mapTitle", mapTitle)
+        intent.putExtra(ROUTE_GPX, routeGPX)
+        intent.putExtra(RACER_LIST, racerList.toTypedArray())
+        intent.putExtra(MAP_ID, mapId)
         startActivity(intent)
       }
     }
+  }
+
+  companion object {
+    const val RACER_LIST="RacerList"
   }
 }
