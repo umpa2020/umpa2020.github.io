@@ -1,4 +1,4 @@
-package com.umpa2020.tracer.util
+package com.umpa2020.tracer.broadcastReceiver
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -7,9 +7,10 @@ import android.location.Location
 import android.os.SystemClock
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.SphericalUtil
-import com.umpa2020.tracer.lockscreen.util.LocationViewModel
 import com.umpa2020.tracer.extensions.toLatLng
 import com.umpa2020.tracer.main.start.BaseRunningActivity
+import com.umpa2020.tracer.util.Logg
+import com.umpa2020.tracer.viewModel.LocationViewModel
 
 /**
  *  브로드 케스트 리시버 클래스

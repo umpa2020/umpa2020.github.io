@@ -1,6 +1,7 @@
 package com.umpa2020.tracer.main
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.SystemClock
@@ -8,11 +9,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.umpa2020.tracer.lockscreen.util.LocationViewModel
+import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.locationBackground.LocationBackgroundService
 import com.umpa2020.tracer.locationBackground.ServiceStatus
+import com.umpa2020.tracer.viewModel.LocationViewModel
 import com.umpa2020.tracer.main.challenge.ChallengeFragment
 import com.umpa2020.tracer.main.profile.ProfileFragment
 import com.umpa2020.tracer.main.ranking.RankingFragment
@@ -157,10 +159,15 @@ class MainActivity : AppCompatActivity() {
 
   private fun startStopServiceCommand(action: ServiceStatus) {
     Logg.i("startStopServiceCommand")
-    Intent(applicationContext, LocationBackgroundService::class.java).also {
+    Intent(App.applicationContext(), LocationBackgroundService::class.java).also {
       it.action = action.name
       Logg.d(action.toString())
-      startService(it)
+
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { // 오레오 이상부터 foregroundService로 실행.
+        startForegroundService(it)
+      }else {
+        startService(it)
+      }
     }
   }
 
