@@ -359,7 +359,6 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
     // 폴리 라인만 그리는
     if (loadTrack.tag != "init") {
       loadTrack.remove()
-      Logg.d("ssmm11 markerlist = ${traceMap!!.markerList.size}")
       traceMap!!.markerList[0].remove()
       traceMap!!.markerList.removeAt(0)
     }

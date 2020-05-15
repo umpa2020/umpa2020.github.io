@@ -40,7 +40,6 @@ class MyInformationActivity : AppCompatActivity(), OnSingleClickListener {
       }
     }
 
-    Logg.d("ssmm11 userinfo = ${UserInfo.birth} / ${UserInfo.autoLoginKey}")
     // Shared에 저장된 유저 정보 설정정
     emailTextView.text = UserInfo.email
     nickNameTextView.text = UserInfo.nickname
