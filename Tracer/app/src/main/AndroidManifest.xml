@@ -48,7 +48,7 @@
     <activity android:name=".main.start.racing.RacingSelectPeopleActivity" />
     <activity android:name=".main.profile.myrecord.ProfileRecordActivity" />
     <activity android:name=".main.profile.settting.MyInformationActivity" />
-    <activity android:name=".main.profile.settting.AppSettingActivity" />
+    <activity android:name=".main.profile.settting.AppSettingActivity"/>
     <activity android:name=".main.profile.myroute.ProfileRouteActivity" />
     <activity android:name=".main.profile.OtherProfileActivity" />
 
