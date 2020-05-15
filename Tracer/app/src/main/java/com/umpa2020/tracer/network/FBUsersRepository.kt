@@ -70,4 +70,8 @@ class FBUsersRepository : BaseFB() {
       .whereEqualTo(MAP_ID, mapId)
       .get().await().isEmpty
   }
+
+  fun userWithdrawal() {
+    usersCollectionRef.document(UserInfo.autoLoginKey).update(USER_STATE, false)
+  }
 }

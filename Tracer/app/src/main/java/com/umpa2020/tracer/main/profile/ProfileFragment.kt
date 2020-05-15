@@ -49,6 +49,7 @@ class ProfileFragment() : Fragment(), OnSingleClickListener, Parcelable {
     root.appSettingButton.setOnClickListener(this)
     root.profileRouteTextView.setOnClickListener(this)
     root.profileRecordTextView.setOnClickListener(this)
+
     return root
   }
 
