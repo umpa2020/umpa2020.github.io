@@ -40,6 +40,7 @@
         android:orientation="horizontal"
         android:visibility="visible">
 
+        <!--
         <TextView
           android:id="@+id/mainStartLogoTextView"
           android:layout_width="match_parent"
@@ -53,6 +54,15 @@
           android:textStyle="bold">
 
         </TextView>
+        -->
+        <ImageView
+          android:id="@+id/mainStartLogoTextView"
+          android:layout_width="100dp"
+          android:layout_height="80dp"
+          android:layout_centerInParent="true"
+          android:layout_centerVertical="true"
+          android:background="@drawable/title"
+          android:gravity="center" />
 
         <LinearLayout
           android:id="@+id/mainStartSearchLayout"
@@ -80,8 +90,8 @@
 
         <Button
           android:id="@+id/mainStartSearchButton"
-          android:layout_width="30dp"
-          android:layout_height="30dp"
+          android:layout_width="20dp"
+          android:layout_height="20dp"
           android:layout_alignParentEnd="true"
           android:layout_centerVertical="true"
           android:layout_marginStart="10dp"

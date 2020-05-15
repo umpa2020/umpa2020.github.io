@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
   <Preference
+    app:iconSpaceReserved = "false"
     android:key="myInformation"
     android:title="@string/my_information">
   </Preference>
 
   <PreferenceCategory
+    app:iconSpaceReserved = "false"
     android:title="@string/TTS">
 
     <!--
@@ -21,6 +24,7 @@
       -->
 
     <SwitchPreference
+      app:iconSpaceReserved = "false"
       android:defaultValue="true"
       android:key="ttsNotificationSetting"
       android:summary="@string/TTS_check"
@@ -31,8 +35,10 @@
   </PreferenceCategory>
 
   <PreferenceCategory
+    app:iconSpaceReserved = "false"
     android:title="@string/lockScreenSetting">
     <SwitchPreference
+      app:iconSpaceReserved = "false"
       android:defaultValue="true"
       android:key="LockScreenStatus"
       android:title="@string/lockScreenCheck"
@@ -41,8 +47,10 @@
       android:switchTextOn="ON" />
   </PreferenceCategory>
   <PreferenceCategory
+    app:iconSpaceReserved = "false"
     android:title="@string/noticeSetting">
     <SwitchPreference
+      app:iconSpaceReserved = "false"
       android:defaultValue="true"
       android:key="notificationSetting"
       android:summary="@string/noticeSound"
@@ -52,12 +60,25 @@
   </PreferenceCategory>
 
   <Preference
+    app:iconSpaceReserved = "false"
+    app:allowDividerAbove="true"
+   app:allowDividerBelow="true"
     android:key="logout"
     android:title="@string/logout">
   </Preference>
 
+
   <Preference
+    app:iconSpaceReserved = "false"
+    app:allowDividerAbove="true"
+    app:allowDividerBelow="true"
     android:key="unregister"
     android:title="@string/unregister">
+  </Preference>
+
+  <Preference
+    app:iconSpaceReserved = "false"
+    app:allowDividerAbove="true"
+    app:allowDividerBelow="true">
   </Preference>
 </PreferenceScreen>

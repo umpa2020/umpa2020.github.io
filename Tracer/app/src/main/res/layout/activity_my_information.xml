@@ -17,9 +17,11 @@
     android:elevation="1dp" />
 
   <LinearLayout
+    android:paddingTop="30dp"
+    android:paddingBottom="30dp"
     android:background="@drawable/textline_background_down"
     android:layout_width="match_parent"
-    android:layout_height="200dp"
+    android:layout_height="wrap_content"
     android:gravity="center"
     android:orientation="vertical">
     <FrameLayout
@@ -32,6 +34,7 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:background="@drawable/ic_profile_logo"
+        app:civ_border_color="@color/gray"
         />
 
       <com.mikhaellopez.circularimageview.CircularImageView
@@ -46,6 +49,7 @@
       android:layout_height="wrap_content"
       android:layout_marginTop="15dp"
       android:layout_gravity="center"
+      android:textColor="@color/skyBlue"
       android:text="@string/profile_image_change"
       android:textSize="18dp" />
   </LinearLayout>

@@ -26,7 +26,6 @@ class SettingPreferenceFragment : PreferenceFragmentCompat() {
 
   override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
     setPreferencesFromResource(R.xml.fragment_setting_preference, rootKey)
-
     mAuth = FirebaseAuth.getInstance() // FirebaseAuth를 사용하기 위해서 인스턴스를 꼭 받아오기
 
     //  Configure Google Sign In
