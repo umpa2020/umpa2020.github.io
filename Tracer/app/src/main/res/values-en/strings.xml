@@ -27,6 +27,8 @@
   <string name="race">Race</string>
   <string name="start">Start</string>
   <string name="my_activity">My Activity</string>
+  <string name="activity">Activity</string>
+
   <string name="my_route">My Route</string>
   <string name="other_route">Route</string>
   <string name="race_result">Race Result</string>
