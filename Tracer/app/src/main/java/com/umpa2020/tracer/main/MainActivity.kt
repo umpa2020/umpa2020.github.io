@@ -6,9 +6,9 @@ import android.os.Handler
 import android.os.SystemClock
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.umpa2020.tracer.lockscreen.util.LocationViewModel
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.locationBackground.LocationBackgroundService
@@ -17,14 +17,12 @@ import com.umpa2020.tracer.main.challenge.ChallengeFragment
 import com.umpa2020.tracer.main.profile.ProfileFragment
 import com.umpa2020.tracer.main.ranking.RankingFragment
 import com.umpa2020.tracer.main.start.StartFragment
-import com.umpa2020.tracer.roomDatabase.entity.GPSData
-import com.umpa2020.tracer.roomDatabase.viewModel.GpsViewModel
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.TTS
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity(){
+class MainActivity : AppCompatActivity() {
   private var doubleBackToExitPressedOnce1 = false
 
   var selectedFragment: Fragment? = null//선택된 프래그먼트 저장하는 변수
@@ -50,45 +48,30 @@ class MainActivity : AppCompatActivity(){
         R.id.container,
         selectedFragment!!
       ).commit()
-    
+
     }
     true
   }
+
   companion object {
-    lateinit var gpsViewModel: GpsViewModel
+
+    lateinit var locationViewModel: LocationViewModel
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
 
-    gpsViewModel = ViewModelProvider(this).get(GpsViewModel::class.java)
+    locationViewModel = ViewModelProvider(this).get(LocationViewModel::class.java)
 
-
-    gpsViewModel.allGps.observe(this, Observer {gpsData->
-      if(gpsData==null){
-        gpsViewModel.insert(GPSData(0,15.0,15.0))
-      }else{
-        //TODO: 옵저버 해제
-        gpsViewModel.allGps.removeObservers(this)
-      }
-//      gpsData?.let {
-//        Logg.d("실행 돼??")
-//        val latlng = LatLng(it.lat, it.lng)
-//        Logg.d("abcd ${latlng.toString()}")
-//        val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latlng, 17f)
-//        traceMap!!.mMap.moveCamera(cameraUpdate)
-//      }
-    })
-
-//
-//    if(gpsViewModel.isUSER_ID.value == null){
-//      Logg.d("값이 없음")
-//      val gpsData = GPSData(0, 0.0,0.0  )
-//      gpsViewModel.insert(gpsData)
-//    }else {
-//      Logg.d("값이 있었음")
-//    }
+    // 앱이 처음 다운되었으면 광운대학교로 위치 Shared에 설정.
+    if (UserInfo.lat == 0.0f && UserInfo.lng == 0.0f) {
+      Logg.d("값 없음")
+      UserInfo.lat = 37.619606f
+      UserInfo.lng = 127.059798f
+    }else{
+      Logg.d("값 있음 : ${UserInfo.lat}, ${UserInfo.lng}")
+    }
 
 
     TTS.speech(" ")
