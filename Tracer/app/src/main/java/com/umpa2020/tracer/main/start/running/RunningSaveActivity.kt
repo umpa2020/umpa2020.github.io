@@ -160,6 +160,7 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
     infoData.maxSpeed = speedList.max()!!
     infoData.averageSpeed = speedList.average()
     infoData.routeGPXPath = "$MAP_ROUTE/${infoData.mapId}/${infoData.mapId}"
+    infoData.createTime = timestamp
 
     val rankingData = RankingData(
       UserInfo.nickname,
