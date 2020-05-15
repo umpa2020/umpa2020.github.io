@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical"
+  tools:context=".main.profile.myroute.ProfileRouteActivity">
+
+  <Toolbar
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:background="@color/white"
+    android:elevation="1dp"
+    android:contentInsetStart="0dp">
+
+    <TextView
+      android:id="@+id/profileRouteMyRoute"
+      style="@style/appBarText"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:gravity="center"
+      android:text="나의 업적"/>
+  </Toolbar>
+
+
+  <androidx.recyclerview.widget.RecyclerView
+    android:id="@+id/profileRecyclerAchivement"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="50dp"/>
+
+</FrameLayout>
