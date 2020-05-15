@@ -51,7 +51,7 @@
     <activity android:name=".main.profile.settting.MyInformationActivity" />
     <activity android:name=".main.profile.settting.AppSettingActivity" />
     <activity android:name=".main.profile.myroute.ProfileRouteActivity" />
-    <activity android:name=".main.profile.OtherProfileActivity" />
+    <activity android:name=".main.profile.ProfileActivity" />
 
     <service
       android:name=".locationBackground.LocationBackgroundService"

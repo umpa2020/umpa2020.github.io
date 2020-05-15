@@ -28,7 +28,7 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class OtherProfileActivity : AppCompatActivity(), OnSingleClickListener {
+class ProfileActivity : AppCompatActivity(), OnSingleClickListener {
   var userId = ""
   val progressBar = MyProgressBar()
 
@@ -38,6 +38,10 @@ class OtherProfileActivity : AppCompatActivity(), OnSingleClickListener {
     progressBar.show()
 
     userId = intent.extras?.getString(USER_ID).toString()
+    if (userId == UserInfo.autoLoginKey) {
+
+    }
+
 
     MainScope().launch {
       withContext(Dispatchers.IO) {
