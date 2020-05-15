@@ -26,7 +26,7 @@ import kotlinx.android.synthetic.main.recycler_rankfragment_topplayer_item.view.
 import java.util.*
 
 class RacingRecyclerViewAdapterMultiSelect(
-  val mydata: ArrayList<RankingData>,
+  val mydata: MutableList<RankingData>,
   val mapTitle: String,
   val tagContainerLayout: TagContainerLayout
 ) : RecyclerView.Adapter<RacingRecyclerViewAdapterMultiSelect.myViewHolder>() {

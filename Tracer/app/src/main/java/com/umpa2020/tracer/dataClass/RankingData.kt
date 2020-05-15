@@ -5,11 +5,11 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class RankingData(
-  val makerNickname: String? = null,
+  val makerId: String? = null,
   val challengerId: String?=null,
   val challengerNickname: String? = null,
   val challengerTime: Long? = null,
-  var bestTime: Boolean? = null,
+  var BestTime: Boolean = false,
   val maxSpeed: String? = null,
   val averageSpeed: String? = null,
   var racerGPX:String?=null

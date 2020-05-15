@@ -30,7 +30,7 @@ import com.umpa2020.tracer.extensions.toAge
 import com.umpa2020.tracer.extensions.show
 import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.network.FBProfileRepository
-import com.umpa2020.tracer.network.FBUserInfoRepository
+import com.umpa2020.tracer.network.FBUsersRepository
 import com.umpa2020.tracer.util.*
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_sign_up.*
@@ -57,7 +57,6 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
   private var selectedImageUri: Uri? = null
 
   private var nickname: String? = null
-  private var age: String? = null
   private var gender: String? = null
 
   // firebase DB
@@ -362,7 +361,7 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
         }
       }
       .addOnFailureListener { exception ->
-        Logg.w("Error getting documents: " + exception)
+        Logg.w("Error getting documents: $exception")
       }
       .addOnCompleteListener {
         if (flag == 3) {
@@ -406,13 +405,15 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
   private fun uploadUserInfo(nickname: String, birth: String, gender: String, dt: String) {
     // 회원 정보
     val data = hashMapOf(
-      "UID" to uid,
+      "userId" to uid,
       "nickname" to nickname,
       "birth" to birth,
       "gender" to gender,
+      "nickname" to nickname,
       "profileImagePath" to "Profile/$uid/$dt"
+    // TODO : 회원 탈퇴 : 얘가 살앗는지 죽었는지
     )
-    FBUserInfoRepository().createUserInfo(data)
+    FBUsersRepository().createUserInfo(data)
   }
 
   override fun onSingleClick(v: View?) {
@@ -447,7 +448,7 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
       R.id.sign_up_button -> {
 
         nickname = editNickname.text.toString()
-        age = editAge.text.toString()
+        birth = editAge.text.toString()
         gender = editGender.text.toString()
 
 
@@ -457,12 +458,16 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
           Logg.d(textInputLayoutArray[0].error.toString() + "if문 검사")
           getString(R.string.check_duplicates).show()
         } else { // 중복 확인 통과
+          Logg.d(
+            isInputCorrectData[0].toString() + ", " + birth!!.isNotEmpty()
+              .toString() + ", " + gender!!.isNotEmpty().toString()
+          )
+          if (isInputCorrectData[0] && birth!!.isNotEmpty() && gender!!.isNotEmpty()) {
 //          Logg.d(
 //            isInputCorrectData[0].toString() + ", " + age!!.isNotEmpty()
 //              .toString() + ", " + gender!!.isNotEmpty().toString()
 //          )
           // 단순 editText의 Empty유무 확인 => age는 이곳에서만 쓰이고 안쓰임. -> birth로 나이 관리.
-          if (isInputCorrectData[0] && age!!.isNotEmpty() && gender!!.isNotEmpty()) {
             if (selectedImageUri == null) // 프로필 이미지를 설정하지 않았을 때 = 사용자 입장에서 프로필 버튼을 누르지 않았음
             {
               basicProfileSettingPopup() //팝업창으로 물어봄

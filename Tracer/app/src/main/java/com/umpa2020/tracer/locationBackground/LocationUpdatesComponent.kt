@@ -45,14 +45,11 @@ object LocationUpdatesComponent {
   }
 
   fun onCreate(context: Context) {
-    Logg.i( "created...............")
     fusedLocationClient = LocationServices.getFusedLocationProviderClient(context) // 위치 서비스 클라이언트 만들기
-
     // create location request
     createLocationRequest()
     // get last known location
     getLastLocation()
-
     locationCallback = object : LocationCallback() {
       override fun onLocationResult(locationResult: LocationResult?) {
         super.onLocationResult(locationResult)
@@ -60,6 +57,7 @@ object LocationUpdatesComponent {
       }
     }
   }
+
   /**
    * start location updates
    */
@@ -85,7 +83,6 @@ object LocationUpdatesComponent {
    *  지연 시간: 위치 데이터의 제공 속도. 일반적으로 지연 시간이 적을수록 더 많은 배터리가 필요합니다.
    *  https://developer.android.com/guide/topics/location/battery?hl=ko#accuracy
    */
-
   private fun createLocationRequest() {
     locationRequest = LocationRequest.create() // 위치 요청
     locationRequest.run {

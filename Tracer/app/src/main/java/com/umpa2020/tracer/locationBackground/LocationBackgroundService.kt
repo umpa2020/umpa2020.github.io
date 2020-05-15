@@ -24,25 +24,14 @@ class LocationBackgroundService : IntentService("LocationBackgroundService"), Lo
    *  2. Service는 이벤트를 받고 어떤 동작을 수행
    *  3. Service는 Activity로 결과 이벤트를 전달
    */
-  var notification: Notification? = null
   override fun onCreate() {
     super.onCreate()
-    Logg.i( "onCreate ")
-
-    /**
-     *  위치 관련 생성.
-     */
-
-
-
-    Logg.d(this.toString())
-    LocationUpdatesComponent.setILocationProvider(this)
-    LocationUpdatesComponent.onCreate(this)
-    LocationUpdatesComponent.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-
-
-    notification = createNotification()
-    startForeground(1, notification)
+    LocationUpdatesComponent.apply {
+      setILocationProvider(this@LocationBackgroundService)
+      onCreate(this@LocationBackgroundService)
+      setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+    }
+    startForeground(1, createNotification())
   }
 
   // this makes service running continuously,commenting this start command method service runs only once
@@ -85,7 +74,6 @@ class LocationBackgroundService : IntentService("LocationBackgroundService"), Lo
     }
   }
 
-
   /**
    *  LocationComponent에서 locatoin결과 값 받아옴.
    *  => 이걸 이제 액티비티 or 프래그먼트에 전달해주는 것.
@@ -94,7 +82,6 @@ class LocationBackgroundService : IntentService("LocationBackgroundService"), Lo
   override fun onLocationUpdated(location: Location?) {
     location?.let { sendMessage(it) }
   }
-
 
   /**
    *  foreground에 알림창 만들기.

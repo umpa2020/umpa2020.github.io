@@ -3,58 +3,53 @@ package com.umpa2020.tracer.main.profile
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Parcel
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.extensions.format
+import com.umpa2020.tracer.extensions.image
 import com.umpa2020.tracer.extensions.m_s
 import com.umpa2020.tracer.extensions.prettyDistance
-import com.umpa2020.tracer.main.profile.myrecord.ProfileRecordActivity
+import com.umpa2020.tracer.main.profile.myActivity.ProfileActivityActivity
 import com.umpa2020.tracer.main.profile.myroute.ProfileRouteActivity
 import com.umpa2020.tracer.main.profile.settting.AppSettingActivity
+import com.umpa2020.tracer.network.BaseFB
 import com.umpa2020.tracer.network.FBProfileRepository
-import com.umpa2020.tracer.network.ProfileListener
 import com.umpa2020.tracer.util.Logg
+import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.UserInfo
+import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.fragment_profile.view.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 /**
  * A simple [Fragment] subclass.
  */
-class ProfileFragment : Fragment(), OnSingleClickListener {
+class ProfileFragment() : Fragment(), OnSingleClickListener, Parcelable {
   lateinit var root: View
   var bundle = Bundle()
+  val progressBar = MyProgressBar()
+
+  constructor(parcel: Parcel) : this() {
+    bundle = parcel.readBundle(Bundle::class.java.classLoader)!!
+  }
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-    Logg.i("onCreateView()")
-
-    val view = inflater.inflate(R.layout.fragment_profile, container, false)
-    root = view
-
-    // 공유 프리페런스에 있는 닉네임을 반영
-    view.profileIdTextView.text = UserInfo.nickname
-
-    // 설정 버튼 누르면
-    view.appSettingButton.setOnClickListener(this)
-
-    // 나의 루트 액티비티
-    view.profileRouteTextView.setOnClickListener(this)
-
-    // 나의 활동 액티비티
-    view.profileRecordTextView.setOnClickListener(this)
-
-
-    /*val recordTextView = view.findViewById<TextView>(R.id.profileRecordTextView)
-    recordTextView.setOnClickListener {
-      val nextIntent = Intent(activity, ProfileRecordActivity::class.java)
-      startActivity(nextIntent)
-    }*/
-
-    return view
+    root = inflater.inflate(R.layout.fragment_profile, container, false)
+    root.profileIdTextView.text = UserInfo.nickname
+    root.appSettingButton.setOnClickListener(this)
+    root.profileRouteTextView.setOnClickListener(this)
+    root.profileRecordTextView.setOnClickListener(this)
+    return root
   }
 
   override fun onSingleClick(v: View?) {
@@ -66,63 +61,52 @@ class ProfileFragment : Fragment(), OnSingleClickListener {
 
       R.id.profileRouteTextView -> { // 나의 루트 액티비티
         val nextIntent = Intent(activity, ProfileRouteActivity::class.java)
-        nextIntent.putExtra("nickname", UserInfo.nickname)
+        nextIntent.putExtra(BaseFB.USER_ID, UserInfo.autoLoginKey)
         startActivity(nextIntent)
       }
 
       R.id.profileRecordTextView -> { // 나의 활동 액티비티
-        val nextIntent = Intent(activity, ProfileRecordActivity::class.java)
-        //nextIntent.putExtra("nickname", UserInfo.nickname)
+        val nextIntent = Intent(activity, ProfileActivityActivity::class.java)
         startActivity(nextIntent)
       }
-
-
     }
   }
 
-  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-    super.onActivityResult(requestCode, resultCode, data)
-
-  }
-
-  override fun onStart() {
-    Logg.i("onStart()")
-    super.onStart()
-  }
-
   override fun onResume() {
-    Logg.i("onResume()")
+    super.onResume()
+    progressBar.show()
     /**
      * 프로필 이미지랑 총 시간,거리 셋팅을 하는 함수
      * 프로필 변경을 하고 나오는 경우에도 적용된
      * 사진을 바로 보기 위해 Resume에서 적용
      */
-    FBProfileRepository().getProfile(root, UserInfo.nickname) { distance, time ->
-      root.profileFragmentTotalDistance.text = distance.prettyDistance
-      root.profileFragmentTotalTime.text = time.toLong().format(m_s)
-    }
-    super.onResume()
-  }
-
-  override fun onPause() {
-    Logg.i("onPause()")
-    super.onPause()
-  }
-
-  override fun onStop() {
-    Logg.i("onStop()")
-    super.onStop()
-  }
-
-  private val profileListener = object : ProfileListener {
-    override fun getProfile(distance: Double, time: Double) {
-      // 총 거리와 시간을 띄워줌
-      root.profileFragmentTotalDistance.text = distance.prettyDistance
-      root.profileFragmentTotalTime.text = time.toLong().format(m_s)
-    }
-
-    override fun changeProfile() {
+    MainScope().launch {
+      withContext(Dispatchers.IO) {
+        FBProfileRepository().getProfile(UserInfo.autoLoginKey)
+      }.let {
+        profileImageView.image(it.imgPath)
+        profileFragmentTotalDistance.text = it.distance.prettyDistance
+        profileFragmentTotalTime.text = it.time.format(m_s)
+        progressBar.dismiss()
+      }
     }
   }
 
+  override fun writeToParcel(parcel: Parcel, flags: Int) {
+    parcel.writeBundle(bundle)
+  }
+
+  override fun describeContents(): Int {
+    return 0
+  }
+
+  companion object CREATOR : Parcelable.Creator<ProfileFragment> {
+    override fun createFromParcel(parcel: Parcel): ProfileFragment {
+      return ProfileFragment(parcel)
+    }
+
+    override fun newArray(size: Int): Array<ProfileFragment?> {
+      return arrayOfNulls(size)
+    }
+  }
 }

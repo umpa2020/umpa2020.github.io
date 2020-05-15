@@ -42,9 +42,9 @@ class SettingPreferenceFragment : PreferenceFragmentCompat() {
     val switchTTS: SwitchPreference? = findPreference("ttsNotificationSetting") as SwitchPreference?
 
     // Switch preference change listener
-    switchTTS?.setOnPreferenceChangeListener{ preference, newValue ->
-      if (newValue == true){
-      }else{
+    switchTTS?.setOnPreferenceChangeListener { preference, newValue ->
+      if (newValue == true) {
+      } else {
       }
 
       true
@@ -56,10 +56,10 @@ class SettingPreferenceFragment : PreferenceFragmentCompat() {
     val switchNotification: SwitchPreference? = findPreference("notificationSetting") as SwitchPreference?
 
     // Switch preference change listener
-    switchNotification?.setOnPreferenceChangeListener{ preference, newValue ->
-      if (newValue == true){
+    switchNotification?.setOnPreferenceChangeListener { preference, newValue ->
+      if (newValue == true) {
         //TODO 알람 ON 기능 추가
-      }else{
+      } else {
         //TODO 알람 OFF 기능 추가
       }
 
@@ -90,6 +90,8 @@ class SettingPreferenceFragment : PreferenceFragmentCompat() {
     }
 
     //회원 탈퇴 눌렀을 때
+    // TODO : 회원 탈퇴 : 죽여 and Shared 값 삭제
+
     if (preference?.key.equals("unregister")) {
       //TODO. 회원 탈퇴 기능 만들기
     }

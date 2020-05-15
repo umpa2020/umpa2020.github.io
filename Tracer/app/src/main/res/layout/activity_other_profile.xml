@@ -22,10 +22,10 @@
   </Toolbar>
 
   <LinearLayout
-    android:layout_below="@+id/profileToolBar"
     android:id="@+id/profileFragmentLinearLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_below="@+id/profileToolBar"
     android:layout_marginLeft="20dp"
     android:layout_marginRight="20dp"
     android:orientation="vertical">
@@ -119,6 +119,7 @@
   </LinearLayout>
 
   <RelativeLayout
+    android:layout_marginTop="300dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -146,34 +147,34 @@
 
   </RelativeLayout>
 
-  <!--     <RelativeLayout
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content">
+ <!-- <RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_marginTop="300dp"
+    android:layout_height="wrap_content">
 
-           <TextView
-               style="@style/divisionTextView"/>
+    <TextView style="@style/divisionTextView" />
 
-           <TextView
-               android:id="@+id/profileRecordTextView"
-               style="@style/ListDetail"
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:layout_marginLeft="20dp"
-               android:layout_marginRight="20dp"
-               android:padding="10dp"
-               android:text="나의 활동" />
+    <TextView
+      android:id="@+id/profileRecordTextView"
+      style="@style/ListDetail"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="20dp"
+      android:layout_marginRight="20dp"
+      android:padding="10dp"
+      android:text="Route" />
 
-           <TextView
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:layout_alignEnd="@id/profileRecordTextView"
-               android:layout_centerVertical="true"
-               android:paddingTop="5dp"
-               android:text=">  "
-               android:textSize="18dp" />
+    <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignEnd="@id/profileRecordTextView"
+      android:layout_centerVertical="true"
+      android:paddingTop="5dp"
+      android:text=">  "
+      android:textSize="18dp" />
 
 
-       </RelativeLayout>
--->
+  </RelativeLayout>-->
+
   <TextView style="@style/divisionTextView" />
 </RelativeLayout>

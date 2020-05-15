@@ -31,13 +31,14 @@
     android:text="@string/max_five_select"/>
 
   <co.lujun.androidtagview.TagContainerLayout
-    android:layout_below="@+id/Max3TextView"
     android:id="@+id/tagcontainerLayout1"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_below="@+id/Max3TextView"
+    android:layout_marginTop="0dp"
     android:padding="10dp"
-    app:container_border_color="#FFFFFFFF"
     app:container_background_color="#00000000"
+    app:container_border_color="#FFFFFFFF"
     app:container_gravity="left"
     app:horizontal_interval="10dp"
     app:tag_background_color="#FFFFFFFF"

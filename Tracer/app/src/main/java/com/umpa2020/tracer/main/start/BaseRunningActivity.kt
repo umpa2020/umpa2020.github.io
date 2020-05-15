@@ -46,17 +46,18 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
   var time = 0.0
   var previousLatLng = LatLng(0.0, 0.0)          //이전위
   var currentLatLng = LatLng(37.619742, 127.060836)
-
   var elevation = 0.0
   var speed = 0.0
 
   var userState = UserState.NORMAL       //사용자의 현재상태 달리기
-  var moving = false
-  var trkList: MutableList<WayPoint> = mutableListOf()
-  var wpList: MutableList<WayPoint> = mutableListOf()
-  var markerCount = 1
-  var timeWhenStopped: Long = 0
+  var moving = false  //유저가 움직인건지 gps가 튄건지 잡는 flag
+  var trkList: MutableList<WayPoint> = mutableListOf()  //사용자의 이동 경로 리스트
+  var wpList: MutableList<WayPoint> = mutableListOf()   //사용자의 체크포인트 리스트
+  var markerCount = 1   //현재 찍힌 마커의 개수
+  var timeWhenStopped: Long = 0   //일시정지된 시간
+  var cameraZoomSize = 0.0f   //camera zoom size
 
+  //공통으로 업데이트 해주는 View
   lateinit var chronometer: Chronometer
   lateinit var startButton: Button
   lateinit var stopButton: Button
@@ -146,13 +147,11 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
   open fun start() {
     userState = UserState.RUNNING
     anim()
-
     Logg.d(chronometer.base.toString())
     chronometer.base = SystemClock.elapsedRealtime()
+    chronometer.start()
 
     // DB에 시작 시간 업데이트
-
-    chronometer.start()
     notificationTextView.visibility = View.GONE
     lockScreen(true)
 

@@ -172,25 +172,6 @@ fun RouteGPX.classToGpx(folderPath: String): Uri {
     e.printStackTrace()
   }
 
-/*
-  val gpxBuilder = GPX.builder()
-    .addTrack { it.addSegment(TrackSegment.of(trkList)).build() }
-  wptList.forEach { gpxBuilder.addWayPoint(it) }
-  val gpx = gpxBuilder.build()
-  try {
-    Logg.d("make gpx file")
-    val saveFolder = File(folderPath) // 저장 경로
-    if (!saveFolder.exists()) {       //폴더 없으면 생성
-      saveFolder.mkdir()
-    }
-    val path = "route_${System.currentTimeMillis()}.gpx"
-    val myfile = File(saveFolder, path)         //로컬에 파일저장
-    GPX.write(gpx, (myfile.path))
-    Logg.d("start upload gpx")
-    return Uri.fromFile(myfile)
-  } catch (e: Exception) {
-    Logg.d(e.toString());
-  }*/
   return Uri.EMPTY
 }
 
@@ -204,16 +185,6 @@ fun String.gpxToClass(): RouteGPX {
         it.item(i).let { node ->
           node.toWayPoint()
         })
-      /*WayPoint(
-        node.value("lat").toDouble(),
-        node.value("lon").toDouble(),
-        node.value("ele").toDouble(),
-        node.value("speed").toDouble(),
-        node.value("name"),
-        node.value("desc"),
-        node.value("time").toLong(),
-        WayPointType.values()[node.value("type").toInt()]
-      )*/
     }
   }
   val trkList = mutableListOf<WayPoint>()
@@ -276,4 +247,11 @@ fun Location.toWayPoint(type: WayPointType): WayPoint {
     TURNING_RIGHT_POINT -> WayPoint(latitude, longitude, altitude, speed.toDouble(), "Turning Point", "Turn Right", time, type)
     TRACK_POINT -> WayPoint(latitude, longitude, altitude, speed.toDouble(), "Track Point", "Track Point", time, type)
   }
+}
+fun RouteGPX.getSpeed(): MutableList<Double> {
+  val speeds = mutableListOf<Double>()
+  trkList.forEach {
+    speeds.add(it.speed!!)
+  }
+  return speeds
 }

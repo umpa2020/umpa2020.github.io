@@ -97,7 +97,6 @@ class LoginActivity : AppCompatActivity(), OnSingleClickListener {
         // 구글 로그인에 성공했을때 넘어오는 토큰값을 가지고 있는 Task
         Logg.d(data.toString())
         val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-        Logg.d("여기까지 실행??")
         // Google Sign In was successful, authenticate with Firebase
         // 구글 로그인 성공
         // ApiException 캐스팅
@@ -145,13 +144,13 @@ class LoginActivity : AppCompatActivity(), OnSingleClickListener {
           Logg.d("signInWithCredential:success")
           // 로그인 성공
           uid = mAuth!!.uid.toString()
-          mFirestoreDB!!.collection("userinfo").whereEqualTo("UID", uid).get()
+          mFirestoreDB!!.collection("userinfo").whereEqualTo("USER_ID", uid).get()
             .addOnSuccessListener { result ->
               // Document found in the offline cache
               if (result.isEmpty) {
                 Logg.d("초기 가입인가")
                 val nextIntent = Intent(this@LoginActivity, SignUpActivity::class.java)
-                nextIntent.putExtra("user UID", mAuth!!.uid.toString())
+                nextIntent.putExtra("user UID", mAuth!!.uid)
                 nextIntent.putExtra("email", email)
                 startActivity(nextIntent)
                 finish()
