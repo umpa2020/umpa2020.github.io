@@ -27,6 +27,7 @@
   <string name="race">경기</string>
   <string name="start">시작</string>
   <string name="my_activity">나의 활동</string>
+  <string name="activity">활동</string>
   <string name="my_route">나의 루트</string>
   <string name="other_route">루트</string>
   <string name="race_result">경기 결과</string>
