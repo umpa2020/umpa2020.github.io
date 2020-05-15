@@ -17,12 +17,13 @@ import com.umpa2020.tracer.constant.Constants.Companion.MAX_DISTANCE
 import com.umpa2020.tracer.constant.Constants.Companion.MAX_SEEKERBAR
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.network.FBRankingRepository
-import com.umpa2020.tracer.network.RankingListener
 import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.fragment_ranking.*
 import kotlinx.android.synthetic.main.fragment_ranking.view.*
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 
 
 /**
@@ -35,10 +36,21 @@ class RankingFragment : Fragment(), OnSingleClickListener {
 
   var rootInfoDatas = arrayListOf<InfoData>()
   var distance = MAX_DISTANCE
-  val progressbar = MyProgressBar()
   var tuneDistance = 0
   var isLoding = false
   var limit = 0L
+
+  var rankingLatLng: LatLng? = null
+
+  val progressBar = MyProgressBar()
+
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+
+    // Shared에서 마지막 위치 가져오기
+    val latLng = LatLng(UserInfo.lat.toDouble(), UserInfo.lng.toDouble())
+    rankingLatLng = latLng
+  }
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -46,8 +58,6 @@ class RankingFragment : Fragment(), OnSingleClickListener {
     // Inflate the layout for this fragment
     val view = inflater.inflate(R.layout.fragment_ranking, container, false)
     root = view
-
-    rankingRepo = FBRankingRepository(rankingListener)
 
     view.rank_recycler_map.addOnScrollListener(object : RecyclerView.OnScrollListener() {
       override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -58,22 +68,22 @@ class RankingFragment : Fragment(), OnSingleClickListener {
           if (requireView().tuneRadioBtnExecute.isChecked) {
             requireView().rankingfiltermode.text = getString(R.string.execute)
             if (!isLoding) {
-              rankingRepo.listFilterRange(
-                UserInfo.rankingLatLng!!,
-                tuneDistance,
-                "execute",
-                15
-              )
+              MainScope().launch {
+                progressBar.show()
+                FBRankingRepository().listFilterRange(rankingLatLng!!, tuneDistance, "plays", limit).let {
+                  getRank(it, "plays")
+                }
+              }
             }
           } else {
             requireView().rankingfiltermode.text = getString(R.string.likes)
             if (!isLoding) {
-              rankingRepo.listFilterRange(
-                UserInfo.rankingLatLng!!,
-                tuneDistance,
-                "likes",
-                15
-              )
+              MainScope().launch {
+                progressBar.show()
+                FBRankingRepository().listFilterRange(rankingLatLng!!, tuneDistance, "likes", limit).let {
+                  getRank(it, "likes")
+                }
+              }
             }
           }
           isLoding = true
@@ -127,32 +137,29 @@ class RankingFragment : Fragment(), OnSingleClickListener {
 
       R.id.applyButton -> { //적용 버튼 누를때
         tuneDistance = distance
-        progressbar.show()
 
         rootInfoDatas.clear()
-        rankingRepo = FBRankingRepository(rankingListener)
 
-
-        if (UserInfo.rankingLatLng != null) {
+        if (rankingLatLng != null) {
           //실행순 버튼에 체크가 되어 있을 경우
           if (requireView().tuneRadioBtnExecute.isChecked) {
             requireView().rankingfiltermode.text = getString(R.string.execute)
 
-            rankingRepo.listRanking(
-              UserInfo.rankingLatLng!!,
-              tuneDistance,
-              "execute",
-              15
-            )
+            MainScope().launch {
+              progressBar.show()
+              FBRankingRepository().listRanking(rankingLatLng!!, tuneDistance, "plays", limit).let {
+                getRank(it, "plays")
+              }
+            }
           } else {
             requireView().rankingfiltermode.text = getString(R.string.likes)
 
-            rankingRepo.listRanking(
-              UserInfo.rankingLatLng!!,
-              tuneDistance,
-              "likes",
-              15
-            )
+            MainScope().launch {
+              progressBar.show()
+              FBRankingRepository().listRanking(rankingLatLng!!, tuneDistance, "likes", limit).let {
+                getRank(it, "likes")
+              }
+            }
           }
           disappearAnimation()
         }
@@ -161,36 +168,33 @@ class RankingFragment : Fragment(), OnSingleClickListener {
   }
 
   override fun onResume() {
-    if (UserInfo.rankingLatLng != null) {
+    if (rankingLatLng != null) {
       tuneDistance = distance
-      progressbar.show()
       limit = rootInfoDatas.size.toLong()
 
-      if (limit == 0L) limit = 15L
+      if (limit == 0L) limit = 20L
       else rootInfoDatas.clear()
 
-      rankingRepo = FBRankingRepository(rankingListener)
-
-      if (UserInfo.rankingLatLng != null) {
+      if (rankingLatLng != null) {
         //실행순 버튼에 체크가 되어 있을 경우
         if (requireView().tuneRadioBtnExecute.isChecked) {
           requireView().rankingfiltermode.text = getString(R.string.execute)
 
-          rankingRepo.listRanking(
-            UserInfo.rankingLatLng!!,
-            tuneDistance,
-            "execute",
-            limit
-          )
+          MainScope().launch {
+            progressBar.show()
+            FBRankingRepository().listRanking(rankingLatLng!!, tuneDistance, "plays", limit).let {
+              getRank(it, "plays")
+            }
+          }
         } else {
           requireView().rankingfiltermode.text = getString(R.string.likes)
 
-          rankingRepo.listRanking(
-            UserInfo.rankingLatLng!!,
-            tuneDistance,
-            "likes",
-            limit
-          )
+          MainScope().launch {
+            progressBar.show()
+            FBRankingRepository().listRanking(rankingLatLng!!, tuneDistance, "likes", limit).let {
+              getRank(it, "likes")
+            }
+          }
         }
       }
     }
@@ -225,22 +229,22 @@ class RankingFragment : Fragment(), OnSingleClickListener {
     requireView().tuneLinearLayout.startAnimation(animate)
   }
 
-  private val rankingListener = object : RankingListener {
-    override fun getRank(infoDatas: ArrayList<InfoData>, mode: String) {
-      rootInfoDatas.addAll(infoDatas)
-      if (rootInfoDatas.isEmpty()) {
-        rankingRecyclerRouteisEmpty.visibility = View.VISIBLE
-        progressbar.dismiss()
+  fun getRank(infoDatas: MutableList<InfoData>, mode: String) {
+    progressBar.dismiss()
+
+    rootInfoDatas.addAll(infoDatas)
+    if (rootInfoDatas.isEmpty()) {
+      rankingRecyclerRouteisEmpty.visibility = View.VISIBLE
+    } else {
+      //레이아웃 매니저, 어댑터 추가
+      if (rootInfoDatas.size < 21) {
+        rank_recycler_map.layoutManager = LinearLayoutManager(context)
+        rank_recycler_map.adapter = MapRankingAdapter(rootInfoDatas, mode)
       } else {
-        //레이아웃 매니저, 어댑터 추가
-        if (rootInfoDatas.size < 16) {
-          rank_recycler_map.layoutManager = LinearLayoutManager(context)
-          rank_recycler_map.adapter = MapRankingAdapter(rootInfoDatas, mode, progressbar)
-        } else {
-          rank_recycler_map.adapter!!.notifyDataSetChanged()
-        }
-        isLoding = false
+        rank_recycler_map.adapter!!.notifyDataSetChanged()
       }
+      isLoding = false
     }
   }
+
 }

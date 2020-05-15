@@ -8,15 +8,16 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.RankingData
-import com.umpa2020.tracer.extensions.MM_SS
 import com.umpa2020.tracer.extensions.format
+import com.umpa2020.tracer.extensions.m_s
 import com.umpa2020.tracer.main.profile.OtherProfileActivity
+import com.umpa2020.tracer.network.BaseFB
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.recycler_rankfragment_topplayer_item.view.*
 import java.util.*
 
-class RankRecyclerViewAdapterTopPlayer(val mydata: ArrayList<RankingData>, val mapTitle: String) :
+class RankRecyclerViewAdapterTopPlayer(val mydata: MutableList<RankingData>, val mapId: String) :
   RecyclerView.Adapter<RankRecyclerViewAdapterTopPlayer.myViewHolder>() {
   var context: Context? = null
 
@@ -28,7 +29,7 @@ class RankRecyclerViewAdapterTopPlayer(val mydata: ArrayList<RankingData>, val m
     //데이터 바인딩
     holder.rank.text = ranking.toString()
     holder.nickname.text = singleItem1.challengerNickname
-    holder.time.text = singleItem1.challengerTime!!.toLong().format(MM_SS)
+    holder.time.text = singleItem1.challengerTime!!.toLong().format(m_s)
 
     //ranking에 따라 트로피 색 바뀌게 하는 부분
     if (ranking == 1) {
@@ -43,13 +44,11 @@ class RankRecyclerViewAdapterTopPlayer(val mydata: ArrayList<RankingData>, val m
     } else
       holder.rank.setBackgroundResource(R.drawable.ic_4)
 
-    //클릭하면 맵 상세보기 페이지로 이동
     holder.itemView.setOnClickListener(object : OnSingleClickListener {
       override fun onSingleClick(v: View?) {
 
         val nextIntent = Intent(context, OtherProfileActivity::class.java)
-        nextIntent.putExtra("mapTitle", mapTitle) //nickname 정보 인텐트로 넘김
-        nextIntent.putExtra("nickname", holder.nickname.text.toString())
+        nextIntent.putExtra(BaseFB.USER_ID, singleItem1.challengerId)
         context!!.startActivity(nextIntent)
       }
     })
@@ -67,7 +66,6 @@ class RankRecyclerViewAdapterTopPlayer(val mydata: ArrayList<RankingData>, val m
 
   //item 사이즈, 데이터의 전체 길이 반환
   override fun getItemCount(): Int {
-    Logg.d("데이터 크기 " + mydata.size.toString())
     return mydata.size
   }
 

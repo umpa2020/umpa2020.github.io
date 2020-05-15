@@ -14,17 +14,16 @@
     <Toolbar
       android:layout_width="match_parent"
       android:layout_height="50dp"
-      android:layout_alignParentTop="true"
       android:background="@color/white"
-      android:elevation="1dp">
+      android:elevation="1dp"
+      android:contentInsetStart="0dp">
 
       <TextView
         style="@style/appBarText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginRight="12dp"
         android:gravity="center"
-        android:text="@string/map_record"></TextView>
+        android:text="@string/map_record"/>
     </Toolbar>
 
     <RelativeLayout
@@ -112,6 +111,25 @@
         android:textSize="20sp"
         android:layout_alignParentRight="true" />
 
+      <ImageView
+        android:id="@+id/rankRecyclerExecute"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="2dp"
+        android:layout_below="@id/rankRecyclerHeart"
+        android:layout_toLeftOf="@id/rankRecyclerExecuteCount"
+        android:src="@drawable/ic_sneaker_for_running" />
+
+      <TextView
+        android:id="@+id/rankRecyclerExecuteCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_below="@id/rankRecyclerHeart"
+        android:textSize="20sp"
+        android:layout_alignParentRight="true" />
+
 
       <TextView
         android:id="@+id/rankRecyclerHeartSwitch"
@@ -161,7 +179,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="0.5"
         android:gravity="center"
-        android:text="@string/ranking" />
+        android:text="@string/rank" />
 
       <TextView
         style="@style/ListTitle"

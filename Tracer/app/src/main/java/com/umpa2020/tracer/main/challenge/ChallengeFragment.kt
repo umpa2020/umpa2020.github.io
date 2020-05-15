@@ -1,27 +1,39 @@
 package com.umpa2020.tracer.main.challenge
 
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.size
-import androidx.databinding.DataBindingUtil
+import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.umpa2020.tracer.R
-import com.umpa2020.tracer.dataClass.AdChallengeData
 import com.umpa2020.tracer.dataClass.ChallengeData
+import com.umpa2020.tracer.extensions.M_D
+import com.umpa2020.tracer.extensions.Y_M_D
 import com.umpa2020.tracer.extensions.format
+import com.umpa2020.tracer.network.FBChallengeRepository
 import kotlinx.android.synthetic.main.fragment_challenge.*
 import kotlinx.android.synthetic.main.fragment_challenge.view.*
-import java.text.SimpleDateFormat
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import java.util.*
 
 class ChallengeFragment : Fragment() {
+  companion object {
+    const val DEFAULT_START_DATE = 1546300800000
+    const val DEFAULT_END_DATE = 1609372800000
+    const val DEFAULT_LOCALE = "전국"
+  }
 
-  var dateFormat = SimpleDateFormat("dd MMM, YYY", Locale.KOREA)
-  var adChallengeList = ArrayList<AdChallengeData>()
+  var from = DEFAULT_START_DATE // 경기 시작일 기본 값 (2019년 1월 1일)
+  var to = DEFAULT_END_DATE// 경기 종료일 기본 값 (2020년 12월 31일)
+  var locale = DEFAULT_LOCALE // 필터링 지역 기본 값
+
+  lateinit var regionChoicePopup: RegionChoicePopup // 지역 선택했을 때 팝업
+
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
   ): View? {
@@ -29,66 +41,99 @@ class ChallengeFragment : Fragment() {
     val view: View = inflater.inflate(R.layout.fragment_challenge, container, false)
     val now = Calendar.getInstance()
 
-    adChallengeList.add(AdChallengeData("test", R.drawable.ic_checkpoint_red))
-    adChallengeList.add(AdChallengeData("test2", R.drawable.ic_finish_point))
-    adChallengeList.add(AdChallengeData("test2", R.drawable.ic_checkpoint_gray))
-    adChallengeList.add(AdChallengeData("test2", R.drawable.ic_start_point))
-    view.adChallengeScrollViewPager.adapter = AdChallengePageAdapter(adChallengeList, requireContext())
-    view.adChallengeScrollViewPager.startAutoScroll()
-    //view.adChallengeCountTextView.text="${view.adChallengeScrollViewPager.currentItem}/${adChallengeList.size}"
+    view.btn_challenge_from.text = from.format(Y_M_D)
+    view.btn_challenge_to.text = to.format(Y_M_D)
+    view.btn_challenge_region.text = locale
 
-    val challengeDatas = arrayListOf<ChallengeData>()
-    val a=view.adChallengeScrollViewPager.currentItem
-    view.adChallengeScrollViewPager.addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
-      adChallengeCountTextView.text="${(view.adChallengeScrollViewPager.currentItem-a)%adChallengeList.size+1}/${adChallengeList.size}"
+    /**
+     * 배너에 들어가는 이미지와 아이디를 가져오는 리스너
+     */
+    MainScope().launch {
+      FBChallengeRepository().listChallengeBannerImagePath()?.let {
+        adChallengeScrollViewPager.adapter = AdChallengePageAdapter(it, requireContext())
+        adChallengeScrollViewPager.startAutoScroll()
+        val a = view.adChallengeScrollViewPager.currentItem
+        view.adChallengeScrollViewPager.addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
+          adChallengeCountTextView.text = "${(view.adChallengeScrollViewPager.currentItem - a) % it.size + 1}/${it.size}"
+        }
+      }
+      FBChallengeRepository().listChallengeData(from, to, "전국").let {
+        challengeDataList(it!!)
+      }
     }
-    var challengeData = ChallengeData(R.drawable.button_background,"제주 그란폰도","2019. 04. 01","제주")
-    challengeDatas.add(challengeData)
-    challengeData = ChallengeData(R.drawable.button_background,"철원 DMZ 랠리","2019. 07. 03","강원")
-    challengeDatas.add(challengeData)
-    challengeData = ChallengeData(R.drawable.button_background,"양양 그란폰도","2019. 08. 21","경기")
-    challengeDatas.add(challengeData)
-    challengeData = ChallengeData(R.drawable.button_background,"화천 DMZ 랠리","2019. 06. 21","강원")
-    challengeDatas.add(challengeData)
 
+    view.challengeAppBarText.setOnClickListener {
+      val intent = Intent(context, ChallengeDataSettingActivity::class.java)
+      startActivity(intent)
+    }
+
+    /**
+     * 경기 시작일 날짜 시작 클릭 리스너
+     */
     view.btn_challenge_from.setOnClickListener {
-     val datePicker = DatePickerDialog(
-       requireContext(), DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-         val selectedDate = Calendar.getInstance()
-         selectedDate.set(Calendar.YEAR, year)
-         selectedDate.set(Calendar.MONTH, month)
-         selectedDate.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-         btn_challenge_from.text = selectedDate.time.time.format(Locale.getDefault())
-       },
-       now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH)
-     )
-      datePicker.show()
-    }
-
-    view.btn_challenge_to.setOnClickListener{
       val datePicker = DatePickerDialog(
         requireContext(), DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-          val selectedDate = Calendar.getInstance()
-          selectedDate.set(Calendar.YEAR, year)
-          selectedDate.set(Calendar.MONTH, month)
-          selectedDate.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-          btn_challenge_to.text = selectedDate.time.time.format(Locale.getDefault())
+          val selectedDateFrom = Calendar.getInstance().apply {
+            set(Calendar.YEAR, year)
+            set(Calendar.MONTH, month)
+            set(Calendar.DAY_OF_MONTH, dayOfMonth)
+          }.timeInMillis
+          btn_challenge_from.text = selectedDateFrom.format(M_D)
+          from = selectedDateFrom
         },
         now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH)
       )
       datePicker.show()
     }
 
-    view.btn_challenge_region.setOnClickListener{
-      val regionChoicePopup = RegionChoicePopup(requireContext())
+    /**
+     * 경기 종료일 날짜 시작 클릭 리스너
+     */
+    view.btn_challenge_to.setOnClickListener {
+      val datePicker = DatePickerDialog(
+        requireContext(), DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
+          val selectedDateTo = Calendar.getInstance().apply {
+            set(Calendar.YEAR, year)
+            set(Calendar.MONTH, month)
+            set(Calendar.DAY_OF_MONTH, dayOfMonth)
+          }.timeInMillis
+          btn_challenge_to.text = selectedDateTo.format(M_D)
+          to = selectedDateTo
+        },
+        now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH)
+      )
+      datePicker.show()
+    }
+
+    /**
+     * 경기 지역 클릭 리스너
+     */
+    view.btn_challenge_region.setOnClickListener {
+      regionChoicePopup = RegionChoicePopup(requireContext(), View.OnClickListener { localeButton ->
+        locale = (localeButton as Button).text.toString()
+        btn_challenge_region.text = locale
+        regionChoicePopup.dismiss()
+      })
       regionChoicePopup.show()
     }
 
-    view.btn_challenge_search.setOnClickListener{
-
+    view.btn_challenge_search.setOnClickListener {
+      MainScope().launch {
+        FBChallengeRepository().listChallengeData(from, to, locale)?.let {
+          challengeDataList(it)
+        }
+      }
     }
-    view.challenge_recycler_view.adapter = ChallengeRecyclerViewAdapter(challengeDatas)
-    view.challenge_recycler_view.layoutManager = GridLayoutManager(context, 2)
     return view
   }
+
+  /**
+   * 챌린지 프래그먼트 리사이클러 등록하는 리스너
+   */
+  private fun challengeDataList(listChallengeData: MutableList<ChallengeData>) {
+    challenge_recycler_view.adapter = ChallengeRecyclerViewAdapter(listChallengeData)
+    challenge_recycler_view.layoutManager = GridLayoutManager(context, 2)
+  }
 }
+
+

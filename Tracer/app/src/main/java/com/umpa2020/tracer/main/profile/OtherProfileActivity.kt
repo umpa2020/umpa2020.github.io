@@ -5,19 +5,31 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.umpa2020.tracer.R
-import com.umpa2020.tracer.extensions.MM_SS
 import com.umpa2020.tracer.extensions.format
+import com.umpa2020.tracer.extensions.image
+import com.umpa2020.tracer.extensions.m_s
 import com.umpa2020.tracer.extensions.prettyDistance
 import com.umpa2020.tracer.main.profile.myroute.ProfileRouteActivity
+import com.umpa2020.tracer.network.BaseFB
+import com.umpa2020.tracer.network.BaseFB.Companion.USER_ID
 import com.umpa2020.tracer.network.FBProfileRepository
-import com.umpa2020.tracer.network.ProfileListener
+import com.umpa2020.tracer.network.FBUsersRepository
 import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.OnSingleClickListener
+import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_other_profile.*
-import org.jetbrains.anko.contentView
+import kotlinx.android.synthetic.main.activity_other_profile.profileFragmentTotalDistance
+import kotlinx.android.synthetic.main.activity_other_profile.profileFragmentTotalTime
+import kotlinx.android.synthetic.main.activity_other_profile.profileIdTextView
+import kotlinx.android.synthetic.main.activity_other_profile.profileImageView
+import kotlinx.android.synthetic.main.fragment_profile.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class OtherProfileActivity : AppCompatActivity(), OnSingleClickListener {
-  var nickname = ""
+  var userId = ""
   val progressBar = MyProgressBar()
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,39 +37,33 @@ class OtherProfileActivity : AppCompatActivity(), OnSingleClickListener {
     setContentView(R.layout.activity_other_profile)
     progressBar.show()
 
-    val intent = intent
-    //전달 받은 값으로 Title 설정
-    val mapTitle = intent.extras?.getString("mapTitle").toString()
-    nickname = intent.extras?.getString("nickname").toString()
+    userId = intent.extras?.getString(USER_ID).toString()
 
-    // 넘어온 닉네임으로 현재 액티비티 닉네임 적용
-    profileIdTextView.text = nickname
+    MainScope().launch {
+      withContext(Dispatchers.IO) {
+        FBProfileRepository().getProfile(userId)
+      }.let {
+        profileImageView.image(it.imgPath)
+        profileFragmentTotalDistance.text = it.distance.prettyDistance
+        profileFragmentTotalTime.text = it.time.format(m_s)
+        progressBar.dismiss()
+      }
+      FBProfileRepository().getUserNickname(userId).let {
+        profileIdTextView.text = it
+      }
+    }
 
-    FBProfileRepository().getProfile(contentView!!, nickname, profileListener)
     otherProfileRouteTextView.setOnClickListener(this)
   }
 
   override fun onSingleClick(v: View?) {
-    when(v!!.id){
-      R.id.otherProfileRouteTextView->{
+    when (v!!.id) {
+      R.id.otherProfileRouteTextView -> {
         // 루트 클릭하면 해당 사용자가 만든 루트 볼 수 잇는 페이지로 이동
         val nextIntent = Intent(this, ProfileRouteActivity::class.java)
-        nextIntent.putExtra("nickname", nickname)
+        nextIntent.putExtra(BaseFB.USER_ID, userId)
         startActivity(nextIntent)
       }
     }
   }
-
-  private val profileListener = object : ProfileListener {
-    override fun getProfile(distance: Double, time: Double) {
-      // 총 거리와 시간을 띄워줌
-      profileFragmentTotalDistance.text = distance.prettyDistance
-      profileFragmentTotalTime.text = time.toLong().format(MM_SS)
-    }
-
-    override fun changeProfile() {
-
-    }
-  }
-
 }

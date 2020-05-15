@@ -103,7 +103,6 @@ class LocationBackgroundService : IntentService("LocationBackgroundService"),
     }
   }
 
-
   /**
    *  LocationComponent에서 locatoin결과 값 받아옴.
    *  => 이걸 이제 액티비티 or 프래그먼트에 전달해주는 것.

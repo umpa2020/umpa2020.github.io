@@ -7,7 +7,9 @@ import android.os.Handler
 import android.os.SystemClock
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.umpa2020.tracer.lockscreen.util.LocationViewModel
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.locationBackground.LocationBackgroundService
@@ -47,15 +49,32 @@ class MainActivity : AppCompatActivity() {
         R.id.container,
         selectedFragment!!
       ).commit()
-    
+
     }
     true
   }
 
+  companion object {
+
+    lateinit var locationViewModel: LocationViewModel
+  }
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    Logg.d("Hello I'm New")
     setContentView(R.layout.activity_main)
+
+    locationViewModel = ViewModelProvider(this).get(LocationViewModel::class.java)
+
+    // 앱이 처음 다운되었으면 광운대학교로 위치 Shared에 설정.
+    if (UserInfo.lat == 0.0f && UserInfo.lng == 0.0f) {
+      Logg.d("값 없음")
+      UserInfo.lat = 37.619606f
+      UserInfo.lng = 127.059798f
+    }else{
+      Logg.d("값 있음 : ${UserInfo.lat}, ${UserInfo.lng}")
+    }
+
+
     TTS.speech(" ")
     startService() // 서비스 시작.
 
@@ -92,7 +111,6 @@ class MainActivity : AppCompatActivity() {
 
   override fun onStart() {
     super.onStart()
-    Logg.d("onStart()")
     Logg.d(selectedFragment.toString())
     Logg.d(selectedFragment!!.id.toString())
 
@@ -150,12 +168,6 @@ class MainActivity : AppCompatActivity() {
         startService(it)
       }
     }
-  }
-
-  companion object {
-    val TAG = "service"
-    private const val REQUEST_PERMISSIONS_REQUEST_CODE = 34
-    const val MESSENGER_INTENT_KEY = "msg-intent-key"
   }
 
   override fun onBackPressed() {

@@ -5,8 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.text.Editable
@@ -28,12 +27,14 @@ import com.jakewharton.rxbinding2.widget.RxTextView
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.extensions.show
+import com.umpa2020.tracer.extensions.toAge
 import com.umpa2020.tracer.main.MainActivity
+import com.umpa2020.tracer.network.FBProfileRepository
+import com.umpa2020.tracer.network.FBUsersRepository
 import com.umpa2020.tracer.util.*
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_sign_up.*
 import kotlinx.android.synthetic.main.signup_toolbar.*
-import java.io.ByteArrayOutputStream
 import java.util.*
 import java.util.regex.Pattern
 
@@ -53,11 +54,9 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
   // 카메라 requestCode
   private val PICK_FROM_ALBUM = 1
 
-  private var bitmapImg: Bitmap? = null
-  private var basicBitmapImg: Bitmap? = null
+  private var selectedImageUri: Uri? = null
 
   private var nickname: String? = null
-  private var age: String? = null
   private var gender: String? = null
 
   // firebase DB
@@ -148,7 +147,8 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
    */
   private fun goToAlbum() {
     val intent = Intent(Intent.ACTION_PICK)
-    intent.type = MediaStore.Images.Media.CONTENT_TYPE
+    intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
+    //intent.type = MediaStore.Images.Media.CONTENT_TYPE
     startActivityForResult(intent, PICK_FROM_ALBUM)
   }
 
@@ -160,7 +160,7 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
     super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     success_request = requestCode
     if (requestCode == success_request) {
-      var length = permissions.size
+      val length = permissions.size
       for (i in 0 until length - success_request) {
         if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
           // 동의
@@ -204,30 +204,35 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
     //Nickname
     val disposableNick = RxTextView.textChanges(inputDataField[0])
       .map { t -> t.isEmpty() || !Pattern.matches(Constants.NICKNAME_RULE, t) }
-      .subscribe({ it ->
+      .subscribe({
         //inputDataField[2].setText("")
         reactiveInputTextViewData(0, it)
       }) {
         //Error Block
+        it.printStackTrace()
       }
 
     val disposableAge = RxTextView.textChanges(inputDataField[1])
       .map { t -> t.isEmpty() || Pattern.matches(Constants.AGE_RULE, t) }
-      .subscribe({ it ->
+      .subscribe({
         //inputDataField[2].setText("")
         reactiveInputTextViewData(1, it)
       }) {
         //Error Block
+        it.printStackTrace()
       }
 
+//    val compositeDisposable=CompositeDisposable()
+
     val disposableGender = RxTextView.textChanges(inputDataField[2])
-      .map { t -> t.isEmpty() || Pattern.matches(Constants.GENDER_RULE, t) }
-      .subscribe({ it ->
+      .map { t -> t.isEmpty() || !Pattern.matches(Constants.GENDER_RULE, t) }
+      .subscribe({
         //inputDataField[2].setText("")
         Logg.d("성별 : " + it.toString())
         reactiveInputTextViewData(2, it)
       }) {
         //Error Block
+        it.printStackTrace()
       }
     viewDisposables.addAll(
       disposableNick,
@@ -257,8 +262,8 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
     reactiveCheckCorrectData()
   }
 
-  var options: BitmapFactory.Options? = null
 
+  var birth : String? = null
   // intent 결과 받기
   override fun onActivityResult(requestCode: Int, resultCode: Int, intentData: Intent?) {
     super.onActivityResult(requestCode, resultCode, intentData)
@@ -266,24 +271,23 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
     if (requestCode == 102 && resultCode == RESULT_OK) {
       editGender.setText(intentData!!.getStringExtra("Gender"))
     }
+    // 생년월일 yyyyMMdd 형식으로 전달 받음.
+    if (requestCode == 101 && resultCode == RESULT_OK) {
+      // 년월일 yyyymmdd로 전달 받음
+      Logg.d(intentData!!.getStringExtra("Age"))
+      birth = intentData!!.getStringExtra("Age")
+      val age = toAge(intentData.getStringExtra("Age")!!)
+
+      editAge.setText(age)
+    }
 
     // 앨범
     if (requestCode == PICK_FROM_ALBUM) {
-//
       if (resultCode == RESULT_OK) {
-        try {
-          val inputStream = intentData!!.data?.let { contentResolver.openInputStream(it) }
-
-          // 프로필 사진을 비트맵으로 변환
-          options = BitmapFactory.Options()
-          options!!.inSampleSize = 2
-          bitmapImg = BitmapFactory.decodeStream(inputStream, null, options)
-          inputStream!!.close()
-
-          profileImage.setImageBitmap(bitmapImg)
+        if (intentData != null) {
+          selectedImageUri = intentData.data
+          profileImage.setImageURI(selectedImageUri)
           profileImage.scaleType = ImageView.ScaleType.CENTER_CROP
-        } catch (e: java.lang.Exception) {
-
         }
       } else if (resultCode == RESULT_CANCELED) {
         //사진 선택 취소
@@ -317,11 +321,12 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
   }
 
   // 서버로의 회원가입 진행
-  private fun signUp(bitmapImg: Bitmap, nickname: String, age: String, gender: String) {
+  private fun signUp(imageUri: Uri, nickname: String, birth: String, gender: String) {
     if (flag == 1) {// false이면 닉네임 체크가 안된 것. 그러면 실행되면 안돼
+      Logg.d(birth)
       val timestamp = Date().time
-      uploadProfileImage(bitmapImg, nickname, age, gender, timestamp.toString())
-      uploadUserInfo(nickname, age, gender, timestamp.toString())
+      uploadProfileImage(imageUri, nickname, birth, gender, timestamp.toString())
+      uploadUserInfo(nickname, birth, gender, timestamp.toString())
     } else if (flag == 3) {
       textInputLayoutArray[0].setErrorTextColor(resources.getColorStateList(R.color.red, null))
       textInputLayoutArray[0].error = getString(R.string.check_duplicates)
@@ -356,7 +361,7 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
         }
       }
       .addOnFailureListener { exception ->
-        Logg.w("Error getting documents: " + exception)
+        Logg.w("Error getting documents: $exception")
       }
       .addOnCompleteListener {
         if (flag == 3) {
@@ -375,51 +380,40 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
   }
 
   private fun uploadProfileImage(
-    bitmapImg: Bitmap,
+    imageUri: Uri,
     nickname: String,
-    age: String,
+    birth: String,
     gender: String,
     timestamp: String
   ) {
-    // 현재 날짜를 프로필 이름으로 nickname/Profile/현재날짜(영어).jpg 경로 만들기
+    // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
+    // ...
+    UserInfo.autoLoginKey = uid!!
+    UserInfo.email = email!!
+    UserInfo.nickname = nickname // Shared에 nickname저장.
+    UserInfo.birth = birth
+    UserInfo.gender = gender
 
-    val profileRef = mStorageReference!!.child("Profile").child(uid!!).child(timestamp + ".jpg")
-    // 이미지
-    val bitmap = bitmapImg
-    val baos = ByteArrayOutputStream()
-    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-    val imageData = baos.toByteArray()
-    val uploadTask = profileRef.putBytes(imageData)
-    uploadTask.addOnFailureListener {
-      // Handle unsuccessful uploads
-    }.addOnSuccessListener {
-      // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
-      // ...
-      UserInfo.autoLoginKey = uid!!
-      UserInfo.email = email!!
-      UserInfo.nickname = nickname // Shared에 nickname저장.
-      UserInfo.age = age
-      UserInfo.gender = gender
-      val nextIntent = Intent(this@SignUpActivity, MainActivity::class.java)
-      startActivity(nextIntent)
-      progressbar.dismiss()
-      finish()
-    }
+    FBProfileRepository().uploadProfileImage(imageUri, timestamp)
+
+    val nextIntent = Intent(this@SignUpActivity, MainActivity::class.java)
+    startActivity(nextIntent)
+    progressbar.dismiss()
+    finish()
   }
 
-  private fun uploadUserInfo(nickname: String, age: String, gender: String, dt: String) {
+  private fun uploadUserInfo(nickname: String, birth: String, gender: String, dt: String) {
     // 회원 정보
     val data = hashMapOf(
-      "UID" to uid,
+      "userId" to uid,
       "nickname" to nickname,
-      "age" to age,
+      "birth" to birth,
       "gender" to gender,
-      "profileImagePath" to "Profile/$uid/$dt.jpg"
+      "nickname" to nickname,
+      "profileImagePath" to "Profile/$uid/$dt"
+    // TODO : 회원 탈퇴 : 얘가 살앗는지 죽었는지
     )
-    mFirestoreDB!!.collection("userinfo").document(uid!!).set(data)
-      .addOnSuccessListener { Logg.d("DocumentSnapshot successfully written!") }
-      .addOnFailureListener { e -> Logg.w("Error writing document$e") }
-
+    FBUsersRepository().createUserInfo(data)
   }
 
   override fun onSingleClick(v: View?) {
@@ -428,10 +422,11 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
         finish()
       }
       R.id.editAge -> {
-
+        val intent = Intent(this, AgeSelectActivity::class.java)
+        startActivityForResult(intent, 101)
       }
       R.id.editGender -> {
-        var intent = Intent(this, GenderSelectActivity::class.java)
+        val intent = Intent(this, GenderSelectActivity::class.java)
         startActivityForResult(intent, 102)
         editAge.clearFocus()
         editNickname.clearFocus()
@@ -453,23 +448,30 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
       R.id.sign_up_button -> {
 
         nickname = editNickname.text.toString()
-        age = editAge.text.toString()
         gender = editGender.text.toString()
 
 
-        Logg.d("가입 버튼 눌렀을 때 : $nickname, $age, $gender")
+        Logg.d("가입 버튼 눌렀을 때 : $nickname, $birth, $gender")
 
         if (textInputLayoutArray[0].error != getString(R.string.nickname_available)) { //무조건 중복 확인 버튼을 눌러야만 회원가입 가능하게 함
           Logg.d(textInputLayoutArray[0].error.toString() + "if문 검사")
           getString(R.string.check_duplicates).show()
         } else { // 중복 확인 통과
-          Logg.d(isInputCorrectData[0].toString() + ", " + age!!.isNotEmpty().toString() + ", " + gender!!.isNotEmpty().toString())
-          if (isInputCorrectData[0] && age!!.isNotEmpty() && gender!!.isNotEmpty()) {
-            if (bitmapImg == null) // 프로필 이미지를 설정하지 않았을 때 = 사용자 입장에서 프로필 버튼을 누르지 않았음
+          Logg.d(
+            isInputCorrectData[0].toString() + ", " + birth!!.isNotEmpty()
+              .toString() + ", " + gender!!.isNotEmpty().toString()
+          )
+          if (isInputCorrectData[0] && birth!!.isNotEmpty() && gender!!.isNotEmpty()) {
+//          Logg.d(
+//            isInputCorrectData[0].toString() + ", " + age!!.isNotEmpty()
+//              .toString() + ", " + gender!!.isNotEmpty().toString()
+//          )
+          // 단순 editText의 Empty유무 확인 => age는 이곳에서만 쓰이고 안쓰임. -> birth로 나이 관리.
+            if (selectedImageUri == null) // 프로필 이미지를 설정하지 않았을 때 = 사용자 입장에서 프로필 버튼을 누르지 않았음
             {
               basicProfileSettingPopup() //팝업창으로 물어봄
             } else { // 프로필 이미지 있는 경우 설정한 프로필로 가입하기
-              signUp(bitmapImg!!, nickname!!, age!!, gender!!)
+              signUp(selectedImageUri!!, nickname!!, birth!!, gender!!)
               progressbar.show() //메인창으로 넘어가기 전까지 프로그래스 바 띄움
             }
           }
@@ -499,8 +501,10 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
       View.OnClickListener {
         //Yes 버튼 눌렀을 때
         //기본 이미지로 설정
-        basicBitmapImg = BitmapFactory.decodeResource(resources, R.drawable.basic_profile)
-        signUp(basicBitmapImg!!, nickname!!, age!!, gender!!)
+        val basicImageUri = Uri.parse(
+          "android.resource://" + this.packageName.toString() + "/drawable/basic_profile"
+        )
+        signUp(basicImageUri!!, nickname!!, birth!!, gender!!)
         noticePopup.dismiss()
         progressbar.show() //기본이미지로 회원가입이 바로 진행되도록 프로그레스바 띄움
       },

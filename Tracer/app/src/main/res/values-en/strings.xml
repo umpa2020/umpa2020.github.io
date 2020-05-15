@@ -15,7 +15,7 @@
   <string name="txtInputInfoNick">3-12 characters including uppercase, lowercase and numbers in English</string>
   <string name="txtInputInfoPWCHECK">Please check your password.</string>
   <string name="txtInputInfoEmail">This is not an exact email.</string>
-  <string name="txtInputInfoAge">Please enter your age.</string>
+  <string name="txtInputInfoAge">Select the date of birth.</string>
   <string name="txtInputInfoGender">Please select a gender.</string>
 
   <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyAymdWK_9DnHXKY19cuUvg0oMo_FItNvQ0</string>
@@ -33,7 +33,7 @@
   <string name="record">Record</string>
   <string name="my">My</string>
   <string name="maker">Maker</string>
-  <string name="ranking">Ranking</string>
+  <string name="rank">Rank</string>
   <string name="player">Player</string>
   <string name="laptime">Lap Time</string>
   <string name="map_record">Map Record</string>
@@ -80,7 +80,7 @@
   <string name="yes">Yes</string>
   <string name="no">No</string>
   <string name="noroute">There are currently no saved routes.</string>
-  <string name="no_activity">There ar currently no activities.</string>
+  <string name="no_activity">There are currently no activities.</string>
   <string name="profile_information">My Profile</string>
   <string name="profile_image_change">Image Change</string>
   <string name="email_">EMAIL</string>
@@ -119,7 +119,7 @@
   <string name="lockScreenCheck">Lock Screen</string>
 
   <!-- LcokScreen -->
-  <string name="km">Km</string>
+  <string name="m">m</string>
   <string name="km_h">Km/h</string>
   <string name="unlock">Unlock</string>
   <!-- TTS -->
@@ -136,9 +136,9 @@
   <string name="recording">Recording</string>
   <string name="around">Around</string>
   <string name="start_running">Press the start button to start running.</string>
-  <string name="Distance_km">Distance (km)</string>
+  <string name="Distance_km">Distance</string>
   <string name="Time">Time</string>
-  <string name="speed_km">Speed (km/h)</string>
+  <string name="speed_km">Speed</string>
   <string name="pause_mode">When you pause\nCompetition mode upload is not possible.\n\nDo you want to pause?</string>
   <string name="twohundred_save">If you stop when the distance is less than 200m,\nyou cannot save.\n\nWould you like to stop?</string>
   <string name="stop_save">If you stop now,\nsaving is not possible.\n\nWould you like to stop?</string>

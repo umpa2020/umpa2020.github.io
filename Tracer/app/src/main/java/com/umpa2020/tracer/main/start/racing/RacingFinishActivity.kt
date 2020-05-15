@@ -1,29 +1,26 @@
 package com.umpa2020.tracer.main.start.racing
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import com.bumptech.glide.Glide
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.ActivityData
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.RankingData
 import com.umpa2020.tracer.dataClass.RouteGPX
-import com.umpa2020.tracer.extensions.MM_SS
-import com.umpa2020.tracer.extensions.format
-import com.umpa2020.tracer.extensions.prettyDistance
-import com.umpa2020.tracer.extensions.toRank
+import com.umpa2020.tracer.extensions.*
 import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.network.*
+import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_racing_finish.*
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
+import java.io.File
 import java.util.*
 
 
@@ -31,12 +28,10 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
 
   var activity = this
   lateinit var racerData: InfoData
-  lateinit var makerData: InfoData
-  var arrRankingData: ArrayList<RankingData> = arrayListOf()
+  lateinit var arrRankingData: MutableList<RankingData>
   lateinit var progressbar: ProgressBar
 
   var racerSpeeds = mutableListOf<Double>()
-  var makerSpeeds = mutableListOf<Double>()
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -49,38 +44,35 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
     racerData = intent.getParcelableExtra("InfoData") as InfoData
     val result = intent.extras!!.getBoolean("Result")
     val racerGPX = intent.getParcelableExtra<RouteGPX>("RouteGPX")
-    val mapRouteGPX = intent.getParcelableExtra<RouteGPX>("MapRouteGPX")
     racerSpeeds = racerGPX!!.getSpeed()
-    makerSpeeds = mapRouteGPX!!.getSpeed()
-
-
-    // 메이커 인포데이터를 가져오는 함수
-    FBRacingRepository().getMakerData(racerData, getMakerDataListener)
-
-    // 유저 인포에 해당 유저가 이 맵을 뛰었다는
-    // 히스토리를 더하는 함수
-    FBRacingRepository().createUserInfoRacing(racerData)
-    val timestamp = Date().time
-
-    if (result) {
-      val activityData =
-        ActivityData(racerData.mapTitle, timestamp.toString(), "racing go the distance")
-
-      FBUserActivityRepository().createUserHistory(activityData)
-    } else {
-      val activityData = ActivityData(racerData.mapTitle, timestamp.toString(), "racing fail")
-      FBUserActivityRepository().createUserHistory(activityData)
-    }
-
-
-    FBRacingRepository().createRankingData(
-      result,
-      racerData,
-      racingFinishListener,
-      racerSpeeds,
-      racerGPX
+    val rankingData = RankingData(
+      racerData.makerId,
+      UserInfo.autoLoginKey,
+      UserInfo.nickname,
+      racerData.time,
+      false,
+      racerSpeeds.max().toString(),
+      racerSpeeds.average().toString(),
+      null
     )
 
+    val saveFolder = File(App.instance.filesDir, "routeGPX") // 저장 경로
+    if (!saveFolder.exists()) {       //폴더 없으면 생성
+      saveFolder.mkdir()
+    }
+    val racerGpxFile = racerGPX.classToGpx(saveFolder.path)
+
+    MainScope().launch {
+      // 유저 히스토리 등록
+      FBUsersRepository().createUserHistory(
+        ActivityData(racerData.mapId, Date().time, racerData.distance, racerData.time, if (result) "racing go the distance" else "racing fail")
+      )
+      //성공했다면 랭킹에 등록
+      if (result) FBRacingRepository().createRankingData(racerData, rankingData, racerGpxFile)
+      arrRankingData = FBMapRepository().listMapRanking(racerData.mapId)
+      updateRankingUI(arrRankingData)
+      progressbar.dismiss()
+    }
     OKButton.setOnClickListener(this)
     otherPeopleProfileSelect.setOnClickListener(this)
   }
@@ -97,156 +89,131 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
       // 리스트 선택화면으로 넘어감
       R.id.otherPeopleProfileSelect -> {
         val intent = Intent(this, AllRankingActivity::class.java)
-        intent.putExtra("arrRankingData", arrRankingData)
+        intent.putParcelableArrayListExtra("arrRankingData", ArrayList(arrRankingData))
         startActivityForResult(intent, 100)
       }
     }
   }
 
-  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-    if (resultCode == 100) {
+  /*
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
       if (resultCode == 100) {
-        val getNickname = data!!.getStringExtra("result")
-        RacingFinishAnalysisOtherNickname.text = getNickname
+        if (resultCode == 100) {
+          val getNickname = data!!.getStringExtra("result")
+          RacingFinishAnalysisOtherNickname.text = getNickname
 
-        progressbar.show()
-        FBRacingRepository().getOtherData(racerData.mapTitle!!, getNickname!!, racingFinishListener)
-        /**
-         * TODO 아래 코드 원래 있던 코드를 재활용 안하고 새로 했는데 - 정빈
-         *
-         * 1. AllRankingActivity 안에 RecyclerView에서 종료를 시키고 있어서
-         *    제대로 된 종료가 안되서
-         * 2. 원래 있던 코드를 사용하면 APP.instance 부분이 오류가 나게 됨
-         *
-         */
-        val db = FirebaseFirestore.getInstance()
-        var profileImagePath = "init"
-        db.collection("userinfo").whereEqualTo("nickname", getNickname)
-          .get()
-          .addOnSuccessListener { result ->
-            if (!result.isEmpty) {
-              for (document in result) {
-                profileImagePath = document.get("profileImagePath") as String
-                break
-              }
-              // glide imageview 소스
-              // 프사 설정하는 코드 db -> imageView glide
-              val storage = FirebaseStorage.getInstance()
-              val profileRef = storage.reference.child(profileImagePath)
-
-              profileRef.downloadUrl.addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                  // Glide 이용하여 이미지뷰에 로딩
-                  Glide.with(App.instance.currentActivity() as Activity)
-                    .load(task.result)
-                    .override(1024, 980)
-                    .into(RacingFinishAnalysisOtherProfile)
-                  progressbar.dismiss()
-                } else {
-                  progressbar.dismiss()
+          progressbar.show()
+          FBRacingRepository().getOtherData(racerData.mapTitle!!, getNickname!!)
+          /**
+           * TODO 아래 코드 원래 있던 코드를 재활용 안하고 새로 했는데 - 정빈
+           *
+           * 1. AllRankingActivity 안에 RecyclerView에서 종료를 시키고 있어서
+           *    제대로 된 종료가 안되서
+           * 2. 원래 있던 코드를 사용하면 APP.instance 부분이 오류가 나게 됨
+           *
+           */
+          val db = FirebaseFirestore.getInstance()
+          var profileImagePath = "init"
+          db.collection(USERS).whereEqualTo("nickname", getNickname)
+            .get()
+            .addOnSuccessListener { result ->
+              if (!result.isEmpty) {
+                for (document in result) {
+                  profileImagePath = document.get("profileImagePath") as String
+                  break
                 }
+                // glide imageview 소스
+                // 프사 설정하는 코드 db -> imageView glide
+                val storage = FirebaseStorage.getInstance()
+                val profileRef = storage.reference.child(profileImagePath)
+
+                profileRef.downloadUrl.addOnCompleteListener { task ->
+                  if (task.isSuccessful) {
+                    // Glide 이용하여 이미지뷰에 로딩
+                    RacingFinishAnalysisOtherProfile.image(task.result!!)
+                    progressbar.dismiss()
+                  } else {
+                    progressbar.dismiss()
+                  }
+                }
+              } else {
+                RacingFinishAnalysisOtherNickname.text = "탈퇴한 회원입니다."
               }
-            } else {
-              RacingFinishAnalysisOtherNickname.text = "탈퇴한 회원입니다."
+
             }
-
-          }
-        //FBProfileRepository().getProfileImage(RacingFinishAnalysisOtherProfile, getNickname!!)
+          //FBProfileRepository().getProfileImage(RacingFinishAnalysisOtherProfile, getNickname!!)
+        }
       }
+      super.onActivityResult(requestCode, resultCode, data)
     }
-    super.onActivityResult(requestCode, resultCode, data)
-  }
 
-  private fun RouteGPX.getSpeed(): MutableList<Double> {
-    val speeds = mutableListOf<Double>()
-    trkList.forEach {
-      speeds.add(it.speed.get().toDouble())
-    }
-    return speeds
-  }
-
+  */
   private fun setMyUiData(
     racerSpeeds: MutableList<Double>,
-    makerSpeeds: MutableList<Double>,
     resultRankText: Int
   ) {
+    MainScope().launch {
+      // 나의 기록
+      FBProfileRepository().getProfileImage(UserInfo.autoLoginKey)?.let { racingFinishProfileImageView.image(it) }
+      RacingFinishMyNickName.text = UserInfo.nickname
 
-    // 나의 기록
-    FBProfileRepository().getProfileImage(racingFinishProfileImageView, UserInfo.nickname)
-    RacingFinishMyNickName.text = UserInfo.nickname
+      if (resultRankText == 0) {
+        resultRankTextView.text = getString(R.string.fail)
+      } else {
+        resultRankTextView.text = resultRankText.toRank()
+      }
 
-    if (resultRankText == 0) {
-      resultRankTextView.text = getString(R.string.fail)
-    } else {
-      resultRankTextView.text = resultRankText.toRank()
+      RacingFinishMyLapTime.text = racerData.time!!.format(m_s)
+
+      FBProfileRepository().getProfileImage(UserInfo.autoLoginKey)?.let { RacingFinishAnalysisMyProfile.image(it) }
+      RacingFinishAnalysisMyNickname.text = UserInfo.nickname
+
+      racerLapTimeTextView.text = racerData.time!!.format(m_s)
+      racerMaxSpeedTextView.text = racerSpeeds.max()!!.prettyDistance
+      racerAvgSpeedTextView.text = racerSpeeds.average().prettyDistance
+      progressbar.dismiss()
     }
-
-    RacingFinishMyLapTime.text = makerData.time!!.format(MM_SS)
-
-    FBProfileRepository().getProfileImage(RacingFinishAnalysisMyProfile, UserInfo.nickname)
-    RacingFinishAnalysisMyNickname.text = UserInfo.nickname
-
-    // maker data
-
-    FBProfileRepository().getProfileImage(
-      RacingFinishAnalysisOtherProfile,
-      makerData.makersNickname!!
-    )
-    RacingFinishAnalysisOtherNickname.text = makerData.makersNickname
-
-    makerLapTimeTextView.text = makerData.time!!.format(MM_SS)
-    makerMaxSpeedTextView.text = makerSpeeds.max()!!.prettyDistance
-    makerAvgSpeedTextView.text = makerSpeeds.average().prettyDistance
-
-    racerLapTimeTextView.text = racerData.time!!.format(MM_SS)
-    racerMaxSpeedTextView.text = racerSpeeds.max()!!.prettyDistance
-    racerAvgSpeedTextView.text = racerSpeeds.average().prettyDistance
-    progressbar.dismiss()
   }
 
-  private val racingFinishListener = object : RacingFinishListener {
-    override fun getRacingFinish(rankingDatas: ArrayList<RankingData>, resultRank: Int) {
+  private suspend fun updateRankingUI(rankingDatas: MutableList<RankingData>) {
+
+    var resultRank = 1
+    rankingDatas.forEach {
+      if (racerData.time > it.challengerTime!!) {
+        resultRank++
+      }
+
       arrRankingData = rankingDatas
-      setMyUiData(racerSpeeds, makerSpeeds, resultRank)
+      setMyUiData(racerSpeeds, resultRank)
 
       if (arrRankingData.size >= 1) {
-        FBProfileRepository().getProfileImage(
-          racingFinishProfileFirst,
-          arrRankingData[0].challengerNickname!!
-        )
+        FBProfileRepository().getProfileImage(arrRankingData[0].challengerId!!)
+          ?.let { racingFinishProfileFirst.image(it) }
         racingFinishNicknameFirst.text = arrRankingData[0].challengerNickname
-        racingFinishLapTimeFirst.text = arrRankingData[0].challengerTime!!.format(MM_SS)
+        racingFinishLapTimeFirst.text = arrRankingData[0].challengerTime!!.format(m_s)
+
+        FBProfileRepository().getProfileImage(arrRankingData[0].challengerId!!)
+          ?.let { RacingFinishAnalysisOtherProfile.image(it) }
+
+        RacingFinishAnalysisOtherNickname.text = arrRankingData[0].challengerNickname
+        otherLapTimeTextView.text = arrRankingData[0].challengerTime!!.format(m_s)
+        otherMaxSpeedTextView.text = arrRankingData[0].maxSpeed!!.toDouble().prettyDistance
+        otherAvgSpeedTextView.text = arrRankingData[0].averageSpeed!!.toDouble().prettyDistance
       }
 
       if (arrRankingData.size >= 2) {
-        FBProfileRepository().getProfileImage(
-          racingFinishProfileSecond,
-          arrRankingData[1].challengerNickname!!
-        )
+        FBProfileRepository().getProfileImage(arrRankingData[1].challengerId!!)
+          ?.let { racingFinishProfileSecond.image(it) }
         racingFinishNicknameSecond.text = arrRankingData[1].challengerNickname
-        racingFinishLapTimeSecond.text = arrRankingData[1].challengerTime!!.format(MM_SS)
+        racingFinishLapTimeSecond.text = arrRankingData[1].challengerTime!!.format(m_s)
       }
 
       if (arrRankingData.size >= 3) {
-        FBProfileRepository().getProfileImage(
-          racingFinishProfileThird,
-          arrRankingData[2].challengerNickname!!
-        )
+        FBProfileRepository().getProfileImage(arrRankingData[2].challengerId!!)
+          ?.let { racingFinishProfileThird.image(it) }
         racingFinishNicknameThird.text = arrRankingData[2].challengerNickname
-        racingFinishLapTimeThird.text = arrRankingData[2].challengerTime!!.format(MM_SS)
+        racingFinishLapTimeThird.text = arrRankingData[2].challengerTime!!.format(m_s)
       }
-    }
-
-    override fun getOtherRacing(otherData: RankingData) {
-      makerLapTimeTextView.text = otherData.challengerTime!!.format(MM_SS)
-      makerMaxSpeedTextView.text = otherData.maxSpeed!!.toDouble().prettyDistance
-      makerAvgSpeedTextView.text = otherData.averageSpeed!!.toDouble().prettyDistance
-    }
-  }
-
-  private val getMakerDataListener = object : GetMakerDataListener {
-    override fun makerData(getMakerData: InfoData) {
-      makerData = getMakerData
     }
   }
 }

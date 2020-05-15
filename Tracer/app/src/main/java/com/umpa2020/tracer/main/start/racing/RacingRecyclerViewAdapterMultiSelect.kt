@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import co.lujun.androidtagview.TagContainerLayout
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.RankingData
-import com.umpa2020.tracer.extensions.MM_SS
 import com.umpa2020.tracer.extensions.format
+import com.umpa2020.tracer.extensions.m_s
 import com.umpa2020.tracer.extensions.show
 import com.umpa2020.tracer.extensions.toRank
 import com.umpa2020.tracer.main.profile.OtherProfileActivity
@@ -26,7 +26,7 @@ import kotlinx.android.synthetic.main.recycler_rankfragment_topplayer_item.view.
 import java.util.*
 
 class RacingRecyclerViewAdapterMultiSelect(
-  val mydata: ArrayList<RankingData>,
+  val mydata: MutableList<RankingData>,
   val mapTitle: String,
   val tagContainerLayout: TagContainerLayout
 ) : RecyclerView.Adapter<RacingRecyclerViewAdapterMultiSelect.myViewHolder>() {
@@ -40,7 +40,7 @@ class RacingRecyclerViewAdapterMultiSelect(
     //데이터 바인딩
     holder.rank.text = ranking.toString()
     holder.nickname.text = singleItem1.challengerNickname
-    holder.time.text = singleItem1.challengerTime!!.toLong().format(MM_SS)
+    holder.time.text = singleItem1.challengerTime!!.toLong().format(m_s)
 
     //ranking에 따라 트로피 색 바뀌게 하는 부분
     if (ranking == 1) {

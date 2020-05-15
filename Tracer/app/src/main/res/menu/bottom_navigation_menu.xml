@@ -13,9 +13,9 @@
   <item
     android:id="@+id/navigation_ranking"
     android:icon="@drawable/ranking_icon_text_x"
-    android:title="@string/ranking" />
+    android:title="@string/rank" />
   <item
     android:id="@+id/navigation_challenge"
-    android:icon="@drawable/ranking_icon_text_x"
+    android:icon="@drawable/challenge"
     android:title="@string/challenge" />
 </menu>
