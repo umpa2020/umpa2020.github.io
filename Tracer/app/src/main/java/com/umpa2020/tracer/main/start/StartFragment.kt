@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageInfo
+import android.graphics.Color
 import android.location.Geocoder
 import android.location.Location
 import android.net.Uri
@@ -18,14 +19,12 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.google.android.gms.internal.maps.zzz
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.*
 import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
@@ -42,6 +41,8 @@ import com.umpa2020.tracer.main.start.running.RunningActivity
 import com.umpa2020.tracer.map.TraceMap
 import com.umpa2020.tracer.network.BaseFB.Companion.MAP_ID
 import com.umpa2020.tracer.network.FBMapRepository
+import com.umpa2020.tracer.network.FBRankingRepository
+import com.umpa2020.tracer.network.FBStorageRepository
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.OnSingleClickListener
@@ -53,25 +54,15 @@ import java.io.File
 
 
 class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
-  val TAG = "StartFragment"
-
   var traceMap: TraceMap? = null
   var currentLocation: Location? = null
-
-
   var routeMarkers = mutableListOf<Marker>()
 
   // 처음 화면 시작에서 주변 route 마커 찍어주기 위함
-  val STRAT_FRAGMENT_NEARMAP = 30
-  val NEARMAPFALSE = 41
-  var nearMaps: ArrayList<NearMap> = arrayListOf()
   var wedgedCamera = true
   val progressBar = MyProgressBar()
   var firstFlag = true
 
-  //  companion object{
-//    var gpsViewModel = GpsViewModel(App.instance.currentActivity()!!.application)
-//  }
   override fun onSingleClick(v: View?) {
     when (v!!.id) {
       R.id.mainStartRunning -> {
@@ -211,8 +202,8 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
 
     Logg.d("onCreateView()")
     val view = inflater.inflate(R.layout.fragment_start, container, false)
-    view.test.
-    setOnClickListener {
+
+    view.test.setOnClickListener {
       val storage = FirebaseStorage.getInstance()
       val routeRef = storage.reference.child("mapRoute").child("asdasdqwe1587633430060")
       val localFile = File.createTempFile("routeGpx", "xml")
@@ -254,6 +245,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
 
   override fun onMapReady(googleMap: GoogleMap) {
     Logg.d("onMapReady")
+
     traceMap = TraceMap(googleMap) //구글맵
     traceMap!!.mMap.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
     gpsViewModel.allGps.observe(this, Observer { gpsData ->
@@ -301,10 +293,29 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
       wedgedCamera = true
       true
     }
+
+    // 맵 마커를 한 번 클릭했을 때, 해당 맵 자세히 보기 페이지로 넘어감
     traceMap!!.mMap.setOnInfoWindowClickListener { marker ->
       val intent = Intent(activity, RankingMapDetailActivity::class.java)
       intent.putExtra(MAP_ID, marker.tag.toString())
       startActivity(intent)
+    }
+
+    routeInit()
+
+    traceMap!!.mMap.setOnMarkerClickListener {
+      it.showInfoWindow()
+      MainScope().launch {
+        if (it.tag != null) {
+          FBMapRepository().getMapInfo(it.tag as String)?.let {
+            FBStorageRepository().getFile(it.routeGPXPath).gpxToClass().let {
+              drawMarkerRoute(it)
+            }
+          }
+        }
+
+      }
+      true
     }
     traceMap!!.mMap.uiSettings.isCompassEnabled = true
     traceMap!!.mMap.uiSettings.isZoomControlsEnabled = true
@@ -316,6 +327,70 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
     val version = info.versionName
     Logg.d(version.toString())
   }
+
+
+  lateinit var loadTrack: Polyline
+
+  /**
+   * 마커 루트를 그리기 전에 초기화 작업
+   */
+  fun routeInit() {
+    val firstLatLng = mutableListOf<LatLng>()
+
+    loadTrack =
+      traceMap!!.mMap.addPolyline(
+        PolylineOptions()
+          .addAll(firstLatLng)
+          .color(Color.RED)
+          .startCap(RoundCap() as Cap)
+          .endCap(RoundCap())
+      )
+    loadTrack.tag = "init"
+  }
+
+
+  /**
+   * 맵 마커를 누르면 끝나는 지점을 출력하고
+   * 그 맵의 경로를 현재 맵에 보이게 표현
+   */
+  fun drawMarkerRoute(gpx: RouteGPX) {
+    val track = gpx.trkList.map { it.toLatLng() }
+
+    // 폴리 라인만 그리는
+    if (loadTrack.tag != "init") {
+      loadTrack.remove()
+      Logg.d("ssmm11 markerlist = ${traceMap!!.markerList.size}")
+      traceMap!!.markerList[0].remove()
+      traceMap!!.markerList.removeAt(0)
+    }
+
+    loadTrack =
+      traceMap!!.mMap.addPolyline(
+        PolylineOptions()
+          .addAll(track)
+          .color(Color.BLACK)
+          .startCap(RoundCap() as Cap)
+          .endCap(RoundCap())
+      )
+    loadTrack.tag = "not init"
+    gpx.wptList.forEachIndexed { i, it ->
+      when (it.type) {
+        WayPointType.FINISH_POINT -> {
+          traceMap!!.markerList.add(
+            traceMap!!.mMap.addMarker(
+              MarkerOptions()
+                .position(it.toLatLng())
+                .title(it.name)
+                .icon(R.drawable.ic_finish_point.makingIcon())
+            )
+          )
+        }
+        else -> {
+        }
+      }
+    }
+  }
+
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
