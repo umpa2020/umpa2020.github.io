@@ -411,6 +411,7 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
       "gender" to gender,
       "nickname" to nickname,
       "profileImagePath" to "Profile/$uid/$dt"
+    // TODO : 회원 탈퇴 : 얘가 살앗는지 죽었는지
     )
     FBUsersRepository().createUserInfo(data)
   }

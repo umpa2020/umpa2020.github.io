@@ -11,6 +11,7 @@ import com.umpa2020.tracer.dataClass.RankingData
 import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.extensions.m_s
 import com.umpa2020.tracer.main.profile.OtherProfileActivity
+import com.umpa2020.tracer.network.BaseFB
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.recycler_rankfragment_topplayer_item.view.*
@@ -47,7 +48,7 @@ class RankRecyclerViewAdapterTopPlayer(val mydata: MutableList<RankingData>, val
       override fun onSingleClick(v: View?) {
 
         val nextIntent = Intent(context, OtherProfileActivity::class.java)
-        nextIntent.putExtra("uid", singleItem1.challengerId)
+        nextIntent.putExtra(BaseFB.USER_ID, singleItem1.challengerId)
         context!!.startActivity(nextIntent)
       }
     })

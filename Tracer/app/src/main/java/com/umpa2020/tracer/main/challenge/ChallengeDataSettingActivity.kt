@@ -20,10 +20,8 @@ class ChallengeDataSettingActivity : AppCompatActivity() {
       challenge1.hint = it
     }
 
-    val dt = Date()
-    val timeStamp = dt.time
+    val timeStamp = Date().time
     challengeButton.setOnClickListener {
-
       val cutted = challenge12.text.toString().split(",").toMutableList()
       val cuttedLocale = challenge5.textLocale.toString().split(" ").toMutableList()
 
