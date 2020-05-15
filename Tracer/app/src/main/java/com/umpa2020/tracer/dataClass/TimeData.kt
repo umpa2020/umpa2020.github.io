@@ -1,4 +1,4 @@
-package com.umpa2020.tracer
+package com.umpa2020.tracer.dataClass
 
 data class TimeData (
   var time: Long,

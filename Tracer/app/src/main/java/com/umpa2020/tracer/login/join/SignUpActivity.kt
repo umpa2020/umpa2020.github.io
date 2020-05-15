@@ -26,8 +26,8 @@ import com.google.firebase.storage.StorageReference
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants
-import com.umpa2020.tracer.extensions.toAge
 import com.umpa2020.tracer.extensions.show
+import com.umpa2020.tracer.extensions.toAge
 import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.network.FBProfileRepository
 import com.umpa2020.tracer.network.FBUsersRepository
@@ -448,7 +448,6 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
       R.id.sign_up_button -> {
 
         nickname = editNickname.text.toString()
-        birth = editAge.text.toString()
         gender = editGender.text.toString()
 
 

@@ -7,7 +7,7 @@ import android.location.Location
 import android.os.SystemClock
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.SphericalUtil
-import com.umpa2020.tracer.LocationViewModel
+import com.umpa2020.tracer.lockscreen.util.LocationViewModel
 import com.umpa2020.tracer.extensions.toLatLng
 import com.umpa2020.tracer.main.start.BaseRunningActivity
 

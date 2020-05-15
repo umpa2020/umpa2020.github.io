@@ -9,7 +9,7 @@ import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.umpa2020.tracer.R
-import com.umpa2020.tracer.TimeData
+import com.umpa2020.tracer.dataClass.TimeData
 import com.umpa2020.tracer.lockscreen.util.ViewUnLock
 import com.umpa2020.tracer.main.MainActivity.Companion.locationViewModel
 import com.umpa2020.tracer.util.Logg

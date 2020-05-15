@@ -1,9 +1,11 @@
-package com.umpa2020.tracer
+package com.umpa2020.tracer.lockscreen.util
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.umpa2020.tracer.dataClass.DistanceTimeData
+import com.umpa2020.tracer.dataClass.TimeData
 import com.umpa2020.tracer.util.Logg
 import kotlinx.coroutines.launch
 

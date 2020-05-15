@@ -17,8 +17,6 @@ import com.umpa2020.tracer.constant.Constants.Companion.MAX_DISTANCE
 import com.umpa2020.tracer.constant.Constants.Companion.MAX_SEEKERBAR
 import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.network.FBRankingRepository
-import com.umpa2020.tracer.network.RankingListener
-import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.UserInfo

@@ -18,9 +18,9 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.SphericalUtil
 import com.umpa2020.tracer.App
-import com.umpa2020.tracer.DistanceTimeData
+import com.umpa2020.tracer.dataClass.DistanceTimeData
 import com.umpa2020.tracer.R
-import com.umpa2020.tracer.TimeData
+import com.umpa2020.tracer.dataClass.TimeData
 import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.constant.UserState

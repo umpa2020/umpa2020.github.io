@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.umpa2020.tracer.LocationViewModel
+import com.umpa2020.tracer.lockscreen.util.LocationViewModel
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.locationBackground.LocationBackgroundService
