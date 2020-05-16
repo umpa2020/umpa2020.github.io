@@ -178,7 +178,7 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     chronometer.stop()
     pauseButton.text = getString(R.string.restart)
 
-    pauseNotice("기록 측정 중지")
+    pauseNotice(getString(R.string.notece_msg_stop_tracking))
   }
 
   open fun restart() {
@@ -191,8 +191,8 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     locationViewModel.setTimes(TimeData(restartTime, true, timeWhenStopped, ""))
 
     chronometer.start()
-
-    pauseNotificationTextView.visibility = View.INVISIBLE
+    Logg.d("너가 실행되냐?")
+    pauseNotificationTextView.invisible()
     disappearAnimation()
   }
 
@@ -344,7 +344,10 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     animationSet.duration = Constants.PAUSE_ANIMATION_DURATION_TIME
 
     pauseNotificationTextView.animation = animationSet
+    Logg.d("ssmm11 u state = ${pauseNotificationTextView.animation}")
     pauseNotificationTextView.animation.start()
+    Logg.d("ssmm11 d state = ${pauseNotificationTextView.animation}")
+
   }
 
   /**

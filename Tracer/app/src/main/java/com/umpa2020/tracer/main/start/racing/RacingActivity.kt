@@ -325,16 +325,20 @@ class RacingActivity : BaseRunningActivity() {
       deviationCount = 0
       notificationTextView.visibility = View.GONE
     } else {
+      if(userState!=UserState.RUNNING)return
+      if (deviationCount == DEVIATION_COUNT) {
+        racingResult = false
+        pause()
+        notice(getString(R.string.notice_msg_pause_deviation))
+        return
+      }
       deviationCount++
       notice(
         getString(R.string.out_of_route) + deviationCount.toString() + getString(R.string.route_deviates) + DEVIATION_COUNT + getString(
           R.string.resgisration
         )
       )
-      if (deviationCount > DEVIATION_COUNT) {
-        racingResult = false
-        stop()
-      }
+
     }
   }
 
