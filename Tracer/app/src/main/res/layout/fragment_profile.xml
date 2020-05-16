@@ -126,7 +126,7 @@
       android:layout_width="60dp"
       android:layout_height="60dp"
       android:layout_marginRight="15dp"
-      android:src="@drawable/ic_ranking2_black" />
+      android:src="@drawable/ic_3rd_emblem" />
 
     <TextView
       android:id="@+id/medal2nd"
@@ -138,7 +138,7 @@
       android:layout_width="60dp"
       android:layout_height="60dp"
       android:layout_marginBottom="20dp"
-      android:src="@drawable/ic_ranking1_black" />
+      android:src="@drawable/ic_winner_emblem" />
 
     <TextView
       android:id="@+id/medal1th"
@@ -151,7 +151,7 @@
       android:layout_height="60dp"
       android:layout_marginLeft="15dp"
       android:layout_marginTop="5dp"
-      android:src="@drawable/ic_ranking3_black" />
+      android:src="@drawable/ic_3rd_emblem" />
 
     <TextView
       android:id="@+id/medal3rd"

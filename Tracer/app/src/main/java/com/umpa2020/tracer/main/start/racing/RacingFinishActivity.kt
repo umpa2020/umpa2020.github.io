@@ -69,14 +69,10 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
         ActivityData(racerData.mapId, Date().time, racerData.distance, racerData.time, if (result) "racing go the distance" else "racing fail")
       )
       //성공했다면 랭킹에 등록
-      if (result) {
-        FBRacingRepository().createRankingData(racerData, rankingData, racerGpxFile).let {
-          arrRankingData = FBMapRepository().listMapRanking(racerData.mapId)
-        }
-      }
-      else {
-        arrRankingData = FBMapRepository().listMapRanking(racerData.mapId)
-      }
+      if (result)
+        FBRacingRepository().createRankingData(racerData, rankingData, racerGpxFile)
+
+      arrRankingData = FBMapRepository().listMapRanking(racerData.mapId)
       FBUsersRepository().updateUserAchievement(arrRankingData, racerData.mapId)
       updateRankingUI(arrRankingData)
       progressbar.dismiss()
@@ -173,8 +169,7 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
         if (renewal) {
           getString(R.string.renewal).show()
           resultRankTextView.text = resultRankText.toRank()
-        }
-        else
+        } else
           resultRankTextView.text = resultRankText.toRank()
       }
 

@@ -37,6 +37,9 @@ class FBRacingRepository : BaseFB() {
           it.reference.update(BEST_TIME, false)
           rankingData.BestTime = true
         }
+        if (it.isEmpty) {
+          rankingData.BestTime = true
+        }
       }
     rankingData.racerGPX = "$MAP_ROUTE/${racerData.mapId}/$RACING_GPX/$UserInfo.autoLoginKey"
     db.collection(MAPS).document(racerData.mapId).collection(RANKING)
