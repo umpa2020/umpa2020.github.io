@@ -11,8 +11,10 @@ import android.telephony.PhoneStateListener
 import android.telephony.TelephonyManager
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants
+import com.umpa2020.tracer.locationBackground.LocationBackgroundService
 import com.umpa2020.tracer.lockscreen.LockScreenActivity
 import com.umpa2020.tracer.util.Logg
 
@@ -84,7 +86,8 @@ class LockScreenService : Service() {
         this@LockScreenService,
         NotificationManager.getMainNotificationId()
       )
-        .setContentTitle(getString(R.string.gps_activation))
+//        .setContentTitle(getString(R.string.gps_activation))
+        .setContentTitle(getString(R.string.lockscreen_activation))
         .setSmallIcon(R.mipmap.ic_launcher_tracer_final)
         .setTicker("Ticker text")
         .setAutoCancel(true) // 사용자가 탭하면 자동으로 알림을 삭제하는 setAutoCancel()을 호출
@@ -131,7 +134,19 @@ class LockScreenService : Service() {
   override fun onDestroy() {
     super.onDestroy()
     Logg.d("onDestroy()")
-    NotificationManager.cancelnNotificationChannel(this@LockScreenService)
+//    NotificationManager.cancelnNotificationChannel(this@LockScreenService)
+
+    // 서비스에 인텐트 action을 줘서 다시 notification 교환.
+    // 이때의 startService는 서비스 시작이 아닌 단순 정보 전달.
+    // 또한 이때 서비스는 onStartCommand()부터 재시작.
+    Intent(App.applicationContext(), LocationBackgroundService::class.java).also {
+      it.action = "reStartNotification"
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { // 오레오 이상부터 foregroundService로 실행.
+        startForegroundService(it)
+      }else {
+        startService(it)
+      }
+    }
     stateReceiver(false)
   }
 
