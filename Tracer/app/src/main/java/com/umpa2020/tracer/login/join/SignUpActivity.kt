@@ -87,7 +87,7 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
     editNickname.addTextChangedListener(object : TextWatcher {
       override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
         flag = 3
-        Logg.d(flag.toString())
+
       }
 
       override fun afterTextChanged(p0: Editable?) {
@@ -165,7 +165,7 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
       for (i in 0 until length - success_request) {
         if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
           // 동의
-          Logg.d("권한 허용 : " + permissions[i])
+
           goToAlbum()
         }
       }
@@ -187,7 +187,7 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
       temp += Manifest.permission.READ_EXTERNAL_STORAGE + " "
     }
 
-    Logg.d(temp)
+
     if (!TextUtils.isEmpty(temp)) {
       // 권한 요청
       ActivityCompat.requestPermissions(this, temp.trim().split(" ").toTypedArray(), 1)
@@ -229,7 +229,7 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
       .map { t -> t.isEmpty() || !Pattern.matches(Constants.GENDER_RULE, t) }
       .subscribe({
         //inputDataField[2].setText("")
-        Logg.d("성별 : " + it.toString())
+
         reactiveInputTextViewData(2, it)
       }) {
         //Error Block
@@ -276,9 +276,9 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
     // 생년월일 yyyyMMdd 형식으로 전달 받음.
     if (requestCode == 101 && resultCode == RESULT_OK) {
       // 년월일 yyyymmdd로 전달 받음
-      Logg.d(intentData!!.getStringExtra("Age"))
-      birth = intentData.getStringExtra("Age")
-      val age = toAge(intentData.getStringExtra("Age")!!)
+
+      birth = intentData?.getStringExtra("Age")
+      val age = toAge(intentData?.getStringExtra("Age")!!)
 
       editAge.setText(age)
     }
@@ -307,7 +307,7 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
     for (check in isInputCorrectData) {
       if (!check) {
         isSuccess = false
-        Logg.d("입력 상황 : " + check.toString())
+
         return
       }
     }
@@ -325,7 +325,7 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
   // 서버로의 회원가입 진행
   private fun signUp(imageUri: Uri, nickname: String, birth: String, gender: String) {
     if (flag == 1) {// false이면 닉네임 체크가 안된 것. 그러면 실행되면 안돼
-      Logg.d(birth)
+
       val timestamp = Date().time
       uploadProfileImage(imageUri, nickname, birth, gender, timestamp.toString())
       uploadUserInfo(nickname, birth, gender, timestamp.toString())
@@ -347,10 +347,10 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
     mFirestoreDB!!.collection("users").whereEqualTo("nickname", nickname).get()
       .addOnSuccessListener { documents ->
         for (document in documents) {
-          Logg.d(document.id)
-          Logg.d(document.exists().toString())
+
+
           if (document.exists()) {
-            Logg.d("${document.id} => ${document.data}")
+
             textInputLayoutArray[0].setErrorTextColor(
               resources.getColorStateList(
                 R.color.red,
@@ -363,7 +363,7 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
         }
       }
       .addOnFailureListener { exception ->
-        Logg.w("Error getting documents: $exception")
+
       }
       .addOnCompleteListener {
         if (flag == 3) {
@@ -446,21 +446,15 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
         gender = editGender.text.toString()
 
 
-        Logg.d("가입 버튼 눌렀을 때 : $nickname, $birth, $gender")
+
 
         if (textInputLayoutArray[0].error != getString(R.string.nickname_available)) { //무조건 중복 확인 버튼을 눌러야만 회원가입 가능하게 함
-          Logg.d(textInputLayoutArray[0].error.toString() + "if문 검사")
+
           getString(R.string.check_duplicates).show()
         } else { // 중복 확인 통과
-          Logg.d(
-            isInputCorrectData[0].toString() + ", " + birth!!.isNotEmpty()
-              .toString() + ", " + gender!!.isNotEmpty().toString()
-          )
+
           if (isInputCorrectData[0] && birth!!.isNotEmpty() && gender!!.isNotEmpty()) {
-//          Logg.d(
-//            isInputCorrectData[0].toString() + ", " + age!!.isNotEmpty()
-//              .toString() + ", " + gender!!.isNotEmpty().toString()
-//          )
+
             // 단순 editText의 Empty유무 확인 => age는 이곳에서만 쓰이고 안쓰임. -> birth로 나이 관리.
             if (selectedImageUri == null) // 프로필 이미지를 설정하지 않았을 때 = 사용자 입장에서 프로필 버튼을 누르지 않았음
             {

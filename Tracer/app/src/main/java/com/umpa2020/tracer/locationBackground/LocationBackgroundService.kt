@@ -13,7 +13,6 @@ import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.lockscreen.service.NotificationManager
 import com.umpa2020.tracer.main.start.running.RunningActivity
-import com.umpa2020.tracer.util.Logg
 
 /**
  *  IntentService : 오래걸리지만 메인스레드와 관련이 없는 작업을할 때 주로 이용한다.
@@ -33,7 +32,7 @@ class LocationBackgroundService : IntentService("LocationBackgroundService"),
 
   override fun onCreate() {
     super.onCreate()
-    Logg.i("onCreate ")
+
     val pendingIntent: PendingIntent =
       Intent(this, RunningActivity::class.java).let { notificationIntent ->
         PendingIntent.getActivity(this, 0, notificationIntent, 0)
@@ -41,7 +40,7 @@ class LocationBackgroundService : IntentService("LocationBackgroundService"),
     /**
      *  위치 관련 생성.
      */
-    Logg.d(this.toString())
+
     LocationUpdatesComponent.setILocationProvider(this)
     LocationUpdatesComponent.onCreate(this)
     LocationUpdatesComponent.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
@@ -68,13 +67,13 @@ class LocationBackgroundService : IntentService("LocationBackgroundService"),
   // this makes service running continuously,commenting this start command method service runs only once
   // action에 따른 service 실행 유무
   override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-    Logg.i("onStartCommand Service started....")
+
 
     if (intent!!.action == "reStartNotification") {
       startForegroundNotification()
     } else {
       val action = intent.action
-      Logg.i("onStartCommand action $action")
+
       when (action) {
         ServiceStatus.START.name -> startService()
         ServiceStatus.STOP.name -> stopService()
@@ -85,7 +84,7 @@ class LocationBackgroundService : IntentService("LocationBackgroundService"),
 
 
   override fun onHandleIntent(intent: Intent?) {
-    Logg.i("onHandleIntent $intent")
+
   }
 
   /**
@@ -99,11 +98,11 @@ class LocationBackgroundService : IntentService("LocationBackgroundService"),
     try {
       val intent = Intent("custom-event-name")
       intent.putExtra("message", location)
-      Logg.d(location.toString())
+
       LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
 
     } catch (e: RemoteException) {
-      Logg.e("Error passing service object back to activity.")
+
     }
   }
 

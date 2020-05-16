@@ -12,7 +12,6 @@ import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.TimeData
 import com.umpa2020.tracer.lockscreen.util.ViewUnLock
 import com.umpa2020.tracer.main.MainActivity.Companion.locationViewModel
-import com.umpa2020.tracer.util.Logg
 import kotlinx.android.synthetic.main.activity_lock_screen.*
 
 /**
@@ -109,17 +108,17 @@ class LockScreenActivity : AppCompatActivity() {
   var flag = true
   fun changeTimeUI(records: TimeData) {
 
-    Logg.d(flag.toString())
+
     if (flag) {
       if (records.timeControl) { // 처음 시작은 true
         lockScreenChronometer.base = records.time + records.timeWhenStop
         lockScreenChronometer.start()
-        Logg.d("시간 시작")
+
       } else { // false
 
-        Logg.d(records.timeText)
+
         lockScreenChronometer.text = records.timeText
-        Logg.d("시간 정지")
+
       }
       flag = false
     }
