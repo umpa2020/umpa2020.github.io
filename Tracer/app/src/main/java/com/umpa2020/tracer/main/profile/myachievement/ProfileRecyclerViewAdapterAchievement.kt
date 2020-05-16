@@ -1,4 +1,4 @@
-package com.umpa2020.tracer.main.profile.myachivement
+package com.umpa2020.tracer.main.profile.myachievement
 
 import android.content.Context
 import android.content.Intent
@@ -18,12 +18,12 @@ import kotlinx.android.synthetic.main.recycler_profile_user_record_item.view.*
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
-class ProfileRecyclerViewAdapterAchivement(val datas: MutableList<ActivityData>) :
-  RecyclerView.Adapter<ProfileRecyclerViewAdapterAchivement.MyViewHolder>() {
+class ProfileRecyclerViewAdapterAchievement(val datas: MutableList<ActivityData>) :
+  RecyclerView.Adapter<ProfileRecyclerViewAdapterAchievement.MyViewHolder>() {
   var context: Context? = null
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
     val view = LayoutInflater.from(parent.context)
-      .inflate(R.layout.recycler_profile_user_record_item, parent, false)
+      .inflate(R.layout.recycler_profile_achivement_item, parent, false)
     context = parent.context
     return MyViewHolder(view)
   }

@@ -13,10 +13,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.customUI.WorkaroundMapFragment
-import com.umpa2020.tracer.dataClass.ActivityData
-import com.umpa2020.tracer.dataClass.InfoData
-import com.umpa2020.tracer.dataClass.RankingData
-import com.umpa2020.tracer.dataClass.RouteGPX
+import com.umpa2020.tracer.dataClass.*
 import com.umpa2020.tracer.extensions.*
 import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.map.TraceMap
@@ -160,6 +157,7 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
     infoData.maxSpeed = speedList.max()!!
     infoData.averageSpeed = speedList.average()
     infoData.routeGPXPath = "$MAP_ROUTE/${infoData.mapId}/${infoData.mapId}"
+    infoData.user1st = UserInfo.autoLoginKey
 
     val rankingData = RankingData(
       UserInfo.nickname,
@@ -172,9 +170,10 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
       "${BaseFB.MAP_ROUTE}/${infoData.mapId}/racingGPX/${UserInfo.autoLoginKey}"
     )
     val activityData = ActivityData(infoData.mapId, timestamp, infoData.distance, infoData.time,"map save")
-    Logg.d("Start Upload")
+    val achivementData = AchievementData(infoData.mapId, 1)
 
-    FBMapRepository().uploadMap(infoData, rankingData, activityData, timestamp.toString(), routeGpxFile, Uri.fromFile(File(imgPath)))
+
+    FBMapRepository().uploadMap(infoData, rankingData, activityData, timestamp.toString(), routeGpxFile, Uri.fromFile(File(imgPath)), achivementData)
     Logg.d("Finish Upload")
     progressBar.dismiss()
     finish()

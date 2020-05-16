@@ -4,10 +4,7 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class AchivementData(
+data class AchievementData(
   val mapId: String? = null,
-  val time: Long? = null,
-  val distance: Double? = null,
-  val playTime: Long? = null,
-  var mode: String? = null
+  val ranking: Long? = null
 ) : Parcelable

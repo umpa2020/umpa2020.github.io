@@ -66,5 +66,7 @@ open class BaseFB {
     const val ID = "id"
     const val DATE = "date"
     const val LOCALE = "locale"
+
+    const val ACHIEVEMENT = "achievement"
   }
 }

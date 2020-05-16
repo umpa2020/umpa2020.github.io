@@ -75,7 +75,7 @@ class LocationBackgroundService : IntentService("LocationBackgroundService"), Lo
   }
 
   /**
-   *  LocationComponent에서 locatoin결과 값 받아옴.
+   *  Locationzomponent에서 locatoin결과 값 받아옴.
    *  => 이걸 이제 액티비티 or 프래그먼트에 전달해주는 것.
    */
   //it의 경우는 함수의 변수가 한 개여야 만 허용.

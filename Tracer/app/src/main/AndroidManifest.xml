@@ -51,6 +51,7 @@
     <activity android:name=".main.profile.settting.MyInformationActivity" />
     <activity android:name=".main.profile.settting.AppSettingActivity" />
     <activity android:name=".main.profile.myroute.ProfileRouteActivity" />
+    <activity android:name=".main.profile.myachievement.ProfileAchievementActivity" />
     <activity android:name=".main.profile.OtherProfileActivity" />
 
     <service

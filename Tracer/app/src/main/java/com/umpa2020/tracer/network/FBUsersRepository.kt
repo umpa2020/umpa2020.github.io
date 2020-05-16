@@ -1,8 +1,10 @@
 package com.umpa2020.tracer.network
 
 import com.google.firebase.firestore.DocumentSnapshot
+import com.umpa2020.tracer.dataClass.AchievementData
 import com.umpa2020.tracer.dataClass.ActivityData
 import com.umpa2020.tracer.dataClass.InfoData
+import com.umpa2020.tracer.dataClass.RankingData
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.coroutines.tasks.await
@@ -18,6 +20,51 @@ import kotlinx.coroutines.tasks.await
 
 class FBUsersRepository : BaseFB() {
   var globalStartAfter: DocumentSnapshot? = null
+
+  suspend fun listUserAchievement(userId: String): ArrayList<Int> {
+    val list = arrayListOf<Int>()
+
+    val ref = usersCollectionRef.whereEqualTo(USER_ID, userId).get().await()
+      .documents.first().reference
+    for (i in 1..3) {
+      list.add(
+        ref.collection(ACHIEVEMENT).whereEqualTo(RANKING, i).get().await()
+          .documents.size
+      )
+    }
+    return list
+  }
+
+  fun createUserAchievement(achieveData: AchievementData) {
+    usersCollectionRef.document(UserInfo.autoLoginKey).collection(ACHIEVEMENT).add(achieveData)
+  }
+
+  fun updateUserAchievement(rankingDatas: MutableList<RankingData>, mapId: String) {
+    var ranking = 0L
+    rankingDatas.forEachIndexed { i, rankingData ->
+      if (rankingData.challengerId == UserInfo.autoLoginKey) {
+        ranking = i+1L
+      }
+    }
+
+    if (ranking != 0L) {
+      usersCollectionRef.document(UserInfo.autoLoginKey).collection(ACHIEVEMENT)
+        .whereEqualTo(MAP_ID, mapId)
+        .get()
+        .addOnSuccessListener {
+          if (it.isEmpty) {
+            usersCollectionRef.document(UserInfo.autoLoginKey).collection(ACHIEVEMENT)
+              .add(AchievementData(mapId, ranking))
+          } else {
+            val before = it.documents.first().getLong(RANKING)!!
+            if (before != ranking) {
+              it.documents.first().reference.update(RANKING, ranking)
+            }
+          }
+        }
+    }
+
+  }
 
   fun createUserInfo(data: HashMap<String, String?>) {
     db.collection(USERS).document(data[USER_ID]!!).set(data)

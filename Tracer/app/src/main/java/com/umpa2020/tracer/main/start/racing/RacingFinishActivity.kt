@@ -1,8 +1,10 @@
 package com.umpa2020.tracer.main.start.racing
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
@@ -13,7 +15,6 @@ import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.extensions.*
 import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.network.*
-import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
@@ -70,6 +71,7 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
       //성공했다면 랭킹에 등록
       if (result) FBRacingRepository().createRankingData(racerData, rankingData, racerGpxFile)
       arrRankingData = FBMapRepository().listMapRanking(racerData.mapId)
+      FBUsersRepository().updateUserAchievement(arrRankingData, racerData.mapId)
       updateRankingUI(arrRankingData)
       progressbar.dismiss()
     }
@@ -148,9 +150,11 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
     }
 
   */
+  @SuppressLint("ShowToast")
   private fun setMyUiData(
     racerSpeeds: MutableList<Double>,
-    resultRankText: Int
+    resultRankText: Int,
+    renewal: Boolean
   ) {
     MainScope().launch {
       // 나의 기록
@@ -160,15 +164,20 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
       if (resultRankText == 0) {
         resultRankTextView.text = getString(R.string.fail)
       } else {
-        resultRankTextView.text = resultRankText.toRank()
+        if (renewal) {
+          getString(R.string.renewal).show()
+          resultRankTextView.text = resultRankText.toRank()
+        }
+        else
+          resultRankTextView.text = resultRankText.toRank()
       }
 
-      RacingFinishMyLapTime.text = racerData.time!!.format(m_s)
+      RacingFinishMyLapTime.text = racerData.time.format(m_s)
 
       FBProfileRepository().getProfileImage(UserInfo.autoLoginKey)?.let { RacingFinishAnalysisMyProfile.image(it) }
       RacingFinishAnalysisMyNickname.text = UserInfo.nickname
 
-      racerLapTimeTextView.text = racerData.time!!.format(m_s)
+      racerLapTimeTextView.text = racerData.time.format(m_s)
       racerMaxSpeedTextView.text = racerSpeeds.max()!!.prettyDistance
       racerAvgSpeedTextView.text = racerSpeeds.average().prettyDistance
       progressbar.dismiss()
@@ -176,15 +185,18 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
   }
 
   private suspend fun updateRankingUI(rankingDatas: MutableList<RankingData>) {
-
     var resultRank = 1
+    var renewal = false
     rankingDatas.forEach {
       if (racerData.time > it.challengerTime!!) {
+        if (UserInfo.autoLoginKey == it.challengerId) {
+          renewal = true
+        }
         resultRank++
       }
 
       arrRankingData = rankingDatas
-      setMyUiData(racerSpeeds, resultRank)
+      setMyUiData(racerSpeeds, resultRank, renewal)
 
       if (arrRankingData.size >= 1) {
         FBProfileRepository().getProfileImage(arrRankingData[0].challengerId!!)

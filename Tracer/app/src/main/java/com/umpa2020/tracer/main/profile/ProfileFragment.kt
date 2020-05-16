@@ -15,10 +15,12 @@ import com.umpa2020.tracer.extensions.image
 import com.umpa2020.tracer.extensions.m_s
 import com.umpa2020.tracer.extensions.prettyDistance
 import com.umpa2020.tracer.main.profile.myActivity.ProfileActivityActivity
+import com.umpa2020.tracer.main.profile.myachievement.ProfileAchievementActivity
 import com.umpa2020.tracer.main.profile.myroute.ProfileRouteActivity
 import com.umpa2020.tracer.main.profile.settting.AppSettingActivity
 import com.umpa2020.tracer.network.BaseFB
 import com.umpa2020.tracer.network.FBProfileRepository
+import com.umpa2020.tracer.network.FBUsersRepository
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.OnSingleClickListener
@@ -49,6 +51,7 @@ class ProfileFragment() : Fragment(), OnSingleClickListener, Parcelable {
     root.appSettingButton.setOnClickListener(this)
     root.profileRouteTextView.setOnClickListener(this)
     root.profileRecordTextView.setOnClickListener(this)
+    root.profileAchivementTextView.setOnClickListener(this)
     return root
   }
 
@@ -69,6 +72,11 @@ class ProfileFragment() : Fragment(), OnSingleClickListener, Parcelable {
         val nextIntent = Intent(activity, ProfileActivityActivity::class.java)
         startActivity(nextIntent)
       }
+
+      R.id.profileAchivementTextView -> { // 나의 업적 액티비티
+        val nextIntent = Intent(activity, ProfileAchievementActivity::class.java)
+        startActivity(nextIntent)
+      }
     }
   }
 
@@ -87,8 +95,13 @@ class ProfileFragment() : Fragment(), OnSingleClickListener, Parcelable {
         profileImageView.image(it.imgPath)
         profileFragmentTotalDistance.text = it.distance.prettyDistance
         profileFragmentTotalTime.text = it.time.format(m_s)
-        progressBar.dismiss()
       }
+        FBUsersRepository().listUserAchievement(UserInfo.autoLoginKey).let {
+          medal1th.text = it[0].toString()
+          medal2nd.text = it[1].toString()
+          medal3rd.text = it[2].toString()
+          progressBar.dismiss()
+        }
     }
   }
 
