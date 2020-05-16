@@ -1,6 +1,6 @@
 package com.umpa2020.tracer.dataClass
 
-data class ChallengeData (
+data class ChallengeData(
   var id: String? = null,
   var name: String? = null,
   var date: Long? = null,

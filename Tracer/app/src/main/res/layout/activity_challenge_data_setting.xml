@@ -10,11 +10,12 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical">
+
     <EditText
-      android:layout_marginTop="20dp"
       android:id="@+id/challenge1"
       android:layout_width="300dp"
       android:layout_height="wrap_content"
+      android:layout_marginTop="20dp"
       android:hint="대회 이름" />
 
     <EditText

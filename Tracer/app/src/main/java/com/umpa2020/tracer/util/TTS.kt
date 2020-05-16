@@ -54,7 +54,7 @@ object TTS {
       }
     } else if (mAudioManager.ringerMode == AudioManager.RINGER_MODE_VIBRATE) { // 핸드폰이 진동 일 때
       if (Build.VERSION.SDK_INT >= O) // 오레오 이상
-        mVibrator.vibrate(VibrationEffect.createOneShot(1000,  VibrationEffect.DEFAULT_AMPLITUDE))
+        mVibrator.vibrate(VibrationEffect.createOneShot(1000, VibrationEffect.DEFAULT_AMPLITUDE))
       else // 오레도 미만
         mVibrator.vibrate(1000)
     }

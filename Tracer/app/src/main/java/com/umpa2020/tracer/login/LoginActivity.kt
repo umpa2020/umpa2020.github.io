@@ -56,7 +56,7 @@ class LoginActivity : AppCompatActivity(), OnSingleClickListener {
      */
     mAuth = FirebaseAuth.getInstance() // FirebaseAuth를 사용하기 위해서 인스턴스를 꼭 받아오기
 
-   // signInButton = googleSignInButton // googleSignInButton 사용. Gradle에서 implementation을 해줘야 사용 가능.
+    // signInButton = googleSignInButton // googleSignInButton 사용. Gradle에서 implementation을 해줘야 사용 가능.
 
     //  Configure Google Sign In
     // 구글 로그인 옵션

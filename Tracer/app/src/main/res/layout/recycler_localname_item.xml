@@ -6,10 +6,10 @@
 
   <Button
     android:id="@+id/local_name"
-    android:background="@drawable/button_empty_background"
     style="@style/buttonTextRedText"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
-    android:textSize="13sp"/>
+    android:background="@drawable/button_empty_background"
+    android:textSize="13sp" />
 </LinearLayout>

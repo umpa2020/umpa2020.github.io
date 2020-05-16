@@ -35,7 +35,7 @@
     android:supportsRtl="true"
     android:theme="@style/AppTheme"
     tools:ignore="GoogleAppIndexingWarning">
-    <activity android:name=".login.join.AgeSelectActivity"/>
+    <activity android:name=".login.join.AgeSelectActivity" />
     <activity android:name=".main.challenge.ChallengeDataSettingActivity" />
 
     <service android:name=".lockscreen.service.LockScreenService" />
@@ -44,12 +44,12 @@
       android:name=".lockscreen.LockScreenActivity"
       android:launchMode="singleInstance"
       android:showOnLockScreen="true"
-      android:theme="@style/lockscreenView"/>
+      android:theme="@style/lockscreenView" />
     <activity android:name=".main.start.racing.AllRankingActivity" />
-    <activity android:name=".main.start.racing.RacingSelectPeopleActivity"/>
+    <activity android:name=".main.start.racing.RacingSelectPeopleActivity" />
     <activity android:name=".main.profile.myrecord.ProfileRecordActivity" />
     <activity android:name=".main.profile.settting.MyInformationActivity" />
-    <activity android:name=".main.profile.settting.AppSettingActivity"/>
+    <activity android:name=".main.profile.settting.AppSettingActivity" />
     <activity android:name=".main.profile.myroute.ProfileRouteActivity" />
     <activity android:name=".main.profile.ProfileActivity" />
 
@@ -73,7 +73,7 @@
     <activity
       android:name=".main.start.running.RunningSaveActivity"
       android:windowSoftInputMode="adjustPan" />
-<!--    <activity android:name=".main.start.BaseRunningActivity"/>-->
+    <!--    <activity android:name=".main.start.BaseRunningActivity"/>-->
     <activity android:name=".main.start.running.RunningActivity" />
     <activity android:name=".main.MainActivity" />
     <activity android:name=".login.LoginActivity" />

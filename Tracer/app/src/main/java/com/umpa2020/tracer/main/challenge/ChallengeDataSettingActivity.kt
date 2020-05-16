@@ -1,7 +1,7 @@
 package com.umpa2020.tracer.main.challenge
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.ChallengeData
 import com.umpa2020.tracer.network.FBChallengeRepository

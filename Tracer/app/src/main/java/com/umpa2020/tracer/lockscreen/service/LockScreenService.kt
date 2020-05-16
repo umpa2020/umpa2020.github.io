@@ -143,7 +143,7 @@ class LockScreenService : Service() {
       it.action = "reStartNotification"
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { // 오레오 이상부터 foregroundService로 실행.
         startForegroundService(it)
-      }else {
+      } else {
         startService(it)
       }
     }

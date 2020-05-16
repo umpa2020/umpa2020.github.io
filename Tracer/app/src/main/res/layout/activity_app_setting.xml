@@ -4,8 +4,8 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  tools:context=".main.profile.settting.AppSettingActivity"
-  android:background="@color/white">
+  android:background="@color/white"
+  tools:context=".main.profile.settting.AppSettingActivity">
 
   <Toolbar
     android:id="@+id/settingActivityToolBar"
@@ -13,28 +13,28 @@
     android:layout_height="50dp"
     android:layout_alignParentTop="true"
     android:background="@color/white"
-    android:elevation="1dp"
-    android:contentInsetStart="0dp">
+    android:contentInsetStart="0dp"
+    android:elevation="1dp">
 
     <TextView
       style="@style/appBarText"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:gravity="center"
-      android:text="@string/settings"/>
+      android:text="@string/settings" />
   </Toolbar>
 
   <fragment
-    android:layout_marginStart="20dp"
-    android:layout_marginEnd="20dp"
-    android:layout_below="@+id/settingActivityToolBar"
     android:id="@+id/preferenceSettingFrag"
     android:name="com.umpa2020.tracer.main.profile.settting.SettingPreferenceFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_below="@+id/settingActivityToolBar"
+    android:layout_marginStart="20dp"
+    android:layout_marginEnd="20dp"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintLeft_toLeftOf="parent"
     app:layout_constraintRight_toRightOf="parent"
-    app:layout_constraintTop_toTopOf="parent"/>
+    app:layout_constraintTop_toTopOf="parent" />
 
 </RelativeLayout>

@@ -4,7 +4,7 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class InfoData(
+data class MapInfo(
   var mapId: String = "",
   var mapTitle: String = "",
   var makerId: String = "",

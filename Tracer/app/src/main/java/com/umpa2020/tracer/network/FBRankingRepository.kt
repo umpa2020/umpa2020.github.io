@@ -4,7 +4,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Query
 import com.google.maps.android.SphericalUtil
-import com.umpa2020.tracer.dataClass.InfoData
+import com.umpa2020.tracer.dataClass.MapInfo
 import kotlinx.coroutines.tasks.await
 
 /**
@@ -22,7 +22,7 @@ class FBRankingRepository : BaseFB() {
     boundary: Int,
     mode: String,
     limit: Long
-  ): MutableList<InfoData> {
+  ): MutableList<MapInfo> {
     /**
      * 결과로 가져온 location에서 정보추출 / 이건 위도 경도 형태로 받아오는 형식
      * Location 형태로 받아오고 싶다면 아래처럼
@@ -34,7 +34,7 @@ class FBRankingRepository : BaseFB() {
       .limit(limit)
       .get().await().documents.map {
         globalStartAfter = it
-        it.toObject(InfoData::class.java)!!.apply {
+        it.toObject(MapInfo::class.java)!!.apply {
           distance = SphericalUtil.computeDistanceBetween(
             cur_loc,
             LatLng(startLatitude, startLongitude)
@@ -56,7 +56,7 @@ class FBRankingRepository : BaseFB() {
     boundary: Int,
     mode: String,
     limit: Long
-  ): MutableList<InfoData> {
+  ): MutableList<MapInfo> {
     //결과로 가져온 location에서 정보추출 / 이건 위도 경도 형태로 받아오는 형식
     //Location 형태로 받아오고 싶다면 아래처럼
     //var getintentLocation = current
@@ -67,7 +67,7 @@ class FBRankingRepository : BaseFB() {
       .limit(limit)
       .get().await().documents.map {
         globalStartAfter = it
-        it.toObject(InfoData::class.java)!!.apply {
+        it.toObject(MapInfo::class.java)!!.apply {
           distance = SphericalUtil.computeDistanceBetween(
             cur_loc,
             LatLng(startLatitude!!, startLongitude!!)

@@ -20,8 +20,8 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:background="@color/white"
-      android:elevation="1dp"
-      android:contentInsetStart="0dp" />
+      android:contentInsetStart="0dp"
+      android:elevation="1dp" />
 
     <TextView
       android:layout_width="wrap_content"
@@ -48,8 +48,7 @@
         android:id="@+id/profileImage"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:background="@drawable/ic_profile_logo"
-         />
+        android:background="@drawable/ic_profile_logo" />
 
       <com.mikhaellopez.circularimageview.CircularImageView
         android:layout_width="30dp"
@@ -100,8 +99,7 @@
             android:layout_height="25dp"
             android:layout_gravity="right|center"
             android:layout_marginBottom="5dp"
-            android:background="@drawable/redundant_check_change_button"
-             />
+            android:background="@drawable/redundant_check_change_button" />
         </FrameLayout>
       </com.google.android.material.textfield.TextInputLayout>
 

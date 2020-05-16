@@ -264,7 +264,8 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
   }
 
 
-  var birth : String? = null
+  var birth: String? = null
+
   // intent 결과 받기
   override fun onActivityResult(requestCode: Int, resultCode: Int, intentData: Intent?) {
     super.onActivityResult(requestCode, resultCode, intentData)
@@ -460,7 +461,7 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
 //            isInputCorrectData[0].toString() + ", " + age!!.isNotEmpty()
 //              .toString() + ", " + gender!!.isNotEmpty().toString()
 //          )
-          // 단순 editText의 Empty유무 확인 => age는 이곳에서만 쓰이고 안쓰임. -> birth로 나이 관리.
+            // 단순 editText의 Empty유무 확인 => age는 이곳에서만 쓰이고 안쓰임. -> birth로 나이 관리.
             if (selectedImageUri == null) // 프로필 이미지를 설정하지 않았을 때 = 사용자 입장에서 프로필 버튼을 누르지 않았음
             {
               basicProfileSettingPopup() //팝업창으로 물어봄

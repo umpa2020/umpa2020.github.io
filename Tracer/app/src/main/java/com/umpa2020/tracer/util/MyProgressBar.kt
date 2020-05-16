@@ -8,7 +8,7 @@ class MyProgressBar {
   var mprogressBar = ProgressBar(App.instance.currentActivity() as Activity)
 
   fun show() {
-    if(switch==0) mprogressBar.show()
+    if (switch == 0) mprogressBar.show()
     switch++
   }
 

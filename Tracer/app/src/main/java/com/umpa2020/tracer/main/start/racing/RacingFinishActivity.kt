@@ -7,13 +7,15 @@ import androidx.appcompat.app.AppCompatActivity
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.ActivityData
-import com.umpa2020.tracer.dataClass.InfoData
+import com.umpa2020.tracer.dataClass.MapInfo
 import com.umpa2020.tracer.dataClass.RankingData
 import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.extensions.*
 import com.umpa2020.tracer.main.MainActivity
-import com.umpa2020.tracer.network.*
-import com.umpa2020.tracer.util.Logg
+import com.umpa2020.tracer.network.FBMapRepository
+import com.umpa2020.tracer.network.FBProfileRepository
+import com.umpa2020.tracer.network.FBRacingRepository
+import com.umpa2020.tracer.network.FBUsersRepository
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
@@ -27,7 +29,7 @@ import java.util.*
 class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
 
   var activity = this
-  lateinit var racerData: InfoData
+  lateinit var racerData: MapInfo
   lateinit var arrRankingData: MutableList<RankingData>
   lateinit var progressbar: ProgressBar
 
@@ -41,7 +43,7 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
     progressbar.show()
 
     // Racing Activity 에서 넘겨준 infoData를 받아서 활용
-    racerData = intent.getParcelableExtra("InfoData") as InfoData
+    racerData = intent.getParcelableExtra("InfoData") as MapInfo
     val result = intent.extras!!.getBoolean("Result")
     val racerGPX = intent.getParcelableExtra<RouteGPX>("RouteGPX")
     racerSpeeds = racerGPX!!.getSpeed()

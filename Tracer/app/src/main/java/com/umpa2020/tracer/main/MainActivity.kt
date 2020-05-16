@@ -14,7 +14,6 @@ import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.locationBackground.LocationBackgroundService
 import com.umpa2020.tracer.locationBackground.ServiceStatus
-import com.umpa2020.tracer.viewModel.LocationViewModel
 import com.umpa2020.tracer.main.challenge.ChallengeFragment
 import com.umpa2020.tracer.main.profile.ProfileFragment
 import com.umpa2020.tracer.main.ranking.RankingFragment
@@ -22,6 +21,7 @@ import com.umpa2020.tracer.main.start.StartFragment
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.TTS
 import com.umpa2020.tracer.util.UserInfo
+import com.umpa2020.tracer.viewModel.LocationViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity() {
       Logg.d("값 없음")
       UserInfo.lat = 37.619606f
       UserInfo.lng = 127.059798f
-    }else{
+    } else {
       Logg.d("값 있음 : ${UserInfo.lat}, ${UserInfo.lng}")
     }
 
@@ -165,7 +165,7 @@ class MainActivity : AppCompatActivity() {
 
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { // 오레오 이상부터 foregroundService로 실행.
         startForegroundService(it)
-      }else {
+      } else {
         startService(it)
       }
     }

@@ -12,7 +12,7 @@ import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.constant.UserState
-import com.umpa2020.tracer.dataClass.InfoData
+import com.umpa2020.tracer.dataClass.MapInfo
 import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.extensions.toWayPoint
 import com.umpa2020.tracer.gpx.WayPointType.*
@@ -98,7 +98,7 @@ class RunningActivity : BaseRunningActivity() {
     TTS.speech(getString(R.string.finishRunning))
 
     wpList.add(currentLocation.toWayPoint(FINISH_POINT))
-    val infoData = InfoData()
+    val infoData = MapInfo()
     infoData.distance = distance
     infoData.time = SystemClock.elapsedRealtime() - chronometer.base
     infoData.startLatitude = trkList.first().lat

@@ -2,7 +2,7 @@ package com.umpa2020.tracer.network
 
 import com.google.firebase.firestore.DocumentSnapshot
 import com.umpa2020.tracer.dataClass.ActivityData
-import com.umpa2020.tracer.dataClass.InfoData
+import com.umpa2020.tracer.dataClass.MapInfo
 import com.umpa2020.tracer.dataClass.Users
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.UserInfo
@@ -44,7 +44,7 @@ class FBUsersRepository : BaseFB() {
       }.toObjects(ActivityData::class.java)
   }
 
-  suspend fun listUserRoute(uid: String, limit: Long): List<InfoData>? {
+  suspend fun listUserRoute(uid: String, limit: Long): List<MapInfo>? {
     val infoDatas =
       if (globalStartAfter == null) {
         mapsCollectionRef.whereEqualTo(BaseFB.MAKER_ID, uid)
@@ -54,7 +54,7 @@ class FBUsersRepository : BaseFB() {
         if (documents.size == 0)
           return null
         globalStartAfter = documents.last()
-      }.toObjects(InfoData::class.java)
+      }.toObjects(MapInfo::class.java)
 
     val playedMapIdList = FBMapRepository().listPlayed()
     val likedMapIdList = FBMapRepository().listLikedMap()
