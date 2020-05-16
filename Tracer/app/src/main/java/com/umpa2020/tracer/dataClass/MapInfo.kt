@@ -20,5 +20,6 @@ data class MapInfo(
   var liked: Boolean = false,
   var played: Boolean = false,
   var averageSpeed: Double = 0.0,
-  var maxSpeed: Double = 0.0
+  var maxSpeed: Double = 0.0,
+  var createTime: Long = 0L
 ) : Parcelable

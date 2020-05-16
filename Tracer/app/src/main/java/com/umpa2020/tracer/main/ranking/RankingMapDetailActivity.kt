@@ -53,7 +53,7 @@ class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener, OnM
     MainScope().launch {
       FBMapRepository().getMapInfo(mapId)?.let {
         rankingDetailMapTitle.text = it.mapTitle
-        rankingDetailDate.text = it.time.format(Y_M_D)
+        rankingDetailDate.text = it.createTime.format(Y_M_D)
         rankingDetailMapDetail.text = it.mapExplanation
         rankingDetailDistance.text = String.format("%.2f", it.distance / 1000)
         rankingDetailTime.text = it.time.format(m_s)

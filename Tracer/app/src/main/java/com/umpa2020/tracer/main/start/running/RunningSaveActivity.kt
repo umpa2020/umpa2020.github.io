@@ -150,16 +150,17 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
     val timestamp = Date().time
 
     // 인포데이터에 필요한 내용을 저장하고
-    mapInfo.mapId = mapTitleEdit.text.toString() + timestamp.toString()
-    mapInfo.makerId = UserInfo.autoLoginKey
-    mapInfo.mapTitle = mapTitleEdit.text.toString()
-    mapInfo.mapImagePath = "mapImage/${mapInfo.mapTitle}"
-    mapInfo.mapExplanation = mapExplanationEdit.text.toString()
-    mapInfo.plays = 1
-    mapInfo.likes = 0
-    mapInfo.maxSpeed = speedList.max()!!
-    mapInfo.averageSpeed = speedList.average()
-    mapInfo.routeGPXPath = "$MAP_ROUTE/${mapInfo.mapId}/${mapInfo.mapId}"
+    infoData.mapId = mapTitleEdit.text.toString() + timestamp.toString()
+    infoData.makerId = UserInfo.autoLoginKey
+    infoData.mapTitle = mapTitleEdit.text.toString()
+    infoData.mapImagePath = "mapImage/${infoData.mapTitle}"
+    infoData.mapExplanation = mapExplanationEdit.text.toString()
+    infoData.plays = 1
+    infoData.likes = 0
+    infoData.maxSpeed = speedList.max()!!
+    infoData.averageSpeed = speedList.average()
+    infoData.routeGPXPath = "$MAP_ROUTE/${infoData.mapId}/${infoData.mapId}"
+    infoData.createTime = timestamp
 
     val rankingData = RankingData(
       UserInfo.nickname,

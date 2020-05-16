@@ -6,7 +6,7 @@
   android:layout_height="match_parent">
 
   <Toolbar
-    android:id="@+id/profileFragmentToolBar"
+    android:id="@+id/profileToolBar"
     android:layout_width="match_parent"
     android:layout_height="50dp"
     android:background="@color/white"
@@ -31,13 +31,13 @@
   </Toolbar>
 
   <LinearLayout
+    android:id="@+id/profileFragmentLinearLayout"
     android:background="@color/white"
     android:paddingTop="20dp"
     android:gravity="center"
-    android:id="@+id/profileFragmentLinearLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_below="@+id/profileFragmentToolBar"
+    android:layout_below="@+id/profileToolBar"
     android:orientation="vertical">
 
     <de.hdodenhof.circleimageview.CircleImageView
@@ -46,7 +46,7 @@
       android:layout_height="100dp"
       android:src="@drawable/ic_profile_logo"
       app:civ_border_color="@color/gray"
-      app:civ_border_width="2dp" />
+      app:civ_border_width="2dp"/>
 
     <TextView
       android:layout_marginTop="20dp"
@@ -54,7 +54,7 @@
       style="@style/blackBoldText20"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_gravity="center"/>
+      android:layout_gravity="center" />
   </LinearLayout>
 
   <LinearLayout
@@ -87,7 +87,8 @@
         android:layout_marginTop="5dp"
         android:textSize="20dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -110,13 +111,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="20dp" />
+
     </LinearLayout>
   </LinearLayout>
 
   <TextView
-    android:background="@drawable/textline_background_up"
+    android:background="@drawable/textlines"
     android:layout_marginTop="20dp"
-    android:id="@+id/profileRouteTextView"
+    android:id="@+id/otherProfileRouteTextView"
     style="@style/ListDetail"
     android:layout_width="match_parent"
     android:layout_height="50dp"
@@ -125,12 +127,12 @@
     android:paddingEnd="20dp"
     android:padding="10dp"
     android:gravity="center_vertical"
-    android:text="@string/my_route" />
+    android:text="@string/other_route" />
 
   <TextView
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_alignBaseline="@+id/profileRouteTextView"
+    android:layout_alignBaseline="@+id/otherProfileRouteTextView"
     android:layout_alignParentRight="true"
     android:layout_marginRight="20dp"
     android:background="@drawable/ic_chevron_right_black_24dp"
@@ -140,7 +142,7 @@
   <TextView
     android:id="@+id/divisionTextView2"
     style="@style/divisionTextView"
-    android:layout_below="@+id/profileRouteTextView" />
+    android:layout_below="@+id/otherProfileRouteTextView" />
 
   <TextView
     android:background="@drawable/textline_background_down"
@@ -153,7 +155,7 @@
     android:paddingEnd="20dp"
     android:padding="10dp"
     android:gravity="center_vertical"
-    android:text="@string/my_activity" />
+    android:text="@string/activity" />
 
   <TextView
     android:layout_width="wrap_content"
@@ -165,4 +167,35 @@
     android:backgroundTint="@color/black"
     android:textSize="18dp" />
 
+
+
+  <!--     <RelativeLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content">
+
+           <TextView
+               style="@style/divisionTextView"/>
+
+           <TextView
+               android:id="@+id/profileRecordTextView"
+               style="@style/ListDetail"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_marginLeft="20dp"
+               android:layout_marginRight="20dp"
+               android:padding="10dp"
+               android:text="나의 활동" />
+
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_alignEnd="@id/profileRecordTextView"
+               android:layout_centerVertical="true"
+               android:paddingTop="5dp"
+               android:text=">  "
+               android:textSize="18dp" />
+
+
+       </RelativeLayout>
+-->
 </RelativeLayout>

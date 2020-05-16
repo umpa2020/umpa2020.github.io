@@ -3,9 +3,7 @@ package com.umpa2020.tracer.lockscreen.util
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import androidx.core.content.ContextCompat.startForegroundService
 import com.umpa2020.tracer.App
-import com.umpa2020.tracer.LockScreenApplication
 import com.umpa2020.tracer.lockscreen.service.LockScreenService
 import com.umpa2020.tracer.util.Logg
 

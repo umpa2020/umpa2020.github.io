@@ -57,7 +57,8 @@ class Constants {
     const val MIN_CLICK_INTERVAL: Long = 600
     var mLastClickTime: Long = 0
 
-
+    // 포그라운드 서비스 ID
+    const val FOREGROUND_ID = 1994
 
     const val TIMESTAMP_LENGTH = 13
     var testId = 0

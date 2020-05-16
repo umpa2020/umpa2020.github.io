@@ -1,11 +1,9 @@
 package com.umpa2020.tracer.main.start.racing
 
 import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import androidx.recyclerview.widget.RecyclerView
 import co.lujun.androidtagview.TagContainerLayout
 import com.umpa2020.tracer.R
@@ -13,17 +11,12 @@ import com.umpa2020.tracer.dataClass.RankingData
 import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.extensions.m_s
 import com.umpa2020.tracer.extensions.show
-import com.umpa2020.tracer.extensions.toRank
-import com.umpa2020.tracer.main.profile.OtherProfileActivity
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.OnSingleClickListener
-import com.umpa2020.tracer.util.UserInfo.nickname
 import kotlinx.android.synthetic.main.recycler_racing_select_people_item.view.*
-import kotlinx.android.synthetic.main.recycler_rankfragment_topplayer_item.view.*
 import kotlinx.android.synthetic.main.recycler_rankfragment_topplayer_item.view.rankRecyclerItemClickChallengerNicknameTextView
 import kotlinx.android.synthetic.main.recycler_rankfragment_topplayer_item.view.rankRecyclerItemClickCountTextView
 import kotlinx.android.synthetic.main.recycler_rankfragment_topplayer_item.view.rankRecyclerItemClickTimeTextView
-import java.util.*
 
 class RacingRecyclerViewAdapterMultiSelect(
   val mydata: MutableList<RankingData>,

@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import com.chibatching.kotpref.Kotpref
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -68,7 +67,6 @@ class LoginActivity : AppCompatActivity(), OnSingleClickListener {
       .build()
 
     mGoogleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions) //구글 로그인 클래스
-    Kotpref.init(this) // Kotpref 사용을 위한 singleton context 저장
 
     // 람다식으로 onClick 설정
     googleSignInButton.setOnClickListener(this)
@@ -144,7 +142,9 @@ class LoginActivity : AppCompatActivity(), OnSingleClickListener {
           Logg.d("signInWithCredential:success")
           // 로그인 성공
           uid = mAuth!!.uid.toString()
-          mFirestoreDB!!.collection("userinfo").whereEqualTo("USER_ID", uid).get()
+          mFirestoreDB!!.collection("users").whereEqualTo("userId", uid)
+            .whereEqualTo("userState", true)
+            .get()
             .addOnSuccessListener { result ->
               // Document found in the offline cache
               if (result.isEmpty) {
@@ -169,7 +169,7 @@ class LoginActivity : AppCompatActivity(), OnSingleClickListener {
                   UserInfo.autoLoginKey = mAuth!!.uid.toString()
                   UserInfo.email = email
                   UserInfo.nickname = document.data["nickname"].toString() // Shared에 nickname저장.
-                  UserInfo.birth = document.data["age"].toString()
+                  UserInfo.birth = document.data["birth"].toString()
                   UserInfo.gender = document.data["gender"].toString()
 
                   val nextIntent = Intent(this@LoginActivity, MainActivity::class.java)

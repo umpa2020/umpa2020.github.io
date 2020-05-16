@@ -28,14 +28,14 @@
 
   <application
     android:name=".App"
-    android:allowBackup="true"
+    android:allowBackup="false"
     android:icon="@mipmap/ic_launcher_tracer_final"
     android:label="@string/app_name"
     android:roundIcon="@mipmap/ic_tracer_final_round"
     android:supportsRtl="true"
     android:theme="@style/AppTheme"
     tools:ignore="GoogleAppIndexingWarning">
-    <activity android:name=".login.join.AgeSelectActivity"></activity>
+    <activity android:name=".login.join.AgeSelectActivity"/>
     <activity android:name=".main.challenge.ChallengeDataSettingActivity" />
 
     <service android:name=".lockscreen.service.LockScreenService" />
@@ -44,14 +44,14 @@
       android:name=".lockscreen.LockScreenActivity"
       android:launchMode="singleInstance"
       android:showOnLockScreen="true"
-      android:theme="@style/lockscreenView" />
+      android:theme="@style/lockscreenView"/>
     <activity android:name=".main.start.racing.AllRankingActivity" />
-    <activity android:name=".main.start.racing.RacingSelectPeopleActivity" />
-    <activity android:name=".main.profile.myActivity.ProfileActivityActivity" />
+    <activity android:name=".main.start.racing.RacingSelectPeopleActivity"/>
+    <activity android:name=".main.profile.myrecord.ProfileRecordActivity" />
     <activity android:name=".main.profile.settting.MyInformationActivity" />
-    <activity android:name=".main.profile.settting.AppSettingActivity" />
+    <activity android:name=".main.profile.settting.AppSettingActivity"/>
     <activity android:name=".main.profile.myroute.ProfileRouteActivity" />
-    <activity android:name=".main.profile.OtherProfileActivity" />
+    <activity android:name=".main.profile.ProfileActivity" />
 
     <service
       android:name=".locationBackground.LocationBackgroundService"
@@ -73,6 +73,7 @@
     <activity
       android:name=".main.start.running.RunningSaveActivity"
       android:windowSoftInputMode="adjustPan" />
+<!--    <activity android:name=".main.start.BaseRunningActivity"/>-->
     <activity android:name=".main.start.running.RunningActivity" />
     <activity android:name=".main.MainActivity" />
     <activity android:name=".login.LoginActivity" />

@@ -24,7 +24,6 @@ import kotlinx.coroutines.withContext
 class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener {
   val activity = this
   var likes = 0
-  var mapTitle = ""
   var mapId = ""
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,7 +44,7 @@ class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener
       withContext(Dispatchers.IO) {
         FBMapRepository().getMapInfo(mapId)
       }?.let {
-        mapTitle = it.mapTitle
+        rankRecyclerMapTitle.text = it.mapTitle
         it.makerId.let {
           FBProfileRepository().getUserNickname(it).let {
             rankRecyclerNickname.text = it
@@ -57,7 +56,6 @@ class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener
       }
     }
 
-    rankRecyclerMapTitle.text = mapTitle
     MainScope().launch {
       rankRoutePriview.image(FBMapRepository().getMapImage(mapId))
       setLiked(FBLikesRepository().isLiked(UserInfo.autoLoginKey, mapId), FBLikesRepository().getMapLikes(mapId))

@@ -2,6 +2,7 @@ package com.umpa2020.tracer.network
 
 import android.net.Uri
 import com.umpa2020.tracer.dataClass.MapInfo
+import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.RankingData
 import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.extensions.gpxToClass
