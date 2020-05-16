@@ -2,10 +2,7 @@ package com.umpa2020.tracer.network
 
 import android.net.Uri
 import com.google.firebase.firestore.DocumentSnapshot
-import com.umpa2020.tracer.dataClass.InfoData
-import com.umpa2020.tracer.dataClass.LikedMapData
 import com.umpa2020.tracer.dataClass.ProfileData
-import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.coroutines.tasks.await
 import java.util.*
@@ -68,4 +65,5 @@ class FBProfileRepository : BaseFB() {
     // 현재 날짜를 프로필 이름으로 nickname/Profile/현재날짜 경로 만들기
     FBStorageRepository().uploadFile(imageUri, PROFILE + "/" + UserInfo.autoLoginKey + "/" + timestamp)
   }
+
 }

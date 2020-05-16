@@ -2,6 +2,7 @@ package com.umpa2020.tracer.main.start
 
 import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Context.LAYOUT_INFLATER_SERVICE
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageInfo
@@ -15,6 +16,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -22,14 +24,13 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
-import com.umpa2020.tracer.dataClass.NearMap
+import com.umpa2020.tracer.dataClass.MapInfo
 import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.extensions.*
 import com.umpa2020.tracer.gpx.WayPoint
@@ -42,6 +43,7 @@ import com.umpa2020.tracer.main.start.running.RunningActivity
 import com.umpa2020.tracer.map.TraceMap
 import com.umpa2020.tracer.network.BaseFB.Companion.MAP_ID
 import com.umpa2020.tracer.network.FBMapRepository
+import com.umpa2020.tracer.network.FBProfileRepository
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.OnSingleClickListener
@@ -64,11 +66,11 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
   // 처음 화면 시작에서 주변 route 마커 찍어주기 위함
   val STRAT_FRAGMENT_NEARMAP = 30
   val NEARMAPFALSE = 41
-  var nearMaps: ArrayList<NearMap> = arrayListOf()
+  var nearMaps: ArrayList<MapInfo> = arrayListOf()
   var wedgedCamera = true
   val progressBar = MyProgressBar()
   var firstFlag = true
-
+  lateinit var mCustomMarkerView:View
   //  companion object{
 //    var gpsViewModel = GpsViewModel(App.instance.currentActivity()!!.application)
 //  }
@@ -150,22 +152,24 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
           progressBar.dismiss()
         } else {
           mainStartSearchAreaButton.visibility = View.GONE
-          val icon =
-            BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE)
           routeMarkers.forEach {
             it.remove()
           }
           routeMarkers.clear()
           nearMapList.forEach { nearMap ->
             //데이터 바인딩
-            routeMarkers.add(
+            Logg.d("asd : ${FBProfileRepository().getProfile(nearMap.makerId).imgPath}")
+           routeMarkers.add(
               traceMap!!.mMap.addMarker(
                 MarkerOptions()
-                  .position(nearMap.latLng)
+                  .position(LatLng(nearMap.startLatitude,nearMap.startLongitude))
                   .title(nearMap.mapTitle)
                   .snippet(nearMap.distance.prettyDistance)
-                  .icon(icon)
-              ).apply { tag = nearMap.mapId }
+                  .icon(traceMap?.makeProfileIcon(mCustomMarkerView,nearMap.makerId))
+
+              ).apply {
+                Logg.d("nani0-2")
+                tag = nearMap.mapId }
             )
           }
           progressBar.dismiss()
@@ -248,7 +252,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
 
     val smf = childFragmentManager.findFragmentById(R.id.map_viewer_start) as SupportMapFragment
     smf.getMapAsync(this)
-
+    mCustomMarkerView= (activity?.getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater).inflate(R.layout.profile_marker, null);
     return view
   }
 

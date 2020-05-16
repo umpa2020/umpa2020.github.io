@@ -6,6 +6,7 @@ import android.widget.Toast
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.umpa2020.tracer.App
+import kotlin.math.ceil
 
 fun String.show() {
   val text = this
@@ -76,4 +77,9 @@ fun Double.prettyDistance(): String {
 
 fun Double.prettySpeed(): String {
   return String.format("%.1f", this) + "km/h"
+}
+
+fun Int.toDp() : Float{
+  return if (this == 0) 0f
+  else ceil(App.instance.resources.displayMetrics.density * this)
 }

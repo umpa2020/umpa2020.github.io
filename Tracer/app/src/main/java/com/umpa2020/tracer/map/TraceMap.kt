@@ -1,17 +1,28 @@
 package com.umpa2020.tracer.map
 
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.PorterDuff
 import android.location.Location
+import android.view.View
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.*
+import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
+import com.umpa2020.tracer.dataClass.RacerData
 import com.umpa2020.tracer.extensions.bounds
+import com.umpa2020.tracer.extensions.image
 import com.umpa2020.tracer.extensions.makingIcon
 import com.umpa2020.tracer.extensions.toLatLng
 import com.umpa2020.tracer.gpx.WayPoint
 import com.umpa2020.tracer.gpx.WayPointType.*
+import com.umpa2020.tracer.network.FBProfileRepository
 import com.umpa2020.tracer.util.Logg
+import kotlinx.android.synthetic.main.profile_marker.view.*
+import kotlinx.coroutines.delay
+
 
 class TraceMap(val mMap: GoogleMap) {
 
@@ -21,13 +32,6 @@ class TraceMap(val mMap: GoogleMap) {
 
   lateinit var loadTrack: Polyline
   val passedIcon = R.drawable.ic_passed_circle.makingIcon()
-  val racerIcons = arrayOf(
-    R.drawable.ic_racer0.makingIcon(),
-    R.drawable.ic_racer1.makingIcon(),
-    R.drawable.ic_racer2.makingIcon(),
-    R.drawable.ic_racer3.makingIcon(),
-    R.drawable.ic_racer4.makingIcon()
-  )
   var markerList = mutableListOf<Marker>()
   var turningPointList = mutableListOf<Marker>()
   val unPassedIcon = R.drawable.ic_unpassed_circle.makingIcon()
@@ -99,27 +103,48 @@ class TraceMap(val mMap: GoogleMap) {
 
   var racerList = mutableListOf<Marker>()
 
-  suspend fun updateMarker(i: Int, latlng: LatLng) {
+  fun updateMarker(i: Int, latlng: LatLng) {
     racerList[i].position = latlng
   }
 
-  suspend fun addRacer(latlng: LatLng, name: String, racerNo: Int) {
+  suspend fun addRacer(latlng: LatLng, racerData: RacerData, mCustomMarkerView: View) {
+    Logg.d("racer : before add")
     racerList.add(
       mMap.addMarker(
         MarkerOptions()
           .position(latlng)
-          .title(name)
-          .icon(racerIcons[racerNo])
+          .title(racerData.racerName)
+          .icon(
+            makeProfileIcon(mCustomMarkerView, racerData.racerId)
+          )
           .draggable(true)
       )
     )
+    Logg.d("racer : after add")
+  }
+
+  suspend fun makeProfileIcon(view: View, uid: String): BitmapDescriptor {
+    Logg.d("start glide")
+    view.profile_image.image(FBProfileRepository().getProfile(uid).imgPath)
+    delay(100)
+    Logg.d("finish glide")
+    view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
+    view.layout(0, 0, view.measuredWidth, view.measuredHeight)
+    val bitmap = Bitmap.createBitmap(
+      view.measuredWidth, view.measuredHeight,
+      Bitmap.Config.ARGB_8888
+    )
+    val canvas = Canvas(bitmap)
+    canvas.drawColor(Color.WHITE, PorterDuff.Mode.SRC_IN)
+    view.draw(canvas)
+    return BitmapDescriptorFactory.fromBitmap(bitmap)
   }
 
   fun removeRacer(racerNo: Int) {
     racerList[racerNo].remove()
   }
 
-  fun addMarker(wpt:WayPoint){
+  fun addMarker(wpt: WayPoint) {
     when (wpt.type) {
       START_POINT -> {
         markerList.add(
@@ -130,7 +155,6 @@ class TraceMap(val mMap: GoogleMap) {
               .icon(R.drawable.ic_start_point.makingIcon())
           )
         )
-
       }
       FINISH_POINT -> {
         markerList.add(

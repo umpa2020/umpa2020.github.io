@@ -1,5 +1,6 @@
 package com.umpa2020.tracer.network
 
+import android.graphics.Bitmap
 import android.net.Uri
 import kotlinx.coroutines.tasks.await
 import java.io.File
@@ -28,4 +29,5 @@ class FBStorageRepository : BaseFB() {
     storage.reference.child(path).getFile(localFile).await()
     return localFile.path
   }
+
 }

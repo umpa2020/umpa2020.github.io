@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.umpa2020.tracer.R
-import com.umpa2020.tracer.dataClass.InfoData
+import com.umpa2020.tracer.dataClass.MapInfo
 import com.umpa2020.tracer.extensions.*
 import com.umpa2020.tracer.main.ranking.RankRecyclerItemClickActivity
 import com.umpa2020.tracer.network.BaseFB.Companion.MAP_ID
@@ -22,7 +22,7 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import java.util.*
 
-class ProfileRouteRecyclerViewAdapter(val mdata: ArrayList<InfoData>) :
+class ProfileRouteRecyclerViewAdapter(val mdata: ArrayList<MapInfo>) :
   RecyclerView.Adapter<ProfileRouteRecyclerViewAdapter.mViewHolder>() {
   var context: Context? = null
 

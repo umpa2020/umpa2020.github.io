@@ -8,8 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
-import com.umpa2020.tracer.dataClass.InfoData
-import com.umpa2020.tracer.dataClass.UserId
+import com.umpa2020.tracer.dataClass.MapInfo
 import com.umpa2020.tracer.network.BaseFB.Companion.USER_ID
 import com.umpa2020.tracer.network.FBUsersRepository
 import com.umpa2020.tracer.util.ProgressBar
@@ -23,7 +22,7 @@ class ProfileRouteActivity : AppCompatActivity() {
   var uid = ""
   var nickname = ""
   var isLoding = false
-  val rootInfoDatas = arrayListOf<InfoData>()
+  val rootInfoDatas = arrayListOf<MapInfo>()
   var limit = 0L
   val repository = FBUsersRepository()
 
@@ -75,9 +74,9 @@ class ProfileRouteActivity : AppCompatActivity() {
    * 리스너로 받아온 루트 데이터들을
    * 리사이클러뷰에 띄워줌
    */
-  fun listProfileRoute(infoDatas: List<InfoData>?) {
-    if (infoDatas != null)
-      rootInfoDatas.addAll(infoDatas)
+  fun listProfileRoute(mapInfos: List<MapInfo>?) {
+    if (mapInfos != null)
+      rootInfoDatas.addAll(mapInfos)
 
     if (rootInfoDatas.isEmpty()) {
       profileRecyclerRouteisEmpty.visibility = View.VISIBLE

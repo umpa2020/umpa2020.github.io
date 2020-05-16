@@ -16,7 +16,7 @@ import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants.Companion.ANIMATION_DURATION_TIME
 import com.umpa2020.tracer.constant.Constants.Companion.MAX_DISTANCE
 import com.umpa2020.tracer.constant.Constants.Companion.MAX_SEEKERBAR
-import com.umpa2020.tracer.dataClass.InfoData
+import com.umpa2020.tracer.dataClass.MapInfo
 import com.umpa2020.tracer.main.MainActivity.Companion.gpsViewModel
 import com.umpa2020.tracer.network.FBRankingRepository
 import com.umpa2020.tracer.util.Logg
@@ -36,7 +36,7 @@ class RankingFragment : Fragment(), OnSingleClickListener {
   lateinit var root: View
   lateinit var rankingRepo: FBRankingRepository
 
-  var rootInfoDatas = arrayListOf<InfoData>()
+  var rootInfoDatas = arrayListOf<MapInfo>()
   var distance = MAX_DISTANCE
   var tuneDistance = 0
   var isLoding = false
@@ -234,10 +234,10 @@ class RankingFragment : Fragment(), OnSingleClickListener {
     requireView().tuneLinearLayout.startAnimation(animate)
   }
 
-  fun getRank(infoDatas: MutableList<InfoData>, mode: String) {
+  fun getRank(mapInfos: MutableList<MapInfo>, mode: String) {
     progressBar.dismiss()
 
-    rootInfoDatas.addAll(infoDatas)
+    rootInfoDatas.addAll(mapInfos)
     if (rootInfoDatas.isEmpty()) {
       rankingRecyclerRouteisEmpty.visibility = View.VISIBLE
     } else {

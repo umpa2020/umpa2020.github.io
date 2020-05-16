@@ -74,7 +74,7 @@ class RacingSelectPeopleActivity : AppCompatActivity(), OnSingleClickListener {
       R.id.racingSelectButton -> {
         val racerList = tagcontainerLayout1.tags.toTypedArray().map { nickName ->
           RacerData(
-            rankingDataList.find { it.challengerNickname == nickName }!!.challengerId, nickName
+            rankingDataList.find { it.challengerNickname == nickName }?.challengerId!!, nickName
           )
         }
         val intent = Intent(App.instance.context(), RacingActivity::class.java)
