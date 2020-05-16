@@ -200,7 +200,8 @@
     android:background="#990044FF"
     android:gravity="center"
     android:textColor="@color/white"
-    android:textSize="20sp" />
+    android:textSize="20sp"
+    android:visibility="invisible"/>
 
   <TextView
     android:id="@+id/racingNotificationTextView"

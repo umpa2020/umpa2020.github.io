@@ -1,8 +1,5 @@
 package com.umpa2020.tracer.main.start
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
-import android.animation.ObjectAnimator
 import android.content.IntentFilter
 import android.location.Location
 import android.os.Bundle
@@ -359,8 +356,13 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
       }
 
     })
+    Logg.d("Animation set")
     pauseNotificationTextView.animation = animationSet
+    Logg.d("Animation before start")
+  //  pauseNotificationTextView.visible()
     pauseNotificationTextView.animation.start()
+    Logg.d("Animation after start")
+
 
   }
 
@@ -370,7 +372,7 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
   fun disappearAnimation() {
     val height = pauseNotificationTextView.height.toFloat()
     pauseNotificationTextView.clearAnimation() // 일시정지 애니메이션 종료
-    pauseNotificationTextView.visibility = View.GONE
+    pauseNotificationTextView.invisible()
     Logg.i("재시작 애니메이션")
     Logg.i(height.toString())
     val translationAnimation1 = TranslateAnimation(0f, 0f, height, 0f)
