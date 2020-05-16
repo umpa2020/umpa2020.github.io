@@ -95,6 +95,7 @@
   <string name="please_select">선택해주세요.</string>
   <string name="set_default_image">기본 이미지로 설정하시겠습니까?</string>
   <string name="gps_activation">GPS 활성화</string>
+  <string name="lockscreen_activation">잠금화면 활성화</string>
   <string name="racing_go_the_distance">%1$s 을(를) %2$s 에 완주했습니다.</string>
   <string name="racing_fail">"%1$s 을(를) %2$s 에 실패했습니다."</string>
   <string name="map_save">"%1$s 을(를) %2$s 에 만들었습니다."</string>

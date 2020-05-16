@@ -22,9 +22,7 @@ import com.umpa2020.tracer.util.Logg
  */
 class LocationBackgroundService : IntentService("LocationBackgroundService"),
   LocationUpdatesComponent.ILocationProvider {
-  companion object {
-    var aa : NotificationCompat.Builder? = null
-  }
+
   /**
    * Activity와 Service 통신
    *  1. Activity는 Service에 이벤트를 전달
@@ -48,15 +46,20 @@ class LocationBackgroundService : IntentService("LocationBackgroundService"),
     LocationUpdatesComponent.onCreate(this)
     LocationUpdatesComponent.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
 
-    /**
-     *  포그라운드 서비스로 인해 onCreate()에서 알림창 초기화 및 실행.
-     */
+    startForegroundNotification()
+  }
+
+  /**
+   *  포그라운드 서비스로 인해 onCreate()에서 알림창 초기화 및 실행.
+   */
+  private fun startForegroundNotification() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       // 포그라운드 서비스는 알림창이 있어야 실행 가능.
       // 채널 생성은 한번만 해도 됌.
       NotificationManager.createMainNotificationChannel(this@LocationBackgroundService)
 
-      startForeground( Constants.FOREGROUND_ID, createNotificationCompatBuilder()
+      startForeground(
+        Constants.FOREGROUND_ID, createNotificationCompatBuilder()
           .build()
       )
     }
@@ -67,7 +70,9 @@ class LocationBackgroundService : IntentService("LocationBackgroundService"),
   override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
     Logg.i("onStartCommand Service started....")
 
-    if (intent != null) {
+    if (intent!!.action == "reStartNotification") {
+      startForegroundNotification()
+    } else {
       val action = intent.action
       Logg.i("onStartCommand action $action")
       when (action) {
@@ -129,46 +134,6 @@ class LocationBackgroundService : IntentService("LocationBackgroundService"),
       NotificationCompat.Builder(this@LocationBackgroundService, "")
     }
   }
-
-//  /**
-//   *  foreground에 알림창 만들기.
-//   */
-//  private fun createNotification(): Notification {
-//    val notificationChannelId = LocationBackgroundService::class.java.simpleName
-//
-//    // depending on the Android API that we're dealing with we will have
-//    // to use a specific method to create the notification
-//    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//      val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-//      val channel = NotificationChannel(
-//        notificationChannelId,
-//        "Notifications Channel",
-//        NotificationManager.IMPORTANCE_HIGH
-//      ).let {
-//        it.description = "Background location service is getting location..."
-//        it
-//      }
-//      notificationManager.createNotificationChannel(channel)
-//    }
-//
-//    // notification을 클릭하면 지정한 액티비티로 이동.
-//    val pendingIntent: PendingIntent = Intent(this, RunningActivity::class.java).let { notificationIntent ->
-//      PendingIntent.getActivity(this, 0, notificationIntent, 0)
-//    }
-//
-//    val builder: Notification.Builder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) Notification.Builder(
-//      this,
-//      notificationChannelId
-//    ) else Notification.Builder(this)
-//
-//    return builder
-//      .setContentTitle(getString(R.string.gps_activation))
-////      .setContentText("Background location service is getting location...")
-//      .setContentIntent(pendingIntent)
-//      .setSmallIcon(R.mipmap.ic_launcher_tracer_final)
-//      .setTicker("Ticker text")
-//      .build()
-//  }
 
   private fun startService() {
     //hey request for location updates

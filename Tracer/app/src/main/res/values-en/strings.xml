@@ -93,7 +93,8 @@
   <string name="nickname_available">Available nickname.</string>
   <string name="please_select">Please select</string>
   <string name="set_default_image">Would you like to set it as the default image?</string>
-  <string name="gps_activation">GPS activation</string>
+  <string name="gps_activation">GPS Activation</string>
+  <string name="lockscreen_activation">LockScreen Activation</string>
   <string name="racing_go_the_distance">You went the distance %1$s %2$s.</string>
   <string name="racing_fail">"You failed %1$s on %2$s."</string>
   <string name="map_save">"You made %1$s on %2$s."</string>
