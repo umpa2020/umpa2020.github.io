@@ -9,12 +9,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.iid.FirebaseInstanceId
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.locationBackground.LocationBackgroundService
 import com.umpa2020.tracer.locationBackground.ServiceStatus
-import com.umpa2020.tracer.viewModel.LocationViewModel
 import com.umpa2020.tracer.main.challenge.ChallengeFragment
 import com.umpa2020.tracer.main.profile.ProfileFragment
 import com.umpa2020.tracer.main.ranking.RankingFragment
@@ -22,7 +24,9 @@ import com.umpa2020.tracer.main.start.StartFragment
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.TTS
 import com.umpa2020.tracer.util.UserInfo
+import com.umpa2020.tracer.viewModel.LocationViewModel
 import kotlinx.android.synthetic.main.activity_main.*
+
 
 class MainActivity : AppCompatActivity() {
   private var doubleBackToExitPressedOnce1 = false
@@ -99,8 +103,31 @@ class MainActivity : AppCompatActivity() {
       ).commit()
     }
     Logg.d("restart service")
+
+    registerPushToken()
   }
 
+  /**
+   *  다음과 같은 경우 토큰 재 발급.
+   *  - 앱에서 인스턴스 ID 삭제
+   *  - 새 기기에서 앱 복원
+   *  - 사용자가 앱 삭제/재설치
+   *  - 사용자가 앱 데이터 소거
+   */
+  private fun registerPushToken() {
+    //v17.0.0 이전까지는
+    ////var pushToken = FirebaseInstanceId.getInstance().token
+    //v17.0.1 이후부터는 onTokenRefresh()-depriciated
+    var pushToken: String? = null
+    val uid = FirebaseAuth.getInstance().currentUser!!.uid
+    val map = mutableMapOf<String, Any>()
+    FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener { instanceIdResult ->
+      pushToken = instanceIdResult.token
+      Logg.d(pushToken.toString())
+      map["pushtoken"] = pushToken!!
+      FirebaseFirestore.getInstance().collection("pushtokens").document(uid).set(map)
+    }
+  }
 //  override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
 //    if (selectedFragment != null) {
 //      supportFragmentManager.putFragment(outState, KEY_FRAGMENT, currentFragment);

@@ -6,7 +6,6 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.TranslateAnimation
-import android.widget.LinearLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.umpa2020.tracer.util.Logg
 
