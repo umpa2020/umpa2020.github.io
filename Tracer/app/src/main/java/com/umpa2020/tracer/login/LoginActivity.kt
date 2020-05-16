@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import com.chibatching.kotpref.Kotpref
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -68,7 +67,6 @@ class LoginActivity : AppCompatActivity(), OnSingleClickListener {
       .build()
 
     mGoogleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions) //구글 로그인 클래스
-    Kotpref.init(this) // Kotpref 사용을 위한 singleton context 저장
 
     // 람다식으로 onClick 설정
     googleSignInButton.setOnClickListener(this)

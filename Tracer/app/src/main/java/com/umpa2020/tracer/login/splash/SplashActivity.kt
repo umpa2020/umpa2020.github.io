@@ -9,8 +9,7 @@ import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
+import com.chibatching.kotpref.Kotpref
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.extensions.show
 import com.umpa2020.tracer.login.LoginActivity
@@ -21,21 +20,19 @@ import kotlinx.android.synthetic.main.activity_splash.*
 import kotlin.system.exitProcess
 
 class SplashActivity : AppCompatActivity() {
-  val WSY = "WSY"
+
   private val multiplePermissionsCode = 100          //권한
   private val requiredPermissions = arrayOf(
     Manifest.permission.ACCESS_FINE_LOCATION,
     Manifest.permission.ACCESS_COARSE_LOCATION,
     Manifest.permission.READ_EXTERNAL_STORAGE
   )
-  private var mAuth: FirebaseAuth? = null
-
-  // firebase DB
-  private var mFirestoreDB: FirebaseFirestore? = null
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_splash)
+
+    Kotpref.init(this) // Kotpref 사용을 위한 singleton context 저장
 
     checkPermissions()          //모든 권한 확인
   }
@@ -87,11 +84,8 @@ class SplashActivity : AppCompatActivity() {
     }
   }
 
-  fun launchApp() {
-    /**
-     *  Firestore 초기화
-     */
-    mFirestoreDB = FirebaseFirestore.getInstance()
+  private fun launchApp() {
+
     ObjectAnimator.ofFloat(redMovingView, "translationX", 2000f).apply {
       duration = 1500
       start()
@@ -104,7 +98,7 @@ class SplashActivity : AppCompatActivity() {
        */
 
       // 앱 설치시에는 isEmpty() 즉, 값이 없다.
-      if (UserInfo.autoLoginKey.isEmpty()) { // 로그인 고유 값이 있으면 --> 회원가입 진행 끝났다고 생각하고 일단ㄱㄱ -> 수정해야함
+      if (UserInfo.autoLoginKey == "") { // 로그인 고유 값이 있으면 --> 회원가입 진행 끝났다고 생각하고 일단ㄱㄱ -> 수정해야함
         val nextIntent = Intent(this@SplashActivity, LoginActivity::class.java)
         startActivity(nextIntent)
         finish()
