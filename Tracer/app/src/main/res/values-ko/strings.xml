@@ -186,4 +186,6 @@
   <string name="max_five">최대 5명까지만 선택 가능합니다</string>
 
   <string name="challenge">챌린지</string>
+  <string name="notice_msg_pause_deviation">경로 이탈로 인해 일시 정지 되었습니다.</string>
+  <string name="notece_msg_stop_tracking">기록 측정 중지</string>
 </resources>

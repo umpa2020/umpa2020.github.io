@@ -189,4 +189,6 @@
 
 
   <string name="challenge">Challenge</string>
+  <string name="notice_msg_pause_deviation">Pausing because of deviation</string>
+  <string name="notece_msg_stop_tracking">Stop tracking</string>
 </resources>

@@ -37,7 +37,7 @@ import com.umpa2020.tracer.network.FBRacingRepository
 import com.umpa2020.tracer.util.ChoicePopup
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.TTS
-import kotlinx.android.synthetic.main.activity_ranking_recode_racing.*
+import kotlinx.android.synthetic.main.activity_running.*
 import kotlinx.coroutines.*
 
 class RacingActivity : BaseRunningActivity() {
@@ -62,7 +62,7 @@ class RacingActivity : BaseRunningActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-    setContentView(R.layout.activity_ranking_recode_racing)
+    setContentView(R.layout.activity_running)
     mapRouteGPX = intent.getParcelableExtra(ROUTE_GPX) as RouteGPX
     mapId = intent.getStringExtra(MAP_ID)!!
     racerList = intent.getSerializableExtra(RACER_LIST) as Array<RacerData>
@@ -75,9 +75,9 @@ class RacingActivity : BaseRunningActivity() {
 
     TTS.speech(getString(R.string.goToStartPoint))
 
-    racingStartButton.setOnClickListener(this)
-    racingStopButton.setOnClickListener(this)
-    racingPauseButton.setOnClickListener(this)
+    runningStartButton.setOnClickListener(this)
+    runningStopButton.setOnClickListener(this)
+    runningPauseButton.setOnClickListener(this)
   }
 
   override fun onMapReady(googleMap: GoogleMap) {
@@ -94,16 +94,16 @@ class RacingActivity : BaseRunningActivity() {
     val smf = supportFragmentManager.findFragmentById(R.id.map_viewer) as SupportMapFragment
     smf.getMapAsync(this)
     mCustomMarkerView = (getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater).inflate(R.layout.profile_marker, null);
-    startButton = racingStartButton
-    stopButton = racingStopButton
-    pauseButton = racingPauseButton
-    chronometer = racingTimerTextView
-    notificationTextView = racingNotificationTextView
-    pauseNotificationTextView = racingPauseNotificationTextView
-    drawerHandle = racingHandle
-    drawer = racingDrawer
-    speedTextView = racingSpeedTextView
-    distanceTextView = racingDistanceTextView
+    startButton = runningStartButton
+    stopButton = runningStopButton
+    pauseButton = runningPauseButton
+    chronometer = runningTimerTextView
+    notificationTextView = runningNotificationTextView
+    pauseNotificationTextView = runningPauseNotificationTextView
+    drawerHandle = runningHandle
+    drawer = runningDrawer
+    speedTextView = runningSpeedTextView
+    distanceTextView = runningDistanceTextView
     stopButton.setOnLongClickListener {
       noticePopup = ChoicePopup(this, getString(R.string.please_select),
         getString(R.string.cannot_save),
@@ -130,7 +130,7 @@ class RacingActivity : BaseRunningActivity() {
 
   override fun onSingleClick(v: View?) {
     when (v!!.id) {
-      R.id.racingStartButton -> {
+      R.id.runningStartButton -> {
         when (userState) {
           UserState.NORMAL -> {
             Toast.makeText(
@@ -149,12 +149,12 @@ class RacingActivity : BaseRunningActivity() {
           }
         }
       }
-      R.id.racingStopButton -> {
+      R.id.runningStopButton -> {
         //"종료를 원하시면 길게 눌러주세요".show()
         // Toast.makeText(this, "종료를 원하시면 길게 눌러주세요", Toast.LENGTH_LONG).show()
 
       }
-      R.id.racingPauseButton -> {
+      R.id.runningPauseButton -> {
         if (privacy == Privacy.RACING) {
           showPausePopup(
             getString(R.string.pause_notsave)
@@ -206,7 +206,7 @@ class RacingActivity : BaseRunningActivity() {
 
     if (!racerGPXList.isNullOrEmpty()) {
       Logg.d("Start Virtual Racing")
-      virtualRacing()
+      //  virtualRacing()
     }
   }
 
@@ -325,16 +325,20 @@ class RacingActivity : BaseRunningActivity() {
       deviationCount = 0
       notificationTextView.visibility = View.GONE
     } else {
+      if (userState != UserState.RUNNING) return
+      if (deviationCount == DEVIATION_COUNT) {
+        racingResult = false
+        pause()
+        notice(getString(R.string.notice_msg_pause_deviation))
+        return
+      }
       deviationCount++
       notice(
         getString(R.string.out_of_route) + deviationCount.toString() + getString(R.string.route_deviates) + DEVIATION_COUNT + getString(
           R.string.resgisration
         )
       )
-      if (deviationCount > DEVIATION_COUNT) {
-        racingResult = false
-        stop()
-      }
+
     }
   }
 

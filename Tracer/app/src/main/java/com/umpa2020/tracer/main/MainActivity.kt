@@ -18,7 +18,6 @@ import com.umpa2020.tracer.main.challenge.ChallengeFragment
 import com.umpa2020.tracer.main.profile.ProfileFragment
 import com.umpa2020.tracer.main.ranking.RankingFragment
 import com.umpa2020.tracer.main.start.StartFragment
-import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.TTS
 import com.umpa2020.tracer.util.UserInfo
 import com.umpa2020.tracer.viewModel.LocationViewModel
@@ -44,7 +43,7 @@ class MainActivity : AppCompatActivity() {
         R.id.navigation_challenge -> selectedFragment = ChallengeFragment()
       }
 
-      Logg.i("프래그먼트 개수 : " + supportFragmentManager.backStackEntryCount.toString())
+
       //동적으로 프래그먼트 교체
       supportFragmentManager.beginTransaction().replace(
         R.id.container,
@@ -68,11 +67,11 @@ class MainActivity : AppCompatActivity() {
 
     // 앱이 처음 다운되었으면 광운대학교로 위치 Shared에 설정.
     if (UserInfo.lat == 0.0f && UserInfo.lng == 0.0f) {
-      Logg.d("값 없음")
+
       UserInfo.lat = 37.619606f
       UserInfo.lng = 127.059798f
     } else {
-      Logg.d("값 있음 : ${UserInfo.lat}, ${UserInfo.lng}")
+
     }
 
 
@@ -98,7 +97,7 @@ class MainActivity : AppCompatActivity() {
         StartFragment()
       ).commit()
     }
-    Logg.d("restart service")
+
   }
 
 //  override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
@@ -112,12 +111,12 @@ class MainActivity : AppCompatActivity() {
 
   override fun onStart() {
     super.onStart()
-    Logg.d(selectedFragment.toString())
-    Logg.d(selectedFragment!!.id.toString())
+
+
 
     if (selectedFragment!!.id == Constants.PROFILE_FRAGMENT_ID) { //  ProfileFragment id = 2131296382
-      Logg.d(selectedFragment!!.id.toString())
-      Logg.i("누구냐!")
+
+
       supportFragmentManager.beginTransaction().detach(selectedFragment!!).attach(selectedFragment!!).commit()
     }
   }
@@ -158,10 +157,10 @@ class MainActivity : AppCompatActivity() {
    */
 
   private fun startStopServiceCommand(action: ServiceStatus) {
-    Logg.i("startStopServiceCommand")
+
     Intent(App.applicationContext(), LocationBackgroundService::class.java).also {
       it.action = action.name
-      Logg.d(action.toString())
+
 
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { // 오레오 이상부터 foregroundService로 실행.
         startForegroundService(it)
