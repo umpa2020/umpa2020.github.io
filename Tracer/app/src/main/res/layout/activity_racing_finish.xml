@@ -11,8 +11,8 @@
     android:layout_height="50dp"
     android:layout_alignParentTop="true"
     android:background="@color/white"
-    android:elevation="1dp"
-    android:contentInsetStart="0dp">
+    android:contentInsetStart="0dp"
+    android:elevation="1dp">
 
     <TextView
       style="@style/appBarText"
@@ -332,7 +332,7 @@
               android:layout_gravity="center"
               android:src="@drawable/ic_profile_logo"
               app:civ_border_color="@color/gray"
-              app:civ_border_width="2dp"/>
+              app:civ_border_width="2dp" />
 
             <ImageView
               android:layout_width="25dp"

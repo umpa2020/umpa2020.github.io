@@ -49,8 +49,8 @@ class GenderSelectActivity : AppCompatActivity(), OnSingleClickListener {
         }
       }
       R.id.man -> {
-        manTextView.setTextColor(resources.getColor(R.color.red,null))
-        womanTextView.setTextColor(resources.getColor(R.color.rankBackgroudGray,null))
+        manTextView.setTextColor(resources.getColor(R.color.red, null))
+        womanTextView.setTextColor(resources.getColor(R.color.rankBackgroudGray, null))
         if (manCheck.visibility == View.INVISIBLE && manUnderline.visibility == View.INVISIBLE) {
           manCheck.visibility = View.VISIBLE
           manUnderline.visibility = View.VISIBLE

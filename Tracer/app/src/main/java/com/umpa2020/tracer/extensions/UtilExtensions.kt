@@ -53,8 +53,8 @@ val Double.prettyDistance: String
     String.format("%.2f", this / 1000) + " km"
   }
 
-val  Double.prettySpeed : String
-  get() =  String.format("%.1f", this) + "km/h"
+val Double.prettySpeed: String
+  get() = String.format("%.1f", this) + "km/h"
 
 val Double.lockDistance: String
   get() = if (this < 1000) {
@@ -79,7 +79,7 @@ fun Double.prettySpeed(): String {
   return String.format("%.1f", this) + "km/h"
 }
 
-fun Int.toDp() : Float{
+fun Int.toDp(): Float {
   return if (this == 0) 0f
   else ceil(App.instance.resources.displayMetrics.density * this)
 }

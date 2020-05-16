@@ -12,7 +12,10 @@ import com.umpa2020.tracer.dataClass.RankingData
 import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.extensions.*
 import com.umpa2020.tracer.main.MainActivity
-import com.umpa2020.tracer.network.*
+import com.umpa2020.tracer.network.FBMapRepository
+import com.umpa2020.tracer.network.FBProfileRepository
+import com.umpa2020.tracer.network.FBRacingRepository
+import com.umpa2020.tracer.network.FBUsersRepository
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo

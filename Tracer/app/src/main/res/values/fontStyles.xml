@@ -24,9 +24,9 @@
   </style>
 
   <style name="buttonText">
-  <item name="android:textSize">15sp</item>
-  <item name="android:textColor">#ffffff</item>
-</style>
+    <item name="android:textSize">15sp</item>
+    <item name="android:textColor">#ffffff</item>
+  </style>
 
   <style name="buttonTextRedText" parent="buttonText">
     <item name="android:textColor">@color/red</item>

@@ -3,7 +3,6 @@ package com.umpa2020.tracer.network
 import com.google.firebase.firestore.DocumentSnapshot
 import com.umpa2020.tracer.dataClass.ActivityData
 import com.umpa2020.tracer.dataClass.MapInfo
-import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.dataClass.Users
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.UserInfo

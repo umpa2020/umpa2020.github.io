@@ -2,9 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
+  android:background="@color/white"
   android:paddingTop="5dp"
-  android:paddingBottom="5dp"
-  android:background="@color/white">
+  android:paddingBottom="5dp">
 
   <TextView
     android:id="@+id/rankRecyclerItemClickCountTextView"
@@ -36,12 +36,12 @@
     android:gravity="center" />
 
   <ImageView
-    android:layout_gravity="center"
     android:id="@+id/selectPeopleCheckImage"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:layout_gravity="center"
     android:background="@drawable/ic_check_24dp"
     android:paddingEnd="10dp"
-    android:visibility="invisible"/>
+    android:visibility="invisible" />
 
 </LinearLayout>

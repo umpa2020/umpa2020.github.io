@@ -12,8 +12,8 @@ import com.umpa2020.tracer.dataClass.RacerData
 import com.umpa2020.tracer.dataClass.RankingData
 import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.main.start.racing.RacingActivity.Companion.ROUTE_GPX
-import com.umpa2020.tracer.network.*
 import com.umpa2020.tracer.network.BaseFB.Companion.MAP_ID
+import com.umpa2020.tracer.network.FBMapRepository
 import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.activity_racing_select_people.*
 import kotlinx.coroutines.MainScope
@@ -87,6 +87,6 @@ class RacingSelectPeopleActivity : AppCompatActivity(), OnSingleClickListener {
   }
 
   companion object {
-    const val RACER_LIST="RacerList"
+    const val RACER_LIST = "RacerList"
   }
 }

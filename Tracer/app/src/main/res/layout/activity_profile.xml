@@ -32,13 +32,13 @@
 
   <LinearLayout
     android:id="@+id/profileFragmentLinearLayout"
-    android:background="@color/white"
-    android:paddingTop="20dp"
-    android:gravity="center"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_below="@+id/profileToolBar"
-    android:orientation="vertical">
+    android:background="@color/white"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingTop="20dp">
 
     <de.hdodenhof.circleimageview.CircleImageView
       android:id="@+id/profileImageView"
@@ -46,15 +46,15 @@
       android:layout_height="100dp"
       android:src="@drawable/ic_profile_logo"
       app:civ_border_color="@color/gray"
-      app:civ_border_width="2dp"/>
+      app:civ_border_width="2dp" />
 
     <TextView
-      android:layout_marginTop="20dp"
       android:id="@+id/profileIdTextView"
       style="@style/blackBoldText20"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_gravity="center" />
+      android:layout_gravity="center"
+      android:layout_marginTop="20dp" />
   </LinearLayout>
 
   <LinearLayout
@@ -62,8 +62,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_below="@+id/profileFragmentLinearLayout"
-    android:orientation="horizontal"
     android:background="@drawable/textline_background_down"
+    android:orientation="horizontal"
     android:paddingTop="20dp"
     android:paddingEnd="20dp"
     android:paddingBottom="15dp">
@@ -76,18 +76,18 @@
       android:orientation="vertical">
 
       <TextView
-        android:textSize="15sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/total_distance" />
+        android:text="@string/total_distance"
+        android:textSize="15sp" />
 
       <TextView
         android:id="@+id/profileFragmentTotalDistance"
         style="@style/MapDetail"
-        android:layout_marginTop="5dp"
-        android:textSize="20dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:textSize="20dp" />
 
     </LinearLayout>
 
@@ -99,34 +99,34 @@
       android:orientation="vertical">
 
       <TextView
-        android:textSize="15sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/total_time" />
+        android:text="@string/total_time"
+        android:textSize="15sp" />
 
       <TextView
         android:id="@+id/profileFragmentTotalTime"
         style="@style/MapDetail"
-        android:layout_marginTop="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:textSize="20dp" />
 
     </LinearLayout>
   </LinearLayout>
 
   <TextView
-    android:background="@drawable/textlines"
-    android:layout_marginTop="20dp"
     android:id="@+id/otherProfileRouteTextView"
     style="@style/ListDetail"
     android:layout_width="match_parent"
     android:layout_height="50dp"
     android:layout_below="@+id/rankingDetailInfoLinearLayout"
+    android:layout_marginTop="20dp"
+    android:background="@drawable/textlines"
+    android:gravity="center_vertical"
+    android:padding="10dp"
     android:paddingStart="20dp"
     android:paddingEnd="20dp"
-    android:padding="10dp"
-    android:gravity="center_vertical"
     android:text="@string/other_route" />
 
   <TextView
@@ -145,16 +145,16 @@
     android:layout_below="@+id/otherProfileRouteTextView" />
 
   <TextView
-    android:background="@drawable/textline_background_down"
-    android:layout_below="@+id/divisionTextView2"
     android:id="@+id/profileRecordTextView"
     style="@style/ListDetail"
     android:layout_width="match_parent"
     android:layout_height="50dp"
+    android:layout_below="@+id/divisionTextView2"
+    android:background="@drawable/textline_background_down"
+    android:gravity="center_vertical"
+    android:padding="10dp"
     android:paddingStart="20dp"
     android:paddingEnd="20dp"
-    android:padding="10dp"
-    android:gravity="center_vertical"
     android:text="@string/activity" />
 
   <TextView
@@ -166,7 +166,6 @@
     android:background="@drawable/ic_chevron_right_black_24dp"
     android:backgroundTint="@color/black"
     android:textSize="18dp" />
-
 
 
   <!--     <RelativeLayout

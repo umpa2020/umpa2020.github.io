@@ -1,6 +1,5 @@
 package com.umpa2020.tracer.network
 
-import android.graphics.Bitmap
 import android.net.Uri
 import kotlinx.coroutines.tasks.await
 import java.io.File

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
@@ -17,25 +16,25 @@
     android:elevation="1dp" />
 
   <LinearLayout
-    android:paddingTop="30dp"
-    android:paddingBottom="30dp"
-    android:background="@drawable/textline_background_down"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/textline_background_down"
     android:gravity="center"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingTop="30dp"
+    android:paddingBottom="30dp">
+
     <FrameLayout
-      android:layout_gravity="center"
       android:layout_width="wrap_content"
-      android:layout_height="wrap_content">
+      android:layout_height="wrap_content"
+      android:layout_gravity="center">
 
       <com.mikhaellopez.circularimageview.CircularImageView
         android:id="@+id/profileImage"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:background="@drawable/ic_profile_logo"
-        app:civ_border_color="@color/gray"
-        />
+        app:civ_border_color="@color/gray" />
 
       <com.mikhaellopez.circularimageview.CircularImageView
         android:layout_width="30dp"
@@ -47,123 +46,133 @@
     <TextView
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginTop="15dp"
       android:layout_gravity="center"
-      android:textColor="@color/skyBlue"
+      android:layout_marginTop="15dp"
       android:text="@string/profile_image_change"
+      android:textColor="@color/skyBlue"
       android:textSize="18dp" />
   </LinearLayout>
 
   <TableLayout
-    android:background="@drawable/textlines"
-    android:layout_marginTop="15dp"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginTop="15dp"
+    android:background="@drawable/textlines">
 
     <!-- 첫번쨰 행-->
     <TableRow
-      android:paddingStart="20dp"
-      android:paddingEnd="20dp"
       android:layout_marginTop="15dp"
-      android:layout_marginBottom="15dp">
+      android:layout_marginBottom="15dp"
+      android:paddingStart="20dp"
+      android:paddingEnd="20dp">
+
       <TextView
-        android:layout_weight="1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:text="@string/email_"
-        android:textSize="15sp"/>
+        android:textSize="15sp" />
+
       <TextView
-        android:layout_weight="3"
         android:id="@+id/emailTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="15dp"/>
+        android:layout_weight="3"
+        android:textSize="15dp" />
     </TableRow>
 
     <TextView
-      android:layout_width="match_parent"
-      style="@style/divisionTextView" />
+      style="@style/divisionTextView"
+      android:layout_width="match_parent" />
 
     <!-- 두번쨰 행-->
     <TableRow
-      android:paddingStart="20dp"
-      android:paddingEnd="20dp"
       android:layout_marginTop="15dp"
-      android:layout_marginBottom="15dp">
+      android:layout_marginBottom="15dp"
+      android:paddingStart="20dp"
+      android:paddingEnd="20dp">
+
       <TextView
-        android:layout_weight="1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:text="@string/nick_name"
-        android:textSize="15sp"/>
+        android:textSize="15sp" />
+
       <TextView
-        android:layout_weight="3"
         android:id="@+id/nickNameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="15sp"/>
+        android:layout_weight="3"
+        android:textSize="15sp" />
     </TableRow>
+
     <TextView
-      android:layout_width="match_parent"
-      style="@style/divisionTextView" />
+      style="@style/divisionTextView"
+      android:layout_width="match_parent" />
 
     <!-- 세번쨰 행-->
     <TableRow
-      android:paddingStart="20dp"
-      android:paddingEnd="20dp"
       android:layout_marginTop="15dp"
-      android:layout_marginBottom="15dp">
+      android:layout_marginBottom="15dp"
+      android:paddingStart="20dp"
+      android:paddingEnd="20dp">
+
       <TextView
-        android:layout_weight="1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:text="@string/age_"
-        android:textSize="15sp"/>
+        android:textSize="15sp" />
+
       <TextView
-        android:layout_weight="3"
         android:id="@+id/ageTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="15sp"/>
+        android:layout_weight="3"
+        android:textSize="15sp" />
     </TableRow>
+
     <TextView
-      android:layout_width="match_parent"
-      style="@style/divisionTextView" />
+      style="@style/divisionTextView"
+      android:layout_width="match_parent" />
 
     <!-- 네번쨰 행-->
     <TableRow
+      android:layout_marginTop="15dp"
       android:paddingStart="20dp"
       android:paddingEnd="20dp"
-      android:layout_marginTop="15dp"
       android:paddingBottom="15dp">
+
       <TextView
-        android:layout_weight="1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:text="@string/gender_"
-        android:textSize="15sp"/>
+        android:textSize="15sp" />
+
       <TextView
-        android:layout_weight="3"
         android:id="@+id/genderTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="15sp"/>
+        android:layout_weight="3"
+        android:textSize="15sp" />
     </TableRow>
   </TableLayout>
 
   <View
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_weight="1"/>
+    android:layout_weight="1" />
 
   <Button
-    android:layout_gravity="bottom"
-    android:layout_marginStart="20dp"
-    android:layout_marginEnd="20dp"
     android:id="@+id/profileChangeButton"
     style="@style/buttonText"
     android:layout_width="match_parent"
     android:layout_height="40dp"
+    android:layout_gravity="bottom"
+    android:layout_marginStart="20dp"
+    android:layout_marginEnd="20dp"
     android:layout_marginBottom="10dp"
     android:background="@drawable/button_background"
     android:text="@string/confirmation" />

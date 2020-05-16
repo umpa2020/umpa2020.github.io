@@ -18,17 +18,18 @@ import com.umpa2020.tracer.dataClass.MapInfo
 import com.umpa2020.tracer.dataClass.RankingData
 import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.extensions.*
+import com.umpa2020.tracer.gpx.WayPointType.FINISH_POINT
+import com.umpa2020.tracer.gpx.WayPointType.START_POINT
 import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.map.TraceMap
+import com.umpa2020.tracer.network.BaseFB
+import com.umpa2020.tracer.network.BaseFB.Companion.MAP_ROUTE
+import com.umpa2020.tracer.network.FBMapRepository
 import com.umpa2020.tracer.util.*
 import kotlinx.android.synthetic.main.activity_running_save.*
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
-import com.umpa2020.tracer.gpx.WayPointType.*
-import com.umpa2020.tracer.network.BaseFB
-import com.umpa2020.tracer.network.BaseFB.Companion.MAP_ROUTE
-import com.umpa2020.tracer.network.FBMapRepository
 
 class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleClickListener {
   var switch = 0
@@ -150,17 +151,17 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
     val timestamp = Date().time
 
     // 인포데이터에 필요한 내용을 저장하고
-    infoData.mapId = mapTitleEdit.text.toString() + timestamp.toString()
-    infoData.makerId = UserInfo.autoLoginKey
-    infoData.mapTitle = mapTitleEdit.text.toString()
-    infoData.mapImagePath = "mapImage/${infoData.mapTitle}"
-    infoData.mapExplanation = mapExplanationEdit.text.toString()
-    infoData.plays = 1
-    infoData.likes = 0
-    infoData.maxSpeed = speedList.max()!!
-    infoData.averageSpeed = speedList.average()
-    infoData.routeGPXPath = "$MAP_ROUTE/${infoData.mapId}/${infoData.mapId}"
-    infoData.createTime = timestamp
+    mapInfo.mapId = mapTitleEdit.text.toString() + timestamp.toString()
+    mapInfo.makerId = UserInfo.autoLoginKey
+    mapInfo.mapTitle = mapTitleEdit.text.toString()
+    mapInfo.mapImagePath = "mapImage/${mapInfo.mapTitle}"
+    mapInfo.mapExplanation = mapExplanationEdit.text.toString()
+    mapInfo.plays = 1
+    mapInfo.likes = 0
+    mapInfo.maxSpeed = speedList.max()!!
+    mapInfo.averageSpeed = speedList.average()
+    mapInfo.routeGPXPath = "$MAP_ROUTE/${mapInfo.mapId}/${mapInfo.mapId}"
+    mapInfo.createTime = timestamp
 
     val rankingData = RankingData(
       UserInfo.nickname,
@@ -172,7 +173,7 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
       speedList.average().toString(),
       "${BaseFB.MAP_ROUTE}/${mapInfo.mapId}/racingGPX/${UserInfo.autoLoginKey}"
     )
-    val activityData = ActivityData(mapInfo.mapId, timestamp, mapInfo.distance, mapInfo.time,"map save")
+    val activityData = ActivityData(mapInfo.mapId, timestamp, mapInfo.distance, mapInfo.time, "map save")
     Logg.d("Start Upload")
 
     FBMapRepository().uploadMap(mapInfo, rankingData, activityData, timestamp.toString(), routeGpxFile, Uri.fromFile(File(imgPath)))

@@ -1,6 +1,5 @@
 package com.umpa2020.tracer.main.profile.settting
 
-import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -9,18 +8,14 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.extensions.image
 import com.umpa2020.tracer.extensions.toAge
 import com.umpa2020.tracer.network.FBProfileRepository
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.OnSingleClickListener
-import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_my_information.*
-import kotlinx.android.synthetic.main.activity_my_information.app_toolbar
-import kotlinx.android.synthetic.main.activity_my_information.profileImage
 import kotlinx.android.synthetic.main.signup_toolbar.*
 import kotlinx.android.synthetic.main.signup_toolbar.view.*
 import kotlinx.coroutines.MainScope
@@ -35,7 +30,7 @@ class MyInformationActivity : AppCompatActivity(), OnSingleClickListener {
     setContentView(R.layout.activity_my_information)
     app_toolbar.titleText.text = getString(R.string.my_information)
     MainScope().launch {
-      FBProfileRepository().getProfileImage(UserInfo.autoLoginKey)?.let{
+      FBProfileRepository().getProfileImage(UserInfo.autoLoginKey)?.let {
         profileImage.image(it)
       }
     }

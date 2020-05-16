@@ -31,7 +31,10 @@ import com.umpa2020.tracer.gpx.WayPointType.TRACK_POINT
 import com.umpa2020.tracer.lockscreen.util.LockScreen
 import com.umpa2020.tracer.main.MainActivity.Companion.locationViewModel
 import com.umpa2020.tracer.map.TraceMap
-import com.umpa2020.tracer.util.*
+import com.umpa2020.tracer.util.ChoicePopup
+import com.umpa2020.tracer.util.Logg
+import com.umpa2020.tracer.util.OnSingleClickListener
+import com.umpa2020.tracer.util.UserInfo
 import hollowsoft.slidingdrawer.OnDrawerCloseListener
 import hollowsoft.slidingdrawer.OnDrawerOpenListener
 import hollowsoft.slidingdrawer.OnDrawerScrollListener

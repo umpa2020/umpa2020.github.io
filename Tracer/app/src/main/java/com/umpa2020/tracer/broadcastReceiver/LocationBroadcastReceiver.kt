@@ -24,7 +24,7 @@ class LocationBroadcastReceiver(val activity: BaseRunningActivity) : BroadcastRe
   var currentTime = 0L
 
   var flag = true
-  var currentLocation : Location? = null
+  var currentLocation: Location? = null
 
   private lateinit var model: LocationViewModel
 
@@ -44,7 +44,7 @@ class LocationBroadcastReceiver(val activity: BaseRunningActivity) : BroadcastRe
       flag = false
     } else {
       if ((((currentTime - previousTime) / 1000) + 1) * 10
-          > SphericalUtil.computeDistanceBetween(previousLatLng, currentLatLng)
+        > SphericalUtil.computeDistanceBetween(previousLatLng, currentLatLng)
       ) {
         activity.updateLocation(currentLocation!!)
         previousLatLng = currentLatLng

@@ -17,17 +17,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.google.android.gms.internal.maps.zzz
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.*
 import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.App
@@ -44,9 +39,8 @@ import com.umpa2020.tracer.main.start.running.RunningActivity
 import com.umpa2020.tracer.map.TraceMap
 import com.umpa2020.tracer.network.BaseFB.Companion.MAP_ID
 import com.umpa2020.tracer.network.FBMapRepository
-import com.umpa2020.tracer.network.FBRankingRepository
-import com.umpa2020.tracer.network.FBStorageRepository
 import com.umpa2020.tracer.network.FBProfileRepository
+import com.umpa2020.tracer.network.FBStorageRepository
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.OnSingleClickListener
@@ -70,7 +64,8 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
   var wedgedCamera = true
   val progressBar = MyProgressBar()
   var firstFlag = true
-  lateinit var mCustomMarkerView:View
+  lateinit var mCustomMarkerView: View
+
   //  companion object{
 //    var gpsViewModel = GpsViewModel(App.instance.currentActivity()!!.application)
 //  }
@@ -159,17 +154,18 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
           nearMapList.forEach { nearMap ->
             //데이터 바인딩
             Logg.d("asd : ${FBProfileRepository().getProfile(nearMap.makerId).imgPath}")
-           routeMarkers.add(
+            routeMarkers.add(
               traceMap!!.mMap.addMarker(
                 MarkerOptions()
-                  .position(LatLng(nearMap.startLatitude,nearMap.startLongitude))
+                  .position(LatLng(nearMap.startLatitude, nearMap.startLongitude))
                   .title(nearMap.mapTitle)
                   .snippet(nearMap.distance.prettyDistance)
-                  .icon(traceMap?.makeProfileIcon(mCustomMarkerView,nearMap.makerId))
+                  .icon(traceMap?.makeProfileIcon(mCustomMarkerView, nearMap.makerId))
 
               ).apply {
                 Logg.d("nani0-2")
-                tag = nearMap.mapId }
+                tag = nearMap.mapId
+              }
             )
           }
           progressBar.dismiss()
@@ -249,7 +245,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
 
     val smf = childFragmentManager.findFragmentById(R.id.map_viewer_start) as SupportMapFragment
     smf.getMapAsync(this)
-    mCustomMarkerView= (activity?.getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater).inflate(R.layout.profile_marker, null);
+    mCustomMarkerView = (activity?.getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater).inflate(R.layout.profile_marker, null);
     return view
   }
 

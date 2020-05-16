@@ -11,8 +11,8 @@
     android:layout_height="50dp"
     android:layout_alignParentTop="true"
     android:background="@color/white"
-    android:elevation="1dp"
-    android:contentInsetStart="0dp">
+    android:contentInsetStart="0dp"
+    android:elevation="1dp">
 
     <RelativeLayout
       android:layout_width="match_parent"
@@ -31,8 +31,8 @@
         android:layout_height="20dp"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
-        android:background="@drawable/ic_rubbish_can"
-        android:layout_margin="15dp"/>
+        android:layout_margin="15dp"
+        android:background="@drawable/ic_rubbish_can" />
     </RelativeLayout>
   </Toolbar>
 
@@ -50,9 +50,9 @@
       <fragment
         android:id="@+id/map_viewer"
         android:name="com.google.android.gms.maps.SupportMapFragment"
+        class="com.umpa2020.tracer.customUI.WorkaroundMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        class="com.umpa2020.tracer.customUI.WorkaroundMapFragment"/>
+        android:layout_height="300dp" />
 
       <TextView
         android:id="@+id/line1"
@@ -227,47 +227,47 @@
         android:gravity="top"
         android:hint="@string/text" />
 
-     <!-- <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/mapExplanationEdit"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="80dp"
-        android:gravity="center">
+      <!-- <LinearLayout
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_below="@id/mapExplanationEdit"
+         android:layout_marginLeft="20dp"
+         android:layout_marginRight="20dp"
+         android:layout_marginBottom="80dp"
+         android:gravity="center">
 
-        <RadioGroup
-          android:id="@+id/privacyRadioGroup"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:orientation="horizontal">
+         <RadioGroup
+           android:id="@+id/privacyRadioGroup"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:orientation="horizontal">
 
-          <RadioButton
-            android:id="@+id/racingRadio"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:checked="true"
-            android:text="@string/competition"
-            android:textSize="12sp" />
+           <RadioButton
+             android:id="@+id/racingRadio"
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+             android:layout_weight="1"
+             android:checked="true"
+             android:text="@string/competition"
+             android:textSize="12sp" />
 
-          <RadioButton
-            android:id="@+id/publicRadio"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/public_"
-            android:textSize="12sp" />
+           <RadioButton
+             android:id="@+id/publicRadio"
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+             android:layout_weight="1"
+             android:text="@string/public_"
+             android:textSize="12sp" />
 
-          <RadioButton
-            android:id="@+id/privateRadio"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/private_"
-            android:textSize="12sp" />
-        </RadioGroup>
-      </LinearLayout>-->
+           <RadioButton
+             android:id="@+id/privateRadio"
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+             android:layout_weight="1"
+             android:text="@string/private_"
+             android:textSize="12sp" />
+         </RadioGroup>
+       </LinearLayout>-->
     </RelativeLayout>
   </ScrollView>
 

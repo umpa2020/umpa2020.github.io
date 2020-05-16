@@ -16,8 +16,6 @@ import com.umpa2020.tracer.constant.Constants.Companion.ANIMATION_DURATION_TIME
 import com.umpa2020.tracer.constant.Constants.Companion.MAX_DISTANCE
 import com.umpa2020.tracer.constant.Constants.Companion.MAX_SEEKERBAR
 import com.umpa2020.tracer.dataClass.MapInfo
-import com.umpa2020.tracer.main.MainActivity.Companion.gpsViewModel
-import com.umpa2020.tracer.dataClass.InfoData
 import com.umpa2020.tracer.network.FBRankingRepository
 import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.OnSingleClickListener

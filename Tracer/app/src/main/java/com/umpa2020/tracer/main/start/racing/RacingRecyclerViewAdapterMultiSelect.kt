@@ -25,6 +25,7 @@ class RacingRecyclerViewAdapterMultiSelect(
 ) : RecyclerView.Adapter<RacingRecyclerViewAdapterMultiSelect.myViewHolder>() {
   var context: Context? = null
   val whichIsCheck = mutableListOf<String>()
+
   //생성된 뷰 홀더에 데이터를 바인딩 해줌.
   override fun onBindViewHolder(holder: myViewHolder, position: Int) {
     val singleItem1 = mydata[position]
@@ -63,23 +64,21 @@ class RacingRecyclerViewAdapterMultiSelect(
         //다시 선택하면 취소
         if (whichIsCheck.contains(singleItem1.challengerNickname)) {
           whichIsCheck.remove(singleItem1.challengerNickname)
-          tagContainerLayout.tags.forEachIndexed {i,text->
-            if(text == singleItem1.challengerNickname){
+          tagContainerLayout.tags.forEachIndexed { i, text ->
+            if (text == singleItem1.challengerNickname) {
               tagContainerLayout.removeTag(i)
             }
             notifyDataSetChanged()
           }
-        }
-        else{
+        } else {
           //size 개수 제한
-          if(whichIsCheck.size < 6){
+          if (whichIsCheck.size < 6) {
             //리스트 뷰에서 선택한 닉네임을 태그 뷰로 추가
             whichIsCheck.add(singleItem1.challengerNickname!!)
             tagContainerLayout.addTag(singleItem1.challengerNickname)
             notifyDataSetChanged()
-          }
-          else
-           context!!.getString(R.string.max_five).show()
+          } else
+            context!!.getString(R.string.max_five).show()
         }
       }
     })

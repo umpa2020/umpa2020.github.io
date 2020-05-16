@@ -12,17 +12,12 @@ import com.umpa2020.tracer.extensions.prettyDistance
 import com.umpa2020.tracer.main.profile.myActivity.ProfileActivityActivity
 import com.umpa2020.tracer.main.profile.myroute.ProfileRouteActivity
 import com.umpa2020.tracer.main.profile.settting.AppSettingActivity
-import com.umpa2020.tracer.network.BaseFB
 import com.umpa2020.tracer.network.BaseFB.Companion.USER_ID
 import com.umpa2020.tracer.network.FBProfileRepository
 import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_profile.*
-import kotlinx.android.synthetic.main.activity_profile.profileFragmentTotalDistance
-import kotlinx.android.synthetic.main.activity_profile.profileFragmentTotalTime
-import kotlinx.android.synthetic.main.activity_profile.profileIdTextView
-import kotlinx.android.synthetic.main.activity_profile.profileImageView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch

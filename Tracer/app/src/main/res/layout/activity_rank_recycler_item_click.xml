@@ -10,14 +10,15 @@
     android:layout_width="match_parent"
     android:layout_height="50dp"
     android:background="@color/white"
-    android:elevation="1dp"
-    android:contentInsetStart="0dp">
+    android:contentInsetStart="0dp"
+    android:elevation="1dp">
+
     <TextView
       style="@style/appBarText"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:gravity="center"
-      android:text="@string/map_record"/>
+      android:text="@string/map_record" />
   </Toolbar>
 
   <androidx.core.widget.NestedScrollView
@@ -31,21 +32,21 @@
       android:orientation="vertical">
 
       <RelativeLayout
-        android:background="@drawable/textline_background_down"
         android:id="@+id/mapnamehorizontallayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:paddingRight="20dp"
+        android:background="@drawable/textline_background_down"
+        android:orientation="vertical"
         android:paddingLeft="20dp"
-        android:orientation="vertical">
+        android:paddingTop="10dp"
+        android:paddingRight="20dp"
+        android:paddingBottom="10dp">
 
         <LinearLayout
           android:id="@+id/linearlayout"
-          android:layout_marginTop="10dp"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
+          android:layout_marginTop="10dp"
           android:orientation="horizontal">
 
           <de.hdodenhof.circleimageview.CircleImageView
@@ -57,66 +58,65 @@
             app:civ_border_width="1dp" />
 
           <TextView
-            android:layout_gravity="center_vertical"
             android:id="@+id/rankRecyclerNickname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_marginLeft="10dp"
             android:text="test"
-            android:textSize="18dp"
-            android:textColor="#808080"/>
+            android:textColor="#808080"
+            android:textSize="18dp" />
         </LinearLayout>
 
         <ImageView
-          android:layout_marginTop="10dp"
-          android:layout_toLeftOf="@+id/rankRecyclerHeartCount"
           android:id="@+id/rankRecyclerHeart"
           android:layout_width="20dp"
           android:layout_height="20dp"
+          android:layout_marginTop="10dp"
+          android:layout_toLeftOf="@+id/rankRecyclerHeartCount"
           android:src="@drawable/ic_favorite_border_black_24dp" />
 
         <TextView
-          android:layout_marginLeft="5dp"
-          android:layout_marginTop="10dp"
-          android:layout_alignParentRight="true"
-          android:layout_marginRight="20dp"
           android:id="@+id/rankRecyclerHeartCount"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
+          android:layout_alignParentRight="true"
           android:layout_gravity="center_vertical"
-          android:textSize="20dp"/>
+          android:layout_marginLeft="5dp"
+          android:layout_marginTop="10dp"
+          android:layout_marginRight="20dp"
+          android:textSize="20dp" />
 
         <ImageView
           android:id="@+id/rankRecyclerExecute"
           android:layout_width="20dp"
           android:layout_height="20dp"
-          android:layout_marginTop="15dp"
           android:layout_below="@id/rankRecyclerHeart"
-          android:src="@drawable/ic_sneaker_for_running"
-          android:layout_toLeftOf="@+id/rankRecyclerExecuteCount"/>
+          android:layout_marginTop="15dp"
+          android:layout_toLeftOf="@+id/rankRecyclerExecuteCount"
+          android:src="@drawable/ic_sneaker_for_running" />
 
         <TextView
-          android:layout_marginLeft="5dp"
-          android:layout_marginTop="15dp"
-          android:layout_alignParentRight="true"
           android:id="@+id/rankRecyclerExecuteCount"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_below="@id/rankRecyclerHeart"
-          android:textSize="20dp"
-          android:layout_marginRight="20dp"/>
-
+          android:layout_alignParentRight="true"
+          android:layout_marginLeft="5dp"
+          android:layout_marginTop="15dp"
+          android:layout_marginRight="20dp"
+          android:textSize="20dp" />
 
 
         <TextView
-          android:layout_marginTop="10dp"
-          android:layout_below="@id/linearlayout"
           android:id="@+id/rankRecyclerMapTitle"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:textSize="20dp"
+          android:layout_below="@id/linearlayout"
+          android:layout_marginTop="10dp"
           android:fontFamily="sans-serif-medium"
-          android:textColor="@color/lightblack"/>
+          android:textColor="@color/lightblack"
+          android:textSize="20dp" />
 
 
         <TextView
@@ -129,11 +129,11 @@
       </RelativeLayout>
 
       <RelativeLayout
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
         android:id="@+id/RelativeLayout"
         android:layout_width="match_parent"
-        android:layout_height="300dp">
+        android:layout_height="300dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp">
 
         <ImageView
           android:id="@+id/rankRoutePriview"
@@ -151,10 +151,10 @@
           android:layout_alignParentBottom="true"
           android:layout_marginRight="15dp"
           android:layout_marginBottom="15dp"
-          android:paddingLeft="20dp"
-          android:paddingRight="20dp"
           android:background="@drawable/button_background"
           android:gravity="center"
+          android:paddingLeft="20dp"
+          android:paddingRight="20dp"
           android:text="@string/learn_more" />
       </RelativeLayout>
 
@@ -176,15 +176,15 @@
         -->
 
       <LinearLayout
-        android:background="@drawable/textline_background_up"
         android:id="@+id/infolayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingRight="20dp"
+        android:background="@drawable/textline_background_up"
+        android:orientation="horizontal"
         android:paddingLeft="20dp"
         android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:orientation="horizontal">
+        android:paddingRight="20dp"
+        android:paddingBottom="10dp">
 
         <TextView
           style="@style/ListTitle"
@@ -212,15 +212,15 @@
       </LinearLayout>
 
       <androidx.recyclerview.widget.RecyclerView
-        android:background="@drawable/textlines"
-        android:paddingBottom="1dp"
-        android:paddingTop="1dp"
         android:id="@+id/rankRecyclerItemClickRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/infolayout"
+        android:background="@drawable/textlines"
         android:paddingLeft="20dp"
-        android:paddingRight="20dp"/>
+        android:paddingTop="1dp"
+        android:paddingRight="20dp"
+        android:paddingBottom="1dp" />
 
     </LinearLayout>
   </androidx.core.widget.NestedScrollView>
