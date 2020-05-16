@@ -105,7 +105,7 @@ class MainActivity : AppCompatActivity() {
     Logg.d("restart service")
 
     // FCM 테스트는 해당 함수 실행 후 서버에 저장된 토큰 값으로 Cloud Message 실행.
-   // registerPushToken()
+    registerPushToken()
   }
 
   /**
