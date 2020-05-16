@@ -1,5 +1,6 @@
 package com.umpa2020.tracer.network
 
+import android.os.Looper.loop
 import com.google.firebase.firestore.DocumentSnapshot
 import com.umpa2020.tracer.dataClass.AchievementData
 import com.umpa2020.tracer.dataClass.ActivityData
@@ -41,11 +42,16 @@ class FBUsersRepository : BaseFB() {
 
   fun updateUserAchievement(rankingDatas: MutableList<RankingData>, mapId: String) {
     var ranking = 0L
-    rankingDatas.forEachIndexed { i, rankingData ->
-      if (rankingData.challengerId == UserInfo.autoLoginKey) {
-        ranking = i+1L
+    run loop@ {
+      rankingDatas.forEachIndexed { i, rankingData ->
+        if (i > 3)
+          return@loop
+        if (rankingData.challengerId == UserInfo.autoLoginKey) {
+          ranking = i+1L
+        }
       }
     }
+
 
     if (ranking != 0L) {
       usersCollectionRef.document(UserInfo.autoLoginKey).collection(ACHIEVEMENT)
@@ -63,7 +69,6 @@ class FBUsersRepository : BaseFB() {
           }
         }
     }
-
   }
 
   fun createUserInfo(data: HashMap<String, String?>) {
