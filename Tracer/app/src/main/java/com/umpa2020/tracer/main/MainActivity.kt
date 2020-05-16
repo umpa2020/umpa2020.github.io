@@ -104,10 +104,12 @@ class MainActivity : AppCompatActivity() {
     }
     Logg.d("restart service")
 
-    registerPushToken()
+    // FCM 테스트는 해당 함수 실행 후 서버에 저장된 토큰 값으로 Cloud Message 실행.
+   // registerPushToken()
   }
 
   /**
+   * 토큰 값을 서버에 저장하는 함수지만 토큰 값 없이 Cloud Message만 써도 전송 가능.
    *  다음과 같은 경우 토큰 재 발급.
    *  - 앱에서 인스턴스 ID 삭제
    *  - 새 기기에서 앱 복원
