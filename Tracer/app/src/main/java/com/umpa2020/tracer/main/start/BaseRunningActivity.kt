@@ -1,5 +1,8 @@
 package com.umpa2020.tracer.main.start
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
+import android.animation.ObjectAnimator
 import android.content.IntentFilter
 import android.location.Location
 import android.os.Bundle
@@ -207,7 +210,7 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
   }
 
   fun pauseNotice(str: String) {
-    pauseNotificationTextView.visibility = View.VISIBLE
+    pauseNotificationTextView.visible()
     pauseNotificationTextView.text = str
     appearAnimation()
   }
@@ -342,11 +345,22 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     animationSet.fillAfter = true
     animationSet.fillBefore = true
     animationSet.duration = Constants.PAUSE_ANIMATION_DURATION_TIME
+    animationSet.setAnimationListener(object : Animation.AnimationListener {
+      override fun onAnimationRepeat(animation: Animation?) {
+        Logg.d("Animation repeat")
+      }
 
+      override fun onAnimationEnd(animation: Animation?) {
+        Logg.d("Animation end")
+      }
+
+      override fun onAnimationStart(animation: Animation?) {
+        Logg.d("Animation start")
+      }
+
+    })
     pauseNotificationTextView.animation = animationSet
-    Logg.d("ssmm11 u state = ${pauseNotificationTextView.animation}")
     pauseNotificationTextView.animation.start()
-    Logg.d("ssmm11 d state = ${pauseNotificationTextView.animation}")
 
   }
 
