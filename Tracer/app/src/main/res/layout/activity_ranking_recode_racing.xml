@@ -196,10 +196,12 @@
     android:id="@+id/racingPauseNotificationTextView"
     android:layout_width="match_parent"
     android:layout_height="50dp"
+    android:layout_marginTop="350dp"
     android:background="#990044FF"
     android:gravity="center"
     android:textColor="@color/white"
-    android:textSize="20sp" />
+    android:textSize="20sp"
+    android:visibility="invisible" />
 
   <TextView
     android:id="@+id/racingNotificationTextView"

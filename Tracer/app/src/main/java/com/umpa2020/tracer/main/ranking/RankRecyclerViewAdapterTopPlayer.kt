@@ -12,7 +12,6 @@ import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.extensions.m_s
 import com.umpa2020.tracer.main.profile.ProfileActivity
 import com.umpa2020.tracer.network.BaseFB
-import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.recycler_rankfragment_topplayer_item.view.*
 
@@ -59,7 +58,7 @@ class RankRecyclerViewAdapterTopPlayer(val mydata: MutableList<RankingData>, val
     val view = LayoutInflater.from(parent.context)
       .inflate(R.layout.recycler_rankfragment_topplayer_item, parent, false)
     context = parent.context
-    Logg.d("onCreateViewHolder호출")
+
     return myViewHolder(view) //view 객체는 한개의 리사이클러뷰가 디자인 되어 있는 레이아웃을 의미
   }
 

@@ -50,7 +50,7 @@ object TTS {
     if (mAudioManager.ringerMode == AudioManager.RINGER_MODE_NORMAL) { // 핸드폰이 소리 일 때
       if (prefs.getBoolean("ttsNotificationSetting", true)) {
         tts.speak(sentence, TextToSpeech.QUEUE_FLUSH, null, null)
-        Logg.d(sentence)
+
       }
     } else if (mAudioManager.ringerMode == AudioManager.RINGER_MODE_VIBRATE) { // 핸드폰이 진동 일 때
       if (Build.VERSION.SDK_INT >= O) // 오레오 이상

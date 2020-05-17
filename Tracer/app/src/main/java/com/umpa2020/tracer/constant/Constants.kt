@@ -17,7 +17,7 @@ class Constants {
     const val DEVIATION_DISTANCE = 20.0
 
     //경로이탈 카운트
-    const val DEVIATION_COUNT = 30
+    const val DEVIATION_COUNT = 10
     const val WPINTERVAL = 100  //way point interval
 
     //handler what

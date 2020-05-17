@@ -39,11 +39,11 @@ class MainActivity : AppCompatActivity() {
 
     // 앱이 처음 다운되었으면 광운대학교로 위치 Shared에 설정.
     if (UserInfo.lat == 0.0f && UserInfo.lng == 0.0f) {
-      Logg.d("값 없음")
+
       UserInfo.lat = 37.619606f
       UserInfo.lng = 127.059798f
     } else {
-      Logg.d("값 있음 : ${UserInfo.lat}, ${UserInfo.lng}")
+
     }
 
 
@@ -94,10 +94,10 @@ class MainActivity : AppCompatActivity() {
    */
 
   private fun startStopServiceCommand(action: ServiceStatus) {
-    Logg.i("startStopServiceCommand")
+
     Intent(App.applicationContext(), LocationBackgroundService::class.java).also {
       it.action = action.name
-      Logg.d(action.toString())
+
 
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { // 오레오 이상부터 foregroundService로 실행.
         startForegroundService(it)
