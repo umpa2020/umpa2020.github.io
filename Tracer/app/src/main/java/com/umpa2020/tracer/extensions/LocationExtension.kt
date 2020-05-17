@@ -97,6 +97,10 @@ fun RouteGPX.addDirectionSign(): RouteGPX {
     //현재와 다음 좌표직선의 기울기
     var postGradient =
       (atan2((c.latitude - b.latitude), (c.longitude - b.longitude))) * 180 / PI
+
+    Logg.d("ssmm11 보정 전 post = $postGradient / pre = $preGradient")
+    Logg.d("ssmm11 a.lat = ${a.latitude} / a.long = ${a.longitude} / b.lat = ${b.latitude} / b.long = ${b.longitude} / c.lat = ${c.latitude} / c.long = ${c.longitude}")
+
     //만약 값이 범위를 초과하면 보정
     if (postGradient - preGradient < 180.0 || postGradient - preGradient > -180.0) {
       if (preGradient < 0) {
@@ -108,6 +112,7 @@ fun RouteGPX.addDirectionSign(): RouteGPX {
     }
     //직선의 회전각
     val angle = postGradient - preGradient
+    Logg.d("ssmm11 보정 후 angle = $angle / post = $postGradient / pre = $preGradient")
     if (abs(angle) >= TURNING_ANGLE) {
       if (angle > 0) {
         this.wptList.add(
