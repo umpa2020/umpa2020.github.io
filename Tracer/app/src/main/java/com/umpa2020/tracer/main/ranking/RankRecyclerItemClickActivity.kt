@@ -40,7 +40,7 @@ class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener
 
     val intent = intent
     //전달 받은 값으로 Title 설정
-    mapId = intent.getStringExtra(MAP_ID)
+    mapId = intent.getStringExtra(MAP_ID)!!
 
     MainScope().launch {
       withContext(Dispatchers.IO) {

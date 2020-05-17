@@ -60,7 +60,7 @@ class ProfileRecyclerViewAdapterRecord(val datas: MutableList<ActivityData>) :
     holder.itemView.setOnClickListener(object : OnSingleClickListener {
       override fun onSingleClick(v: View?) {
         val nextIntent = Intent(context, RankRecyclerItemClickActivity::class.java)
-        nextIntent.putExtra("MapId", singleItem1.mapId) //mapTitle 정보 인텐트로 넘김
+        nextIntent.putExtra("mapId", singleItem1.mapId) //mapTitle 정보 인텐트로 넘김
         context!!.startActivity(nextIntent)
       }
     })

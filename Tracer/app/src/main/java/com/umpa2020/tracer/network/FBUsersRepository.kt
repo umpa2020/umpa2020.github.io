@@ -45,11 +45,13 @@ class FBUsersRepository : BaseFB() {
   }
 
   suspend fun listUserRoute(uid: String, limit: Long): List<MapInfo>? {
+    Logg.d("ssmm11 global = $globalStartAfter")
+
     val infoDatas =
       if (globalStartAfter == null) {
-        mapsCollectionRef.whereEqualTo(BaseFB.MAKER_ID, uid)
+        mapsCollectionRef.whereEqualTo(MAKER_ID, uid)
       } else {
-        mapsCollectionRef.whereEqualTo(BaseFB.MAKER_ID, uid).startAfter(globalStartAfter!!)
+        mapsCollectionRef.whereEqualTo(MAKER_ID, uid).startAfter(globalStartAfter!!)
       }.limit(limit).get().await().apply {
         if (documents.size == 0)
           return null
