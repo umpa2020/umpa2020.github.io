@@ -114,8 +114,6 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
 
   // 위치를 브로드케스트에서 받아 지속적으로 업데이트
   open fun updateLocation(curLoc: Location) {
-
-
     currentLocation = curLoc
     distanceTextView.text = distance.prettyDistance
     speedTextView.text = speed.prettySpeed()
