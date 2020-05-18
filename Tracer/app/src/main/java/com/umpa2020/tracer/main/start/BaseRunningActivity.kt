@@ -162,8 +162,6 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
   }
 
   open fun pause() {
-
-
     privacy = Privacy.PUBLIC
     userState = UserState.PAUSED
 
@@ -239,12 +237,11 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
 
         LockScreen.deActivate()
       }
-    } else {
-
     }
   }
 
-  override fun onCreate(savedInstanceState: Bundle?) {
+  override fun onCreate(savedInstanceState: Bundle?)
+  {
     super.onCreate(savedInstanceState)
     locationBroadcastReceiver = LocationBroadcastReceiver(this)
     LocalBroadcastManager.getInstance(this)
@@ -253,10 +250,6 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
 
     // 거리, 속도, 시간 관련 데이터 초기 설정.
     locationViewModel.init(DistanceTimeData("0.0", "0.0"), TimeData(0L, false, 0L, "0.0"))
-
-
-//    recordViewModel = RecordViewModel(application)
-//    recordViewModel.deleteAll()
   }
 
   lateinit var currentLocation: Location
@@ -317,7 +310,7 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
    * 레이아웃이 스르륵 보이는 함수
    */
 
-  fun appearAnimation() {
+  private fun appearAnimation() {
     val height = pauseNotificationTextView.height.toFloat()
 
 
@@ -344,7 +337,7 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
   /**
    * 레이아웃이 스르륵 사라지는 함수
    */
-  fun disappearAnimation() {
+  private fun disappearAnimation() {
     val height = pauseNotificationTextView.height.toFloat()
     pauseNotificationTextView.clearAnimation() // 일시정지 애니메이션 종료
     pauseNotificationTextView.invisible()

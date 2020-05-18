@@ -83,13 +83,13 @@ class TraceMap(val mMap: GoogleMap) {
     Logg.d("move camera $curLoc")
     mMap.moveCamera(
       CameraUpdateFactory.newCameraPosition(
-        CameraPosition(curLoc.toLatLng(), 17F, 0F, curLoc.bearing)
+        CameraPosition(curLoc.toLatLng()/*좌표*/, 17F/*줌 레벨*/, 0F/*기울기 각도*/, curLoc.bearing/*베어링 각도*/)
       )
     )
   }
 
   fun moveCamera(latlng: LatLng) {
-    mMap.moveCamera(CameraUpdateFactory.newLatLng(latlng))
+    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, 16F))
   }
 
   fun changeMarkerIcon(nextWP: Int) {
