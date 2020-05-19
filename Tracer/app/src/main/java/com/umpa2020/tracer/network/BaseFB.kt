@@ -92,5 +92,9 @@ open class BaseFB {
     const val TIMES_OF_RUN_10 = "timesOfRun10"
     const val TIMES_OF_RUN_100 = "timesOfRun100"
     const val TIMES_OF_RUN_1000 = "timesOfRun1000"
+
+    const val NO = "no"
+    const val IMAGE_PATH = "imagePath"
+    const val IMAGE_PATH_BLACK = "imagePathBlack"
   }
 }

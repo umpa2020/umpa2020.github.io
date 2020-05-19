@@ -34,12 +34,12 @@ class FBAchievementRepository : BaseFB() {
   }
 
   suspend fun listEmblemImagePaths(userEmblems: MutableList<EmblemData>): MutableList<String> {
-    return emblemsCollectionRef.orderBy("no").get().await().documents.map {
+    return emblemsCollectionRef.orderBy(NO).get().await().documents.map {
       val emblemData = EmblemData(it.getString(NAME)!!)
       if (userEmblems.contains(emblemData)) {
-        it.getString("imagePath")!!
+        it.getString(IMAGE_PATH)!!
       } else {
-        it.getString("imagePathBlack")!!
+        it.getString(IMAGE_PATH_BLACK)!!
       }
     }.toMutableList()
   }
