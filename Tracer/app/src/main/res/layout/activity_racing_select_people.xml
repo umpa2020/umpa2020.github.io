@@ -1,6 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
-  xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent">
 
@@ -10,75 +9,92 @@
     android:layout_height="50dp"
     android:layout_alignParentTop="true"
     android:background="@color/white"
-    android:elevation="1dp"
-    android:contentInsetStart="0dp">
+    android:contentInsetStart="0dp"
+    android:elevation="1dp">
 
     <TextView
       style="@style/appBarText"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:gravity="center"
-      android:text="@string/select_people"/>
+      android:text="@string/select_people" />
   </Toolbar>
 
-  <TextView
+  <LinearLayout
+    android:id="@+id/linearlayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:layout_below="@+id/racingSelectPeopleToolBar"
-    android:id="@+id/Max3TextView"
-    android:layout_marginLeft="20dp"
+    android:background="@drawable/textline_background_down"
+    android:orientation="vertical"
+    android:paddingLeft="20dp"
+    android:paddingTop="10dp"
+    android:paddingRight="20dp"
+    android:paddingBottom="10dp">
+
+    <TextView
+      android:id="@+id/Max3TextView"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="@string/max_five_select" />
+
+    <co.lujun.androidtagview.TagContainerLayout
+      android:id="@+id/tagcontainerLayout1"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_below="@+id/Max3TextView"
+      android:layout_marginTop="10dp"
+      app:container_background_color="#FFFFFFFF"
+      app:container_border_color="#FFFFFFFF"
+      app:container_gravity="left"
+      app:horizontal_interval="10dp"
+      app:tag_background_color="#FFFFFFFF"
+      app:tag_border_color="#330000ff"
+      app:tag_border_width="2dp"
+      app:tag_clickable="true"
+      app:tag_corner_radius="5dp"
+      app:tag_enable_cross="true"
+      app:tag_horizontal_padding="15dp"
+      app:tag_max_length="18"
+      app:tag_selectable="true"
+      app:tag_text_color="#ff666666"
+      app:tag_text_direction="ltr"
+      app:tag_text_size="14sp"
+      app:tag_theme="none"
+      app:tag_vertical_padding="10dp"
+      app:vertical_interval="10dp" />
+  </LinearLayout>
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/linearlayout"
     android:layout_marginTop="10dp"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="@string/max_five_select"/>
+    android:layout_marginBottom="70dp"
+    android:background="@drawable/textlines"
+    android:orientation="vertical">
 
-  <co.lujun.androidtagview.TagContainerLayout
-    android:id="@+id/tagcontainerLayout1"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_below="@+id/Max3TextView"
-    android:layout_marginTop="0dp"
-    android:padding="10dp"
-    app:container_background_color="#00000000"
-    app:container_border_color="#FFFFFFFF"
-    app:container_gravity="left"
-    app:horizontal_interval="10dp"
-    app:tag_background_color="#FFFFFFFF"
-    app:tag_border_color="#330000ff"
-    app:tag_border_width="2dp"
-    app:tag_clickable="true"
-    app:tag_corner_radius="5dp"
-    app:tag_enable_cross="true"
-    app:tag_horizontal_padding="15dp"
-    app:tag_max_length="18"
-    app:tag_selectable="true"
-    app:tag_text_color="#ff666666"
-    app:tag_text_direction="ltr"
-    app:tag_text_size="14sp"
-    app:tag_theme="none"
-    app:tag_vertical_padding="10dp"
-    app:vertical_interval="10dp" />
+    <androidx.recyclerview.widget.RecyclerView
+      android:id="@+id/racingSelectRecyclerView"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:paddingLeft="20dp"
+      android:paddingTop="1dp"
+      android:paddingRight="20dp"
+      android:paddingBottom="1dp" />
 
-  <androidx.recyclerview.widget.RecyclerView
-    android:layout_marginLeft="20dp"
-    android:layout_marginRight="20dp"
-    android:layout_below="@+id/tagcontainerLayout1"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/racingSelectRecyclerView"
-    android:layout_marginBottom="70dp"/>
+  </LinearLayout>
 
   <Button
+    android:id="@+id/racingSelectButton"
+    style="@style/buttonText"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:text="@string/selection_complete"
-    android:id="@+id/racingSelectButton"
-    android:background="@drawable/button_background"
-    style="@style/buttonText"
     android:layout_alignParentBottom="true"
-    android:layout_marginRight="20dp"
     android:layout_marginLeft="20dp"
-    android:layout_marginBottom="10dp"/>
-
-
-
+    android:layout_marginRight="20dp"
+    android:layout_marginBottom="10dp"
+    android:background="@drawable/button_background"
+    android:text="@string/selection_complete" />
 
 </RelativeLayout>

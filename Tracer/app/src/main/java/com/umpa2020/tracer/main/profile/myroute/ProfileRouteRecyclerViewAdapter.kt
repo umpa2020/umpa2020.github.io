@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.umpa2020.tracer.R
-import com.umpa2020.tracer.dataClass.InfoData
+import com.umpa2020.tracer.dataClass.MapInfo
 import com.umpa2020.tracer.extensions.*
 import com.umpa2020.tracer.main.ranking.RankRecyclerItemClickActivity
 import com.umpa2020.tracer.network.BaseFB.Companion.MAP_ID
@@ -22,13 +22,12 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import java.util.*
 
-class ProfileRouteRecyclerViewAdapter(val mdata: ArrayList<InfoData>) :
+class ProfileRouteRecyclerViewAdapter(val mdata: ArrayList<MapInfo>) :
   RecyclerView.Adapter<ProfileRouteRecyclerViewAdapter.mViewHolder>() {
   var context: Context? = null
 
   override fun onBindViewHolder(holder: mViewHolder, position: Int) {
     val infoData = mdata[position]
-    val time = infoData.time
 
     MainScope().launch {
       holder.image.image(FBMapRepository().getMapImage(infoData.mapId))
@@ -38,7 +37,7 @@ class ProfileRouteRecyclerViewAdapter(val mdata: ArrayList<InfoData>) :
     holder.time.text = infoData.time.format(mm_ss)
     holder.likes.text = infoData.likes.toString()
     holder.excutes.text = infoData.plays.toString()
-    holder.date.text = time.format(Y_M_D)
+    holder.date.text = infoData.createTime.format(Y_M_D)
 
     if (infoData.played) {
       holder.play.setColorFilter(Color.CYAN)

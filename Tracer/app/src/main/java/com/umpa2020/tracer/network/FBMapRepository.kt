@@ -4,7 +4,10 @@ import android.net.Uri
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.Query
-import com.umpa2020.tracer.dataClass.*
+import com.umpa2020.tracer.dataClass.ActivityData
+import com.umpa2020.tracer.dataClass.MapInfo
+import com.umpa2020.tracer.dataClass.RankingData
+import com.umpa2020.tracer.dataClass.TrophyData
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.coroutines.tasks.await
 
@@ -17,11 +20,11 @@ class FBMapRepository : BaseFB() {
   /**
    * mapID 하나를 받으면 맵 인포 데이터를 받아오는 함수.
    */
-  suspend fun getMapInfo(mapId: String): InfoData? {
+  suspend fun getMapInfo(mapId: String): MapInfo? {
     return mapsCollectionRef
       .whereEqualTo(MAP_ID, mapId)
       .get()
-      .await().documents.first().toObject(InfoData::class.java)
+      .await().documents.first().toObject(MapInfo::class.java)
   }
 
   /**
@@ -55,7 +58,7 @@ class FBMapRepository : BaseFB() {
    * Tracer 에서 만들어진 맵이 있다면 찾아와서 마커에 표현할 수 있도록
    * 리스트로 받아오는 함수
    */
-  suspend fun listNearMap(southwest: LatLng, northeast: LatLng): List<NearMap>? {
+  suspend fun listNearMap(southwest: LatLng, northeast: LatLng): List<MapInfo>? {
     return mapsCollectionRef
       .whereGreaterThan(START_LATITUDE, southwest.latitude)
       .whereLessThan(START_LATITUDE, northeast.latitude)
@@ -64,14 +67,7 @@ class FBMapRepository : BaseFB() {
         ((southwest.longitude > 0 && northeast.longitude < 0) &&
           (southwest.longitude < startLongitude || startLongitude < northeast.longitude))
           || (southwest.longitude < startLongitude && startLongitude < northeast.longitude)
-      }.map {
-        NearMap(
-          it.getString(MAP_ID)!!,
-          it.getString(MAP_TITLE)!!,
-          LatLng(it.getDouble(START_LATITUDE)!!, it.getDouble(START_LONGITUDE)!!),
-          it.get(DISTANCE) as Double
-        )
-      }
+      }.map { it.toObject(MapInfo::class.java)!! }
   }
 
   /**
@@ -89,18 +85,18 @@ class FBMapRepository : BaseFB() {
    * 3. ranking 에 맵 제작자의 ranking 을 업로드
    * 4. users activity 에 map save 로 해당 내용 저장
    */
-  fun uploadMap(infoData: InfoData, rankingData: RankingData, activityData: ActivityData, timestamp: String, gpxUri: Uri, imgPath: Uri, achievementData: TrophyData) {
+  fun uploadMap(mapInfo: MapInfo, rankingData: RankingData, activityData: ActivityData, timestamp: String, gpxUri: Uri, imgPath: Uri, trophyData: TrophyData) {
     //Maps/mapId에 새로운 맵 정보 생성
-    mapsCollectionRef.document(infoData.mapId).set(infoData)
+    mapsCollectionRef.document(mapInfo.mapId).set(mapInfo)
     //racerGPX
-    FBStorageRepository().uploadFile(imgPath, infoData.mapImagePath)
-    FBStorageRepository().uploadFile(gpxUri, infoData.routeGPXPath)
+    FBStorageRepository().uploadFile(imgPath, mapInfo.mapImagePath)
+    FBStorageRepository().uploadFile(gpxUri, mapInfo.routeGPXPath)
     FBStorageRepository().uploadFile(gpxUri, rankingData.racerGPX!!)
-    mapsCollectionRef.document(infoData.mapId).collection(RANKING)
+    mapsCollectionRef.document(mapInfo.mapId).collection(RANKING)
       .document(UserInfo.autoLoginKey + timestamp).set(rankingData)
     // 히스토리 업로드
     FBUsersRepository().createUserHistory(activityData)
-    FBUsersRepository().createUserAchievement(achievementData)
+    FBUsersRepository().createUserAchievement(trophyData)
 
   }
 

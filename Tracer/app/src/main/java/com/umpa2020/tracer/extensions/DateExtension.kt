@@ -1,7 +1,6 @@
 package com.umpa2020.tracer.extensions
 
 import android.annotation.SuppressLint
-import com.umpa2020.tracer.util.Logg
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -87,24 +86,26 @@ fun String.toMillisecond(pattern: String): Long? {
 fun String.format(from: String, to: String): String? {
   return toMillisecond(from)?.format(to)
 }
+
 /**
  * Int형 yyyy m d 를 String형 yyyyMMdd로 변환.
  * 십의 자리 미만의 월, 일 앞에 0을 붙이는 함수.
  */
 
-fun intToyyyyMMdd(year : Int, month : Int, day : Int) : String?{
+fun intToyyyyMMdd(year: Int, month: Int, day: Int): String? {
   val mm = if (month < 10)
     "0$month"
   else
     month.toString()
 
-  val dd = if(day < 10)
+  val dd = if (day < 10)
     "0$day"
   else
     day.toString()
 
   return "$year$mm$dd"
 }
+
 /**
  *  년월일을 나이로 변경
  *

@@ -8,12 +8,10 @@ import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.umpa2020.tracer.R
+import com.umpa2020.tracer.dataClass.TimeData
 import com.umpa2020.tracer.lockscreen.util.ViewUnLock
-import com.umpa2020.tracer.roomDatabase.entity.MapRecordData
-import com.umpa2020.tracer.roomDatabase.viewModel.RecordViewModel
-import com.umpa2020.tracer.util.Logg
+import com.umpa2020.tracer.main.MainActivity.Companion.locationViewModel
 import kotlinx.android.synthetic.main.activity_lock_screen.*
 
 /**
@@ -84,77 +82,47 @@ class LockScreenActivity : AppCompatActivity() {
     window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
   }
 
-
-  private lateinit var recordViewModel: RecordViewModel
-
   override fun onResume() {
     super.onResume()
-
-//    setButtonUnlock()
     setViewUnlock()
-
-
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_lock_screen)
 
-    // ViewModelProviders를 사용하여 ViewModel을 Activity와 연관시켜준다.
-    //
-    //Activity가 처음 시작되면 ViewModelProviders가 ViewModel을 만든다. 예를 들어 configuration change을
-    // 통해 Activity가 destory됬을 때 ViewModel은 지속된다. Activity가 다시 생성되면 ViewModelProviders는 기존 ViewModel을 반환한다.
-    // 자세한 내용은 ViewModel을 참조하면 된다.
-    //
-    // RecyclerView 코드 블록 아래의 onCreate ()에서 ViewModelProvider에서 ViewModel을 가져온다.
-    recordViewModel = ViewModelProvider(this).get(RecordViewModel::class.java)
+    /**
+     * liveData가 observe를 갖고 있지 때문에 항상 관찰 가능.
+     */
+    //speed랑 distance 필요
+    locationViewModel.distanceSpeed.observe(this, Observer {
+      lockscreenSpeedTextView.text = it.speed
+      lockscreenDistanceTextView.text = it.distance
+    })
 
-    // 또한 onCreate() 에서 RecordViewModel의 allWords LiveData property에 대한 옵저버를 추가한다.
-    //관찰 된 데이터가 변경되고 activity가 foreground에있을 때 onChanged () 메소드(람다의 기본 메소드로 되있음)가 실행됩니다.
-    recordViewModel.allRecords.observe(this, Observer { records ->
-      // Update the cached copy of the words in the adapter.
-      records?.let { changeUI(it) }
+    locationViewModel.times.observe(this, Observer {
+      changeTimeUI(it)
     })
   }
 
   var flag = true
-  fun changeUI(records: MapRecordData) {
-    lockscreenDistanceTextView.text = records.distance
-    lockscreenSpeedTextView.text = records.speed
+  fun changeTimeUI(records: TimeData) {
 
-    Logg.d(flag.toString())
+
     if (flag) {
       if (records.timeControl) { // 처음 시작은 true
         lockScreenChronometer.base = records.time + records.timeWhenStop
         lockScreenChronometer.start()
-        Logg.d("시간 시작")
+
       } else { // false
-//        val cur=SystemClock.elapsedRealtime()
-//        val temp =
-//          ((cur - (cur % 1000))
-//            + (records.timeWhenStop))
-//        if (temp % 1000 > 0) {
-//          lockScreenChronometer.base = temp - 1000
-//        } else {
-//          lockScreenChronometer.base = temp
-//        }
-        Logg.d(records.timeText)
+
+
         lockScreenChronometer.text = records.timeText
-        Logg.d("시간 정지")
+
       }
       flag = false
     }
   }
-
-
-//  // 이 버튼은 우리꺼에선 사용 안할 듯.
-//  private fun setButtonUnlock() {
-//    swipeUnLockButton.setOnUnlockListenerRight(object : ButtonUnLock.OnUnlockListener {
-//      override fun onUnlock() {
-//        finish()
-//      }
-//    })
-//  }
 
 
   private fun setViewUnlock() {

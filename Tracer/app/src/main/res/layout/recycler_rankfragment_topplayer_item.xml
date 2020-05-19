@@ -2,15 +2,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  android:layout_margin="5dp">
+  android:background="@color/white"
+  android:paddingTop="10dp"
+  android:paddingBottom="10dp">
 
   <TextView
     android:id="@+id/rankRecyclerItemClickCountTextView"
     android:layout_width="0dp"
     android:layout_height="35dp"
-    android:layout_weight="0.5"
+    android:layout_weight="0.4"
     android:background="@drawable/ic_ranking1_black"
-    android:fontFamily="@font/notosansmedium"
     android:gravity="center"
     android:textColor="@color/black"
     android:textSize="15dp"
@@ -21,17 +22,19 @@
     style="@style/ListDetail"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
-    android:layout_weight="2"
+    android:layout_weight="3"
     android:ellipsize="marquee"
     android:paddingLeft="25dp"
-    android:singleLine="true" />
+    android:singleLine="true"
+    android:text="text" />
 
   <TextView
     android:id="@+id/rankRecyclerItemClickTimeTextView"
-    style="@style/ListDetail"
+    style="@style/ListDetail1"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
-    android:layout_weight="2"
-    android:gravity="center" />
+    android:layout_weight="1"
+    android:gravity="center"
+    android:text="text" />
 
 </LinearLayout>

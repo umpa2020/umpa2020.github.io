@@ -12,15 +12,15 @@
     android:layout_height="50dp"
     android:layout_alignParentTop="true"
     android:background="@color/white"
-    android:elevation="1dp"
-    android:contentInsetStart="0dp">
+    android:contentInsetStart="0dp"
+    android:elevation="1dp">
 
     <TextView
       style="@style/appBarText"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:gravity="center"
-      android:text="@string/detailedmap"/>
+      android:text="@string/detailedmap" />
   </Toolbar>
 
   <ScrollView
@@ -40,7 +40,8 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingTop="10dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
           android:id="@+id/rankingDetailProfileImage"
@@ -218,13 +219,12 @@
 
       <fragment
         android:id="@+id/rankingDetailMapViewer"
+        class="com.umpa2020.tracer.customUI.WorkaroundMapFragment"
         android:layout_width="match_parent"
         android:layout_height="250dp"
         android:layout_below="@+id/rankingDetailMapDetailItem2"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        class="com.umpa2020.tracer.customUI.WorkaroundMapFragment"
-        />
+        android:layout_marginBottom="10dp" />
 
       <TextView
         android:id="@+id/rankingDetailMapDetailItem3"

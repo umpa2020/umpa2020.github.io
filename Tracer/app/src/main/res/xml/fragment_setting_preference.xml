@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
   <Preference
     android:key="myInformation"
-    android:title="@string/my_information">
-  </Preference>
+    android:title="@string/my_information"
+    app:iconSpaceReserved="false"></Preference>
 
   <PreferenceCategory
-    android:title="@string/TTS">
+    android:title="@string/TTS"
+    app:iconSpaceReserved="false">
 
     <!--
     <ListPreference
@@ -26,38 +28,53 @@
       android:summary="@string/TTS_check"
       android:switchTextOff="OFF"
       android:switchTextOn="ON"
-      android:title="@string/TTS_setting" />
+      android:title="@string/TTS_setting"
+      app:iconSpaceReserved="false" />
 
   </PreferenceCategory>
 
   <PreferenceCategory
-    android:title="@string/lockScreenSetting">
+    android:title="@string/lockScreenSetting"
+    app:iconSpaceReserved="false">
     <SwitchPreference
       android:defaultValue="true"
       android:key="LockScreenStatus"
-      android:title="@string/lockScreenCheck"
       android:summary="@string/lockScreenBody"
       android:switchTextOff="OFF"
-      android:switchTextOn="ON" />
+      android:switchTextOn="ON"
+      android:title="@string/lockScreenCheck"
+      app:iconSpaceReserved="false" />
   </PreferenceCategory>
   <PreferenceCategory
-    android:title="@string/noticeSetting">
+    android:title="@string/noticeSetting"
+    app:iconSpaceReserved="false">
     <SwitchPreference
       android:defaultValue="true"
       android:key="notificationSetting"
       android:summary="@string/noticeSound"
       android:switchTextOff="OFF"
       android:switchTextOn="ON"
-      android:title="@string/noticeCheck" />
+      android:title="@string/noticeCheck"
+      app:iconSpaceReserved="false" />
   </PreferenceCategory>
 
   <Preference
     android:key="logout"
-    android:title="@string/logout">
-  </Preference>
+    android:title="@string/logout"
+    app:allowDividerAbove="true"
+    app:allowDividerBelow="true"
+    app:iconSpaceReserved="false"></Preference>
+
 
   <Preference
     android:key="unregister"
-    android:title="@string/unregister">
-  </Preference>
+    android:title="@string/unregister"
+    app:allowDividerAbove="true"
+    app:allowDividerBelow="true"
+    app:iconSpaceReserved="false"></Preference>
+
+  <Preference
+    app:allowDividerAbove="true"
+    app:allowDividerBelow="true"
+    app:iconSpaceReserved="false"></Preference>
 </PreferenceScreen>

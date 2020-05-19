@@ -40,19 +40,14 @@
         android:orientation="horizontal"
         android:visibility="visible">
 
-        <TextView
+        <ImageView
           android:id="@+id/mainStartLogoTextView"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
+          android:layout_width="100dp"
+          android:layout_height="80dp"
           android:layout_centerInParent="true"
-          android:fontFamily="@font/godoroundedl"
-          android:gravity="center"
-          android:text="Tracer"
-          android:textColor="@color/red"
-          android:textSize="40dp"
-          android:textStyle="bold">
-
-        </TextView>
+          android:layout_centerVertical="true"
+          android:background="@drawable/title"
+          android:gravity="center" />
 
         <LinearLayout
           android:id="@+id/mainStartSearchLayout"
@@ -80,8 +75,8 @@
 
         <Button
           android:id="@+id/mainStartSearchButton"
-          android:layout_width="30dp"
-          android:layout_height="30dp"
+          android:layout_width="20dp"
+          android:layout_height="20dp"
           android:layout_alignParentEnd="true"
           android:layout_centerVertical="true"
           android:layout_marginStart="10dp"

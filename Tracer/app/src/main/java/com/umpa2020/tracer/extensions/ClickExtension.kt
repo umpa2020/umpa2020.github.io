@@ -4,7 +4,7 @@ import android.os.SystemClock
 import android.view.View
 import com.umpa2020.tracer.constant.Constants
 
-fun View.single():Boolean{
+fun View.single(): Boolean {
   val currentClickTime = SystemClock.uptimeMillis()
   val elapsedTime = currentClickTime - Constants.mLastClickTime
   Constants.mLastClickTime = currentClickTime

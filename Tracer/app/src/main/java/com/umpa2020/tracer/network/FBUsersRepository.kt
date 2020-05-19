@@ -2,6 +2,9 @@ package com.umpa2020.tracer.network
 
 import com.google.firebase.firestore.DocumentSnapshot
 import com.umpa2020.tracer.dataClass.*
+import com.umpa2020.tracer.dataClass.ActivityData
+import com.umpa2020.tracer.dataClass.MapInfo
+import com.umpa2020.tracer.dataClass.Users
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.coroutines.tasks.await
@@ -32,8 +35,8 @@ class FBUsersRepository : BaseFB() {
     return list
   }
 
-  fun createUserAchievement(achieveData: TrophyData) {
-    usersCollectionRef.document(UserInfo.autoLoginKey).collection(TROPHIES).add(achieveData)
+  fun createUserAchievement(trophyData: TrophyData) {
+    usersCollectionRef.document(UserInfo.autoLoginKey).collection(TROPHIES).add(trophyData)
   }
 
   fun updateUserAchievement(rankingDatas: MutableList<RankingData>, mapId: String) {
@@ -67,12 +70,12 @@ class FBUsersRepository : BaseFB() {
     }
   }
 
-  fun createUserInfo(data: HashMap<String, String?>) {
-    db.collection(USERS).document(data[USER_ID]!!).set(data)
+  fun createUserInfo(data: Users) {
+    db.collection(USERS).document(data.userId).set(data)
       .addOnSuccessListener { Logg.d("DocumentSnapshot successfully written!") }
       .addOnFailureListener { e -> Logg.w("Error writing document$e") }
 
-    FBAchievementRepository().createAchievement(data[USER_ID]!!)
+    FBAchievementRepository().createAchievement(data.userId)
   }
 
   fun createUserHistory(activityData: ActivityData) {
@@ -93,17 +96,19 @@ class FBUsersRepository : BaseFB() {
       }.toObjects(ActivityData::class.java)
   }
 
-  suspend fun listUserRoute(uid: String, limit: Long): List<InfoData>? {
+  suspend fun listUserRoute(uid: String, limit: Long): List<MapInfo>? {
+    Logg.d("ssmm11 global = $globalStartAfter")
+
     val infoDatas =
       if (globalStartAfter == null) {
-        mapsCollectionRef.whereEqualTo(BaseFB.MAKER_ID, uid)
+        mapsCollectionRef.whereEqualTo(MAKER_ID, uid)
       } else {
-        mapsCollectionRef.whereEqualTo(BaseFB.MAKER_ID, uid).startAfter(globalStartAfter!!)
+        mapsCollectionRef.whereEqualTo(MAKER_ID, uid).startAfter(globalStartAfter!!)
       }.limit(limit).get().await().apply {
         if (documents.size == 0)
           return null
         globalStartAfter = documents.last()
-      }.toObjects(InfoData::class.java)
+      }.toObjects(MapInfo::class.java)
 
     val playedMapIdList = FBMapRepository().listPlayed()
     val likedMapIdList = FBMapRepository().listLikedMap()
@@ -119,5 +124,9 @@ class FBUsersRepository : BaseFB() {
     return !usersCollectionRef.document(uid).collection(ACTIVITIES)
       .whereEqualTo(MAP_ID, mapId)
       .get().await().isEmpty
+  }
+
+  fun userWithdrawal() {
+    usersCollectionRef.document(UserInfo.autoLoginKey).update(USER_STATE, false)
   }
 }

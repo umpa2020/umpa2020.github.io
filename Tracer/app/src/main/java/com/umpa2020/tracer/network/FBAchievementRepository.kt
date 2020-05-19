@@ -2,7 +2,6 @@ package com.umpa2020.tracer.network
 
 import com.google.firebase.firestore.FieldValue
 import com.umpa2020.tracer.dataClass.AchievementData
-import com.umpa2020.tracer.dataClass.InfoData
 import kotlinx.coroutines.tasks.await
 
 class FBAchievementRepository : BaseFB() {

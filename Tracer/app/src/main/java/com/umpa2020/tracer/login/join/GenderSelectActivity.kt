@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.umpa2020.tracer.R
-import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.activity_gender_select.*
 import kotlinx.android.synthetic.main.signup_toolbar.*
@@ -49,8 +48,8 @@ class GenderSelectActivity : AppCompatActivity(), OnSingleClickListener {
         }
       }
       R.id.man -> {
-        manTextView.setTextColor(resources.getColor(R.color.red,null))
-        womanTextView.setTextColor(resources.getColor(R.color.rankBackgroudGray,null))
+        manTextView.setTextColor(resources.getColor(R.color.red, null))
+        womanTextView.setTextColor(resources.getColor(R.color.rankBackgroudGray, null))
         if (manCheck.visibility == View.INVISIBLE && manUnderline.visibility == View.INVISIBLE) {
           manCheck.visibility = View.VISIBLE
           manUnderline.visibility = View.VISIBLE
@@ -69,8 +68,8 @@ class GenderSelectActivity : AppCompatActivity(), OnSingleClickListener {
           isMan = false
           isWoman = true
         }
-        Logg.d("남자 : " + isMan.toString())
-        Logg.d("여자 : " + isWoman.toString())
+
+
       }
       R.id.woman -> {
         manTextView.setTextColor(resources.getColor(R.color.rankBackgroudGray))

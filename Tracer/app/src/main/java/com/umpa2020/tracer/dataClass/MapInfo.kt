@@ -4,7 +4,7 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class InfoData(
+data class MapInfo(
   var mapId: String = "",
   var mapTitle: String = "",
   var makerId: String = "",
@@ -23,5 +23,6 @@ data class InfoData(
   var maxSpeed: Double = 0.0,
   var user1st: String = "",
   var user2nd: String = "",
-  var user3th: String = ""
+  var user3th: String = "",
+  var createTime: Long = 0L
 ) : Parcelable

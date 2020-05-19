@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import com.chibatching.kotpref.Kotpref
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -17,7 +16,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.login.join.SignUpActivity
 import com.umpa2020.tracer.main.MainActivity
-import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
@@ -57,7 +55,7 @@ class LoginActivity : AppCompatActivity(), OnSingleClickListener {
      */
     mAuth = FirebaseAuth.getInstance() // FirebaseAuth를 사용하기 위해서 인스턴스를 꼭 받아오기
 
-   // signInButton = googleSignInButton // googleSignInButton 사용. Gradle에서 implementation을 해줘야 사용 가능.
+    // signInButton = googleSignInButton // googleSignInButton 사용. Gradle에서 implementation을 해줘야 사용 가능.
 
     //  Configure Google Sign In
     // 구글 로그인 옵션
@@ -68,7 +66,6 @@ class LoginActivity : AppCompatActivity(), OnSingleClickListener {
       .build()
 
     mGoogleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions) //구글 로그인 클래스
-    Kotpref.init(this) // Kotpref 사용을 위한 singleton context 저장
 
     // 람다식으로 onClick 설정
     googleSignInButton.setOnClickListener(this)
@@ -95,7 +92,7 @@ class LoginActivity : AppCompatActivity(), OnSingleClickListener {
     if (requestCode == RC_SIGN_IN /*&&  resultCode == RESULT_OK*/) {
       try {
         // 구글 로그인에 성공했을때 넘어오는 토큰값을 가지고 있는 Task
-        Logg.d(data.toString())
+
         val task = GoogleSignIn.getSignedInAccountFromIntent(data)
         // Google Sign In was successful, authenticate with Firebase
         // 구글 로그인 성공
@@ -111,7 +108,7 @@ class LoginActivity : AppCompatActivity(), OnSingleClickListener {
         firebaseAuthWithGoogle(account!!)
       } catch (e: ApiException) {
         // Google Sign In failed, update UI appropriately
-        Logg.w("Google sign in failed$e")
+
         progressbar.dismiss()
         // ...
       }
@@ -125,8 +122,7 @@ class LoginActivity : AppCompatActivity(), OnSingleClickListener {
    *  Firebase 사용자 인증 정보로 교환하고 해당 정보를 사용해 Firebase 인증을 받습니다.
    */
   private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
-    Logg.d("firebaseAuthWithGoogle:" + acct.id!!) // firebaseAuthWithGoogle:117635384468060774340 => 계정 고유 번호 => 이것을 Shared에 저장하여 자동 로그인 구현
-    Logg.d(acct.email!!)
+
 
     var uid = mAuth!!.uid.toString()
     val email = acct.email.toString()
@@ -134,21 +130,22 @@ class LoginActivity : AppCompatActivity(), OnSingleClickListener {
     // Credentail 구글 로그인에 성공했다는 인증서
     val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
 
-    Logg.d(credential.toString())
 
     //인증서를 Firebase에 넘겨줌(구글 사용자가 등록)
     mAuth!!.signInWithCredential(credential)
       .addOnCompleteListener(this) { task ->
         if (task.isSuccessful) { // 성공하면
           // Sign in success, update UI with the signed-in user's information
-          Logg.d("signInWithCredential:success")
+
           // 로그인 성공
           uid = mAuth!!.uid.toString()
-          mFirestoreDB!!.collection("userinfo").whereEqualTo("USER_ID", uid).get()
+          mFirestoreDB!!.collection("users").whereEqualTo("userId", uid)
+            .whereEqualTo("userState", true)
+            .get()
             .addOnSuccessListener { result ->
               // Document found in the offline cache
               if (result.isEmpty) {
-                Logg.d("초기 가입인가")
+
                 val nextIntent = Intent(this@LoginActivity, SignUpActivity::class.java)
                 nextIntent.putExtra("user UID", mAuth!!.uid)
                 nextIntent.putExtra("email", email)
@@ -158,18 +155,12 @@ class LoginActivity : AppCompatActivity(), OnSingleClickListener {
               } else {
                 for (document in result) {
                   // DocumentSnapshot{key=UserInfo/117635384468060774340, metadata=SnapshotMetadata{hasPendingWrites=false, isFromCache=false}, doc=null}
-                  Logg.d(document.exists().toString()) // false
-                  Logg.d(document.reference.toString()) // com.google.firebase.firestore.DocumentReference@aafeaf20
-                  Logg.d("Cached document data: ${document?.data}") // Cached document data: null
-                  Logg.d("기존 가입자 -> 메인으로") // 이 부분에 들어왔다는 것은 로그아웃 or 앱 삭제 후 재로그인일 테니깐 Shared에 다시 값 저장.
 
-                  Logg.d(document.data.toString()) // {gender=Man, nickname=gfyhv, age=26}
-                  Logg.d(document.data.get("nickname").toString())
 
                   UserInfo.autoLoginKey = mAuth!!.uid.toString()
                   UserInfo.email = email
                   UserInfo.nickname = document.data["nickname"].toString() // Shared에 nickname저장.
-                  UserInfo.birth = document.data["age"].toString()
+                  UserInfo.birth = document.data["birth"].toString()
                   UserInfo.gender = document.data["gender"].toString()
 
                   val nextIntent = Intent(this@LoginActivity, MainActivity::class.java)
@@ -185,7 +176,7 @@ class LoginActivity : AppCompatActivity(), OnSingleClickListener {
         } else {
           // If sign in fails, display a message to the user.
           progressbar.dismiss()
-          Logg.w("signInWithCredential:failure" + task.exception)
+
         }
       }
   }

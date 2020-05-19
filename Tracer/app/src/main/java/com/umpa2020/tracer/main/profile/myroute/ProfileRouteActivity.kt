@@ -8,10 +8,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
-import com.umpa2020.tracer.dataClass.InfoData
-import com.umpa2020.tracer.dataClass.UserId
+import com.umpa2020.tracer.dataClass.MapInfo
 import com.umpa2020.tracer.network.BaseFB.Companion.USER_ID
 import com.umpa2020.tracer.network.FBUsersRepository
+import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_profile_route.*
@@ -23,7 +23,7 @@ class ProfileRouteActivity : AppCompatActivity() {
   var uid = ""
   var nickname = ""
   var isLoding = false
-  val rootInfoDatas = arrayListOf<InfoData>()
+  val rootInfoDatas = arrayListOf<MapInfo>()
   var limit = 0L
   val repository = FBUsersRepository()
 
@@ -61,11 +61,11 @@ class ProfileRouteActivity : AppCompatActivity() {
   override fun onResume() {
     // 마이 루트에 필요한 내용을 받아옴
     limit = rootInfoDatas.size.toLong()
-
+    Logg.d("ssmm11 limit = $limit")
     if (limit == 0L) limit = 5L
     else rootInfoDatas.clear()
     MainScope().launch {
-      listProfileRoute(repository.listUserRoute(uid, limit))
+      listProfileRoute(FBUsersRepository().listUserRoute(uid, limit))
     }
     super.onResume()
   }
@@ -74,9 +74,12 @@ class ProfileRouteActivity : AppCompatActivity() {
    * 리스너로 받아온 루트 데이터들을
    * 리사이클러뷰에 띄워줌
    */
-  fun listProfileRoute(infoDatas: List<InfoData>?) {
-    if (infoDatas != null)
-      rootInfoDatas.addAll(infoDatas)
+  fun listProfileRoute(mapInfos: List<MapInfo>?) {
+    if (mapInfos != null)
+      rootInfoDatas.addAll(mapInfos)
+
+    Logg.d("ssmm11 size = ${rootInfoDatas.size}")
+
 
     if (rootInfoDatas.isEmpty()) {
       profileRecyclerRouteisEmpty.visibility = View.VISIBLE

@@ -15,6 +15,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants
+import com.umpa2020.tracer.network.FBUsersRepository
 import com.umpa2020.tracer.util.ChoicePopup
 import com.umpa2020.tracer.util.UserInfo
 
@@ -25,7 +26,6 @@ class SettingPreferenceFragment : PreferenceFragmentCompat() {
 
   override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
     setPreferencesFromResource(R.xml.fragment_setting_preference, rootKey)
-
     mAuth = FirebaseAuth.getInstance() // FirebaseAuth를 사용하기 위해서 인스턴스를 꼭 받아오기
 
     //  Configure Google Sign In
@@ -90,10 +90,9 @@ class SettingPreferenceFragment : PreferenceFragmentCompat() {
     }
 
     //회원 탈퇴 눌렀을 때
-    // TODO : 회원 탈퇴 : 죽여 and Shared 값 삭제
-
     if (preference?.key.equals("unregister")) {
-      //TODO. 회원 탈퇴 기능 만들기
+      FBUsersRepository().userWithdrawal()
+      logOut()
     }
     return super.onPreferenceTreeClick(preference)
   }
@@ -110,6 +109,7 @@ class SettingPreferenceFragment : PreferenceFragmentCompat() {
         UserInfo.nickname = ""
         UserInfo.birth = ""
         UserInfo.gender = ""
+//        UserInfo.clear()
         //TODO : 이건 정빈이가 추가한거 같은데 삭제 하니깐 약간 어플이 꼬이는거 같아서 물어보고 삭제하든가 하기
 //        UserInfo.permission = 0
 //        UserInfo.rankingLatLng = LatLng(0.0, 0.0)

@@ -9,12 +9,17 @@ import android.os.Build
 import android.os.IBinder
 import android.telephony.PhoneStateListener
 import android.telephony.TelephonyManager
+import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import com.umpa2020.tracer.App
+import com.umpa2020.tracer.R
+import com.umpa2020.tracer.constant.Constants
+import com.umpa2020.tracer.locationBackground.LocationBackgroundService
 import com.umpa2020.tracer.lockscreen.LockScreenActivity
 import com.umpa2020.tracer.util.Logg
 
 class LockScreenService : Service() {
+
   private var isPhoneIdleNum: Int? = null
 
   // by lazy : 호출 시점에 by lazy 정의에 의해서 초기화를 진행한다.
@@ -74,20 +79,25 @@ class LockScreenService : Service() {
     }
   }
 
-
   private fun createNotificationCompatBuilder(): NotificationCompat.Builder {
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       Logg.d("zzzzzz")
       val mBuilder = NotificationCompat.Builder(
         this@LockScreenService,
-        MyNotificationManager.getMainNotificationId()
+        NotificationManager.getMainNotificationId()
       )
+//        .setContentTitle(getString(R.string.gps_activation))
+        .setContentTitle(getString(R.string.lockscreen_activation))
+        .setSmallIcon(R.mipmap.ic_launcher_tracer_final)
+        .setTicker("Ticker text")
+        .setAutoCancel(true) // 사용자가 탭하면 자동으로 알림을 삭제하는 setAutoCancel()을 호출
       mBuilder
     } else {
       Logg.d("ddddd")
       NotificationCompat.Builder(this@LockScreenService, "")
     }
   }
+
 
   override fun onCreate() {
     super.onCreate()
@@ -98,10 +108,15 @@ class LockScreenService : Service() {
      */
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       // 포그라운드 서비스는 알림창이 있어야 실행 가능.
-      MyNotificationManager.createMainNotificationChannel(this@LockScreenService)
-      startForeground( App.notificationId, createNotificationCompatBuilder().build())
+      Logg.d("이거 실행 안돼??")
+      // 서비스 id는 0이 아니여야 한다.
+      startForeground(
+        Constants.FOREGROUND_ID, createNotificationCompatBuilder()
+          .build()
+      )
     }
   }
+
 
   override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 //        return super.onStartCommand(intent, flags, startId) // 이걸 지우면 코드에 노란 박스 사라짐.
@@ -114,8 +129,24 @@ class LockScreenService : Service() {
   override fun onBind(intent: Intent): IBinder {
     TODO("Return the communication channel to the service.")
   }
+
+  @RequiresApi(Build.VERSION_CODES.O)
   override fun onDestroy() {
     super.onDestroy()
+    Logg.d("onDestroy()")
+//    NotificationManager.cancelnNotificationChannel(this@LockScreenService)
+
+    // 서비스에 인텐트 action을 줘서 다시 notification 교환.
+    // 이때의 startService는 서비스 시작이 아닌 단순 정보 전달.
+    // 또한 이때 서비스는 onStartCommand()부터 재시작.
+    Intent(App.applicationContext(), LocationBackgroundService::class.java).also {
+      it.action = "reStartNotification"
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { // 오레오 이상부터 foregroundService로 실행.
+        startForegroundService(it)
+      } else {
+        startService(it)
+      }
+    }
     stateReceiver(false)
   }
 

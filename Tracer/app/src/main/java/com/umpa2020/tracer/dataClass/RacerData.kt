@@ -4,6 +4,6 @@ import java.io.Serializable
 
 
 data class RacerData(
-  var racerId: String? = null,
-  var racerName: String? = null
+  var racerId: String,
+  var racerName: String
 ) : Serializable
