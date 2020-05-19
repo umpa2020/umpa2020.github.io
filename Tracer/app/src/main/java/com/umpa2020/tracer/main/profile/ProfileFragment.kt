@@ -78,7 +78,6 @@ class ProfileFragment() : Fragment(), OnSingleClickListener, Parcelable {
       R.id.profileAchivementTextView -> { // 나의 업적 액티비티
         val nextIntent = Intent(activity, ProfileAchievementActivity::class.java)
         nextIntent.putExtra(BaseFB.USER_ID, UserInfo.autoLoginKey)
-        nextIntent.putExtra(DISTANCE, distance)
         startActivity(nextIntent)
       }
     }

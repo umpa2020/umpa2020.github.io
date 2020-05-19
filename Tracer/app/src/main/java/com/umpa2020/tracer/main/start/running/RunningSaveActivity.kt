@@ -21,16 +21,18 @@ import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.map.TraceMap
 import com.umpa2020.tracer.network.BaseFB
 import com.umpa2020.tracer.network.BaseFB.Companion.MAP_ROUTE
+import com.umpa2020.tracer.network.FBAchievementRepository
 import com.umpa2020.tracer.network.FBMapRepository
 import com.umpa2020.tracer.util.*
 import kotlinx.android.synthetic.main.activity_running_save.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
 
-class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleClickListener {
-  var switch = 0
-
+class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleClickListener, CoroutineScope by MainScope() {
   lateinit var mapInfo: MapInfo
   lateinit var routeGPX: RouteGPX
   lateinit var traceMap: TraceMap
@@ -40,12 +42,12 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    setContentView(com.umpa2020.tracer.R.layout.activity_running_save)
+    setContentView(R.layout.activity_running_save)
     progressBar = MyProgressBar()
     mapInfo = intent.getParcelableExtra("InfoData")!!
     routeGPX = intent.getParcelableExtra("RouteGPX")!!
     val wmf =
-      supportFragmentManager.findFragmentById(com.umpa2020.tracer.R.id.map_viewer) as WorkaroundMapFragment
+      supportFragmentManager.findFragmentById(R.id.map_viewer) as WorkaroundMapFragment
     wmf.getMapAsync(this)
     wmf.setListener(object : WorkaroundMapFragment.OnTouchListener {
       override fun onTouch() {
@@ -170,13 +172,34 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
       speedList.average().toString(),
       "${BaseFB.MAP_ROUTE}/${mapInfo.mapId}/racingGPX/${UserInfo.autoLoginKey}"
     )
-    val activityData = ActivityData(mapInfo.mapId, timestamp, mapInfo.distance, mapInfo.time,BaseFB.ActivityMode.MAP_SAVE)
+    val activityData = ActivityData(mapInfo.mapId, timestamp, mapInfo.distance, mapInfo.time, BaseFB.ActivityMode.MAP_SAVE)
     val trophyData = TrophyData(mapInfo.mapId, 1)
 
-    FBMapRepository().uploadMap(mapInfo, rankingData, activityData, timestamp.toString(), routeGpxFile, Uri.fromFile(File(imgPath)), trophyData)
     Logg.d("Start Upload")
-
+    FBMapRepository().uploadMap(mapInfo, rankingData, activityData, timestamp.toString(), routeGpxFile, Uri.fromFile(File(imgPath)), trophyData)
     Logg.d("Finish Upload")
+
+    launch {
+      val uid = UserInfo.autoLoginKey
+      FBAchievementRepository().getAchievement(uid).let {
+        when (it?.trackMake) {
+          0 -> {
+            FBAchievementRepository().setTrackMaker1Emblem(uid)
+          }
+          9 -> {
+            FBAchievementRepository().setTrackMaker10Emblem(uid)
+          }
+          49 -> {
+            FBAchievementRepository().setTrackMaker50Emblem(uid)
+          }
+          null -> {
+            Logg.e("error")
+          }
+        }
+        FBAchievementRepository().incrementTrackMake(uid)
+      }
+    }
+
     progressBar.dismiss()
     finish()
   }
