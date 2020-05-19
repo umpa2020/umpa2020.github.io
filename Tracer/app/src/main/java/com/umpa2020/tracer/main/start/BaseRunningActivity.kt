@@ -105,11 +105,11 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
 
     traceMap.mMap.setOnCameraMoveListener {
 //      wedgedCamera = false
-//      Logg.d("카메라 이동 중 $wedgedCamera")
+      Logg.d("카메라 이동 중 $wedgedCamera")
     }
 
     traceMap.mMap.setOnCameraIdleListener {
-//      Logg.d("카메라 멈춤 $wedgedCamera")
+      Logg.d("카메라 멈춤 $wedgedCamera")
 //      wedgedCamera = false
 
       zoomLevel = traceMap.mMap.cameraPosition.zoom
