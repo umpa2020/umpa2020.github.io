@@ -81,7 +81,7 @@ class TraceMap(val mMap: GoogleMap) {
 
   fun moveCameraUserDirection(curLoc: Location,  zoomLevel : Float) {
     Logg.d("move camera $curLoc")
-    mMap.moveCamera(
+    mMap.animateCamera(
       CameraUpdateFactory.newCameraPosition(
         CameraPosition(curLoc.toLatLng()/*좌표*/, zoomLevel/*줌 레벨*/, 0F/*기울기 각도*/, curLoc.bearing/*베어링 각도*/)
       )
@@ -89,7 +89,7 @@ class TraceMap(val mMap: GoogleMap) {
   }
 
   fun moveCamera(latlng: LatLng, zoomLevel : Float) {
-    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, zoomLevel))
+    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latlng, zoomLevel))
   }
 
   fun changeMarkerIcon(nextWP: Int) {

@@ -111,7 +111,6 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     traceMap.mMap.setOnCameraIdleListener {
       Logg.d("카메라 멈춤 $wedgedCamera")
 //      wedgedCamera = false
-
       zoomLevel = traceMap.mMap.cameraPosition.zoom
     }
     // 내 위치 버튼 클릭 리스너
