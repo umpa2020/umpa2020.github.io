@@ -102,6 +102,9 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
       Logg.d("구글 맵 클릭")
     }
 
+    traceMap.mMap.setOnCameraMoveStartedListener {
+      Logg.d("카메라 이동 시작")
+    }
 
     traceMap.mMap.setOnCameraMoveListener {
 //      wedgedCamera = false
@@ -115,7 +118,7 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     }
     // 내 위치 버튼 클릭 리스너
     traceMap.mMap.setOnMyLocationButtonClickListener {
-      traceMap.moveCamera(currentLocation.toLatLng(), zoomLevel!!)
+      traceMap.moveCamera(currentLocation!!.toLatLng(), zoomLevel!!)
       wedgedCamera = true
       true
     }
@@ -273,7 +276,7 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     locationViewModel.init(DistanceTimeData("0.0", "0.0"), TimeData(0L, false, 0L, "0.0"))
   }
 
-  lateinit var currentLocation: Location
+  var currentLocation: Location? = null
   override fun onDestroy() {
     super.onDestroy()
     LocalBroadcastManager.getInstance(this).unregisterReceiver(locationBroadcastReceiver)
@@ -281,8 +284,8 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
 
     // Shared에 마지막 위치 업데이트
 
-    UserInfo.lat = currentLocation.latitude.toFloat()
-    UserInfo.lng = currentLocation.longitude.toFloat()
+    UserInfo.lat = currentLocation!!.latitude.toFloat()
+    UserInfo.lng = currentLocation!!.longitude.toFloat()
 
   }
 

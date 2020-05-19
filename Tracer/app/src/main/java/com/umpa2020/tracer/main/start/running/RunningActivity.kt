@@ -91,7 +91,7 @@ class RunningActivity : BaseRunningActivity() {
   override fun start() {
     super.start()
 
-    wpList.add(currentLocation.toWayPoint(START_POINT))
+    wpList.add(currentLocation!!.toWayPoint(START_POINT))
     traceMap.addMarker(wpList.first())
     TTS.speech(getString(R.string.startRunning))
   }
@@ -105,7 +105,7 @@ class RunningActivity : BaseRunningActivity() {
     super.stop()
     TTS.speech(getString(R.string.finishRunning))
 
-    wpList.add(currentLocation.toWayPoint(FINISH_POINT))
+    wpList.add(currentLocation!!.toWayPoint(FINISH_POINT))
     val infoData = MapInfo()
     infoData.distance = distance
     infoData.time = SystemClock.elapsedRealtime() - chronometer.base

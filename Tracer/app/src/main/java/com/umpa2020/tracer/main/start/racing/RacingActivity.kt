@@ -201,7 +201,7 @@ class RacingActivity : BaseRunningActivity() {
     // 레이싱 시작 TTS
     TTS.speech(getString(R.string.startRacing))
     wpList.add(
-      currentLocation.toWayPoint(START_POINT)
+      currentLocation!!.toWayPoint(START_POINT)
     )
 
     if (!racerGPXList.isNullOrEmpty()) {
@@ -254,7 +254,7 @@ class RacingActivity : BaseRunningActivity() {
 
   override fun stop() {
     super.stop()
-    wpList.add(currentLocation.toWayPoint(FINISH_POINT))
+    wpList.add(currentLocation!!.toWayPoint(FINISH_POINT))
 
     // 레이싱 끝 TTS
     TTS.speech(getString(R.string.finishRacing))
@@ -298,7 +298,7 @@ class RacingActivity : BaseRunningActivity() {
     ) {
       traceMap.changeMarkerIcon(nextWP)
       nextWP++
-      wpList.add(currentLocation.toWayPoint(DISTANCE_POINT))
+      wpList.add(currentLocation!!.toWayPoint(DISTANCE_POINT))
       if (nextWP == markerList.size) {
         stop()
       }
