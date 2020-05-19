@@ -89,7 +89,7 @@ class FBMapRepository : BaseFB() {
    * 3. ranking 에 맵 제작자의 ranking 을 업로드
    * 4. users activity 에 map save 로 해당 내용 저장
    */
-  fun uploadMap(infoData: InfoData, rankingData: RankingData, activityData: ActivityData, timestamp: String, gpxUri: Uri, imgPath: Uri, achievementData: AchievementData) {
+  fun uploadMap(infoData: InfoData, rankingData: RankingData, activityData: ActivityData, timestamp: String, gpxUri: Uri, imgPath: Uri, achievementData: TrophyData) {
     //Maps/mapId에 새로운 맵 정보 생성
     mapsCollectionRef.document(infoData.mapId).set(infoData)
     //racerGPX
@@ -101,6 +101,7 @@ class FBMapRepository : BaseFB() {
     // 히스토리 업로드
     FBUsersRepository().createUserHistory(activityData)
     FBUsersRepository().createUserAchievement(achievementData)
+
   }
 
   /**

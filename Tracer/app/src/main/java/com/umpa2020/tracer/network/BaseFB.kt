@@ -15,7 +15,12 @@ open class BaseFB {
   val storage = FirebaseStorage.getInstance()
   val usersCollectionRef = db.collection(USERS)
   val mapsCollectionRef = db.collection(MAPS)
+  val achievementCollectionRef = db.collection(ACHIEVEMENT)
   val mapRouteStorageRef = storage.reference.child(MAP_ROUTE)
+
+  enum class ActivityMode {
+    MAP_SAVE,RACING_SUCCESS,RACING_FAIL
+  }
 
   companion object {
     /**
@@ -68,5 +73,8 @@ open class BaseFB {
     const val LOCALE = "locale"
 
     const val ACHIEVEMENT = "achievement"
+    const val TROPHIES = "trophies"
+    const val MODE = "mode"
+    const val TRACK_MAKE = "trackMake"
   }
 }

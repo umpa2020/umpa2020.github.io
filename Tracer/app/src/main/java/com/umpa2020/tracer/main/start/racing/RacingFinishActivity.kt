@@ -66,7 +66,7 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
     MainScope().launch {
       // 유저 히스토리 등록
       FBUsersRepository().createUserHistory(
-        ActivityData(racerData.mapId, Date().time, racerData.distance, racerData.time, if (result) "racing go the distance" else "racing fail")
+        ActivityData(racerData.mapId, Date().time, racerData.distance, racerData.time, if (result) BaseFB.ActivityMode.RACING_SUCCESS else BaseFB.ActivityMode.RACING_FAIL)
       )
       //성공했다면 랭킹에 등록
       if (result)

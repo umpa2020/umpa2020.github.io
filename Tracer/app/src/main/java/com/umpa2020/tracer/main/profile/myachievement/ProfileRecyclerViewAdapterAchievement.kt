@@ -12,6 +12,7 @@ import com.umpa2020.tracer.extensions.Y_M_D
 import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.extensions.image
 import com.umpa2020.tracer.main.ranking.RankRecyclerItemClickActivity
+import com.umpa2020.tracer.network.BaseFB
 import com.umpa2020.tracer.network.FBMapRepository
 import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.recycler_profile_user_record_item.view.*
@@ -40,15 +41,15 @@ class ProfileRecyclerViewAdapterAchievement(val datas: MutableList<ActivityData>
       FBMapRepository().getMapTitle(singleItem1.mapId)?.let {
         val time = singleItem1.time!!.toLong().format(Y_M_D)
         when (singleItem1.mode) {
-          "racing go the distance" -> {
+          BaseFB.ActivityMode.RACING_SUCCESS -> {
             holder.activityText.text =
               String.format(context!!.getString(R.string.racing_go_the_distance), it, time)
           }
-          "racing fail" -> {
+          BaseFB.ActivityMode.RACING_FAIL -> {
             holder.activityText.text =
               String.format(context!!.getString(R.string.racing_fail), it, time)
           }
-          "map save" -> {
+          BaseFB.ActivityMode.MAP_SAVE -> {
             holder.activityText.text =
               String.format(context!!.getString(R.string.map_save), it, time)
           }

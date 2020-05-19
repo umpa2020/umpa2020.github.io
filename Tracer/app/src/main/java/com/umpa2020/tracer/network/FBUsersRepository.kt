@@ -1,11 +1,7 @@
 package com.umpa2020.tracer.network
 
-import android.os.Looper.loop
 import com.google.firebase.firestore.DocumentSnapshot
-import com.umpa2020.tracer.dataClass.AchievementData
-import com.umpa2020.tracer.dataClass.ActivityData
-import com.umpa2020.tracer.dataClass.InfoData
-import com.umpa2020.tracer.dataClass.RankingData
+import com.umpa2020.tracer.dataClass.*
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.coroutines.tasks.await
@@ -29,38 +25,38 @@ class FBUsersRepository : BaseFB() {
       .documents.first().reference
     for (i in 1..3) {
       list.add(
-        ref.collection(ACHIEVEMENT).whereEqualTo(RANKING, i).get().await()
+        ref.collection(TROPHIES).whereEqualTo(RANKING, i).get().await()
           .documents.size
       )
     }
     return list
   }
 
-  fun createUserAchievement(achieveData: AchievementData) {
-    usersCollectionRef.document(UserInfo.autoLoginKey).collection(ACHIEVEMENT).add(achieveData)
+  fun createUserAchievement(achieveData: TrophyData) {
+    usersCollectionRef.document(UserInfo.autoLoginKey).collection(TROPHIES).add(achieveData)
   }
 
   fun updateUserAchievement(rankingDatas: MutableList<RankingData>, mapId: String) {
     var ranking = 0L
-    run loop@ {
+    run loop@{
       rankingDatas.forEachIndexed { i, rankingData ->
         if (i > 3)
           return@loop
         if (rankingData.challengerId == UserInfo.autoLoginKey) {
-          ranking = i+1L
+          ranking = i + 1L
         }
       }
     }
 
 
     if (ranking != 0L) {
-      usersCollectionRef.document(UserInfo.autoLoginKey).collection(ACHIEVEMENT)
+      usersCollectionRef.document(UserInfo.autoLoginKey).collection(TROPHIES)
         .whereEqualTo(MAP_ID, mapId)
         .get()
         .addOnSuccessListener {
           if (it.isEmpty) {
-            usersCollectionRef.document(UserInfo.autoLoginKey).collection(ACHIEVEMENT)
-              .add(AchievementData(mapId, ranking))
+            usersCollectionRef.document(UserInfo.autoLoginKey).collection(TROPHIES)
+              .add(TrophyData(mapId, ranking))
           } else {
             val before = it.documents.first().getLong(RANKING)!!
             if (before != ranking) {
@@ -75,6 +71,8 @@ class FBUsersRepository : BaseFB() {
     db.collection(USERS).document(data[USER_ID]!!).set(data)
       .addOnSuccessListener { Logg.d("DocumentSnapshot successfully written!") }
       .addOnFailureListener { e -> Logg.w("Error writing document$e") }
+
+    FBAchievementRepository().createAchievement(data[USER_ID]!!)
   }
 
   fun createUserHistory(activityData: ActivityData) {

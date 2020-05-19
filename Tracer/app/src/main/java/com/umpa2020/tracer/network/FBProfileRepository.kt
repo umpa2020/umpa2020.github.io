@@ -68,4 +68,22 @@ class FBProfileRepository : BaseFB() {
     // 현재 날짜를 프로필 이름으로 nickname/Profile/현재날짜 경로 만들기
     FBStorageRepository().uploadFile(imageUri, PROFILE + "/" + UserInfo.autoLoginKey + "/" + timestamp)
   }
+
+  suspend fun getCountMap(userId: String): Int {
+    return usersCollectionRef.document(userId).collection(ACTIVITIES)
+      .whereEqualTo(MODE, ActivityMode.MAP_SAVE)
+      .get()
+      .await()
+      .documents.size
+  }
+
+  suspend fun getCelebrity(userId: String): Int {
+    return usersCollectionRef.document(userId)
+      .collection(ACTIVITIES)
+      .whereEqualTo(MODE, ActivityMode.MAP_SAVE)
+      .get().await()
+      .documents.sumBy {
+        mapsCollectionRef.document(it.getString(MAP_ID)!!).get().await().getLong(PLAYS)!!.toInt()
+      }
+  }
 }

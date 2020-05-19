@@ -23,7 +23,6 @@
       android:text="나의 업적"/>
   </Toolbar>
 
-
   <androidx.recyclerview.widget.RecyclerView
     android:id="@+id/profileRecyclerAchievement"
     android:layout_width="match_parent"

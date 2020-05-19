@@ -14,8 +14,7 @@
     android:layout_marginTop="10dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    style="@style/ListDetail"
-    android:text="업적 제목"/>
+    style="@style/ListDetail"/>
 
 
 </LinearLayout>

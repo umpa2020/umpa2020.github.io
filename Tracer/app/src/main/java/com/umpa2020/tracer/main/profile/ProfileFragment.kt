@@ -19,6 +19,7 @@ import com.umpa2020.tracer.main.profile.myachievement.ProfileAchievementActivity
 import com.umpa2020.tracer.main.profile.myroute.ProfileRouteActivity
 import com.umpa2020.tracer.main.profile.settting.AppSettingActivity
 import com.umpa2020.tracer.network.BaseFB
+import com.umpa2020.tracer.network.BaseFB.Companion.DISTANCE
 import com.umpa2020.tracer.network.FBProfileRepository
 import com.umpa2020.tracer.network.FBUsersRepository
 import com.umpa2020.tracer.util.Logg
@@ -40,6 +41,7 @@ class ProfileFragment() : Fragment(), OnSingleClickListener, Parcelable {
   lateinit var root: View
   var bundle = Bundle()
   val progressBar = MyProgressBar()
+  var distance = 0.0
 
   constructor(parcel: Parcel) : this() {
     bundle = parcel.readBundle(Bundle::class.java.classLoader)!!
@@ -75,6 +77,8 @@ class ProfileFragment() : Fragment(), OnSingleClickListener, Parcelable {
 
       R.id.profileAchivementTextView -> { // 나의 업적 액티비티
         val nextIntent = Intent(activity, ProfileAchievementActivity::class.java)
+        nextIntent.putExtra(BaseFB.USER_ID, UserInfo.autoLoginKey)
+        nextIntent.putExtra(DISTANCE, distance)
         startActivity(nextIntent)
       }
     }
@@ -94,6 +98,7 @@ class ProfileFragment() : Fragment(), OnSingleClickListener, Parcelable {
       }.let {
         profileImageView.image(it.imgPath)
         profileFragmentTotalDistance.text = it.distance.prettyDistance
+        distance = it.distance
         profileFragmentTotalTime.text = it.time.format(m_s)
       }
         FBUsersRepository().listUserAchievement(UserInfo.autoLoginKey).let {
