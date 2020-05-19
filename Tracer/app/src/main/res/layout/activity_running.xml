@@ -25,7 +25,7 @@
       android:text="@string/creatroute" />
   </Toolbar>
 
-  <fragment
+  <androidx.fragment.app.FragmentContainerView
     android:id="@+id/map_viewer"
     android:name="com.google.android.gms.maps.SupportMapFragment"
     android:layout_width="match_parent"

@@ -5,6 +5,7 @@ import android.content.pm.ActivityInfo
 import android.location.Location
 import android.os.Bundle
 import android.os.SystemClock
+import android.view.MotionEvent
 import android.view.View
 import android.widget.Toast
 import com.google.android.gms.maps.SupportMapFragment
@@ -18,6 +19,7 @@ import com.umpa2020.tracer.extensions.toWayPoint
 import com.umpa2020.tracer.gpx.WayPointType.*
 import com.umpa2020.tracer.main.start.BaseRunningActivity
 import com.umpa2020.tracer.util.ChoicePopup
+import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.TTS
 import kotlinx.android.synthetic.main.activity_running.*
 
@@ -32,6 +34,12 @@ class RunningActivity : BaseRunningActivity() {
     init()
     notice(getString(R.string.start_running))
     TTS.speech(getString(R.string.pushthestartbutton))
+
+    map_viewer.setOnTouchListener{view, motionEvent ->
+      if(motionEvent!!.actionMasked == MotionEvent.ACTION_DOWN)
+        Logg.d("화면 터치")
+      false
+    }
   }
 
   /**

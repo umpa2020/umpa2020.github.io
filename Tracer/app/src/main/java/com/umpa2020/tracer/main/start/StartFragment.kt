@@ -62,10 +62,8 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
   val progressBar = MyProgressBar()
   var firstFlag = true
   lateinit var mCustomMarkerView: View
+  var zoomLevel : Float? = 16f // 줌 레벨 할당
 
-  //  companion object{
-//    var gpsViewModel = GpsViewModel(App.instance.currentActivity()!!.application)
-//  }
   override fun onSingleClick(v: View?) {
     when (v!!.id) {
       R.id.mainStartRunning -> {
@@ -193,7 +191,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
       getString(R.string.cannot_find).show()
     } else {
       // mainStartSearchTextView.setText(addressList[0].getAddressLine(0))
-      traceMap!!.moveCamera(LatLng(addressList[0].latitude, addressList[0].longitude))
+      traceMap!!.moveCamera(LatLng(addressList[0].latitude, addressList[0].longitude), zoomLevel!!)
       searchThisArea()
     }
 
@@ -253,42 +251,29 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
     Logg.d("${UserInfo.lat} , ${UserInfo.lng}")
 
     val latlng = LatLng(UserInfo.lat.toDouble(), UserInfo.lng.toDouble())
-    traceMap!!.moveCamera(latlng)
+    traceMap!!.initCamera(latlng)
 
-    wedgedCamera = true
+    // 카메라 이동 중일 때
+    traceMap!!.mMap.setOnCameraMoveListener {
+      wedgedCamera = false
+      Logg.d("카메라 이동 중 $wedgedCamera")
+      mainStartSearchAreaButton.visibility = View.GONE
+    }
 
-//    traceMap!!.mMap.setOnCameraMoveStartedListener(object : GoogleMap.OnCameraMoveStartedListener{
-//      override fun onCameraMoveStarted(p0: Int) {
-//        wedgedCamera = false
-//        Logg.d("카메라 이동 시작 $wedgedCamera")
-//        mainStartSearchAreaButton.visibility = View.GONE
-//      }
-//    })
-    traceMap!!.mMap.setOnCameraMoveListener(object : GoogleMap.OnCameraMoveListener{
-      override fun onCameraMove() {
-        wedgedCamera = false
-        Logg.d("카메라 이동 중 $wedgedCamera")
-        mainStartSearchAreaButton.visibility = View.GONE
-      }
-    })
-    traceMap!!.mMap.setOnCameraIdleListener(object : GoogleMap.OnCameraIdleListener{
-      override fun onCameraIdle() {
-        Logg.d("카메라 멈춤 $wedgedCamera")
-        // 여기서 검색 버튼 보여주기
-        mainStartSearchAreaButton.visibility = View.VISIBLE
-      }
-    })
+    // 카메라가 멈췄을 때
+    traceMap!!.mMap.setOnCameraIdleListener {
 
-    traceMap!!.mMap.setOnCameraMoveCanceledListener(object : GoogleMap.OnCameraMoveCanceledListener{
-      override fun onCameraMoveCanceled() {
-        Logg.d("zzzzzzzz $wedgedCamera")
-      }
-    })
+      // 여기서 검색 버튼 보여주기
+      zoomLevel = traceMap!!.mMap.cameraPosition.zoom
+      Logg.d("카메라 멈춤 $wedgedCamera, 줌 레벨 : $zoomLevel")
+      mainStartSearchAreaButton.visibility = View.VISIBLE
+    }
+
     // 내 위치 버튼 클릭 리스너
     traceMap!!.mMap.setOnMyLocationButtonClickListener {
       traceMap!!.mMap
       wedgedCamera = true
-      traceMap!!.moveCamera(currentLocation!!.toLatLng())
+      traceMap!!.moveCamera(currentLocation!!.toLatLng(), zoomLevel!!)
       Logg.d("내 위치로 카메라 이동 $wedgedCamera")
       true
     }
@@ -429,6 +414,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
 
   override fun onDestroy() {
     super.onDestroy()
+    zoomLevel = 16f
     Logg.d("onDestroy()")
   }
 
@@ -437,7 +423,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
     override fun onReceive(context: Context?, intent: Intent?) {
       val message = intent?.getParcelableExtra<Location>("message")
       currentLocation = message as Location
-      if (wedgedCamera) traceMap!!.moveCamera(currentLocation!!.toLatLng())
+      if (wedgedCamera) traceMap!!.moveCamera(currentLocation!!.toLatLng(), zoomLevel!!)
       traceMap?.let {
 
 //        if (firstFlag) {
