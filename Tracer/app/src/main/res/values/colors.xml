@@ -22,4 +22,5 @@
   <color name="lightgray">#DDF7F7F7</color>
   <color name="green">#0dcdc0</color>
   <color name="skyBlue">#6799FF</color>
+  <color name="recordCompare">#D1FF67</color>
 </resources>

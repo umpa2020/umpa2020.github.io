@@ -51,7 +51,8 @@
       android:layout_gravity="center"
       android:textColor="@color/skyBlue"
       android:text="@string/profile_image_change"
-      android:textSize="18dp" />
+      android:textSize="18dp"
+      android:textStyle="bold"/>
   </LinearLayout>
 
   <TableLayout
@@ -71,7 +72,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/email_"
-        android:textSize="15sp"/>
+        android:textSize="15dp"/>
       <TextView
         android:layout_weight="3"
         android:id="@+id/emailTextView"
@@ -95,7 +96,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/nick_name"
-        android:textSize="15sp"/>
+        android:textSize="15dp"/>
       <TextView
         android:layout_weight="3"
         android:id="@+id/nickNameTextView"
@@ -118,7 +119,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/age_"
-        android:textSize="15sp"/>
+        android:textSize="15dp"/>
       <TextView
         android:layout_weight="3"
         android:id="@+id/ageTextView"
@@ -147,7 +148,7 @@
         android:id="@+id/genderTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="15sp"/>
+        android:textSize="15dp"/>
     </TableRow>
   </TableLayout>
 
@@ -163,7 +164,7 @@
     android:id="@+id/profileChangeButton"
     style="@style/buttonText"
     android:layout_width="match_parent"
-    android:layout_height="40dp"
+    android:layout_height="50dp"
     android:layout_marginBottom="10dp"
     android:background="@drawable/button_background"
     android:text="@string/confirmation" />

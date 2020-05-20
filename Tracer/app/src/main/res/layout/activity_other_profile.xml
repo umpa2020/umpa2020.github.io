@@ -36,7 +36,7 @@
       android:layout_height="100dp"
       android:src="@drawable/ic_profile_logo"
       app:civ_border_color="@color/gray"
-      app:civ_border_width="2dp"/>
+      app:civ_border_width="1dp"/>
 
     <TextView
       android:layout_marginTop="20dp"
@@ -55,8 +55,10 @@
     android:orientation="horizontal"
     android:background="@drawable/textline_background_down"
     android:paddingTop="20dp"
-    android:paddingEnd="20dp"
-    android:paddingBottom="15dp">
+    android:paddingRight="20dp"
+    android:paddingLeft="20dp"
+    android:paddingBottom="15dp"
+    android:gravity="center">
 
     <LinearLayout
       android:layout_width="wrap_content"
@@ -66,7 +68,7 @@
       android:orientation="vertical">
 
       <TextView
-        android:textSize="15sp"
+        android:textSize="16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/total_distance" />
@@ -74,7 +76,7 @@
       <TextView
         android:id="@+id/profileFragmentTotalDistance"
         style="@style/MapDetail"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:textSize="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
@@ -89,7 +91,7 @@
       android:orientation="vertical">
 
       <TextView
-        android:textSize="15sp"
+        android:textSize="16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/total_time" />
@@ -97,7 +99,7 @@
       <TextView
         android:id="@+id/profileFragmentTotalTime"
         style="@style/MapDetail"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="40dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="20dp" />
