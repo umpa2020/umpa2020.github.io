@@ -217,7 +217,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
       val routeRef = storage.reference.child("mapRoute").child("asdasdqwe1587633430060")
       val localFile = File.createTempFile("routeGpx", "xml")
       routeRef.getFile(Uri.fromFile(localFile)).addOnSuccessListener {
-        val routeGPX = localFile.path.gpxToClass()
+        val routeGPX = Uri.fromFile(localFile).gpxToClass()
         val intent = Intent(App.instance.context(), RacingActivity::class.java)
         intent.putExtra("RouteGPX", routeGPX)
         val racingGPXs = ArrayList<RouteGPX>()

@@ -8,18 +8,25 @@ import android.os.SystemClock
 import android.view.View
 import android.widget.Toast
 import com.google.android.gms.maps.SupportMapFragment
+import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.constant.UserState
 import com.umpa2020.tracer.dataClass.MapInfo
 import com.umpa2020.tracer.dataClass.RouteGPX
+import com.umpa2020.tracer.extensions.addDirectionSign
+import com.umpa2020.tracer.extensions.classToGpx
 import com.umpa2020.tracer.extensions.toWayPoint
+import com.umpa2020.tracer.gpx.WayPoint
 import com.umpa2020.tracer.gpx.WayPointType.*
 import com.umpa2020.tracer.main.start.BaseRunningActivity
+import com.umpa2020.tracer.main.start.racing.RacingActivity
 import com.umpa2020.tracer.util.ChoicePopup
+import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.TTS
 import kotlinx.android.synthetic.main.activity_running.*
+import java.io.File
 
 
 class RunningActivity : BaseRunningActivity() {
@@ -103,10 +110,17 @@ class RunningActivity : BaseRunningActivity() {
     infoData.time = SystemClock.elapsedRealtime() - chronometer.base
     infoData.startLatitude = trkList.first().lat
     infoData.startLongitude = trkList.first().lon
-    val routeGPX = RouteGPX(infoData.time!!, "", wpList, trkList)
+    val routeGPX = RouteGPX(infoData.time, "", wpList, trkList)
+
+    val saveFolder = File(App.instance.filesDir, "RouteGPX") // 저장 경로
+    if (!saveFolder.exists()) {       //폴더 없으면 생성
+      saveFolder.mkdir()
+    }
+    routeGPX.addDirectionSign()
+    val routeGpxUri = routeGPX.classToGpx(saveFolder.path).toString()
 
     val intent = Intent(this, RunningSaveActivity::class.java)
-    intent.putExtra("RouteGPX", routeGPX)
+    intent.putExtra(RacingActivity.ROUTE_GPX, routeGpxUri)
     intent.putExtra("InfoData", infoData)
     startActivity(intent)
     finish()
