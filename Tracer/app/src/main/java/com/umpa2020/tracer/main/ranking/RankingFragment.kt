@@ -70,7 +70,7 @@ class RankingFragment : Fragment(), OnSingleClickListener {
             if (!isLoding) {
               MainScope().launch {
                 progressBar.show()
-                FBRankingRepository().listFilterRange(rankingLatLng!!, tuneDistance, "plays", limit).let {
+                rankingRepo.listFilterRange(rankingLatLng!!, tuneDistance, "plays", limit).let {
                   getRank(it, "plays")
                 }
               }
@@ -80,7 +80,7 @@ class RankingFragment : Fragment(), OnSingleClickListener {
             if (!isLoding) {
               MainScope().launch {
                 progressBar.show()
-                FBRankingRepository().listFilterRange(rankingLatLng!!, tuneDistance, "likes", limit).let {
+                rankingRepo.listFilterRange(rankingLatLng!!, tuneDistance, "likes", limit).let {
                   getRank(it, "likes")
                 }
               }
@@ -137,7 +137,7 @@ class RankingFragment : Fragment(), OnSingleClickListener {
 
       R.id.applyButton -> { //적용 버튼 누를때
         tuneDistance = distance
-
+        rankingRepo = FBRankingRepository()
         rootInfoDatas.clear()
 
         if (rankingLatLng != null) {
@@ -147,7 +147,7 @@ class RankingFragment : Fragment(), OnSingleClickListener {
 
             MainScope().launch {
               progressBar.show()
-              FBRankingRepository().listRanking(rankingLatLng!!, tuneDistance, "plays", limit).let {
+              rankingRepo.listRanking(rankingLatLng!!, tuneDistance, "plays", limit).let {
                 getRank(it, "plays")
               }
             }
@@ -156,7 +156,7 @@ class RankingFragment : Fragment(), OnSingleClickListener {
 
             MainScope().launch {
               progressBar.show()
-              FBRankingRepository().listRanking(rankingLatLng!!, tuneDistance, "likes", limit).let {
+              rankingRepo.listRanking(rankingLatLng!!, tuneDistance, "likes", limit).let {
                 getRank(it, "likes")
               }
             }
@@ -179,10 +179,11 @@ class RankingFragment : Fragment(), OnSingleClickListener {
         //실행순 버튼에 체크가 되어 있을 경우
         if (requireView().tuneRadioBtnExecute.isChecked) {
           requireView().rankingfiltermode.text = getString(R.string.execute)
+          rankingRepo = FBRankingRepository()
 
           MainScope().launch {
             progressBar.show()
-            FBRankingRepository().listRanking(rankingLatLng!!, tuneDistance, "plays", limit).let {
+            rankingRepo.listRanking(rankingLatLng!!, tuneDistance, "plays", limit).let {
               getRank(it, "plays")
             }
           }
@@ -191,7 +192,7 @@ class RankingFragment : Fragment(), OnSingleClickListener {
 
           MainScope().launch {
             progressBar.show()
-            FBRankingRepository().listRanking(rankingLatLng!!, tuneDistance, "likes", limit).let {
+            rankingRepo.listRanking(rankingLatLng!!, tuneDistance, "likes", limit).let {
               getRank(it, "likes")
             }
           }

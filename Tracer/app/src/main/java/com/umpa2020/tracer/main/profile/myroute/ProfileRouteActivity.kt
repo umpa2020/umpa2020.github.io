@@ -33,7 +33,6 @@ class ProfileRouteActivity : AppCompatActivity() {
     setContentView(R.layout.activity_profile_route)
 
     progressbar.show()
-    val intent = intent
     uid = intent.extras?.getString(USER_ID).toString()
 
     profileRecyclerRoute.addOnScrollListener(object : RecyclerView.OnScrollListener() {
