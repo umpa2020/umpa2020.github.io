@@ -1,6 +1,7 @@
 package com.umpa2020.tracer.main.start.racing
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -11,13 +12,18 @@ import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.RacerData
 import com.umpa2020.tracer.dataClass.RankingData
 import com.umpa2020.tracer.dataClass.RouteGPX
+import com.umpa2020.tracer.extensions.addDirectionSign
+import com.umpa2020.tracer.extensions.classToGpx
+import com.umpa2020.tracer.extensions.gpxToClass
 import com.umpa2020.tracer.main.start.racing.RacingActivity.Companion.ROUTE_GPX
+import com.umpa2020.tracer.main.start.running.RunningSaveActivity
 import com.umpa2020.tracer.network.BaseFB.Companion.MAP_ID
 import com.umpa2020.tracer.network.FBMapRepository
 import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.activity_racing_select_people.*
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+import java.io.File
 
 class RacingSelectPeopleActivity : AppCompatActivity(), OnSingleClickListener {
   val activity = this
@@ -29,7 +35,9 @@ class RacingSelectPeopleActivity : AppCompatActivity(), OnSingleClickListener {
     setContentView(R.layout.activity_racing_select_people)
 
     mapId = intent.getStringExtra(MAP_ID)!!
-    routeGPX = intent.getParcelableExtra(ROUTE_GPX)!!
+
+    val routeGPXUri = intent.getStringExtra(ROUTE_GPX)
+    routeGPX = Uri.parse(routeGPXUri).gpxToClass()
 
     MainScope().launch {
       FBMapRepository().listMapRanking(mapId).let {
@@ -78,7 +86,14 @@ class RacingSelectPeopleActivity : AppCompatActivity(), OnSingleClickListener {
           )
         }
         val intent = Intent(App.instance.context(), RacingActivity::class.java)
-        intent.putExtra(ROUTE_GPX, routeGPX)
+
+        val saveFolder = File(App.instance.filesDir, "routeGPX") // 저장 경로
+        if (!saveFolder.exists()) {       //폴더 없으면 생성
+          saveFolder.mkdir()
+        }
+        routeGPX.addDirectionSign()
+        val routeGpxUri = routeGPX.classToGpx(saveFolder.path).toString()
+        intent.putExtra(ROUTE_GPX, routeGpxUri)
         intent.putExtra(RACER_LIST, racerList.toTypedArray())
         intent.putExtra(MAP_ID, mapId)
         startActivity(intent)
