@@ -7,6 +7,7 @@ import com.google.firebase.firestore.Query
 import com.umpa2020.tracer.dataClass.ActivityData
 import com.umpa2020.tracer.dataClass.MapInfo
 import com.umpa2020.tracer.dataClass.RankingData
+import com.umpa2020.tracer.dataClass.TrophyData
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.coroutines.tasks.await
 
@@ -84,7 +85,7 @@ class FBMapRepository : BaseFB() {
    * 3. ranking 에 맵 제작자의 ranking 을 업로드
    * 4. users activity 에 map save 로 해당 내용 저장
    */
-  fun uploadMap(mapInfo: MapInfo, rankingData: RankingData, activityData: ActivityData, timestamp: String, gpxUri: Uri, imgPath: Uri) {
+  fun uploadMap(mapInfo: MapInfo, rankingData: RankingData, activityData: ActivityData, timestamp: String, gpxUri: Uri, imgPath: Uri, trophyData: TrophyData) {
     //Maps/mapId에 새로운 맵 정보 생성
     mapsCollectionRef.document(mapInfo.mapId).set(mapInfo)
     //racerGPX
@@ -95,6 +96,8 @@ class FBMapRepository : BaseFB() {
       .document(UserInfo.autoLoginKey + timestamp).set(rankingData)
     // 히스토리 업로드
     FBUsersRepository().createUserHistory(activityData)
+    FBUsersRepository().createUserAchievement(trophyData)
+
   }
 
   /**

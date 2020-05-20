@@ -2,6 +2,7 @@ package com.umpa2020.tracer.network
 
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import java.sql.Time
 
 /**
  * 파이어베이스 통신 기본 통신 규약
@@ -15,7 +16,13 @@ open class BaseFB {
   val storage = FirebaseStorage.getInstance()
   val usersCollectionRef = db.collection(USERS)
   val mapsCollectionRef = db.collection(MAPS)
+  val achievementCollectionRef = db.collection(ACHIEVEMENT)
+  val emblemsCollectionRef = db.collection(EMBLEMS)
   val mapRouteStorageRef = storage.reference.child(MAP_ROUTE)
+
+  enum class ActivityMode {
+    MAP_SAVE,RACING_SUCCESS,RACING_FAIL
+  }
 
   companion object {
     /**
@@ -67,5 +74,40 @@ open class BaseFB {
     const val ID = "id"
     const val DATE = "date"
     const val LOCALE = "locale"
+
+    const val ACHIEVEMENT = "achievement"
+    const val TROPHIES = "trophies"
+    const val MODE = "mode"
+    const val TRACK_MAKE = "trackMake"
+    const val EMBLEMS = "emblems"
+    const val NAME = "name"
+
+    const val TRACK_MAKER_1 = "trackMaker1"
+    const val TRACK_MAKER_10 = "trackMaker10"
+    const val TRACK_MAKER_50 = "trackMaker50"
+
+    const val TRACK_COUNT_0 = 0
+    const val TRACK_COUNT_9 = 9
+    const val TRACK_COUNT_49 = 49
+
+    const val DISTANCE_10 = "distance10"
+    const val DISTANCE_50 = "distance50"
+    const val DISTANCE_100 = "distance100"
+
+    const val DISTANCE_COUNT_10 = 10000
+    const val DISTANCE_COUNT_50 = 50000
+    const val DISTANCE_COUNT_100 = 100000
+
+    const val TIMES_OF_RUN_10 = "timesOfRun10"
+    const val TIMES_OF_RUN_100 = "timesOfRun100"
+    const val TIMES_OF_RUN_1000 = "timesOfRun1000"
+
+    const val TIMES_OF_RUN_COUNT_9 = 9
+    const val TIMES_OF_RUN_COUNT_99 = 99
+    const val TIMES_OF_RUN_COUNT_999 = 999
+
+    const val NO = "no"
+    const val IMAGE_PATH = "imagePath"
+    const val IMAGE_PATH_BLACK = "imagePathBlack"
   }
 }

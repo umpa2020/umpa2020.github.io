@@ -66,4 +66,21 @@ class FBProfileRepository : BaseFB() {
     FBStorageRepository().uploadFile(imageUri, PROFILE + "/" + UserInfo.autoLoginKey + "/" + timestamp)
   }
 
+  suspend fun getCountMap(userId: String): Int {
+    return usersCollectionRef.document(userId).collection(ACTIVITIES)
+      .whereEqualTo(MODE, ActivityMode.MAP_SAVE)
+      .get()
+      .await()
+      .documents.size
+  }
+
+  suspend fun getCelebrity(userId: String): Int {
+    return usersCollectionRef.document(userId)
+      .collection(ACTIVITIES)
+      .whereEqualTo(MODE, ActivityMode.MAP_SAVE)
+      .get().await()
+      .documents.sumBy {
+        mapsCollectionRef.document(it.getString(MAP_ID)!!).get().await().getLong(PLAYS)!!.toInt()
+      }
+  }
 }

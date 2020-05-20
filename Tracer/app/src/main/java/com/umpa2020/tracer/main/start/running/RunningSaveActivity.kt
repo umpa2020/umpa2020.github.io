@@ -13,10 +13,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.customUI.WorkaroundMapFragment
-import com.umpa2020.tracer.dataClass.ActivityData
-import com.umpa2020.tracer.dataClass.MapInfo
-import com.umpa2020.tracer.dataClass.RankingData
-import com.umpa2020.tracer.dataClass.RouteGPX
+import com.umpa2020.tracer.dataClass.*
 import com.umpa2020.tracer.extensions.*
 import com.umpa2020.tracer.gpx.WayPointType.FINISH_POINT
 import com.umpa2020.tracer.gpx.WayPointType.START_POINT
@@ -24,16 +21,21 @@ import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.map.TraceMap
 import com.umpa2020.tracer.network.BaseFB
 import com.umpa2020.tracer.network.BaseFB.Companion.MAP_ROUTE
+import com.umpa2020.tracer.network.BaseFB.Companion.TRACK_COUNT_0
+import com.umpa2020.tracer.network.BaseFB.Companion.TRACK_COUNT_49
+import com.umpa2020.tracer.network.BaseFB.Companion.TRACK_COUNT_9
+import com.umpa2020.tracer.network.FBAchievementRepository
 import com.umpa2020.tracer.network.FBMapRepository
 import com.umpa2020.tracer.util.*
 import kotlinx.android.synthetic.main.activity_running_save.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
 
-class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleClickListener {
-  var switch = 0
-
+class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleClickListener, CoroutineScope by MainScope() {
   lateinit var mapInfo: MapInfo
   lateinit var routeGPX: RouteGPX
   lateinit var traceMap: TraceMap
@@ -43,12 +45,12 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    setContentView(com.umpa2020.tracer.R.layout.activity_running_save)
+    setContentView(R.layout.activity_running_save)
     progressBar = MyProgressBar()
     mapInfo = intent.getParcelableExtra("InfoData")!!
     routeGPX = intent.getParcelableExtra("RouteGPX")!!
     val wmf =
-      supportFragmentManager.findFragmentById(com.umpa2020.tracer.R.id.map_viewer) as WorkaroundMapFragment
+      supportFragmentManager.findFragmentById(R.id.map_viewer) as WorkaroundMapFragment
     wmf.getMapAsync(this)
     wmf.setListener(object : WorkaroundMapFragment.OnTouchListener {
       override fun onTouch() {
@@ -173,11 +175,35 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
       speedList.average().toString(),
       "${BaseFB.MAP_ROUTE}/${mapInfo.mapId}/racingGPX/${UserInfo.autoLoginKey}"
     )
-    val activityData = ActivityData(mapInfo.mapId, timestamp, mapInfo.distance, mapInfo.time, "map save")
-    Logg.d("Start Upload")
+    val activityData = ActivityData(mapInfo.mapId, timestamp, mapInfo.distance, mapInfo.time, BaseFB.ActivityMode.MAP_SAVE)
+    val trophyData = TrophyData(mapInfo.mapId, 1)
 
-    FBMapRepository().uploadMap(mapInfo, rankingData, activityData, timestamp.toString(), routeGpxFile, Uri.fromFile(File(imgPath)))
+    Logg.d("Start Upload")
+    FBMapRepository().uploadMap(mapInfo, rankingData, activityData, timestamp.toString(), routeGpxFile, Uri.fromFile(File(imgPath)), trophyData)
+    FBAchievementRepository().incrementPlays(mapInfo.makerId)
     Logg.d("Finish Upload")
+
+    launch {
+      val uid = UserInfo.autoLoginKey
+      FBAchievementRepository().getAchievement(uid).let {
+        when (it?.trackMake) {
+          TRACK_COUNT_0 -> {
+            FBAchievementRepository().setTrackMaker1Emblem(uid)
+          }
+          TRACK_COUNT_9 -> {
+            FBAchievementRepository().setTrackMaker10Emblem(uid)
+          }
+          TRACK_COUNT_49 -> {
+            FBAchievementRepository().setTrackMaker50Emblem(uid)
+          }
+          null -> {
+            Logg.e("error")
+          }
+        }
+        FBAchievementRepository().incrementTrackMake(uid)
+      }
+    }
+
     progressBar.dismiss()
     finish()
   }
