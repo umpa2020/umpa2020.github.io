@@ -21,8 +21,6 @@ data class MapInfo(
   var played: Boolean = false,
   var averageSpeed: Double = 0.0,
   var maxSpeed: Double = 0.0,
-  var user1st: String = "",
-  var user2nd: String = "",
-  var user3th: String = "",
-  var createTime: Long = 0L
+  var createTime: Long = 0L,
+  var challenge: Boolean = false
 ) : Parcelable

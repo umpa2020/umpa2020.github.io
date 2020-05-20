@@ -31,6 +31,7 @@ class FBRankingRepository : BaseFB() {
 
     val infoDatas = db.collection(MAPS)
       .orderBy(mode, Query.Direction.DESCENDING)
+      .whereEqualTo(CHALLENGE, false)
       .limit(limit)
       .get().await().documents.map {
         globalStartAfter = it
@@ -63,6 +64,7 @@ class FBRankingRepository : BaseFB() {
 
     val infoDatas = db.collection(MAPS)
       .orderBy(mode, Query.Direction.DESCENDING)
+      .whereEqualTo(CHALLENGE, false)
       .startAfter(globalStartAfter)
       .limit(limit)
       .get().await().documents.map {

@@ -244,6 +244,7 @@ class RacingActivity : BaseRunningActivity() {
     infoData.time = SystemClock.elapsedRealtime() - runningTimerTextView.base
     infoData.mapId = mapId
     infoData.distance = distance
+    infoData.challenge = false
     val routeGPX = RouteGPX(infoData.time, "", wpList, trkList)
 
     val saveFolder = File(App.instance.filesDir, "RouteGPX") // 저장 경로
