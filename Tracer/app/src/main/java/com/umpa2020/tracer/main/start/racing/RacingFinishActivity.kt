@@ -171,7 +171,7 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
     MainScope().launch {
       // 나의 기록
       FBProfileRepository().getProfileImage(UserInfo.autoLoginKey)?.let { racingFinishProfileImageView.image(it) }
-      RacingFinishMyNickName.text = UserInfo.nickname
+      //RacingFinishMyNickName.text = UserInfo.nickname
 
       if (resultRankText == 0) {
         resultRankTextView.text = getString(R.string.fail)

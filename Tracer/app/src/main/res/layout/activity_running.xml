@@ -195,21 +195,21 @@
 
       <Button
         android:id="@+id/runningStopButton"
-        style="@style/buttonText"
+        style="@style/buttonTextRedText"
         android:layout_width="130dp"
         android:layout_height="40dp"
-        android:background="@drawable/button_background"
+        android:background="@drawable/button_empty_background"
         android:gravity="center"
         android:text="@string/stop"
         android:visibility="invisible" />
 
       <Button
         android:id="@+id/runningPauseButton"
-        style="@style/buttonTextRedText"
+        style="@style/buttonText"
         android:layout_width="130dp"
         android:layout_height="40dp"
         android:layout_marginLeft="20dp"
-        android:background="@drawable/button_empty_background"
+        android:background="@drawable/button_background"
         android:gravity="center"
         android:text="@string/pause"
         android:visibility="invisible" />

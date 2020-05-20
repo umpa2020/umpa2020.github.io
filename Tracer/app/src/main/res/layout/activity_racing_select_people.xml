@@ -25,25 +25,25 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_below="@+id/racingSelectPeopleToolBar"
+    android:paddingTop="20dp"
     android:background="@drawable/textline_background_down"
     android:orientation="vertical"
     android:paddingLeft="20dp"
-    android:paddingTop="10dp"
     android:paddingRight="20dp"
-    android:paddingBottom="10dp">
-
+    android:paddingBottom="20dp">
     <TextView
+      android:textColor="@color/lightblack"
       android:id="@+id/Max3TextView"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:text="@string/max_five_select" />
 
     <co.lujun.androidtagview.TagContainerLayout
+      android:layout_marginTop="15dp"
+      android:layout_below="@+id/Max3TextView"
       android:id="@+id/tagcontainerLayout1"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_below="@+id/Max3TextView"
-      android:layout_marginTop="10dp"
       app:container_background_color="#FFFFFFFF"
       app:container_border_color="#FFFFFFFF"
       app:container_gravity="left"
@@ -86,15 +86,15 @@
   </LinearLayout>
 
   <Button
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:text="@string/selection_complete"
     android:id="@+id/racingSelectButton"
     style="@style/buttonText"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
     android:layout_alignParentBottom="true"
     android:layout_marginLeft="20dp"
     android:layout_marginRight="20dp"
     android:layout_marginBottom="10dp"
-    android:background="@drawable/button_background"
-    android:text="@string/selection_complete" />
+    android:background="@drawable/button_background" />
 
 </RelativeLayout>
