@@ -426,11 +426,11 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
       if (wedgedCamera) traceMap!!.moveCamera(currentLocation!!.toLatLng(), zoomLevel!!)
       traceMap?.let {
 
-//        if (firstFlag) {
-//          searchThisArea()
-//          firstFlag = false
+        if (firstFlag) {
+          searchThisArea()
+          firstFlag = false
 //          it.initCamera(currentLocation!!.toLatLng())
-//        }
+        }
 //        Logg.d("${currentLocation}")
       }
     }
