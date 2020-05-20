@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.Navigation.findNavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.umpa2020.tracer.App
@@ -64,8 +63,14 @@ class MainActivity : AppCompatActivity() {
 
   }
 
+  override fun onPause() {
+    super.onPause()
+    Logg.d("onPause()")
+  }
+
   override fun onDestroy() {
     super.onDestroy()
+    Logg.d("onDestroy()")
     stopService()
   }
 
