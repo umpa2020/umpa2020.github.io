@@ -1,7 +1,7 @@
 package com.umpa2020.tracer.network
 
 import android.net.Uri
-import com.umpa2020.tracer.dataClass.InfoData
+import com.umpa2020.tracer.dataClass.MapInfo
 import com.umpa2020.tracer.dataClass.RankingData
 import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.extensions.gpxToClass
@@ -19,7 +19,7 @@ class FBRacingRepository : BaseFB() {
    * ranking 에 등록하는 함수
    */
   suspend fun createRankingData(
-    racerData: InfoData,
+    racerData: MapInfo,
     rankingData: RankingData,
     racerGpxFile: Uri
   ) {
@@ -33,6 +33,9 @@ class FBRacingRepository : BaseFB() {
           it.getLong(CHALLENGER_TIME)!! > racerData.time
         }.forEach {
           it.reference.update(BEST_TIME, false)
+          rankingData.BestTime = true
+        }
+        if (it.isEmpty) {
           rankingData.BestTime = true
         }
       }

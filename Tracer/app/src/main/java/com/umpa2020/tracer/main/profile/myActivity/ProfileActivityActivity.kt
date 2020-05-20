@@ -66,7 +66,7 @@ class ProfileActivityActivity : AppCompatActivity() {
      */
 
     MainScope().launch {
-      userActivityRepo.listUserMakingActivity(limit)?.let {
+      FBUsersRepository().listUserMakingActivity(limit)?.let {
         activityList(it)
       } ?: kotlin.run {
         activityList(rootActivityDatas)

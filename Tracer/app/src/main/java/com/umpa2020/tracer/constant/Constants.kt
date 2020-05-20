@@ -60,6 +60,12 @@ class Constants {
     // 포그라운드 서비스 ID
     const val FOREGROUND_ID = 1994
 
+    // 러닝 시작 시 카운트 다운
+    const val MILLISINFUTURE = 3000L
+    const val COUNTDOWN_INTERVAL = 1000L
+
+
+
     const val TIMESTAMP_LENGTH = 13
     var testId = 0
   }

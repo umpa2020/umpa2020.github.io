@@ -31,14 +31,14 @@
   </Toolbar>
 
   <LinearLayout
-    android:background="@color/white"
-    android:paddingTop="20dp"
-    android:gravity="center"
     android:id="@+id/profileFragmentLinearLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_below="@+id/profileFragmentToolBar"
-    android:orientation="vertical">
+    android:background="@color/white"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingTop="20dp">
 
     <de.hdodenhof.circleimageview.CircleImageView
       android:id="@+id/profileImageView"
@@ -49,12 +49,12 @@
       app:civ_border_width="2dp" />
 
     <TextView
-      android:layout_marginTop="20dp"
       android:id="@+id/profileIdTextView"
       style="@style/blackBoldText20"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_gravity="center"/>
+      android:layout_gravity="center"
+      android:layout_marginTop="20dp" />
   </LinearLayout>
 
   <LinearLayout
@@ -62,8 +62,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_below="@+id/profileFragmentLinearLayout"
-    android:orientation="horizontal"
     android:background="@drawable/textline_background_down"
+    android:orientation="horizontal"
+    android:paddingStart="20dp"
     android:paddingTop="20dp"
     android:paddingEnd="20dp"
     android:paddingBottom="15dp">
@@ -75,19 +76,22 @@
       android:gravity="center"
       android:orientation="vertical">
 
+
       <TextView
-        android:textSize="15sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/total_distance" />
+        android:layout_marginTop="5dp"
+        android:text="@string/total_distance"
+        android:textSize="15sp" />
+
 
       <TextView
         android:id="@+id/profileFragmentTotalDistance"
         style="@style/MapDetail"
-        android:layout_marginTop="5dp"
-        android:textSize="20dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:textSize="20dp" />
     </LinearLayout>
 
     <LinearLayout
@@ -98,33 +102,83 @@
       android:orientation="vertical">
 
       <TextView
-        android:textSize="15sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/total_time" />
+        android:layout_marginTop="5dp"
+        android:text="@string/total_time"
+        android:textSize="15sp" />
 
       <TextView
         android:id="@+id/profileFragmentTotalTime"
         style="@style/MapDetail"
-        android:layout_marginTop="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:textSize="20dp" />
+
     </LinearLayout>
   </LinearLayout>
 
+  <LinearLayout
+    android:id="@+id/profileMedal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/rankingDetailInfoLinearLayout"
+    android:layout_marginTop="5dp"
+    android:gravity="center"
+    android:orientation="horizontal">
+
+    <ImageView
+      android:layout_width="60dp"
+      android:layout_height="60dp"
+      android:layout_marginRight="15dp"
+      android:src="@drawable/ic_ranking2_black" />
+
+    <TextView
+      android:id="@+id/medal2nd"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textSize="15sp" />
+
+    <ImageView
+      android:layout_width="60dp"
+      android:layout_height="60dp"
+      android:layout_marginBottom="20dp"
+      android:src="@drawable/ic_ranking1_black" />
+
+    <TextView
+      android:id="@+id/medal1th"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textSize="15sp" />
+
+    <ImageView
+      android:layout_width="60dp"
+      android:layout_height="60dp"
+      android:layout_marginLeft="15dp"
+      android:layout_marginTop="5dp"
+      android:src="@drawable/ic_ranking3_black" />
+
+    <TextView
+      android:id="@+id/medal3rd"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textSize="15sp" />
+
+  </LinearLayout>
+
+
   <TextView
-    android:background="@drawable/textline_background_up"
-    android:layout_marginTop="20dp"
     android:id="@+id/profileRouteTextView"
     style="@style/ListDetail"
     android:layout_width="match_parent"
-    android:layout_height="50dp"
-    android:layout_below="@+id/rankingDetailInfoLinearLayout"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/profileMedal"
+    android:layout_marginTop="20dp"
+    android:background="@drawable/textline_background_up"
+    android:padding="10dp"
     android:paddingStart="20dp"
     android:paddingEnd="20dp"
-    android:padding="10dp"
-    android:gravity="center_vertical"
     android:text="@string/my_route" />
 
   <TextView
@@ -143,16 +197,14 @@
     android:layout_below="@+id/profileRouteTextView" />
 
   <TextView
-    android:background="@drawable/textline_background_down"
-    android:layout_below="@+id/divisionTextView2"
     android:id="@+id/profileRecordTextView"
     style="@style/ListDetail"
     android:layout_width="match_parent"
-    android:layout_height="50dp"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/divisionTextView2"
+    android:padding="10dp"
     android:paddingStart="20dp"
     android:paddingEnd="20dp"
-    android:padding="10dp"
-    android:gravity="center_vertical"
     android:text="@string/my_activity" />
 
   <TextView
@@ -164,5 +216,33 @@
     android:background="@drawable/ic_chevron_right_black_24dp"
     android:backgroundTint="@color/black"
     android:textSize="18dp" />
+
+  <TextView
+    android:id="@+id/divisionTextView3"
+    style="@style/divisionTextView"
+    android:layout_below="@+id/profileRecordTextView" />
+
+  <TextView
+    android:id="@+id/profileAchivementTextView"
+    style="@style/ListDetail"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/divisionTextView3"
+    android:background="@drawable/textline_background_down"
+    android:padding="10dp"
+    android:paddingStart="20dp"
+    android:paddingEnd="20dp"
+    android:text="나의 업적" />
+
+  <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignBaseline="@+id/profileAchivementTextView"
+    android:layout_alignParentRight="true"
+    android:layout_marginRight="20dp"
+    android:background="@drawable/ic_chevron_right_black_24dp"
+    android:backgroundTint="@color/black"
+    android:textSize="18dp" />
+
 
 </RelativeLayout>

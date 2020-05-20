@@ -2,9 +2,6 @@ package com.umpa2020.tracer.network
 
 import com.umpa2020.tracer.dataClass.BannerData
 import com.umpa2020.tracer.dataClass.ChallengeData
-import com.umpa2020.tracer.dataClass.LikedMapData
-import com.umpa2020.tracer.util.Logg
-import com.umpa2020.tracer.util.UserInfo
 import kotlinx.coroutines.tasks.await
 
 /**
@@ -20,7 +17,7 @@ class FBChallengeRepository : BaseFB() {
    */
 
   fun createChallengeData(challengeData: ChallengeData) {
-    db.collection(CHALLENGES).add(challengeData)
+    db.collection(CHALLENGES).document(challengeData.id!!).set(challengeData)
   }
 
   /**

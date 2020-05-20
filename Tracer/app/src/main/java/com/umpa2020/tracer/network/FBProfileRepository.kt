@@ -2,10 +2,7 @@ package com.umpa2020.tracer.network
 
 import android.net.Uri
 import com.google.firebase.firestore.DocumentSnapshot
-import com.umpa2020.tracer.dataClass.InfoData
-import com.umpa2020.tracer.dataClass.LikedMapData
 import com.umpa2020.tracer.dataClass.ProfileData
-import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.coroutines.tasks.await
 import java.util.*
@@ -67,5 +64,23 @@ class FBProfileRepository : BaseFB() {
   fun uploadProfileImage(imageUri: Uri, timestamp: String) {
     // 현재 날짜를 프로필 이름으로 nickname/Profile/현재날짜 경로 만들기
     FBStorageRepository().uploadFile(imageUri, PROFILE + "/" + UserInfo.autoLoginKey + "/" + timestamp)
+  }
+
+  suspend fun getCountMap(userId: String): Int {
+    return usersCollectionRef.document(userId).collection(ACTIVITIES)
+      .whereEqualTo(MODE, ActivityMode.MAP_SAVE)
+      .get()
+      .await()
+      .documents.size
+  }
+
+  suspend fun getCelebrity(userId: String): Int {
+    return usersCollectionRef.document(userId)
+      .collection(ACTIVITIES)
+      .whereEqualTo(MODE, ActivityMode.MAP_SAVE)
+      .get().await()
+      .documents.sumBy {
+        mapsCollectionRef.document(it.getString(MAP_ID)!!).get().await().getLong(PLAYS)!!.toInt()
+      }
   }
 }

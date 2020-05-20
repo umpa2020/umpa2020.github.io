@@ -38,13 +38,8 @@ class ChallengeFragment : Fragment() {
     inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
   ): View? {
     // Inflate the layout for this fragment
-    val view: View = inflater.inflate(R.layout.fragment_challenge, container, false)
-    val now = Calendar.getInstance()
-
-    view.btn_challenge_from.text = from.format(Y_M_D)
-    view.btn_challenge_to.text = to.format(Y_M_D)
-    view.btn_challenge_region.text = locale
-
+    val view = inflater.inflate(R.layout.fragment_challenge, container, false)
+    initView(view)
     /**
      * 배너에 들어가는 이미지와 아이디를 가져오는 리스너
      */
@@ -62,69 +57,79 @@ class ChallengeFragment : Fragment() {
       }
     }
 
-    view.challengeAppBarText.setOnClickListener {
-      val intent = Intent(context, ChallengeDataSettingActivity::class.java)
-      startActivity(intent)
-    }
+    return view
+  }
 
-    /**
-     * 경기 시작일 날짜 시작 클릭 리스너
-     */
-    view.btn_challenge_from.setOnClickListener {
-      val datePicker = DatePickerDialog(
-        requireContext(), DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-          val selectedDateFrom = Calendar.getInstance().apply {
-            set(Calendar.YEAR, year)
-            set(Calendar.MONTH, month)
-            set(Calendar.DAY_OF_MONTH, dayOfMonth)
-          }.timeInMillis
-          btn_challenge_from.text = selectedDateFrom.format(M_D)
-          from = selectedDateFrom
-        },
-        now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH)
-      )
-      datePicker.show()
-    }
+  private fun initView(layout:View) {
+    val now = Calendar.getInstance()
+    with(layout){
+      btn_challenge_from.text = from.format(Y_M_D)
+      btn_challenge_to.text = to.format(Y_M_D)
+      btn_challenge_region.text = locale
 
-    /**
-     * 경기 종료일 날짜 시작 클릭 리스너
-     */
-    view.btn_challenge_to.setOnClickListener {
-      val datePicker = DatePickerDialog(
-        requireContext(), DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-          val selectedDateTo = Calendar.getInstance().apply {
-            set(Calendar.YEAR, year)
-            set(Calendar.MONTH, month)
-            set(Calendar.DAY_OF_MONTH, dayOfMonth)
-          }.timeInMillis
-          btn_challenge_to.text = selectedDateTo.format(M_D)
-          to = selectedDateTo
-        },
-        now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH)
-      )
-      datePicker.show()
-    }
+      challengeAppBarText.setOnClickListener {
+        val intent = Intent(context, ChallengeDataSettingActivity::class.java)
+        startActivity(intent)
+      }
 
-    /**
-     * 경기 지역 클릭 리스너
-     */
-    view.btn_challenge_region.setOnClickListener {
-      regionChoicePopup = RegionChoicePopup(requireContext(), View.OnClickListener { localeButton ->
-        locale = (localeButton as Button).text.toString()
-        btn_challenge_region.text = locale
-        regionChoicePopup.dismiss()
-      })
-      regionChoicePopup.show()
-    }
+      /**
+       * 경기 시작일 날짜 시작 클릭 리스너
+       */
+      btn_challenge_from.setOnClickListener {
+        val datePicker = DatePickerDialog(
+          requireContext(), DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
+            val selectedDateFrom = Calendar.getInstance().apply {
+              set(Calendar.YEAR, year)
+              set(Calendar.MONTH, month)
+              set(Calendar.DAY_OF_MONTH, dayOfMonth)
+            }.timeInMillis
+            btn_challenge_from.text = selectedDateFrom.format(M_D)
+            from = selectedDateFrom
+          },
+          now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH)
+        )
+        datePicker.show()
+      }
 
-    view.btn_challenge_search.setOnClickListener {
-      MainScope().launch {
-        FBChallengeRepository().listChallengeData(from, to, locale)?.let {
-          challengeDataList(it)
+      /**
+       * 경기 종료일 날짜 시작 클릭 리스너
+       */
+      btn_challenge_to.setOnClickListener {
+        val datePicker = DatePickerDialog(
+          requireContext(), DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
+            val selectedDateTo = Calendar.getInstance().apply {
+              set(Calendar.YEAR, year)
+              set(Calendar.MONTH, month)
+              set(Calendar.DAY_OF_MONTH, dayOfMonth)
+            }.timeInMillis
+            btn_challenge_to.text = selectedDateTo.format(M_D)
+            to = selectedDateTo
+          },
+          now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH)
+        )
+        datePicker.show()
+      }
+
+      /**
+       * 경기 지역 클릭 리스너
+       */
+      btn_challenge_region.setOnClickListener {
+        regionChoicePopup = RegionChoicePopup(requireContext(), View.OnClickListener { localeButton ->
+          locale = (localeButton as Button).text.toString()
+          btn_challenge_region.text = locale
+          regionChoicePopup.dismiss()
+        })
+        regionChoicePopup.show()
+      }
+
+      btn_challenge_search.setOnClickListener {
+        MainScope().launch {
+          FBChallengeRepository().listChallengeData(from, to, locale)?.let {
+            challengeDataList(it)
+          }
         }
       }
     }
-    return view
   }
 
   /**

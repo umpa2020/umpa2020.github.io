@@ -1,7 +1,6 @@
 package com.umpa2020.tracer.main.start.running
 
 import android.content.Intent
-import android.content.pm.ActivityInfo
 import android.location.Location
 import android.os.Bundle
 import android.os.SystemClock
@@ -12,7 +11,7 @@ import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.constant.UserState
-import com.umpa2020.tracer.dataClass.InfoData
+import com.umpa2020.tracer.dataClass.MapInfo
 import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.extensions.toWayPoint
 import com.umpa2020.tracer.gpx.WayPointType.*
@@ -26,8 +25,6 @@ class RunningActivity : BaseRunningActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-    setContentView(R.layout.activity_running)
     supportActionBar?.title = "RUNNING"
     init()
     notice(getString(R.string.start_running))
@@ -42,20 +39,10 @@ class RunningActivity : BaseRunningActivity() {
     val smf = supportFragmentManager.findFragmentById(R.id.map_viewer) as SupportMapFragment
     smf.getMapAsync(this)
 
-    startButton = runningStartButton
-    stopButton = runningStopButton
-    pauseButton = runningPauseButton
-    notificationTextView = runningNotificationTextView
-    pauseNotificationTextView = runningPauseNotificationTextView
-    drawerHandle = runningHandle
-    drawer = runningDrawer
-    chronometer = runningTimerTextView
-    speedTextView = runningSpeedTextView
-    distanceTextView = runningDistanceTextView
     /**
     Stop 팝업 띄우기
      */
-    stopButton.setOnLongClickListener {
+    runningStopButton.setOnLongClickListener {
       if (distance < Constants.MINIMUM_STOPPING_DISTANCE) {
         noticePopup = ChoicePopup(this, getString(R.string.please_select),
           getString(R.string.twohundred_save),
@@ -71,7 +58,7 @@ class RunningActivity : BaseRunningActivity() {
           })
         noticePopup.show()
       } else
-        stop()
+        stop(getString(R.string.finishRunning))
       true
     }
     super.init()
@@ -80,12 +67,10 @@ class RunningActivity : BaseRunningActivity() {
   /**
    * 러닝 이 시작될 때
    */
-  override fun start() {
-    super.start()
-
+  override fun start(tts :String) {
+    super.start(tts)
     wpList.add(currentLocation.toWayPoint(START_POINT))
     traceMap.addMarker(wpList.first())
-    TTS.speech(getString(R.string.startRunning))
   }
 
   /**
@@ -93,14 +78,14 @@ class RunningActivity : BaseRunningActivity() {
    * 현재 위치를 finish point로 설정
    * InfoData와 RouteGPX를 생성해서 RunningSaveActivity에게 전달함
    */
-  override fun stop() {
-    super.stop()
-    TTS.speech(getString(R.string.finishRunning))
 
-    wpList.add(currentLocation.toWayPoint(FINISH_POINT))
-    val infoData = InfoData()
+  override fun stop(tts: String) {
+    super.stop(tts)
+
+    wpList.add(currentLocation!!.toWayPoint(FINISH_POINT))
+    val infoData = MapInfo()
     infoData.distance = distance
-    infoData.time = SystemClock.elapsedRealtime() - chronometer.base
+    infoData.time = SystemClock.elapsedRealtime() - runningTimerTextView.base
     infoData.startLatitude = trkList.first().lat
     infoData.startLongitude = trkList.first().lon
     val routeGPX = RouteGPX(infoData.time!!, "", wpList, trkList)
@@ -131,7 +116,7 @@ class RunningActivity : BaseRunningActivity() {
   override fun onSingleClick(v: View?) {
     when (v!!.id) {
       R.id.runningStartButton -> {
-        start()
+        start(getString(R.string.startRunning)) // tts String 전달
       }
       R.id.runningPauseButton -> {
         if (privacy == Privacy.RACING) {

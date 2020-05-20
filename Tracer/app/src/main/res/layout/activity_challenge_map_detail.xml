@@ -20,7 +20,7 @@
       android:layout_height="wrap_content"
       android:layout_marginRight="12dp"
       android:gravity="center"
-      android:text="대회 상세정보"/>
+      android:text="대회 상세정보" />
   </Toolbar>
 
   <ScrollView
@@ -44,11 +44,10 @@
 
         <ImageView
           android:id="@+id/challengeDetailImageView"
-          android:src="@mipmap/ic_launcher_tracer_final"
           android:layout_width="match_parent"
           android:layout_height="150dp"
           android:scaleType="fitXY"
-          />
+          android:src="@mipmap/ic_launcher_tracer_final" />
 
       </LinearLayout>
 
@@ -188,13 +187,12 @@
 
       <fragment
         android:id="@+id/challengeDetailLocation"
+        class="com.umpa2020.tracer.customUI.WorkaroundMapFragment"
         android:layout_width="match_parent"
         android:layout_height="250dp"
         android:layout_below="@+id/challengeLocation"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        class="com.umpa2020.tracer.customUI.WorkaroundMapFragment"
-        />
+        android:layout_marginBottom="10dp" />
 
       <TextView
         android:id="@+id/challengeCourse"

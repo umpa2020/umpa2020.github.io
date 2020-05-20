@@ -10,11 +10,11 @@ class App : Application() {
     lateinit var instance: App
       private set
 
-    fun applicationContext() : Context? {
+    fun applicationContext(): Context? {
       return instance.applicationContext
     }
 
-    const val notificationId : Int = 1 // 알림창 Id 통일.
+    const val notificationId: Int = 1 // 알림창 Id 통일.
   }
 
   private var activityCount = 0

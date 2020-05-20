@@ -97,6 +97,8 @@
   <string name="racing_go_the_distance">%1$s 을(를) %2$s 에 완주했습니다.</string>
   <string name="racing_fail">"%1$s 을(를) %2$s 에 실패했습니다."</string>
   <string name="map_save">"%1$s 을(를) %2$s 에 만들었습니다."</string>
+  <string name="renewal">"최고 기록을 갱신하지 못하여 랭킹에 반영되지 않습니다."</string>
+
 
   <!-- firebase string-->
   <string name="google_storage_bucket_string">gs://tracer-release.appspot.com/</string>
@@ -184,6 +186,8 @@
   <string name="max_five_select">가상 레이싱 할 상대를 최대 5명 선택해주세요</string>
   <string name="select_people">가상 레이싱 상대방 선택</string>
   <string name="max_five">최대 5명까지만 선택 가능합니다</string>
-  
+
   <string name="challenge">챌린지</string>
+  <string name="notice_msg_pause_deviation">경로 이탈로 인해 일시 정지 되었습니다.</string>
+  <string name="notece_msg_stop_tracking">기록 측정 중지</string>
 </resources>

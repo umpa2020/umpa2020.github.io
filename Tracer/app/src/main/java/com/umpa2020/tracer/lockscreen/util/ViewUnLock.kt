@@ -43,7 +43,7 @@ open class ViewUnLock(val context: Context, val lockScreenView: ConstraintLayout
           val touchMoveY = event.y - firstTouchY
           Logg.d("touchMoveY : $touchMoveY")
 
-          if(touchMoveY < 0)
+          if (touchMoveY < 0)
             lockScreenView.y = lockScreenView.y + touchMoveY
           Logg.d("이동 : ${lockScreenView.y}")
 
@@ -79,9 +79,9 @@ open class ViewUnLock(val context: Context, val lockScreenView: ConstraintLayout
 
     Logg.d(forgroundY.toString())
 
-    if(forgroundY > 500) {
+    if (forgroundY > 500) {
       Logg.d("실행?")
-      val animation = TranslateAnimation(0f, 0f,  -forgroundY,-mDeviceHeight.toFloat())
+      val animation = TranslateAnimation(0f, 0f, -forgroundY, -mDeviceHeight.toFloat())
       animation.duration = 300
       animation.setAnimationListener(object : Animation.AnimationListener {
         override fun onAnimationStart(animation: Animation) {}

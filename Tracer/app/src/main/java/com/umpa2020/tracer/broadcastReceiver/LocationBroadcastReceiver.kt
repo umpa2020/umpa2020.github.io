@@ -7,6 +7,7 @@ import android.location.Location
 import android.os.SystemClock
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.SphericalUtil
+import com.umpa2020.tracer.extensions.show
 import com.umpa2020.tracer.extensions.toLatLng
 import com.umpa2020.tracer.main.start.BaseRunningActivity
 import com.umpa2020.tracer.util.Logg
@@ -19,20 +20,16 @@ import com.umpa2020.tracer.viewModel.LocationViewModel
 class LocationBroadcastReceiver(val activity: BaseRunningActivity) : BroadcastReceiver() {
   var previousLatLng = LatLng(0.0, 0.0)          //이전위
   var currentLatLng = LatLng(0.0, 0.0)
-
   var previousTime = 0L
   var currentTime = 0L
-
   var flag = true
-  var currentLocation : Location? = null
-
+  var currentLocation: Location? = null
+  var bounceTime = 0
   private lateinit var model: LocationViewModel
 
   override fun onReceive(context: Context?, intent: Intent?) {
     val message = intent?.getParcelableExtra<Location>("message")
     currentLocation = message as Location
-
-
     currentLatLng = currentLocation!!.toLatLng()
     currentTime = SystemClock.elapsedRealtime()
 
@@ -44,14 +41,19 @@ class LocationBroadcastReceiver(val activity: BaseRunningActivity) : BroadcastRe
       flag = false
     } else {
       if ((((currentTime - previousTime) / 1000) + 1) * 10
-          > SphericalUtil.computeDistanceBetween(previousLatLng, currentLatLng)
+        > SphericalUtil.computeDistanceBetween(previousLatLng, currentLatLng)
       ) {
         activity.updateLocation(currentLocation!!)
         previousLatLng = currentLatLng
         previousTime = currentTime
+        bounceTime=0
         Logg.d("GPS 예상 안")
       } else {
         Logg.d("GPS 튐")
+        bounceTime++
+        if(bounceTime>10){
+          "gps가 오랜시간 동안 불안정 합니다. gps 상태를 확인해 주세요".show()
+        }
       }
     }
   }

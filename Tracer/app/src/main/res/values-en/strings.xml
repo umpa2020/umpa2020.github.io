@@ -98,10 +98,11 @@
   <string name="racing_go_the_distance">You went the distance %1$s %2$s.</string>
   <string name="racing_fail">"You failed %1$s on %2$s."</string>
   <string name="map_save">"You made %1$s on %2$s."</string>
+  <string name="renewal">"Unable to break record and not reflected in ranking."</string>
 
 
   <!-- firebase string-->
-  <string name="google_storage_bucket_string" >gs://tracer-release.appspot.com/</string>
+  <string name="google_storage_bucket_string">gs://tracer-release.appspot.com/</string>
   <string name="serachHint">Search for a place or address</string>
 
   <!-- setting-->
@@ -169,7 +170,7 @@
   <string name="route_deviates">\n(Caution)If the route deviates more than</string>
   <string name="resgisration">seconds, ranking registration is not possible.</string>
   <string name="out_of_route">Out of route</string>
-  <string name="altitude" >altitude</string>
+  <string name="altitude">altitude</string>
 
   <string name="speed">speed</string>
   <string name="Are_you_sure_to_delete_this">Are you sure to delete this running?</string>
@@ -187,6 +188,8 @@
   <string name="select_people">Virtual Racer Selection</string>
   <string name="max_five">Up to 5 people can be chosen</string>
 
-  
- <string name="challenge">Challenge</string>
+
+  <string name="challenge">Challenge</string>
+  <string name="notice_msg_pause_deviation">Pausing because of deviation</string>
+  <string name="notece_msg_stop_tracking">Stop tracking</string>
 </resources>

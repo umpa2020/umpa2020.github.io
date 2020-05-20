@@ -2,6 +2,7 @@ package com.umpa2020.tracer.main.start
 
 import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Context.LAYOUT_INFLATER_SERVICE
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageInfo
@@ -10,16 +11,14 @@ import android.location.Geocoder
 import android.location.Location
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.google.android.gms.internal.maps.zzz
-import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
@@ -27,7 +26,7 @@ import com.google.android.gms.maps.model.*
 import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
-import com.umpa2020.tracer.dataClass.NearMap
+import com.umpa2020.tracer.dataClass.MapInfo
 import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.extensions.*
 import com.umpa2020.tracer.gpx.WayPoint
@@ -39,7 +38,7 @@ import com.umpa2020.tracer.main.start.running.RunningActivity
 import com.umpa2020.tracer.map.TraceMap
 import com.umpa2020.tracer.network.BaseFB.Companion.MAP_ID
 import com.umpa2020.tracer.network.FBMapRepository
-import com.umpa2020.tracer.network.FBRankingRepository
+import com.umpa2020.tracer.network.FBProfileRepository
 import com.umpa2020.tracer.network.FBStorageRepository
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.MyProgressBar
@@ -58,9 +57,14 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
   var routeMarkers = mutableListOf<Marker>()
 
   // 처음 화면 시작에서 주변 route 마커 찍어주기 위함
-  var wedgedCamera = true
+  val STRAT_FRAGMENT_NEARMAP = 30
+  val NEARMAPFALSE = 41
+  var nearMaps: ArrayList<MapInfo> = arrayListOf()
+  var wedgedCamera = true // 카메로 고정 flag
   val progressBar = MyProgressBar()
   var firstFlag = true
+  lateinit var mCustomMarkerView: View
+  var zoomLevel : Float? = 16f // 줌 레벨 할당
 
   override fun onSingleClick(v: View?) {
     when (v!!.id) {
@@ -99,7 +103,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
          val gpx = path.gpxToClass()
          gpx.addCheckPoint()
          gpx.addDirectionSign()
-         gpx.wptList.forEachIndexed{i,it-> Logg.d("${it.type} $i")
+         gpx.wptList.forEachIndexed{i,it->
 
       }
       */
@@ -140,22 +144,25 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
           progressBar.dismiss()
         } else {
           mainStartSearchAreaButton.visibility = View.GONE
-          val icon =
-            BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE)
           routeMarkers.forEach {
             it.remove()
           }
           routeMarkers.clear()
           nearMapList.forEach { nearMap ->
             //데이터 바인딩
+            Logg.d("asd : ${FBProfileRepository().getProfile(nearMap.makerId).imgPath}")
             routeMarkers.add(
               traceMap!!.mMap.addMarker(
                 MarkerOptions()
-                  .position(nearMap.latLng)
+                  .position(LatLng(nearMap.startLatitude, nearMap.startLongitude))
                   .title(nearMap.mapTitle)
                   .snippet(nearMap.distance.prettyDistance)
-                  .icon(icon)
-              ).apply { tag = nearMap.mapId }
+                  .icon(traceMap?.makeProfileIcon(mCustomMarkerView, nearMap.makerId))
+
+              ).apply {
+                Logg.d("nani0-2")
+                tag = nearMap.mapId
+              }
             )
           }
           progressBar.dismiss()
@@ -186,7 +193,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
       getString(R.string.cannot_find).show()
     } else {
       // mainStartSearchTextView.setText(addressList[0].getAddressLine(0))
-      traceMap!!.moveCamera(LatLng(addressList[0].latitude, addressList[0].longitude))
+      traceMap!!.moveCamera(LatLng(addressList[0].latitude, addressList[0].longitude), zoomLevel!!)
       searchThisArea()
     }
 
@@ -222,20 +229,15 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
     }
 
     // 검색 창 키보드에서 엔터키 리스너
-    view.mainStartSearchTextView.setOnEditorActionListener(
-      object : TextView.OnEditorActionListener {
-        override fun onEditorAction(p0: TextView?, p1: Int, p2: KeyEvent?): Boolean {
-
-          Logg.i("엔터키 클릭")
-          search()
-          return true
-        }
-      }
-    )
+    view.mainStartSearchTextView.setOnEditorActionListener { p0, p1, p2 ->
+      Logg.i("엔터키 클릭")
+      search()
+      true
+    }
 
     val smf = childFragmentManager.findFragmentById(R.id.map_viewer_start) as SupportMapFragment
     smf.getMapAsync(this)
-
+    mCustomMarkerView = (activity?.getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater).inflate(R.layout.profile_marker, null);
     return view
   }
 
@@ -244,20 +246,37 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
 
     traceMap = TraceMap(googleMap) //구글맵
     traceMap!!.mMap.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
+    traceMap!!.mMap.setMaxZoomPreference(18.0f) // 최대 줌 설정
+
 
     // Shared의 값을 받아와서 초기 카메라 위치 설정.
     Logg.d("${UserInfo.lat} , ${UserInfo.lng}")
-    val latlng = LatLng(UserInfo.lat.toDouble(), UserInfo.lng.toDouble())
-    val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latlng, 17f)
-    traceMap!!.mMap.moveCamera(cameraUpdate)
 
-    wedgedCamera = true
-    traceMap!!.mMap.setOnCameraMoveCanceledListener {
+    val latlng = LatLng(UserInfo.lat.toDouble(), UserInfo.lng.toDouble())
+    traceMap!!.initCamera(latlng)
+
+    // 카메라 이동 중일 때
+    traceMap!!.mMap.setOnCameraMoveListener {
       wedgedCamera = false
+      Logg.d("카메라 이동 중 $wedgedCamera")
+      mainStartSearchAreaButton.visibility = View.GONE
+    }
+
+    // 카메라가 멈췄을 때
+    traceMap!!.mMap.setOnCameraIdleListener {
+
+      // 여기서 검색 버튼 보여주기
+      zoomLevel = traceMap!!.mMap.cameraPosition.zoom
+      Logg.d("카메라 멈춤 $wedgedCamera, 줌 레벨 : $zoomLevel")
       mainStartSearchAreaButton.visibility = View.VISIBLE
     }
+
+    // 내 위치 버튼 클릭 리스너
     traceMap!!.mMap.setOnMyLocationButtonClickListener {
+      traceMap!!.mMap
       wedgedCamera = true
+      traceMap!!.moveCamera(currentLocation!!.toLatLng(), zoomLevel!!)
+      Logg.d("내 위치로 카메라 이동 $wedgedCamera")
       true
     }
 
@@ -330,7 +349,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
    * 맵 마커를 누르면 끝나는 지점을 출력하고
    * 그 맵의 경로를 현재 맵에 보이게 표현
    */
-  fun drawMarkerRoute(gpx: RouteGPX) {
+  private fun drawMarkerRoute(gpx: RouteGPX) {
     val track = gpx.trkList.map { it.toLatLng() }
 
     // 폴리 라인만 그리는
@@ -397,6 +416,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
 
   override fun onDestroy() {
     super.onDestroy()
+    zoomLevel = 16f
     Logg.d("onDestroy()")
   }
 
@@ -405,27 +425,16 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
     override fun onReceive(context: Context?, intent: Intent?) {
       val message = intent?.getParcelableExtra<Location>("message")
       currentLocation = message as Location
+      if (wedgedCamera) traceMap!!.moveCamera(currentLocation!!.toLatLng(), zoomLevel!!)
       traceMap?.let {
-        if (wedgedCamera) it.moveCamera(currentLocation!!)
+
         if (firstFlag) {
           searchThisArea()
           firstFlag = false
-          it.initCamera(currentLocation!!.toLatLng())
+//          it.initCamera(currentLocation!!.toLatLng())
         }
-        Logg.d("${currentLocation}")
+//        Logg.d("${currentLocation}")
       }
     }
-  }
-
-  private fun setDefaultLocation() {
-
-
-    //디폴트 위치, Seoul
-    val DEFAULT_LOCATION = LatLng(37.621664, 127.0561576)
-
-
-    val cameraUpdate = CameraUpdateFactory.newLatLngZoom(DEFAULT_LOCATION, 15f)
-    traceMap!!.mMap.moveCamera(cameraUpdate)
-
   }
 }

@@ -54,11 +54,14 @@
       android:theme="@style/lockscreenView" />
     <activity android:name=".main.start.racing.AllRankingActivity" />
     <activity android:name=".main.start.racing.RacingSelectPeopleActivity" />
-    <activity android:name=".main.profile.myrecord.ProfileRecordActivity" />
+    <activity android:name=".main.profile.myActivity.ProfileActivityActivity" />
     <activity android:name=".main.profile.settting.MyInformationActivity" />
     <activity android:name=".main.profile.settting.AppSettingActivity" />
     <activity android:name=".main.profile.myroute.ProfileRouteActivity" />
+    <activity android:name=".main.profile.myachievement.ProfileAchievementActivity" />
     <activity android:name=".main.profile.ProfileActivity" />
+    <activity android:name=".main.start.challengeracing.ChallengeRacingActivity" />
+    <activity android:name=".main.start.challengeracing.ChallengeRacingFinishActivity" />
 
     <service
       android:name=".locationBackground.LocationBackgroundService"
@@ -79,7 +82,8 @@
     <activity android:name=".main.ranking.RankingMapDetailActivity" />
     <activity
       android:name=".main.start.running.RunningSaveActivity"
-      android:windowSoftInputMode="adjustPan" /> <!-- <activity android:name=".main.start.BaseRunningActivity"/> -->
+      android:windowSoftInputMode="adjustPan" />
+    <!--    <activity android:name=".main.start.BaseRunningActivity"/>-->
     <activity android:name=".main.start.running.RunningActivity" />
     <activity android:name=".main.MainActivity" />
     <activity android:name=".login.LoginActivity" />

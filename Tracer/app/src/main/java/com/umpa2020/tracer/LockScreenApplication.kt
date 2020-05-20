@@ -34,7 +34,7 @@ class LockScreenApplication : MultiDexApplication() {
     private var instance: LockScreenApplication? = null
     const val notificationId: Int = 1
 
-    fun applicationContext() : Context? {
+    fun applicationContext(): Context? {
       return instance?.applicationContext
     }
   }
