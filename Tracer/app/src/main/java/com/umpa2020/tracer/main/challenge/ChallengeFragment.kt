@@ -144,6 +144,7 @@ class ChallengeFragment : Fragment(), CoroutineScope by MainScope() {
 
   override fun onPause() {
     super.onPause()
+//    progressBar.dismiss()
     MainScope().cancel()
   }
 }

@@ -332,7 +332,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener, Cor
   /**
    * 마커 루트를 그리기 전에 초기화 작업
    */
-  fun routeInit() {
+  private fun routeInit() {
     val firstLatLng = mutableListOf<LatLng>()
 
     loadTrack =
@@ -404,8 +404,9 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener, Cor
 
   override fun onPause() {
     super.onPause()
+    progressBar.dismiss()
     // 갑자기 뒤로가면 코루틴 취소
-    cancel()
+    MainScope().cancel()
     // 브로드 캐스트 해제
     LocalBroadcastManager.getInstance(this.requireContext())
       .unregisterReceiver(locationBroadcastReceiver)

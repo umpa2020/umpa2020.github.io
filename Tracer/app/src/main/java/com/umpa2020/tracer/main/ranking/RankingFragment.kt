@@ -211,6 +211,7 @@ class RankingFragment : Fragment(), OnSingleClickListener, CoroutineScope by Mai
 
   override fun onPause() {
     super.onPause()
+    progressBar.dismiss()
     // 갑자기 뒤로가면 코루틴 취소
     MainScope().cancel()
 
