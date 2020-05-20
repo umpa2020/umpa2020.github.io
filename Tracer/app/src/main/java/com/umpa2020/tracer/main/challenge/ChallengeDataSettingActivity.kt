@@ -48,8 +48,8 @@ class ChallengeDataSettingActivity : AppCompatActivity() {
 
       val mapInfo = MapInfo(
         challengeData.id!!, challengeData.name!!, challengeData.host!!, "", "", "mapRoute/${challengeData.id}/${challengeData.id}",
-        0.0, 0, 0, 0, 0.0, 0.0, false, false, 0.0, 0.0, 0
-      )
+        0.0, 0, 0, 0, 0.0, 0.0, false, false, 0.0, 0.0)
+
       FBMapRepository().mapsCollectionRef.document(mapInfo.mapId).set(mapInfo)
     }
   }

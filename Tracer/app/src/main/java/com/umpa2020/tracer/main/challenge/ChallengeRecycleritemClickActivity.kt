@@ -82,6 +82,9 @@ class ChallengeRecycleritemClickActivity : AppCompatActivity(), OnSingleClickLis
           val nextIntent = Intent(this, RacingSelectPeopleActivity::class.java)
           nextIntent.putExtra(MAP_ID, challengeId)
           //routegpx 넘겨주기
+
+
+
           nextIntent.putExtra(RacingActivity.ROUTE_GPX, routeGPX)
           startActivity(nextIntent)
         }
