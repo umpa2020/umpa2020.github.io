@@ -20,7 +20,7 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:gravity="center"
-      android:text="나의 업적"/>
+      android:text="@string/my_achievement"/>
   </Toolbar>
 
   <androidx.recyclerview.widget.RecyclerView

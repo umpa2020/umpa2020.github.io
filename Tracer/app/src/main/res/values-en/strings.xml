@@ -193,4 +193,27 @@
   <string name="challenge">Challenge</string>
   <string name="notice_msg_pause_deviation">Pausing because of deviation</string>
   <string name="notece_msg_stop_tracking">Stop tracking</string>
+
+  <!--fragment_challenge-->
+  <string name="tournament_search">Tournament Search</string>
+  <string name="region">Region</string>
+  <string name="search">Search</string>
+  <string name="tournament_list">Tournament List</string>
+
+  <!--activity_challenge_map_detail-->
+  <string name="tournament_details">Tournament Details</string>
+  <string name="tournament_name">Tournament Name</string>
+  <string name="opening_date">Opening Date</string>
+  <string name="reception_period">Reception Period</string>
+  <string name="address">Address</string>
+  <string name="host">Host</string>
+  <string name="tournament_information">Tournament Information</string>
+  <string name="location">Location</string>
+  <string name="course_information">Course Information</string>
+
+
+  <string name="region_selection">Region Selection</string>
+
+  <string name="my_achievement">My Achievement</string>
+
 </resources>

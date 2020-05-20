@@ -19,7 +19,7 @@
       android:layout_height="match_parent"
       android:layout_gravity="center"
       android:gravity="center"
-      android:text="챌린지" />
+      android:text="@string/challenge" />
   </Toolbar>
 
   <androidx.core.widget.NestedScrollView
@@ -82,7 +82,7 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           style="@style/subjectName"
-          android:text="대회 검색"
+          android:text="@string/tournament_search"
           android:paddingTop="10dp"
           android:layout_marginBottom="15dp"/>
 
@@ -103,7 +103,7 @@
             android:layout_height="40dp"
             android:layout_weight="1"
             android:background="@drawable/profile_route_bg"
-            android:text="지역" />
+            android:text="@string/region" />
 
           <Button
             android:layout_gravity="right"
@@ -115,7 +115,7 @@
             android:layout_width="100dp"
             android:layout_height="40dp"
             android:background="@drawable/button_background"
-            android:text="검색"/>
+            android:text="@string/search"/>
 
         </LinearLayout>
 
@@ -168,7 +168,7 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           style="@style/subjectName"
-          android:text="대회 목록"
+          android:text="@string/tournament_list"
           android:paddingTop="10dp"/>
 
 
