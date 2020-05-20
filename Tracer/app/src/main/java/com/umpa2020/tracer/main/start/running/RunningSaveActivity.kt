@@ -67,9 +67,9 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
       speedList.add(it.speed!!)
       elevationList.add(it.alt)
     }
-    distance_tv.text = mapInfo.distance!!.prettyDistance
+    distance_tv.text = mapInfo.distance.prettyDistance
 
-    time_tv.text = mapInfo.time!!.format(m_s)
+    time_tv.text = mapInfo.time.format(m_s)
     speed_tv.text = String.format("%.2f", speedList.average())
 
     val myChart = Chart(elevationList, speedList, chart)

@@ -57,6 +57,7 @@ open class BaseFB {
     const val MAKER_ID = "makerId"
 
     const val CHALLENGER_Id = "challengerId"
+    const val CHALLENGE = "challenge"
 
     // for profile
     const val PROFILE_IMAGE_PATH = "profileImagePath"
