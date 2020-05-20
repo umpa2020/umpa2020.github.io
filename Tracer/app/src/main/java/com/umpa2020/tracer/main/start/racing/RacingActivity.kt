@@ -190,7 +190,7 @@ class RacingActivity : BaseRunningActivity() {
 
     if (!racerGPXList.isNullOrEmpty()) {
       Logg.d("Start Virtual Racing")
-      //  virtualRacing()
+      virtualRacing()
     }
   }
 
