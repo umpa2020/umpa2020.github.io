@@ -8,31 +8,30 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.umpa2020.tracer.App
+import com.umpa2020.tracer.App.Companion.jobList
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.customUI.WorkaroundMapFragment
 import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.extensions.*
 import com.umpa2020.tracer.gpx.WayPointType.FINISH_POINT
 import com.umpa2020.tracer.gpx.WayPointType.START_POINT
-import com.umpa2020.tracer.main.start.racing.RacingActivity
 import com.umpa2020.tracer.main.start.racing.RacingActivity.Companion.ROUTE_GPX
 import com.umpa2020.tracer.main.start.racing.RacingSelectPeopleActivity
-import com.umpa2020.tracer.main.start.running.RunningSaveActivity
 import com.umpa2020.tracer.map.TraceMap
 import com.umpa2020.tracer.network.BaseFB.Companion.MAP_ID
 import com.umpa2020.tracer.network.FBMapRepository
 import com.umpa2020.tracer.network.FBProfileRepository
 import com.umpa2020.tracer.network.FBStorageRepository
 import com.umpa2020.tracer.util.Chart
-import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.activity_ranking_map_detail.*
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import java.io.File
 
-class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener, OnMapReadyCallback {
+class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener, OnMapReadyCallback, CoroutineScope by MainScope() {
   lateinit var routeGPX: RouteGPX
   lateinit var traceMap: TraceMap
   var mapId = ""
@@ -55,7 +54,7 @@ class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener, OnM
         }
       })
     rankingDetailRaceButton.setOnClickListener(this)
-    MainScope().launch {
+    jobList.add(launch {
       FBMapRepository().getMapInfo(mapId)?.let {
         rankingDetailMapTitle.text = it.mapTitle
         rankingDetailDate.text = it.createTime.format(Y_M_D)
@@ -83,8 +82,10 @@ class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener, OnM
           progressBar.dismiss()
         }
       }
-    }
+    })
   }
+
+
 
   override fun onSingleClick(v: View?) {
     when (v!!.id) {

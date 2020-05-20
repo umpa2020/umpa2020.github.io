@@ -1,29 +1,23 @@
 package com.umpa2020.tracer.main.profile.myachievement
 
 import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.umpa2020.tracer.App.Companion.jobList
 import com.umpa2020.tracer.R
-import com.umpa2020.tracer.dataClass.ActivityData
 import com.umpa2020.tracer.dataClass.EmblemData
-import com.umpa2020.tracer.extensions.Y_M_D
-import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.extensions.image
-import com.umpa2020.tracer.main.ranking.RankRecyclerItemClickActivity
-import com.umpa2020.tracer.network.BaseFB
-import com.umpa2020.tracer.network.FBMapRepository
 import com.umpa2020.tracer.network.FBStorageRepository
 import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.recycler_profile_achivement_item.view.*
-import kotlinx.android.synthetic.main.recycler_profile_user_record_item.view.*
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
 class ProfileRecyclerViewAdapterAchievement(private val emblemDatas: MutableList<EmblemData>) :
-  RecyclerView.Adapter<ProfileRecyclerViewAdapterAchievement.MyViewHolder>() {
+  RecyclerView.Adapter<ProfileRecyclerViewAdapterAchievement.MyViewHolder>(), CoroutineScope by MainScope() {
   var context: Context? = null
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
     val view = LayoutInflater.from(parent.context)
@@ -39,9 +33,9 @@ class ProfileRecyclerViewAdapterAchievement(private val emblemDatas: MutableList
   override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
     val emblemData = emblemDatas[position]
 
-    MainScope().launch {
+    jobList.add(launch {
       holder.mapImageView.image(FBStorageRepository().downloadFile(emblemData.imagePath!!))
-    }
+    })
     holder.activityText.text = emblemData.name
 
     //클릭하면 맵 상세보기 페이지로 이동

@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.umpa2020.tracer.App
+import com.umpa2020.tracer.App.Companion.jobList
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.MapInfo
 import com.umpa2020.tracer.network.BaseFB.Companion.USER_ID
@@ -15,10 +16,11 @@ import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_profile_route.*
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
-class ProfileRouteActivity : AppCompatActivity() {
+class ProfileRouteActivity : AppCompatActivity(), CoroutineScope by MainScope() {
   val progressbar = ProgressBar(App.instance.currentActivity() as Activity)
   var uid = ""
   var nickname = ""
@@ -42,9 +44,9 @@ class ProfileRouteActivity : AppCompatActivity() {
         } else if (!profileRecyclerRoute.canScrollVertically(1)) {
           // 리사이클러뷰가 맨 아래로 이동했을 경우
           if (!isLoding) {
-            MainScope().launch {
+            jobList.add(launch {
               listProfileRoute(repository.listUserRoute(uid, 5))
-            }
+            })
           }
           isLoding = true
         }
@@ -64,11 +66,12 @@ class ProfileRouteActivity : AppCompatActivity() {
     Logg.d("ssmm11 limit = $limit")
     if (limit == 0L) limit = 5L
     else rootInfoDatas.clear()
-    MainScope().launch {
+    jobList.add(launch {
       listProfileRoute(FBUsersRepository().listUserRoute(uid, limit))
-    }
+    })
     super.onResume()
   }
+
 
   /**
    * 리스너로 받아온 루트 데이터들을

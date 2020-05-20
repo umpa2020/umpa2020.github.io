@@ -46,7 +46,10 @@ class App : Application() {
       currentActivity = activity
     }
 
-    override fun onActivityPaused(activity: Activity?) {}
+    override fun onActivityPaused(activity: Activity?) {
+      jobList.forEach { it.cancel() }
+      jobList.clear()
+    }
     override fun onActivityStopped(activity: Activity?) {}
     override fun onActivityDestroyed(activity: Activity?) {
       activityCount--

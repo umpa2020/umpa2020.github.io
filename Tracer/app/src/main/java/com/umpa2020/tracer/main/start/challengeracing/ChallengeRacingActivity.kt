@@ -14,6 +14,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.maps.android.PolyUtil
 import com.google.maps.android.SphericalUtil
+import com.umpa2020.tracer.App.Companion.jobList
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.constant.Constants.Companion.ARRIVE_BOUNDARY
@@ -33,10 +34,11 @@ import com.umpa2020.tracer.util.ChoicePopup
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.TTS
 import kotlinx.android.synthetic.main.activity_running.*
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
-class ChallengeRacingActivity : BaseRunningActivity() {
+class ChallengeRacingActivity : BaseRunningActivity(), CoroutineScope by MainScope() {
   companion object {
     const val ROUTE_GPX = "RouteGPX"
   }
@@ -55,10 +57,10 @@ class ChallengeRacingActivity : BaseRunningActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     mapId = intent.getStringExtra(MAP_ID)!!
-    MainScope().launch {
+    jobList.add(launch {
       mapRouteGPX = FBStorageRepository().getFile(FBMapRepository().getMapInfo(mapId)?.routeGPXPath!!).gpxToClass()
       loadRoute()
-    }
+    })
     TTS.speech(getString(R.string.goToStartPoint))
   }
 

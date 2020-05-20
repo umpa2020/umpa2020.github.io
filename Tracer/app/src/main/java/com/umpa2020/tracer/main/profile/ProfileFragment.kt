@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.umpa2020.tracer.App.Companion.jobList
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.extensions.image
@@ -19,25 +20,19 @@ import com.umpa2020.tracer.main.profile.myachievement.ProfileAchievementActivity
 import com.umpa2020.tracer.main.profile.myroute.ProfileRouteActivity
 import com.umpa2020.tracer.main.profile.settting.AppSettingActivity
 import com.umpa2020.tracer.network.BaseFB
-import com.umpa2020.tracer.network.BaseFB.Companion.DISTANCE
 import com.umpa2020.tracer.network.FBProfileRepository
 import com.umpa2020.tracer.network.FBUsersRepository
 import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.fragment_profile.*
-import kotlinx.android.synthetic.main.fragment_profile.profileFragmentTotalDistance
-import kotlinx.android.synthetic.main.fragment_profile.profileImageView
 import kotlinx.android.synthetic.main.fragment_profile.view.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
 /**
  * A simple [Fragment] subclass.
  */
-class ProfileFragment() : Fragment(), OnSingleClickListener, Parcelable {
+class ProfileFragment() : Fragment(), OnSingleClickListener, Parcelable, CoroutineScope by MainScope() {
   lateinit var root: View
   var bundle = Bundle()
   val progressBar = MyProgressBar()
@@ -91,7 +86,7 @@ class ProfileFragment() : Fragment(), OnSingleClickListener, Parcelable {
      * 프로필 변경을 하고 나오는 경우에도 적용된
      * 사진을 바로 보기 위해 Resume에서 적용
      */
-    MainScope().launch {
+    jobList.add(launch {
       withContext(Dispatchers.IO) {
         FBProfileRepository().getProfile(UserInfo.autoLoginKey)
       }.let {
@@ -106,7 +101,14 @@ class ProfileFragment() : Fragment(), OnSingleClickListener, Parcelable {
           medal3rd.text = it[2].toString()
           progressBar.dismiss()
         }
-    }
+    })
+  }
+
+  override fun onPause() {
+    super.onPause()
+    // 갑자기 뒤로가면 코루틴 취소
+    jobList.forEach { it.cancel() }
+    jobList.clear()
   }
 
   override fun writeToParcel(parcel: Parcel, flags: Int) {

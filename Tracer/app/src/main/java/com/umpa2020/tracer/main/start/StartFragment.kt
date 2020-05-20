@@ -45,12 +45,14 @@ import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.fragment_start.*
 import kotlinx.android.synthetic.main.fragment_start.view.*
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import java.io.File
 
 
-class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
+class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener, CoroutineScope by MainScope() {
   var traceMap: TraceMap? = null
   var currentLocation: Location? = null
   var routeMarkers = mutableListOf<Marker>()
@@ -134,9 +136,11 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
    *  현재 맵 보이는 범위로 루트 검색
    */
   private fun searchThisArea() {
+    Logg.d("1번선수")
     progressBar.show()
     val bound = traceMap!!.mMap.projection.visibleRegion.latLngBounds
-    jobList.add(MainScope().launch {
+   launch {
+      Logg.d("2번선수")
       FBMapRepository().listNearMap(bound.southwest, bound.northeast).let { nearMapList ->
         if (nearMapList == null) {
           getString(R.string.not_search).show()
@@ -167,7 +171,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
           progressBar.dismiss()
         }
       }
-    })
+    }
   }
 
   /**
@@ -290,7 +294,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
 
     traceMap!!.mMap.setOnMarkerClickListener {
       it.showInfoWindow()
-      jobList.add(MainScope().launch {
+     launch {
         if (it.tag != null) {
           FBMapRepository().getMapInfo(it.tag as String)?.let {
             FBStorageRepository().getFile(it.routeGPXPath).gpxToClass().let {
@@ -299,7 +303,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
           }
         }
 
-      })
+      }
       true
     }
     traceMap!!.mMap.uiSettings.isCompassEnabled = true
@@ -401,6 +405,8 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
 
   override fun onPause() {
     super.onPause()
+    // 갑자기 뒤로가면 코루틴 취소
+    MainScope().cancel()
     jobList.forEach { it.cancel() }
     jobList.clear()
     // 브로드 캐스트 해제

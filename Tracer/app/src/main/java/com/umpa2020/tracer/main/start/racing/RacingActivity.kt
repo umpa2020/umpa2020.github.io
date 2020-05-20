@@ -16,6 +16,7 @@ import com.google.android.gms.maps.model.Marker
 import com.google.maps.android.PolyUtil
 import com.google.maps.android.SphericalUtil
 import com.umpa2020.tracer.App
+import com.umpa2020.tracer.App.Companion.jobList
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.constant.Constants.Companion.ARRIVE_BOUNDARY
@@ -30,7 +31,6 @@ import com.umpa2020.tracer.gpx.WayPoint
 import com.umpa2020.tracer.gpx.WayPointType.*
 import com.umpa2020.tracer.main.start.BaseRunningActivity
 import com.umpa2020.tracer.main.start.racing.RacingSelectPeopleActivity.Companion.RACER_LIST
-import com.umpa2020.tracer.main.start.running.RunningSaveActivity
 import com.umpa2020.tracer.network.BaseFB.Companion.MAP_ID
 import com.umpa2020.tracer.network.FBMapRepository
 import com.umpa2020.tracer.network.FBRacingRepository
@@ -41,7 +41,7 @@ import kotlinx.android.synthetic.main.activity_running.*
 import kotlinx.coroutines.*
 import java.io.File
 
-class RacingActivity : BaseRunningActivity() {
+class RacingActivity : BaseRunningActivity(),CoroutineScope by MainScope() {
   companion object {
     const val ROUTE_GPX = "RouteGPX"
   }
@@ -68,10 +68,10 @@ class RacingActivity : BaseRunningActivity() {
     racerList = intent.getSerializableExtra(RACER_LIST) as Array<RacerData>
 
     Logg.d(racerList.joinToString())
-    MainScope().launch {
+    jobList.add(launch {
       racerGPXList = FBRacingRepository().listRacingGPX(mapId, racerList.map { it.racerId })
       loadRoute()
-    }
+    })
 
     TTS.speech(getString(R.string.goToStartPoint))
   }
@@ -202,7 +202,7 @@ class RacingActivity : BaseRunningActivity() {
   private fun virtualRacing() {
     val checkPoints = arrayOf(DISTANCE_POINT, START_POINT, FINISH_POINT)
     racerGPXList?.forEachIndexed { racerNo, racingGPX ->
-      GlobalScope.launch {
+      jobList.add(launch {
         val wpts = racingGPX.wptList.filter { checkPoints.contains(it.type) }
         var tempIndex = 1
         val wptIndices = mutableListOf<Int>()
@@ -232,9 +232,10 @@ class RacingActivity : BaseRunningActivity() {
           TTS.speech("${racerList[racerNo].racerName} is arrive")
           traceMap.removeRacer(racerNo)
         }
-      }
+      })
     }
   }
+
 
   override fun stop(tts: String) {
     super.stop(tts)

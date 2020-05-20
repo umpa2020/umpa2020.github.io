@@ -11,25 +11,29 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.maps.model.LatLng
+import com.umpa2020.tracer.App.Companion.jobList
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants.Companion.ANIMATION_DURATION_TIME
 import com.umpa2020.tracer.constant.Constants.Companion.MAX_DISTANCE
 import com.umpa2020.tracer.constant.Constants.Companion.MAX_SEEKERBAR
 import com.umpa2020.tracer.dataClass.MapInfo
 import com.umpa2020.tracer.network.FBRankingRepository
+import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.fragment_ranking.*
 import kotlinx.android.synthetic.main.fragment_ranking.view.*
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 
 
 /**
  * main 화면의 ranking tab
  */
-class RankingFragment : Fragment(), OnSingleClickListener {
+class RankingFragment : Fragment(), OnSingleClickListener, CoroutineScope by MainScope() {
   lateinit var location: LatLng
   lateinit var root: View
   lateinit var rankingRepo: FBRankingRepository
@@ -68,7 +72,7 @@ class RankingFragment : Fragment(), OnSingleClickListener {
           if (requireView().tuneRadioBtnExecute.isChecked) {
             requireView().rankingfiltermode.text = getString(R.string.execute)
             if (!isLoding) {
-              MainScope().launch {
+              launch {
                 progressBar.show()
                 rankingRepo.listFilterRange(rankingLatLng!!, tuneDistance, "plays", limit).let {
                   getRank(it, "plays")
@@ -78,7 +82,7 @@ class RankingFragment : Fragment(), OnSingleClickListener {
           } else {
             requireView().rankingfiltermode.text = getString(R.string.likes)
             if (!isLoding) {
-              MainScope().launch {
+             launch {
                 progressBar.show()
                 rankingRepo.listFilterRange(rankingLatLng!!, tuneDistance, "likes", limit).let {
                   getRank(it, "likes")
@@ -145,7 +149,7 @@ class RankingFragment : Fragment(), OnSingleClickListener {
           if (requireView().tuneRadioBtnExecute.isChecked) {
             requireView().rankingfiltermode.text = getString(R.string.execute)
 
-            MainScope().launch {
+           launch {
               progressBar.show()
               rankingRepo.listRanking(rankingLatLng!!, tuneDistance, "plays", limit).let {
                 getRank(it, "plays")
@@ -154,7 +158,7 @@ class RankingFragment : Fragment(), OnSingleClickListener {
           } else {
             requireView().rankingfiltermode.text = getString(R.string.likes)
 
-            MainScope().launch {
+           launch {
               progressBar.show()
               rankingRepo.listRanking(rankingLatLng!!, tuneDistance, "likes", limit).let {
                 getRank(it, "likes")
@@ -168,6 +172,7 @@ class RankingFragment : Fragment(), OnSingleClickListener {
   }
 
   override fun onResume() {
+    super.onResume()
     if (rankingLatLng != null) {
       tuneDistance = distance
       limit = rootInfoDatas.size.toLong()
@@ -175,13 +180,17 @@ class RankingFragment : Fragment(), OnSingleClickListener {
       if (limit == 0L) limit = 20L
       else rootInfoDatas.clear()
 
+      Logg.d("왜 안나와~~~1")
       if (rankingLatLng != null) {
         //실행순 버튼에 체크가 되어 있을 경우
         if (requireView().tuneRadioBtnExecute.isChecked) {
           requireView().rankingfiltermode.text = getString(R.string.execute)
           rankingRepo = FBRankingRepository()
 
-          MainScope().launch {
+          Logg.d("왜 안나와~~~2")
+
+         launch {
+            Logg.d("왜 안나와~~~3")
             progressBar.show()
             rankingRepo.listRanking(rankingLatLng!!, tuneDistance, "plays", limit).let {
               getRank(it, "plays")
@@ -190,7 +199,7 @@ class RankingFragment : Fragment(), OnSingleClickListener {
         } else {
           requireView().rankingfiltermode.text = getString(R.string.likes)
 
-          MainScope().launch {
+          launch {
             progressBar.show()
             rankingRepo.listRanking(rankingLatLng!!, tuneDistance, "likes", limit).let {
               getRank(it, "likes")
@@ -199,7 +208,14 @@ class RankingFragment : Fragment(), OnSingleClickListener {
         }
       }
     }
-    super.onResume()
+  }
+
+  override fun onPause() {
+    super.onPause()
+    // 갑자기 뒤로가면 코루틴 취소
+    MainScope().cancel()
+    jobList.forEach { it.cancel() }
+    jobList.clear()
   }
 
   /**

@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.umpa2020.tracer.App.Companion.jobList
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.extensions.image
 import com.umpa2020.tracer.extensions.toAge
@@ -18,10 +19,11 @@ import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_my_information.*
 import kotlinx.android.synthetic.main.signup_toolbar.*
 import kotlinx.android.synthetic.main.signup_toolbar.view.*
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
-class MyInformationActivity : AppCompatActivity(), OnSingleClickListener {
+class MyInformationActivity : AppCompatActivity(), OnSingleClickListener, CoroutineScope by MainScope() {
   //lateinit var progressBar: ProgressBar
   private var selectedImageUri: Uri? = null
 
@@ -29,11 +31,11 @@ class MyInformationActivity : AppCompatActivity(), OnSingleClickListener {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_my_information)
     app_toolbar.titleText.text = getString(R.string.my_information)
-    MainScope().launch {
+    jobList.add(launch {
       FBProfileRepository().getProfileImage(UserInfo.autoLoginKey)?.let {
         profileImage.image(it)
       }
-    }
+    })
 
     // Shared에 저장된 유저 정보 설정정
     emailTextView.text = UserInfo.email
@@ -60,11 +62,11 @@ class MyInformationActivity : AppCompatActivity(), OnSingleClickListener {
         if (selectedImageUri != null) { // 사진을 고르면
           //progressBar = ProgressBar(App.instance.currentActivity() as Activity)
           //progressBar.show()
-          MainScope().launch {
+          jobList.add(launch {
             FBProfileRepository().updateProfileImage(selectedImageUri!!)
             //progressBar.dismiss()
             finish()
-          }
+          })
         } else { // 사진을 안고르면
           finish()
         }
@@ -99,6 +101,8 @@ class MyInformationActivity : AppCompatActivity(), OnSingleClickListener {
       }
     }
   }
+
+
 
   companion object {
     // 카메라 requestCode

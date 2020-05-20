@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import com.umpa2020.tracer.App.Companion.jobList
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.extensions.image
@@ -24,12 +25,9 @@ import kotlinx.android.synthetic.main.activity_profile.profileFragmentTotalTime
 import kotlinx.android.synthetic.main.activity_profile.profileIdTextView
 import kotlinx.android.synthetic.main.activity_profile.profileImageView
 import kotlinx.android.synthetic.main.fragment_profile.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
-class ProfileActivity : AppCompatActivity(), OnSingleClickListener {
+class ProfileActivity : AppCompatActivity(), OnSingleClickListener, CoroutineScope by MainScope() {
   var userId = ""
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,7 +43,7 @@ class ProfileActivity : AppCompatActivity(), OnSingleClickListener {
     }
 
 
-    MainScope().launch {
+    jobList.add(launch {
       withContext(Dispatchers.IO) {
         FBProfileRepository().getProfile(userId)
       }.let {
@@ -57,7 +55,7 @@ class ProfileActivity : AppCompatActivity(), OnSingleClickListener {
       FBProfileRepository().getUserNickname(userId).let {
         profileIdTextView.text = it
       }
-    }
+    })
 
     otherProfileRouteTextView.setOnClickListener(this)
     appSettingButton.setOnClickListener(this)

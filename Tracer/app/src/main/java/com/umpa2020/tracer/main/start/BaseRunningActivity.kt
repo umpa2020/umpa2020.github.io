@@ -292,7 +292,7 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     // 거리, 속도, 시간 관련 데이터 초기 설정.
     locationViewModel.init(DistanceTimeData("0.0", "0.0"), TimeData(0L, false, 0L, "0.0"))
   }
-  
+
   override fun onResume() {
     super.onResume()
     backFlag = false

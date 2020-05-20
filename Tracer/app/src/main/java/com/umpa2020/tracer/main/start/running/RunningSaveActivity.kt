@@ -8,10 +8,10 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.net.toUri
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.umpa2020.tracer.App
+import com.umpa2020.tracer.App.Companion.jobList
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.customUI.WorkaroundMapFragment
 import com.umpa2020.tracer.dataClass.*
@@ -187,7 +187,7 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
     FBAchievementRepository().incrementPlays(mapInfo.makerId)
     Logg.d("Finish Upload")
 
-    launch {
+    jobList.add(launch {
       val uid = UserInfo.autoLoginKey
       FBAchievementRepository().getAchievement(uid).let {
         when (it?.trackMake) {
@@ -206,11 +206,13 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
         }
         FBAchievementRepository().incrementTrackMake(uid)
       }
-    }
+    })
 
     progressBar.dismiss()
     finish()
   }
+
+
 
   override fun onMapReady(googleMap: GoogleMap) {
     Logg.d("onMapReady")

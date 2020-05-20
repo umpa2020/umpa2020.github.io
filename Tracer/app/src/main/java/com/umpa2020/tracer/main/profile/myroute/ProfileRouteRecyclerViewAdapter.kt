@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.umpa2020.tracer.App.Companion.jobList
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.MapInfo
 import com.umpa2020.tracer.extensions.*
@@ -18,20 +19,21 @@ import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.recycler_profilefragment_route_grid_image.view.*
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import java.util.*
 
 class ProfileRouteRecyclerViewAdapter(val mdata: ArrayList<MapInfo>) :
-  RecyclerView.Adapter<ProfileRouteRecyclerViewAdapter.mViewHolder>() {
+  RecyclerView.Adapter<ProfileRouteRecyclerViewAdapter.mViewHolder>(), CoroutineScope by MainScope() {
   var context: Context? = null
 
   override fun onBindViewHolder(holder: mViewHolder, position: Int) {
     val infoData = mdata[position]
 
-    MainScope().launch {
+    jobList.add(launch {
       holder.image.image(FBMapRepository().getMapImage(infoData.mapId))
-    }
+    })
     holder.maptitle.text = infoData.mapTitle
     holder.distance.text = infoData.distance.prettyDistance
     holder.time.text = infoData.time.format(mm_ss)
@@ -51,7 +53,7 @@ class ProfileRouteRecyclerViewAdapter(val mdata: ArrayList<MapInfo>) :
 
     holder.heart.setOnClickListener(object : OnSingleClickListener {
       override fun onSingleClick(v: View?) {
-        MainScope().launch { FBLikesRepository().toggleLikes(UserInfo.autoLoginKey, infoData.mapId) }
+        jobList.add(launch { FBLikesRepository().toggleLikes(UserInfo.autoLoginKey, infoData.mapId) })
         if (infoData.liked) {
           infoData.liked = false
           infoData.likes--

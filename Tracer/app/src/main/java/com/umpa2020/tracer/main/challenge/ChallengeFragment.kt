@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
+import com.umpa2020.tracer.App.Companion.jobList
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.ChallengeData
 import com.umpa2020.tracer.extensions.M_D
@@ -17,11 +18,12 @@ import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.network.FBChallengeRepository
 import kotlinx.android.synthetic.main.fragment_challenge.*
 import kotlinx.android.synthetic.main.fragment_challenge.view.*
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import java.util.*
 
-class ChallengeFragment : Fragment() {
+class ChallengeFragment : Fragment(), CoroutineScope by MainScope() {
   companion object {
     const val DEFAULT_START_DATE = 1546300800000
     const val DEFAULT_END_DATE = 1609372800000
@@ -43,7 +45,7 @@ class ChallengeFragment : Fragment() {
     /**
      * 배너에 들어가는 이미지와 아이디를 가져오는 리스너
      */
-    MainScope().launch {
+    jobList.add(launch {
       FBChallengeRepository().listChallengeBannerImagePath()?.let {
         adChallengeScrollViewPager.adapter = AdChallengePageAdapter(it, requireContext())
         adChallengeScrollViewPager.startAutoScroll()
@@ -55,7 +57,7 @@ class ChallengeFragment : Fragment() {
       FBChallengeRepository().listChallengeData(from, to, "전국").let {
         challengeDataList(it!!)
       }
-    }
+    })
 
     return view
   }
@@ -123,11 +125,11 @@ class ChallengeFragment : Fragment() {
       }
 
       btn_challenge_search.setOnClickListener {
-        MainScope().launch {
+        jobList.add(launch {
           FBChallengeRepository().listChallengeData(from, to, locale)?.let {
             challengeDataList(it)
           }
-        }
+        })
       }
     }
   }
@@ -138,6 +140,12 @@ class ChallengeFragment : Fragment() {
   private fun challengeDataList(listChallengeData: MutableList<ChallengeData>) {
     challenge_recycler_view.adapter = ChallengeRecyclerViewAdapter(listChallengeData)
     challenge_recycler_view.layoutManager = GridLayoutManager(context, 2)
+  }
+
+  override fun onPause() {
+    super.onPause()
+    jobList.forEach { it.cancel() }
+    jobList.clear()
   }
 }
 

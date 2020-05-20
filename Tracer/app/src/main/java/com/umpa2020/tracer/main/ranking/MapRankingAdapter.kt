@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.umpa2020.tracer.App.Companion.jobList
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.MapInfo
 import com.umpa2020.tracer.extensions.prettyDistance
@@ -14,6 +15,7 @@ import com.umpa2020.tracer.network.FBLikesRepository
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.recycler_rankfragment_item.view.*
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
@@ -23,7 +25,7 @@ import kotlinx.coroutines.launch
 class MapRankingAdapter(
   val mapInfos: ArrayList<MapInfo>,
   val mode: String
-) : RecyclerView.Adapter<MapRankingAdapter.mViewHolder>() {
+) : RecyclerView.Adapter<MapRankingAdapter.mViewHolder>(), CoroutineScope by MainScope() {
 
   var context: Context? = null
 
@@ -85,7 +87,7 @@ class MapRankingAdapter(
     holder.modeIcon.setOnClickListener(
       object : OnSingleClickListener {
         override fun onSingleClick(v: View?) {
-          MainScope().launch { FBLikesRepository().toggleLikes(UserInfo.autoLoginKey, infoData.mapId) }
+          jobList.add(launch { FBLikesRepository().toggleLikes(UserInfo.autoLoginKey, infoData.mapId) })
           if (infoData.liked) {
             infoData.liked = false
             infoData.likes--
