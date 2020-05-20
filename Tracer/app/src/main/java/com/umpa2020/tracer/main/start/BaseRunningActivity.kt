@@ -46,6 +46,7 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
   OnDrawerCloseListener, OnSingleClickListener {
   lateinit var traceMap: TraceMap
   var privacy = Privacy.RACING
+  var currentLocation: Location? = null // 가끔 null 오류가 나서 이렇게 수정
   var distance = 0.0
   var time = 0.0
   var previousLatLng = LatLng(0.0, 0.0)          //이전위
@@ -73,7 +74,7 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
   lateinit var drawerHandle: Button
   lateinit var drawer: SlidingDrawer
 
-  private var wedgedCamera = true
+  private var wedgedCamera = true // 사용자 카메라 인식 flag
   lateinit var locationBroadcastReceiver: LocationBroadcastReceiver
   var unPassedIcon = R.drawable.ic_checkpoint_gray.makingIcon()
   var passedIcon = R.drawable.ic_checkpoint_red.makingIcon()
@@ -92,27 +93,34 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     stopButton.setOnClickListener(this)
 
     traceMap = TraceMap(googleMap) //구글맵
-
+    traceMap.mMap.setMaxZoomPreference(18.0f) // 최대 줌 설정
     // startFragment의 마지막 위치를 가져와서 카메라 설정
     val latLng = LatLng(UserInfo.lat.toDouble(), UserInfo.lng.toDouble())
     traceMap.initCamera(latLng)
 
+    traceMap.mMap.setOnCameraMoveCanceledListener {
+      Logg.d("구글 맵 클릭")
+    }
 
     traceMap.mMap.setOnMapClickListener{
       Logg.d("구글 맵 클릭")
     }
 
     traceMap.mMap.setOnCameraMoveStartedListener {
-      Logg.d("카메라 이동 시작")
+      // 공개 정적 최종 정수 REASON_GESTURE, 지도에서 사용자의 제스처에 응답하여 카메라 동작이 시작되었습니다.
+      // 예를 들어, 이동, 기울기, 핀치 확대 또는 회전.
+      if(it == 1){
+        wedgedCamera = false
+      }
     }
 
     traceMap.mMap.setOnCameraMoveListener {
 //      wedgedCamera = false
-      Logg.d("카메라 이동 중 $wedgedCamera")
+//      Logg.d("카메라 이동 중 $wedgedCamera")
     }
 
     traceMap.mMap.setOnCameraIdleListener {
-      Logg.d("카메라 멈춤 $wedgedCamera")
+//      Logg.d("카메라 멈춤 $wedgedCamera")
 //      wedgedCamera = false
       zoomLevel = traceMap.mMap.cameraPosition.zoom
     }
@@ -173,7 +181,14 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     // DB에 시작 시간 업데이트
     notificationTextView.visibility = View.GONE
     lockScreen(true)
-
+    chronometer.setOnChronometerTickListener {
+      val mille = SystemClock.elapsedRealtime() - chronometer.base
+      val time = (mille / 1000).toInt()
+      val hour = time / (60 * 60)
+      val min = time % (60 * 60) / 60
+      val sec = time % 60
+//      Logg.d("$hour 시 $min 분 $sec 초")
+    }
     // DB 초기값 설정 => 시작 시간 설정
     locationViewModel.setTimes(TimeData(chronometer.base, true, 0L, ""))
   }
@@ -240,13 +255,15 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     } else {
       moving = true
 
-      // 유저 상태에 따라 카메라 설정
-      if (userState == UserState.NORMAL) {
-        Logg.d("노멀 : 유저 바라보는 방향으로 지도 이동 X")
-        traceMap.moveCamera(location.toLatLng(), zoomLevel!!)
-      }else if(userState == UserState.RUNNING){
-        Logg.d("러닝 : 유저 바라보는 방향으로 지도 이동 O")
-        traceMap.moveCameraUserDirection(location, zoomLevel!!)
+      if(wedgedCamera) { // 사용자 카메라 인식 flag
+        // 유저 상태에 따라 카메라 설정
+        if (userState == UserState.NORMAL) {
+//        Logg.d("노멀 : 유저 바라보는 방향으로 지도 이동 X")
+          traceMap.moveCamera(location.toLatLng(), zoomLevel!!)
+        } else if (userState == UserState.RUNNING) {
+//        Logg.d("러닝 : 유저 바라보는 방향으로 지도 이동 O")
+          traceMap.moveCameraUserDirection(location, zoomLevel!!)
+        }
       }
     }
     return moving
@@ -276,7 +293,6 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     locationViewModel.init(DistanceTimeData("0.0", "0.0"), TimeData(0L, false, 0L, "0.0"))
   }
 
-  var currentLocation: Location? = null
   override fun onDestroy() {
     super.onDestroy()
     LocalBroadcastManager.getInstance(this).unregisterReceiver(locationBroadcastReceiver)

@@ -22,6 +22,10 @@ import com.umpa2020.tracer.util.ChoicePopup
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.TTS
 import kotlinx.android.synthetic.main.activity_running.*
+import java.io.ByteArrayOutputStream
+import java.io.IOException
+import java.io.ObjectOutput
+import java.io.ObjectOutputStream
 
 
 class RunningActivity : BaseRunningActivity() {
@@ -35,8 +39,8 @@ class RunningActivity : BaseRunningActivity() {
     notice(getString(R.string.start_running))
     TTS.speech(getString(R.string.pushthestartbutton))
 
-    map_viewer.setOnTouchListener{view, motionEvent ->
-      if(motionEvent!!.actionMasked == MotionEvent.ACTION_DOWN)
+    map_viewer.setOnTouchListener { view, motionEvent ->
+      if (motionEvent!!.actionMasked == MotionEvent.ACTION_DOWN)
         Logg.d("화면 터치")
       false
     }
@@ -101,6 +105,7 @@ class RunningActivity : BaseRunningActivity() {
    * 현재 위치를 finish point로 설정
    * InfoData와 RouteGPX를 생성해서 RunningSaveActivity에게 전달함
    */
+
   override fun stop() {
     super.stop()
     TTS.speech(getString(R.string.finishRunning))
