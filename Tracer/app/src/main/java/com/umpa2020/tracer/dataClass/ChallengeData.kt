@@ -18,5 +18,6 @@ data class ChallengeData(
   var type: String?=null,
   var link: String?=null,
   var arrCategory: MutableList<String>?=null,
-  var imagePath: String?=null
+  var imagePath: String?=null,
+  var enabled:Boolean=false
 ):Parcelable

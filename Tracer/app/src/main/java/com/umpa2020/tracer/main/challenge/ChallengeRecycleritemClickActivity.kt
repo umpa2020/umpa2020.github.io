@@ -16,6 +16,8 @@ import com.umpa2020.tracer.extensions.gpxToClass
 import com.umpa2020.tracer.extensions.image
 import com.umpa2020.tracer.gpx.WayPointType
 import com.umpa2020.tracer.main.start.challengeracing.ChallengeRacingActivity
+import com.umpa2020.tracer.main.start.racing.RacingActivity
+import com.umpa2020.tracer.main.start.racing.RacingSelectPeopleActivity
 import com.umpa2020.tracer.map.TraceMap
 import com.umpa2020.tracer.network.BaseFB.Companion.MAP_ID
 import com.umpa2020.tracer.network.FBChallengeRepository
@@ -37,7 +39,7 @@ class ChallengeRecycleritemClickActivity : AppCompatActivity(), OnSingleClickLis
   lateinit var routeGPX: RouteGPX
   lateinit var traceMap: TraceMap
   lateinit var challengeId: String
-
+  var challengeEnabled =true
   @SuppressLint("SetTextI18n")
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -56,6 +58,7 @@ class ChallengeRecycleritemClickActivity : AppCompatActivity(), OnSingleClickLis
         challengeDetailAddress.text = address
         challengeDetailHost.text = host
         challengeDetailInformation.text = intro
+        challengeEnabled=enabled
       }
       FBStorageRepository().getFile(FBMapRepository().getMapInfo(challengeId)?.routeGPXPath!!).gpxToClass().let {
         traceMap.drawRoute(it.trkList.toList(), it.wptList.filter { it.type == WayPointType.START_POINT || it.type == WayPointType.FINISH_POINT })
@@ -71,9 +74,17 @@ class ChallengeRecycleritemClickActivity : AppCompatActivity(), OnSingleClickLis
   override fun onSingleClick(v: View?) {
     when (v?.id) {
       R.id.challengeDetailButton -> {
-        startActivity(Intent(this, ChallengeRacingActivity::class.java).apply {
-          putExtra(MAP_ID, challengeId)
-        })
+        if(challengeEnabled) {
+          startActivity(Intent(this, ChallengeRacingActivity::class.java).apply {
+            putExtra(MAP_ID, challengeId)
+          })
+        }else{
+          val nextIntent = Intent(this, RacingSelectPeopleActivity::class.java)
+          nextIntent.putExtra(MAP_ID, challengeId)
+          //routegpx 넘겨주기
+          nextIntent.putExtra(RacingActivity.ROUTE_GPX, routeGPX)
+          startActivity(nextIntent)
+        }
       }
     }
   }
