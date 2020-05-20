@@ -4,7 +4,6 @@
   android:id="@+id/challenge_cardview"
   android:layout_width="wrap_content"
   android:layout_height="wrap_content"
-  android:layout_marginBottom="12dp"
   android:orientation="vertical"
   app:cardCornerRadius="8dp"
   app:cardElevation="5dp"
@@ -16,7 +15,19 @@
     android:layout_height="wrap_content"
     android:padding="5dp">
 
+    <TextView
+      android:layout_centerHorizontal="true"
+      android:id="@+id/challenge_date"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="2020"
+      android:textSize="17dp"
+      android:textColor="@color/blackgray"/>
+
+
     <ImageView
+      android:layout_below="@+id/challenge_date"
+      android:scaleType="fitXY"
       android:id="@+id/challenge_map"
       android:layout_width="150dp"
       android:layout_height="150dp"
@@ -30,8 +41,9 @@
       android:layout_height="wrap_content"
       android:layout_below="@id/challenge_map"
       android:layout_centerHorizontal="true"
-      android:layout_marginTop="5dp"
+      android:layout_marginTop="10dp"
       android:text="경기 이름"
+      android:textColor="@color/lightblack"
       android:textStyle="bold" />
 
     <LinearLayout
@@ -40,11 +52,6 @@
       android:layout_below="@id/challenge_race_name"
       android:orientation="vertical">
 
-      <TextView
-        android:id="@+id/challenge_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="2020.04.22" />
 
       <TextView
         android:id="@+id/challenge_locale"
