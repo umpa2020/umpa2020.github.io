@@ -157,12 +157,14 @@
       </LinearLayout>
 
       <LinearLayout
+        android:gravity="center_horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         style="@style/subjectRelativeLayoutStyle">
 
         <TextView
+          android:layout_gravity="left"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           style="@style/subjectName"
