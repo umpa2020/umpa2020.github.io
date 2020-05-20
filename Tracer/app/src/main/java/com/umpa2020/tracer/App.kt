@@ -5,6 +5,8 @@ import android.app.Application
 import android.content.Context
 import android.os.Bundle
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.cancel
 
 class App : Application() {
   companion object {
@@ -47,8 +49,7 @@ class App : Application() {
     }
 
     override fun onActivityPaused(activity: Activity?) {
-      jobList.forEach { it.cancel() }
-      jobList.clear()
+      MainScope().cancel()
     }
     override fun onActivityStopped(activity: Activity?) {}
     override fun onActivityDestroyed(activity: Activity?) {

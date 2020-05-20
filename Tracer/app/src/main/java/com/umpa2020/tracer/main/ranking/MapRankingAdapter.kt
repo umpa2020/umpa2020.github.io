@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.umpa2020.tracer.App.Companion.jobList
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.MapInfo
 import com.umpa2020.tracer.extensions.prettyDistance
@@ -87,7 +86,7 @@ class MapRankingAdapter(
     holder.modeIcon.setOnClickListener(
       object : OnSingleClickListener {
         override fun onSingleClick(v: View?) {
-          jobList.add(launch { FBLikesRepository().toggleLikes(UserInfo.autoLoginKey, infoData.mapId) })
+          launch { FBLikesRepository().toggleLikes(UserInfo.autoLoginKey, infoData.mapId) }
           if (infoData.liked) {
             infoData.liked = false
             infoData.likes--

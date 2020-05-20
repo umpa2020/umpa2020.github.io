@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.umpa2020.tracer.App.Companion.jobList
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.EmblemData
 import com.umpa2020.tracer.extensions.image
@@ -33,9 +32,9 @@ class ProfileRecyclerViewAdapterAchievement(private val emblemDatas: MutableList
   override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
     val emblemData = emblemDatas[position]
 
-    jobList.add(launch {
+    launch {
       holder.mapImageView.image(FBStorageRepository().downloadFile(emblemData.imagePath!!))
-    })
+    }
     holder.activityText.text = emblemData.name
 
     //클릭하면 맵 상세보기 페이지로 이동

@@ -5,7 +5,6 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.umpa2020.tracer.App.Companion.jobList
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.ActivityData
 import com.umpa2020.tracer.network.FBUsersRepository
@@ -45,11 +44,11 @@ class ProfileActivityActivity : AppCompatActivity(), CoroutineScope by MainScope
         } else if (!profileRecyclerRecord.canScrollVertically(1)) {
           /* 리사이클러뷰가 맨 아래로 이동했을 경우 */
           if (!isLoding) {
-            jobList.add(launch {
+            launch {
               userActivityRepo.listUserMakingActivity(15)?.let {
                 activityList(it)
               }
-            })
+            }
           }
           isLoding = true
         }
@@ -67,13 +66,13 @@ class ProfileActivityActivity : AppCompatActivity(), CoroutineScope by MainScope
      * 나의 활동 리스트를 가져오기
      */
 
-    jobList.add(launch {
+    launch {
       FBUsersRepository().listUserMakingActivity(limit)?.let {
         activityList(it)
       } ?: kotlin.run {
         activityList(rootActivityDatas)
       }
-    })
+    }
     super.onResume()
   }
 

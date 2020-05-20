@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
-import com.umpa2020.tracer.App.Companion.jobList
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.ChallengeData
 import com.umpa2020.tracer.extensions.M_D
@@ -20,6 +19,7 @@ import kotlinx.android.synthetic.main.fragment_challenge.*
 import kotlinx.android.synthetic.main.fragment_challenge.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -45,7 +45,7 @@ class ChallengeFragment : Fragment(), CoroutineScope by MainScope() {
     /**
      * 배너에 들어가는 이미지와 아이디를 가져오는 리스너
      */
-    jobList.add(launch {
+    launch {
       FBChallengeRepository().listChallengeBannerImagePath()?.let {
         adChallengeScrollViewPager.adapter = AdChallengePageAdapter(it, requireContext())
         adChallengeScrollViewPager.startAutoScroll()
@@ -57,14 +57,14 @@ class ChallengeFragment : Fragment(), CoroutineScope by MainScope() {
       FBChallengeRepository().listChallengeData(from, to, "전국").let {
         challengeDataList(it!!)
       }
-    })
+    }
 
     return view
   }
 
-  private fun initView(layout:View) {
+  private fun initView(layout: View) {
     val now = Calendar.getInstance()
-    with(layout){
+    with(layout) {
       btn_challenge_from.text = from.format(Y_M_D)
       btn_challenge_to.text = to.format(Y_M_D)
       btn_challenge_region.text = locale
@@ -125,11 +125,11 @@ class ChallengeFragment : Fragment(), CoroutineScope by MainScope() {
       }
 
       btn_challenge_search.setOnClickListener {
-        jobList.add(launch {
+        launch {
           FBChallengeRepository().listChallengeData(from, to, locale)?.let {
             challengeDataList(it)
           }
-        })
+        }
       }
     }
   }
@@ -144,8 +144,7 @@ class ChallengeFragment : Fragment(), CoroutineScope by MainScope() {
 
   override fun onPause() {
     super.onPause()
-    jobList.forEach { it.cancel() }
-    jobList.clear()
+    MainScope().cancel()
   }
 }
 

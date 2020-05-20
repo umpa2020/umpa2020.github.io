@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.github.demono.adapter.InfinitePagerAdapter
-import com.umpa2020.tracer.App.Companion.jobList
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.BannerData
 import com.umpa2020.tracer.extensions.image
@@ -31,9 +30,9 @@ class AdChallengePageAdapter(
     val view = LayoutInflater.from(container!!.context)
       .inflate(R.layout.fragment_adchallenge, container, false)
 
-    jobList.add(launch {
+    launch {
       view.adChallengeImgView.image(FBStorageRepository().downloadFile(adChallengeList[position].bannerImagePath!!))
-    })
+    }
     view.setOnClickListener {
       if (position != 0) { // 코로나 안내이면 안 넘기도록 추후에 else 해서 자세한 안내 띄우도록
         val intent = Intent(context, ChallengeRecycleritemClickActivity::class.java)

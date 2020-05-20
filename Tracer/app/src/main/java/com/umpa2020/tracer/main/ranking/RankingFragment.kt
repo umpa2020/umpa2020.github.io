@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.maps.model.LatLng
-import com.umpa2020.tracer.App.Companion.jobList
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants.Companion.ANIMATION_DURATION_TIME
 import com.umpa2020.tracer.constant.Constants.Companion.MAX_DISTANCE
@@ -214,8 +213,7 @@ class RankingFragment : Fragment(), OnSingleClickListener, CoroutineScope by Mai
     super.onPause()
     // 갑자기 뒤로가면 코루틴 취소
     MainScope().cancel()
-    jobList.forEach { it.cancel() }
-    jobList.clear()
+
   }
 
   /**

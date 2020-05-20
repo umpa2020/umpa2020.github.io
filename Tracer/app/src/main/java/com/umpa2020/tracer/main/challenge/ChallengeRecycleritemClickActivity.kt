@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.umpa2020.tracer.App.Companion.jobList
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.extensions.Y_M_D
 import com.umpa2020.tracer.extensions.format
@@ -53,7 +52,7 @@ class ChallengeRecycleritemClickActivity : AppCompatActivity(), OnSingleClickLis
     smf.getMapAsync(this)
     challengeId = intent.getStringExtra("challengeId")!!
     val job =
-      jobList.add(launch {
+      launch {
         FBChallengeRepository().getChallengeData(challengeId).run {
           challengeDetailImageView.image(FBStorageRepository().downloadFile(imagePath!!))
           challengeDetailCompetitionName.text = name
@@ -70,7 +69,7 @@ class ChallengeRecycleritemClickActivity : AppCompatActivity(), OnSingleClickLis
           }
         }
         initButton()
-      })
+      }
   }
 
   private fun initButton() {

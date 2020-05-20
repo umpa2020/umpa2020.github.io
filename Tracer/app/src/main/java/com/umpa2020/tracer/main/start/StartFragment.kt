@@ -23,7 +23,6 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.App
-import com.umpa2020.tracer.App.Companion.jobList
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.MapInfo
 import com.umpa2020.tracer.dataClass.RouteGPX
@@ -406,9 +405,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener, Cor
   override fun onPause() {
     super.onPause()
     // 갑자기 뒤로가면 코루틴 취소
-    MainScope().cancel()
-    jobList.forEach { it.cancel() }
-    jobList.clear()
+    cancel()
     // 브로드 캐스트 해제
     LocalBroadcastManager.getInstance(this.requireContext())
       .unregisterReceiver(locationBroadcastReceiver)

@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import co.lujun.androidtagview.TagView.OnTagClickListener
 import com.umpa2020.tracer.App
-import com.umpa2020.tracer.App.Companion.jobList
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.RacerData
 import com.umpa2020.tracer.dataClass.RankingData
@@ -41,7 +40,7 @@ class RacingSelectPeopleActivity : AppCompatActivity(), OnSingleClickListener, C
     val routeGPXUri = intent.getStringExtra(ROUTE_GPX)
     routeGPX = Uri.parse(routeGPXUri).gpxToClass()
 
-    jobList.add(launch {
+    launch {
       FBMapRepository().listMapRanking(mapId).let {
         //레이아웃 매니저 추가
         rankingDataList = it
@@ -50,7 +49,7 @@ class RacingSelectPeopleActivity : AppCompatActivity(), OnSingleClickListener, C
         racingSelectRecyclerView.adapter =
           RacingRecyclerViewAdapterMultiSelect(it, mapId, tagcontainerLayout1)
       }
-    })
+    }
 
 
     // Set custom click listener

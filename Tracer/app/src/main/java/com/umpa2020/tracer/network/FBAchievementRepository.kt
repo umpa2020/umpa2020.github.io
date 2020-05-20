@@ -1,7 +1,6 @@
 package com.umpa2020.tracer.network
 
 import com.google.firebase.firestore.FieldValue
-import com.umpa2020.tracer.App.Companion.jobList
 import com.umpa2020.tracer.dataClass.AchievementData
 import com.umpa2020.tracer.dataClass.EmblemData
 import com.umpa2020.tracer.dataClass.EmblemNameData
@@ -59,7 +58,7 @@ class FBAchievementRepository : BaseFB(), CoroutineScope by MainScope() {
   fun incrementDistance(userId: String, distance: Double) {
     achievementCollectionRef.document(userId).update(DISTANCE, FieldValue.increment(distance))
       .addOnSuccessListener {
-        jobList.add(launch {
+        launch {
           getAchievement(userId).let {
             when {
               it!!.distance > DISTANCE_COUNT_10 -> {
@@ -73,12 +72,12 @@ class FBAchievementRepository : BaseFB(), CoroutineScope by MainScope() {
               }
             }
           }
-        })
+        }
       }
   }
 
   fun incrementPlays(userId: String) {
-    jobList.add(launch {
+    launch {
       getAchievement(userId).let {
         when {
           it!!.plays == TIMES_OF_RUN_COUNT_9 -> {
@@ -93,7 +92,7 @@ class FBAchievementRepository : BaseFB(), CoroutineScope by MainScope() {
         }
         achievementCollectionRef.document(userId).update(PLAYS, FieldValue.increment(1))
       }
-    })
+    }
   }
 
   /**

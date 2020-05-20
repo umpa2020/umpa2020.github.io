@@ -6,7 +6,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import com.umpa2020.tracer.App.Companion.jobList
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.ActivityData
 import com.umpa2020.tracer.dataClass.MapInfo
@@ -65,7 +64,7 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener, Corouti
     }
     val racerGpxFile = racerGPX.classToGpx(saveFolder.path)*/
 
-    jobList.add(launch {
+    launch {
       // 유저 히스토리 등록
       FBUsersRepository().createUserHistory(
         ActivityData(racerData.mapId, Date().time, racerData.distance, racerData.time, if (result) BaseFB.ActivityMode.RACING_SUCCESS else BaseFB.ActivityMode.RACING_FAIL)
@@ -83,7 +82,7 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener, Corouti
       FBUsersRepository().updateUserAchievement(arrRankingData, racerData.mapId)
       updateRankingUI(arrRankingData)
       progressbar.dismiss()
-    })
+    }
     OKButton.setOnClickListener(this)
     otherPeopleProfileSelect.setOnClickListener(this)
   }
@@ -112,7 +111,7 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener, Corouti
     resultRankText: Int,
     renewal: Boolean
   ) {
-    jobList.add(launch {
+    launch {
       // 나의 기록
       FBProfileRepository().getProfileImage(UserInfo.autoLoginKey)?.let { racingFinishProfileImageView.image(it) }
       //RacingFinishMyNickName.text = UserInfo.nickname
@@ -136,7 +135,7 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener, Corouti
       racerMaxSpeedTextView.text = racerSpeeds.max()!!.prettyDistance
       racerAvgSpeedTextView.text = racerSpeeds.average().prettyDistance
       progressbar.dismiss()
-    })
+    }
   }
 
   private suspend fun updateRankingUI(rankingDatas: MutableList<RankingData>) {

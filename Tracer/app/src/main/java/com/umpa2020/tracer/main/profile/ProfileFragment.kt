@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.umpa2020.tracer.App.Companion.jobList
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.extensions.image
@@ -86,7 +85,7 @@ class ProfileFragment() : Fragment(), OnSingleClickListener, Parcelable, Corouti
      * 프로필 변경을 하고 나오는 경우에도 적용된
      * 사진을 바로 보기 위해 Resume에서 적용
      */
-    jobList.add(launch {
+    launch {
       withContext(Dispatchers.IO) {
         FBProfileRepository().getProfile(UserInfo.autoLoginKey)
       }.let {
@@ -101,14 +100,13 @@ class ProfileFragment() : Fragment(), OnSingleClickListener, Parcelable, Corouti
           medal3rd.text = it[2].toString()
           progressBar.dismiss()
         }
-    })
+    }
   }
 
   override fun onPause() {
     super.onPause()
     // 갑자기 뒤로가면 코루틴 취소
-    jobList.forEach { it.cancel() }
-    jobList.clear()
+    MainScope().cancel()
   }
 
   override fun writeToParcel(parcel: Parcel, flags: Int) {

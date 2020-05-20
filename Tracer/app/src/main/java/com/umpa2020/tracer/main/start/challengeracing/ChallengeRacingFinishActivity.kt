@@ -45,14 +45,14 @@ class ChallengeRacingFinishActivity : AppCompatActivity(), OnSingleClickListener
     challengeFinishMyLapTime.text=recordList.last().format(m_s)
     challengeRankTextView.text = "${recordList.last().calcRank(bestList.last(), worstList.last())} %"
     challengeOKButton.setOnClickListener(this)
-    jobList.add(launch {
+    launch {
       // 유저 히스토리 등록
       /* FBUsersRepository().createUserHistory(
          ActivityData(racerData.mapId, Date().time, racerData.distance, racerData.time, if (result) "racing go the distance" else "racing fail")
        )*/
       challengeFinishProfileImageView.image(FBProfileRepository().getProfileImage(UserInfo.autoLoginKey))
       progressbar.dismiss()
-    })
+    }
     setDistributionChart()
     setLineChart()
     challengeOKButton.setOnClickListener(this)

@@ -57,10 +57,10 @@ class ChallengeRacingActivity : BaseRunningActivity(), CoroutineScope by MainSco
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     mapId = intent.getStringExtra(MAP_ID)!!
-    jobList.add(launch {
+    launch {
       mapRouteGPX = FBStorageRepository().getFile(FBMapRepository().getMapInfo(mapId)?.routeGPXPath!!).gpxToClass()
       loadRoute()
-    })
+    }
     TTS.speech(getString(R.string.goToStartPoint))
   }
 

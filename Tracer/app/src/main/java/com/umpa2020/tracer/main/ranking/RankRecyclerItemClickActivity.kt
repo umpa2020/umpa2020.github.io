@@ -7,7 +7,6 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.umpa2020.tracer.App
-import com.umpa2020.tracer.App.Companion.jobList
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.extensions.image
 import com.umpa2020.tracer.network.BaseFB.Companion.MAP_ID
@@ -40,7 +39,7 @@ class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener
     //전달 받은 값으로 Title 설정
     mapId = intent.getStringExtra(MAP_ID)!!
 
-    jobList.add(launch {
+    launch {
       withContext(Dispatchers.IO) {
         FBMapRepository().getMapInfo(mapId)
       }?.let {
@@ -54,9 +53,9 @@ class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener
           }
         }
       }
-    })
+    }
 
-    jobList.add(launch {
+    launch {
       rankRoutePriview.image(FBMapRepository().getMapImage(mapId))
       setLiked(FBLikesRepository().isLiked(UserInfo.autoLoginKey, mapId), FBLikesRepository().getMapLikes(mapId))
       setPlayed(FBUsersRepository().isPlayed(UserInfo.autoLoginKey, mapId), FBMapRepository().getMapPlays(mapId))
@@ -68,7 +67,7 @@ class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener
           RankRecyclerViewAdapterTopPlayer(it, mapId)
         progressBar.dismiss()
       }
-    })
+    }
 
 
   }
@@ -82,13 +81,13 @@ class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener
       }
       R.id.rankRecyclerHeart -> {
         if (rankRecyclerHeartSwitch.text == "off") {
-          jobList.add(launch { FBLikesRepository().toggleLikes(UserInfo.autoLoginKey, mapId) })
+          launch { FBLikesRepository().toggleLikes(UserInfo.autoLoginKey, mapId) }
           rankRecyclerHeart.setImageResource(R.drawable.ic_favorite_red_24dp)
           rankRecyclerHeartSwitch.text = "on"
           likes++
           rankRecyclerHeartCount.text = likes.toString()
         } else if (rankRecyclerHeartSwitch.text == "on") {
-          jobList.add(launch { FBLikesRepository().toggleLikes(UserInfo.autoLoginKey, mapId) })
+          launch { FBLikesRepository().toggleLikes(UserInfo.autoLoginKey, mapId) }
           rankRecyclerHeart.setImageResource(R.drawable.ic_favorite_border_black_24dp)
           rankRecyclerHeartSwitch.text = "off"
           likes--

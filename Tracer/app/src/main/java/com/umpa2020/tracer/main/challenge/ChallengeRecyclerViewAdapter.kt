@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.umpa2020.tracer.App.Companion.jobList
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.ChallengeData
 import com.umpa2020.tracer.extensions.M_D
@@ -28,9 +27,9 @@ class ChallengeRecyclerViewAdapter(var challenge: MutableList<ChallengeData>) :
   @SuppressLint("SetTextI18n")
   override fun onBindViewHolder(holder: ItemHolder, position: Int) {
     val challengeData = challenge[position]
-    jobList.add(launch {
+    launch {
       holder.icons.image(FBStorageRepository().downloadFile(challengeData.imagePath!!))
-    })
+    }
 
     holder.name.text = challengeData.name
     holder.date.text = challengeData.date!!.format(M_D)

@@ -8,7 +8,6 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.umpa2020.tracer.App
-import com.umpa2020.tracer.App.Companion.jobList
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.customUI.WorkaroundMapFragment
 import com.umpa2020.tracer.dataClass.RouteGPX
@@ -54,7 +53,7 @@ class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener, OnM
         }
       })
     rankingDetailRaceButton.setOnClickListener(this)
-    jobList.add(launch {
+    launch {
       FBMapRepository().getMapInfo(mapId)?.let {
         rankingDetailMapTitle.text = it.mapTitle
         rankingDetailDate.text = it.createTime.format(Y_M_D)
@@ -82,7 +81,7 @@ class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener, OnM
           progressBar.dismiss()
         }
       }
-    })
+    }
   }
 
 

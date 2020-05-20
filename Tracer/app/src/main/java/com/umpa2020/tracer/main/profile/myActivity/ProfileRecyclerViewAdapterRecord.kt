@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.umpa2020.tracer.App.Companion.jobList
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.ActivityData
 import com.umpa2020.tracer.extensions.Y_M_D
@@ -38,7 +37,7 @@ class ProfileRecyclerViewAdapterRecord(val datas: MutableList<ActivityData>) :
   override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
     val singleItem1 = datas[position]
 
-    jobList.add(launch {
+    launch {
       holder.mapImageView.image(FBMapRepository().getMapImage(singleItem1.mapId!!))
       FBMapRepository().getMapTitle(singleItem1.mapId)?.let {
         val time = singleItem1.time!!.toLong().format(Y_M_D)
@@ -57,7 +56,7 @@ class ProfileRecyclerViewAdapterRecord(val datas: MutableList<ActivityData>) :
           }
         }
       }
-    })
+    }
 
     //클릭하면 맵 상세보기 페이지로 이동
     holder.itemView.setOnClickListener(object : OnSingleClickListener {

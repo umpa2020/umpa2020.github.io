@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.umpa2020.tracer.App.Companion.jobList
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.MapInfo
 import com.umpa2020.tracer.extensions.*
@@ -31,9 +30,9 @@ class ProfileRouteRecyclerViewAdapter(val mdata: ArrayList<MapInfo>) :
   override fun onBindViewHolder(holder: mViewHolder, position: Int) {
     val infoData = mdata[position]
 
-    jobList.add(launch {
+    launch {
       holder.image.image(FBMapRepository().getMapImage(infoData.mapId))
-    })
+    }
     holder.maptitle.text = infoData.mapTitle
     holder.distance.text = infoData.distance.prettyDistance
     holder.time.text = infoData.time.format(mm_ss)
@@ -53,7 +52,7 @@ class ProfileRouteRecyclerViewAdapter(val mdata: ArrayList<MapInfo>) :
 
     holder.heart.setOnClickListener(object : OnSingleClickListener {
       override fun onSingleClick(v: View?) {
-        jobList.add(launch { FBLikesRepository().toggleLikes(UserInfo.autoLoginKey, infoData.mapId) })
+        launch { FBLikesRepository().toggleLikes(UserInfo.autoLoginKey, infoData.mapId) }
         if (infoData.liked) {
           infoData.liked = false
           infoData.likes--

@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import com.umpa2020.tracer.App.Companion.jobList
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.extensions.image
@@ -43,7 +42,7 @@ class ProfileActivity : AppCompatActivity(), OnSingleClickListener, CoroutineSco
     }
 
 
-    jobList.add(launch {
+    launch {
       withContext(Dispatchers.IO) {
         FBProfileRepository().getProfile(userId)
       }.let {
@@ -55,7 +54,7 @@ class ProfileActivity : AppCompatActivity(), OnSingleClickListener, CoroutineSco
       FBProfileRepository().getUserNickname(userId).let {
         profileIdTextView.text = it
       }
-    })
+    }
 
     otherProfileRouteTextView.setOnClickListener(this)
     appSettingButton.setOnClickListener(this)

@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.umpa2020.tracer.App
-import com.umpa2020.tracer.App.Companion.jobList
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.MapInfo
 import com.umpa2020.tracer.network.BaseFB.Companion.USER_ID
@@ -44,9 +43,9 @@ class ProfileRouteActivity : AppCompatActivity(), CoroutineScope by MainScope() 
         } else if (!profileRecyclerRoute.canScrollVertically(1)) {
           // 리사이클러뷰가 맨 아래로 이동했을 경우
           if (!isLoding) {
-            jobList.add(launch {
+            launch {
               listProfileRoute(repository.listUserRoute(uid, 5))
-            })
+            }
           }
           isLoding = true
         }
@@ -66,9 +65,9 @@ class ProfileRouteActivity : AppCompatActivity(), CoroutineScope by MainScope() 
     Logg.d("ssmm11 limit = $limit")
     if (limit == 0L) limit = 5L
     else rootInfoDatas.clear()
-    jobList.add(launch {
+    launch {
       listProfileRoute(FBUsersRepository().listUserRoute(uid, limit))
-    })
+    }
     super.onResume()
   }
 
