@@ -1,7 +1,6 @@
 package com.umpa2020.tracer.main.start.running
 
 import android.content.Intent
-import android.content.pm.ActivityInfo
 import android.location.Location
 import android.os.Bundle
 import android.os.SystemClock
@@ -26,8 +25,6 @@ class RunningActivity : BaseRunningActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-    setContentView(R.layout.activity_running)
     supportActionBar?.title = "RUNNING"
     init()
     notice(getString(R.string.start_running))
@@ -41,21 +38,10 @@ class RunningActivity : BaseRunningActivity() {
   override fun init() {
     val smf = supportFragmentManager.findFragmentById(R.id.map_viewer) as SupportMapFragment
     smf.getMapAsync(this)
-
-    startButton = runningStartButton
-    stopButton = runningStopButton
-    pauseButton = runningPauseButton
-    notificationTextView = runningNotificationTextView
-    pauseNotificationTextView = runningPauseNotificationTextView
-    drawerHandle = runningHandle
-    drawer = runningDrawer
-    chronometer = runningTimerTextView
-    speedTextView = runningSpeedTextView
-    distanceTextView = runningDistanceTextView
     /**
     Stop 팝업 띄우기
      */
-    stopButton.setOnLongClickListener {
+    runningStopButton.setOnLongClickListener {
       if (distance < Constants.MINIMUM_STOPPING_DISTANCE) {
         noticePopup = ChoicePopup(this, getString(R.string.please_select),
           getString(R.string.twohundred_save),
@@ -100,7 +86,7 @@ class RunningActivity : BaseRunningActivity() {
     wpList.add(currentLocation.toWayPoint(FINISH_POINT))
     val infoData = MapInfo()
     infoData.distance = distance
-    infoData.time = SystemClock.elapsedRealtime() - chronometer.base
+    infoData.time = SystemClock.elapsedRealtime() - runningTimerTextView.base
     infoData.startLatitude = trkList.first().lat
     infoData.startLongitude = trkList.first().lon
     val routeGPX = RouteGPX(infoData.time!!, "", wpList, trkList)

@@ -11,6 +11,7 @@ import android.location.Geocoder
 import android.location.Location
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -262,6 +263,15 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
     traceMap!!.mMap.moveCamera(cameraUpdate)
 
     wedgedCamera = true
+    traceMap!!.mMap.setOnCameraIdleListener {
+
+    }
+    traceMap!!.mMap.setOnCameraMoveCanceledListener {
+
+    }
+    traceMap!!.mMap.setOnCameraMoveStartedListener {
+      Logg.d("move camera started $it")
+    }
     traceMap!!.mMap.setOnCameraMoveCanceledListener {
       wedgedCamera = false
       mainStartSearchAreaButton.visibility = View.VISIBLE

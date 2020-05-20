@@ -6,6 +6,7 @@ import android.widget.Toast
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.umpa2020.tracer.App
+import com.umpa2020.tracer.util.Logg
 import kotlin.math.ceil
 
 fun String.show() {
@@ -82,4 +83,18 @@ fun Double.prettySpeed(): String {
 fun Int.toDp(): Float {
   return if (this == 0) 0f
   else ceil(App.instance.resources.displayMetrics.density * this)
+}
+
+fun Long.calcRank(best: Long, worst: Long): Int {
+  Logg.d("$this $best $worst")
+  return when {
+    this < (worst - best) * 0.00 + best -> 1
+    this < (worst - best) * 0.25 + best -> 10
+    this < (worst - best) * 0.40 + best -> 35
+    this < (worst - best) * 0.50 + best -> 50
+    this < (worst - best) * 0.60 + best -> 50
+    this < (worst - best) * 0.75 + best -> 70
+    this < (worst - best) * 1.00 + best -> 100
+    else -> 100
+  }
 }
