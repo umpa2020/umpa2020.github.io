@@ -11,6 +11,7 @@ import com.umpa2020.tracer.util.Logg
 
 object LocationUpdatesComponent {
   private var iLocationProvider: ILocationProvider? = null
+
   /**
    * Provides access to the Fused Location Provider API.
    */
@@ -34,13 +35,14 @@ object LocationUpdatesComponent {
    *  이전 위치
    */
   var previousLocation: LatLng = LatLng(0.0, 0.0)          //이전위치
+
   /**
    * create first time to initialize the location components
    *
    * @param context
    */
 
-  fun setILocationProvider(iLocationProvider: ILocationProvider){
+  fun setILocationProvider(iLocationProvider: ILocationProvider) {
     LocationUpdatesComponent.iLocationProvider = iLocationProvider
   }
 
@@ -62,7 +64,7 @@ object LocationUpdatesComponent {
    * start location updates
    */
   fun onStart() {
-    Logg.i( "onStart ")
+
     //hey request for location updates
     requestLocationUpdates()
   }
@@ -71,7 +73,7 @@ object LocationUpdatesComponent {
    * remove location updates
    */
   fun onStop() {
-    Logg.i( "onStop....")
+
     removeLocationUpdates()
   }
 
@@ -96,11 +98,11 @@ object LocationUpdatesComponent {
    *  정확도 설정이 없으면 PRIORITY_BALANCED_POWER_ACCURACY이 기본 값(102)
    *  PRIORITY_HIGH_ACCURACY의 값은 100
    */
-  fun setPriority(priority : Int){
+  fun setPriority(priority: Int) {
     locationRequest.priority = priority
   }
 
-  fun getLastLocat() : Location{
+  fun getLastLocat(): Location {
     return lastLocation!!
   }
 
@@ -111,32 +113,32 @@ object LocationUpdatesComponent {
    *
    *  마지막 위치를 가져와서 UI 설정. 시작 마커, 현재 자신의 위치 마커
    */
-  var lastLocation : Location? = null
-  private fun getLastLocation(){
-    try{
+  var lastLocation: Location? = null
+  private fun getLastLocation() {
+    try {
       fusedLocationClient.lastLocation // 마지막으로 알려진 위치 가져오기
-        .addOnCompleteListener{task ->
+        .addOnCompleteListener { task ->
           if (task.isSuccessful && task.result != null) {
             currentLocation = task.result!!
             lastLocation = task.result!!
-            Logg.i( "getLastLocation $currentLocation" )
+
 
             onNewLocation(currentLocation)
           } else {
-            Logg.w( "Failed to get location.")
+
           }
 
         }
         .addOnSuccessListener { location ->
           if (location == null) {
-            Logg.d("Location is null")
+
           } else {
-            Logg.d("Success to get Init Location : $location" )
+
             previousLocation = LatLng(location.latitude, location.longitude) // 이전 위치
           }
         }
-    }catch (e : Exception){
-      Logg.e( "Lost location permission.$e")
+    } catch (e: Exception) {
+
     }
 
   }
@@ -147,15 +149,15 @@ object LocationUpdatesComponent {
    *  위치 설정 변경의 과정에서 이 방법을 보여줍니다. 위치 요청이 완료되면 requestLocationUpdates()를 호출하여 정기 업데이트를 시작할 수 있습니다.
    */
   private fun requestLocationUpdates() {
-    Logg.i( "Requesting location updates")
+
     try {
       fusedLocationClient.requestLocationUpdates(
         locationRequest,
         locationCallback,
         Looper.getMainLooper()
       )
-    }catch (e : Exception){
-      Logg.e( "Lost location permission. Could not request updates. $e")
+    } catch (e: Exception) {
+
     }
 
   }
@@ -166,12 +168,12 @@ object LocationUpdatesComponent {
    *  백그라운드에서 실행 중일 때에도 앱이 정보를 수집할 필요가 없는 경우 위치 업데이트를 중지하면 전력 소모를 줄이는 데 도움이 될 수 있습니다.
    */
   private fun removeLocationUpdates() {
-    Logg.i( "Removing location updates")
+    Logg.i("Removing location updates")
     try {
       fusedLocationClient.removeLocationUpdates(locationCallback)
     } catch (err: Exception) {
       //            Utils.setRequestingLocationUpdates(this, true);
-      Logg.e( "Lost location permission. Could not remove updates. $err")
+      Logg.e("Lost location permission. Could not remove updates. $err")
     }
   }
 

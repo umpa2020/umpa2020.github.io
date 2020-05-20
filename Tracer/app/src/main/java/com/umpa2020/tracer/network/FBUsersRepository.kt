@@ -1,8 +1,10 @@
 package com.umpa2020.tracer.network
 
 import com.google.firebase.firestore.DocumentSnapshot
+import com.umpa2020.tracer.dataClass.*
 import com.umpa2020.tracer.dataClass.ActivityData
-import com.umpa2020.tracer.dataClass.InfoData
+import com.umpa2020.tracer.dataClass.MapInfo
+import com.umpa2020.tracer.dataClass.Users
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.coroutines.tasks.await
@@ -19,19 +21,68 @@ import kotlinx.coroutines.tasks.await
 class FBUsersRepository : BaseFB() {
   var globalStartAfter: DocumentSnapshot? = null
 
-  fun createUserInfo(data: HashMap<String, String?>) {
-    db.collection(USERS).document(data[USER_ID]!!).set(data)
+  suspend fun listUserAchievement(userId: String): ArrayList<Int> {
+    val list = arrayListOf<Int>()
+
+    val ref = usersCollectionRef.whereEqualTo(USER_ID, userId).get().await()
+      .documents.first().reference
+    for (i in 1..3) {
+      list.add(
+        ref.collection(TROPHIES).whereEqualTo(RANKING, i).get().await()
+          .documents.size
+      )
+    }
+    return list
+  }
+
+  fun createUserAchievement(trophyData: TrophyData) {
+    usersCollectionRef.document(UserInfo.autoLoginKey).collection(TROPHIES).add(trophyData)
+  }
+
+  fun updateUserAchievement(rankingDatas: MutableList<RankingData>, mapId: String) {
+    var ranking = 0L
+    run loop@{
+      rankingDatas.forEachIndexed { i, rankingData ->
+        if (i > 3)
+          return@loop
+        if (rankingData.challengerId == UserInfo.autoLoginKey) {
+          ranking = i + 1L
+        }
+      }
+    }
+
+
+    if (ranking != 0L) {
+      usersCollectionRef.document(UserInfo.autoLoginKey).collection(TROPHIES)
+        .whereEqualTo(MAP_ID, mapId)
+        .get()
+        .addOnSuccessListener {
+          if (it.isEmpty) {
+            usersCollectionRef.document(UserInfo.autoLoginKey).collection(TROPHIES)
+              .add(TrophyData(mapId, ranking))
+          } else {
+            val before = it.documents.first().getLong(RANKING)!!
+            if (before != ranking) {
+              it.documents.first().reference.update(RANKING, ranking)
+            }
+          }
+        }
+    }
+  }
+
+  fun createUserInfo(data: Users) {
+    usersCollectionRef.document(data.userId).set(data)
       .addOnSuccessListener { Logg.d("DocumentSnapshot successfully written!") }
       .addOnFailureListener { e -> Logg.w("Error writing document$e") }
+
+    FBAchievementRepository().createAchievement(data.userId)
   }
 
   fun createUserHistory(activityData: ActivityData) {
-    db.collection(USERS).whereEqualTo(USER_ID, UserInfo.autoLoginKey)
-      .get()
-      .addOnSuccessListener {
-        it.documents.last().reference.collection(ACTIVITIES).add(activityData)
-      }
+    usersCollectionRef.document(UserInfo.autoLoginKey).collection(ACTIVITIES).add(activityData)
+    FBAchievementRepository().incrementDistance(UserInfo.autoLoginKey, activityData.distance!!)
   }
+
 
   suspend fun listUserMakingActivity(limit: Long): List<ActivityData>? {
     return (if (globalStartAfter == null) db.collection(USERS).document(UserInfo.autoLoginKey).collection(ACTIVITIES)
@@ -43,17 +94,19 @@ class FBUsersRepository : BaseFB() {
       }.toObjects(ActivityData::class.java)
   }
 
-  suspend fun listUserRoute(uid: String, limit: Long): List<InfoData>? {
+  suspend fun listUserRoute(uid: String, limit: Long): List<MapInfo>? {
+    Logg.d("ssmm11 global = $globalStartAfter")
+
     val infoDatas =
       if (globalStartAfter == null) {
-        mapsCollectionRef.whereEqualTo(BaseFB.MAKER_ID, uid)
+        mapsCollectionRef.whereEqualTo(MAKER_ID, uid)
       } else {
-        mapsCollectionRef.whereEqualTo(BaseFB.MAKER_ID, uid).startAfter(globalStartAfter!!)
+        mapsCollectionRef.whereEqualTo(MAKER_ID, uid).startAfter(globalStartAfter!!)
       }.limit(limit).get().await().apply {
         if (documents.size == 0)
           return null
         globalStartAfter = documents.last()
-      }.toObjects(InfoData::class.java)
+      }.toObjects(MapInfo::class.java)
 
     val playedMapIdList = FBMapRepository().listPlayed()
     val likedMapIdList = FBMapRepository().listLikedMap()

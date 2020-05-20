@@ -19,7 +19,7 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:gravity="center"
-      android:text="대회 상세정보"/>
+      android:text="대회 상세정보" />
   </Toolbar>
 
   <ScrollView
@@ -182,8 +182,6 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_below="@+id/challengeCourse"/>
-
-
       </RelativeLayout>
 
     </RelativeLayout>

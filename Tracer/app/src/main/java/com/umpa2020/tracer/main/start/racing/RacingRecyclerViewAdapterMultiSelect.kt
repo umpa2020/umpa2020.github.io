@@ -1,11 +1,9 @@
 package com.umpa2020.tracer.main.start.racing
 
 import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import androidx.recyclerview.widget.RecyclerView
 import co.lujun.androidtagview.TagContainerLayout
 import com.umpa2020.tracer.R
@@ -13,17 +11,12 @@ import com.umpa2020.tracer.dataClass.RankingData
 import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.extensions.m_s
 import com.umpa2020.tracer.extensions.show
-import com.umpa2020.tracer.extensions.toRank
-import com.umpa2020.tracer.main.profile.OtherProfileActivity
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.OnSingleClickListener
-import com.umpa2020.tracer.util.UserInfo.nickname
 import kotlinx.android.synthetic.main.recycler_racing_select_people_item.view.*
-import kotlinx.android.synthetic.main.recycler_rankfragment_topplayer_item.view.*
 import kotlinx.android.synthetic.main.recycler_rankfragment_topplayer_item.view.rankRecyclerItemClickChallengerNicknameTextView
 import kotlinx.android.synthetic.main.recycler_rankfragment_topplayer_item.view.rankRecyclerItemClickCountTextView
 import kotlinx.android.synthetic.main.recycler_rankfragment_topplayer_item.view.rankRecyclerItemClickTimeTextView
-import java.util.*
 
 class RacingRecyclerViewAdapterMultiSelect(
   val mydata: MutableList<RankingData>,
@@ -32,6 +25,7 @@ class RacingRecyclerViewAdapterMultiSelect(
 ) : RecyclerView.Adapter<RacingRecyclerViewAdapterMultiSelect.myViewHolder>() {
   var context: Context? = null
   val whichIsCheck = mutableListOf<String>()
+
   //생성된 뷰 홀더에 데이터를 바인딩 해줌.
   override fun onBindViewHolder(holder: myViewHolder, position: Int) {
     val singleItem1 = mydata[position]
@@ -70,23 +64,21 @@ class RacingRecyclerViewAdapterMultiSelect(
         //다시 선택하면 취소
         if (whichIsCheck.contains(singleItem1.challengerNickname)) {
           whichIsCheck.remove(singleItem1.challengerNickname)
-          tagContainerLayout.tags.forEachIndexed {i,text->
-            if(text == singleItem1.challengerNickname){
+          tagContainerLayout.tags.forEachIndexed { i, text ->
+            if (text == singleItem1.challengerNickname) {
               tagContainerLayout.removeTag(i)
             }
             notifyDataSetChanged()
           }
-        }
-        else{
+        } else {
           //size 개수 제한
-          if(whichIsCheck.size < 6){
+          if (whichIsCheck.size < 6) {
             //리스트 뷰에서 선택한 닉네임을 태그 뷰로 추가
             whichIsCheck.add(singleItem1.challengerNickname!!)
             tagContainerLayout.addTag(singleItem1.challengerNickname)
             notifyDataSetChanged()
-          }
-          else
-           context!!.getString(R.string.max_five).show()
+          } else
+            context!!.getString(R.string.max_five).show()
         }
       }
     })

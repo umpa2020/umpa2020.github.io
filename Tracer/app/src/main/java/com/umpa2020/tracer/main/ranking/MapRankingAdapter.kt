@@ -8,11 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.umpa2020.tracer.R
-import com.umpa2020.tracer.constant.Constants.Companion.TIMESTAMP_LENGTH
-import com.umpa2020.tracer.dataClass.InfoData
+import com.umpa2020.tracer.dataClass.MapInfo
 import com.umpa2020.tracer.extensions.prettyDistance
 import com.umpa2020.tracer.network.FBLikesRepository
-import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.recycler_rankfragment_item.view.*
@@ -23,7 +21,7 @@ import kotlinx.coroutines.launch
  * 맵 랭킹 목록 어댑터
  */
 class MapRankingAdapter(
-  val infoDatas: ArrayList<InfoData>,
+  val mapInfos: ArrayList<MapInfo>,
   val mode: String
 ) : RecyclerView.Adapter<MapRankingAdapter.mViewHolder>() {
 
@@ -35,7 +33,7 @@ class MapRankingAdapter(
     holder: mViewHolder,
     position: Int
   ) {
-    val infoData = infoDatas[position]
+    val infoData = mapInfos[position]
     val ranking = position + 1
     val mapTitle = infoData.mapTitle
 
@@ -114,7 +112,7 @@ class MapRankingAdapter(
   //item 사이즈, 데이터의 전체 길이 반ㅎ환
   override fun getItemCount(): Int {
     //return 10
-    return infoDatas.size
+    return mapInfos.size
   }
 
   //여기서 item을 textView에 옮겨줌

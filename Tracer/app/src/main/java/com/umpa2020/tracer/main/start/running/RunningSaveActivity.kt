@@ -13,27 +13,30 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.customUI.WorkaroundMapFragment
-import com.umpa2020.tracer.dataClass.ActivityData
-import com.umpa2020.tracer.dataClass.InfoData
-import com.umpa2020.tracer.dataClass.RankingData
-import com.umpa2020.tracer.dataClass.RouteGPX
+import com.umpa2020.tracer.dataClass.*
 import com.umpa2020.tracer.extensions.*
+import com.umpa2020.tracer.gpx.WayPointType.FINISH_POINT
+import com.umpa2020.tracer.gpx.WayPointType.START_POINT
 import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.map.TraceMap
+import com.umpa2020.tracer.network.BaseFB
+import com.umpa2020.tracer.network.BaseFB.Companion.MAP_ROUTE
+import com.umpa2020.tracer.network.BaseFB.Companion.TRACK_COUNT_0
+import com.umpa2020.tracer.network.BaseFB.Companion.TRACK_COUNT_49
+import com.umpa2020.tracer.network.BaseFB.Companion.TRACK_COUNT_9
+import com.umpa2020.tracer.network.FBAchievementRepository
+import com.umpa2020.tracer.network.FBMapRepository
 import com.umpa2020.tracer.util.*
 import kotlinx.android.synthetic.main.activity_running_save.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
-import com.umpa2020.tracer.gpx.WayPointType.*
-import com.umpa2020.tracer.network.BaseFB
-import com.umpa2020.tracer.network.BaseFB.Companion.MAP_ROUTE
-import com.umpa2020.tracer.network.FBMapRepository
 
-class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleClickListener {
-  var switch = 0
-
-  lateinit var infoData: InfoData
+class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleClickListener, CoroutineScope by MainScope() {
+  lateinit var mapInfo: MapInfo
   lateinit var routeGPX: RouteGPX
   lateinit var traceMap: TraceMap
   val speedList = mutableListOf<Double>()
@@ -42,12 +45,12 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    setContentView(com.umpa2020.tracer.R.layout.activity_running_save)
+    setContentView(R.layout.activity_running_save)
     progressBar = MyProgressBar()
-    infoData = intent.getParcelableExtra("InfoData")!!
+    mapInfo = intent.getParcelableExtra("InfoData")!!
     routeGPX = intent.getParcelableExtra("RouteGPX")!!
     val wmf =
-      supportFragmentManager.findFragmentById(com.umpa2020.tracer.R.id.map_viewer) as WorkaroundMapFragment
+      supportFragmentManager.findFragmentById(R.id.map_viewer) as WorkaroundMapFragment
     wmf.getMapAsync(this)
     wmf.setListener(object : WorkaroundMapFragment.OnTouchListener {
       override fun onTouch() {
@@ -60,9 +63,9 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
       speedList.add(it.speed!!)
       elevationList.add(it.alt)
     }
-    distance_tv.text = infoData.distance!!.prettyDistance
+    distance_tv.text = mapInfo.distance!!.prettyDistance
 
-    time_tv.text = infoData.time!!.format(m_s)
+    time_tv.text = mapInfo.time!!.format(m_s)
     speed_tv.text = String.format("%.2f", speedList.average())
 
     val myChart = Chart(elevationList, speedList, chart)
@@ -150,32 +153,57 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
     val timestamp = Date().time
 
     // 인포데이터에 필요한 내용을 저장하고
-    infoData.mapId = mapTitleEdit.text.toString() + timestamp.toString()
-    infoData.makerId = UserInfo.autoLoginKey
-    infoData.mapTitle = mapTitleEdit.text.toString()
-    infoData.mapImagePath = "mapImage/${infoData.mapTitle}"
-    infoData.mapExplanation = mapExplanationEdit.text.toString()
-    infoData.plays = 1
-    infoData.likes = 0
-    infoData.maxSpeed = speedList.max()!!
-    infoData.averageSpeed = speedList.average()
-    infoData.routeGPXPath = "$MAP_ROUTE/${infoData.mapId}/${infoData.mapId}"
+    mapInfo.mapId = mapTitleEdit.text.toString() + timestamp.toString()
+    mapInfo.makerId = UserInfo.autoLoginKey
+    mapInfo.mapTitle = mapTitleEdit.text.toString()
+    mapInfo.mapImagePath = "mapImage/${mapInfo.mapTitle}"
+    mapInfo.mapExplanation = mapExplanationEdit.text.toString()
+    mapInfo.plays = 1
+    mapInfo.likes = 0
+    mapInfo.maxSpeed = speedList.max()!!
+    mapInfo.averageSpeed = speedList.average()
+    mapInfo.routeGPXPath = "$MAP_ROUTE/${mapInfo.mapId}/${mapInfo.mapId}"
+    mapInfo.createTime = timestamp
 
     val rankingData = RankingData(
       UserInfo.nickname,
       UserInfo.autoLoginKey,
       UserInfo.nickname,
-      infoData.time,
+      mapInfo.time,
       true,
       speedList.max().toString(),
       speedList.average().toString(),
-      "${BaseFB.MAP_ROUTE}/${infoData.mapId}/racingGPX/${UserInfo.autoLoginKey}"
+      "${BaseFB.MAP_ROUTE}/${mapInfo.mapId}/racingGPX/${UserInfo.autoLoginKey}"
     )
-    val activityData = ActivityData(infoData.mapId, timestamp, infoData.distance, infoData.time,"map save")
-    Logg.d("Start Upload")
+    val activityData = ActivityData(mapInfo.mapId, timestamp, mapInfo.distance, mapInfo.time, BaseFB.ActivityMode.MAP_SAVE)
+    val trophyData = TrophyData(mapInfo.mapId, 1)
 
-    FBMapRepository().uploadMap(infoData, rankingData, activityData, timestamp.toString(), routeGpxFile, Uri.fromFile(File(imgPath)))
+    Logg.d("Start Upload")
+    FBMapRepository().uploadMap(mapInfo, rankingData, activityData, timestamp.toString(), routeGpxFile, Uri.fromFile(File(imgPath)), trophyData)
+    FBAchievementRepository().incrementPlays(mapInfo.makerId)
     Logg.d("Finish Upload")
+
+    launch {
+      val uid = UserInfo.autoLoginKey
+      FBAchievementRepository().getAchievement(uid).let {
+        when (it?.trackMake) {
+          TRACK_COUNT_0 -> {
+            FBAchievementRepository().setTrackMaker1Emblem(uid)
+          }
+          TRACK_COUNT_9 -> {
+            FBAchievementRepository().setTrackMaker10Emblem(uid)
+          }
+          TRACK_COUNT_49 -> {
+            FBAchievementRepository().setTrackMaker50Emblem(uid)
+          }
+          null -> {
+            Logg.e("error")
+          }
+        }
+        FBAchievementRepository().incrementTrackMake(uid)
+      }
+    }
+
     progressBar.dismiss()
     finish()
   }

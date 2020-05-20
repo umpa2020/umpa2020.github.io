@@ -11,15 +11,15 @@
     android:layout_height="50dp"
     android:layout_alignParentTop="true"
     android:background="@color/white"
-    android:elevation="1dp"
-    android:contentInsetStart="0dp">
+    android:contentInsetStart="0dp"
+    android:elevation="1dp">
 
     <TextView
       style="@style/appBarText"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:gravity="center"
-      android:text="@string/detailedmap"/>
+      android:text="@string/detailedmap" />
   </Toolbar>
 
   <ScrollView
@@ -285,7 +285,6 @@
           android:layout_height="200dp"
           android:layout_below="@+id/rankingDetailMapDetailItem3"
           android:layout_marginTop="10dp">
-
         </com.github.mikephil.charting.charts.LineChart>
 
       </RelativeLayout>

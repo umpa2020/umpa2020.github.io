@@ -10,12 +10,10 @@ import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.RankingData
 import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.extensions.m_s
-import com.umpa2020.tracer.main.profile.OtherProfileActivity
+import com.umpa2020.tracer.main.profile.ProfileActivity
 import com.umpa2020.tracer.network.BaseFB
-import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.recycler_rankfragment_topplayer_item.view.*
-import java.util.*
 
 class RankRecyclerViewAdapterTopPlayer(val mydata: MutableList<RankingData>, val mapId: String) :
   RecyclerView.Adapter<RankRecyclerViewAdapterTopPlayer.myViewHolder>() {
@@ -47,7 +45,7 @@ class RankRecyclerViewAdapterTopPlayer(val mydata: MutableList<RankingData>, val
     holder.itemView.setOnClickListener(object : OnSingleClickListener {
       override fun onSingleClick(v: View?) {
 
-        val nextIntent = Intent(context, OtherProfileActivity::class.java)
+        val nextIntent = Intent(context, ProfileActivity::class.java)
         nextIntent.putExtra(BaseFB.USER_ID, singleItem1.challengerId)
         context!!.startActivity(nextIntent)
       }
@@ -60,7 +58,7 @@ class RankRecyclerViewAdapterTopPlayer(val mydata: MutableList<RankingData>, val
     val view = LayoutInflater.from(parent.context)
       .inflate(R.layout.recycler_rankfragment_topplayer_item, parent, false)
     context = parent.context
-    Logg.d("onCreateViewHolder호출")
+
     return myViewHolder(view) //view 객체는 한개의 리사이클러뷰가 디자인 되어 있는 레이아웃을 의미
   }
 

@@ -15,7 +15,7 @@ import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants.Companion.ANIMATION_DURATION_TIME
 import com.umpa2020.tracer.constant.Constants.Companion.MAX_DISTANCE
 import com.umpa2020.tracer.constant.Constants.Companion.MAX_SEEKERBAR
-import com.umpa2020.tracer.dataClass.InfoData
+import com.umpa2020.tracer.dataClass.MapInfo
 import com.umpa2020.tracer.network.FBRankingRepository
 import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.OnSingleClickListener
@@ -34,7 +34,7 @@ class RankingFragment : Fragment(), OnSingleClickListener {
   lateinit var root: View
   lateinit var rankingRepo: FBRankingRepository
 
-  var rootInfoDatas = arrayListOf<InfoData>()
+  var rootInfoDatas = arrayListOf<MapInfo>()
   var distance = MAX_DISTANCE
   var tuneDistance = 0
   var isLoding = false
@@ -70,7 +70,7 @@ class RankingFragment : Fragment(), OnSingleClickListener {
             if (!isLoding) {
               MainScope().launch {
                 progressBar.show()
-                FBRankingRepository().listFilterRange(rankingLatLng!!, tuneDistance, "plays", limit).let {
+                rankingRepo.listFilterRange(rankingLatLng!!, tuneDistance, "plays", limit).let {
                   getRank(it, "plays")
                 }
               }
@@ -80,7 +80,7 @@ class RankingFragment : Fragment(), OnSingleClickListener {
             if (!isLoding) {
               MainScope().launch {
                 progressBar.show()
-                FBRankingRepository().listFilterRange(rankingLatLng!!, tuneDistance, "likes", limit).let {
+                rankingRepo.listFilterRange(rankingLatLng!!, tuneDistance, "likes", limit).let {
                   getRank(it, "likes")
                 }
               }
@@ -137,7 +137,7 @@ class RankingFragment : Fragment(), OnSingleClickListener {
 
       R.id.applyButton -> { //적용 버튼 누를때
         tuneDistance = distance
-
+        rankingRepo = FBRankingRepository()
         rootInfoDatas.clear()
 
         if (rankingLatLng != null) {
@@ -147,7 +147,7 @@ class RankingFragment : Fragment(), OnSingleClickListener {
 
             MainScope().launch {
               progressBar.show()
-              FBRankingRepository().listRanking(rankingLatLng!!, tuneDistance, "plays", limit).let {
+              rankingRepo.listRanking(rankingLatLng!!, tuneDistance, "plays", limit).let {
                 getRank(it, "plays")
               }
             }
@@ -156,7 +156,7 @@ class RankingFragment : Fragment(), OnSingleClickListener {
 
             MainScope().launch {
               progressBar.show()
-              FBRankingRepository().listRanking(rankingLatLng!!, tuneDistance, "likes", limit).let {
+              rankingRepo.listRanking(rankingLatLng!!, tuneDistance, "likes", limit).let {
                 getRank(it, "likes")
               }
             }
@@ -179,10 +179,11 @@ class RankingFragment : Fragment(), OnSingleClickListener {
         //실행순 버튼에 체크가 되어 있을 경우
         if (requireView().tuneRadioBtnExecute.isChecked) {
           requireView().rankingfiltermode.text = getString(R.string.execute)
+          rankingRepo = FBRankingRepository()
 
           MainScope().launch {
             progressBar.show()
-            FBRankingRepository().listRanking(rankingLatLng!!, tuneDistance, "plays", limit).let {
+            rankingRepo.listRanking(rankingLatLng!!, tuneDistance, "plays", limit).let {
               getRank(it, "plays")
             }
           }
@@ -191,7 +192,7 @@ class RankingFragment : Fragment(), OnSingleClickListener {
 
           MainScope().launch {
             progressBar.show()
-            FBRankingRepository().listRanking(rankingLatLng!!, tuneDistance, "likes", limit).let {
+            rankingRepo.listRanking(rankingLatLng!!, tuneDistance, "likes", limit).let {
               getRank(it, "likes")
             }
           }
@@ -229,10 +230,10 @@ class RankingFragment : Fragment(), OnSingleClickListener {
     requireView().tuneLinearLayout.startAnimation(animate)
   }
 
-  fun getRank(infoDatas: MutableList<InfoData>, mode: String) {
+  fun getRank(mapInfos: MutableList<MapInfo>, mode: String) {
     progressBar.dismiss()
 
-    rootInfoDatas.addAll(infoDatas)
+    rootInfoDatas.addAll(mapInfos)
     if (rootInfoDatas.isEmpty()) {
       rankingRecyclerRouteisEmpty.visibility = View.VISIBLE
     } else {

@@ -8,10 +8,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
-import com.umpa2020.tracer.constant.Constants.Companion.TIMESTAMP_LENGTH
 import com.umpa2020.tracer.extensions.image
-import com.umpa2020.tracer.network.*
 import com.umpa2020.tracer.network.BaseFB.Companion.MAP_ID
+import com.umpa2020.tracer.network.FBLikesRepository
+import com.umpa2020.tracer.network.FBMapRepository
+import com.umpa2020.tracer.network.FBProfileRepository
+import com.umpa2020.tracer.network.FBUsersRepository
 import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.UserInfo
@@ -24,7 +26,6 @@ import kotlinx.coroutines.withContext
 class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener {
   val activity = this
   var likes = 0
-  var mapTitle = ""
   var mapId = ""
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,13 +40,13 @@ class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener
 
     val intent = intent
     //전달 받은 값으로 Title 설정
-    mapId = intent.getStringExtra(MAP_ID)
+    mapId = intent.getStringExtra(MAP_ID)!!
 
     MainScope().launch {
       withContext(Dispatchers.IO) {
         FBMapRepository().getMapInfo(mapId)
       }?.let {
-        mapTitle = it.mapTitle
+        rankRecyclerMapTitle.text = it.mapTitle
         it.makerId.let {
           FBProfileRepository().getUserNickname(it).let {
             rankRecyclerNickname.text = it
@@ -57,7 +58,6 @@ class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener
       }
     }
 
-    rankRecyclerMapTitle.text = mapTitle
     MainScope().launch {
       rankRoutePriview.image(FBMapRepository().getMapImage(mapId))
       setLiked(FBLikesRepository().isLiked(UserInfo.autoLoginKey, mapId), FBLikesRepository().getMapLikes(mapId))

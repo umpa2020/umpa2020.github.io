@@ -1,4 +1,4 @@
-package com.umpa2020.tracer.lockscreen.util
+package com.umpa2020.tracer.viewModel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel

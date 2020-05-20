@@ -15,21 +15,24 @@ import com.umpa2020.tracer.extensions.image
 import com.umpa2020.tracer.extensions.m_s
 import com.umpa2020.tracer.extensions.prettyDistance
 import com.umpa2020.tracer.main.profile.myActivity.ProfileActivityActivity
+import com.umpa2020.tracer.main.profile.myachievement.ProfileAchievementActivity
 import com.umpa2020.tracer.main.profile.myroute.ProfileRouteActivity
 import com.umpa2020.tracer.main.profile.settting.AppSettingActivity
 import com.umpa2020.tracer.network.BaseFB
+import com.umpa2020.tracer.network.BaseFB.Companion.DISTANCE
 import com.umpa2020.tracer.network.FBProfileRepository
-import com.umpa2020.tracer.util.Logg
+import com.umpa2020.tracer.network.FBUsersRepository
 import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.fragment_profile.*
+import kotlinx.android.synthetic.main.fragment_profile.profileFragmentTotalDistance
+import kotlinx.android.synthetic.main.fragment_profile.profileImageView
 import kotlinx.android.synthetic.main.fragment_profile.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-
 
 /**
  * A simple [Fragment] subclass.
@@ -38,6 +41,7 @@ class ProfileFragment() : Fragment(), OnSingleClickListener, Parcelable {
   lateinit var root: View
   var bundle = Bundle()
   val progressBar = MyProgressBar()
+  var distance = 0.0
 
   constructor(parcel: Parcel) : this() {
     bundle = parcel.readBundle(Bundle::class.java.classLoader)!!
@@ -49,7 +53,7 @@ class ProfileFragment() : Fragment(), OnSingleClickListener, Parcelable {
     root.appSettingButton.setOnClickListener(this)
     root.profileRouteTextView.setOnClickListener(this)
     root.profileRecordTextView.setOnClickListener(this)
-
+    root.profileAchivementTextView.setOnClickListener(this)
     return root
   }
 
@@ -70,6 +74,12 @@ class ProfileFragment() : Fragment(), OnSingleClickListener, Parcelable {
         val nextIntent = Intent(activity, ProfileActivityActivity::class.java)
         startActivity(nextIntent)
       }
+
+      R.id.profileAchivementTextView -> { // 나의 업적 액티비티
+        val nextIntent = Intent(activity, ProfileAchievementActivity::class.java)
+        nextIntent.putExtra(BaseFB.USER_ID, UserInfo.autoLoginKey)
+        startActivity(nextIntent)
+      }
     }
   }
 
@@ -87,9 +97,15 @@ class ProfileFragment() : Fragment(), OnSingleClickListener, Parcelable {
       }.let {
         profileImageView.image(it.imgPath)
         profileFragmentTotalDistance.text = it.distance.prettyDistance
+        distance = it.distance
         profileFragmentTotalTime.text = it.time.format(m_s)
-        progressBar.dismiss()
       }
+        FBUsersRepository().listUserAchievement(UserInfo.autoLoginKey).let {
+          medal1th.text = it[0].toString()
+          medal2nd.text = it[1].toString()
+          medal3rd.text = it[2].toString()
+          progressBar.dismiss()
+        }
     }
   }
 

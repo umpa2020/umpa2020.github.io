@@ -42,7 +42,7 @@ class FBLikesRepository : BaseFB() {
       usersCollectionRef.document(UserInfo.autoLoginKey).collection(LIKED_MAP)
         .add(LikedMapData(mapId))
       mapsCollectionRef.document(mapId).collection(LIKES).add(UserId(uid))
-     mapsCollectionRef.document(mapId).update(LIKES, FieldValue.increment(1))
+      mapsCollectionRef.document(mapId).update(LIKES, FieldValue.increment(1))
     }
   }
 }

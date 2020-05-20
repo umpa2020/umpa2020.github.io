@@ -3,7 +3,6 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
   android:background="@color/white"
   android:orientation="vertical"
   tools:context=".login.join.GenderSelectActivity">
@@ -43,7 +42,7 @@
           android:layout_height="wrap_content"
           android:gravity="center"
           android:text="@string/man"
-          android:textSize="20dp"/>
+          android:textSize="20dp" />
 
         <ImageView
           android:id="@+id/manCheck"
@@ -56,10 +55,10 @@
       </FrameLayout>
 
       <View
-        android:layout_marginTop="10dp"
         android:id="@+id/manUnderline"
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_marginTop="10dp"
         android:background="@color/red"
         android:visibility="invisible" />
     </LinearLayout>
@@ -86,7 +85,7 @@
           android:layout_height="wrap_content"
           android:gravity="center"
           android:text="@string/woman"
-          android:textSize="20dp"/>
+          android:textSize="20dp" />
 
         <ImageView
           android:id="@+id/womanCheck"
@@ -99,10 +98,10 @@
       </FrameLayout>
 
       <View
-        android:layout_marginTop="10dp"
         android:id="@+id/womanUnderline"
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_marginTop="10dp"
         android:background="@color/red"
         android:visibility="invisible" />
     </LinearLayout>

@@ -10,8 +10,8 @@
     android:layout_width="match_parent"
     android:layout_height="50dp"
     android:background="@color/white"
-    android:elevation="1dp"
-    android:contentInsetStart="0dp">
+    android:contentInsetStart="0dp"
+    android:elevation="1dp">
 
     <TextView
       android:id="@+id/profileRouteMyRoute"
@@ -19,7 +19,7 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:gravity="center"
-      android:text="@string/my_route"/>
+      android:text="@string/my_route" />
   </Toolbar>
 
 
@@ -27,7 +27,7 @@
     android:id="@+id/profileRecyclerRoute"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="50dp"/>
+    android:layout_marginTop="50dp" />
 
   <TextView
     android:id="@+id/profileRecyclerRouteisEmpty"
