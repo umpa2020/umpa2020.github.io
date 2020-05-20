@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.os.Bundle
+import kotlinx.coroutines.Job
 
 class App : Application() {
   companion object {
@@ -14,6 +15,7 @@ class App : Application() {
       return instance.applicationContext
     }
 
+    val jobList = mutableListOf<Job>()
     const val notificationId: Int = 1 // 알림창 Id 통일.
   }
 

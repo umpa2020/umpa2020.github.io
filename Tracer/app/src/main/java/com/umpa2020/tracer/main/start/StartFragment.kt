@@ -23,6 +23,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.App
+import com.umpa2020.tracer.App.Companion.jobList
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.MapInfo
 import com.umpa2020.tracer.dataClass.RouteGPX
@@ -62,7 +63,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
   val progressBar = MyProgressBar()
   var firstFlag = true
   lateinit var mCustomMarkerView: View
-  var zoomLevel : Float? = 16f // 줌 레벨 할당
+  var zoomLevel: Float? = 16f // 줌 레벨 할당
 
   override fun onSingleClick(v: View?) {
     when (v!!.id) {
@@ -135,7 +136,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
   private fun searchThisArea() {
     progressBar.show()
     val bound = traceMap!!.mMap.projection.visibleRegion.latLngBounds
-    MainScope().launch {
+    jobList.add(MainScope().launch {
       FBMapRepository().listNearMap(bound.southwest, bound.northeast).let { nearMapList ->
         if (nearMapList == null) {
           getString(R.string.not_search).show()
@@ -166,7 +167,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
           progressBar.dismiss()
         }
       }
-    }
+    })
   }
 
   /**
@@ -289,7 +290,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
 
     traceMap!!.mMap.setOnMarkerClickListener {
       it.showInfoWindow()
-      MainScope().launch {
+      jobList.add(MainScope().launch {
         if (it.tag != null) {
           FBMapRepository().getMapInfo(it.tag as String)?.let {
             FBStorageRepository().getFile(it.routeGPXPath).gpxToClass().let {
@@ -298,7 +299,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
           }
         }
 
-      }
+      })
       true
     }
     traceMap!!.mMap.uiSettings.isCompassEnabled = true
@@ -400,6 +401,8 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
 
   override fun onPause() {
     super.onPause()
+    jobList.forEach { it.cancel() }
+    jobList.clear()
     // 브로드 캐스트 해제
     LocalBroadcastManager.getInstance(this.requireContext())
       .unregisterReceiver(locationBroadcastReceiver)
