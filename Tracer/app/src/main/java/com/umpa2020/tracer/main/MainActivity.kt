@@ -6,7 +6,8 @@ import android.os.Bundle
 import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import androidx.navigation.findNavController
+import androidx.navigation.ui.setupWithNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.iid.FirebaseInstanceId
@@ -14,10 +15,6 @@ import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.locationBackground.LocationBackgroundService
 import com.umpa2020.tracer.locationBackground.ServiceStatus
-import com.umpa2020.tracer.main.challenge.ChallengeFragment
-import com.umpa2020.tracer.main.profile.ProfileFragment
-import com.umpa2020.tracer.main.ranking.RankingFragment
-import com.umpa2020.tracer.main.start.StartFragment
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.TTS
 import com.umpa2020.tracer.util.UserInfo
@@ -39,8 +36,6 @@ class MainActivity : AppCompatActivity() {
 
     val navController = findNavController(R.id.nav_host_fragment)
     bottom_navigation.setupWithNavController(navController)
-
-
 
     locationViewModel = ViewModelProvider(this).get(LocationViewModel::class.java)
 
