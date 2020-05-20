@@ -52,6 +52,8 @@
     <activity android:name=".main.profile.settting.AppSettingActivity" />
     <activity android:name=".main.profile.myroute.ProfileRouteActivity" />
     <activity android:name=".main.profile.ProfileActivity" />
+    <activity android:name=".main.start.challengeracing.ChallengeRacingActivity" />
+    <activity android:name=".main.start.challengeracing.ChallengeRacingFinishActivity" />
 
     <service
       android:name=".locationBackground.LocationBackgroundService"

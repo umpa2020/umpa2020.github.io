@@ -1,6 +1,7 @@
 package com.umpa2020.tracer.main.start
 
 import android.content.IntentFilter
+import android.content.pm.ActivityInfo
 import android.location.Location
 import android.os.Bundle
 import android.os.SystemClock
@@ -38,6 +39,7 @@ import hollowsoft.slidingdrawer.OnDrawerCloseListener
 import hollowsoft.slidingdrawer.OnDrawerOpenListener
 import hollowsoft.slidingdrawer.OnDrawerScrollListener
 import hollowsoft.slidingdrawer.SlidingDrawer
+import kotlinx.android.synthetic.main.activity_running.*
 
 
 open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDrawerScrollListener,
@@ -60,18 +62,6 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
   var timeWhenStopped: Long = 0   //일시정지된 시간
   var cameraZoomSize = 0.0f   //camera zoom size
 
-  //공통으로 업데이트 해주는 View
-  lateinit var chronometer: Chronometer
-  lateinit var startButton: Button
-  lateinit var stopButton: Button
-  lateinit var pauseButton: Button
-  lateinit var notificationTextView: TextView
-  lateinit var pauseNotificationTextView: TextView
-  lateinit var speedTextView: TextView
-  lateinit var distanceTextView: TextView
-  lateinit var drawerHandle: Button
-  lateinit var drawer: SlidingDrawer
-
   private var wedgedCamera = true
   lateinit var locationBroadcastReceiver: LocationBroadcastReceiver
   var unPassedIcon = R.drawable.ic_checkpoint_gray.makingIcon()
@@ -79,17 +69,15 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
 
 
   open fun init() {
-    drawer.setOnDrawerScrollListener(this)
-    drawer.setOnDrawerOpenListener(this)
-    drawer.setOnDrawerCloseListener(this)
+    runningDrawer.setOnDrawerScrollListener(this)
+    runningDrawer.setOnDrawerOpenListener(this)
+    runningDrawer.setOnDrawerCloseListener(this)
+    runningStartButton.setOnClickListener(this)
+    runningStopButton.setOnClickListener(this)
+    runningPauseButton.setOnClickListener(this)
   }
 
   override fun onMapReady(googleMap: GoogleMap) {
-    startButton.setOnClickListener(this)
-    pauseButton.setOnClickListener(this)
-    stopButton.setOnClickListener(this)
-
-
     traceMap = TraceMap(googleMap) //구글맵
 
     var i = 0
@@ -97,31 +85,32 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     val latLng = LatLng(UserInfo.lat.toDouble(), UserInfo.lng.toDouble())
 
     val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 17f)
-    traceMap.mMap.moveCamera(cameraUpdate)
+    with(traceMap){
+      mMap.moveCamera(cameraUpdate)
+      mMap.setOnCameraMoveCanceledListener {
+        wedgedCamera = false
+      }
+      mMap.setOnMyLocationButtonClickListener {
+        wedgedCamera = true
+        true
+      }
+      mMap.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
+      mMap.uiSettings.isCompassEnabled = true
+      mMap.uiSettings.isZoomControlsEnabled = true
+    }
 
-    traceMap.mMap.setOnCameraMoveCanceledListener {
-      wedgedCamera = false
-    }
-    traceMap.mMap.setOnMyLocationButtonClickListener {
-      wedgedCamera = true
-      true
-    }
-    traceMap.mMap.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
-    traceMap.mMap.uiSettings.isCompassEnabled = true
-    traceMap.mMap.uiSettings.isZoomControlsEnabled = true
     wedgedCamera = true
   }
 
   // 위치를 브로드케스트에서 받아 지속적으로 업데이트
   open fun updateLocation(curLoc: Location) {
     currentLocation = curLoc
-    distanceTextView.text = distance.prettyDistance
-    speedTextView.text = speed.prettySpeed()
+    runningDistanceTextView.text = distance.prettyDistance
+    runningSpeedTextView.text = speed.prettySpeed()
 
     // room DB에 속도, 거리 데이터 업데이트.
 //    recordViewModel.updateSpeedDistance(speed.lockSpeed, distance.lockDistance)
     locationViewModel.setDistanceSpeed(DistanceTimeData(distance.lockDistance, speed.lockSpeed))
-
     if (setLocation(curLoc)) {
       when (userState) {
         UserState.NORMAL -> {
@@ -130,7 +119,7 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
         }
         UserState.RUNNING -> {
           distance += SphericalUtil.computeDistanceBetween(previousLatLng, currentLatLng)
-          traceMap.drawPolyLine(previousLatLng, currentLatLng)
+          traceMap!!.drawPolyLine(previousLatLng, currentLatLng)
           //tplist에 추가
           trkList.add(curLoc.toWayPoint(TRACK_POINT))
         }
@@ -150,15 +139,15 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     userState = UserState.RUNNING
     anim()
 
-    chronometer.base = SystemClock.elapsedRealtime()
-    chronometer.start()
+    runningTimerTextView.base = SystemClock.elapsedRealtime()
+    runningTimerTextView.start()
 
     // DB에 시작 시간 업데이트
-    notificationTextView.visibility = View.GONE
+    runningNotificationTextView.visibility = View.GONE
     lockScreen(true)
 
     // DB 초기값 설정 => 시작 시간 설정
-    locationViewModel.setTimes(TimeData(chronometer.base, true, 0L, ""))
+    locationViewModel.setTimes(TimeData(runningTimerTextView.base, true, 0L, ""))
   }
 
   open fun pause() {
@@ -167,29 +156,29 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     privacy = Privacy.PUBLIC
     userState = UserState.PAUSED
 
-    timeWhenStopped = chronometer.base - SystemClock.elapsedRealtime()
+    timeWhenStopped = runningTimerTextView.base - SystemClock.elapsedRealtime()
 
     // 시간 텍스트 설정, 시간 통제 업데이트
-    locationViewModel.setTimes(TimeData(0L, false, timeWhenStopped, chronometer.text.toString()))
+    locationViewModel.setTimes(TimeData(0L, false, timeWhenStopped, runningTimerTextView.text.toString()))
 
-    chronometer.stop()
-    pauseButton.text = getString(R.string.restart)
+    runningTimerTextView.stop()
+    runningPauseButton.text = getString(R.string.restart)
 
     pauseNotice(getString(R.string.notece_msg_stop_tracking))
   }
 
   open fun restart() {
     userState = UserState.RUNNING
-    pauseButton.text = getString(R.string.pause)
+    runningPauseButton.text = getString(R.string.pause)
     val restartTime = SystemClock.elapsedRealtime()
-    chronometer.base = restartTime + timeWhenStopped
+    runningTimerTextView.base = restartTime + timeWhenStopped
 
     // 시간 통제 업데이트, 재시작 업데이트
     locationViewModel.setTimes(TimeData(restartTime, true, timeWhenStopped, ""))
 
-    chronometer.start()
+    runningTimerTextView.start()
 
-    pauseNotificationTextView.invisible()
+    runningPauseNotificationTextView.invisible()
     disappearAnimation()
   }
 
@@ -199,19 +188,19 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     // 시간 통제 업데이트
     locationViewModel.setTimes(TimeData(0L, false, 0L, ""))
 
-    chronometer.stop()
+    runningTimerTextView.stop()
     lockScreen(false)
   }
 
   fun pauseNotice(str: String) {
-    pauseNotificationTextView.visible()
-    pauseNotificationTextView.text = str
+    runningPauseNotificationTextView.visible()
+    runningPauseNotificationTextView.text = str
     appearAnimation()
   }
 
   fun notice(str: String) {
-    notificationTextView.visibility = View.VISIBLE
-    notificationTextView.text = str
+    runningNotificationTextView.visibility = View.VISIBLE
+    runningNotificationTextView.text = str
   }
 
   fun setLocation(location: Location): Boolean {//현재위치를 이전위치로 변경
@@ -224,7 +213,10 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
       moving = false
     } else {
       moving = true
-      if (wedgedCamera) traceMap.moveCamera(location)
+      if (wedgedCamera) {
+        if(!::traceMap.isInitialized) return false
+         traceMap.moveCamera(location)
+      }
     }
     return moving
   }
@@ -246,10 +238,11 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+    requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+    setContentView(R.layout.activity_running)
     locationBroadcastReceiver = LocationBroadcastReceiver(this)
     LocalBroadcastManager.getInstance(this)
       .registerReceiver(locationBroadcastReceiver, IntentFilter("custom-event-name"))
-
 
     // 거리, 속도, 시간 관련 데이터 초기 설정.
     locationViewModel.init(DistanceTimeData("0.0", "0.0"), TimeData(0L, false, 0L, "0.0"))
@@ -302,7 +295,7 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
       getString(R.string.yes), getString(R.string.no),
       View.OnClickListener {
         //Yes 버튼 눌렀을 때
-        notificationTextView.visibility = View.GONE
+        runningNotificationTextView.visibility = View.GONE
         noticePopup.dismiss()
         pause()
       },
@@ -318,7 +311,7 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
    */
 
   fun appearAnimation() {
-    val height = pauseNotificationTextView.height.toFloat()
+    val height = runningPauseNotificationTextView.height.toFloat()
 
 
     val translationAnimation1 = TranslateAnimation(0f, 0f, 0f, height)
@@ -337,22 +330,22 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     animationSet.fillAfter = true
     animationSet.fillBefore = true
     animationSet.duration = Constants.PAUSE_ANIMATION_DURATION_TIME
-    pauseNotificationTextView.animation = animationSet
-    pauseNotificationTextView.animation.start()
+    runningPauseNotificationTextView.animation = animationSet
+    runningPauseNotificationTextView.animation.start()
   }
 
   /**
    * 레이아웃이 스르륵 사라지는 함수
    */
   fun disappearAnimation() {
-    val height = pauseNotificationTextView.height.toFloat()
-    pauseNotificationTextView.clearAnimation() // 일시정지 애니메이션 종료
-    pauseNotificationTextView.invisible()
+    val height = runningPauseNotificationTextView.height.toFloat()
+    runningPauseNotificationTextView.clearAnimation() // 일시정지 애니메이션 종료
+    runningPauseNotificationTextView.invisible()
 
 
     val translationAnimation1 = TranslateAnimation(0f, 0f, height, 0f)
     translationAnimation1.duration = Constants.PAUSE_ANIMATION_DURATION_TIME
-    pauseNotificationTextView.startAnimation(translationAnimation1)
+    runningPauseNotificationTextView.startAnimation(translationAnimation1)
   }
 
   /**
@@ -361,11 +354,11 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
   fun anim() {
     val fabOpen =
       AnimationUtils.loadAnimation(applicationContext, R.anim.running_btn_open) // 애니매이션 초기화
-    startButton.visibility = View.INVISIBLE
-    stopButton.startAnimation(fabOpen)
-    pauseButton.startAnimation(fabOpen)
-    stopButton.isClickable = true
-    pauseButton.isClickable = true
+    runningStartButton.visibility = View.INVISIBLE
+    runningStopButton.startAnimation(fabOpen)
+    runningPauseButton.startAnimation(fabOpen)
+    runningStopButton.isClickable = true
+    runningPauseButton.isClickable = true
   }
 
   override fun onScrollStarted() {
@@ -377,12 +370,12 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
   }
 
   override fun onDrawerOpened() {
-    drawerHandle.text = "▼"
+    runningHandle.text = "▼"
 
   }
 
   override fun onDrawerClosed() {
-    drawerHandle.text = "▲"
+    runningHandle.text = "▲"
 
   }
 
