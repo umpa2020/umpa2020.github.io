@@ -4,7 +4,9 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.ChallengeData
+import com.umpa2020.tracer.dataClass.MapInfo
 import com.umpa2020.tracer.network.FBChallengeRepository
+import com.umpa2020.tracer.network.FBMapRepository
 import kotlinx.android.synthetic.main.activity_challenge_data_setting.*
 import java.util.*
 
@@ -39,11 +41,16 @@ class ChallengeDataSettingActivity : AppCompatActivity() {
         "${challenge10.text}",
         "${challenge11.text}",
         cutted,
-        "challenge/$timeStamp",
         "challenge/$timeStamp/$timeStamp.jpg"
       )
 
       FBChallengeRepository().createChallengeData(challengeData)
+
+      val mapInfo = MapInfo(
+        challengeData.id!!, challengeData.name!!, challengeData.host!!, "", "", "mapRoute/${challengeData.id}/${challengeData.id}",
+        0.0, 0, 0, 0, 0.0, 0.0, false, false, 0.0, 0.0, ""
+      )
+      FBMapRepository().mapsCollectionRef.document(mapInfo.mapId).set(mapInfo)
     }
   }
 }
