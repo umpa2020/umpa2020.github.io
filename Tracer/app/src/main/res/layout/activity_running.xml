@@ -215,4 +215,16 @@
         android:visibility="invisible" />
     </LinearLayout>
   </FrameLayout>
+
+  <TextView
+    android:id="@+id/countDownTextView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_centerInParent="true"
+    android:background="@color/white"
+    android:gravity="center"
+    android:textColor="@color/red"
+    android:textSize="200sp"
+    android:textStyle="bold"
+    android:visibility="gone" />
 </RelativeLayout>

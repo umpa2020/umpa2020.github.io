@@ -3,6 +3,7 @@ package com.umpa2020.tracer.main.start
 import android.content.IntentFilter
 import android.location.Location
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.os.SystemClock
 import android.view.View
 import android.view.animation.*
@@ -30,15 +31,14 @@ import com.umpa2020.tracer.gpx.WayPointType.TRACK_POINT
 import com.umpa2020.tracer.lockscreen.util.LockScreen
 import com.umpa2020.tracer.main.MainActivity.Companion.locationViewModel
 import com.umpa2020.tracer.map.TraceMap
-import com.umpa2020.tracer.util.ChoicePopup
-import com.umpa2020.tracer.util.Logg
-import com.umpa2020.tracer.util.OnSingleClickListener
-import com.umpa2020.tracer.util.UserInfo
+import com.umpa2020.tracer.util.*
 import hollowsoft.slidingdrawer.OnDrawerCloseListener
 import hollowsoft.slidingdrawer.OnDrawerOpenListener
 import hollowsoft.slidingdrawer.OnDrawerScrollListener
 import hollowsoft.slidingdrawer.SlidingDrawer
 import kotlinx.android.synthetic.main.activity_running.*
+import java.lang.String.format
+import java.util.*
 
 
 open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDrawerScrollListener,
@@ -46,7 +46,7 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
   OnDrawerCloseListener, OnSingleClickListener {
   lateinit var traceMap: TraceMap
   var privacy = Privacy.RACING
-  var currentLocation: Location? = null // 가끔 null 오류가 나서 이렇게 수정
+  lateinit var currentLocation: Location // 가끔 null 오류가 나서 이렇게 수정
   var distance = 0.0
   var time = 0.0
   var previousLatLng = LatLng(0.0, 0.0)          //이전위
@@ -79,9 +79,13 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
   var unPassedIcon = R.drawable.ic_checkpoint_gray.makingIcon()
   var passedIcon = R.drawable.ic_checkpoint_red.makingIcon()
 
-  var zoomLevel : Float? = 16f // 줌 레벨 할당
+  var zoomLevel: Float? = 16f // 줌 레벨 할당
+  lateinit var progressBar: MyProgressBar
 
   open fun init() {
+    progressBar = MyProgressBar().apply {
+      show()
+    }
     drawer.setOnDrawerScrollListener(this)
     drawer.setOnDrawerOpenListener(this)
     drawer.setOnDrawerCloseListener(this)
@@ -98,32 +102,19 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     val latLng = LatLng(UserInfo.lat.toDouble(), UserInfo.lng.toDouble())
     traceMap.initCamera(latLng)
 
-    traceMap.mMap.setOnCameraMoveCanceledListener {
-      Logg.d("구글 맵 클릭")
-    }
-
-    traceMap.mMap.setOnMapClickListener{
-      Logg.d("구글 맵 클릭")
-    }
-
     traceMap.mMap.setOnCameraMoveStartedListener {
       // 공개 정적 최종 정수 REASON_GESTURE, 지도에서 사용자의 제스처에 응답하여 카메라 동작이 시작되었습니다.
       // 예를 들어, 이동, 기울기, 핀치 확대 또는 회전.
-      if(it == 1){
+      if (it == 1) {
         wedgedCamera = false
       }
     }
 
-    traceMap.mMap.setOnCameraMoveListener {
-//      wedgedCamera = false
-//      Logg.d("카메라 이동 중 $wedgedCamera")
-    }
-
+    // 지도가 멈추면 줌 비율 얻어오기
     traceMap.mMap.setOnCameraIdleListener {
-//      Logg.d("카메라 멈춤 $wedgedCamera")
-//      wedgedCamera = false
       zoomLevel = traceMap.mMap.cameraPosition.zoom
     }
+
     // 내 위치 버튼 클릭 리스너
     traceMap.mMap.setOnMyLocationButtonClickListener {
       traceMap.moveCamera(currentLocation!!.toLatLng(), zoomLevel!!)
@@ -138,6 +129,9 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
 
   // 위치를 브로드케스트에서 받아 지속적으로 업데이트
   open fun updateLocation(curLoc: Location) {
+    if(::currentLocation.isInitialized)
+      progressBar.dismiss()
+
     currentLocation = curLoc
     distanceTextView.text = distance.prettyDistance
     speedTextView.text = speed.prettySpeed()
@@ -170,27 +164,42 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     }
   }
 
-  open fun start() {
-    userState = UserState.RUNNING
-    buttonAnimation()
+  open fun start(tts: String) {
+    countDownTextView.visibility = View.VISIBLE
+    // 시작 카운트 다운
+    val countDownTimer = object : CountDownTimer(Constants.MILLISINFUTURE, Constants.COUNTDOWN_INTERVAL) {
+      override fun onTick(millisUntilFinished: Long) {
+        Logg.d("${millisUntilFinished / Constants.COUNTDOWN_INTERVAL}")
 
-    runningDrawer.open()
-    chronometer.base = SystemClock.elapsedRealtime()
-    chronometer.start()
+        // 3..2..1..로 보여주기 위해서 + 1
+        countDownTextView.text =
+          format(Locale.getDefault(), "%d", millisUntilFinished / Constants.COUNTDOWN_INTERVAL + 1)
+      }
 
-    // DB에 시작 시간 업데이트
-    notificationTextView.visibility = View.GONE
-    lockScreen(true)
-    chronometer.setOnChronometerTickListener {
-      val mille = SystemClock.elapsedRealtime() - chronometer.base
-      val time = (mille / 1000).toInt()
-      val hour = time / (60 * 60)
-      val min = time % (60 * 60) / 60
-      val sec = time % 60
+      override fun onFinish() {
+        countDownTextView.visibility = View.GONE
+        userState = UserState.RUNNING
+        buttonAnimation()
+
+        runningDrawer.open()
+        chronometer.base = SystemClock.elapsedRealtime()
+        chronometer.start()
+
+        notificationTextView.visibility = View.GONE
+        lockScreen(true)
+        chronometer.setOnChronometerTickListener {
+          val mille = SystemClock.elapsedRealtime() - chronometer.base
+          val time = (mille / 1000).toInt()
+          val hour = time / (60 * 60)
+          val min = time % (60 * 60) / 60
+          val sec = time % 60
 //      Logg.d("$hour 시 $min 분 $sec 초")
-    }
-    // DB 초기값 설정 => 시작 시간 설정
-    locationViewModel.setTimes(TimeData(chronometer.base, true, 0L, ""))
+        }
+        // viewModel 초기값 설정 => 시작 시간 설정
+        locationViewModel.setTimes(TimeData(chronometer.base, true, 0L, ""))
+        TTS.speech(tts)
+      }
+    }.start()
   }
 
   open fun pause() {
@@ -223,13 +232,14 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     disappearAnimation()
   }
 
-  open fun stop() {
+  open fun stop(tts: String) {
     userState = UserState.STOP
 
     // 시간 통제 업데이트
     locationViewModel.setTimes(TimeData(0L, false, 0L, ""))
 
     chronometer.stop()
+    TTS.speech(tts)
     lockScreen(false)
   }
 
@@ -255,7 +265,7 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     } else {
       moving = true
 
-      if(wedgedCamera) { // 사용자 카메라 인식 flag
+      if (wedgedCamera) { // 사용자 카메라 인식 flag
         // 유저 상태에 따라 카메라 설정
         if (userState == UserState.NORMAL) {
 //        Logg.d("노멀 : 유저 바라보는 방향으로 지도 이동 X")
@@ -282,8 +292,7 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     }
   }
 
-  override fun onCreate(savedInstanceState: Bundle?)
-  {
+  override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     locationBroadcastReceiver = LocationBroadcastReceiver(this)
     LocalBroadcastManager.getInstance(this)

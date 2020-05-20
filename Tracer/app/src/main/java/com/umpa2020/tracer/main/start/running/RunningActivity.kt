@@ -38,12 +38,6 @@ class RunningActivity : BaseRunningActivity() {
     init()
     notice(getString(R.string.start_running))
     TTS.speech(getString(R.string.pushthestartbutton))
-
-    map_viewer.setOnTouchListener { view, motionEvent ->
-      if (motionEvent!!.actionMasked == MotionEvent.ACTION_DOWN)
-        Logg.d("화면 터치")
-      false
-    }
   }
 
   /**
@@ -83,7 +77,7 @@ class RunningActivity : BaseRunningActivity() {
           })
         noticePopup.show()
       } else
-        stop()
+        stop(getString(R.string.finishRunning))
       true
     }
     super.init()
@@ -92,12 +86,10 @@ class RunningActivity : BaseRunningActivity() {
   /**
    * 러닝 이 시작될 때
    */
-  override fun start() {
-    super.start()
-
-    wpList.add(currentLocation!!.toWayPoint(START_POINT))
+  override fun start(tts :String) {
+    super.start(tts)
+    wpList.add(currentLocation.toWayPoint(START_POINT))
     traceMap.addMarker(wpList.first())
-    TTS.speech(getString(R.string.startRunning))
   }
 
   /**
@@ -106,9 +98,8 @@ class RunningActivity : BaseRunningActivity() {
    * InfoData와 RouteGPX를 생성해서 RunningSaveActivity에게 전달함
    */
 
-  override fun stop() {
-    super.stop()
-    TTS.speech(getString(R.string.finishRunning))
+  override fun stop(tts: String) {
+    super.stop(tts)
 
     wpList.add(currentLocation!!.toWayPoint(FINISH_POINT))
     val infoData = MapInfo()
@@ -144,7 +135,7 @@ class RunningActivity : BaseRunningActivity() {
   override fun onSingleClick(v: View?) {
     when (v!!.id) {
       R.id.runningStartButton -> {
-        start()
+        start(getString(R.string.startRunning)) // tts String 전달
       }
       R.id.runningPauseButton -> {
         if (privacy == Privacy.RACING) {
