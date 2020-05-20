@@ -35,6 +35,13 @@
     android:supportsRtl="true"
     android:theme="@style/AppTheme"
     tools:ignore="GoogleAppIndexingWarning">
+    <service
+      android:name=".MyFirebaseMessageService"
+      android:exported="false">
+      <intent-filter>
+        <action android:name="com.google.firebase.MESSAGING_EVENT" />
+      </intent-filter>
+    </service>
     <activity android:name=".login.join.AgeSelectActivity" />
     <activity android:name=".main.challenge.ChallengeDataSettingActivity" />
 
@@ -85,6 +92,9 @@
     <meta-data
       android:name="com.google.android.geo.API_KEY"
       android:value="@string/google_maps_key" />
+    <meta-data
+      android:name="com.google.firebase.messaging.default_notification_channel_id"
+      android:value="@string/default_notification_channel_id"/>
   </application>
 
 </manifest>

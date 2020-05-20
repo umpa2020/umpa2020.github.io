@@ -70,8 +70,8 @@ class RacingActivity : BaseRunningActivity() {
     Logg.d(racerList.joinToString())
     MainScope().launch {
       racerGPXList = FBRacingRepository().listRacingGPX(mapId, racerList.map { it.racerId })
+      loadRoute()
     }
-    init()
 
     TTS.speech(getString(R.string.goToStartPoint))
   }
@@ -85,7 +85,7 @@ class RacingActivity : BaseRunningActivity() {
   }
 
   override fun init() {
-    loadRoute()
+    super.init()
     val smf = supportFragmentManager.findFragmentById(R.id.map_viewer) as SupportMapFragment
     smf.getMapAsync(this)
     mCustomMarkerView = (getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater).inflate(R.layout.profile_marker, null)
@@ -113,8 +113,10 @@ class RacingActivity : BaseRunningActivity() {
   }
 
   override fun onSingleClick(v: View?) {
+    Logg.d("tlqkf!! before when")
     when (v!!.id) {
       R.id.runningStartButton -> {
+        Logg.d("tlqkf!! tqtqtqt")
         when (userState) {
           UserState.NORMAL -> {
             Toast.makeText(
@@ -127,7 +129,7 @@ class RacingActivity : BaseRunningActivity() {
           UserState.READYTORACING -> {
             Logg.d("READYTORACING")
             runningNotificationTextView.visibility = View.GONE
-            start()
+            start(getString(R.string.startRacing)) // tts String 전달
           }
           else -> {
           }
@@ -179,13 +181,11 @@ class RacingActivity : BaseRunningActivity() {
   }
 
 
-  override fun start() {
-    super.start()
+  override fun start(tts: String) {
+    super.start(tts)
     FBMapRepository().incrementExecute(mapId)
-    // 레이싱 시작 TTS
-    TTS.speech(getString(R.string.startRacing))
     wpList.add(
-      currentLocation.toWayPoint(START_POINT)
+      currentLocation!!.toWayPoint(START_POINT)
     )
 
     if (!racerGPXList.isNullOrEmpty()) {
@@ -236,12 +236,9 @@ class RacingActivity : BaseRunningActivity() {
     }
   }
 
-  override fun stop() {
-    super.stop()
-    wpList.add(currentLocation.toWayPoint(FINISH_POINT))
-
-    // 레이싱 끝 TTS
-    TTS.speech(getString(R.string.finishRacing))
+  override fun stop(tts: String) {
+    super.stop(tts)
+    wpList.add(currentLocation!!.toWayPoint(FINISH_POINT))
 
     val infoData = MapInfo()
     infoData.time = SystemClock.elapsedRealtime() - runningTimerTextView.base
@@ -287,9 +284,9 @@ class RacingActivity : BaseRunningActivity() {
     ) {
       traceMap.changeMarkerIcon(nextWP)
       nextWP++
-      wpList.add(currentLocation.toWayPoint(DISTANCE_POINT))
+      wpList.add(currentLocation!!.toWayPoint(DISTANCE_POINT))
       if (nextWP == markerList.size) {
-        stop()
+        stop(getString(R.string.finishRacing))
       }
     }
   }

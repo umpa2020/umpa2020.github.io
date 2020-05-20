@@ -4,6 +4,7 @@ import android.content.IntentFilter
 import android.content.pm.ActivityInfo
 import android.location.Location
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.os.SystemClock
 import android.view.View
 import android.view.animation.*
@@ -13,7 +14,6 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.preference.PreferenceManager
-import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
@@ -32,14 +32,14 @@ import com.umpa2020.tracer.gpx.WayPointType.TRACK_POINT
 import com.umpa2020.tracer.lockscreen.util.LockScreen
 import com.umpa2020.tracer.main.MainActivity.Companion.locationViewModel
 import com.umpa2020.tracer.map.TraceMap
-import com.umpa2020.tracer.util.ChoicePopup
-import com.umpa2020.tracer.util.OnSingleClickListener
-import com.umpa2020.tracer.util.UserInfo
+import com.umpa2020.tracer.util.*
 import hollowsoft.slidingdrawer.OnDrawerCloseListener
 import hollowsoft.slidingdrawer.OnDrawerOpenListener
 import hollowsoft.slidingdrawer.OnDrawerScrollListener
 import hollowsoft.slidingdrawer.SlidingDrawer
 import kotlinx.android.synthetic.main.activity_running.*
+import java.lang.String.format
+import java.util.*
 
 
 open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDrawerScrollListener,
@@ -47,6 +47,7 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
   OnDrawerCloseListener, OnSingleClickListener {
   lateinit var traceMap: TraceMap
   var privacy = Privacy.RACING
+  lateinit var currentLocation: Location // 가끔 null 오류가 나서 이렇게 수정
   var distance = 0.0
   var time = 0.0
   var previousLatLng = LatLng(0.0, 0.0)          //이전위
@@ -60,13 +61,12 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
   var wpList: MutableList<WayPoint> = mutableListOf()   //사용자의 체크포인트 리스트
   var markerCount = 1   //현재 찍힌 마커의 개수
   var timeWhenStopped: Long = 0   //일시정지된 시간
-  var cameraZoomSize = 0.0f   //camera zoom size
 
-  private var wedgedCamera = true
+  private var wedgedCamera = true // 사용자 카메라 인식 flag
   lateinit var locationBroadcastReceiver: LocationBroadcastReceiver
-  var unPassedIcon = R.drawable.ic_checkpoint_gray.makingIcon()
-  var passedIcon = R.drawable.ic_checkpoint_red.makingIcon()
 
+  var zoomLevel: Float? = 16f // 줌 레벨 할당
+  lateinit var progressBar: MyProgressBar
 
   open fun init() {
     runningDrawer.setOnDrawerScrollListener(this)
@@ -80,23 +80,33 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
   override fun onMapReady(googleMap: GoogleMap) {
     traceMap = TraceMap(googleMap) //구글맵
 
-    var i = 0
+    traceMap.mMap.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
+    traceMap.mMap.uiSettings.isCompassEnabled = true
+    traceMap.mMap.uiSettings.isZoomControlsEnabled = true
+
+    traceMap.mMap.setMaxZoomPreference(18.0f) // 최대 줌 설정
     // startFragment의 마지막 위치를 가져와서 카메라 설정
     val latLng = LatLng(UserInfo.lat.toDouble(), UserInfo.lng.toDouble())
+    traceMap.initCamera(latLng)
 
-    val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 17f)
-    with(traceMap){
-      mMap.moveCamera(cameraUpdate)
-      mMap.setOnCameraMoveCanceledListener {
+    traceMap.mMap.setOnCameraMoveStartedListener {
+      // 공개 정적 최종 정수 REASON_GESTURE, 지도에서 사용자의 제스처에 응답하여 카메라 동작이 시작되었습니다.
+      // 예를 들어, 이동, 기울기, 핀치 확대 또는 회전.
+      if (it == 1) {
         wedgedCamera = false
       }
-      mMap.setOnMyLocationButtonClickListener {
-        wedgedCamera = true
-        true
-      }
-      mMap.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
-      mMap.uiSettings.isCompassEnabled = true
-      mMap.uiSettings.isZoomControlsEnabled = true
+    }
+
+    // 지도가 멈추면 줌 비율 얻어오기
+    traceMap.mMap.setOnCameraIdleListener {
+      zoomLevel = traceMap.mMap.cameraPosition.zoom
+    }
+
+    // 내 위치 버튼 클릭 리스너
+    traceMap.mMap.setOnMyLocationButtonClickListener {
+      traceMap.moveCamera(currentLocation!!.toLatLng(), zoomLevel!!)
+      wedgedCamera = true
+      true
     }
 
     wedgedCamera = true
@@ -104,6 +114,7 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
 
   // 위치를 브로드케스트에서 받아 지속적으로 업데이트
   open fun updateLocation(curLoc: Location) {
+
     currentLocation = curLoc
     runningDistanceTextView.text = distance.prettyDistance
     runningSpeedTextView.text = speed.prettySpeed()
@@ -135,24 +146,45 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     }
   }
 
-  open fun start() {
-    userState = UserState.RUNNING
-    anim()
+  open fun start(tts: String) {
+    countDownTextView.visibility = View.VISIBLE
+    // 시작 카운트 다운
+    val countDownTimer = object : CountDownTimer(Constants.MILLISINFUTURE, Constants.COUNTDOWN_INTERVAL) {
+      override fun onTick(millisUntilFinished: Long) {
+        Logg.d("${millisUntilFinished / Constants.COUNTDOWN_INTERVAL}")
 
-    runningTimerTextView.base = SystemClock.elapsedRealtime()
-    runningTimerTextView.start()
+        // 3..2..1..로 보여주기 위해서 + 1
+        countDownTextView.text =
+          format(Locale.getDefault(), "%d", millisUntilFinished / Constants.COUNTDOWN_INTERVAL + 1)
+      }
 
-    // DB에 시작 시간 업데이트
-    runningNotificationTextView.visibility = View.GONE
-    lockScreen(true)
+      override fun onFinish() {
+        countDownTextView.visibility = View.GONE
+        userState = UserState.RUNNING
+        buttonAnimation()
 
-    // DB 초기값 설정 => 시작 시간 설정
-    locationViewModel.setTimes(TimeData(runningTimerTextView.base, true, 0L, ""))
+        runningDrawer.open()
+        runningTimerTextView.base = SystemClock.elapsedRealtime()
+        runningTimerTextView.start()
+
+        runningNotificationTextView.visibility = View.GONE
+        lockScreen(true)
+        runningTimerTextView.setOnChronometerTickListener {
+          val mille = SystemClock.elapsedRealtime() - runningTimerTextView.base
+          val time = (mille / 1000).toInt()
+          val hour = time / (60 * 60)
+          val min = time % (60 * 60) / 60
+          val sec = time % 60
+//      Logg.d("$hour 시 $min 분 $sec 초")
+        }
+        // viewModel 초기값 설정 => 시작 시간 설정
+        locationViewModel.setTimes(TimeData(runningTimerTextView.base, true, 0L, ""))
+        TTS.speech(tts)
+      }
+    }.start()
   }
 
   open fun pause() {
-
-
     privacy = Privacy.PUBLIC
     userState = UserState.PAUSED
 
@@ -182,17 +214,18 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     disappearAnimation()
   }
 
-  open fun stop() {
+  open fun stop(tts: String) {
     userState = UserState.STOP
 
     // 시간 통제 업데이트
     locationViewModel.setTimes(TimeData(0L, false, 0L, ""))
 
     runningTimerTextView.stop()
+    TTS.speech(tts)
     lockScreen(false)
   }
 
-  fun pauseNotice(str: String) {
+  private fun pauseNotice(str: String) {
     runningPauseNotificationTextView.visible()
     runningPauseNotificationTextView.text = str
     appearAnimation()
@@ -203,7 +236,7 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     runningNotificationTextView.text = str
   }
 
-  fun setLocation(location: Location): Boolean {//현재위치를 이전위치로 변경
+  private fun setLocation(location: Location): Boolean {//현재위치를 이전위치로 변경
     elevation = location.altitude
     speed = location.speed.toDouble()
 
@@ -213,9 +246,16 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
       moving = false
     } else {
       moving = true
-      if (wedgedCamera) {
-        if(!::traceMap.isInitialized) return false
-         traceMap.moveCamera(location)
+
+      if (wedgedCamera) { // 사용자 카메라 인식 flag
+        // 유저 상태에 따라 카메라 설정
+        if (userState == UserState.NORMAL) {
+//        Logg.d("노멀 : 유저 바라보는 방향으로 지도 이동 X")
+          traceMap.moveCamera(location.toLatLng(), zoomLevel!!)
+        } else if (userState == UserState.RUNNING) {
+//        Logg.d("러닝 : 유저 바라보는 방향으로 지도 이동 O")
+          traceMap.moveCameraUserDirection(location, zoomLevel!!)
+        }
       }
     }
     return moving
@@ -231,8 +271,6 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
 
         LockScreen.deActivate()
       }
-    } else {
-
     }
   }
 
@@ -240,19 +278,15 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     super.onCreate(savedInstanceState)
     requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     setContentView(R.layout.activity_running)
+    init()
     locationBroadcastReceiver = LocationBroadcastReceiver(this)
     LocalBroadcastManager.getInstance(this)
       .registerReceiver(locationBroadcastReceiver, IntentFilter("custom-event-name"))
 
     // 거리, 속도, 시간 관련 데이터 초기 설정.
     locationViewModel.init(DistanceTimeData("0.0", "0.0"), TimeData(0L, false, 0L, "0.0"))
-
-
-//    recordViewModel = RecordViewModel(application)
-//    recordViewModel.deleteAll()
   }
 
-  lateinit var currentLocation: Location
   override fun onDestroy() {
     super.onDestroy()
     LocalBroadcastManager.getInstance(this).unregisterReceiver(locationBroadcastReceiver)
@@ -260,8 +294,8 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
 
     // Shared에 마지막 위치 업데이트
 
-    UserInfo.lat = currentLocation.latitude.toFloat()
-    UserInfo.lng = currentLocation.longitude.toFloat()
+    UserInfo.lat = currentLocation!!.latitude.toFloat()
+    UserInfo.lng = currentLocation!!.longitude.toFloat()
 
   }
 
@@ -351,7 +385,7 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
   /**
    *  버튼 하나에서 두개로 퍼지는 애니메니션
    */
-  fun anim() {
+  private fun buttonAnimation() {
     val fabOpen =
       AnimationUtils.loadAnimation(applicationContext, R.anim.running_btn_open) // 애니매이션 초기화
     runningStartButton.visibility = View.INVISIBLE
@@ -380,5 +414,6 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
   }
 
   override fun onSingleClick(v: View?) {
+    Logg.d("tlqkf!! baserunning")
   }
 }
