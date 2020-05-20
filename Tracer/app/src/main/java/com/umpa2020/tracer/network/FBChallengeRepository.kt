@@ -17,7 +17,7 @@ class FBChallengeRepository : BaseFB() {
    */
 
   fun createChallengeData(challengeData: ChallengeData) {
-    db.collection(CHALLENGES).add(challengeData)
+    db.collection(CHALLENGES).document(challengeData.id!!).set(challengeData)
   }
 
   /**

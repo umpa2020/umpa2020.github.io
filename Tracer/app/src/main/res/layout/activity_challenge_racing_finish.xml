@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:id="@+id/parentRelativeLayout"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+  <Toolbar
+    android:id="@+id/challengeFinishToolBar"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:layout_alignParentTop="true"
+    android:background="@color/white"
+    android:contentInsetStart="0dp"
+    android:elevation="1dp">
+
+    <TextView
+      style="@style/appBarText"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:gravity="center"
+      android:text="@string/race_result" />
+  </Toolbar>
+
+  <ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_below="@+id/challengeFinishToolBar">
+
+    <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="vertical">
+
+      <TextView
+        android:id="@+id/challengeFinishTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/my_rank" />
+
+      <LinearLayout
+        android:id="@+id/challengeFinishLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/challengeFinishTextView"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="20dp"
+        android:orientation="horizontal">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+          android:id="@+id/challengeFinishProfileImageView"
+          android:layout_width="50dp"
+          android:layout_height="50dp"
+          android:src="@drawable/ic_profile_logo"
+          app:civ_border_color="@color/gray"
+          app:civ_border_width="2dp" />
+
+        <LinearLayout
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center_vertical"
+          android:layout_weight="1"
+          android:orientation="vertical">
+
+          <TextView
+            android:id="@+id/challengeFinishMyNickName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:text="내 순위" />
+
+          <TextView
+            android:id="@+id/challengeFinishMyLapTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/laptime"
+            android:textColor="@color/skyBlue"
+            android:textSize="16dp"
+            android:textStyle="bold" />
+        </LinearLayout>
+
+        <TextView
+          android:id="@+id/challengeRankTextView"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="right|center_vertical"
+          android:layout_marginRight="30dp"
+          android:text="몇 등"
+          android:textColor="@color/red"
+          android:textSize="16dp"
+          android:textStyle="bold" />
+
+      </LinearLayout>
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/challengeFinishLayout"
+        android:orientation="vertical">
+        <TextView
+          android:id="@+id/challengeFinishAnalysis"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginLeft="20dp"
+          android:layout_marginTop="20dp"
+          android:text="Analysis" />
+
+        <com.github.mikephil.charting.charts.CombinedChart
+          android:id="@+id/distributionChart"
+          android:layout_width="match_parent"
+          android:layout_height="200dp"
+          android:layout_marginLeft="20dp"
+          android:layout_marginTop="10dp"
+          android:layout_marginRight="20dp" />
+
+        <com.github.mikephil.charting.charts.LineChart
+          android:id="@+id/rankLineChart"
+          android:layout_width="match_parent"
+          android:layout_height="200dp"
+          android:layout_marginLeft="20dp"
+          android:layout_marginTop="10dp"
+          android:layout_marginRight="20dp" />
+      </LinearLayout>
+    </RelativeLayout>
+  </ScrollView>
+
+  <Button
+    android:id="@+id/challengeOKButton"
+    style="@style/buttonText"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp"
+    android:layout_marginBottom="10dp"
+    android:background="@drawable/button_background"
+    android:text="확인" />
+</RelativeLayout>
