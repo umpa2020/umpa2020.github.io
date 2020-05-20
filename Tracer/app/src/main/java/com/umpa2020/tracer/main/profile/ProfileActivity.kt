@@ -18,6 +18,12 @@ import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_profile.*
+import kotlinx.android.synthetic.main.activity_profile.appSettingButton
+import kotlinx.android.synthetic.main.activity_profile.profileFragmentTotalDistance
+import kotlinx.android.synthetic.main.activity_profile.profileFragmentTotalTime
+import kotlinx.android.synthetic.main.activity_profile.profileIdTextView
+import kotlinx.android.synthetic.main.activity_profile.profileImageView
+import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch

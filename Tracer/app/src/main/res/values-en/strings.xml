@@ -68,7 +68,7 @@
   <string name="age_">Age</string>
   <string name="gender_">Gender</string>
   <string name="sign_up">Sign Up</string>
-  <string name="map_title">Map Title</string>
+  <string name="map_title">Naming the map</string>
   <string name="text">Text</string>
   <string name="profile">Profile</string>
   <string name="mystats">My Stats</string>
@@ -181,6 +181,7 @@
   <string name="record_comparison">Record Comparison</string>
   <string name="max_speed">Max Speed</string>
   <string name="avg_speed">Average Speed</string>
+  <string name="no_record">No Record</string>
 
   <!--activity_racing_select_people-->
   <string name="selection_complete">Complete</string>
@@ -188,7 +189,7 @@
   <string name="select_people">Virtual Racer Selection</string>
   <string name="max_five">Up to 5 people can be chosen</string>
 
-
+  <string name="map_write_description">Please describe the map</string>
   <string name="challenge">Challenge</string>
   <string name="notice_msg_pause_deviation">Pausing because of deviation</string>
   <string name="notece_msg_stop_tracking">Stop tracking</string>

@@ -12,7 +12,7 @@
   </style>
 
   <style name="MapDetail">
-    <item name="android:textSize">17sp</item>
+    <item name="android:textSize">17dp</item>
     <item name="android:textColor">#6799FF</item>
     <item name="fontFamily">sans-serif-medium</item>
   </style>
@@ -24,9 +24,9 @@
   </style>
 
   <style name="buttonText">
-    <item name="android:textSize">15sp</item>
-    <item name="android:textColor">#ffffff</item>
-  </style>
+  <item name="android:textSize">15dp</item>
+  <item name="android:textColor">#ffffff</item>
+</style>
 
   <style name="buttonTextRedText" parent="buttonText">
     <item name="android:textColor">@color/red</item>
@@ -34,18 +34,18 @@
 
 
   <style name="blackBoldText20">
-    <item name="fontFamily">sans-serif-light</item>
-    <item name="android:textSize">20sp</item>
+    <item name="fontFamily">sans-serif-medium</item>
+    <item name="android:textSize">20dp</item>
     <item name="android:textColor">#000000</item>
   </style>
 
   <style name="blackMediumText18" parent="blackBoldText20">
     <item name="android:textColor">@color/black</item>
-    <item name="android:textSize">18sp</item>
+    <item name="android:textSize">18dp</item>
   </style>
 
   <style name="blackMediumText20" parent="blackBoldText20">
-    <item name="android:textSize">20sp</item>
+    <item name="android:textSize">20dp</item>
   </style>
 
   <style name="whiteText">
@@ -59,9 +59,36 @@
 
 
   <style name="tuneText">
-    <item name="android:textSize">16sp</item>
+    <item name="android:textSize">16dp</item>
     <item name="android:textColor">#000000</item>
   </style>
+
+  <style name="subjectName">
+    <item name="android:textSize">17dp</item>
+    <item name="android:textColor">@color/black</item>
+    <item name="android:textStyle">bold</item>
+  </style>
+
+  <style name="underSubjectName">
+    <item name="android:textSize">16dp</item>
+    <item name="android:textColor">@color/blackgray</item>
+  </style>
+
+  <style name="recordComparison">
+    <item name="android:textSize">20dp</item>
+    <item name="android:textColor">@color/lightblack</item>
+  </style>
+
+  <style name="challengeDetail">
+    <item name="android:textSize">17dp</item>
+    <item name="android:textColor">@color/blackgray</item>
+  </style>
+
+  <style name="challengeDetailList">
+    <item name="android:textSize">16dp</item>
+    <item name="android:textColor">@color/lightblack</item>
+  </style>
+
 
 
 </resources>

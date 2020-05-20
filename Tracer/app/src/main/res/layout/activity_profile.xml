@@ -46,7 +46,7 @@
       android:layout_height="100dp"
       android:src="@drawable/ic_profile_logo"
       app:civ_border_color="@color/gray"
-      app:civ_border_width="2dp" />
+      app:civ_border_width="1dp"/>
 
     <TextView
       android:id="@+id/profileIdTextView"
@@ -65,8 +65,10 @@
     android:background="@drawable/textline_background_down"
     android:orientation="horizontal"
     android:paddingTop="20dp"
-    android:paddingEnd="20dp"
-    android:paddingBottom="15dp">
+    android:paddingRight="20dp"
+    android:paddingLeft="20dp"
+    android:paddingBottom="15dp"
+    android:gravity="center">
 
     <LinearLayout
       android:layout_width="wrap_content"
@@ -76,17 +78,18 @@
       android:orientation="vertical">
 
       <TextView
+        android:textSize="16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/total_distance"
-        android:textSize="15sp" />
+        android:text="@string/total_distance" />
 
       <TextView
+        android:text="test"
         android:id="@+id/profileFragmentTotalDistance"
         style="@style/MapDetail"
+        android:layout_marginTop="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
         android:textSize="20dp" />
 
     </LinearLayout>
@@ -99,17 +102,17 @@
       android:orientation="vertical">
 
       <TextView
+        android:textSize="16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/total_time"
-        android:textSize="15sp" />
+        android:text="@string/total_time"/>
 
       <TextView
         android:id="@+id/profileFragmentTotalTime"
         style="@style/MapDetail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:textSize="20dp" />
 
     </LinearLayout>
@@ -139,6 +142,7 @@
     android:backgroundTint="@color/black"
     android:textSize="18dp" />
 
+  <!--
   <TextView
     android:id="@+id/divisionTextView2"
     style="@style/divisionTextView"
@@ -166,6 +170,8 @@
     android:background="@drawable/ic_chevron_right_black_24dp"
     android:backgroundTint="@color/black"
     android:textSize="18dp" />
+
+   -->
 
 
   <!--     <RelativeLayout

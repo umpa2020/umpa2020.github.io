@@ -41,12 +41,15 @@
     </Toolbar>
 
     <LinearLayout
+      android:background="@color/white"
       android:id="@+id/listTitleLinearLayout"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_below="@+id/rankingFragmentMonthTextView"
-      android:layout_marginLeft="20dp"
-      android:layout_marginRight="20dp"
+      android:paddingTop="10dp"
+      android:paddingBottom="10dp"
+      android:paddingRight="20dp"
+      android:paddingLeft="20dp"
       android:orientation="horizontal">
 
       <TextView
@@ -88,14 +91,15 @@
       android:id="@+id/divisionTextView"
       style="@style/divisionTextView" />
 
-
     <androidx.recyclerview.widget.RecyclerView
       android:id="@+id/rank_recycler_map"
       android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:layout_marginLeft="20dp"
-      android:layout_marginTop="5dp"
-      android:layout_marginRight="20dp" />
+      android:layout_height="wrap_content"
+      android:background="@drawable/textline_background_down"
+      android:paddingLeft="20dp"
+      android:paddingTop="5dp"
+      android:paddingRight="20dp"
+      android:paddingBottom="10dp" />
   </LinearLayout>
 
   <TextView

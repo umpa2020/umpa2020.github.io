@@ -36,6 +36,7 @@
         android:orientation="horizontal">
 
         <TextView
+          android:textColor="@color/lightblack"
           android:id="@+id/manTextView"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
@@ -78,6 +79,7 @@
         android:orientation="horizontal">
 
         <TextView
+          android:textColor="@color/lightblack"
           android:id="@+id/womanTextView"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
@@ -110,7 +112,7 @@
     android:id="@+id/nextButton"
     style="@style/buttonText"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="50dp"
     android:layout_marginLeft="20dp"
     android:layout_marginRight="20dp"
     android:layout_marginBottom="20dp"
