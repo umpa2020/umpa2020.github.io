@@ -3,6 +3,7 @@ package com.umpa2020.tracer.main.start.racing
 import android.content.Context
 import android.content.Intent
 import android.location.Location
+import android.net.Uri
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.LayoutInflater
@@ -14,6 +15,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.maps.android.PolyUtil
 import com.google.maps.android.SphericalUtil
+import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.constant.Constants.Companion.ARRIVE_BOUNDARY
@@ -23,13 +25,12 @@ import com.umpa2020.tracer.constant.UserState
 import com.umpa2020.tracer.dataClass.MapInfo
 import com.umpa2020.tracer.dataClass.RacerData
 import com.umpa2020.tracer.dataClass.RouteGPX
-import com.umpa2020.tracer.extensions.prettyDistance
-import com.umpa2020.tracer.extensions.toLatLng
-import com.umpa2020.tracer.extensions.toWayPoint
+import com.umpa2020.tracer.extensions.*
 import com.umpa2020.tracer.gpx.WayPoint
 import com.umpa2020.tracer.gpx.WayPointType.*
 import com.umpa2020.tracer.main.start.BaseRunningActivity
 import com.umpa2020.tracer.main.start.racing.RacingSelectPeopleActivity.Companion.RACER_LIST
+import com.umpa2020.tracer.main.start.running.RunningSaveActivity
 import com.umpa2020.tracer.network.BaseFB.Companion.MAP_ID
 import com.umpa2020.tracer.network.FBMapRepository
 import com.umpa2020.tracer.network.FBRacingRepository
@@ -38,6 +39,7 @@ import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.TTS
 import kotlinx.android.synthetic.main.activity_running.*
 import kotlinx.coroutines.*
+import java.io.File
 
 class RacingActivity : BaseRunningActivity() {
   companion object {
@@ -60,15 +62,16 @@ class RacingActivity : BaseRunningActivity() {
   lateinit var mCustomMarkerView: View
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    mapRouteGPX = intent.getParcelableExtra(ROUTE_GPX) as RouteGPX
+    val routeGPXUri = intent.getStringExtra(ROUTE_GPX)
+    mapRouteGPX = Uri.parse(routeGPXUri).gpxToClass()
     mapId = intent.getStringExtra(MAP_ID)!!
     racerList = intent.getSerializableExtra(RACER_LIST) as Array<RacerData>
 
     Logg.d(racerList.joinToString())
     MainScope().launch {
-      racerGPXList = FBRacingRepository().listRacingGPX(mapId, racerList.map { it.racerId!! })
+      racerGPXList = FBRacingRepository().listRacingGPX(mapId, racerList.map { it.racerId })
+      loadRoute()
     }
-    init()
 
     TTS.speech(getString(R.string.goToStartPoint))
   }
@@ -82,7 +85,7 @@ class RacingActivity : BaseRunningActivity() {
   }
 
   override fun init() {
-    loadRoute()
+    super.init()
     val smf = supportFragmentManager.findFragmentById(R.id.map_viewer) as SupportMapFragment
     smf.getMapAsync(this)
     mCustomMarkerView = (getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater).inflate(R.layout.profile_marker, null)
@@ -100,7 +103,6 @@ class RacingActivity : BaseRunningActivity() {
       noticePopup.show()
       true
     }
-
   }
 
   fun loadRoute() {
@@ -111,8 +113,10 @@ class RacingActivity : BaseRunningActivity() {
   }
 
   override fun onSingleClick(v: View?) {
+    Logg.d("tlqkf!! before when")
     when (v!!.id) {
       R.id.runningStartButton -> {
+        Logg.d("tlqkf!! tqtqtqt")
         when (userState) {
           UserState.NORMAL -> {
             Toast.makeText(
@@ -242,12 +246,17 @@ class RacingActivity : BaseRunningActivity() {
     infoData.distance = distance
     val routeGPX = RouteGPX(infoData.time, "", wpList, trkList)
 
+    val saveFolder = File(App.instance.filesDir, "RouteGPX") // 저장 경로
+    if (!saveFolder.exists()) {       //폴더 없으면 생성
+      saveFolder.mkdir()
+    }
+    routeGPX.addDirectionSign()
+    val routeGpxUri = routeGPX.classToGpx(saveFolder.path).toString()
+
     val newIntent = Intent(this, RacingFinishActivity::class.java)
     newIntent.putExtra("Result", racingResult)
     newIntent.putExtra("InfoData", infoData)
-    newIntent.putExtra("MapRouteGPX", mapRouteGPX)
-    newIntent.putExtra("RouteGPX", routeGPX)
-
+    newIntent.putExtra(ROUTE_GPX, routeGpxUri)
     startActivity(newIntent)
     finish()
   }

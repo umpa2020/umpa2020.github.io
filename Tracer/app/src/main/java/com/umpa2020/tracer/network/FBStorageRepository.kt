@@ -23,10 +23,10 @@ class FBStorageRepository : BaseFB() {
     return storage.reference.child(path).downloadUrl.await()
   }
 
-  suspend fun getFile(path: String): String {
+  suspend fun getFile(path: String): Uri {
     val localFile = File.createTempFile("routeGpx", "gpx")
     storage.reference.child(path).getFile(localFile).await()
-    return localFile.path
+    return Uri.fromFile(localFile)
   }
 
 }

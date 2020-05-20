@@ -61,20 +61,14 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
   var wpList: MutableList<WayPoint> = mutableListOf()   //사용자의 체크포인트 리스트
   var markerCount = 1   //현재 찍힌 마커의 개수
   var timeWhenStopped: Long = 0   //일시정지된 시간
-  var cameraZoomSize = 0.0f   //camera zoom size
 
   private var wedgedCamera = true // 사용자 카메라 인식 flag
   lateinit var locationBroadcastReceiver: LocationBroadcastReceiver
-  var unPassedIcon = R.drawable.ic_checkpoint_gray.makingIcon()
-  var passedIcon = R.drawable.ic_checkpoint_red.makingIcon()
 
   var zoomLevel: Float? = 16f // 줌 레벨 할당
   lateinit var progressBar: MyProgressBar
 
   open fun init() {
-    progressBar = MyProgressBar().apply {
-      show()
-    }
     runningDrawer.setOnDrawerScrollListener(this)
     runningDrawer.setOnDrawerOpenListener(this)
     runningDrawer.setOnDrawerCloseListener(this)
@@ -120,8 +114,6 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
 
   // 위치를 브로드케스트에서 받아 지속적으로 업데이트
   open fun updateLocation(curLoc: Location) {
-    if(::currentLocation.isInitialized)
-      progressBar.dismiss()
 
     currentLocation = curLoc
     runningDistanceTextView.text = distance.prettyDistance
@@ -286,6 +278,7 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     super.onCreate(savedInstanceState)
     requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     setContentView(R.layout.activity_running)
+    init()
     locationBroadcastReceiver = LocationBroadcastReceiver(this)
     LocalBroadcastManager.getInstance(this)
       .registerReceiver(locationBroadcastReceiver, IntentFilter("custom-event-name"))
@@ -421,5 +414,6 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
   }
 
   override fun onSingleClick(v: View?) {
+    Logg.d("tlqkf!! baserunning")
   }
 }
