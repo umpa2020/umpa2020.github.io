@@ -63,18 +63,6 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
   var timeWhenStopped: Long = 0   //일시정지된 시간
   var cameraZoomSize = 0.0f   //camera zoom size
 
-  //공통으로 업데이트 해주는 View
-  lateinit var chronometer: Chronometer
-  lateinit var startButton: Button
-  lateinit var stopButton: Button
-  lateinit var pauseButton: Button
-  lateinit var notificationTextView: TextView
-  lateinit var pauseNotificationTextView: TextView
-  lateinit var speedTextView: TextView
-  lateinit var distanceTextView: TextView
-  lateinit var drawerHandle: Button
-  lateinit var drawer: SlidingDrawer
-
   private var wedgedCamera = true // 사용자 카메라 인식 flag
   lateinit var locationBroadcastReceiver: LocationBroadcastReceiver
   var unPassedIcon = R.drawable.ic_checkpoint_gray.makingIcon()
@@ -87,17 +75,21 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     progressBar = MyProgressBar().apply {
       show()
     }
-    drawer.setOnDrawerScrollListener(this)
-    drawer.setOnDrawerOpenListener(this)
-    drawer.setOnDrawerCloseListener(this)
+    runningDrawer.setOnDrawerScrollListener(this)
+    runningDrawer.setOnDrawerOpenListener(this)
+    runningDrawer.setOnDrawerCloseListener(this)
+    runningStartButton.setOnClickListener(this)
+    runningStopButton.setOnClickListener(this)
+    runningPauseButton.setOnClickListener(this)
   }
 
   override fun onMapReady(googleMap: GoogleMap) {
-    startButton.setOnClickListener(this)
-    pauseButton.setOnClickListener(this)
-    stopButton.setOnClickListener(this)
-
     traceMap = TraceMap(googleMap) //구글맵
+
+    traceMap.mMap.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
+    traceMap.mMap.uiSettings.isCompassEnabled = true
+    traceMap.mMap.uiSettings.isZoomControlsEnabled = true
+
     traceMap.mMap.setMaxZoomPreference(18.0f) // 최대 줌 설정
     // startFragment의 마지막 위치를 가져와서 카메라 설정
     val latLng = LatLng(UserInfo.lat.toDouble(), UserInfo.lng.toDouble())
@@ -180,13 +172,13 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
         buttonAnimation()
 
         runningDrawer.open()
-        chronometer.base = SystemClock.elapsedRealtime()
-        chronometer.start()
+        runningTimerTextView.base = SystemClock.elapsedRealtime()
+        runningTimerTextView.start()
 
-        notificationTextView.visibility = View.GONE
+        runningNotificationTextView.visibility = View.GONE
         lockScreen(true)
-        chronometer.setOnChronometerTickListener {
-          val mille = SystemClock.elapsedRealtime() - chronometer.base
+        runningTimerTextView.setOnChronometerTickListener {
+          val mille = SystemClock.elapsedRealtime() - runningTimerTextView.base
           val time = (mille / 1000).toInt()
           val hour = time / (60 * 60)
           val min = time % (60 * 60) / 60
@@ -194,7 +186,7 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
 //      Logg.d("$hour 시 $min 분 $sec 초")
         }
         // viewModel 초기값 설정 => 시작 시간 설정
-        locationViewModel.setTimes(TimeData(chronometer.base, true, 0L, ""))
+        locationViewModel.setTimes(TimeData(runningTimerTextView.base, true, 0L, ""))
         TTS.speech(tts)
       }
     }.start()
@@ -236,14 +228,14 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     // 시간 통제 업데이트
     locationViewModel.setTimes(TimeData(0L, false, 0L, ""))
 
-    chronometer.stop()
+    runningTimerTextView.stop()
     TTS.speech(tts)
     lockScreen(false)
   }
 
   private fun pauseNotice(str: String) {
-    pauseNotificationTextView.visible()
-    pauseNotificationTextView.text = str
+    runningPauseNotificationTextView.visible()
+    runningPauseNotificationTextView.text = str
     appearAnimation()
   }
 

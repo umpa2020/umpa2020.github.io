@@ -4,7 +4,6 @@ import android.content.Intent
 import android.location.Location
 import android.os.Bundle
 import android.os.SystemClock
-import android.view.MotionEvent
 import android.view.View
 import android.widget.Toast
 import com.google.android.gms.maps.SupportMapFragment
@@ -18,13 +17,8 @@ import com.umpa2020.tracer.extensions.toWayPoint
 import com.umpa2020.tracer.gpx.WayPointType.*
 import com.umpa2020.tracer.main.start.BaseRunningActivity
 import com.umpa2020.tracer.util.ChoicePopup
-import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.TTS
 import kotlinx.android.synthetic.main.activity_running.*
-import java.io.ByteArrayOutputStream
-import java.io.IOException
-import java.io.ObjectOutput
-import java.io.ObjectOutputStream
 
 
 class RunningActivity : BaseRunningActivity() {
@@ -44,6 +38,7 @@ class RunningActivity : BaseRunningActivity() {
   override fun init() {
     val smf = supportFragmentManager.findFragmentById(R.id.map_viewer) as SupportMapFragment
     smf.getMapAsync(this)
+
     /**
     Stop 팝업 띄우기
      */

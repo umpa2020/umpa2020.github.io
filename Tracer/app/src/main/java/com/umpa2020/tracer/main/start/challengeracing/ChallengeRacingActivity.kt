@@ -115,7 +115,7 @@ class ChallengeRacingActivity : BaseRunningActivity() {
           UserState.READYTORACING -> {
             Logg.d("READYTORACING")
             runningNotificationTextView.visibility = View.GONE
-            start()
+            start(getString(R.string.startRacing))
           }
           else -> {
           }
@@ -168,22 +168,18 @@ class ChallengeRacingActivity : BaseRunningActivity() {
   }
 
 
-  override fun start() {
-    super.start()
+  override fun start(tts: String) {
+    super.start(tts)
     FBMapRepository().incrementExecute(mapId)
-    // 레이싱 시작 TTS
-    TTS.speech(getString(R.string.startRacing))
+
     wpList.add(
       currentLocation.toWayPoint(START_POINT)
     )
   }
 
-  override fun stop() {
-    super.stop()
+  override fun stop(tts: String) {
+    super.stop(tts)
     wpList.add(currentLocation.toWayPoint(FINISH_POINT))
-
-    // 레이싱 끝 TTS
-    TTS.speech(getString(R.string.finishRacing))
 
     val infoData = MapInfo()
     infoData.time = SystemClock.elapsedRealtime() - runningTimerTextView.base
@@ -237,7 +233,7 @@ class ChallengeRacingActivity : BaseRunningActivity() {
       nextWP++
       wpList.add(currentLocation.toWayPoint(DISTANCE_POINT))
       if (nextWP == markerList.size) {
-        stop()
+        stop(getString(R.string.finishRacing))
       }
     }
   }

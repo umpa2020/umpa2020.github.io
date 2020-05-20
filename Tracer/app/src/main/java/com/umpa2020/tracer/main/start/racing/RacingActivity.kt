@@ -81,7 +81,6 @@ class RacingActivity : BaseRunningActivity() {
     }
   }
 
-
   override fun init() {
     loadRoute()
     val smf = supportFragmentManager.findFragmentById(R.id.map_viewer) as SupportMapFragment
@@ -125,7 +124,7 @@ class RacingActivity : BaseRunningActivity() {
           }
           UserState.READYTORACING -> {
             Logg.d("READYTORACING")
-            notificationTextView.visibility = View.GONE
+            runningNotificationTextView.visibility = View.GONE
             start(getString(R.string.startRacing)) // tts String 전달
           }
           else -> {
