@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.ActivityData
+import com.umpa2020.tracer.dataClass.EmblemData
 import com.umpa2020.tracer.extensions.Y_M_D
 import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.extensions.image
@@ -21,7 +22,7 @@ import kotlinx.android.synthetic.main.recycler_profile_user_record_item.view.*
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
-class ProfileRecyclerViewAdapterAchievement(private val imagePaths: MutableList<String>) :
+class ProfileRecyclerViewAdapterAchievement(private val emblemDatas: MutableList<EmblemData>) :
   RecyclerView.Adapter<ProfileRecyclerViewAdapterAchievement.MyViewHolder>() {
   var context: Context? = null
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -32,16 +33,16 @@ class ProfileRecyclerViewAdapterAchievement(private val imagePaths: MutableList<
   }
 
   override fun getItemCount(): Int {
-    return imagePaths.size
+    return emblemDatas.size
   }
 
   override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-    val imagePath = imagePaths[position]
+    val emblemData = emblemDatas[position]
 
     MainScope().launch {
-      holder.mapImageView.image(FBStorageRepository().downloadFile(imagePath))
+      holder.mapImageView.image(FBStorageRepository().downloadFile(emblemData.imagePath!!))
     }
-    //holder.activityText.text =
+    holder.activityText.text = emblemData.name
 
     //클릭하면 맵 상세보기 페이지로 이동
     holder.itemView.setOnClickListener(object : OnSingleClickListener {

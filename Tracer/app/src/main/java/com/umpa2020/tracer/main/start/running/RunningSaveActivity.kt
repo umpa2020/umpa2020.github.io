@@ -21,6 +21,9 @@ import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.map.TraceMap
 import com.umpa2020.tracer.network.BaseFB
 import com.umpa2020.tracer.network.BaseFB.Companion.MAP_ROUTE
+import com.umpa2020.tracer.network.BaseFB.Companion.TRACK_COUNT_0
+import com.umpa2020.tracer.network.BaseFB.Companion.TRACK_COUNT_49
+import com.umpa2020.tracer.network.BaseFB.Companion.TRACK_COUNT_9
 import com.umpa2020.tracer.network.FBAchievementRepository
 import com.umpa2020.tracer.network.FBMapRepository
 import com.umpa2020.tracer.util.*
@@ -177,19 +180,20 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
 
     Logg.d("Start Upload")
     FBMapRepository().uploadMap(mapInfo, rankingData, activityData, timestamp.toString(), routeGpxFile, Uri.fromFile(File(imgPath)), trophyData)
+    FBAchievementRepository().incrementPlays(mapInfo.makerId)
     Logg.d("Finish Upload")
 
     launch {
       val uid = UserInfo.autoLoginKey
       FBAchievementRepository().getAchievement(uid).let {
         when (it?.trackMake) {
-          0 -> {
+          TRACK_COUNT_0 -> {
             FBAchievementRepository().setTrackMaker1Emblem(uid)
           }
-          9 -> {
+          TRACK_COUNT_9 -> {
             FBAchievementRepository().setTrackMaker10Emblem(uid)
           }
-          49 -> {
+          TRACK_COUNT_49 -> {
             FBAchievementRepository().setTrackMaker50Emblem(uid)
           }
           null -> {

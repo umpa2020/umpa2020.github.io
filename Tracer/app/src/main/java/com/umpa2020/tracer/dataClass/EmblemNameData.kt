@@ -4,7 +4,6 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class EmblemData(
-  val name: String? = null,
-  val imagePath: String? = null
+data class EmblemNameData(
+  val name: String? = null
 ) : Parcelable

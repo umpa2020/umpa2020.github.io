@@ -4,12 +4,9 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.umpa2020.tracer.R
-import com.umpa2020.tracer.dataClass.TrophyData
+import com.umpa2020.tracer.dataClass.EmblemData
 import com.umpa2020.tracer.network.BaseFB
-import com.umpa2020.tracer.network.BaseFB.Companion.DISTANCE
 import com.umpa2020.tracer.network.FBAchievementRepository
-import com.umpa2020.tracer.network.FBProfileRepository
-import com.umpa2020.tracer.util.Logg
 import kotlinx.android.synthetic.main.activity_profile_achivement.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
@@ -27,7 +24,7 @@ class ProfileAchievementActivity : AppCompatActivity(), CoroutineScope by MainSc
 
     val uid = intent.extras?.getString(BaseFB.USER_ID).toString()
     launch {
-      FBAchievementRepository().listUserEmblems(uid).let {
+      FBAchievementRepository().listUserEmblemNames(uid).let {
         FBAchievementRepository().listEmblemImagePaths(it).let {
           achievementDataList(it)
         }
@@ -35,7 +32,7 @@ class ProfileAchievementActivity : AppCompatActivity(), CoroutineScope by MainSc
     }
   }
 
-  private fun achievementDataList(imagePaths: MutableList<String>) {
+  private fun achievementDataList(imagePaths: MutableList<EmblemData>) {
     profileRecyclerAchievement.layoutManager = GridLayoutManager(baseContext, 3)
     profileRecyclerAchievement.adapter = ProfileRecyclerViewAdapterAchievement(imagePaths)
   }

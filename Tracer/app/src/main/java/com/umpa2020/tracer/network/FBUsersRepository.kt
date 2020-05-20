@@ -71,7 +71,7 @@ class FBUsersRepository : BaseFB() {
   }
 
   fun createUserInfo(data: Users) {
-    db.collection(USERS).document(data.userId).set(data)
+    usersCollectionRef.document(data.userId).set(data)
       .addOnSuccessListener { Logg.d("DocumentSnapshot successfully written!") }
       .addOnFailureListener { e -> Logg.w("Error writing document$e") }
 
@@ -79,12 +79,10 @@ class FBUsersRepository : BaseFB() {
   }
 
   fun createUserHistory(activityData: ActivityData) {
-    db.collection(USERS).whereEqualTo(USER_ID, UserInfo.autoLoginKey)
-      .get()
-      .addOnSuccessListener {
-        it.documents.last().reference.collection(ACTIVITIES).add(activityData)
-      }
+    usersCollectionRef.document(UserInfo.autoLoginKey).collection(ACTIVITIES).add(activityData)
+    FBAchievementRepository().incrementDistance(UserInfo.autoLoginKey, activityData.distance!!)
   }
+
 
   suspend fun listUserMakingActivity(limit: Long): List<ActivityData>? {
     return (if (globalStartAfter == null) db.collection(USERS).document(UserInfo.autoLoginKey).collection(ACTIVITIES)

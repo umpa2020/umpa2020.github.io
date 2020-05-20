@@ -19,6 +19,7 @@ import com.umpa2020.tracer.network.FBMapRepository
 import com.umpa2020.tracer.network.FBProfileRepository
 import com.umpa2020.tracer.network.FBRacingRepository
 import com.umpa2020.tracer.network.FBUsersRepository
+import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
@@ -72,6 +73,11 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
       FBUsersRepository().createUserHistory(
         ActivityData(racerData.mapId, Date().time, racerData.distance, racerData.time, if (result) BaseFB.ActivityMode.RACING_SUCCESS else BaseFB.ActivityMode.RACING_FAIL)
       )
+
+      FBMapRepository().getMapInfo(racerData.mapId).let {
+        FBAchievementRepository().incrementPlays(it!!.makerId)
+      }
+
       //성공했다면 랭킹에 등록
       if (result)
         FBRacingRepository().createRankingData(racerData, rankingData, racerGpxFile)
