@@ -1,6 +1,7 @@
 package com.umpa2020.tracer.dataClass
 
 import android.os.Parcelable
+import com.umpa2020.tracer.network.BaseFB
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -9,5 +10,5 @@ data class ActivityData(
   val time: Long? = null,
   val distance: Double? = null,
   val playTime: Long? = null,
-  var mode: String? = null
+  var mode: BaseFB.ActivityMode? = null
 ) : Parcelable
