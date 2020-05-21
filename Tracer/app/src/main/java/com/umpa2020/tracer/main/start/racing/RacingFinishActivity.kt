@@ -66,12 +66,6 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
       null
     )
 
-  /*  val saveFolder = File(App.instance.filesDir, "routeGPX") // 저장 경로
-    if (!saveFolder.exists()) {       //폴더 없으면 생성
-      saveFolder.mkdir()
-    }
-    val racerGpxFile = racerGPX.classToGpx(saveFolder.path)*/
-
     MainScope().launch {
       // 유저 히스토리 등록
       FBUsersRepository().createUserHistory(

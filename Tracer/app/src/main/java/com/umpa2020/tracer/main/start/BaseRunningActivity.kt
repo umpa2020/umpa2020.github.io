@@ -8,9 +8,6 @@ import android.os.CountDownTimer
 import android.os.SystemClock
 import android.view.View
 import android.view.animation.*
-import android.widget.Button
-import android.widget.Chronometer
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.preference.PreferenceManager
@@ -36,7 +33,6 @@ import com.umpa2020.tracer.util.*
 import hollowsoft.slidingdrawer.OnDrawerCloseListener
 import hollowsoft.slidingdrawer.OnDrawerOpenListener
 import hollowsoft.slidingdrawer.OnDrawerScrollListener
-import hollowsoft.slidingdrawer.SlidingDrawer
 import kotlinx.android.synthetic.main.activity_running.*
 import java.lang.String.format
 import java.util.*

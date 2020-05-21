@@ -33,10 +33,12 @@ import com.umpa2020.tracer.util.ChoicePopup
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.TTS
 import kotlinx.android.synthetic.main.activity_running.*
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class ChallengeRacingActivity : BaseRunningActivity() {
+class ChallengeRacingActivity : BaseRunningActivity(),CoroutineScope by MainScope() {
   companion object {
     const val ROUTE_GPX = "RouteGPX"
   }
@@ -54,6 +56,7 @@ class ChallengeRacingActivity : BaseRunningActivity() {
   lateinit var mCustomMarkerView: View
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+    runningAppBarTextView.text=getString(R.string.challenge)
     mapId = intent.getStringExtra(MAP_ID)!!
     MainScope().launch {
       mapRouteGPX = FBStorageRepository().getFile(FBMapRepository().getMapInfo(mapId)?.routeGPXPath!!).gpxToClass()
@@ -64,9 +67,14 @@ class ChallengeRacingActivity : BaseRunningActivity() {
 
   override fun onMapReady(googleMap: GoogleMap) {
     super.onMapReady(googleMap)
-    traceMap.drawRoute(mapRouteGPX.trkList, mapRouteGPX.wptList).run {
-      markerList = this.first
-      turningPointList = this.second
+    launch {
+      while(!::mapRouteGPX.isInitialized){
+        delay(100)
+      }
+      traceMap.drawRoute(mapRouteGPX.trkList, mapRouteGPX.wptList).run {
+        markerList = this.first
+        turningPointList = this.second
+      }
     }
   }
 
@@ -97,6 +105,7 @@ class ChallengeRacingActivity : BaseRunningActivity() {
       track.add(it.toLatLng())
     }
     mapRouteGPX.wptList.let { startPoint = it.first() }
+
   }
 
   override fun onSingleClick(v: View?) {
