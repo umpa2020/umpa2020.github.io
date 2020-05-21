@@ -53,4 +53,9 @@ class FBRacingRepository : BaseFB() {
       FBStorageRepository().getFile("$MAP_ROUTE/$mapId/$RACING_GPX/$it").gpxToClass()
     }
   }
+
+  suspend fun getOtherData(mapId: String, userId: String): RankingData {
+    return mapsCollectionRef.document(mapId).collection(RANKING).whereEqualTo(CHALLENGER_Id, userId).whereEqualTo(BEST_TIME, true)
+      .get().await().documents.first().toObject(RankingData::class.java)!!
+  }
 }

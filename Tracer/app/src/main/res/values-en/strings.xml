@@ -215,5 +215,6 @@
   <string name="region_selection">Region Selection</string>
 
   <string name="my_achievement">My Achievement</string>
+  <string name="unregister_user">who has withdrawn from Tracer</string>
 
 </resources>

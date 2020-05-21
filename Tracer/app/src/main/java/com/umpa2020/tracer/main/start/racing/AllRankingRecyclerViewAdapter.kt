@@ -14,6 +14,7 @@ import com.umpa2020.tracer.extensions.m_s
 import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.recycler_rankfragment_topplayer_item.view.*
 import java.util.*
+import kotlin.math.sin
 
 class AllRankingRecyclerViewAdapter(private val mydata: ArrayList<RankingData>) :
   RecyclerView.Adapter<AllRankingRecyclerViewAdapter.myViewHolder>() {
@@ -45,7 +46,8 @@ class AllRankingRecyclerViewAdapter(private val mydata: ArrayList<RankingData>) 
     holder.itemView.setOnClickListener(object : OnSingleClickListener {
       override fun onSingleClick(v: View?) {
         val intent = Intent()
-        intent.putExtra("result", holder.nickname.text.toString())
+        intent.putExtra("userId", singleItem1.challengerId)
+        intent.putExtra("userNickname", singleItem1.challengerNickname)
         App.instance.currentActivity()!!.setResult(100, intent)
         App.instance.currentActivity()!!.finish()
       }
