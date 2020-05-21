@@ -41,16 +41,16 @@
     </Toolbar>
 
     <LinearLayout
-      android:background="@color/white"
       android:id="@+id/listTitleLinearLayout"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_below="@+id/rankingFragmentMonthTextView"
-      android:paddingTop="10dp"
-      android:paddingBottom="10dp"
-      android:paddingRight="20dp"
+      android:background="@color/white"
+      android:orientation="horizontal"
       android:paddingLeft="20dp"
-      android:orientation="horizontal">
+      android:paddingTop="10dp"
+      android:paddingRight="20dp"
+      android:paddingBottom="10dp">
 
       <TextView
         style="@style/ListTitle"

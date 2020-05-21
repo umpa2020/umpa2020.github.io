@@ -9,10 +9,11 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
-import com.umpa2020.tracer.dataClass.RouteGPX
-import com.umpa2020.tracer.extensions.*
+import com.umpa2020.tracer.extensions.Y_M_D
+import com.umpa2020.tracer.extensions.format
+import com.umpa2020.tracer.extensions.gpxToClass
+import com.umpa2020.tracer.extensions.image
 import com.umpa2020.tracer.gpx.WayPointType
 import com.umpa2020.tracer.main.start.challengeracing.ChallengeRacingActivity
 import com.umpa2020.tracer.main.start.racing.RacingActivity
@@ -27,7 +28,6 @@ import kotlinx.android.synthetic.main.activity_challenge_map_detail.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
-import java.io.File
 
 /**
  * 하나의 대회를 선택하면 해당 대회의 정보를

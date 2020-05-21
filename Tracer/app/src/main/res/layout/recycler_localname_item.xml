@@ -6,9 +6,9 @@
 
   <Button
     android:id="@+id/local_name"
-    android:background="@drawable/local_recycler_background"
-    android:textColor="@color/lightblack"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:textSize="15dp"/>
+    android:background="@drawable/local_recycler_background"
+    android:textColor="@color/lightblack"
+    android:textSize="15dp" />
 </LinearLayout>

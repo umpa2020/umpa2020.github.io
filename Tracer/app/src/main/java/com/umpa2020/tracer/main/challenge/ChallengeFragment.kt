@@ -60,9 +60,9 @@ class ChallengeFragment : Fragment() {
     return view
   }
 
-  private fun initView(layout:View) {
+  private fun initView(layout: View) {
     val now = Calendar.getInstance()
-    with(layout){
+    with(layout) {
       btn_challenge_from.text = from.format(Y_M_D)
       btn_challenge_to.text = to.format(Y_M_D)
       btn_challenge_region.text = locale

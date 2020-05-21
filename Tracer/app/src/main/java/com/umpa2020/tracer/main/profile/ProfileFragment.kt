@@ -19,15 +19,12 @@ import com.umpa2020.tracer.main.profile.myachievement.ProfileAchievementActivity
 import com.umpa2020.tracer.main.profile.myroute.ProfileRouteActivity
 import com.umpa2020.tracer.main.profile.settting.AppSettingActivity
 import com.umpa2020.tracer.network.BaseFB
-import com.umpa2020.tracer.network.BaseFB.Companion.DISTANCE
 import com.umpa2020.tracer.network.FBProfileRepository
 import com.umpa2020.tracer.network.FBUsersRepository
 import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.fragment_profile.*
-import kotlinx.android.synthetic.main.fragment_profile.profileFragmentTotalDistance
-import kotlinx.android.synthetic.main.fragment_profile.profileImageView
 import kotlinx.android.synthetic.main.fragment_profile.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
@@ -100,12 +97,12 @@ class ProfileFragment() : Fragment(), OnSingleClickListener, Parcelable {
         distance = it.distance
         profileFragmentTotalTime.text = it.time.format(m_s)
       }
-        FBUsersRepository().listUserAchievement(UserInfo.autoLoginKey).let {
-          medal1th.text = it[0].toString()
-          medal2nd.text = it[1].toString()
-          medal3rd.text = it[2].toString()
-          progressBar.dismiss()
-        }
+      FBUsersRepository().listUserAchievement(UserInfo.autoLoginKey).let {
+        medal1th.text = it[0].toString()
+        medal2nd.text = it[1].toString()
+        medal3rd.text = it[2].toString()
+        progressBar.dismiss()
+      }
     }
   }
 

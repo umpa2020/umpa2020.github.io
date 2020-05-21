@@ -14,17 +14,14 @@ import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.extensions.*
 import com.umpa2020.tracer.gpx.WayPointType.FINISH_POINT
 import com.umpa2020.tracer.gpx.WayPointType.START_POINT
-import com.umpa2020.tracer.main.start.racing.RacingActivity
 import com.umpa2020.tracer.main.start.racing.RacingActivity.Companion.ROUTE_GPX
 import com.umpa2020.tracer.main.start.racing.RacingSelectPeopleActivity
-import com.umpa2020.tracer.main.start.running.RunningSaveActivity
 import com.umpa2020.tracer.map.TraceMap
 import com.umpa2020.tracer.network.BaseFB.Companion.MAP_ID
 import com.umpa2020.tracer.network.FBMapRepository
 import com.umpa2020.tracer.network.FBProfileRepository
 import com.umpa2020.tracer.network.FBStorageRepository
 import com.umpa2020.tracer.util.Chart
-import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.activity_ranking_map_detail.*

@@ -59,68 +59,68 @@
             app:civ_border_width="1dp" />
 
           <TextView
-            android:layout_gravity="center_vertical"
             android:id="@+id/rankRecyclerNickname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_marginLeft="15dp"
             android:text="test"
-            android:textSize="18dp"
-            android:textColor="@color/lightblack"/>
+            android:textColor="@color/lightblack"
+            android:textSize="18dp" />
         </LinearLayout>
 
         <TextView
-          android:includeFontPadding="false"
-          android:textColor="@color/blackgray"
-          android:layout_toLeftOf="@+id/rankRecyclerHeart"
-          android:text="test"
-          android:layout_marginTop="10dp"
-          android:layout_marginRight="10dp"
           android:id="@+id/rankRecyclerHeartCount"
           android:layout_width="50dp"
           android:layout_height="wrap_content"
+          android:layout_marginTop="10dp"
+          android:layout_marginRight="10dp"
+          android:layout_toLeftOf="@+id/rankRecyclerHeart"
           android:gravity="right"
-          android:textSize="20dp"/>
+          android:includeFontPadding="false"
+          android:text="test"
+          android:textColor="@color/blackgray"
+          android:textSize="20dp" />
 
         <ImageView
-          android:layout_marginTop="10dp"
-          android:layout_alignParentRight="true"
           android:id="@+id/rankRecyclerHeart"
           android:layout_width="23dp"
           android:layout_height="23dp"
+          android:layout_alignParentRight="true"
+          android:layout_marginTop="10dp"
           android:src="@drawable/ic_favorite_border_black_24dp" />
 
         <TextView
-          android:includeFontPadding="false"
-          android:textColor="@color/blackgray"
-          android:text="test"
-          android:layout_marginTop="15dp"
-          android:layout_toLeftOf="@+id/rankRecyclerExecute"
           android:id="@+id/rankRecyclerExecuteCount"
           android:layout_width="50dp"
           android:layout_height="wrap_content"
           android:layout_below="@id/rankRecyclerHeartCount"
-          android:textSize="20dp"
+          android:layout_marginTop="15dp"
+          android:layout_marginRight="10dp"
+          android:layout_toLeftOf="@+id/rankRecyclerExecute"
           android:gravity="right"
-          android:layout_marginRight="10dp"/>
+          android:includeFontPadding="false"
+          android:text="test"
+          android:textColor="@color/blackgray"
+          android:textSize="20dp" />
 
         <ImageView
-          android:layout_alignParentRight="true"
           android:id="@+id/rankRecyclerExecute"
           android:layout_width="23dp"
           android:layout_height="23dp"
-          android:layout_marginTop="15dp"
           android:layout_below="@id/rankRecyclerHeart"
-          android:src="@drawable/ic_sneaker_for_running"/>
+          android:layout_alignParentRight="true"
+          android:layout_marginTop="15dp"
+          android:src="@drawable/ic_sneaker_for_running" />
 
         <TextView
-          android:text="test"
-          android:layout_marginTop="10dp"
-          android:layout_below="@id/linearlayout"
           android:id="@+id/rankRecyclerMapTitle"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
+          android:layout_below="@id/linearlayout"
+          android:layout_marginTop="10dp"
           android:fontFamily="sans-serif-medium"
+          android:text="test"
           android:textColor="@color/lightblack"
           android:textSize="20dp" />
 

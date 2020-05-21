@@ -62,7 +62,7 @@ class RacingActivity : BaseRunningActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     val routeGPXUri = intent.getStringExtra(ROUTE_GPX)
-    runningAppBarTextView.text=getString(R.string.race)
+    runningAppBarTextView.text = getString(R.string.race)
     mapRouteGPX = Uri.parse(routeGPXUri).gpxToClass()
     mapId = intent.getStringExtra(MAP_ID)!!
     racerList = intent.getSerializableExtra(RACER_LIST) as Array<RacerData>
