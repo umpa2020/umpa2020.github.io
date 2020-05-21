@@ -88,12 +88,13 @@ class RunningActivity : BaseRunningActivity() {
   override fun stop(tts: String) {
     super.stop(tts)
 
-    wpList.add(currentLocation!!.toWayPoint(FINISH_POINT))
+    wpList.add(currentLocation.toWayPoint(FINISH_POINT))
     val infoData = MapInfo()
     infoData.distance = distance
     infoData.time = SystemClock.elapsedRealtime() - runningTimerTextView.base
     infoData.startLatitude = trkList.first().lat
     infoData.startLongitude = trkList.first().lon
+    infoData.challenge = false
     val routeGPX = RouteGPX(infoData.time, "", wpList, trkList)
 
     val saveFolder = File(App.instance.filesDir, "RouteGPX") // 저장 경로

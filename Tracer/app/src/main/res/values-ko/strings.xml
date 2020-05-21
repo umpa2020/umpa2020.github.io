@@ -193,4 +193,25 @@
 
   <string name="notice_msg_pause_deviation">경로 이탈로 인해 일시 정지 되었습니다.</string>
   <string name="notece_msg_stop_tracking">기록 측정 중지</string>
+
+  <!--fragment_challenge-->
+  <string name="tournament_search">대회 검색</string>
+  <string name="region">지역</string>
+  <string name="search">검색</string>
+  <string name="tournament_list">대회 목록</string>
+
+  <!--activity_challenge_map_detail-->
+  <string name="tournament_details">대회 상세정보</string>
+  <string name="tournament_name">대회 이름</string>
+  <string name="opening_date">개최일</string>
+  <string name="reception_period">접수 기간</string>
+  <string name="address">주소</string>
+  <string name="host">주관</string>
+  <string name="tournament_information">대회 정보</string>
+  <string name="location">위치</string>
+  <string name="course_information">코스정보</string>
+
+  <string name="region_selection">지역 선택</string>
+
+  <string name="my_achievement">나의 업적</string>
 </resources>

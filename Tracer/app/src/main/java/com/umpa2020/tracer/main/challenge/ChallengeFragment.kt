@@ -54,7 +54,7 @@ class ChallengeFragment : Fragment(), CoroutineScope by MainScope() {
           adChallengeCountTextView.text = "${(view.adChallengeScrollViewPager.currentItem - a) % it.size + 1}/${it.size}"
         }
       }
-      FBChallengeRepository().listChallengeData(from, to, "전국").let {
+      FBChallengeRepository().listChallengeData(from, to, locale).let {
         challengeDataList(it!!)
       }
     }
