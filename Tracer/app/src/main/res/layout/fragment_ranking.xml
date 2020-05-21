@@ -252,7 +252,7 @@
         <Button
           android:id="@+id/allDeleteButton"
           style="@style/buttonTextRedText"
-          android:layout_width="wrap_content"
+          android:layout_width="70dp"
           android:layout_height="wrap_content"
           android:background="@drawable/button_empty_background"
           android:text="@string/delete_all" />
@@ -265,7 +265,7 @@
         <Button
           android:id="@+id/applyButton"
           style="@style/buttonText"
-          android:layout_width="wrap_content"
+          android:layout_width="70dp"
           android:layout_height="wrap_content"
           android:background="@drawable/button_background"
           android:text="@string/apply" />
