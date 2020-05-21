@@ -36,6 +36,7 @@ import com.umpa2020.tracer.util.TTS
 import kotlinx.android.synthetic.main.activity_running.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class ChallengeRacingActivity : BaseRunningActivity(), CoroutineScope by MainScope() {
@@ -56,6 +57,7 @@ class ChallengeRacingActivity : BaseRunningActivity(), CoroutineScope by MainSco
   lateinit var mCustomMarkerView: View
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+    runningAppBarTextView.text = getString(R.string.challenge)
     mapId = intent.getStringExtra(MAP_ID)!!
     launch {
       mapRouteGPX = FBStorageRepository().getFile(FBMapRepository().getMapInfo(mapId)?.routeGPXPath!!).gpxToClass()
@@ -66,9 +68,14 @@ class ChallengeRacingActivity : BaseRunningActivity(), CoroutineScope by MainSco
 
   override fun onMapReady(googleMap: GoogleMap) {
     super.onMapReady(googleMap)
-    traceMap.drawRoute(mapRouteGPX.trkList, mapRouteGPX.wptList).run {
-      markerList = this.first
-      turningPointList = this.second
+    launch {
+      while (!::mapRouteGPX.isInitialized) {
+        delay(100)
+      }
+      traceMap.drawRoute(mapRouteGPX.trkList, mapRouteGPX.wptList).run {
+        markerList = this.first
+        turningPointList = this.second
+      }
     }
   }
 
@@ -99,6 +106,7 @@ class ChallengeRacingActivity : BaseRunningActivity(), CoroutineScope by MainSco
       track.add(it.toLatLng())
     }
     mapRouteGPX.wptList.let { startPoint = it.first() }
+
   }
 
   override fun onSingleClick(v: View?) {
@@ -227,7 +235,7 @@ class ChallengeRacingActivity : BaseRunningActivity(), CoroutineScope by MainSco
       val nowRecord = SystemClock.elapsedRealtime() - runningTimerTextView.base
       bestList.add(recordTimes.first().toLong())
       worstList.add(recordTimes.last().toLong())
-      val a=nowRecord.calcRank(bestList.last(), worstList.last())
+      val a = nowRecord.calcRank(bestList.last(), worstList.last())
       recordList.add(nowRecord)
       TTS.speech("you are in ${a} % now")
       traceMap.changeMarkerIcon(nextWP)

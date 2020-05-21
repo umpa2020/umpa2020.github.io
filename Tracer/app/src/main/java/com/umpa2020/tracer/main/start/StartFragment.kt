@@ -27,7 +27,6 @@ import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.MapInfo
 import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.extensions.*
-import com.umpa2020.tracer.gpx.WayPoint
 import com.umpa2020.tracer.gpx.WayPointType
 import com.umpa2020.tracer.main.challenge.ChallengeDataSettingActivity
 import com.umpa2020.tracer.main.ranking.RankingMapDetailActivity
@@ -99,34 +98,20 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener, Cor
         startActivity(intent)
       }
       R.id.gpxTest -> {
-        /* val path = "/data/data/com.umpa2020.tracer/files/originGPX/2020korea50k_10kfinal.gpx"
-         val gpx = path.gpxToClass()
-         gpx.addCheckPoint()
-         gpx.addDirectionSign()
-         gpx.wptList.forEachIndexed{i,it->
+        val a = Uri.parse("/data/data/com.umpa2020.tracer/files/originGPX/2020korea50k_50 final")
+        val gpx = a.gpxToClass()
+        gpx.addCheckPoint()
+        gpx.addDirectionSign()
+        gpx.wptList.forEachIndexed { i, it ->
 
-      }
-      */
+        }
+
         val saveFolder = File(requireContext().filesDir, "routeGPX") // 저장 경로
         if (!saveFolder.exists()) {       //폴더 없으면 생성
           saveFolder.mkdir()
         }
-        val wptList = mutableListOf<WayPoint>()
-        wptList.add(WayPoint(1.0, 1.0, 1.0, 1.0, "1", "1", 0, WayPointType.START_POINT))
-        wptList.add(WayPoint(2.0, 2.0, 2.0, 2.0, "2", "2", 0, WayPointType.DISTANCE_POINT))
-        wptList.add(WayPoint(3.0, 3.0, 3.0, 3.0, "3", "3", 0, WayPointType.DISTANCE_POINT))
-        wptList.add(WayPoint(4.0, 4.0, 4.0, 4.0, "4", "4", 0, WayPointType.FINISH_POINT))
-
-
-        val trkList = mutableListOf<WayPoint>()
-        trkList.add(WayPoint(1.0, 1.0, 1.0, 1.0, "1", "1", 0, WayPointType.TRACK_POINT))
-        trkList.add(WayPoint(2.0, 2.0, 2.0, 2.0, "2", "2", 0, WayPointType.TRACK_POINT))
-        trkList.add(WayPoint(3.0, 3.0, 3.0, 3.0, "3", "3", 0, WayPointType.TRACK_POINT))
-        trkList.add(WayPoint(4.0, 4.0, 4.0, 4.0, "4", "4", 0, WayPointType.TRACK_POINT))
-
-        val routeGPX = RouteGPX(0, "0", wptList, trkList)
-        routeGPX.addDirectionSign()
-        val routeGpxFile = routeGPX.classToGpx(saveFolder.path)
+        val routeGpxUri = gpx.classToGpx(saveFolder.path).toString()
+        Logg.d("$routeGpxUri")
       }
     }
   }
@@ -141,7 +126,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener, Cor
    launch {
       Logg.d("2번선수")
       FBMapRepository().listNearMap(bound.southwest, bound.northeast).let { nearMapList ->
-        if (nearMapList == null) {
+        if (nearMapList.isEmpty()) {
           getString(R.string.not_search).show()
           progressBar.dismiss()
         } else {

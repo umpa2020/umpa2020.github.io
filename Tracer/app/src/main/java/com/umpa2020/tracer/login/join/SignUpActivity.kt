@@ -32,7 +32,10 @@ import com.umpa2020.tracer.extensions.toAge
 import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.network.FBProfileRepository
 import com.umpa2020.tracer.network.FBUsersRepository
-import com.umpa2020.tracer.util.*
+import com.umpa2020.tracer.util.ChoicePopup
+import com.umpa2020.tracer.util.OnSingleClickListener
+import com.umpa2020.tracer.util.ProgressBar
+import com.umpa2020.tracer.util.UserInfo
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_sign_up.*
 import kotlinx.android.synthetic.main.signup_toolbar.*

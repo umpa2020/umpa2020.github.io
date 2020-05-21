@@ -17,12 +17,10 @@ import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.extensions.addDirectionSign
 import com.umpa2020.tracer.extensions.classToGpx
 import com.umpa2020.tracer.extensions.toWayPoint
-import com.umpa2020.tracer.gpx.WayPoint
 import com.umpa2020.tracer.gpx.WayPointType.*
 import com.umpa2020.tracer.main.start.BaseRunningActivity
 import com.umpa2020.tracer.main.start.racing.RacingActivity
 import com.umpa2020.tracer.util.ChoicePopup
-import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.TTS
 import kotlinx.android.synthetic.main.activity_running.*
 import java.io.File
@@ -73,7 +71,7 @@ class RunningActivity : BaseRunningActivity() {
   /**
    * 러닝 이 시작될 때
    */
-  override fun start(tts :String) {
+  override fun start(tts: String) {
     super.start(tts)
     wpList.add(currentLocation.toWayPoint(START_POINT))
     traceMap.addMarker(wpList.first())

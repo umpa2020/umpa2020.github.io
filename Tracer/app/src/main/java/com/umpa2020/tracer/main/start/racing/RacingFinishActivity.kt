@@ -7,10 +7,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import com.bumptech.glide.Glide
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.storage.FirebaseStorage
-import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.ActivityData
 import com.umpa2020.tracer.dataClass.MapInfo
@@ -63,13 +59,7 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener, Corouti
       null
     )
 
-    /*  val saveFolder = File(App.instance.filesDir, "routeGPX") // 저장 경로
-      if (!saveFolder.exists()) {       //폴더 없으면 생성
-        saveFolder.mkdir()
-      }
-      val racerGpxFile = racerGPX.classToGpx(saveFolder.path)*/
-
-    launch {
+    MainScope().launch {
       // 유저 히스토리 등록
       FBUsersRepository().createUserHistory(
         ActivityData(racerData.mapId, Date().time, racerData.distance, racerData.time, if (result) BaseFB.ActivityMode.RACING_SUCCESS else BaseFB.ActivityMode.RACING_FAIL)

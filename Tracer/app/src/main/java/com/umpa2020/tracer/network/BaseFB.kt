@@ -2,7 +2,6 @@ package com.umpa2020.tracer.network
 
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
-import java.sql.Time
 
 /**
  * 파이어베이스 통신 기본 통신 규약
@@ -21,7 +20,7 @@ open class BaseFB {
   val mapRouteStorageRef = storage.reference.child(MAP_ROUTE)
 
   enum class ActivityMode {
-    MAP_SAVE,RACING_SUCCESS,RACING_FAIL
+    MAP_SAVE, RACING_SUCCESS, RACING_FAIL
   }
 
   companion object {

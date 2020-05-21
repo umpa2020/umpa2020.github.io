@@ -58,7 +58,7 @@ class FBMapRepository : BaseFB() {
    * Tracer 에서 만들어진 맵이 있다면 찾아와서 마커에 표현할 수 있도록
    * 리스트로 받아오는 함수
    */
-  suspend fun listNearMap(southwest: LatLng, northeast: LatLng): List<MapInfo>? {
+  suspend fun listNearMap(southwest: LatLng, northeast: LatLng): List<MapInfo> {
     return mapsCollectionRef
       .whereGreaterThan(START_LATITUDE, southwest.latitude)
       .whereLessThan(START_LATITUDE, northeast.latitude)

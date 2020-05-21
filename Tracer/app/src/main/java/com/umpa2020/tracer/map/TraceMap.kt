@@ -79,7 +79,7 @@ class TraceMap(val mMap: GoogleMap) {
     }
   }
 
-  fun moveCameraUserDirection(curLoc: Location,  zoomLevel : Float) {
+  fun moveCameraUserDirection(curLoc: Location, zoomLevel: Float) {
     Logg.d("move camera $curLoc")
     mMap.animateCamera(
       CameraUpdateFactory.newCameraPosition(
@@ -88,7 +88,7 @@ class TraceMap(val mMap: GoogleMap) {
     )
   }
 
-  fun moveCamera(latlng: LatLng, zoomLevel : Float) {
+  fun moveCamera(latlng: LatLng, zoomLevel: Float) {
     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latlng, zoomLevel))
   }
 

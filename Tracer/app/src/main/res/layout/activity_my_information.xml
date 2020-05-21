@@ -50,7 +50,7 @@
       android:layout_marginTop="15dp"
       android:text="@string/profile_image_change"
       android:textSize="18dp"
-      android:textStyle="bold"/>
+      android:textStyle="bold" />
   </LinearLayout>
 
   <TableLayout
@@ -71,7 +71,8 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="@string/email_"
-        android:textSize="15dp"/>
+        android:textSize="15dp" />
+
       <TextView
         android:id="@+id/emailTextView"
         android:layout_width="wrap_content"
@@ -96,7 +97,8 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="@string/nick_name"
-        android:textSize="15dp"/>
+        android:textSize="15dp" />
+
       <TextView
         android:id="@+id/nickNameTextView"
         android:layout_width="wrap_content"
@@ -121,7 +123,8 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="@string/age_"
-        android:textSize="15dp"/>
+        android:textSize="15dp" />
+
       <TextView
         android:id="@+id/ageTextView"
         android:layout_width="wrap_content"
@@ -152,7 +155,7 @@
         android:id="@+id/genderTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="15dp"/>
+        android:textSize="15dp" />
     </TableRow>
   </TableLayout>
 
@@ -166,10 +169,10 @@
     style="@style/buttonText"
     android:layout_width="match_parent"
     android:layout_height="50dp"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp"
     android:layout_marginBottom="10dp"
     android:background="@drawable/button_background"
-    android:text="@string/confirmation"
-    android:layout_marginLeft="20dp"
-    android:layout_marginRight="20dp"/>
+    android:text="@string/confirmation" />
 
 </LinearLayout>

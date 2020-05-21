@@ -42,7 +42,7 @@ class ChallengeRacingFinishActivity : AppCompatActivity(), OnSingleClickListener
     recordList = intent.getLongArrayExtra("RecordList")
     bestList = intent.getLongArrayExtra("BestList")
     worstList = intent.getLongArrayExtra("WorstList")
-    challengeFinishMyLapTime.text=recordList.last().format(m_s)
+    challengeFinishMyLapTime.text = recordList.last().format(m_s)
     challengeRankTextView.text = "${recordList.last().calcRank(bestList.last(), worstList.last())} %"
     challengeOKButton.setOnClickListener(this)
     launch {

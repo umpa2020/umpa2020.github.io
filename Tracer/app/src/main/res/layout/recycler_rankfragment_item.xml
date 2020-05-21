@@ -28,13 +28,13 @@
 
   <TextView
 
-    android:text="test"
     android:id="@+id/rankingFragmentDistanceTextView"
     style="@style/ListDetail"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
     android:layout_weight="2"
-    android:gravity="right" />
+    android:gravity="right"
+    android:text="test" />
 
   <LinearLayout
     android:layout_width="0dp"

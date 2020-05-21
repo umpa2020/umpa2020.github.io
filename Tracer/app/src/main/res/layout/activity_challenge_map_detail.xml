@@ -6,12 +6,12 @@
   tools:context=".main.ranking.RankingMapDetailActivity">
 
   <Toolbar
-    android:contentInsetStart="0dp"
     android:id="@+id/challengeDetailToolBar"
     android:layout_width="match_parent"
     android:layout_height="50dp"
     android:layout_alignParentTop="true"
     android:background="@color/white"
+    android:contentInsetStart="0dp"
     android:elevation="1dp">
 
     <TextView
@@ -23,11 +23,11 @@
   </Toolbar>
 
   <ScrollView
-    android:layout_marginBottom="70dp"
     android:id="@+id/challengeDetailScrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_below="@+id/challengeDetailToolBar">
+    android:layout_below="@+id/challengeDetailToolBar"
+    android:layout_marginBottom="70dp">
 
     <RelativeLayout
       android:layout_width="match_parent"
@@ -40,148 +40,147 @@
         android:scaleType="fitXY" />
 
       <RelativeLayout
-        android:layout_below="@+id/challengeDetailImageView"
+        style="@style/subjectRelativeLayoutStyle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        style="@style/subjectRelativeLayoutStyle">
+        android:layout_below="@+id/challengeDetailImageView">
 
         <TextView
-          style="@style/challengeDetail"
           android:id="@+id/challengeCompetitionName"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="10dp"
-          android:text="@string/tournament_name"/>
-
-
-        <TextView
-          style="@style/challengeDetailList"
-          android:layout_margin="10dp"
-          android:text="test"
-          android:id="@+id/challengeDetailCompetitionName"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_below="@+id/challengeCompetitionName" />
-
-        <TextView
-          android:layout_marginTop="10dp"
           style="@style/challengeDetail"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="10dp"
+          android:text="@string/tournament_name" />
+
+
+        <TextView
+          android:id="@+id/challengeDetailCompetitionName"
+          style="@style/challengeDetailList"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_below="@+id/challengeCompetitionName"
+          android:layout_margin="10dp"
+          android:text="test" />
+
+        <TextView
           android:id="@+id/challengeCompetitionDate"
+          style="@style/challengeDetail"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_below="@+id/challengeDetailCompetitionName"
-          android:text="@string/opening_date"/>
+          android:layout_marginTop="10dp"
+          android:text="@string/opening_date" />
 
         <TextView
-          style="@style/challengeDetailList"
-          android:layout_margin="10dp"
           android:id="@+id/challengeDetailCompetitionDate"
+          style="@style/challengeDetailList"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_below="@+id/challengeCompetitionDate" />
+          android:layout_below="@+id/challengeCompetitionDate"
+          android:layout_margin="10dp" />
 
         <TextView
-          style="@style/challengeDetail"
           android:id="@+id/challengeCompetitionPeriod"
+          style="@style/challengeDetail"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_below="@+id/challengeDetailCompetitionDate"
-          android:text="@string/reception_period"/>
+          android:text="@string/reception_period" />
 
         <TextView
           android:id="@+id/challengeDetailCompetitionPeriod"
           style="@style/challengeDetailList"
-          android:layout_margin="10dp"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_below="@+id/challengeCompetitionPeriod"/>
+          android:layout_below="@+id/challengeCompetitionPeriod"
+          android:layout_margin="10dp" />
 
         <TextView
-          android:layout_marginTop="10dp"
-          style="@style/challengeDetail"
           android:id="@+id/challengeAddress"
+          style="@style/challengeDetail"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_below="@+id/challengeDetailCompetitionPeriod"
-          android:text="@string/address"/>
+          android:layout_marginTop="10dp"
+          android:text="@string/address" />
 
         <TextView
-          style="@style/challengeDetailList"
-          android:layout_margin="10dp"
           android:id="@+id/challengeDetailAddress"
+          style="@style/challengeDetailList"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_below="@+id/challengeAddress"/>
+          android:layout_below="@+id/challengeAddress"
+          android:layout_margin="10dp" />
 
         <TextView
-          android:layout_marginTop="10dp"
-          style="@style/challengeDetail"
           android:id="@+id/challengeHost"
+          style="@style/challengeDetail"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_below="@+id/challengeDetailAddress"
-          android:text="@string/host"/>
+          android:layout_marginTop="10dp"
+          android:text="@string/host" />
 
         <TextView
-          style="@style/challengeDetailList"
-          android:layout_margin="10dp"
           android:id="@+id/challengeDetailHost"
+          style="@style/challengeDetailList"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_below="@+id/challengeHost"/>
+          android:layout_below="@+id/challengeHost"
+          android:layout_margin="10dp" />
 
         <TextView
-          android:layout_marginTop="10dp"
-          style="@style/challengeDetail"
           android:id="@+id/challengeInformation"
+          style="@style/challengeDetail"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_below="@+id/challengeDetailHost"
+          android:layout_marginTop="10dp"
           android:text="@string/tournament_information" />
 
         <TextView
-          style="@style/challengeDetailList"
-          android:layout_margin="10dp"
           android:id="@+id/challengeDetailInformation"
+          style="@style/challengeDetailList"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_below="@+id/challengeInformation"/>
+          android:layout_below="@+id/challengeInformation"
+          android:layout_margin="10dp" />
 
         <TextView
-          android:layout_marginTop="10dp"
-          style="@style/challengeDetail"
           android:id="@+id/challengeLocation"
+          style="@style/challengeDetail"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_below="@+id/challengeDetailInformation"
-          android:text="@string/location"/>
+          android:layout_marginTop="10dp"
+          android:text="@string/location" />
 
         <fragment
           android:id="@+id/challengeDetailLocation"
+          class="com.umpa2020.tracer.customUI.WorkaroundMapFragment"
           android:layout_width="match_parent"
           android:layout_height="250dp"
           android:layout_below="@+id/challengeLocation"
           android:layout_marginTop="10dp"
-          android:layout_marginBottom="10dp"
-          class="com.umpa2020.tracer.customUI.WorkaroundMapFragment"
-          />
+          android:layout_marginBottom="10dp" />
 
         <TextView
-          android:layout_marginTop="10dp"
-          style="@style/challengeDetail"
           android:id="@+id/challengeCourse"
+          style="@style/challengeDetail"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_below="@+id/challengeDetailLocation"
-          android:text="@string/course_information"/>
+          android:layout_marginTop="10dp"
+          android:text="@string/course_information" />
 
         <TextView
-          style="@style/challengeDetailList"
-          android:layout_margin="10dp"
           android:id="@+id/challengeCourseInformation"
+          style="@style/challengeDetailList"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_below="@+id/challengeCourse"/>
+          android:layout_below="@+id/challengeCourse"
+          android:layout_margin="10dp" />
       </RelativeLayout>
 
     </RelativeLayout>

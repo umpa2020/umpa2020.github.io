@@ -61,7 +61,7 @@ fun RouteGPX.addCheckPoint(): RouteGPX {
       if (i == trkList.size - 1) {
         wptList.add(it.apply {
           name = "Finish"
-          desc = "Finish Point"
+          desc = "${20000 * i},${40000 * i}"
           type = FINISH_POINT
         })
       } else {
@@ -73,7 +73,7 @@ fun RouteGPX.addCheckPoint(): RouteGPX {
           distance = 0.0
           wptList.add(it.apply {
             name = "Distance point"
-            desc = "100m"
+            desc = "${20000 * i},${40000 * i}"
             type = DISTANCE_POINT
           })
         }
@@ -203,23 +203,29 @@ fun Uri.gpxToClass(): RouteGPX {
 fun Node.toWayPoint(): WayPoint {
   val lat = value("lat")!!.toDouble()
   val lng = value("lon")!!.toDouble()
-  var ele: Double? = null
-  var speed: Double? = null
-  var time: Long? = null
-  var name: String? = null
-  var desc: String? = null
-  var type: WayPointType? = null
+  var ele = 0.0
+  var speed = 0.0
+  var time = 0L
+  var name = ""
+  var desc = ""
+  var type = TRACK_POINT
   for (i in 0 until childNodes.length) {
     val item = childNodes.item(i)
     when (item.nodeName) {
       "ele" -> {
-        ele = item.textContent.toDouble()
+        item.textContent.toDoubleOrNull()?.let {
+          ele = it
+        }
       }
       "speed" -> {
-        speed = item.textContent.toDouble()
+        item.textContent.toDoubleOrNull()?.let {
+          speed = it
+        }
       }
       "time" -> {
-        time = item.textContent.toLong()
+        item.textContent.toLongOrNull()?.let {
+          time = it
+        }
       }
       "name" -> {
         name = item.textContent

@@ -57,22 +57,22 @@
       <LinearLayout
         android:id="@+id/mapResultLinearLayout"
         style="@style/subjectRelativeLayoutStyle"
-        android:orientation="vertical"
-        android:layout_below="@+id/map_viewer">
+        android:layout_below="@+id/map_viewer"
+        android:orientation="vertical">
 
         <TextView
-          android:layout_marginTop="10dp"
           android:id="@+id/mapinformation"
+          style="@style/subjectName"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:text="@string/mapresult"
-          style="@style/subjectName"/>
+          android:layout_marginTop="10dp"
+          android:text="@string/mapresult" />
 
         <LinearLayout
-          android:layout_marginTop="20dp"
           android:id="@+id/dataTableLayout"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
+          android:layout_marginTop="20dp"
           android:orientation="horizontal">
 
           <LinearLayout
@@ -90,13 +90,13 @@
               android:textSize="15dp" />
 
             <TextView
-              android:textColor="@color/lightblack"
-              android:text="test"
               android:id="@+id/distance_tv"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:layout_marginTop="5dp"
               android:gravity="center"
+              android:text="test"
+              android:textColor="@color/lightblack"
               android:textSize="20dp" />
           </LinearLayout>
 
@@ -115,13 +115,13 @@
               android:textSize="15dp" />
 
             <TextView
-              android:textColor="@color/lightblack"
-              android:text="test"
               android:id="@+id/time_tv"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:layout_marginTop="5dp"
               android:gravity="center"
+              android:text="test"
+              android:textColor="@color/lightblack"
               android:textSize="20dp" />
           </LinearLayout>
 
@@ -139,13 +139,13 @@
               android:textSize="15dp" />
 
             <TextView
-              android:textColor="@color/lightblack"
-              android:text="test"
               android:id="@+id/speed_tv"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:layout_marginTop="5dp"
               android:gravity="center"
+              android:text="test"
+              android:textColor="@color/lightblack"
               android:textSize="20dp" />
           </LinearLayout>
         </LinearLayout>
@@ -154,15 +154,15 @@
       <LinearLayout
         android:id="@+id/altitude_sppedchart_layout"
         style="@style/subjectRelativeLayoutStyle"
-        android:orientation="vertical"
-        android:layout_below="@+id/mapResultLinearLayout">
+        android:layout_below="@+id/mapResultLinearLayout"
+        android:orientation="vertical">
 
         <TextView
-          android:layout_marginTop="10dp"
+          style="@style/subjectName"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          style="@style/subjectName"
-          android:text="@string/altitude_sppedchart"/>
+          android:layout_marginTop="10dp"
+          android:text="@string/altitude_sppedchart" />
 
         <com.github.mikephil.charting.charts.LineChart
           android:id="@+id/chart"
@@ -173,73 +173,73 @@
       </LinearLayout>
 
       <RelativeLayout
-        android:layout_below="@+id/altitude_sppedchart_layout"
-        style="@style/subjectRelativeLayoutStyle">
+        style="@style/subjectRelativeLayoutStyle"
+        android:layout_below="@+id/altitude_sppedchart_layout">
 
         <TextView
           android:id="@+id/mapinformationTextView"
-          android:layout_marginTop="10dp"
+          style="@style/subjectName"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          style="@style/subjectName"
-          android:text="@string/mapinformation"/>
+          android:layout_marginTop="10dp"
+          android:text="@string/mapinformation" />
 
         <TextView
-          android:layout_marginRight="30dp"
           android:id="@+id/mapNameTextView"
-          android:text="@string/mapname"
-          android:layout_marginTop="20dp"
-          android:textSize="16dp"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
+          android:layout_below="@+id/mapinformationTextView"
+          android:layout_marginTop="20dp"
+          android:layout_marginRight="30dp"
+          android:text="@string/mapname"
           android:textColor="@color/blackgray"
-          android:layout_below="@+id/mapinformationTextView"/>
+          android:textSize="16dp" />
 
         <EditText
-          android:layout_toRightOf="@+id/mapNameTextView"
-          android:layout_alignBaseline="@+id/mapNameTextView"
-          android:textColor="@color/lightblack"
-          android:layout_marginTop="20dp"
           android:id="@+id/mapTitleEdit"
-          android:background="@android:color/transparent"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:hint="@string/map_title" />
+          android:layout_alignBaseline="@+id/mapNameTextView"
+          android:layout_marginTop="20dp"
+          android:layout_toRightOf="@+id/mapNameTextView"
+          android:background="@android:color/transparent"
+          android:hint="@string/map_title"
+          android:textColor="@color/lightblack" />
 
         <TextView
-          android:layout_below="@+id/mapNameTextView"
+          android:id="@+id/divisiontext"
           style="@style/divisionTextView"
-          android:layout_marginTop="20dp"
-          android:layout_marginRight="0dp"
+          android:layout_below="@+id/mapNameTextView"
           android:layout_marginLeft="0dp"
-          android:id="@+id/divisiontext"/>
+          android:layout_marginTop="20dp"
+          android:layout_marginRight="0dp" />
 
         <TextView
-          android:layout_marginRight="30dp"
           android:id="@+id/mapDescriptionTextView"
-          android:text="@string/mapdescription"
-          android:layout_marginTop="20dp"
-          android:textSize="16dp"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
+          android:layout_below="@+id/divisiontext"
+          android:layout_marginTop="20dp"
+          android:layout_marginRight="30dp"
+          android:text="@string/mapdescription"
           android:textColor="@color/blackgray"
-          android:layout_below="@+id/divisiontext"/>
+          android:textSize="16dp" />
 
 
         <EditText
-          android:gravity="top"
-          android:layout_below="@+id/mapDescriptionTextView"
-          android:textColor="@color/lightblack"
-          android:layout_marginTop="10dp"
           android:id="@+id/mapExplanationEdit"
-          android:background="@android:color/transparent"
           android:layout_width="match_parent"
           android:layout_height="100dp"
+          android:layout_below="@+id/mapDescriptionTextView"
+          android:layout_marginTop="10dp"
+          android:background="@android:color/transparent"
+          android:gravity="top"
           android:hint="@string/map_write_description"
-          android:scrollbars="vertical"
           android:minLines="10"
+          android:overScrollMode="always"
           android:scrollbarStyle="insideInset"
-          android:overScrollMode="always"/>
+          android:scrollbars="vertical"
+          android:textColor="@color/lightblack" />
       </RelativeLayout>
 
       <!-- <LinearLayout

@@ -26,139 +26,139 @@
     android:id="@+id/rankingDetailScrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginBottom="70dp"
-    android:layout_below="@+id/rankingDetailToolBar">
+    android:layout_below="@+id/rankingDetailToolBar"
+    android:layout_marginBottom="70dp">
 
     <RelativeLayout
       android:layout_width="match_parent"
       android:layout_height="match_parent">
 
       <RelativeLayout
-        android:layout_marginTop="0dp"
         android:id="@+id/mapDescriptionLayout"
+        style="@style/subjectRelativeLayoutStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/subjectRelativeLayoutStyle">
+        android:layout_marginTop="0dp">
 
         <TextView
           android:id="@+id/mapinformationTextView"
-          android:layout_marginTop="10dp"
+          style="@style/subjectName"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          style="@style/subjectName"
-          android:text="@string/mapinformation"/>
+          android:layout_marginTop="10dp"
+          android:text="@string/mapinformation" />
 
         <de.hdodenhof.circleimageview.CircleImageView
-          android:layout_marginTop="15dp"
-          android:layout_below="@+id/mapinformationTextView"
           android:id="@+id/rankingDetailProfileImage"
           android:layout_width="60dp"
           android:layout_height="60dp"
+          android:layout_below="@+id/mapinformationTextView"
           android:layout_gravity="center_vertical"
+          android:layout_marginTop="15dp"
           android:src="@drawable/basic_profile">
 
         </de.hdodenhof.circleimageview.CircleImageView>
 
         <LinearLayout
           android:id="@+id/mapdetaillayout"
-          android:layout_marginTop="15dp"
-          android:layout_below="@+id/mapinformationTextView"
-          android:layout_toRightOf="@+id/rankingDetailProfileImage"
           android:layout_width="match_parent"
           android:layout_height="60dp"
-          android:gravity="center_vertical"
+          android:layout_below="@+id/mapinformationTextView"
           android:layout_marginLeft="20dp"
+          android:layout_marginTop="15dp"
+          android:layout_toRightOf="@+id/rankingDetailProfileImage"
+          android:gravity="center_vertical"
           android:orientation="vertical">
 
           <TextView
-            android:text="test"
             android:id="@+id/rankingDetailDate"
             style="@style/ListDetail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="15dp"/>
+            android:text="test"
+            android:textSize="15dp" />
 
           <TextView
-            android:layout_marginTop="10dp"
-            android:text="test"
             android:id="@+id/rankingDetailNickname"
             style="@style/ListDetail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="test"
+            android:textColor="@color/lightblack"
             android:textSize="17dp"
-            android:textStyle="bold"
-            android:textColor="@color/lightblack"/>
+            android:textStyle="bold" />
         </LinearLayout>
 
         <TextView
-          android:paddingLeft="10dp"
-          android:layout_marginRight="30dp"
           android:id="@+id/rankingDetailMapDetailItem0"
-          android:text="@string/mapname"
-          android:layout_marginTop="20dp"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:textSize="16dp"
-          android:layout_below="@+id/mapdetaillayout" />
+          android:layout_below="@+id/mapdetaillayout"
+          android:layout_marginTop="20dp"
+          android:layout_marginRight="30dp"
+          android:paddingLeft="10dp"
+          android:text="@string/mapname"
+          android:textSize="16dp" />
 
         <TextView
-          android:gravity="right"
-          android:layout_marginRight="10dp"
-          android:layout_toRightOf="@+id/rankingDetailMapDetailItem0"
-          android:layout_alignBaseline="@+id/rankingDetailMapDetailItem0"
-          android:textColor="@color/lightblack"
-          android:layout_marginTop="20dp"
           android:id="@+id/rankingDetailMapTitle"
-          android:background="@android:color/transparent"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:text="test"
-          android:textSize="18dp"/>
-
-        <TextView
-          android:layout_below="@+id/rankingDetailMapDetailItem0"
-          style="@style/divisionTextView"
+          android:layout_alignBaseline="@+id/rankingDetailMapDetailItem0"
           android:layout_marginTop="20dp"
           android:layout_marginRight="10dp"
-          android:layout_marginLeft="10dp"
-          android:id="@+id/divisiontext"/>
-
-        <TextView
-          android:layout_below="@+id/divisiontext"
-          android:textSize="16dp"
-          android:paddingLeft="10dp"
-          android:id="@+id/rankingDetailMapDetailItem"
-          android:text="@string/mapdescription"
-          android:layout_marginTop="20dp"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"/>
-
-        <TextView
-          android:gravity="top"
-          android:layout_below="@+id/rankingDetailMapDetailItem"
+          android:layout_toRightOf="@+id/rankingDetailMapDetailItem0"
+          android:background="@android:color/transparent"
+          android:gravity="right"
+          android:text="test"
           android:textColor="@color/lightblack"
-          android:textSize="15dp"
+          android:textSize="18dp" />
+
+        <TextView
+          android:id="@+id/divisiontext"
+          style="@style/divisionTextView"
+          android:layout_below="@+id/rankingDetailMapDetailItem0"
+          android:layout_marginLeft="10dp"
+          android:layout_marginTop="20dp"
+          android:layout_marginRight="10dp" />
+
+        <TextView
+          android:id="@+id/rankingDetailMapDetailItem"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_below="@+id/divisiontext"
+          android:layout_marginTop="20dp"
+          android:paddingLeft="10dp"
+          android:text="@string/mapdescription"
+          android:textSize="16dp" />
+
+        <TextView
+          android:id="@+id/rankingDetailMapDetail"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_below="@+id/rankingDetailMapDetailItem"
+          android:layout_marginLeft="10dp"
           android:layout_marginTop="10dp"
           android:layout_marginRight="10dp"
-          android:layout_marginLeft="10dp"
-          android:id="@+id/rankingDetailMapDetail"
           android:background="@android:color/transparent"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"/>
+          android:gravity="top"
+          android:textColor="@color/lightblack"
+          android:textSize="15dp" />
 
       </RelativeLayout>
 
       <RelativeLayout
         android:id="@+id/recordDetail"
-        android:layout_below="@+id/mapDescriptionLayout"
-        style="@style/subjectRelativeLayoutStyle">
+        style="@style/subjectRelativeLayoutStyle"
+        android:layout_below="@+id/mapDescriptionLayout">
 
         <TextView
           android:id="@+id/rankingDetailMapDetailItem1"
-          android:layout_marginTop="10dp"
+          style="@style/subjectName"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          style="@style/subjectName"
+          android:layout_marginTop="10dp"
           android:text="@string/recordanalysis" />
 
         <LinearLayout
@@ -177,19 +177,19 @@
             android:orientation="vertical">
 
             <TextView
-              android:textSize="15dp"
               style="@style/ListDetail"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:text="@string/distance" />
+              android:text="@string/distance"
+              android:textSize="15dp" />
 
             <TextView
-              android:layout_marginTop="10dp"
               android:id="@+id/rankingDetailDistance"
-              android:textSize="18dp"
               style="@style/MapDetail"
               android:layout_width="wrap_content"
-              android:layout_height="wrap_content" />
+              android:layout_height="wrap_content"
+              android:layout_marginTop="10dp"
+              android:textSize="18dp" />
 
           </LinearLayout>
 
@@ -201,19 +201,19 @@
             android:orientation="vertical">
 
             <TextView
-              android:textSize="15dp"
               style="@style/ListDetail"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:text="@string/time" />
+              android:text="@string/time"
+              android:textSize="15dp" />
 
             <TextView
-              android:layout_marginTop="10dp"
               android:id="@+id/rankingDetailTime"
-              android:textSize="18dp"
               style="@style/MapDetail"
               android:layout_width="wrap_content"
-              android:layout_height="wrap_content" />
+              android:layout_height="wrap_content"
+              android:layout_marginTop="10dp"
+              android:textSize="18dp" />
 
           </LinearLayout>
 
@@ -225,19 +225,19 @@
             android:orientation="vertical">
 
             <TextView
-              android:textSize="15dp"
               style="@style/ListDetail"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:text="@string/speed_with_unit" />
+              android:text="@string/speed_with_unit"
+              android:textSize="15dp" />
 
             <TextView
-              android:layout_marginTop="10dp"
               android:id="@+id/rankingDetailSpeed"
-              android:textSize="18dp"
               style="@style/MapDetail"
               android:layout_width="wrap_content"
-              android:layout_height="wrap_content" />
+              android:layout_height="wrap_content"
+              android:layout_marginTop="10dp"
+              android:textSize="18dp" />
 
           </LinearLayout>
         </LinearLayout>
@@ -245,38 +245,37 @@
 
       <RelativeLayout
         android:id="@+id/rountthumlayout"
-        android:layout_below="@+id/recordDetail"
-        style="@style/subjectRelativeLayoutStyle">
+        style="@style/subjectRelativeLayoutStyle"
+        android:layout_below="@+id/recordDetail">
 
         <TextView
           android:id="@+id/rankingDetailMapDetailItem2"
-          android:layout_marginTop="10dp"
+          style="@style/subjectName"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          style="@style/subjectName"
+          android:layout_marginTop="10dp"
           android:text="@string/thumbnail" />
 
         <fragment
           android:id="@+id/rankingDetailMapViewer"
+          class="com.umpa2020.tracer.customUI.WorkaroundMapFragment"
           android:layout_width="match_parent"
           android:layout_height="250dp"
           android:layout_below="@+id/rankingDetailMapDetailItem2"
           android:layout_marginTop="10dp"
-          android:layout_marginBottom="10dp"
-          class="com.umpa2020.tracer.customUI.WorkaroundMapFragment"
-          />
+          android:layout_marginBottom="10dp" />
       </RelativeLayout>
 
       <RelativeLayout
-        android:layout_below="@+id/rountthumlayout"
-        style="@style/subjectRelativeLayoutStyle">
+        style="@style/subjectRelativeLayoutStyle"
+        android:layout_below="@+id/rountthumlayout">
 
         <TextView
           android:id="@+id/rankingDetailMapDetailItem3"
-          android:layout_marginTop="10dp"
+          style="@style/subjectName"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          style="@style/subjectName"
+          android:layout_marginTop="10dp"
           android:text="@string/altitude_sppedchart" />
 
         <com.github.mikephil.charting.charts.LineChart
@@ -284,8 +283,7 @@
           android:layout_width="match_parent"
           android:layout_height="200dp"
           android:layout_below="@+id/rankingDetailMapDetailItem3"
-          android:layout_marginTop="10dp">
-        </com.github.mikephil.charting.charts.LineChart>
+          android:layout_marginTop="10dp"></com.github.mikephil.charting.charts.LineChart>
 
       </RelativeLayout>
     </RelativeLayout>

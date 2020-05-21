@@ -16,23 +16,23 @@
     android:padding="5dp">
 
     <TextView
-      android:layout_centerHorizontal="true"
       android:id="@+id/challenge_date"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:layout_centerHorizontal="true"
       android:text="2020"
-      android:textSize="17dp"
-      android:textColor="@color/blackgray"/>
+      android:textColor="@color/blackgray"
+      android:textSize="17dp" />
 
 
     <ImageView
-      android:layout_below="@+id/challenge_date"
-      android:scaleType="fitXY"
       android:id="@+id/challenge_map"
       android:layout_width="150dp"
       android:layout_height="150dp"
+      android:layout_below="@+id/challenge_date"
       android:layout_centerHorizontal="true"
       android:layout_marginTop="5dp"
+      android:scaleType="fitXY"
       android:src="@drawable/login_image" />
 
     <TextView

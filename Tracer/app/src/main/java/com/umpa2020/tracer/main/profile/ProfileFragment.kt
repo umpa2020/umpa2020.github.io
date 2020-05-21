@@ -94,12 +94,12 @@ class ProfileFragment() : Fragment(), OnSingleClickListener, Parcelable, Corouti
         distance = it.distance
         profileFragmentTotalTime.text = it.time.format(m_s)
       }
-        FBUsersRepository().listUserAchievement(UserInfo.autoLoginKey).let {
-          medal1th.text = it[0].toString()
-          medal2nd.text = it[1].toString()
-          medal3rd.text = it[2].toString()
-          progressBar.dismiss()
-        }
+      FBUsersRepository().listUserAchievement(UserInfo.autoLoginKey).let {
+        medal1th.text = it[0].toString()
+        medal2nd.text = it[1].toString()
+        medal3rd.text = it[2].toString()
+        progressBar.dismiss()
+      }
     }
   }
 

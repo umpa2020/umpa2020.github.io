@@ -62,6 +62,7 @@ class RacingActivity : BaseRunningActivity(),CoroutineScope by MainScope() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     val routeGPXUri = intent.getStringExtra(ROUTE_GPX)
+    runningAppBarTextView.text = getString(R.string.race)
     mapRouteGPX = Uri.parse(routeGPXUri).gpxToClass()
     mapId = intent.getStringExtra(MAP_ID)!!
     racerList = intent.getSerializableExtra(RACER_LIST) as Array<RacerData>
@@ -189,7 +190,7 @@ class RacingActivity : BaseRunningActivity(),CoroutineScope by MainScope() {
 
     if (!racerGPXList.isNullOrEmpty()) {
       Logg.d("Start Virtual Racing")
-      //  virtualRacing()
+      virtualRacing()
     }
   }
 
