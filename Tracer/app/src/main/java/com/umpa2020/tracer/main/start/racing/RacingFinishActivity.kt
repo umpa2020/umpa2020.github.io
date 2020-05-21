@@ -2,6 +2,7 @@ package com.umpa2020.tracer.main.start.racing
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -49,8 +50,11 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
     // Racing Activity 에서 넘겨준 infoData를 받아서 활용
     racerData = intent.getParcelableExtra("InfoData") as MapInfo
     val result = intent.extras!!.getBoolean("Result")
-    val racerGPX = intent.getParcelableExtra<RouteGPX>("RouteGPX")
-    racerSpeeds = racerGPX!!.getSpeed()
+
+    val routeGPXUri = intent.getStringExtra(RacingActivity.ROUTE_GPX)
+    val racerGPX = Uri.parse(routeGPXUri).gpxToClass()
+
+    racerSpeeds = racerGPX.getSpeed()
     val rankingData = RankingData(
       racerData.makerId,
       UserInfo.autoLoginKey,
@@ -62,11 +66,11 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
       null
     )
 
-    val saveFolder = File(App.instance.filesDir, "routeGPX") // 저장 경로
+  /*  val saveFolder = File(App.instance.filesDir, "routeGPX") // 저장 경로
     if (!saveFolder.exists()) {       //폴더 없으면 생성
       saveFolder.mkdir()
     }
-    val racerGpxFile = racerGPX.classToGpx(saveFolder.path)
+    val racerGpxFile = racerGPX.classToGpx(saveFolder.path)*/
 
     MainScope().launch {
       // 유저 히스토리 등록
@@ -80,7 +84,7 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
 
       //성공했다면 랭킹에 등록
       if (result)
-        FBRacingRepository().createRankingData(racerData, rankingData, racerGpxFile)
+        FBRacingRepository().createRankingData(racerData, rankingData, Uri.parse(routeGPXUri))
 
       arrRankingData = FBMapRepository().listMapRanking(racerData.mapId)
       FBUsersRepository().updateUserAchievement(arrRankingData, racerData.mapId)
@@ -109,59 +113,6 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
     }
   }
 
-  /*
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-      if (resultCode == 100) {
-        if (resultCode == 100) {
-          val getNickname = data!!.getStringExtra("result")
-          RacingFinishAnalysisOtherNickname.text = getNickname
-
-          progressbar.show()
-          FBRacingRepository().getOtherData(racerData.mapTitle!!, getNickname!!)
-          /**
-           * TODO 아래 코드 원래 있던 코드를 재활용 안하고 새로 했는데 - 정빈
-           *
-           * 1. AllRankingActivity 안에 RecyclerView에서 종료를 시키고 있어서
-           *    제대로 된 종료가 안되서
-           * 2. 원래 있던 코드를 사용하면 APP.instance 부분이 오류가 나게 됨
-           *
-           */
-          val db = FirebaseFirestore.getInstance()
-          var profileImagePath = "init"
-          db.collection(USERS).whereEqualTo("nickname", getNickname)
-            .get()
-            .addOnSuccessListener { result ->
-              if (!result.isEmpty) {
-                for (document in result) {
-                  profileImagePath = document.get("profileImagePath") as String
-                  break
-                }
-                // glide imageview 소스
-                // 프사 설정하는 코드 db -> imageView glide
-                val storage = FirebaseStorage.getInstance()
-                val profileRef = storage.reference.child(profileImagePath)
-
-                profileRef.downloadUrl.addOnCompleteListener { task ->
-                  if (task.isSuccessful) {
-                    // Glide 이용하여 이미지뷰에 로딩
-                    RacingFinishAnalysisOtherProfile.image(task.result!!)
-                    progressbar.dismiss()
-                  } else {
-                    progressbar.dismiss()
-                  }
-                }
-              } else {
-                RacingFinishAnalysisOtherNickname.text = "탈퇴한 회원입니다."
-              }
-
-            }
-          //FBProfileRepository().getProfileImage(RacingFinishAnalysisOtherProfile, getNickname!!)
-        }
-      }
-      super.onActivityResult(requestCode, resultCode, data)
-    }
-
-  */
   @SuppressLint("ShowToast")
   private fun setMyUiData(
     racerSpeeds: MutableList<Double>,

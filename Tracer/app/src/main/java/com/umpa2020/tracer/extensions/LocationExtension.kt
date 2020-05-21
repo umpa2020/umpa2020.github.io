@@ -171,7 +171,6 @@ fun RouteGPX.classToGpx(folderPath: String): Uri {
     val result = StreamResult(FileOutputStream(file))
     // val result = StreamResult(System.out)
     transformer.transform(source, result)
-    Logg.d("tlqkf")
     return Uri.fromFile(file)
   } catch (e: Exception) {
     e.printStackTrace()
@@ -180,8 +179,8 @@ fun RouteGPX.classToGpx(folderPath: String): Uri {
   return Uri.EMPTY
 }
 
-fun String.gpxToClass(): RouteGPX {
-  val inputStream = FileInputStream(this)
+fun Uri.gpxToClass(): RouteGPX {
+  val inputStream = FileInputStream(path!!)
   val dom = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(inputStream)
   val wptList = mutableListOf<WayPoint>()
   dom.documentElement.getElementsByTagName("wpt").let {

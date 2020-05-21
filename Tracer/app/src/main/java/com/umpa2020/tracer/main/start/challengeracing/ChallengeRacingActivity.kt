@@ -58,7 +58,6 @@ class ChallengeRacingActivity : BaseRunningActivity() {
     MainScope().launch {
       mapRouteGPX = FBStorageRepository().getFile(FBMapRepository().getMapInfo(mapId)?.routeGPXPath!!).gpxToClass()
       loadRoute()
-      init()
     }
     TTS.speech(getString(R.string.goToStartPoint))
   }

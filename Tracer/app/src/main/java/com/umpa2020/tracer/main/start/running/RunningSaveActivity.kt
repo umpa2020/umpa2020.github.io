@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.umpa2020.tracer.App
@@ -18,6 +19,7 @@ import com.umpa2020.tracer.extensions.*
 import com.umpa2020.tracer.gpx.WayPointType.FINISH_POINT
 import com.umpa2020.tracer.gpx.WayPointType.START_POINT
 import com.umpa2020.tracer.main.MainActivity
+import com.umpa2020.tracer.main.start.racing.RacingActivity
 import com.umpa2020.tracer.map.TraceMap
 import com.umpa2020.tracer.network.BaseFB
 import com.umpa2020.tracer.network.BaseFB.Companion.MAP_ROUTE
@@ -48,7 +50,9 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
     setContentView(R.layout.activity_running_save)
     progressBar = MyProgressBar()
     mapInfo = intent.getParcelableExtra("InfoData")!!
-    routeGPX = intent.getParcelableExtra("RouteGPX")!!
+    val routeGPXUri = intent.getStringExtra(RacingActivity.ROUTE_GPX)
+    routeGPX = Uri.parse(routeGPXUri).gpxToClass()
+
     val wmf =
       supportFragmentManager.findFragmentById(R.id.map_viewer) as WorkaroundMapFragment
     wmf.getMapAsync(this)
@@ -63,9 +67,9 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
       speedList.add(it.speed!!)
       elevationList.add(it.alt)
     }
-    distance_tv.text = mapInfo.distance!!.prettyDistance
+    distance_tv.text = mapInfo.distance.prettyDistance
 
-    time_tv.text = mapInfo.time!!.format(m_s)
+    time_tv.text = mapInfo.time.format(m_s)
     speed_tv.text = String.format("%.2f", speedList.average())
 
     val myChart = Chart(elevationList, speedList, chart)

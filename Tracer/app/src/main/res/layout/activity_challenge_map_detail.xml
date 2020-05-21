@@ -19,7 +19,7 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:gravity="center"
-      android:text="대회 상세정보" />
+      android:text="@string/tournament_details" />
   </Toolbar>
 
   <ScrollView
@@ -51,7 +51,7 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_marginTop="10dp"
-          android:text="대회 이름"/>
+          android:text="@string/tournament_name"/>
 
 
         <TextView
@@ -70,7 +70,7 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_below="@+id/challengeDetailCompetitionName"
-          android:text="개최일"/>
+          android:text="@string/opening_date"/>
 
         <TextView
           style="@style/challengeDetailList"
@@ -86,7 +86,7 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_below="@+id/challengeDetailCompetitionDate"
-          android:text="접수 기간"/>
+          android:text="@string/reception_period"/>
 
         <TextView
           android:id="@+id/challengeDetailCompetitionPeriod"
@@ -103,7 +103,7 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_below="@+id/challengeDetailCompetitionPeriod"
-          android:text="주소"/>
+          android:text="@string/address"/>
 
         <TextView
           style="@style/challengeDetailList"
@@ -120,7 +120,7 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_below="@+id/challengeDetailAddress"
-          android:text="주관"/>
+          android:text="@string/host"/>
 
         <TextView
           style="@style/challengeDetailList"
@@ -137,7 +137,7 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_below="@+id/challengeDetailHost"
-          android:text="대회 정보" />
+          android:text="@string/tournament_information" />
 
         <TextView
           style="@style/challengeDetailList"
@@ -154,7 +154,7 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_below="@+id/challengeDetailInformation"
-          android:text="위치"/>
+          android:text="@string/location"/>
 
         <fragment
           android:id="@+id/challengeDetailLocation"
@@ -173,7 +173,7 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_below="@+id/challengeDetailLocation"
-          android:text="코스정보"/>
+          android:text="@string/course_information"/>
 
         <TextView
           style="@style/challengeDetailList"
