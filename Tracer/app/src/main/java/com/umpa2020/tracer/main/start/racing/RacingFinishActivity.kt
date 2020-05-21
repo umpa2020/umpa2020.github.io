@@ -1,11 +1,16 @@
 package com.umpa2020.tracer.main.start.racing
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.ActivityData
 import com.umpa2020.tracer.dataClass.MapInfo
@@ -58,11 +63,11 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener, Corouti
       null
     )
 
-  /*  val saveFolder = File(App.instance.filesDir, "routeGPX") // 저장 경로
-    if (!saveFolder.exists()) {       //폴더 없으면 생성
-      saveFolder.mkdir()
-    }
-    val racerGpxFile = racerGPX.classToGpx(saveFolder.path)*/
+    /*  val saveFolder = File(App.instance.filesDir, "routeGPX") // 저장 경로
+      if (!saveFolder.exists()) {       //폴더 없으면 생성
+        saveFolder.mkdir()
+      }
+      val racerGpxFile = racerGPX.classToGpx(saveFolder.path)*/
 
     launch {
       // 유저 히스토리 등록
@@ -105,6 +110,34 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener, Corouti
     }
   }
 
+  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    if (resultCode == 100) {
+      if (resultCode == 100) {
+        val getId = data!!.getStringExtra("userId")
+        val getNickname = data.getStringExtra("userNickname")
+        RacingFinishAnalysisOtherNickname.text = getNickname
+
+        progressbar.show()
+
+        MainScope().launch {
+          FBRacingRepository().getOtherData(racerData.mapId, getId!!).let {
+            setOtherData(it)
+          }
+          // TODO 회원탈퇴 방식 getProfileImage에서 검사를 안하기 때문에 새로 검사를 해야하는 함수 작성 필요
+          FBProfileRepository().getProfileImage(getId).let {
+            if (it == null) {
+              RacingFinishAnalysisOtherNickname.text = getString(R.string.unregister_user)
+            } else {
+              RacingFinishAnalysisOtherProfile.image(it)
+            }
+            progressbar.dismiss()
+          }
+        }
+      }
+    }
+    super.onActivityResult(requestCode, resultCode, data)
+  }
+
   @SuppressLint("ShowToast")
   private fun setMyUiData(
     racerSpeeds: MutableList<Double>,
@@ -136,6 +169,16 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener, Corouti
       racerAvgSpeedTextView.text = racerSpeeds.average().prettyDistance
       progressbar.dismiss()
     }
+  }
+
+  private fun setOtherData(rankingData: RankingData) {
+    MainScope().launch {
+      FBProfileRepository().getProfileImage(rankingData.challengerId!!)?.let { RacingFinishAnalysisOtherProfile.image(it) }
+
+    }
+    otherLapTimeTextView.text = rankingData.challengerTime!!.format(m_s)
+    otherMaxSpeedTextView.text = rankingData.maxSpeed!!.toDouble().prettyDistance
+    otherAvgSpeedTextView.text = rankingData.averageSpeed!!.toDouble().prettyDistance
   }
 
   private suspend fun updateRankingUI(rankingDatas: MutableList<RankingData>) {
