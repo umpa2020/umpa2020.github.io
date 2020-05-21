@@ -70,11 +70,11 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
       null
     )
 
-  /*  val saveFolder = File(App.instance.filesDir, "routeGPX") // 저장 경로
-    if (!saveFolder.exists()) {       //폴더 없으면 생성
-      saveFolder.mkdir()
-    }
-    val racerGpxFile = racerGPX.classToGpx(saveFolder.path)*/
+    /*  val saveFolder = File(App.instance.filesDir, "routeGPX") // 저장 경로
+      if (!saveFolder.exists()) {       //폴더 없으면 생성
+        saveFolder.mkdir()
+      }
+      val racerGpxFile = racerGPX.classToGpx(saveFolder.path)*/
 
     MainScope().launch {
       // 유저 히스토리 등록
@@ -120,52 +120,26 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     if (resultCode == 100) {
       if (resultCode == 100) {
-        val getNickname = data!!.getStringExtra("result")
+        val getId = data!!.getStringExtra("userId")
+        val getNickname = data.getStringExtra("userNickname")
         RacingFinishAnalysisOtherNickname.text = getNickname
 
         progressbar.show()
-        FBRacingRepository().getOtherData(racerData.mapTitle, getNickname!!, racingFinishListener)
-        /**
-         * TODO 아래 코드 원래 있던 코드를 재활용 안하고 새로 했는데 - 정빈
-         *
-         * 1. AllRankingActivity 안에 RecyclerView에서 종료를 시키고 있어서
-         *    제대로 된 종료가 안되서
-         * 2. 원래 있던 코드를 사용하면 APP.instance 부분이 오류가 나게 됨
-         *
-         */
-        val db = FirebaseFirestore.getInstance()
-        var profileImagePath = "init"
-        db.collection("userinfo").whereEqualTo("nickname", getNickname)
-          .get()
-          .addOnSuccessListener { result ->
-            if (!result.isEmpty) {
-              for (document in result) {
-                profileImagePath = document.get("profileImagePath") as String
-                break
-              }
-              // glide imageview 소스
-              // 프사 설정하는 코드 db -> imageView glide
-              val storage = FirebaseStorage.getInstance()
-              val profileRef = storage.reference.child(profileImagePath)
 
-              profileRef.downloadUrl.addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                  // Glide 이용하여 이미지뷰에 로딩
-                  Glide.with(App.instance.currentActivity() as Activity)
-                    .load(task.result)
-                    .override(1024, 980)
-                    .into(RacingFinishAnalysisOtherProfile)
-                  progressbar.dismiss()
-                } else {
-                  progressbar.dismiss()
-                }
-              }
-            } else {
-              RacingFinishAnalysisOtherNickname.text = "탈퇴한 회원입니다."
-            }
-
+        MainScope().launch {
+          FBRacingRepository().getOtherData(racerData.mapId, getId!!).let {
+            setOtherData(it)
           }
-        //FBProfileRepository().getProfileImage(RacingFinishAnalysisOtherProfile, getNickname!!)
+          // TODO 회원탈퇴 방식 getProfileImage에서 검사를 안하기 때문에 새로 검사를 해야하는 함수 작성 필요
+          FBProfileRepository().getProfileImage(getId).let {
+            if (it == null) {
+              RacingFinishAnalysisOtherNickname.text = getString(R.string.unregister_user)
+            } else {
+              RacingFinishAnalysisOtherProfile.image(it)
+            }
+            progressbar.dismiss()
+          }
+        }
       }
     }
     super.onActivityResult(requestCode, resultCode, data)
@@ -202,6 +176,16 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
       racerAvgSpeedTextView.text = racerSpeeds.average().prettyDistance
       progressbar.dismiss()
     }
+  }
+
+  private fun setOtherData(rankingData: RankingData) {
+    MainScope().launch {
+      FBProfileRepository().getProfileImage(rankingData.challengerId!!)?.let { RacingFinishAnalysisOtherProfile.image(it) }
+
+    }
+    otherLapTimeTextView.text = rankingData.challengerTime!!.format(m_s)
+    otherMaxSpeedTextView.text = rankingData.maxSpeed!!.toDouble().prettyDistance
+    otherAvgSpeedTextView.text = rankingData.averageSpeed!!.toDouble().prettyDistance
   }
 
   private suspend fun updateRankingUI(rankingDatas: MutableList<RankingData>) {
