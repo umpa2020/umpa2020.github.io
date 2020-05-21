@@ -59,9 +59,18 @@ class RacingSelectPeopleActivity : AppCompatActivity(), OnSingleClickListener {
 
       override fun onSelectedTagDrag(position: Int, text: String) {}
 
+
       override fun onTagCrossClick(position: Int) {
         //mTagContainerLayout1.removeTag(position);
+        //클릭하면 아이템 삭제
+        if (position < tagcontainerLayout1.childCount) {
+          tagcontainerLayout1.removeTag(position)
+          //whichIsCheck에서 text지움
+          (racingSelectRecyclerView.adapter as RacingRecyclerViewAdapterMultiSelect).whichIsCheck.removeAt(position)
+          racingSelectRecyclerView.adapter!!.notifyDataSetChanged()
+        }
       }
+
     })
 
     racingSelectButton.setOnClickListener(this)
