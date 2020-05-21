@@ -39,7 +39,7 @@ class FBRacingRepository : BaseFB() {
           rankingData.BestTime = true
         }
       }
-    rankingData.racerGPX = "$MAP_ROUTE/${racerData.mapId}/$RACING_GPX/$UserInfo.autoLoginKey"
+    rankingData.racerGPX = "$MAP_ROUTE/${racerData.mapId}/$RACING_GPX/${UserInfo.autoLoginKey}"
     db.collection(MAPS).document(racerData.mapId).collection(RANKING)
       .document(UserInfo.autoLoginKey + timestamp).set(rankingData)
 

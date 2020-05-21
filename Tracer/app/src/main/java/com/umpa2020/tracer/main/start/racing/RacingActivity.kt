@@ -30,7 +30,6 @@ import com.umpa2020.tracer.gpx.WayPoint
 import com.umpa2020.tracer.gpx.WayPointType.*
 import com.umpa2020.tracer.main.start.BaseRunningActivity
 import com.umpa2020.tracer.main.start.racing.RacingSelectPeopleActivity.Companion.RACER_LIST
-import com.umpa2020.tracer.main.start.running.RunningSaveActivity
 import com.umpa2020.tracer.network.BaseFB.Companion.MAP_ID
 import com.umpa2020.tracer.network.FBMapRepository
 import com.umpa2020.tracer.network.FBRacingRepository
@@ -63,6 +62,7 @@ class RacingActivity : BaseRunningActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     val routeGPXUri = intent.getStringExtra(ROUTE_GPX)
+    runningAppBarTextView.text=getString(R.string.race)
     mapRouteGPX = Uri.parse(routeGPXUri).gpxToClass()
     mapId = intent.getStringExtra(MAP_ID)!!
     racerList = intent.getSerializableExtra(RACER_LIST) as Array<RacerData>

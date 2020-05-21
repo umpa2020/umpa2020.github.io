@@ -56,6 +56,7 @@ class ChallengeRacingActivity : BaseRunningActivity(),CoroutineScope by MainScop
   lateinit var mCustomMarkerView: View
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+    runningAppBarTextView.text=getString(R.string.challenge)
     mapId = intent.getStringExtra(MAP_ID)!!
     MainScope().launch {
       mapRouteGPX = FBStorageRepository().getFile(FBMapRepository().getMapInfo(mapId)?.routeGPXPath!!).gpxToClass()
