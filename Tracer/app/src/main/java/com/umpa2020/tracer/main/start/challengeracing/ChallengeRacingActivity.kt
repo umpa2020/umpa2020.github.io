@@ -38,7 +38,7 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class ChallengeRacingActivity : BaseRunningActivity(),CoroutineScope by MainScope() {
+class ChallengeRacingActivity : BaseRunningActivity(), CoroutineScope by MainScope() {
   companion object {
     const val ROUTE_GPX = "RouteGPX"
   }
@@ -56,7 +56,7 @@ class ChallengeRacingActivity : BaseRunningActivity(),CoroutineScope by MainScop
   lateinit var mCustomMarkerView: View
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    runningAppBarTextView.text=getString(R.string.challenge)
+    runningAppBarTextView.text = getString(R.string.challenge)
     mapId = intent.getStringExtra(MAP_ID)!!
     MainScope().launch {
       mapRouteGPX = FBStorageRepository().getFile(FBMapRepository().getMapInfo(mapId)?.routeGPXPath!!).gpxToClass()
@@ -68,7 +68,7 @@ class ChallengeRacingActivity : BaseRunningActivity(),CoroutineScope by MainScop
   override fun onMapReady(googleMap: GoogleMap) {
     super.onMapReady(googleMap)
     launch {
-      while(!::mapRouteGPX.isInitialized){
+      while (!::mapRouteGPX.isInitialized) {
         delay(100)
       }
       traceMap.drawRoute(mapRouteGPX.trkList, mapRouteGPX.wptList).run {
@@ -234,7 +234,7 @@ class ChallengeRacingActivity : BaseRunningActivity(),CoroutineScope by MainScop
       val nowRecord = SystemClock.elapsedRealtime() - runningTimerTextView.base
       bestList.add(recordTimes.first().toLong())
       worstList.add(recordTimes.last().toLong())
-      val a=nowRecord.calcRank(bestList.last(), worstList.last())
+      val a = nowRecord.calcRank(bestList.last(), worstList.last())
       recordList.add(nowRecord)
       TTS.speech("you are in ${a} % now")
       traceMap.changeMarkerIcon(nextWP)

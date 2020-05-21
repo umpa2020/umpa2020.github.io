@@ -36,12 +36,12 @@
         android:orientation="horizontal">
 
         <TextView
-          android:textColor="@color/lightblack"
           android:id="@+id/manTextView"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:gravity="center"
           android:text="@string/man"
+          android:textColor="@color/lightblack"
           android:textSize="20dp" />
 
         <ImageView
@@ -79,12 +79,12 @@
         android:orientation="horizontal">
 
         <TextView
-          android:textColor="@color/lightblack"
           android:id="@+id/womanTextView"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:gravity="center"
           android:text="@string/woman"
+          android:textColor="@color/lightblack"
           android:textSize="20dp" />
 
         <ImageView

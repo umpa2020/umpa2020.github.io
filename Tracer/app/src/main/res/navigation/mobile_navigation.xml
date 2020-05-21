@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<navigation
-  xmlns:android="http://schemas.android.com/apk/res/android"
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/mobile_navigation"
@@ -9,21 +8,21 @@
   <fragment
     android:id="@+id/navigation_start"
     android:name="com.umpa2020.tracer.main.start.StartFragment"
-    tools:layout="@layout/fragment_start"/>
+    tools:layout="@layout/fragment_start" />
 
   <fragment
     android:id="@+id/navigation_ranking"
     android:name="com.umpa2020.tracer.main.ranking.RankingFragment"
-    tools:layout="@layout/fragment_ranking"/>
+    tools:layout="@layout/fragment_ranking" />
 
   <fragment
     android:id="@+id/navigation_profile"
     android:name="com.umpa2020.tracer.main.profile.ProfileFragment"
-    tools:layout="@layout/fragment_profile"/>
+    tools:layout="@layout/fragment_profile" />
 
   <fragment
     android:id="@+id/navigation_challenge"
     android:name="com.umpa2020.tracer.main.challenge.ChallengeFragment"
-    tools:layout="@layout/fragment_challenge"/>
+    tools:layout="@layout/fragment_challenge" />
 
 </navigation>

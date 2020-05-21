@@ -61,7 +61,7 @@ fun RouteGPX.addCheckPoint(): RouteGPX {
       if (i == trkList.size - 1) {
         wptList.add(it.apply {
           name = "Finish"
-          desc = "${20000*i},${40000*i}"
+          desc = "${20000 * i},${40000 * i}"
           type = FINISH_POINT
         })
       } else {
@@ -73,7 +73,7 @@ fun RouteGPX.addCheckPoint(): RouteGPX {
           distance = 0.0
           wptList.add(it.apply {
             name = "Distance point"
-            desc = "${20000*i},${40000*i}"
+            desc = "${20000 * i},${40000 * i}"
             type = DISTANCE_POINT
           })
         }
@@ -207,24 +207,24 @@ fun Node.toWayPoint(): WayPoint {
   var speed = 0.0
   var time = 0L
   var name = ""
-  var desc= ""
+  var desc = ""
   var type = TRACK_POINT
   for (i in 0 until childNodes.length) {
     val item = childNodes.item(i)
     when (item.nodeName) {
       "ele" -> {
         item.textContent.toDoubleOrNull()?.let {
-          ele=it
+          ele = it
         }
       }
       "speed" -> {
-       item.textContent.toDoubleOrNull()?.let{
-         speed =it
-       }
+        item.textContent.toDoubleOrNull()?.let {
+          speed = it
+        }
       }
       "time" -> {
-        item.textContent.toLongOrNull()?.let{
-          time=it
+        item.textContent.toLongOrNull()?.let {
+          time = it
         }
       }
       "name" -> {

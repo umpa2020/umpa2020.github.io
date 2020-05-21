@@ -35,28 +35,28 @@
       android:orientation="vertical">
 
       <TextView
-        android:background="@color/white"
         android:id="@+id/RacingFinishTextView"
+        style="@style/subjectName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingRight="20dp"
+        android:background="@color/white"
         android:paddingLeft="20dp"
-        android:paddingEnd="20dp"
         android:paddingTop="10dp"
-        android:text="@string/my_rank"
-        style="@style/subjectName"/>
+        android:paddingEnd="20dp"
+        android:paddingRight="20dp"
+        android:text="@string/my_rank" />
 
       <LinearLayout
-        android:background="@drawable/textline_background_down"
         android:id="@+id/RacingFinishLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/RacingFinishTextView"
+        android:background="@drawable/textline_background_down"
+        android:orientation="horizontal"
         android:paddingLeft="20dp"
         android:paddingTop="20dp"
         android:paddingRight="20dp"
-        android:paddingBottom="20dp"
-        android:orientation="horizontal">
+        android:paddingBottom="20dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
           android:id="@+id/racingFinishProfileImageView"
@@ -90,7 +90,7 @@
             android:text="@string/laptime"
             android:textColor="@color/skyBlue"
             android:textSize="20dp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
         </LinearLayout>
 
         <TextView
@@ -108,17 +108,17 @@
 
       <RelativeLayout
         android:id="@+id/top3Relative"
-        android:layout_below="@+id/RacingFinishLayout"
-        style="@style/subjectRelativeLayoutStyle">
+        style="@style/subjectRelativeLayoutStyle"
+        android:layout_below="@+id/RacingFinishLayout">
 
         <TextView
-          style="@style/subjectName"
           android:id="@+id/RacingFinishAnalysis"
+          style="@style/subjectName"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginTop="10dp"
-          android:text="@string/top3_rank"
-          android:layout_marginBottom="10dp"/>
+          android:layout_marginBottom="10dp"
+          android:text="@string/top3_rank" />
 
         <!--1등-->
         <LinearLayout
@@ -153,8 +153,8 @@
 
 
           <TextView
-            style="@style/underSubjectName"
             android:id="@+id/racingFinishNicknameFirst"
+            style="@style/underSubjectName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/racingFinishFrameLayoutFirst"
@@ -170,8 +170,8 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
             android:text="@string/no_record"
-            android:textSize="17dp"
-            android:textColor="@color/lightblack" />
+            android:textColor="@color/lightblack"
+            android:textSize="17dp" />
         </LinearLayout>
 
         <!--2등-->
@@ -186,10 +186,10 @@
           android:orientation="vertical">
 
           <FrameLayout
-            android:layout_gravity="center_horizontal"
             android:id="@+id/racingFinishFrameLayoutSecond"
             android:layout_width="70dp"
-            android:layout_height="70dp">
+            android:layout_height="70dp"
+            android:layout_gravity="center_horizontal">
 
             <de.hdodenhof.circleimageview.CircleImageView
               android:id="@+id/racingFinishProfileSecond"
@@ -208,8 +208,8 @@
           </FrameLayout>
 
           <TextView
-            style="@style/underSubjectName"
             android:id="@+id/racingFinishNicknameSecond"
+            style="@style/underSubjectName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -223,8 +223,8 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"
             android:text="@string/no_record"
-            android:textSize="17dp"
-            android:textColor="@color/lightblack"/>
+            android:textColor="@color/lightblack"
+            android:textSize="17dp" />
         </LinearLayout>
 
         <!--3등-->
@@ -241,10 +241,10 @@
 
 
           <FrameLayout
-            android:layout_gravity="center_horizontal"
             android:id="@+id/racingFinishFrameLayoutThird"
             android:layout_width="70dp"
-            android:layout_height="70dp">
+            android:layout_height="70dp"
+            android:layout_gravity="center_horizontal">
 
             <de.hdodenhof.circleimageview.CircleImageView
               android:id="@+id/racingFinishProfileThird"
@@ -263,8 +263,8 @@
           </FrameLayout>
 
           <TextView
-            style="@style/underSubjectName"
             android:id="@+id/racingFinishNicknameThird"
+            style="@style/underSubjectName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -278,23 +278,23 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"
             android:text="@string/no_record"
-            android:textSize="17dp"
-            android:textColor="@color/lightblack"/>
+            android:textColor="@color/lightblack"
+            android:textSize="17dp" />
         </LinearLayout>
       </RelativeLayout>
 
       <!-- 기록 분석 -->
       <RelativeLayout
+        android:id="@+id/recordAnalysisRelative"
         style="@style/subjectRelativeLayoutStyle"
-        android:layout_below="@+id/top3Relative"
-        android:id="@+id/recordAnalysisRelative">
+        android:layout_below="@+id/top3Relative">
 
         <TextView
-          android:layout_marginTop="10dp"
-          style="@style/subjectName"
           android:id="@+id/RacingFinishRecordAnalysis"
+          style="@style/subjectName"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
+          android:layout_marginTop="10dp"
           android:text="@string/record_comparison" />
 
         <LinearLayout
@@ -325,7 +325,7 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:layout_marginTop="10dp"
-              android:textSize="16dp"/>
+              android:textSize="16dp" />
 
           </LinearLayout>
 
@@ -357,7 +357,7 @@
                 android:layout_gravity="center"
                 android:src="@drawable/ic_profile_logo"
                 app:civ_border_color="@color/gray"
-                app:civ_border_width="1dp"/>
+                app:civ_border_width="1dp" />
 
               <ImageView
                 android:layout_width="25dp"
@@ -372,7 +372,7 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:layout_marginTop="10dp"
-              android:textSize="16dp"/>
+              android:textSize="16dp" />
           </LinearLayout>
         </LinearLayout>
 
@@ -383,45 +383,44 @@
           android:layout_height="wrap_content"
           android:layout_below="@+id/VSLinearLayout"
           android:layout_marginTop="15dp"
-          android:orientation="vertical"
-          android:gravity="center">
+          android:gravity="center"
+          android:orientation="vertical">
 
           <TextView
             style="@style/underSubjectName"
-            android:gravity="center_horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="Lap Time"/>
+            android:gravity="center_horizontal"
+            android:text="Lap Time" />
 
           <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:paddingBottom="15dp"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingBottom="15dp">
 
             <TextView
-              android:text="test"
-              style="@style/recordComparison"
               android:id="@+id/racerLapTimeTextView"
+              style="@style/recordComparison"
               android:layout_width="130dp"
               android:layout_height="wrap_content"
-              android:gravity="center" />
+              android:gravity="center"
+              android:text="test" />
 
             <TextView
-              android:text="test"
-              style="@style/recordComparison"
               android:id="@+id/otherLapTimeTextView"
+              style="@style/recordComparison"
               android:layout_width="130dp"
               android:layout_height="wrap_content"
               android:layout_marginLeft="60dp"
-              android:gravity="center" />
+              android:gravity="center"
+              android:text="test" />
           </LinearLayout>
 
-          <TextView
-            style="@style/divisionTextView"/>
+          <TextView style="@style/divisionTextView" />
         </LinearLayout>
 
         <!--최고 속력-->
@@ -431,8 +430,8 @@
           android:layout_height="wrap_content"
           android:layout_below="@+id/LapTimeLayout"
           android:layout_marginTop="15dp"
-          android:orientation="vertical"
-          android:gravity="center">
+          android:gravity="center"
+          android:orientation="vertical">
 
           <TextView
             style="@style/underSubjectName"
@@ -445,30 +444,29 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:paddingBottom="15dp"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingBottom="15dp">
 
             <TextView
-              android:text="test"
-              style="@style/recordComparison"
               android:id="@+id/racerMaxSpeedTextView"
+              style="@style/recordComparison"
               android:layout_width="130dp"
               android:layout_height="wrap_content"
-              android:gravity="center" />
+              android:gravity="center"
+              android:text="test" />
 
             <TextView
-              android:text="test"
               android:id="@+id/otherMaxSpeedTextView"
               style="@style/recordComparison"
               android:layout_width="130dp"
               android:layout_height="wrap_content"
               android:layout_marginLeft="60dp"
-              android:gravity="center" />
+              android:gravity="center"
+              android:text="test" />
           </LinearLayout>
 
-          <TextView
-            style="@style/divisionTextView"/>
+          <TextView style="@style/divisionTextView" />
         </LinearLayout>
 
         <!--평균 속력-->
@@ -482,10 +480,10 @@
 
           <TextView
             style="@style/underSubjectName"
-            android:gravity="center_horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:gravity="center_horizontal"
             android:text="@string/avg_speed" />
 
           <LinearLayout
@@ -497,39 +495,39 @@
             android:orientation="horizontal">
 
             <TextView
-              android:text="test"
-              style="@style/recordComparison"
               android:id="@+id/racerAvgSpeedTextView"
+              style="@style/recordComparison"
               android:layout_width="130dp"
               android:layout_height="wrap_content"
-              android:gravity="center" />
+              android:gravity="center"
+              android:text="test" />
 
             <TextView
-              android:text="test"
-              style="@style/recordComparison"
               android:id="@+id/otherAvgSpeedTextView"
+              style="@style/recordComparison"
               android:layout_width="130dp"
               android:layout_height="wrap_content"
               android:layout_marginLeft="60dp"
-              android:gravity="center" />
+              android:gravity="center"
+              android:text="test" />
           </LinearLayout>
         </LinearLayout>
 
       </RelativeLayout>
     </RelativeLayout>
 
-    </ScrollView>
+  </ScrollView>
 
-    <Button
-      android:id="@+id/OKButton"
-      style="@style/buttonText"
-      android:layout_width="match_parent"
-      android:layout_height="50dp"
-      android:layout_alignParentBottom="true"
-      android:layout_marginLeft="20dp"
-      android:layout_marginRight="20dp"
-      android:layout_marginBottom="10dp"
-      android:background="@drawable/button_background"
-      android:text="확인" />
+  <Button
+    android:id="@+id/OKButton"
+    style="@style/buttonText"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:layout_alignParentBottom="true"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp"
+    android:layout_marginBottom="10dp"
+    android:background="@drawable/button_background"
+    android:text="확인" />
 
 </RelativeLayout>

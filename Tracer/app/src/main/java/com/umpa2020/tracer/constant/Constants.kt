@@ -65,7 +65,6 @@ class Constants {
     const val COUNTDOWN_INTERVAL = 1000L
 
 
-
     const val TIMESTAMP_LENGTH = 13
     var testId = 0
   }

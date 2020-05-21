@@ -11,8 +11,6 @@ import android.location.Geocoder
 import android.location.Location
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
-import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,7 +27,6 @@ import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.MapInfo
 import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.extensions.*
-import com.umpa2020.tracer.gpx.WayPoint
 import com.umpa2020.tracer.gpx.WayPointType
 import com.umpa2020.tracer.main.challenge.ChallengeDataSettingActivity
 import com.umpa2020.tracer.main.ranking.RankingMapDetailActivity
@@ -64,7 +61,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
   val progressBar = MyProgressBar()
   var firstFlag = true
   lateinit var mCustomMarkerView: View
-  var zoomLevel : Float? = 16f // 줌 레벨 할당
+  var zoomLevel: Float? = 16f // 줌 레벨 할당
 
   override fun onSingleClick(v: View?) {
     when (v!!.id) {
@@ -99,13 +96,13 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
         startActivity(intent)
       }
       R.id.gpxTest -> {
-        val a=Uri.parse("/data/data/com.umpa2020.tracer/files/originGPX/2020korea50k_50 final")
-         val gpx = a.gpxToClass()
-         gpx.addCheckPoint()
-         gpx.addDirectionSign()
-         gpx.wptList.forEachIndexed{i,it->
+        val a = Uri.parse("/data/data/com.umpa2020.tracer/files/originGPX/2020korea50k_50 final")
+        val gpx = a.gpxToClass()
+        gpx.addCheckPoint()
+        gpx.addDirectionSign()
+        gpx.wptList.forEachIndexed { i, it ->
 
-      }
+        }
 
         val saveFolder = File(requireContext().filesDir, "routeGPX") // 저장 경로
         if (!saveFolder.exists()) {       //폴더 없으면 생성

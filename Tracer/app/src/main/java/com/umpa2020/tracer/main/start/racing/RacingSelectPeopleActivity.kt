@@ -16,7 +16,6 @@ import com.umpa2020.tracer.extensions.addDirectionSign
 import com.umpa2020.tracer.extensions.classToGpx
 import com.umpa2020.tracer.extensions.gpxToClass
 import com.umpa2020.tracer.main.start.racing.RacingActivity.Companion.ROUTE_GPX
-import com.umpa2020.tracer.main.start.running.RunningSaveActivity
 import com.umpa2020.tracer.network.BaseFB.Companion.MAP_ID
 import com.umpa2020.tracer.network.FBMapRepository
 import com.umpa2020.tracer.util.OnSingleClickListener
