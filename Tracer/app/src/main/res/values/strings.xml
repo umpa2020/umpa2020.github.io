@@ -215,6 +215,11 @@
   <string name="region_selection">지역 선택</string>
 
   <string name="my_achievement">나의 업적</string>
+  
+  <!--profile-->
+  <string name="medals">획득 메달 수</string>
+  <string name="stats">내 통계</string>
 
+  
 
 </resources>

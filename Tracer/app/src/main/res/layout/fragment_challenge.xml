@@ -177,7 +177,7 @@
           android:layout_below="@+id/btn_challenge_search"
           android:layout_gravity="center_horizontal"
           android:id="@+id/challenge_recycler_view"
-          android:layout_width="match_parent"
+          android:layout_width="wrap_content"
           android:layout_height="match_parent"
           app:layoutManager="GridLayoutManager"
           app:spanCount="2" />

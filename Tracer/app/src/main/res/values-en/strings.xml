@@ -216,4 +216,8 @@
 
   <string name="my_achievement">My Achievement</string>
 
+  <!--profile-->
+  <string name="medals">Number of medals won</string>
+  <string name="stats">My Stats</string>
+
 </resources>
