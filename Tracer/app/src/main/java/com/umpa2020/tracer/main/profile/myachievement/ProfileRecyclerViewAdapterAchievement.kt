@@ -11,6 +11,7 @@ import com.umpa2020.tracer.extensions.image
 import com.umpa2020.tracer.network.FBStorageRepository
 import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.recycler_profile_achivement_item.view.*
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
