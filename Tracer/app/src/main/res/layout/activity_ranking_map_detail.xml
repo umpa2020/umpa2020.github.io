@@ -45,7 +45,7 @@
           style="@style/subjectName"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_marginTop="10dp"
+          android:layout_marginTop="20dp"
           android:text="@string/mapinformation" />
 
         <de.hdodenhof.circleimageview.CircleImageView
@@ -76,7 +76,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="test"
-            android:textSize="15dp" />
+            android:textSize="13dp"
+            android:includeFontPadding="false"/>
 
           <TextView
             android:id="@+id/rankingDetailNickname"
@@ -86,15 +87,22 @@
             android:layout_marginTop="10dp"
             android:text="test"
             android:textColor="@color/lightblack"
-            android:textSize="17dp"
-            android:textStyle="bold" />
+            android:textSize="17dp" />
         </LinearLayout>
+
+        <TextView
+          android:id="@+id/divisiontext1"
+          style="@style/divisionTextView"
+          android:layout_below="@+id/rankingDetailProfileImage"
+          android:layout_marginLeft="10dp"
+          android:layout_marginTop="20dp"
+          android:layout_marginRight="10dp" />
 
         <TextView
           android:id="@+id/rankingDetailMapDetailItem0"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_below="@+id/mapdetaillayout"
+          android:layout_below="@+id/divisiontext1"
           android:layout_marginTop="20dp"
           android:layout_marginRight="30dp"
           android:paddingLeft="10dp"
@@ -102,15 +110,13 @@
           android:textSize="16dp" />
 
         <TextView
+          android:paddingLeft="10dp"
+          android:layout_below="@+id/rankingDetailMapDetailItem0"
           android:id="@+id/rankingDetailMapTitle"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_alignBaseline="@+id/rankingDetailMapDetailItem0"
           android:layout_marginTop="20dp"
-          android:layout_marginRight="10dp"
-          android:layout_toRightOf="@+id/rankingDetailMapDetailItem0"
           android:background="@android:color/transparent"
-          android:gravity="right"
           android:text="test"
           android:textColor="@color/lightblack"
           android:textSize="18dp" />
@@ -118,7 +124,7 @@
         <TextView
           android:id="@+id/divisiontext"
           style="@style/divisionTextView"
-          android:layout_below="@+id/rankingDetailMapDetailItem0"
+          android:layout_below="@+id/rankingDetailMapTitle"
           android:layout_marginLeft="10dp"
           android:layout_marginTop="20dp"
           android:layout_marginRight="10dp" />
@@ -158,7 +164,7 @@
           style="@style/subjectName"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_marginTop="10dp"
+          android:layout_marginTop="20dp"
           android:text="@string/recordanalysis" />
 
         <LinearLayout
@@ -253,7 +259,7 @@
           style="@style/subjectName"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_marginTop="10dp"
+          android:layout_marginTop="20dp"
           android:text="@string/thumbnail" />
 
         <fragment
@@ -262,7 +268,7 @@
           android:layout_width="match_parent"
           android:layout_height="250dp"
           android:layout_below="@+id/rankingDetailMapDetailItem2"
-          android:layout_marginTop="10dp"
+          android:layout_marginTop="15dp"
           android:layout_marginBottom="10dp" />
       </RelativeLayout>
 
@@ -275,7 +281,7 @@
           style="@style/subjectName"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_marginTop="10dp"
+          android:layout_marginTop="20dp"
           android:text="@string/altitude_sppedchart" />
 
         <com.github.mikephil.charting.charts.LineChart
@@ -283,7 +289,7 @@
           android:layout_width="match_parent"
           android:layout_height="200dp"
           android:layout_below="@+id/rankingDetailMapDetailItem3"
-          android:layout_marginTop="10dp"></com.github.mikephil.charting.charts.LineChart>
+          android:layout_marginTop="15dp"></com.github.mikephil.charting.charts.LineChart>
 
       </RelativeLayout>
     </RelativeLayout>

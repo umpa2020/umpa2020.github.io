@@ -34,6 +34,8 @@
       android:layout_height="match_parent">
 
       <ImageView
+        android:paddingBottom="0.2dp"
+        android:background="@drawable/profile_route_bg"
         android:id="@+id/challengeDetailImageView"
         android:layout_width="match_parent"
         android:layout_height="200dp"
@@ -50,7 +52,7 @@
           style="@style/challengeDetail"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_marginTop="10dp"
+          android:layout_marginTop="20dp"
           android:text="@string/tournament_name" />
 
 
@@ -64,11 +66,20 @@
           android:text="test" />
 
         <TextView
+          android:id="@+id/dividetextveiw1"
+          android:layout_below="@+id/challengeDetailCompetitionName"
+          style="@style/divisionTextView"
+          android:layout_marginBottom="10dp"
+          android:layout_marginTop="10dp"
+          android:layout_marginRight="0dp"
+          android:layout_marginLeft="0dp"/>
+
+        <TextView
           android:id="@+id/challengeCompetitionDate"
           style="@style/challengeDetail"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_below="@+id/challengeDetailCompetitionName"
+          android:layout_below="@+id/dividetextveiw1"
           android:layout_marginTop="10dp"
           android:text="@string/opening_date" />
 
@@ -81,11 +92,21 @@
           android:layout_margin="10dp" />
 
         <TextView
+          android:id="@+id/dividetextveiw2"
+          android:layout_below="@+id/challengeDetailCompetitionDate"
+          style="@style/divisionTextView"
+          android:layout_marginBottom="10dp"
+          android:layout_marginTop="10dp"
+          android:layout_marginRight="0dp"
+          android:layout_marginLeft="0dp"/>
+
+        <TextView
+          android:layout_marginTop="10dp"
           android:id="@+id/challengeCompetitionPeriod"
           style="@style/challengeDetail"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_below="@+id/challengeDetailCompetitionDate"
+          android:layout_below="@+id/dividetextveiw2"
           android:text="@string/reception_period" />
 
         <TextView
@@ -97,11 +118,20 @@
           android:layout_margin="10dp" />
 
         <TextView
+          android:id="@+id/dividetextveiw3"
+          android:layout_below="@+id/challengeDetailCompetitionPeriod"
+          style="@style/divisionTextView"
+          android:layout_marginBottom="10dp"
+          android:layout_marginTop="10dp"
+          android:layout_marginRight="0dp"
+          android:layout_marginLeft="0dp"/>
+
+        <TextView
           android:id="@+id/challengeAddress"
           style="@style/challengeDetail"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_below="@+id/challengeDetailCompetitionPeriod"
+          android:layout_below="@+id/dividetextveiw3"
           android:layout_marginTop="10dp"
           android:text="@string/address" />
 
@@ -114,11 +144,21 @@
           android:layout_margin="10dp" />
 
         <TextView
+          android:id="@+id/dividetextveiw4"
+          android:layout_below="@+id/challengeDetailAddress"
+          style="@style/divisionTextView"
+          android:layout_marginBottom="10dp"
+          android:layout_marginTop="10dp"
+          android:layout_marginRight="0dp"
+          android:layout_marginLeft="0dp"/>
+
+
+        <TextView
           android:id="@+id/challengeHost"
           style="@style/challengeDetail"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_below="@+id/challengeDetailAddress"
+          android:layout_below="@+id/dividetextveiw4"
           android:layout_marginTop="10dp"
           android:text="@string/host" />
 
@@ -131,11 +171,21 @@
           android:layout_margin="10dp" />
 
         <TextView
+          android:id="@+id/dividetextveiw5"
+          android:layout_below="@+id/challengeDetailHost"
+          style="@style/divisionTextView"
+          android:layout_marginBottom="10dp"
+          android:layout_marginTop="10dp"
+          android:layout_marginRight="0dp"
+          android:layout_marginLeft="0dp"/>
+
+
+        <TextView
           android:id="@+id/challengeInformation"
           style="@style/challengeDetail"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_below="@+id/challengeDetailHost"
+          android:layout_below="@+id/dividetextveiw5"
           android:layout_marginTop="10dp"
           android:text="@string/tournament_information" />
 
@@ -148,11 +198,20 @@
           android:layout_margin="10dp" />
 
         <TextView
+          android:id="@+id/dividetextveiw6"
+          android:layout_below="@+id/challengeDetailInformation"
+          style="@style/divisionTextView"
+          android:layout_marginBottom="10dp"
+          android:layout_marginTop="10dp"
+          android:layout_marginRight="0dp"
+          android:layout_marginLeft="0dp"/>
+
+        <TextView
           android:id="@+id/challengeLocation"
           style="@style/challengeDetail"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_below="@+id/challengeDetailInformation"
+          android:layout_below="@+id/dividetextveiw6"
           android:layout_marginTop="10dp"
           android:text="@string/location" />
 
@@ -166,11 +225,21 @@
           android:layout_marginBottom="10dp" />
 
         <TextView
+          android:id="@+id/dividetextveiw7"
+          android:layout_below="@+id/challengeDetailLocation"
+          style="@style/divisionTextView"
+          android:layout_marginBottom="10dp"
+          android:layout_marginTop="10dp"
+          android:layout_marginRight="0dp"
+          android:layout_marginLeft="0dp"/>
+
+
+        <TextView
           android:id="@+id/challengeCourse"
           style="@style/challengeDetail"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_below="@+id/challengeDetailLocation"
+          android:layout_below="@+id/dividetextveiw7"
           android:layout_marginTop="10dp"
           android:text="@string/course_information" />
 

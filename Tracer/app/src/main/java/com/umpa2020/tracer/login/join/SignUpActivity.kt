@@ -37,8 +37,11 @@ import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.android.synthetic.main.activity_gender_select.*
 import kotlinx.android.synthetic.main.activity_sign_up.*
+import kotlinx.android.synthetic.main.activity_sign_up.app_toolbar
 import kotlinx.android.synthetic.main.signup_toolbar.*
+import kotlinx.android.synthetic.main.signup_toolbar.view.*
 import java.util.*
 import java.util.regex.Pattern
 
@@ -81,6 +84,9 @@ class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
     super.onCreate(savedInstanceState)
     requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
     setContentView(R.layout.activity_sign_up)
+
+    val titleText = app_toolbar.titleText
+    titleText.text = getString(R.string.sign_up)
 
     progressbar = ProgressBar(this)
 

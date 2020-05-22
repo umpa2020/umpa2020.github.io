@@ -217,4 +217,18 @@
   <string name="my_achievement">My Achievement</string>
   <string name="unregister_user">who has withdrawn from Tracer</string>
 
+  <!--profile-->
+  <string name="medals">Number of medals won</string>
+  <string name="stats">My Stats</string>
+
+  <!--AllRanking-->
+  <string name="selectCompare">Please select the person you want to compare.</string>
+
+  <!--sign-->
+  <string name="duplicate">Duplicate ID Check</string>
+  <!--Broadcast-->
+  <string name="unstableGPS">GPS is unstable for a long time. Please check the GPS status.</string>
+
+
+
 </resources>

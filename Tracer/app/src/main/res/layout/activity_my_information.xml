@@ -22,19 +22,20 @@
     android:gravity="center"
     android:orientation="vertical"
     android:paddingTop="30dp"
-    android:paddingBottom="30dp">
+    android:paddingBottom="20dp">
 
     <FrameLayout
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="center">
 
-      <com.mikhaellopez.circularimageview.CircularImageView
+      <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profileImage"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:background="@drawable/ic_profile_logo"
-        app:civ_border_color="@color/gray" />
+        android:src="@drawable/ic_profile_logo"
+        app:civ_border_color="@color/gray"
+        app:civ_border_width="1dp" />
 
       <com.mikhaellopez.circularimageview.CircularImageView
         android:layout_width="30dp"
@@ -44,13 +45,13 @@
     </FrameLayout>
 
     <TextView
+      style="@style/recordComparison"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="center"
       android:layout_marginTop="15dp"
       android:text="@string/profile_image_change"
-      android:textSize="18dp"
-      android:textStyle="bold" />
+      android:textSize="18dp" />
   </LinearLayout>
 
   <TableLayout
@@ -67,11 +68,11 @@
       android:paddingEnd="20dp">
 
       <TextView
+        style="@style/challengeDetailList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="@string/email_"
-        android:textSize="15dp" />
+        android:text="@string/email_"/>
 
       <TextView
         android:id="@+id/emailTextView"
@@ -93,11 +94,11 @@
       android:paddingEnd="20dp">
 
       <TextView
+        style="@style/challengeDetailList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="@string/nick_name"
-        android:textSize="15dp" />
+        android:text="@string/nick_name"/>
 
       <TextView
         android:id="@+id/nickNameTextView"
@@ -119,18 +120,17 @@
       android:paddingEnd="20dp">
 
       <TextView
+        style="@style/challengeDetailList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="@string/age_"
-        android:textSize="15dp" />
+        android:text="@string/age_"/>
 
       <TextView
         android:id="@+id/ageTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="3"
-        android:textSize="15sp" />
+        android:layout_weight="3"/>
     </TableRow>
 
     <TextView
@@ -145,13 +145,14 @@
       android:paddingBottom="15dp">
 
       <TextView
+        style="@style/challengeDetailList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="@string/gender_"
-        android:textSize="15sp" />
+        android:text="@string/gender_"/>
 
       <TextView
+        android:layout_weight="3"
         android:id="@+id/genderTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

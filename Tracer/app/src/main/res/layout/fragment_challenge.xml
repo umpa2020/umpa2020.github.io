@@ -83,10 +83,11 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginBottom="15dp"
-          android:paddingTop="10dp"
+          android:paddingTop="20dp"
           android:text="@string/tournament_search" />
 
         <LinearLayout
+          android:layout_marginTop="10dp"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_marginLeft="20dp"
@@ -168,13 +169,13 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_gravity="left"
-          android:paddingTop="10dp"
+          android:paddingTop="20dp"
           android:text="@string/tournament_list" />
 
 
         <androidx.recyclerview.widget.RecyclerView
           android:id="@+id/challenge_recycler_view"
-          android:layout_width="match_parent"
+          android:layout_width="wrap_content"
           android:layout_height="match_parent"
           android:layout_below="@+id/btn_challenge_search"
           android:layout_gravity="center_horizontal"

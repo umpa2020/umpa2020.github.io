@@ -65,7 +65,7 @@
           style="@style/subjectName"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_marginTop="10dp"
+          android:layout_marginTop="20dp"
           android:text="@string/mapresult" />
 
         <LinearLayout
@@ -93,7 +93,7 @@
               android:id="@+id/distance_tv"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:layout_marginTop="5dp"
+              android:layout_marginTop="10dp"
               android:gravity="center"
               android:text="test"
               android:textColor="@color/lightblack"
@@ -118,7 +118,7 @@
               android:id="@+id/time_tv"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:layout_marginTop="5dp"
+              android:layout_marginTop="10dp"
               android:gravity="center"
               android:text="test"
               android:textColor="@color/lightblack"
@@ -142,7 +142,7 @@
               android:id="@+id/speed_tv"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:layout_marginTop="5dp"
+              android:layout_marginTop="10dp"
               android:gravity="center"
               android:text="test"
               android:textColor="@color/lightblack"
@@ -161,7 +161,7 @@
           style="@style/subjectName"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_marginTop="10dp"
+          android:layout_marginTop="20dp"
           android:text="@string/altitude_sppedchart" />
 
         <com.github.mikephil.charting.charts.LineChart
@@ -181,7 +181,7 @@
           style="@style/subjectName"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_marginTop="10dp"
+          android:layout_marginTop="20dp"
           android:text="@string/mapinformation" />
 
         <TextView
