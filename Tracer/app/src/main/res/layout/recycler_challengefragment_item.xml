@@ -11,14 +11,15 @@
     android:layout_width="0dp"
     android:layout_height="0dp"
     android:orientation="vertical"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="10dp"
-    app:cardPreventCornerOverlap="true"
+    app:cardCornerRadius="5dp"
+    app:cardElevation="5dp"
     app:cardUseCompatPadding="true"
-    android:layout_marginEnd="15dp"
-    android:layout_marginStart="15dp"
-    android:layout_marginTop="30dp"
-    app:layout_constraintDimensionRatio="1:1.5"
+    app:cardPreventCornerOverlap="true"
+    android:layout_marginEnd="5dp"
+    android:layout_marginStart="5dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="5dp"
+    app:layout_constraintDimensionRatio="1:1.45"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent">
@@ -26,59 +27,73 @@
     <androidx.constraintlayout.widget.ConstraintLayout
       android:layout_width="match_parent"
       android:layout_height="match_parent">
+
       <ImageView
         android:id="@+id/challenge_map"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintDimensionRatio="1:1"
+        android:scaleType="fitXY"
+        app:layout_constraintDimensionRatio="1:0.8"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
       <TextView
-        android:gravity="center"
         android:id="@+id/challenge_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="5dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="10dp"
         style="@style/underSubjectName"
-        android:textSize="18dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:gravity="left"
+        android:text="test"
+        android:textColor="@color/red"
+        android:textSize="15dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/challenge_map"
-        android:text="test"/>
+        app:layout_constraintTop_toBottomOf="@+id/challenge_map" />
 
       <TextView
-        android:gravity="center"
         android:id="@+id/challenge_race_name"
-        android:layout_width="wrap_content"
+        style="@style/challengeDetail"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="5dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="10dp"
-        style="@style/underSubjectName"
-        android:textSize="18dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="5dp"
+        android:ellipsize="end"
+        android:gravity="left"
+        android:maxLines="2"
+        android:text="test"
+        android:textSize="16dp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/challenge_date"
-        android:text="test"/>
+        app:layout_constraintTop_toBottomOf="@+id/challenge_date" />
 
       <TextView
-        android:gravity="center"
-        android:id="@+id/challenge_locale"
+        android:id="@+id/challengeTag"
+        style="@style/underSubjectName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="5dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:paddingBottom="5dp"
+        android:text="# "
+        android:textSize="14dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+      <TextView
+        android:id="@+id/challenge_locale"
         style="@style/underSubjectName"
-        android:textSize="18dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/challenge_race_name"
-        android:text="test"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="5dp"
+        android:layout_marginEnd="10dp"
+        android:text="test"
+        android:textSize="14dp"
+        android:layout_marginTop="3dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/challengeTag" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
