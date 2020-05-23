@@ -260,6 +260,7 @@
           android:text="@string/activity" />
 
         <TextView
+          android:id="@+id/otherProfileRecordMoreTextView"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_alignBaseline="@+id/otherProfileRecordTextView"
