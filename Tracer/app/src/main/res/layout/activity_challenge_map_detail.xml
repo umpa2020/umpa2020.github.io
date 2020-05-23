@@ -34,6 +34,8 @@
       android:layout_height="match_parent">
 
       <ImageView
+        android:paddingBottom="0.2dp"
+        android:background="@drawable/profile_route_bg"
         android:id="@+id/challengeDetailImageView"
         android:layout_width="match_parent"
         android:layout_height="200dp"
@@ -46,17 +48,27 @@
         android:layout_below="@+id/challengeDetailImageView">
 
         <TextView
+          android:textColor="@color/red"
+          android:layout_marginTop="20dp"
+          android:id="@+id/exactDetailsTextView"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:text="@string/exactDetails"/>
+
+
+        <TextView
+          android:layout_below="@+id/exactDetailsTextView"
           android:id="@+id/challengeCompetitionName"
           style="@style/challengeDetail"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_marginTop="10dp"
+          android:layout_marginTop="20dp"
           android:text="@string/tournament_name" />
 
 
         <TextView
           android:id="@+id/challengeDetailCompetitionName"
-          style="@style/challengeDetailList"
+          style="@style/underSubjectName"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_below="@+id/challengeCompetitionName"
@@ -64,95 +76,181 @@
           android:text="test" />
 
         <TextView
+          android:id="@+id/dividetextveiw1"
+          android:layout_below="@+id/challengeDetailCompetitionName"
+          style="@style/divisionTextView"
+          android:layout_marginBottom="10dp"
+          android:layout_marginTop="10dp"
+          android:layout_marginRight="0dp"
+          android:layout_marginLeft="0dp"/>
+
+        <TextView
           android:id="@+id/challengeCompetitionDate"
           style="@style/challengeDetail"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_below="@+id/challengeDetailCompetitionName"
+          android:layout_below="@+id/dividetextveiw1"
           android:layout_marginTop="10dp"
           android:text="@string/opening_date" />
 
         <TextView
           android:id="@+id/challengeDetailCompetitionDate"
-          style="@style/challengeDetailList"
+          style="@style/underSubjectName"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_below="@+id/challengeCompetitionDate"
           android:layout_margin="10dp" />
 
         <TextView
+          android:id="@+id/dividetextveiw2"
+          android:layout_below="@+id/challengeDetailCompetitionDate"
+          style="@style/divisionTextView"
+          android:layout_marginBottom="10dp"
+          android:layout_marginTop="10dp"
+          android:layout_marginRight="0dp"
+          android:layout_marginLeft="0dp"/>
+
+        <TextView
+          android:layout_marginTop="10dp"
           android:id="@+id/challengeCompetitionPeriod"
           style="@style/challengeDetail"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_below="@+id/challengeDetailCompetitionDate"
+          android:layout_below="@+id/dividetextveiw2"
           android:text="@string/reception_period" />
 
         <TextView
           android:id="@+id/challengeDetailCompetitionPeriod"
-          style="@style/challengeDetailList"
+          style="@style/underSubjectName"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_below="@+id/challengeCompetitionPeriod"
           android:layout_margin="10dp" />
 
         <TextView
+          android:id="@+id/dividetextveiw3"
+          android:layout_below="@+id/challengeDetailCompetitionPeriod"
+          style="@style/divisionTextView"
+          android:layout_marginBottom="10dp"
+          android:layout_marginTop="10dp"
+          android:layout_marginRight="0dp"
+          android:layout_marginLeft="0dp"/>
+
+        <TextView
           android:id="@+id/challengeAddress"
           style="@style/challengeDetail"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_below="@+id/challengeDetailCompetitionPeriod"
+          android:layout_below="@+id/dividetextveiw3"
           android:layout_marginTop="10dp"
           android:text="@string/address" />
 
         <TextView
           android:id="@+id/challengeDetailAddress"
-          style="@style/challengeDetailList"
+          style="@style/underSubjectName"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_below="@+id/challengeAddress"
           android:layout_margin="10dp" />
 
         <TextView
+          android:id="@+id/dividetextveiw4"
+          android:layout_below="@+id/challengeDetailAddress"
+          style="@style/divisionTextView"
+          android:layout_marginBottom="10dp"
+          android:layout_marginTop="10dp"
+          android:layout_marginRight="0dp"
+          android:layout_marginLeft="0dp"/>
+
+
+        <TextView
           android:id="@+id/challengeHost"
           style="@style/challengeDetail"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_below="@+id/challengeDetailAddress"
+          android:layout_below="@+id/dividetextveiw4"
           android:layout_marginTop="10dp"
           android:text="@string/host" />
 
         <TextView
           android:id="@+id/challengeDetailHost"
-          style="@style/challengeDetailList"
+          style="@style/underSubjectName"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_below="@+id/challengeHost"
           android:layout_margin="10dp" />
 
         <TextView
+          android:id="@+id/dividetextveiw5"
+          android:layout_below="@+id/challengeDetailHost"
+          style="@style/divisionTextView"
+          android:layout_marginBottom="10dp"
+          android:layout_marginTop="10dp"
+          android:layout_marginRight="0dp"
+          android:layout_marginLeft="0dp"/>
+
+
+        <TextView
+          android:id="@+id/challengeURI"
+          style="@style/challengeDetail"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_below="@+id/dividetextveiw5"
+          android:layout_marginTop="10dp"
+          android:text="URI" />
+
+        <TextView
+          android:id="@+id/challengeURIDetails"
+          style="@style/underSubjectName"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_below="@+id/challengeURI"
+          android:layout_margin="10dp" />
+
+        <TextView
+          android:id="@+id/dividetextveiw8"
+          android:layout_below="@+id/challengeURIDetails"
+          style="@style/divisionTextView"
+          android:layout_marginBottom="10dp"
+          android:layout_marginTop="10dp"
+          android:layout_marginRight="0dp"
+          android:layout_marginLeft="0dp"/>
+
+
+
+
+        <TextView
           android:id="@+id/challengeInformation"
           style="@style/challengeDetail"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_below="@+id/challengeDetailHost"
+          android:layout_below="@+id/dividetextveiw8"
           android:layout_marginTop="10dp"
           android:text="@string/tournament_information" />
 
         <TextView
           android:id="@+id/challengeDetailInformation"
-          style="@style/challengeDetailList"
+          style="@style/underSubjectName"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_below="@+id/challengeInformation"
           android:layout_margin="10dp" />
 
         <TextView
+          android:id="@+id/dividetextveiw6"
+          android:layout_below="@+id/challengeDetailInformation"
+          style="@style/divisionTextView"
+          android:layout_marginBottom="10dp"
+          android:layout_marginTop="10dp"
+          android:layout_marginRight="0dp"
+          android:layout_marginLeft="0dp"/>
+
+        <TextView
           android:id="@+id/challengeLocation"
           style="@style/challengeDetail"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_below="@+id/challengeDetailInformation"
+          android:layout_below="@+id/dividetextveiw6"
           android:layout_marginTop="10dp"
           android:text="@string/location" />
 
@@ -166,21 +264,33 @@
           android:layout_marginBottom="10dp" />
 
         <TextView
+          android:id="@+id/dividetextveiw7"
+          android:layout_below="@+id/challengeDetailLocation"
+          style="@style/divisionTextView"
+          android:layout_marginBottom="10dp"
+          android:layout_marginTop="10dp"
+          android:layout_marginRight="0dp"
+          android:layout_marginLeft="0dp"/>
+
+
+        <TextView
           android:id="@+id/challengeCourse"
           style="@style/challengeDetail"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_below="@+id/challengeDetailLocation"
+          android:layout_below="@+id/dividetextveiw7"
           android:layout_marginTop="10dp"
           android:text="@string/course_information" />
 
         <TextView
           android:id="@+id/challengeCourseInformation"
-          style="@style/challengeDetailList"
+          style="@style/underSubjectName"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_below="@+id/challengeCourse"
           android:layout_margin="10dp" />
+
+
       </RelativeLayout>
 
     </RelativeLayout>

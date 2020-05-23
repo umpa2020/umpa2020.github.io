@@ -9,26 +9,28 @@
     android:id="@+id/profileUserAchievementImageView"
     android:layout_width="0dp"
     android:layout_height="0dp"
-    android:layout_marginEnd="8dp"
-    android:layout_marginStart="8dp"
-    android:layout_marginTop="8dp"
+    android:layout_marginEnd="15dp"
+    android:layout_marginStart="15dp"
+    android:layout_marginTop="30dp"
+    android:padding="5dp"
     app:layout_constraintDimensionRatio="1:1"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"/>
 
   <TextView
+    android:gravity="center"
     android:id="@+id/profileUserAchievementTextView"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    style="@style/ListDetail"
-    android:layout_marginEnd="8dp"
-    android:layout_marginStart="8dp"
+    android:layout_marginEnd="5dp"
+    android:layout_marginStart="5dp"
     android:layout_marginTop="10dp"
+    style="@style/underSubjectName"
+    android:textSize="18dp"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/profileUserAchievementImageView"
     tools:text="Title" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

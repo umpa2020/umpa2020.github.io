@@ -80,12 +80,8 @@
   </style>
 
   <style name="challengeDetail">
-    <item name="android:textSize">17dp</item>
-    <item name="android:textColor">@color/blackgray</item>
-  </style>
-
-  <style name="challengeDetailList">
-    <item name="android:textSize">16dp</item>
+    <item name="fontFamily">sans-serif-medium</item>
+    <item name="android:textSize">18dp</item>
     <item name="android:textColor">@color/lightblack</item>
   </style>
 
