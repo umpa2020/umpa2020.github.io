@@ -43,14 +43,11 @@ import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.fragment_start.*
 import kotlinx.android.synthetic.main.fragment_start.view.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import java.io.File
 
 
-class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener, CoroutineScope by MainScope() {
+class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener,CoroutineScope by MainScope() {
   var traceMap: TraceMap? = null
   var currentLocation: Location? = null
   var routeMarkers = mutableListOf<Marker>()
@@ -98,7 +95,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener, Cor
         startActivity(intent)
       }
       R.id.gpxTest -> {
-        val a = Uri.parse("/data/data/com.umpa2020.tracer/files/originGPX/2020korea50k_50 final")
+        val a = Uri.parse("/data/data/com.umpa2020.tracer/files/routeGPX/2020korea50k_50 final.txt")
         val gpx = a.gpxToClass()
         gpx.addCheckPoint()
         gpx.addDirectionSign()
@@ -115,7 +112,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener, Cor
       }
     }
   }
-
+  val jobList= mutableListOf<Job>()
   /**
    *  현재 맵 보이는 범위로 루트 검색
    */
@@ -123,14 +120,13 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener, Cor
     Logg.d("1번선수")
     progressBar.show()
     val bound = traceMap!!.mMap.projection.visibleRegion.latLngBounds
-   launch {
-      Logg.d("2번선수")
+    launch {
       FBMapRepository().listNearMap(bound.southwest, bound.northeast).let { nearMapList ->
         if (nearMapList.isEmpty()) {
           getString(R.string.not_search).show()
           progressBar.dismiss()
         } else {
-          mainStartSearchAreaButton.visibility = View.GONE
+          mainStartSearchAreaButton?.visibility = View.GONE
           routeMarkers.forEach {
             it.remove()
           }
@@ -395,7 +391,8 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener, Cor
     // 브로드 캐스트 해제
     LocalBroadcastManager.getInstance(this.requireContext())
       .unregisterReceiver(locationBroadcastReceiver)
-
+    jobList.forEach {it.cancel() }
+    cancel()
     //Shared로 마지막 위치 업데이트
     if (currentLocation != null) {
       Logg.d("마지막 위치 업데이트")

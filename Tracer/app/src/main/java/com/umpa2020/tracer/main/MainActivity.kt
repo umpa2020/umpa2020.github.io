@@ -36,8 +36,9 @@ class MainActivity : AppCompatActivity() {
 
     val navController = findNavController(R.id.nav_host_fragment)
     bottom_navigation.setupWithNavController(navController)
-
-
+    bottom_navigation.setOnNavigationItemReselectedListener {
+      //do nothing
+    }
     locationViewModel = ViewModelProvider(this).get(LocationViewModel::class.java)
 
     // 앱이 처음 다운되었으면 광운대학교로 위치 Shared에 설정.
@@ -80,6 +81,7 @@ class MainActivity : AppCompatActivity() {
       map["pushtoken"] = pushToken!!
       FirebaseFirestore.getInstance().collection("pushtokens").document(uid).set(map)
     }
+
   }
 //  override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
 //    if (selectedFragment != null) {
