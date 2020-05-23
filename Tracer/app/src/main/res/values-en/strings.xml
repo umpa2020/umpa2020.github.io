@@ -210,6 +210,7 @@
   <string name="tournament_information">Tournament Information</string>
   <string name="location">Location</string>
   <string name="course_information">Course Information</string>
+  <string name="exactDetails">Please refer to the homepage for exact details</string>
 
 
   <string name="region_selection">Region Selection</string>

@@ -87,7 +87,7 @@
 
   <style name="challengeDetailList">
     <item name="android:textSize">16dp</item>
-    <item name="android:textColor">@color/lightblack</item>
+    <item name="android:textColor">@color/blackgray</item>
   </style>
 
 

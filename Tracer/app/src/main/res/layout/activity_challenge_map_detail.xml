@@ -48,6 +48,16 @@
         android:layout_below="@+id/challengeDetailImageView">
 
         <TextView
+          android:textColor="@color/red"
+          android:layout_marginTop="20dp"
+          android:id="@+id/exactDetailsTextView"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:text="@string/exactDetails"/>
+
+
+        <TextView
+          android:layout_below="@+id/exactDetailsTextView"
           android:id="@+id/challengeCompetitionName"
           style="@style/challengeDetail"
           android:layout_width="match_parent"
@@ -181,11 +191,40 @@
 
 
         <TextView
-          android:id="@+id/challengeInformation"
+          android:id="@+id/challengeURI"
           style="@style/challengeDetail"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_below="@+id/dividetextveiw5"
+          android:layout_marginTop="10dp"
+          android:text="URI" />
+
+        <TextView
+          android:id="@+id/challengeURIDetails"
+          style="@style/challengeDetailList"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_below="@+id/challengeURI"
+          android:layout_margin="10dp" />
+
+        <TextView
+          android:id="@+id/dividetextveiw8"
+          android:layout_below="@+id/challengeURIDetails"
+          style="@style/divisionTextView"
+          android:layout_marginBottom="10dp"
+          android:layout_marginTop="10dp"
+          android:layout_marginRight="0dp"
+          android:layout_marginLeft="0dp"/>
+
+
+
+
+        <TextView
+          android:id="@+id/challengeInformation"
+          style="@style/challengeDetail"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_below="@+id/dividetextveiw8"
           android:layout_marginTop="10dp"
           android:text="@string/tournament_information" />
 
@@ -250,6 +289,8 @@
           android:layout_height="wrap_content"
           android:layout_below="@+id/challengeCourse"
           android:layout_margin="10dp" />
+
+
       </RelativeLayout>
 
     </RelativeLayout>

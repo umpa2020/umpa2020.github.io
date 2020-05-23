@@ -210,6 +210,7 @@
   <string name="tournament_information">대회 정보</string>
   <string name="location">위치</string>
   <string name="course_information">코스정보</string>
+  <string name="exactDetails">정확한 내용은 해당 홈페이지를 참조하세요</string>
 
   <string name="region_selection">지역 선택</string>
 
