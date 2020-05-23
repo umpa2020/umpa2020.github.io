@@ -233,6 +233,13 @@
   <!--achivement-->
   <string name="badges">Badges</string>
 
+  <!--activity_challenge_Racing_finish-->
+  <string name="distributionChart">Distribution Chart</string>
+  <string name="compregensiveChart">Compregensive chart</string>
+
+  <!--activity_profile-->
+  <string name="other_achivement">Achivement</string>
+
 
 
 </resources>

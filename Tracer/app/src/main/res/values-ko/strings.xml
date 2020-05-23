@@ -233,4 +233,11 @@
   <!--achivement-->
   <string name="badges">뱃지</string>
 
+  <!--activity_challenge_Racing_finish-->
+  <string name="distributionChart">기록 분포도</string>
+  <string name="compregensiveChart">종합 차트</string>
+
+  <!--activity_profile-->
+  <string name="other_achivement">업적</string>
+
 </resources>

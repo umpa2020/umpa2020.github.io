@@ -222,7 +222,7 @@
   <string name="medals">획득 메달 수</string>
   <string name="stats">내 통계</string>
 
-  <!--AllRanking-->
+  <!--AllRanking-->ㅂ
   <string name="selectCompare">비교를 원하는 상대를 선택하세요</string>
 
   <!--sign-->
@@ -234,5 +234,10 @@
   <!--achivement-->
   <string name="badges">뱃지</string>
 
+  <!--activity_challenge_Racing_finish-->
+  <string name="distributionChart">기록 분포도</string>
+  <string name="compregensiveChart">종합 차트</string>
 
+  <!--activity_profile-->
+  <string name="other_achivement">업적</string>
 </resources>
