@@ -37,6 +37,7 @@ class MainActivity : AppCompatActivity() {
     val navController = findNavController(R.id.nav_host_fragment)
     bottom_navigation.setupWithNavController(navController)
 
+
     locationViewModel = ViewModelProvider(this).get(LocationViewModel::class.java)
 
     // 앱이 처음 다운되었으면 광운대학교로 위치 Shared에 설정.

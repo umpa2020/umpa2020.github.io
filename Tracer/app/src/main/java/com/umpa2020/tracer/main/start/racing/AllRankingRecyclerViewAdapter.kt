@@ -32,13 +32,13 @@ class AllRankingRecyclerViewAdapter(private val mydata: ArrayList<RankingData>) 
 
     //ranking에 따라 트로피 색 바뀌게 하는 부분
     if (ranking == 1) {
-      holder.rank.setBackgroundResource(R.drawable.ic_ranking1_black)
+      holder.rank.setBackgroundResource(R.drawable.ic_ranking_1st_emblem)
       holder.rank.text = ""
     } else if (ranking == 2) {
-      holder.rank.setBackgroundResource(R.drawable.ic_ranking2_black)
+      holder.rank.setBackgroundResource(R.drawable.ic_ranking_2nd_emblem)
       holder.rank.text = ""
     } else if (ranking == 3) {
-      holder.rank.setBackgroundResource(R.drawable.ic_ranking3_black)
+      holder.rank.setBackgroundResource(R.drawable.ic_ranking_3rd_emblem)
       holder.rank.text = ""
     } else
       holder.rank.setBackgroundResource(R.drawable.ic_4)

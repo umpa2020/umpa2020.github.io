@@ -38,6 +38,10 @@ class ChallengeRecycleritemClickActivity : AppCompatActivity(), OnSingleClickLis
   lateinit var traceMap: TraceMap
   lateinit var challengeId: String
   var challengeEnabled = true
+  override fun onPause() {
+    super.onPause()
+
+  }
 
   @SuppressLint("SetTextI18n")
   override fun onCreate(savedInstanceState: Bundle?) {

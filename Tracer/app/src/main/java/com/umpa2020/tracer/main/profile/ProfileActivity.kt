@@ -24,12 +24,9 @@ import kotlinx.android.synthetic.main.activity_profile.profileFragmentTotalTime
 import kotlinx.android.synthetic.main.activity_profile.profileIdTextView
 import kotlinx.android.synthetic.main.activity_profile.profileImageView
 import kotlinx.android.synthetic.main.fragment_profile.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
-class ProfileActivity : AppCompatActivity(), OnSingleClickListener {
+class ProfileActivity : AppCompatActivity(), OnSingleClickListener, CoroutineScope by MainScope() {
   var userId = ""
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,12 +37,13 @@ class ProfileActivity : AppCompatActivity(), OnSingleClickListener {
 
     userId = intent.extras?.getString(USER_ID).toString()
     if (userId != UserInfo.autoLoginKey) {
-      profileRecordTextView.visibility = View.GONE
+      otherProfileRecordTextView.visibility = View.GONE
+      otherProfileRecordMoreTextView.visibility = View.GONE
       appSettingButton.visibility = View.GONE
     }
 
 
-    MainScope().launch {
+    launch {
       withContext(Dispatchers.IO) {
         FBProfileRepository().getProfile(userId)
       }.let {
@@ -61,7 +59,7 @@ class ProfileActivity : AppCompatActivity(), OnSingleClickListener {
 
     otherProfileRouteTextView.setOnClickListener(this)
     appSettingButton.setOnClickListener(this)
-    profileRecordTextView.setOnClickListener(this)
+    otherProfileRecordTextView.setOnClickListener(this)
   }
 
   override fun onSingleClick(v: View?) {

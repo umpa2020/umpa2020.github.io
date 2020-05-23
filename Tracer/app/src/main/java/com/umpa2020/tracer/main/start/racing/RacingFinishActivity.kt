@@ -18,12 +18,13 @@ import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_racing_finish.*
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import java.util.*
 
 
-class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
+class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener, CoroutineScope by MainScope() {
 
   var activity = this
   lateinit var racerData: MapInfo
@@ -133,7 +134,7 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
     resultRankText: Int,
     renewal: Boolean
   ) {
-    MainScope().launch {
+    launch {
       // 나의 기록
       FBProfileRepository().getProfileImage(UserInfo.autoLoginKey)?.let { racingFinishProfileImageView.image(it) }
       //RacingFinishMyNickName.text = UserInfo.nickname
@@ -214,4 +215,5 @@ class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
       }
     }
   }
+
 }

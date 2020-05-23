@@ -3,10 +3,12 @@ package com.umpa2020.tracer.main.start
 import android.content.IntentFilter
 import android.content.pm.ActivityInfo
 import android.location.Location
+import android.location.LocationManager
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.SystemClock
 import android.view.View
+import android.view.WindowManager
 import android.view.animation.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -43,7 +45,10 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
   OnDrawerCloseListener, OnSingleClickListener {
   lateinit var traceMap: TraceMap
   var privacy = Privacy.RACING
-  lateinit var currentLocation: Location // 가끔 null 오류가 나서 이렇게 수정
+  var currentLocation = Location(LocationManager.GPS_PROVIDER).apply {
+    latitude = UserInfo.lat.toDouble()
+    longitude = UserInfo.lng.toDouble()
+  }
   var distance = 0.0
   var time = 0.0
   var previousLatLng = LatLng(0.0, 0.0)          //이전위
@@ -142,10 +147,13 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     }
   }
 
+  private lateinit var countDownTimer: CountDownTimer
+  var backFlag = false
   open fun start(tts: String) {
+    userState = UserState.STOP
     countDownTextView.visibility = View.VISIBLE
     // 시작 카운트 다운
-    val countDownTimer = object : CountDownTimer(Constants.MILLISINFUTURE, Constants.COUNTDOWN_INTERVAL) {
+    countDownTimer = object : CountDownTimer(Constants.MILLISINFUTURE, Constants.COUNTDOWN_INTERVAL) {
       override fun onTick(millisUntilFinished: Long) {
         Logg.d("${millisUntilFinished / Constants.COUNTDOWN_INTERVAL}")
 
@@ -155,6 +163,8 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
       }
 
       override fun onFinish() {
+        if (backFlag)
+          return
         countDownTextView.visibility = View.GONE
         userState = UserState.RUNNING
         buttonAnimation()
@@ -283,6 +293,11 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     locationViewModel.init(DistanceTimeData("0.0", "0.0"), TimeData(0L, false, 0L, "0.0"))
   }
 
+  override fun onResume() {
+    super.onResume()
+    backFlag = false
+  }
+
   override fun onDestroy() {
     super.onDestroy()
     LocalBroadcastManager.getInstance(this).unregisterReceiver(locationBroadcastReceiver)
@@ -290,13 +305,14 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
 
     // Shared에 마지막 위치 업데이트
 
-    UserInfo.lat = currentLocation!!.latitude.toFloat()
-    UserInfo.lng = currentLocation!!.longitude.toFloat()
+    UserInfo.lat = currentLocation.latitude.toFloat()
+    UserInfo.lng = currentLocation.longitude.toFloat()
 
   }
 
   lateinit var noticePopup: ChoicePopup
   override fun onBackPressed() {
+    backFlag = true
     when (userState) {
       UserState.RUNNING, UserState.PAUSED -> {
         noticePopup = ChoicePopup(this, getString(R.string.please_select),
@@ -340,7 +356,7 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
    * 레이아웃이 스르륵 보이는 함수
    */
 
-  fun appearAnimation() {
+  private fun appearAnimation() {
     val height = runningPauseNotificationTextView.height.toFloat()
 
 
@@ -367,7 +383,7 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
   /**
    * 레이아웃이 스르륵 사라지는 함수
    */
-  fun disappearAnimation() {
+  private fun disappearAnimation() {
     val height = runningPauseNotificationTextView.height.toFloat()
     runningPauseNotificationTextView.clearAnimation() // 일시정지 애니메이션 종료
     runningPauseNotificationTextView.invisible()

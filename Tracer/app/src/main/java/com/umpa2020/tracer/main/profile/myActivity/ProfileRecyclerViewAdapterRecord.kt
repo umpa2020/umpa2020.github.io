@@ -16,11 +16,12 @@ import com.umpa2020.tracer.network.BaseFB
 import com.umpa2020.tracer.network.FBMapRepository
 import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.recycler_profile_user_record_item.view.*
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
 class ProfileRecyclerViewAdapterRecord(val datas: MutableList<ActivityData>) :
-  RecyclerView.Adapter<ProfileRecyclerViewAdapterRecord.MyViewHolder>() {
+  RecyclerView.Adapter<ProfileRecyclerViewAdapterRecord.MyViewHolder>(), CoroutineScope by MainScope() {
   var context: Context? = null
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
     val view = LayoutInflater.from(parent.context)
@@ -36,7 +37,7 @@ class ProfileRecyclerViewAdapterRecord(val datas: MutableList<ActivityData>) :
   override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
     val singleItem1 = datas[position]
 
-    MainScope().launch {
+    launch {
       holder.mapImageView.image(FBMapRepository().getMapImage(singleItem1.mapId!!))
       FBMapRepository().getMapTitle(singleItem1.mapId)?.let {
         val time = singleItem1.time!!.toLong().format(Y_M_D)

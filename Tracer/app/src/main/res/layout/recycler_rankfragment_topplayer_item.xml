@@ -11,7 +11,7 @@
     android:layout_width="0dp"
     android:layout_height="35dp"
     android:layout_weight="0.4"
-    android:background="@drawable/ic_ranking1_black"
+    android:background="@drawable/ic_ranking_1st_emblem"
     android:gravity="center"
     android:textColor="@color/black"
     android:textSize="15dp"

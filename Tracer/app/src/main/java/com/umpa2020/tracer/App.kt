@@ -4,6 +4,9 @@ import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.os.Bundle
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.cancel
 
 class App : Application() {
   companion object {
@@ -14,6 +17,7 @@ class App : Application() {
       return instance.applicationContext
     }
 
+    val jobList = mutableListOf<Job>()
     const val notificationId: Int = 1 // 알림창 Id 통일.
   }
 
@@ -44,7 +48,9 @@ class App : Application() {
       currentActivity = activity
     }
 
-    override fun onActivityPaused(activity: Activity?) {}
+    override fun onActivityPaused(activity: Activity?) {
+      MainScope().cancel()
+    }
     override fun onActivityStopped(activity: Activity?) {}
     override fun onActivityDestroyed(activity: Activity?) {
       activityCount--

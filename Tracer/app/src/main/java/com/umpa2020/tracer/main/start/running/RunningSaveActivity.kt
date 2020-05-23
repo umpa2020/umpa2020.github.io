@@ -211,6 +211,8 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
     finish()
   }
 
+
+
   override fun onMapReady(googleMap: GoogleMap) {
     Logg.d("onMapReady")
     traceMap = TraceMap(googleMap) //구글맵

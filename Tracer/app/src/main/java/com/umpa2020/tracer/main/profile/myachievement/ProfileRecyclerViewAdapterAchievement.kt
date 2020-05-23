@@ -11,11 +11,12 @@ import com.umpa2020.tracer.extensions.image
 import com.umpa2020.tracer.network.FBStorageRepository
 import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.recycler_profile_achivement_item.view.*
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
 class ProfileRecyclerViewAdapterAchievement(private val emblemDatas: MutableList<EmblemData>) :
-  RecyclerView.Adapter<ProfileRecyclerViewAdapterAchievement.MyViewHolder>() {
+  RecyclerView.Adapter<ProfileRecyclerViewAdapterAchievement.MyViewHolder>(), CoroutineScope by MainScope() {
   var context: Context? = null
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
     val view = LayoutInflater.from(parent.context)
@@ -31,7 +32,7 @@ class ProfileRecyclerViewAdapterAchievement(private val emblemDatas: MutableList
   override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
     val emblemData = emblemDatas[position]
 
-    MainScope().launch {
+    launch {
       holder.mapImageView.image(FBStorageRepository().downloadFile(emblemData.imagePath!!))
     }
     holder.activityText.text = emblemData.name

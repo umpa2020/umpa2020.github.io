@@ -43,12 +43,14 @@ import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.fragment_start.*
 import kotlinx.android.synthetic.main.fragment_start.view.*
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import java.io.File
 
 
-class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
+class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener, CoroutineScope by MainScope() {
   var traceMap: TraceMap? = null
   var currentLocation: Location? = null
   var routeMarkers = mutableListOf<Marker>()
@@ -118,9 +120,11 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
    *  현재 맵 보이는 범위로 루트 검색
    */
   private fun searchThisArea() {
+    Logg.d("1번선수")
     progressBar.show()
     val bound = traceMap!!.mMap.projection.visibleRegion.latLngBounds
-    MainScope().launch {
+   launch {
+      Logg.d("2번선수")
       FBMapRepository().listNearMap(bound.southwest, bound.northeast).let { nearMapList ->
         if (nearMapList.isEmpty()) {
           getString(R.string.not_search).show()
@@ -274,7 +278,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
 
     traceMap!!.mMap.setOnMarkerClickListener {
       it.showInfoWindow()
-      MainScope().launch {
+     launch {
         if (it.tag != null) {
           FBMapRepository().getMapInfo(it.tag as String)?.let {
             FBStorageRepository().getFile(it.routeGPXPath).gpxToClass().let {
@@ -313,7 +317,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
   /**
    * 마커 루트를 그리기 전에 초기화 작업
    */
-  fun routeInit() {
+  private fun routeInit() {
     val firstLatLng = mutableListOf<LatLng>()
 
     loadTrack =
@@ -358,7 +362,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
             traceMap!!.mMap.addMarker(
               MarkerOptions()
                 .position(it.toLatLng())
-                .title(it.name)
+//                .title(it.name)
                 .icon(R.drawable.ic_finish_point.makingIcon())
             )
           )
@@ -385,6 +389,9 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener {
 
   override fun onPause() {
     super.onPause()
+    progressBar.dismiss()
+    // 갑자기 뒤로가면 코루틴 취소
+    MainScope().cancel()
     // 브로드 캐스트 해제
     LocalBroadcastManager.getInstance(this.requireContext())
       .unregisterReceiver(locationBroadcastReceiver)

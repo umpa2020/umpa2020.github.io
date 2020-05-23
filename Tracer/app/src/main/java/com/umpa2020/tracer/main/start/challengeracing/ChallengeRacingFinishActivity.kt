@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.*
+import com.umpa2020.tracer.App.Companion.jobList
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.extensions.calcRank
 import com.umpa2020.tracer.extensions.format
@@ -20,11 +21,12 @@ import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_challenge_racing_finish.*
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
 
-class ChallengeRacingFinishActivity : AppCompatActivity(), OnSingleClickListener {
+class ChallengeRacingFinishActivity : AppCompatActivity(), OnSingleClickListener, CoroutineScope by MainScope() {
   lateinit var progressbar: ProgressBar
   lateinit var recordList: LongArray
   lateinit var bestList: LongArray
@@ -43,7 +45,7 @@ class ChallengeRacingFinishActivity : AppCompatActivity(), OnSingleClickListener
     challengeFinishMyLapTime.text = recordList.last().format(m_s)
     challengeRankTextView.text = "${recordList.last().calcRank(bestList.last(), worstList.last())} %"
     challengeOKButton.setOnClickListener(this)
-    MainScope().launch {
+    launch {
       // 유저 히스토리 등록
       /* FBUsersRepository().createUserHistory(
          ActivityData(racerData.mapId, Date().time, racerData.distance, racerData.time, if (result) "racing go the distance" else "racing fail")

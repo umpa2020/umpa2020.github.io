@@ -41,7 +41,7 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:paddingLeft="20dp"
-        android:paddingTop="10dp"
+        android:paddingTop="20dp"
         android:paddingEnd="20dp"
         android:paddingRight="20dp"
         android:text="@string/my_rank" />
@@ -64,7 +64,7 @@
           android:layout_height="50dp"
           android:src="@drawable/ic_profile_logo"
           app:civ_border_color="@color/gray"
-          app:civ_border_width="2dp" />
+          app:civ_border_width="1dp" />
 
         <LinearLayout
           android:layout_width="wrap_content"
@@ -116,7 +116,7 @@
           style="@style/subjectName"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_marginTop="10dp"
+          android:layout_marginTop="20dp"
           android:layout_marginBottom="10dp"
           android:text="@string/top3_rank" />
 
@@ -294,7 +294,7 @@
           style="@style/subjectName"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_marginTop="10dp"
+          android:layout_marginTop="20dp"
           android:text="@string/record_comparison" />
 
         <LinearLayout
@@ -528,6 +528,6 @@
     android:layout_marginRight="20dp"
     android:layout_marginBottom="10dp"
     android:background="@drawable/button_background"
-    android:text="확인" />
+    android:text="@string/confirmation" />
 
 </RelativeLayout>

@@ -25,11 +25,12 @@ import com.umpa2020.tracer.util.Chart
 import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.activity_ranking_map_detail.*
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import java.io.File
 
-class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener, OnMapReadyCallback {
+class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener, OnMapReadyCallback, CoroutineScope by MainScope() {
   lateinit var routeGPX: RouteGPX
   lateinit var traceMap: TraceMap
   var mapId = ""
@@ -52,7 +53,7 @@ class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener, OnM
         }
       })
     rankingDetailRaceButton.setOnClickListener(this)
-    MainScope().launch {
+    launch {
       FBMapRepository().getMapInfo(mapId)?.let {
         rankingDetailMapTitle.text = it.mapTitle
         rankingDetailDate.text = it.createTime.format(Y_M_D)
@@ -82,6 +83,8 @@ class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener, OnM
       }
     }
   }
+
+
 
   override fun onSingleClick(v: View?) {
     when (v!!.id) {

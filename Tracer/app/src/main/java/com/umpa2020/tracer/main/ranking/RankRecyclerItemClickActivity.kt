@@ -18,12 +18,9 @@ import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_rank_recycler_item_click.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
-class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener {
+class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener, CoroutineScope by MainScope() {
   val activity = this
   var likes = 0
   var mapId = ""
@@ -42,7 +39,7 @@ class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener
     //전달 받은 값으로 Title 설정
     mapId = intent.getStringExtra(MAP_ID)!!
 
-    MainScope().launch {
+    launch {
       withContext(Dispatchers.IO) {
         FBMapRepository().getMapInfo(mapId)
       }?.let {
@@ -58,7 +55,7 @@ class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener
       }
     }
 
-    MainScope().launch {
+    launch {
       rankRoutePriview.image(FBMapRepository().getMapImage(mapId))
       setLiked(FBLikesRepository().isLiked(UserInfo.autoLoginKey, mapId), FBLikesRepository().getMapLikes(mapId))
       setPlayed(FBUsersRepository().isPlayed(UserInfo.autoLoginKey, mapId), FBMapRepository().getMapPlays(mapId))
@@ -84,13 +81,13 @@ class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener
       }
       R.id.rankRecyclerHeart -> {
         if (rankRecyclerHeartSwitch.text == "off") {
-          MainScope().launch { FBLikesRepository().toggleLikes(UserInfo.autoLoginKey, mapId) }
+          launch { FBLikesRepository().toggleLikes(UserInfo.autoLoginKey, mapId) }
           rankRecyclerHeart.setImageResource(R.drawable.ic_favorite_red_24dp)
           rankRecyclerHeartSwitch.text = "on"
           likes++
           rankRecyclerHeartCount.text = likes.toString()
         } else if (rankRecyclerHeartSwitch.text == "on") {
-          MainScope().launch { FBLikesRepository().toggleLikes(UserInfo.autoLoginKey, mapId) }
+          launch { FBLikesRepository().toggleLikes(UserInfo.autoLoginKey, mapId) }
           rankRecyclerHeart.setImageResource(R.drawable.ic_favorite_border_black_24dp)
           rankRecyclerHeartSwitch.text = "off"
           likes--
@@ -118,6 +115,8 @@ class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener
       rankRecyclerHeartSwitch.text = "off"
     }
   }
+
+
 
   private fun setPlayed(played: Boolean, getPlays: Int) {
     rankRecyclerExecuteCount.text = getPlays.toString()

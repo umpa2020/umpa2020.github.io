@@ -81,6 +81,7 @@
             android:text="@string/Distance_km" />
 
           <TextView
+            android:layout_marginTop="15dp"
             android:id="@+id/racingDistanceTextView"
             style="@style/blackMediumText18"
             android:layout_width="match_parent"
@@ -106,6 +107,7 @@
             android:text="@string/Time" />
 
           <Chronometer
+            android:layout_marginTop="15dp"
             android:id="@+id/racingTimerTextView"
             style="@style/blackMediumText18"
             android:layout_width="wrap_content"
@@ -129,6 +131,7 @@
             android:text="@string/speed_km" />
 
           <TextView
+            android:layout_marginTop="15dp"
             android:id="@+id/racingSpeedTextView"
             style="@style/blackMediumText18"
             android:layout_width="match_parent"
@@ -196,7 +199,7 @@
     android:layout_width="match_parent"
     android:layout_height="50dp"
     android:layout_marginTop="350dp"
-    android:background="#990044FF"
+    android:background="#9014E32F"
     android:gravity="center"
     android:textColor="@color/white"
     android:textSize="20sp"
@@ -211,7 +214,7 @@
     android:layout_marginLeft="20dp"
     android:layout_marginTop="50dp"
     android:layout_marginRight="20dp"
-    android:background="#990044FF"
+    android:background="@drawable/running_textvview_background"
     android:gravity="center"
     android:textColor="@color/white"
     android:textSize="20dp" />
@@ -221,7 +224,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_centerInParent="true"
-    android:background="#4400FF00"
+    android:background="@color/pause"
     android:gravity="center"
     android:text="3"
     android:textColor="#FFFFFF"

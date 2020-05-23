@@ -28,20 +28,23 @@
     android:layout_height="wrap_content"
     android:layout_below="@+id/AllRankingToolBar"
     android:layout_marginStart="20dp"
-    android:layout_marginTop="10dp"
+    android:layout_marginTop="20dp"
     android:layout_marginEnd="20dp"
-    android:text="비교를 원하는 상대를 선택해주세요."
+    android:text="@string/selectCompare"
     android:textColor="@color/lightblack"
     android:textSize="16dp" />
 
   <androidx.recyclerview.widget.RecyclerView
+    style="@style/subjectRelativeLayoutStyle"
+    android:paddingTop="0.1dp"
+    android:paddingBottom="0.1dp"
     android:id="@+id/resultPlayerRankingRecycler"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_below="@+id/allRankingTextView"
-    android:layout_marginLeft="20dp"
-    android:layout_marginTop="10dp"
-    android:layout_marginRight="20dp"
-    android:layout_marginBottom="50dp" />
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    android:layout_marginTop="20dp"
+    android:layout_marginBottom="20dp" />
 
 </RelativeLayout>

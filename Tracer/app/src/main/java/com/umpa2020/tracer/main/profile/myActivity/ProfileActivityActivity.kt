@@ -10,6 +10,7 @@ import com.umpa2020.tracer.dataClass.ActivityData
 import com.umpa2020.tracer.network.FBUsersRepository
 import com.umpa2020.tracer.util.MyProgressBar
 import kotlinx.android.synthetic.main.activity_profile_record.*
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
@@ -19,7 +20,7 @@ import kotlinx.coroutines.launch
  * 2. 레이싱 완주했는지
  * 3. 레이싱 도중 포기했는지 맵 이미지와 함께 표기
  */
-class ProfileActivityActivity : AppCompatActivity() {
+class ProfileActivityActivity : AppCompatActivity(), CoroutineScope by MainScope() {
   val rootActivityDatas = arrayListOf<ActivityData>()
   val progressbar = MyProgressBar()
   var isLoding = false
@@ -43,7 +44,7 @@ class ProfileActivityActivity : AppCompatActivity() {
         } else if (!profileRecyclerRecord.canScrollVertically(1)) {
           /* 리사이클러뷰가 맨 아래로 이동했을 경우 */
           if (!isLoding) {
-            MainScope().launch {
+            launch {
               userActivityRepo.listUserMakingActivity(15)?.let {
                 activityList(it)
               }
@@ -65,7 +66,7 @@ class ProfileActivityActivity : AppCompatActivity() {
      * 나의 활동 리스트를 가져오기
      */
 
-    MainScope().launch {
+    launch {
       FBUsersRepository().listUserMakingActivity(limit)?.let {
         activityList(it)
       } ?: kotlin.run {

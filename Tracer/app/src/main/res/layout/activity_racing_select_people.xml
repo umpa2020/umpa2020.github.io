@@ -33,6 +33,7 @@
     android:paddingBottom="20dp">
 
     <TextView
+      android:textSize="17dp"
       android:id="@+id/Max3TextView"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"

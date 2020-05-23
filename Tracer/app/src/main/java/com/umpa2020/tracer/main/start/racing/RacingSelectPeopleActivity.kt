@@ -20,15 +20,17 @@ import com.umpa2020.tracer.network.BaseFB.Companion.MAP_ID
 import com.umpa2020.tracer.network.FBMapRepository
 import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.activity_racing_select_people.*
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import java.io.File
 
-class RacingSelectPeopleActivity : AppCompatActivity(), OnSingleClickListener {
+class RacingSelectPeopleActivity : AppCompatActivity(), OnSingleClickListener, CoroutineScope by MainScope() {
   val activity = this
   var likes = 0
   var mapId = ""
   lateinit var routeGPX: RouteGPX
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_racing_select_people)
@@ -38,7 +40,7 @@ class RacingSelectPeopleActivity : AppCompatActivity(), OnSingleClickListener {
     val routeGPXUri = intent.getStringExtra(ROUTE_GPX)
     routeGPX = Uri.parse(routeGPXUri).gpxToClass()
 
-    MainScope().launch {
+    launch {
       FBMapRepository().listMapRanking(mapId).let {
         //레이아웃 매니저 추가
         rankingDataList = it

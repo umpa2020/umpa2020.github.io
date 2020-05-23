@@ -40,7 +40,7 @@ import kotlinx.android.synthetic.main.activity_running.*
 import kotlinx.coroutines.*
 import java.io.File
 
-class RacingActivity : BaseRunningActivity() {
+class RacingActivity : BaseRunningActivity(),CoroutineScope by MainScope() {
   companion object {
     const val ROUTE_GPX = "RouteGPX"
   }
@@ -68,7 +68,7 @@ class RacingActivity : BaseRunningActivity() {
     racerList = intent.getSerializableExtra(RACER_LIST) as Array<RacerData>
 
     Logg.d(racerList.joinToString())
-    MainScope().launch {
+    launch {
       racerGPXList = FBRacingRepository().listRacingGPX(mapId, racerList.map { it.racerId })
       loadRoute()
     }
@@ -137,7 +137,7 @@ class RacingActivity : BaseRunningActivity() {
       }
       R.id.runningStopButton -> {
         //"종료를 원하시면 길게 눌러주세요".show()
-        // Toast.makeText(this, "종료를 원하시면 길게 눌러주세요", Toast.LENGTH_LONG).show()
+        Toast.makeText(this, getString(R.string.press_hold), Toast.LENGTH_LONG).show()
 
       }
       R.id.runningPauseButton -> {
@@ -202,7 +202,7 @@ class RacingActivity : BaseRunningActivity() {
   private fun virtualRacing() {
     val checkPoints = arrayOf(DISTANCE_POINT, START_POINT, FINISH_POINT)
     racerGPXList?.forEachIndexed { racerNo, racingGPX ->
-      GlobalScope.launch {
+      launch {
         val wpts = racingGPX.wptList.filter { checkPoints.contains(it.type) }
         var tempIndex = 1
         val wptIndices = mutableListOf<Int>()
@@ -235,6 +235,7 @@ class RacingActivity : BaseRunningActivity() {
       }
     }
   }
+
 
   override fun stop(tts: String) {
     super.stop(tts)

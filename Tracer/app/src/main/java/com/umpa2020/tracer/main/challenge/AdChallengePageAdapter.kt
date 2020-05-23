@@ -11,6 +11,7 @@ import com.umpa2020.tracer.dataClass.BannerData
 import com.umpa2020.tracer.extensions.image
 import com.umpa2020.tracer.network.FBStorageRepository
 import kotlinx.android.synthetic.main.fragment_adchallenge.view.*
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
@@ -20,7 +21,7 @@ import kotlinx.coroutines.launch
 class AdChallengePageAdapter(
   val adChallengeList: MutableList<BannerData>,
   val context: Context
-) : InfinitePagerAdapter() {
+) : InfinitePagerAdapter(), CoroutineScope by MainScope() {
   override fun getItemCount(): Int {
     return adChallengeList.size
   }
@@ -29,7 +30,7 @@ class AdChallengePageAdapter(
     val view = LayoutInflater.from(container!!.context)
       .inflate(R.layout.fragment_adchallenge, container, false)
 
-    MainScope().launch {
+    launch {
       view.adChallengeImgView.image(FBStorageRepository().downloadFile(adChallengeList[position].bannerImagePath!!))
     }
     view.setOnClickListener {

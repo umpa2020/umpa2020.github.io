@@ -14,6 +14,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.maps.android.PolyUtil
 import com.google.maps.android.SphericalUtil
+import com.umpa2020.tracer.App.Companion.jobList
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.constant.Constants.Companion.ARRIVE_BOUNDARY
@@ -58,7 +59,7 @@ class ChallengeRacingActivity : BaseRunningActivity(), CoroutineScope by MainSco
     super.onCreate(savedInstanceState)
     runningAppBarTextView.text = getString(R.string.challenge)
     mapId = intent.getStringExtra(MAP_ID)!!
-    MainScope().launch {
+    launch {
       mapRouteGPX = FBStorageRepository().getFile(FBMapRepository().getMapInfo(mapId)?.routeGPXPath!!).gpxToClass()
       loadRoute()
     }

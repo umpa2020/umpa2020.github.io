@@ -26,15 +26,12 @@ import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.fragment_profile.view.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
 /**
  * A simple [Fragment] subclass.
  */
-class ProfileFragment() : Fragment(), OnSingleClickListener, Parcelable {
+class ProfileFragment() : Fragment(), OnSingleClickListener, Parcelable, CoroutineScope by MainScope() {
   lateinit var root: View
   var bundle = Bundle()
   val progressBar = MyProgressBar()
@@ -88,7 +85,7 @@ class ProfileFragment() : Fragment(), OnSingleClickListener, Parcelable {
      * 프로필 변경을 하고 나오는 경우에도 적용된
      * 사진을 바로 보기 위해 Resume에서 적용
      */
-    MainScope().launch {
+    launch {
       withContext(Dispatchers.IO) {
         FBProfileRepository().getProfile(UserInfo.autoLoginKey)
       }.let {
@@ -104,6 +101,13 @@ class ProfileFragment() : Fragment(), OnSingleClickListener, Parcelable {
         progressBar.dismiss()
       }
     }
+  }
+
+  override fun onPause() {
+    super.onPause()
+    progressBar.dismiss()
+    // 갑자기 뒤로가면 코루틴 취소
+    MainScope().cancel()
   }
 
   override fun writeToParcel(parcel: Parcel, flags: Int) {

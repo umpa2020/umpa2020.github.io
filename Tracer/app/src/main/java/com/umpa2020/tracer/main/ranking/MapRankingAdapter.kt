@@ -14,6 +14,7 @@ import com.umpa2020.tracer.network.FBLikesRepository
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.recycler_rankfragment_item.view.*
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
@@ -23,7 +24,7 @@ import kotlinx.coroutines.launch
 class MapRankingAdapter(
   val mapInfos: ArrayList<MapInfo>,
   val mode: String
-) : RecyclerView.Adapter<MapRankingAdapter.mViewHolder>() {
+) : RecyclerView.Adapter<MapRankingAdapter.mViewHolder>(), CoroutineScope by MainScope() {
 
   var context: Context? = null
 
@@ -60,13 +61,13 @@ class MapRankingAdapter(
 
     //ranking에 따라 트로피 색 바뀌게 하는 부분
     if (ranking == 1) {
-      holder.rank.setBackgroundResource(R.drawable.ic_ranking1_black)
+      holder.rank.setBackgroundResource(R.drawable.ic_ranking_1st_emblem)
       holder.rank.text = ""
     } else if (ranking == 2) {
-      holder.rank.setBackgroundResource(R.drawable.ic_ranking2_black)
+      holder.rank.setBackgroundResource(R.drawable.ic_ranking_2nd_emblem)
       holder.rank.text = ""
     } else if (ranking == 3) {
-      holder.rank.setBackgroundResource(R.drawable.ic_ranking3_black)
+      holder.rank.setBackgroundResource(R.drawable.ic_ranking_3rd_emblem)
       holder.rank.text = ""
     } else
       holder.rank.setBackgroundResource(R.drawable.ic_4)
@@ -85,7 +86,7 @@ class MapRankingAdapter(
     holder.modeIcon.setOnClickListener(
       object : OnSingleClickListener {
         override fun onSingleClick(v: View?) {
-          MainScope().launch { FBLikesRepository().toggleLikes(UserInfo.autoLoginKey, infoData.mapId) }
+          launch { FBLikesRepository().toggleLikes(UserInfo.autoLoginKey, infoData.mapId) }
           if (infoData.liked) {
             infoData.liked = false
             infoData.likes--
