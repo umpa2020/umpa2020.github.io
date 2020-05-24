@@ -60,6 +60,7 @@ class ChallengeRecycleritemClickActivity : AppCompatActivity(), OnSingleClickLis
           challengeDetailCompetitionPeriod.text = from!!.format(Y_M_D) + " ~ " + to!!.format(Y_M_D)
           challengeDetailAddress.text = address
           challengeDetailHost.text = host
+          challengeURIDetails.text = link
           challengeDetailInformation.text = intro
           challengeEnabled = enabled
         }
