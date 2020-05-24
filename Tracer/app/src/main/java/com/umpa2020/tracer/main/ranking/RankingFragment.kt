@@ -211,7 +211,6 @@ class RankingFragment : Fragment(), OnSingleClickListener, CoroutineScope by Mai
 
   override fun onPause() {
     super.onPause()
-    progressBar.dismiss()
     // 갑자기 뒤로가면 코루틴 취소
     MainScope().cancel()
 
@@ -254,10 +253,10 @@ class RankingFragment : Fragment(), OnSingleClickListener, CoroutineScope by Mai
     } else {
       //레이아웃 매니저, 어댑터 추가
       if (rootInfoDatas.size < 21) {
-        rank_recycler_map.layoutManager = LinearLayoutManager(context)
-        rank_recycler_map.adapter = MapRankingAdapter(rootInfoDatas, mode)
+        rank_recycler_map?.layoutManager = LinearLayoutManager(context)
+        rank_recycler_map?.adapter = MapRankingAdapter(rootInfoDatas, mode)
       } else {
-        rank_recycler_map.adapter!!.notifyDataSetChanged()
+        rank_recycler_map?.adapter!!.notifyDataSetChanged()
       }
       isLoding = false
     }
