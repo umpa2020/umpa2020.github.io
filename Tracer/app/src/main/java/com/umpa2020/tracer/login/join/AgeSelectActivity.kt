@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.NumberPicker
-import androidx.appcompat.app.AppCompatActivity
+import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.extensions.intToyyyyMMdd
 import com.umpa2020.tracer.extensions.toAge
@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.activity_age_select.*
 import kotlinx.android.synthetic.main.signup_toolbar.*
 import kotlinx.android.synthetic.main.signup_toolbar.view.*
 
-class AgeSelectActivity : AppCompatActivity(), OnSingleClickListener {
+class AgeSelectActivity : BaseActivity(), OnSingleClickListener {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)

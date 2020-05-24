@@ -7,10 +7,10 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.umpa2020.tracer.App
+import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.customUI.WorkaroundMapFragment
 import com.umpa2020.tracer.dataClass.*
@@ -29,14 +29,12 @@ import com.umpa2020.tracer.network.FBAchievementRepository
 import com.umpa2020.tracer.network.FBMapRepository
 import com.umpa2020.tracer.util.*
 import kotlinx.android.synthetic.main.activity_running_save.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
 
-class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleClickListener, CoroutineScope by MainScope() {
+class RunningSaveActivity : BaseActivity(), OnMapReadyCallback, OnSingleClickListener {
   lateinit var mapInfo: MapInfo
   lateinit var routeGPX: RouteGPX
   lateinit var traceMap: TraceMap

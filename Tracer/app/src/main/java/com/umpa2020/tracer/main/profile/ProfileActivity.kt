@@ -3,7 +3,7 @@ package com.umpa2020.tracer.main.profile
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
+import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.extensions.image
@@ -13,7 +13,6 @@ import com.umpa2020.tracer.main.profile.myActivity.ProfileActivityActivity
 import com.umpa2020.tracer.main.profile.myachievement.ProfileAchievementActivity
 import com.umpa2020.tracer.main.profile.myroute.ProfileRouteActivity
 import com.umpa2020.tracer.main.profile.settting.AppSettingActivity
-import com.umpa2020.tracer.network.BaseFB
 import com.umpa2020.tracer.network.BaseFB.Companion.USER_ID
 import com.umpa2020.tracer.network.FBProfileRepository
 import com.umpa2020.tracer.network.FBUsersRepository
@@ -21,15 +20,11 @@ import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_profile.*
-import kotlinx.android.synthetic.main.activity_profile.appSettingButton
-import kotlinx.android.synthetic.main.activity_profile.profileFragmentTotalDistance
-import kotlinx.android.synthetic.main.activity_profile.profileFragmentTotalTime
-import kotlinx.android.synthetic.main.activity_profile.profileIdTextView
-import kotlinx.android.synthetic.main.activity_profile.profileImageView
-import kotlinx.android.synthetic.main.fragment_profile.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class ProfileActivity : AppCompatActivity(), OnSingleClickListener, CoroutineScope by MainScope() {
+class ProfileActivity : BaseActivity(), OnSingleClickListener {
   var userId = ""
 
   override fun onCreate(savedInstanceState: Bundle?) {

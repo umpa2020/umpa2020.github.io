@@ -9,7 +9,6 @@ import android.os.CountDownTimer
 import android.os.SystemClock
 import android.view.View
 import android.view.animation.*
-import androidx.appcompat.app.AppCompatActivity
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.preference.PreferenceManager
 import com.google.android.gms.maps.GoogleMap
@@ -17,6 +16,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.SphericalUtil
 import com.umpa2020.tracer.App
+import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.broadcastReceiver.LocationBroadcastReceiver
 import com.umpa2020.tracer.constant.Constants
@@ -39,7 +39,7 @@ import java.lang.String.format
 import java.util.*
 
 
-open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDrawerScrollListener,
+open class BaseRunningActivity : BaseActivity(), OnMapReadyCallback, OnDrawerScrollListener,
   OnDrawerOpenListener,
   OnDrawerCloseListener, OnSingleClickListener {
   lateinit var traceMap: TraceMap

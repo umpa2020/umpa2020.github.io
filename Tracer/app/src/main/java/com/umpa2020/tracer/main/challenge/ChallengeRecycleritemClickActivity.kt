@@ -5,10 +5,10 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.extensions.Y_M_D
 import com.umpa2020.tracer.extensions.format
@@ -25,15 +25,13 @@ import com.umpa2020.tracer.network.FBMapRepository
 import com.umpa2020.tracer.network.FBStorageRepository
 import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.activity_challenge_map_detail.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
 /**
  * 하나의 대회를 선택하면 해당 대회의 정보를
  * 자세히 보여주는 액티비티, 추 후에 뛸 수 있도록 연동
  */
-class ChallengeRecycleritemClickActivity : AppCompatActivity(), OnSingleClickListener, CoroutineScope by MainScope(), OnMapReadyCallback {
+class ChallengeRecycleritemClickActivity : BaseActivity(), OnSingleClickListener, OnMapReadyCallback {
   lateinit var routeGPXUri: Uri
   lateinit var traceMap: TraceMap
   lateinit var challengeId: String

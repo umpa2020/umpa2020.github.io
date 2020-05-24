@@ -2,18 +2,15 @@ package com.umpa2020.tracer.main.profile.myActivity
 
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.ActivityData
-import com.umpa2020.tracer.dataClass.UserId
 import com.umpa2020.tracer.network.BaseFB
 import com.umpa2020.tracer.network.FBUsersRepository
 import com.umpa2020.tracer.util.MyProgressBar
 import kotlinx.android.synthetic.main.activity_profile_record.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
 /**
@@ -22,7 +19,7 @@ import kotlinx.coroutines.launch
  * 2. 레이싱 완주했는지
  * 3. 레이싱 도중 포기했는지 맵 이미지와 함께 표기
  */
-class ProfileActivityActivity : AppCompatActivity(), CoroutineScope by MainScope() {
+class ProfileActivityActivity : BaseActivity() {
   val rootActivityDatas = arrayListOf<ActivityData>()
   val progressbar = MyProgressBar()
   var isLoding = false
