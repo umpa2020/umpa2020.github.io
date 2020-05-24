@@ -188,7 +188,7 @@
               android:textSize="18dp"
               style="@style/underSubjectName"
               android:gravity="center"
-              android:id="@+id/medal1th"
+              android:id="@+id/otherMedal1th"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content" />
 
@@ -199,7 +199,7 @@
               android:gravity="center"
               android:layout_marginRight="50dp"
               android:layout_marginLeft="50dp"
-              android:id="@+id/medal2nd"
+              android:id="@+id/otherMedal2nd"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"/>
 
@@ -208,7 +208,7 @@
               android:textSize="18dp"
               android:gravity="center"
               style="@style/underSubjectName"
-              android:id="@+id/medal3rd"
+              android:id="@+id/otherMedal3rd"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"/>
 
@@ -278,7 +278,7 @@
 
 
         <TextView
-          android:id="@+id/otherProfileAchivementTextView"
+          android:id="@+id/otherProfileAchievementTextView"
           style="@style/ListDetail"
           android:layout_width="match_parent"
           android:layout_height="50dp"
@@ -289,7 +289,7 @@
         <TextView
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_alignBaseline="@+id/otherProfileAchivementTextView"
+          android:layout_alignBaseline="@+id/otherProfileAchievementTextView"
           android:layout_alignParentRight="true"
           android:background="@drawable/ic_chevron_right_black_24dp"
           android:backgroundTint="@color/black"

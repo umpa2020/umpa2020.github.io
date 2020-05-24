@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.MapInfo
 import com.umpa2020.tracer.extensions.prettyDistance
+import com.umpa2020.tracer.extensions.toNumberUnit
 import com.umpa2020.tracer.network.FBLikesRepository
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.UserInfo
@@ -47,7 +48,7 @@ class MapRankingAdapter(
       if (infoData.played) {
         holder.modeIcon.setColorFilter(Color.CYAN)
       }
-      holder.modeNo.text = infoData.plays.toString()
+      holder.modeNo.text = infoData.plays.toNumberUnit()
     } else if (mode == "likes") {
       if (infoData.liked) {
         holder.modeIcon.setImageResource(R.drawable.ic_favorite_red_24dp)
@@ -56,7 +57,7 @@ class MapRankingAdapter(
         holder.modeIcon.setImageResource(R.drawable.ic_favorite_border_black_24dp)
         holder.modeIcon.tag = R.drawable.ic_favorite_border_black_24dp
       }
-      holder.modeNo.text = infoData.likes.toString()
+      holder.modeNo.text = infoData.likes.toNumberUnit()
     }
 
     //ranking에 따라 트로피 색 바뀌게 하는 부분

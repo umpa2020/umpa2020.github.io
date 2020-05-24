@@ -38,7 +38,7 @@ class FBAchievementRepository : BaseFB(), CoroutineScope by MainScope() {
 
   suspend fun listEmblemImagePaths(userEmblems: MutableList<EmblemNameData>): MutableList<EmblemData> {
     return emblemsCollectionRef.orderBy(NO).get().await().documents.map {
-      val emblemNameData = EmblemNameData(it.getString(NAME)!!)
+      val emblemNameData = EmblemNameData(it.id)
       if (userEmblems.contains(emblemNameData)) {
         EmblemData(it.getString(NAME), it.getString(IMAGE_PATH))
       } else {

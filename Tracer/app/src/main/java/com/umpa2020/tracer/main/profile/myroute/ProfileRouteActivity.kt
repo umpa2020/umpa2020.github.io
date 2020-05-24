@@ -62,7 +62,6 @@ class ProfileRouteActivity : AppCompatActivity(), CoroutineScope by MainScope() 
   override fun onResume() {
     // 마이 루트에 필요한 내용을 받아옴
     limit = rootInfoDatas.size.toLong()
-    Logg.d("ssmm11 limit = $limit")
     if (limit == 0L) limit = 5L
     else rootInfoDatas.clear()
     launch {
@@ -79,9 +78,6 @@ class ProfileRouteActivity : AppCompatActivity(), CoroutineScope by MainScope() 
   fun listProfileRoute(mapInfos: List<MapInfo>?) {
     if (mapInfos != null)
       rootInfoDatas.addAll(mapInfos)
-
-    Logg.d("ssmm11 size = ${rootInfoDatas.size}")
-
 
     if (rootInfoDatas.isEmpty()) {
       profileRecyclerRouteisEmpty.visibility = View.VISIBLE
