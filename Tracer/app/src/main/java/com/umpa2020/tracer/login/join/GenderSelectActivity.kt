@@ -4,14 +4,14 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
+import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.activity_gender_select.*
 import kotlinx.android.synthetic.main.signup_toolbar.*
 import kotlinx.android.synthetic.main.signup_toolbar.view.*
 
-class GenderSelectActivity : AppCompatActivity(), OnSingleClickListener {
+class GenderSelectActivity : BaseActivity(), OnSingleClickListener {
   var isMan = false
   var isWoman = false
 

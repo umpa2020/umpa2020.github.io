@@ -10,7 +10,7 @@ data class RankingData(
   val challengerNickname: String? = null,
   val challengerTime: Long? = null,
   var BestTime: Boolean = false,
-  val maxSpeed: String? = null,
-  val averageSpeed: String? = null,
+  val maxSpeed: Double? = null,
+  val averageSpeed: Double? = null,
   var racerGPX: String? = null
 ) : Parcelable

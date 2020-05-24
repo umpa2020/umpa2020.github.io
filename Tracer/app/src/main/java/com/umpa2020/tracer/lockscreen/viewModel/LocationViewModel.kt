@@ -1,4 +1,4 @@
-package com.umpa2020.tracer.viewModel
+package com.umpa2020.tracer.lockscreen.viewModel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -9,6 +9,9 @@ import com.umpa2020.tracer.dataClass.TimeData
 import com.umpa2020.tracer.util.Logg
 import kotlinx.coroutines.launch
 
+/**
+ *  잠금화면에서 데이터 표시를 위한 ViewModel
+ */
 class LocationViewModel(application: Application) : AndroidViewModel(application) {
   val distanceSpeed = MutableLiveData<DistanceTimeData>()
   val times = MutableLiveData<TimeData>()
