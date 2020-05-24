@@ -385,7 +385,6 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener,Coro
 
   override fun onPause() {
     super.onPause()
-    progressBar.dismiss()
     // 갑자기 뒤로가면 코루틴 취소
     MainScope().cancel()
     // 브로드 캐스트 해제

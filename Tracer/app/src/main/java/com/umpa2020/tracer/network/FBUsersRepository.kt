@@ -81,9 +81,9 @@ class FBUsersRepository : BaseFB() {
   }
 
 
-  suspend fun listUserMakingActivity(limit: Long): List<ActivityData>? {
-    return (if (globalStartAfter == null) db.collection(USERS).document(UserInfo.autoLoginKey).collection(ACTIVITIES)
-    else usersCollectionRef.document(UserInfo.autoLoginKey).collection(ACTIVITIES).startAfter(globalStartAfter!!))
+  suspend fun listUserMakingActivity(userId: String, limit: Long): List<ActivityData>? {
+    return (if (globalStartAfter == null) db.collection(USERS).document(userId).collection(ACTIVITIES)
+    else usersCollectionRef.document(userId).collection(ACTIVITIES).startAfter(globalStartAfter!!))
       .limit(limit).get().await().apply {
         if (documents.isEmpty())
           return null
@@ -92,8 +92,6 @@ class FBUsersRepository : BaseFB() {
   }
 
   suspend fun listUserRoute(uid: String, limit: Long): List<MapInfo>? {
-    Logg.d("ssmm11 global = $globalStartAfter")
-
     val infoDatas =
       if (globalStartAfter == null) {
         mapsCollectionRef.whereEqualTo(MAKER_ID, uid).whereEqualTo(CHALLENGE,false)

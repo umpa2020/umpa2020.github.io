@@ -6,10 +6,10 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Handler
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.chibatching.kotpref.Kotpref
+import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.extensions.show
 import com.umpa2020.tracer.login.LoginActivity
@@ -18,7 +18,7 @@ import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_splash.*
 import kotlin.system.exitProcess
 
-class SplashActivity : AppCompatActivity() {
+class SplashActivity : BaseActivity() {
 
   private val multiplePermissionsCode = 100          //권한
   private val requiredPermissions = arrayOf(

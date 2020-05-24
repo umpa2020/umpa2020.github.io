@@ -13,7 +13,7 @@ import com.umpa2020.tracer.extensions.toLatLng
 import com.umpa2020.tracer.main.start.BaseRunningActivity
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.UserInfo
-import com.umpa2020.tracer.viewModel.LocationViewModel
+import com.umpa2020.tracer.lockscreen.viewModel.LocationViewModel
 
 /**
  *  브로드 케스트 리시버 클래스

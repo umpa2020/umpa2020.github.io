@@ -66,6 +66,7 @@ class ProfileFragment() : Fragment(), OnSingleClickListener, Parcelable, Corouti
 
       R.id.profileRecordTextView -> { // 나의 활동 액티비티
         val nextIntent = Intent(activity, ProfileActivityActivity::class.java)
+        nextIntent.putExtra(BaseFB.USER_ID, UserInfo.autoLoginKey)
         startActivity(nextIntent)
       }
 
@@ -89,15 +90,15 @@ class ProfileFragment() : Fragment(), OnSingleClickListener, Parcelable, Corouti
       withContext(Dispatchers.IO) {
         FBProfileRepository().getProfile(UserInfo.autoLoginKey)
       }.let {
-        profileImageView.image(it.imgPath)
-        profileFragmentTotalDistance.text = it.distance.prettyDistance
+        profileImageView?.image(it.imgPath)
+        profileFragmentTotalDistance?.text = it.distance.prettyDistance
         distance = it.distance
-        profileFragmentTotalTime.text = it.time.format(m_s)
+        profileFragmentTotalTime?.text = it.time.format(m_s)
       }
       FBUsersRepository().listUserAchievement(UserInfo.autoLoginKey).let {
-        medal1th.text = it[0].toString()
-        medal2nd.text = it[1].toString()
-        medal3rd.text = it[2].toString()
+        medal1th?.text = it[0].toString()
+        medal2nd?.text = it[1].toString()
+        medal3rd?.text = it[2].toString()
         progressBar.dismiss()
       }
     }
@@ -105,7 +106,6 @@ class ProfileFragment() : Fragment(), OnSingleClickListener, Parcelable, Corouti
 
   override fun onPause() {
     super.onPause()
-    progressBar.dismiss()
     // 갑자기 뒤로가면 코루틴 취소
     MainScope().cancel()
   }

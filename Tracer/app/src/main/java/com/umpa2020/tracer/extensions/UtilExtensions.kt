@@ -26,6 +26,14 @@ fun Int.toRank(): String {
   }
 }
 
+fun Int.toNumberUnit(): String {
+  return when  {
+    this > 999999 -> "${this/1000000}m"
+    this > 999 -> "${this/1000}k"
+    else -> "$this"
+  }
+}
+
 fun Int.makingIcon(): BitmapDescriptor {
   // 기본 마커 활용해서
   val circleDrawable = App.instance.context().getDrawable(this)

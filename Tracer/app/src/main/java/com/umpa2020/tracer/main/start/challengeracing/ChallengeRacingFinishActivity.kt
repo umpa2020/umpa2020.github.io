@@ -4,10 +4,10 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.*
+import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants.Companion.CHALLENGE_ID
 import com.umpa2020.tracer.constant.Constants.Companion.RACING_DISTANCE
@@ -27,13 +27,11 @@ import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_challenge_racing_finish.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import java.util.*
 
 
-class ChallengeRacingFinishActivity : AppCompatActivity(), OnSingleClickListener, CoroutineScope by MainScope() {
+class ChallengeRacingFinishActivity : BaseActivity(), OnSingleClickListener{
   lateinit var progressbar: ProgressBar
   lateinit var recordList: LongArray
   lateinit var bestList: LongArray

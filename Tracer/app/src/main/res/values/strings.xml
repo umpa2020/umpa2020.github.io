@@ -150,6 +150,7 @@
   <string name="twohundred_save">거리가 200m 미만일때\n정지하시면 저장이 불가능합니다.\n\n정지하시겠습니까?</string>
   <string name="stop_save">지금 정지하시면 저장이 불가능합니다.\n\n정지하시겠습니까?</string>
   <string name="like_logout">로그아웃하시겠습니까?</string>
+  <string name="membership_withdrawal">회원탈퇴하시겠습니까?</string>
   <string name="sort">정렬 기준</string>
   <string name="execute_order">실행순</string>
   <string name="like_order">좋아요순</string>
@@ -213,7 +214,6 @@
   <string name="exactDetails">정확한 내용은 해당 홈페이지를 참조하세요</string>
 
 
-
   <string name="region_selection">지역 선택</string>
 
   <string name="my_achievement">나의 업적</string>
@@ -227,7 +227,7 @@
 
   <!--sign-->
   <string name="duplicate">중복 확인</string>
-  
+
   <!--Broadcast-->
   <string name="unstableGPS">GPS가 오랜시간 동안 불안정 합니다. GPS 상태를 확인해 주세요.</string>
 
@@ -240,5 +240,10 @@
 
   <!--activity_profile-->
   <string name="other_achivement">업적</string>
-
+  <string name="title_activity_base">BaseActivity</string>
+  <!--
+    This string is used for square devices and overridden by hello_world in
+    values-round/strings.xml for round devices.
+    -->
+  <string name="hello_world">Hello Square World!</string>
 </resources>

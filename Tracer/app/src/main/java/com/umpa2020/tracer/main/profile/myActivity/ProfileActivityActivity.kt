@@ -2,16 +2,15 @@ package com.umpa2020.tracer.main.profile.myActivity
 
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.ActivityData
+import com.umpa2020.tracer.network.BaseFB
 import com.umpa2020.tracer.network.FBUsersRepository
 import com.umpa2020.tracer.util.MyProgressBar
 import kotlinx.android.synthetic.main.activity_profile_record.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
 /**
@@ -20,12 +19,13 @@ import kotlinx.coroutines.launch
  * 2. 레이싱 완주했는지
  * 3. 레이싱 도중 포기했는지 맵 이미지와 함께 표기
  */
-class ProfileActivityActivity : AppCompatActivity(), CoroutineScope by MainScope() {
+class ProfileActivityActivity : BaseActivity() {
   val rootActivityDatas = arrayListOf<ActivityData>()
   val progressbar = MyProgressBar()
   var isLoading = false
   val userActivityRepo = FBUsersRepository()
   var limit = 0L
+  var userId = ""
 
   /**
    * 순서
@@ -36,6 +36,8 @@ class ProfileActivityActivity : AppCompatActivity(), CoroutineScope by MainScope
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_profile_record)
 
+
+    userId = intent.getStringExtra(BaseFB.USER_ID)!!
     progressbar.show()
     profileRecyclerRecord.addOnScrollListener(object : RecyclerView.OnScrollListener() {
       override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -45,7 +47,7 @@ class ProfileActivityActivity : AppCompatActivity(), CoroutineScope by MainScope
           /* 리사이클러뷰가 맨 아래로 이동했을 경우 */
           if (!isLoading) {
             launch {
-              userActivityRepo.listUserMakingActivity(15)?.let {
+              userActivityRepo.listUserMakingActivity(userId, 15)?.let {
                 activityList(it)
               }
             }
@@ -67,7 +69,7 @@ class ProfileActivityActivity : AppCompatActivity(), CoroutineScope by MainScope
      */
 
     launch {
-      FBUsersRepository().listUserMakingActivity(limit)?.let {
+      FBUsersRepository().listUserMakingActivity(userId, limit)?.let {
         activityList(it)
       } ?: kotlin.run {
         activityList(rootActivityDatas)

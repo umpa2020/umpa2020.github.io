@@ -7,7 +7,7 @@ import android.provider.MediaStore
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.extensions.image
 import com.umpa2020.tracer.extensions.toAge
@@ -18,11 +18,9 @@ import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_my_information.*
 import kotlinx.android.synthetic.main.signup_toolbar.*
 import kotlinx.android.synthetic.main.signup_toolbar.view.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
-class MyInformationActivity : AppCompatActivity(), OnSingleClickListener, CoroutineScope by MainScope() {
+class MyInformationActivity : BaseActivity(), OnSingleClickListener {
   //lateinit var progressBar: ProgressBar
   private var selectedImageUri: Uri? = null
 
