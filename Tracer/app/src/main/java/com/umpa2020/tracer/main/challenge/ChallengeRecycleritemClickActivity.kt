@@ -55,7 +55,9 @@ class ChallengeRecycleritemClickActivity : BaseActivity(), OnSingleClickListener
           challengeDetailImageView.image(FBStorageRepository().downloadFile(imagePath!!))
           challengeDetailCompetitionName.text = name
           challengeDetailCompetitionDate.text = date!!.format(Y_M_D)
-          challengeDetailCompetitionPeriod.text = from!!.format(Y_M_D) + " ~ " + to!!.format(Y_M_D)
+          if (to != 0L) {
+            challengeDetailCompetitionPeriod.text = from!!.format(Y_M_D) + " ~ " + to!!.format(Y_M_D)
+          } else challengeDetailCompetitionPeriod.text = from!!.format(Y_M_D) + " ~ " + getString(R.string.not_specified)
           challengeDetailAddress.text = address
           challengeDetailHost.text = host
           challengeDetailInformation.text = intro

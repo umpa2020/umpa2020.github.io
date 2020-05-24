@@ -241,7 +241,7 @@
 
   <!--activity_profile-->
   <string name="other_achivement">Achivement</string>
-
+  <string name="not_specified">not specified(Please refer to the website)</string>
 
 
 </resources>

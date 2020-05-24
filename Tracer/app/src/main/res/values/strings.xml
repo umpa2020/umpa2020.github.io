@@ -240,10 +240,6 @@
 
   <!--activity_profile-->
   <string name="other_achivement">업적</string>
+  <string name="not_specified">무기한 연장 (자세한 내용은 홈페이지를 확인해주세요)</string>
   <string name="title_activity_base">BaseActivity</string>
-  <!--
-    This string is used for square devices and overridden by hello_world in
-    values-round/strings.xml for round devices.
-    -->
-  <string name="hello_world">Hello Square World!</string>
 </resources>
