@@ -40,10 +40,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-    compileOptions {
-        targetCompatibility = "8"
-        sourceCompatibility = "8"
-    }
     // this code help moving Parcelable object to other activity
     androidExtensions {
         experimental = true
@@ -59,6 +55,10 @@ android {
         production {
             dimension = 'firebase'
         }
+    }
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
     }
 }
 

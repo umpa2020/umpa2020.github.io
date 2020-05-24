@@ -83,6 +83,7 @@ class MainActivity : AppCompatActivity() {
       map["pushtoken"] = pushToken!!
       FirebaseFirestore.getInstance().collection("pushtokens").document(uid).set(map)
     }
+
   }
 //  override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
 //    if (selectedFragment != null) {

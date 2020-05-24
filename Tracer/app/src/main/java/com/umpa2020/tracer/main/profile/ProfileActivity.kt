@@ -37,7 +37,8 @@ class ProfileActivity : AppCompatActivity(), OnSingleClickListener, CoroutineSco
 
     userId = intent.extras?.getString(USER_ID).toString()
     if (userId != UserInfo.autoLoginKey) {
-      profileRecordTextView.visibility = View.GONE
+      otherProfileRecordTextView.visibility = View.GONE
+      otherProfileRecordMoreTextView.visibility = View.GONE
       appSettingButton.visibility = View.GONE
     }
 
@@ -58,7 +59,7 @@ class ProfileActivity : AppCompatActivity(), OnSingleClickListener, CoroutineSco
 
     otherProfileRouteTextView.setOnClickListener(this)
     appSettingButton.setOnClickListener(this)
-    profileRecordTextView.setOnClickListener(this)
+    otherProfileRecordTextView.setOnClickListener(this)
   }
 
   override fun onSingleClick(v: View?) {

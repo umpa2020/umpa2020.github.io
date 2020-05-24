@@ -83,10 +83,11 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginBottom="15dp"
-          android:paddingTop="10dp"
+          android:paddingTop="20dp"
           android:text="@string/tournament_search" />
 
         <LinearLayout
+          android:layout_marginTop="10dp"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_marginLeft="20dp"
@@ -157,6 +158,8 @@
       </LinearLayout>
 
       <LinearLayout
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
         style="@style/subjectRelativeLayoutStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -164,11 +167,12 @@
         android:orientation="vertical">
 
         <TextView
+          android:layout_marginLeft="15dp"
           style="@style/subjectName"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_gravity="left"
-          android:paddingTop="10dp"
+          android:paddingTop="20dp"
           android:text="@string/tournament_list" />
 
 
@@ -178,7 +182,7 @@
           android:layout_height="match_parent"
           android:layout_below="@+id/btn_challenge_search"
           android:layout_gravity="center_horizontal"
-          android:layout_marginTop="15dp"
+          android:layout_marginTop="10dp"
           app:layoutManager="GridLayoutManager"
           app:spanCount="2" />
 
