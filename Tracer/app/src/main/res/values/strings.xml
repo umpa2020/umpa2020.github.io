@@ -101,7 +101,7 @@
   <string name="racing_fail">"%1$s 을(를) %2$s 에 실패했습니다."</string>
   <string name="map_save">"%1$s 을(를) %2$s 에 만들었습니다."</string>
   <string name="renewal">"최고 기록을 갱신하지 못하여 랭킹에 반영되지 않습니다."</string>
-
+  <string name="activity_challenge">"%1$s 을(를) %2$s 에 도전했습니다."</string>
 
   <!-- firebase string-->
   <string name="google_storage_bucket_string">gs://tracer-release.appspot.com/</string>
@@ -240,4 +240,5 @@
 
   <!--activity_profile-->
   <string name="other_achivement">업적</string>
+
 </resources>

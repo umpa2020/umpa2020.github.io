@@ -20,7 +20,7 @@ open class BaseFB {
   val mapRouteStorageRef = storage.reference.child(MAP_ROUTE)
 
   enum class ActivityMode {
-    MAP_SAVE, RACING_SUCCESS, RACING_FAIL
+    MAP_SAVE, RACING_SUCCESS, RACING_FAIL, CHALLENGE
   }
 
   companion object {

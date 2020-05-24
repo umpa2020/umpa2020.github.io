@@ -198,6 +198,8 @@ class ChallengeRacingActivity : BaseRunningActivity(), CoroutineScope by MainSco
 
     val newIntent = Intent(this, ChallengeRacingFinishActivity::class.java)
     newIntent.putExtra("Result", racingResult)
+    newIntent.putExtra(Constants.CHALLENGE_ID,mapId)
+    newIntent.putExtra(Constants.RACING_DISTANCE,distance)
     newIntent.putExtra("RecordList", recordList.toTypedArray().toLongArray())
     newIntent.putExtra("BestList", bestList.toTypedArray().toLongArray())
     newIntent.putExtra("WorstList", worstList.toTypedArray().toLongArray())
