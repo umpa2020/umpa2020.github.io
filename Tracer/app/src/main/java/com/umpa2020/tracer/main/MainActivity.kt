@@ -3,7 +3,6 @@ package com.umpa2020.tracer.main
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
@@ -154,12 +153,13 @@ class MainActivity : AppCompatActivity() {
     }
   }
 
-  override fun onBackPressed() {
-    if (doubleBackToExitPressedOnce1) {
-      super.onBackPressed()
-      return
-    }
-    this.doubleBackToExitPressedOnce1 = true
-    Handler().postDelayed({ doubleBackToExitPressedOnce1 = false }, 3000)
-  }
+
+//  override fun onBackPressed() {
+//    if (doubleBackToExitPressedOnce1) {
+//      super.onBackPressed()
+//      return
+//    }
+//    this.doubleBackToExitPressedOnce1 = true
+//    Handler().postDelayed({ doubleBackToExitPressedOnce1 = false }, 3000)
+//  }
 }
