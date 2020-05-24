@@ -40,7 +40,7 @@ import kotlinx.android.synthetic.main.activity_running.*
 import kotlinx.coroutines.*
 import java.io.File
 
-class RacingActivity : BaseRunningActivity(),CoroutineScope by MainScope() {
+class RacingActivity : BaseRunningActivity() {
   companion object {
     const val ROUTE_GPX = "RouteGPX"
   }

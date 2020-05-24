@@ -3,7 +3,6 @@ package com.umpa2020.tracer.main
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
@@ -14,14 +13,14 @@ import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.locationBackground.LocationBackgroundService
 import com.umpa2020.tracer.locationBackground.ServiceStatus
+import com.umpa2020.tracer.lockscreen.viewModel.LocationViewModel
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.TTS
 import com.umpa2020.tracer.util.UserInfo
-import com.umpa2020.tracer.viewModel.LocationViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
   private var doubleBackToExitPressedOnce1 = false
 
   companion object {
@@ -93,15 +92,6 @@ class MainActivity : AppCompatActivity() {
 //
 //  }
 
-  override fun onStart() {
-    super.onStart()
-
-  }
-
-  override fun onStop() {
-    super.onStop()
-
-  }
 
   override fun onPause() {
     super.onPause()
@@ -152,14 +142,4 @@ class MainActivity : AppCompatActivity() {
       }
     }
   }
-
-
-//  override fun onBackPressed() {
-//    if (doubleBackToExitPressedOnce1) {
-//      super.onBackPressed()
-//      return
-//    }
-//    this.doubleBackToExitPressedOnce1 = true
-//    Handler().postDelayed({ doubleBackToExitPressedOnce1 = false }, 3000)
-//  }
 }

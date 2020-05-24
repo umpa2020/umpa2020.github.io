@@ -1,12 +1,11 @@
 package com.umpa2020.tracer.main.start.racing
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
+import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.ActivityData
 import com.umpa2020.tracer.dataClass.MapInfo
@@ -18,13 +17,12 @@ import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_racing_finish.*
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import java.util.*
 
 
-class RacingFinishActivity : AppCompatActivity(), OnSingleClickListener, CoroutineScope by MainScope() {
+class RacingFinishActivity : BaseActivity(), OnSingleClickListener {
 
   var activity = this
   lateinit var racerData: MapInfo

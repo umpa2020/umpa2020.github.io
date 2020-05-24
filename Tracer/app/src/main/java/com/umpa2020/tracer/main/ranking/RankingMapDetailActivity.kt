@@ -3,11 +3,11 @@ package com.umpa2020.tracer.main.ranking
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.umpa2020.tracer.App
+import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.customUI.WorkaroundMapFragment
 import com.umpa2020.tracer.dataClass.RouteGPX
@@ -25,12 +25,10 @@ import com.umpa2020.tracer.util.Chart
 import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.activity_ranking_map_detail.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import java.io.File
 
-class RankingMapDetailActivity : AppCompatActivity(), OnSingleClickListener, OnMapReadyCallback, CoroutineScope by MainScope() {
+class RankingMapDetailActivity : BaseActivity(), OnSingleClickListener, OnMapReadyCallback {
   lateinit var routeGPX: RouteGPX
   lateinit var traceMap: TraceMap
   var mapId = ""

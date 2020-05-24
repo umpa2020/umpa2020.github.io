@@ -4,9 +4,9 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.umpa2020.tracer.App
+import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.extensions.image
 import com.umpa2020.tracer.network.BaseFB.Companion.MAP_ID
@@ -18,9 +18,11 @@ import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_rank_recycler_item_click.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class RankRecyclerItemClickActivity : AppCompatActivity(), OnSingleClickListener, CoroutineScope by MainScope() {
+class RankRecyclerItemClickActivity : BaseActivity(), OnSingleClickListener {
   val activity = this
   var likes = 0
   var mapId = ""

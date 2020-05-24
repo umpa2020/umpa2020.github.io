@@ -3,23 +3,20 @@ package com.umpa2020.tracer.main.profile.myroute
 import android.app.Activity
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.umpa2020.tracer.App
+import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.MapInfo
 import com.umpa2020.tracer.network.BaseFB.Companion.USER_ID
 import com.umpa2020.tracer.network.FBUsersRepository
-import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_profile_route.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
-class ProfileRouteActivity : AppCompatActivity(), CoroutineScope by MainScope() {
+class ProfileRouteActivity : BaseActivity() {
   val progressbar = ProgressBar(App.instance.currentActivity() as Activity)
   var uid = ""
   var nickname = ""
