@@ -20,6 +20,7 @@ import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.constant.Constants.Companion.ARRIVE_BOUNDARY
 import com.umpa2020.tracer.constant.Constants.Companion.DEVIATION_COUNT
+import com.umpa2020.tracer.constant.Constants.Companion.RACE_RESULT
 import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.constant.UserState
 import com.umpa2020.tracer.dataClass.MapInfo
@@ -40,7 +41,7 @@ import kotlinx.android.synthetic.main.activity_running.*
 import kotlinx.coroutines.*
 import java.io.File
 
-class RacingActivity : BaseRunningActivity(),CoroutineScope by MainScope() {
+class RacingActivity : BaseRunningActivity() {
   companion object {
     const val ROUTE_GPX = "RouteGPX"
   }
@@ -256,7 +257,7 @@ class RacingActivity : BaseRunningActivity(),CoroutineScope by MainScope() {
     val routeGpxUri = routeGPX.classToGpx(saveFolder.path).toString()
 
     val newIntent = Intent(this, RacingFinishActivity::class.java)
-    newIntent.putExtra("Result", racingResult)
+    newIntent.putExtra(RACE_RESULT, racingResult)
     newIntent.putExtra("InfoData", infoData)
     newIntent.putExtra(ROUTE_GPX, routeGpxUri)
     startActivity(newIntent)
@@ -286,7 +287,7 @@ class RacingActivity : BaseRunningActivity(),CoroutineScope by MainScope() {
     ) {
       traceMap.changeMarkerIcon(nextWP)
       nextWP++
-      wpList.add(currentLocation!!.toWayPoint(DISTANCE_POINT))
+      wpList.add(currentLocation.toWayPoint(DISTANCE_POINT))
       if (nextWP == markerList.size) {
         stop(getString(R.string.finishRacing))
       }

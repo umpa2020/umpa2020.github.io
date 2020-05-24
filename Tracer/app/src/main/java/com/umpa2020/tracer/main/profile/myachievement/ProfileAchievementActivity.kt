@@ -1,22 +1,19 @@
 package com.umpa2020.tracer.main.profile.myachievement
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
+import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.EmblemData
 import com.umpa2020.tracer.network.BaseFB
 import com.umpa2020.tracer.network.FBAchievementRepository
-import com.umpa2020.tracer.util.Logg
 import kotlinx.android.synthetic.main.activity_profile_achivement.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
 /**
  * 나의 업적 액티비티
  */
-class ProfileAchievementActivity : AppCompatActivity(), CoroutineScope by MainScope() {
+class ProfileAchievementActivity : BaseActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)

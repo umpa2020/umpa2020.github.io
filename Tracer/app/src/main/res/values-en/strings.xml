@@ -98,6 +98,7 @@
   <string name="racing_go_the_distance">You went the distance %1$s %2$s.</string>
   <string name="racing_fail">"You failed %1$s on %2$s."</string>
   <string name="map_save">"You made %1$s on %2$s."</string>
+  <string name="activity_challenge">"You challenged %1$s on %2$s."</string>
   <string name="renewal">"Unable to break record and not reflected in ranking."</string>
 
 
@@ -240,7 +241,7 @@
 
   <!--activity_profile-->
   <string name="other_achivement">Achivement</string>
-
+  <string name="not_specified">not specified(Please refer to the website)</string>
 
 
 </resources>

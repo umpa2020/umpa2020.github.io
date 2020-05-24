@@ -16,7 +16,6 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.android.material.textfield.TextInputLayout
@@ -24,6 +23,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.jakewharton.rxbinding2.widget.RxTextView
+import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.dataClass.Users
@@ -37,7 +37,6 @@ import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.android.synthetic.main.activity_gender_select.*
 import kotlinx.android.synthetic.main.activity_sign_up.*
 import kotlinx.android.synthetic.main.activity_sign_up.app_toolbar
 import kotlinx.android.synthetic.main.signup_toolbar.*
@@ -45,7 +44,7 @@ import kotlinx.android.synthetic.main.signup_toolbar.view.*
 import java.util.*
 import java.util.regex.Pattern
 
-class SignUpActivity : AppCompatActivity(), OnSingleClickListener {
+class SignUpActivity : BaseActivity(), OnSingleClickListener {
 
   private var WSY = "WSY"
   var success_request = 0
