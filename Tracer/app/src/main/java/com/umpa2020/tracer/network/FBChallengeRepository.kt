@@ -1,7 +1,9 @@
 package com.umpa2020.tracer.network
 
+import com.google.firebase.firestore.DocumentReference
 import com.umpa2020.tracer.dataClass.BannerData
 import com.umpa2020.tracer.dataClass.ChallengeData
+import com.umpa2020.tracer.dataClass.ChallengeRecordData
 import kotlinx.coroutines.tasks.await
 
 /**
@@ -67,6 +69,13 @@ class FBChallengeRepository : BaseFB() {
   suspend fun listChallengeBannerImagePath(): MutableList<BannerData>? {
     return db.collection(CHALLENGE_BANNERS).get().await()
       .documents.map { it.toObject(BannerData::class.java)!! }.toMutableList()
+  }
+
+  suspend fun createChallengeRecord(challengeId: String,challengeRecordData: ChallengeRecordData) :DocumentReference?{
+    return db.collection(CHALLENGES).document(challengeId).collection(RANKING).add(challengeRecordData).await()
+  }
+  suspend fun getChallengeRecord(challengeRecordReference: DocumentReference) :ChallengeRecordData?{
+    return challengeRecordReference.get().await().toObject(ChallengeRecordData::class.java)
   }
 }
 

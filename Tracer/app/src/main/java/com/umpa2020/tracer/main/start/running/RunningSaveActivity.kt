@@ -172,9 +172,9 @@ class RunningSaveActivity : BaseActivity(), OnMapReadyCallback, OnSingleClickLis
       UserInfo.nickname,
       mapInfo.time,
       true,
-      speedList.max().toString(),
-      speedList.average().toString(),
-      "${BaseFB.MAP_ROUTE}/${mapInfo.mapId}/racingGPX/${UserInfo.autoLoginKey}"
+      speedList.max(),
+      speedList.average(),
+      "${MAP_ROUTE}/${mapInfo.mapId}/racingGPX/${UserInfo.autoLoginKey}"
     )
     val activityData = ActivityData(mapInfo.mapId, timestamp, mapInfo.distance, mapInfo.time, BaseFB.ActivityMode.MAP_SAVE)
     val trophyData = TrophyData(mapInfo.mapId, 1)

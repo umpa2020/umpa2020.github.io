@@ -9,18 +9,26 @@ import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.*
 import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.R
+import com.umpa2020.tracer.constant.Constants.Companion.CHALLENGE_ID
+import com.umpa2020.tracer.constant.Constants.Companion.RACING_DISTANCE
+import com.umpa2020.tracer.dataClass.ActivityData
+import com.umpa2020.tracer.dataClass.ChallengeRecordData
 import com.umpa2020.tracer.extensions.calcRank
 import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.extensions.image
 import com.umpa2020.tracer.extensions.m_s
 import com.umpa2020.tracer.main.MainActivity
+import com.umpa2020.tracer.network.BaseFB
+import com.umpa2020.tracer.network.FBChallengeRepository
 import com.umpa2020.tracer.network.FBProfileRepository
+import com.umpa2020.tracer.network.FBUsersRepository
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_challenge_racing_finish.*
 import kotlinx.coroutines.launch
+import java.util.*
 
 
 class ChallengeRacingFinishActivity : BaseActivity(), OnSingleClickListener{
@@ -28,27 +36,30 @@ class ChallengeRacingFinishActivity : BaseActivity(), OnSingleClickListener{
   lateinit var recordList: LongArray
   lateinit var bestList: LongArray
   lateinit var worstList: LongArray
-
+  lateinit var challengeId: String
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_challenge_racing_finish)
     progressbar = ProgressBar(this)
     progressbar.show()
     // Racing Activity 에서 넘겨준 infoData를 받아서 활용
-    val result = intent.extras!!.getBoolean("Result")
+    challengeId = intent.getStringExtra(CHALLENGE_ID)
+    val distance=intent.getDoubleExtra(RACING_DISTANCE,0.0)
     recordList = intent.getLongArrayExtra("RecordList")
     bestList = intent.getLongArrayExtra("BestList")
     worstList = intent.getLongArrayExtra("WorstList")
-    challengeFinishMyLapTime.text = recordList.last().format(m_s)
-    challengeRankTextView.text = "${recordList.last().calcRank(bestList.last(), worstList.last())} %"
-    challengeOKButton.setOnClickListener(this)
     launch {
+      val challengeRecordData = ChallengeRecordData(recordList.toList(), bestList.toList(), worstList.toList())
+      val dataRef=FBChallengeRepository().createChallengeRecord(challengeId, challengeRecordData)
+      challengeFinishMyLapTime.text = recordList.last().format(m_s)
+      challengeRankTextView.text = "${recordList.last().calcRank(bestList.last(), worstList.last())} %"
       // 유저 히스토리 등록
-      /* FBUsersRepository().createUserHistory(
-         ActivityData(racerData.mapId, Date().time, racerData.distance, racerData.time, if (result) "racing go the distance" else "racing fail")
-       )*/
+       FBUsersRepository().createUserHistory(
+       ActivityData(challengeId, Date().time, distance, recordList.last(), BaseFB.ActivityMode.CHALLENGE,dataRef)
+     )
       challengeFinishProfileImageView.image(FBProfileRepository().getProfileImage(UserInfo.autoLoginKey))
       progressbar.dismiss()
+
     }
     setDistributionChart()
     setLineChart()

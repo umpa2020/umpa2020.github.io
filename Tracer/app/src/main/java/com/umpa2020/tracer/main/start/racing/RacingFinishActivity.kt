@@ -7,12 +7,15 @@ import android.os.Bundle
 import android.view.View
 import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.R
+import com.umpa2020.tracer.constant.Constants.Companion.RACE_RESULT
+import com.umpa2020.tracer.constant.Constants.Companion.RANKING_DATA
 import com.umpa2020.tracer.dataClass.ActivityData
 import com.umpa2020.tracer.dataClass.MapInfo
 import com.umpa2020.tracer.dataClass.RankingData
 import com.umpa2020.tracer.extensions.*
 import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.network.*
+import com.umpa2020.tracer.network.BaseFB.Companion.MAP_ID
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
@@ -28,8 +31,8 @@ class RacingFinishActivity : BaseActivity(), OnSingleClickListener {
   lateinit var racerData: MapInfo
   lateinit var arrRankingData: MutableList<RankingData>
   lateinit var progressbar: ProgressBar
-
-  var racerSpeeds = mutableListOf<Double>()
+  lateinit var rankingData: RankingData
+  lateinit var mapId: String
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -38,43 +41,54 @@ class RacingFinishActivity : BaseActivity(), OnSingleClickListener {
     progressbar = ProgressBar(this)
     progressbar.show()
 
-    // Racing Activity 에서 넘겨준 infoData를 받아서 활용
-    racerData = intent.getParcelableExtra("InfoData") as MapInfo
-    val result = intent.extras!!.getBoolean("Result")
+    val result = intent.extras!!.getBoolean(RACE_RESULT)
 
-    val routeGPXUri = intent.getStringExtra(RacingActivity.ROUTE_GPX)
-    val racerGPX = Uri.parse(routeGPXUri).gpxToClass()
-
-    racerSpeeds = racerGPX.getSpeed()
-    val rankingData = RankingData(
-      racerData.makerId,
-      UserInfo.autoLoginKey,
-      UserInfo.nickname,
-      racerData.time,
-      false,
-      racerSpeeds.max().toString(),
-      racerSpeeds.average().toString(),
-      null
-    )
-
-    MainScope().launch {
-      // 유저 히스토리 등록
-      FBUsersRepository().createUserHistory(
-        ActivityData(racerData.mapId, Date().time, racerData.distance, racerData.time, if (result) BaseFB.ActivityMode.RACING_SUCCESS else BaseFB.ActivityMode.RACING_FAIL)
+    if (!intent.hasExtra(RANKING_DATA)) {
+      // Racing Activity 에서 넘겨준 infoData를 받아서 활용
+      racerData = intent.getParcelableExtra("InfoData") as MapInfo
+      mapId = racerData.mapId
+      val routeGPXUri = intent.getStringExtra(RacingActivity.ROUTE_GPX)
+      val racerGPX = Uri.parse(routeGPXUri).gpxToClass()
+      val racerSpeeds = racerGPX.getSpeed()
+      rankingData = RankingData(
+        racerData.makerId,
+        UserInfo.autoLoginKey,
+        UserInfo.nickname,
+        racerData.time,
+        false,
+        racerSpeeds.max(),
+        racerSpeeds.average(),
+        null
       )
+      launch {
 
-      FBMapRepository().getMapInfo(racerData.mapId).let {
-        FBAchievementRepository().incrementPlays(it!!.makerId)
+        //성공했다면 랭킹에 등록
+        val rankingDataReference=if (result)
+          FBRacingRepository().createRankingData(racerData, rankingData, Uri.parse(routeGPXUri))
+        else null
+        arrRankingData = FBMapRepository().listMapRanking(mapId)
+
+        // 유저 히스토리 등록
+        FBUsersRepository().createUserHistory(
+          ActivityData(mapId, Date().time, racerData.distance, racerData.time,
+            if (result) BaseFB.ActivityMode.RACING_SUCCESS else BaseFB.ActivityMode.RACING_FAIL,
+            rankingDataReference)
+        )
+        FBMapRepository().getMapInfo(racerData.mapId).let {
+          FBAchievementRepository().incrementPlays(it!!.makerId)
+        }
+        FBUsersRepository().updateUserAchievement(arrRankingData, mapId)
+
+        updateRankingUI(arrRankingData)
+        progressbar.dismiss()
       }
-
-      //성공했다면 랭킹에 등록
-      if (result)
-        FBRacingRepository().createRankingData(racerData, rankingData, Uri.parse(routeGPXUri))
-
-      arrRankingData = FBMapRepository().listMapRanking(racerData.mapId)
-      FBUsersRepository().updateUserAchievement(arrRankingData, racerData.mapId)
-      updateRankingUI(arrRankingData)
-      progressbar.dismiss()
+    } else {
+      launch {
+        rankingData = intent.getParcelableExtra<RankingData>(RANKING_DATA)
+        mapId = intent.getStringExtra(MAP_ID)
+        arrRankingData = FBMapRepository().listMapRanking(mapId)
+        updateRankingUI(arrRankingData)
+      }
     }
     OKButton.setOnClickListener(this)
     otherPeopleProfileSelect.setOnClickListener(this)
@@ -108,7 +122,7 @@ class RacingFinishActivity : BaseActivity(), OnSingleClickListener {
         progressbar.show()
 
         MainScope().launch {
-          FBRacingRepository().getOtherData(racerData.mapId, getId!!).let {
+          FBRacingRepository().getOtherData(mapId, getId!!).let {
             setOtherData(it)
           }
           // TODO 회원탈퇴 방식 getProfileImage에서 검사를 안하기 때문에 새로 검사를 해야하는 함수 작성 필요
@@ -128,7 +142,7 @@ class RacingFinishActivity : BaseActivity(), OnSingleClickListener {
 
   @SuppressLint("ShowToast")
   private fun setMyUiData(
-    racerSpeeds: MutableList<Double>,
+    rankingData: RankingData,
     resultRankText: Int,
     renewal: Boolean
   ) {
@@ -147,14 +161,14 @@ class RacingFinishActivity : BaseActivity(), OnSingleClickListener {
           resultRankTextView.text = resultRankText.toRank()
       }
 
-      RacingFinishMyLapTime.text = racerData.time.format(m_s)
+      RacingFinishMyLapTime.text = rankingData.challengerTime!!.format(m_s)
 
       FBProfileRepository().getProfileImage(UserInfo.autoLoginKey)?.let { RacingFinishAnalysisMyProfile.image(it) }
       RacingFinishAnalysisMyNickname.text = UserInfo.nickname
 
-      racerLapTimeTextView.text = racerData.time.format(m_s)
-      racerMaxSpeedTextView.text = racerSpeeds.max()!!.prettyDistance
-      racerAvgSpeedTextView.text = racerSpeeds.average().prettyDistance
+      racerLapTimeTextView.text = rankingData.challengerTime!!.format(m_s)
+      racerMaxSpeedTextView.text = rankingData.maxSpeed!!.toDouble().prettyDistance
+      racerAvgSpeedTextView.text = rankingData.averageSpeed!!.toDouble().prettyDistance
       progressbar.dismiss()
     }
   }
@@ -173,7 +187,7 @@ class RacingFinishActivity : BaseActivity(), OnSingleClickListener {
     var resultRank = 1
     var renewal = false
     rankingDatas.forEach {
-      if (racerData.time > it.challengerTime!!) {
+      if (rankingData.challengerTime!! > it.challengerTime!!) {
         if (UserInfo.autoLoginKey == it.challengerId) {
           renewal = true
         }
@@ -181,7 +195,7 @@ class RacingFinishActivity : BaseActivity(), OnSingleClickListener {
       }
 
       arrRankingData = rankingDatas
-      setMyUiData(racerSpeeds, resultRank, renewal)
+      setMyUiData(rankingData, resultRank, renewal)
 
       if (arrRankingData.size >= 1) {
         FBProfileRepository().getProfileImage(arrRankingData[0].challengerId!!)

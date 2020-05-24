@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
 class ProfileActivityActivity : BaseActivity() {
   val rootActivityDatas = arrayListOf<ActivityData>()
   val progressbar = MyProgressBar()
-  var isLoding = false
+  var isLoading = false
   val userActivityRepo = FBUsersRepository()
   var limit = 0L
   var userId = ""
@@ -45,14 +45,14 @@ class ProfileActivityActivity : BaseActivity() {
           // 리사이클러뷰가 맨 위로 이동했을 경우
         } else if (!profileRecyclerRecord.canScrollVertically(1)) {
           /* 리사이클러뷰가 맨 아래로 이동했을 경우 */
-          if (!isLoding) {
+          if (!isLoading) {
             launch {
               userActivityRepo.listUserMakingActivity(userId, 15)?.let {
                 activityList(it)
               }
             }
           }
-          isLoding = true
+          isLoading = true
         }
       }
     })
@@ -96,7 +96,7 @@ class ProfileActivityActivity : BaseActivity() {
       } else {
         profileRecyclerRecord.adapter!!.notifyDataSetChanged()
       }
-      isLoding = false
+      isLoading = false
       progressbar.dismiss()
     }
   }
