@@ -7,6 +7,7 @@ import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.EmblemData
 import com.umpa2020.tracer.network.BaseFB
 import com.umpa2020.tracer.network.FBAchievementRepository
+import com.umpa2020.tracer.util.Logg
 import kotlinx.android.synthetic.main.activity_profile_achivement.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
@@ -23,8 +24,11 @@ class ProfileAchievementActivity : AppCompatActivity(), CoroutineScope by MainSc
 
 
     val uid = intent.extras?.getString(BaseFB.USER_ID).toString()
+    Logg.d("ssmm11 uid = $uid")
+
     launch {
       FBAchievementRepository().listUserEmblemNames(uid).let {
+        Logg.d("ssmm11 uid = $uid / emblems = $it")
         FBAchievementRepository().listEmblemImagePaths(it).let {
           achievementDataList(it)
         }

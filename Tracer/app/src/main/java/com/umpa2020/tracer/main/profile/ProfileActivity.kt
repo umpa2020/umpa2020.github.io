@@ -10,10 +10,13 @@ import com.umpa2020.tracer.extensions.image
 import com.umpa2020.tracer.extensions.m_s
 import com.umpa2020.tracer.extensions.prettyDistance
 import com.umpa2020.tracer.main.profile.myActivity.ProfileActivityActivity
+import com.umpa2020.tracer.main.profile.myachievement.ProfileAchievementActivity
 import com.umpa2020.tracer.main.profile.myroute.ProfileRouteActivity
 import com.umpa2020.tracer.main.profile.settting.AppSettingActivity
+import com.umpa2020.tracer.network.BaseFB
 import com.umpa2020.tracer.network.BaseFB.Companion.USER_ID
 import com.umpa2020.tracer.network.FBProfileRepository
+import com.umpa2020.tracer.network.FBUsersRepository
 import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.UserInfo
@@ -50,16 +53,23 @@ class ProfileActivity : AppCompatActivity(), OnSingleClickListener, CoroutineSco
         profileImageView.image(it.imgPath)
         profileFragmentTotalDistance.text = it.distance.prettyDistance
         profileFragmentTotalTime.text = it.time.format(m_s)
-        progressBar.dismiss()
       }
       FBProfileRepository().getUserNickname(userId).let {
         profileIdTextView.text = it
+      }
+
+      FBUsersRepository().listUserAchievement(userId).let {
+        otherMedal1th?.text = it[0].toString()
+        otherMedal2nd?.text = it[1].toString()
+        otherMedal3rd?.text = it[2].toString()
+        progressBar.dismiss()
       }
     }
 
     otherProfileRouteTextView.setOnClickListener(this)
     appSettingButton.setOnClickListener(this)
     otherProfileRecordTextView.setOnClickListener(this)
+    otherProfileAchievementTextView.setOnClickListener(this)
   }
 
   override fun onSingleClick(v: View?) {
@@ -76,6 +86,11 @@ class ProfileActivity : AppCompatActivity(), OnSingleClickListener, CoroutineSco
       }
       R.id.profileRecordTextView -> { // 나의 활동 액티비티
         val nextIntent = Intent(this, ProfileActivityActivity::class.java)
+        startActivity(nextIntent)
+      }
+      R.id.otherProfileAchievementTextView -> {
+        val nextIntent = Intent(this, ProfileAchievementActivity::class.java)
+        nextIntent.putExtra(USER_ID, userId)
         startActivity(nextIntent)
       }
     }
