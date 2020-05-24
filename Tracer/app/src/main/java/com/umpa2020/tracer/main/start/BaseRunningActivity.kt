@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.SystemClock
 import android.view.View
-import android.view.WindowManager
 import android.view.animation.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -147,8 +146,8 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     }
   }
 
-  private lateinit var countDownTimer: CountDownTimer
-  var backFlag = false
+  private var countDownTimer: CountDownTimer? = null
+
   open fun start(tts: String) {
     userState = UserState.STOP
     countDownTextView.visibility = View.VISIBLE
@@ -163,8 +162,6 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
       }
 
       override fun onFinish() {
-        if (backFlag)
-          return
         countDownTextView.visibility = View.GONE
         userState = UserState.RUNNING
         buttonAnimation()
@@ -293,9 +290,14 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     locationViewModel.init(DistanceTimeData("0.0", "0.0"), TimeData(0L, false, 0L, "0.0"))
   }
 
+  override fun onPause() {
+    super.onPause()
+    TTS.speechStop()
+    countDownTimer?.cancel()
+  }
+
   override fun onResume() {
     super.onResume()
-    backFlag = false
   }
 
   override fun onDestroy() {
@@ -312,7 +314,6 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
 
   lateinit var noticePopup: ChoicePopup
   override fun onBackPressed() {
-    backFlag = true
     when (userState) {
       UserState.RUNNING, UserState.PAUSED -> {
         noticePopup = ChoicePopup(this, getString(R.string.please_select),

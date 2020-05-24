@@ -36,7 +36,10 @@ class MainActivity : AppCompatActivity() {
 
     val navController = findNavController(R.id.nav_host_fragment)
     bottom_navigation.setupWithNavController(navController)
-
+    // 바텀 아이템 중복 선택 시 중복 작업 제거
+    bottom_navigation.setOnNavigationItemReselectedListener{
+      // do nothing
+    }
 
     locationViewModel = ViewModelProvider(this).get(LocationViewModel::class.java)
 
