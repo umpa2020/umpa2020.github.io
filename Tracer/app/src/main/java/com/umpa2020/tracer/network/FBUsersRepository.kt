@@ -96,7 +96,7 @@ class FBUsersRepository : BaseFB() {
 
     val infoDatas =
       if (globalStartAfter == null) {
-        mapsCollectionRef.whereEqualTo(MAKER_ID, uid)
+        mapsCollectionRef.whereEqualTo(MAKER_ID, uid).whereEqualTo(CHALLENGE,false)
       } else {
         mapsCollectionRef.whereEqualTo(MAKER_ID, uid).startAfter(globalStartAfter!!)
       }.limit(limit).get().await().apply {
