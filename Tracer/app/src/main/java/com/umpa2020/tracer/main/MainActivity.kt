@@ -3,7 +3,6 @@ package com.umpa2020.tracer.main
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
@@ -36,9 +35,11 @@ class MainActivity : AppCompatActivity() {
 
     val navController = findNavController(R.id.nav_host_fragment)
     bottom_navigation.setupWithNavController(navController)
-    bottom_navigation.setOnNavigationItemReselectedListener {
-      //do nothing
+    // 바텀 아이템 중복 선택 시 중복 작업 제거
+    bottom_navigation.setOnNavigationItemReselectedListener{
+      // do nothing
     }
+
     locationViewModel = ViewModelProvider(this).get(LocationViewModel::class.java)
 
     // 앱이 처음 다운되었으면 광운대학교로 위치 Shared에 설정.
@@ -152,12 +153,13 @@ class MainActivity : AppCompatActivity() {
     }
   }
 
-  override fun onBackPressed() {
-    if (doubleBackToExitPressedOnce1) {
-      super.onBackPressed()
-      return
-    }
-    this.doubleBackToExitPressedOnce1 = true
-    Handler().postDelayed({ doubleBackToExitPressedOnce1 = false }, 3000)
-  }
+
+//  override fun onBackPressed() {
+//    if (doubleBackToExitPressedOnce1) {
+//      super.onBackPressed()
+//      return
+//    }
+//    this.doubleBackToExitPressedOnce1 = true
+//    Handler().postDelayed({ doubleBackToExitPressedOnce1 = false }, 3000)
+//  }
 }

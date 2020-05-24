@@ -47,11 +47,11 @@ class ChallengeFragment : Fragment(), CoroutineScope by MainScope() {
      */
     launch {
       FBChallengeRepository().listChallengeBannerImagePath()?.let {
-        adChallengeScrollViewPager.adapter = AdChallengePageAdapter(it, requireContext())
-        adChallengeScrollViewPager.startAutoScroll()
+        adChallengeScrollViewPager?.adapter = AdChallengePageAdapter(it, requireContext())
+        adChallengeScrollViewPager?.startAutoScroll()
         val a = view.adChallengeScrollViewPager.currentItem
         view.adChallengeScrollViewPager.addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
-          adChallengeCountTextView.text = "${(view.adChallengeScrollViewPager.currentItem - a) % it.size + 1}/${it.size}"
+          adChallengeCountTextView?.text = "${(view.adChallengeScrollViewPager.currentItem - a) % it.size + 1}/${it.size}"
         }
       }
       FBChallengeRepository().listChallengeData(from, to, locale).let {
@@ -65,9 +65,9 @@ class ChallengeFragment : Fragment(), CoroutineScope by MainScope() {
   private fun initView(layout: View) {
     val now = Calendar.getInstance()
     with(layout) {
-      btn_challenge_from.text = from.format(Y_M_D)
-      btn_challenge_to.text = to.format(Y_M_D)
-      btn_challenge_region.text = locale
+      btn_challenge_from?.text = from.format(Y_M_D)
+      btn_challenge_to?.text = to.format(Y_M_D)
+      btn_challenge_region?.text = locale
 
       challengeAppBarText.setOnClickListener {
         val intent = Intent(context, ChallengeDataSettingActivity::class.java)
@@ -138,13 +138,12 @@ class ChallengeFragment : Fragment(), CoroutineScope by MainScope() {
    * 챌린지 프래그먼트 리사이클러 등록하는 리스너
    */
   private fun challengeDataList(listChallengeData: MutableList<ChallengeData>) {
-    challenge_recycler_view.adapter = ChallengeRecyclerViewAdapter(listChallengeData)
-    challenge_recycler_view.layoutManager = GridLayoutManager(context, 2)
+    challenge_recycler_view?.adapter = ChallengeRecyclerViewAdapter(listChallengeData)
+    challenge_recycler_view?.layoutManager = GridLayoutManager(context, 2)
   }
 
   override fun onPause() {
     super.onPause()
-//    progressBar.dismiss()
     MainScope().cancel()
   }
 }

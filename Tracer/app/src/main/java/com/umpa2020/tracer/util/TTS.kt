@@ -59,4 +59,8 @@ object TTS {
         mVibrator.vibrate(1000)
     }
   }
+
+  fun speechStop(){
+    tts.stop()
+  }
 }
