@@ -17,6 +17,7 @@ import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.network.FBUsersRepository
 import com.umpa2020.tracer.util.ChoicePopup
+import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.UserInfo
 
 class SettingPreferenceFragment : PreferenceFragmentCompat() {
@@ -92,12 +93,56 @@ class SettingPreferenceFragment : PreferenceFragmentCompat() {
     //회원 탈퇴 눌렀을 때
     if (preference?.key.equals("unregister")) {
       FBUsersRepository().userWithdrawal()
-      logOut()
+      authDelete()
     }
     return super.onPreferenceTreeClick(preference)
   }
 
   var noticePopup: ChoicePopup? = null
+
+  private fun authDelete() {
+    Logg.d(mAuth!!.currentUser!!.uid)
+    noticePopup = ChoicePopup(requireContext(), getString(R.string.please_select), getString(R.string.membership_withdrawal), getString(R.string.yes), getString(R.string.no),
+      View.OnClickListener {
+        // 예
+        // Shared의 정보 삭제
+        UserInfo.autoLoginKey = ""
+        UserInfo.email = ""
+        UserInfo.nickname = ""
+        UserInfo.birth = ""
+        UserInfo.gender = ""
+//        UserInfo.clear()
+        //TODO : 이건 정빈이가 추가한거 같은데 삭제 하니깐 약간 어플이 꼬이는거 같아서 물어보고 삭제하든가 하기
+//        UserInfo.permission = 0
+//        UserInfo.rankingLatLng = LatLng(0.0, 0.0)
+
+        // firebase Auth 삭제?
+        mAuth!!.currentUser!!.delete().addOnCompleteListener {
+          if (it.isSuccessful) {
+            Logg.d("탈퇴 성공")
+            //로그아웃처리
+            mAuth!!.signOut()
+          }
+        }
+        // 이거 해주니깐 다시 로그인할 때 아이디 선택 요구함.
+        mGoogleSignInClient!!.signOut()
+
+        noticePopup!!.dismiss()
+        // 어플 재 시작
+        ActivityCompat.finishAffinity(App.instance.currentActivity() as Activity)
+        val intent = context?.packageManager?.getLaunchIntentForPackage(requireContext().packageName)
+        intent!!.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
+
+      },
+      View.OnClickListener {
+        // 아니오
+        noticePopup!!.dismiss()
+      }
+    )
+    noticePopup!!.show()
+  }
 
   private fun logOut() {
     // Shared의 정보 삭제

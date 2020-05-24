@@ -150,6 +150,7 @@
   <string name="twohundred_save">거리가 200m 미만일때\n정지하시면 저장이 불가능합니다.\n\n정지하시겠습니까?</string>
   <string name="stop_save">지금 정지하시면 저장이 불가능합니다.\n\n정지하시겠습니까?</string>
   <string name="like_logout">로그아웃하시겠습니까?</string>
+  <string name="membership_withdrawal">회원탈퇴하시겠습니까?</string>
   <string name="sort">정렬 기준</string>
   <string name="execute_order">실행순</string>
   <string name="like_order">좋아요순</string>
