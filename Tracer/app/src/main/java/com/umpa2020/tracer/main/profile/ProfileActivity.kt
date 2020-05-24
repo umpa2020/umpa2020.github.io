@@ -84,8 +84,9 @@ class ProfileActivity : AppCompatActivity(), OnSingleClickListener, CoroutineSco
         val nextIntent = Intent(this, AppSettingActivity::class.java)
         startActivity(nextIntent)
       }
-      R.id.profileRecordTextView -> { // 나의 활동 액티비티
+      R.id.otherProfileRecordTextView -> { // 나의 활동 액티비티
         val nextIntent = Intent(this, ProfileActivityActivity::class.java)
+        nextIntent.putExtra(USER_ID, userId)
         startActivity(nextIntent)
       }
       R.id.otherProfileAchievementTextView -> {

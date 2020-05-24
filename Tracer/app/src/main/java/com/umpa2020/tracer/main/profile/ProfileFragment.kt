@@ -66,6 +66,7 @@ class ProfileFragment() : Fragment(), OnSingleClickListener, Parcelable, Corouti
 
       R.id.profileRecordTextView -> { // 나의 활동 액티비티
         val nextIntent = Intent(activity, ProfileActivityActivity::class.java)
+        nextIntent.putExtra(BaseFB.USER_ID, UserInfo.autoLoginKey)
         startActivity(nextIntent)
       }
 

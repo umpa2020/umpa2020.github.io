@@ -24,11 +24,9 @@ class ProfileAchievementActivity : AppCompatActivity(), CoroutineScope by MainSc
 
 
     val uid = intent.extras?.getString(BaseFB.USER_ID).toString()
-    Logg.d("ssmm11 uid = $uid")
 
     launch {
       FBAchievementRepository().listUserEmblemNames(uid).let {
-        Logg.d("ssmm11 uid = $uid / emblems = $it")
         FBAchievementRepository().listEmblemImagePaths(it).let {
           achievementDataList(it)
         }
