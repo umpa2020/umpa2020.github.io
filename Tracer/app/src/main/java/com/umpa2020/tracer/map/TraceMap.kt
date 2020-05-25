@@ -20,6 +20,8 @@ import com.umpa2020.tracer.gpx.WayPointType.*
 import com.umpa2020.tracer.network.FBProfileRepository
 import com.umpa2020.tracer.util.GlideApp
 import com.umpa2020.tracer.util.Logg
+import com.umpa2020.tracer.util.MyProgressBar
+import com.umpa2020.tracer.util.ProgressBar
 import kotlinx.android.synthetic.main.profile_marker.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -41,6 +43,7 @@ class TraceMap(val mMap: GoogleMap) {
     trkList: List<WayPoint>,
     wptList: List<WayPoint>
   ): Pair<MutableList<Marker>, MutableList<Marker>> {
+
     Logg.d("Map is draw")
     val track = trkList.map { it.toLatLng() }
     loadTrack =
