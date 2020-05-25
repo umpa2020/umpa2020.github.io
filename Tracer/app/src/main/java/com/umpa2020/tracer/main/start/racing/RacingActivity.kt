@@ -38,7 +38,10 @@ import com.umpa2020.tracer.util.ChoicePopup
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.TTS
 import kotlinx.android.synthetic.main.activity_running.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 
 class RacingActivity : BaseRunningActivity() {
@@ -79,6 +82,8 @@ class RacingActivity : BaseRunningActivity() {
 
   override fun onMapReady(googleMap: GoogleMap) {
     super.onMapReady(googleMap)
+    goToMapButton.visibility = View.VISIBLE
+    wedgedCamera=false
     traceMap.drawRoute(mapRouteGPX.trkList, mapRouteGPX.wptList).run {
       markerList = this.first
       turningPointList = this.second
@@ -114,6 +119,7 @@ class RacingActivity : BaseRunningActivity() {
   }
 
   override fun onSingleClick(v: View?) {
+    super.onSingleClick(v)
     Logg.d("tlqkf!! before when")
     when (v!!.id) {
       R.id.runningStartButton -> {

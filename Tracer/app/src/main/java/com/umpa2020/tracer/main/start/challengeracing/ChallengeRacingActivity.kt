@@ -65,10 +65,12 @@ class ChallengeRacingActivity : BaseRunningActivity() {
 
   override fun onMapReady(googleMap: GoogleMap) {
     super.onMapReady(googleMap)
+    goToMapButton.visibility = View.VISIBLE
     launch {
       while (!::mapRouteGPX.isInitialized) {
         delay(100)
       }
+      wedgedCamera=false
       traceMap.drawRoute(mapRouteGPX.trkList, mapRouteGPX.wptList).run {
         markerList = this.first
         turningPointList = this.second
@@ -107,6 +109,7 @@ class ChallengeRacingActivity : BaseRunningActivity() {
   }
 
   override fun onSingleClick(v: View?) {
+    super.onSingleClick(v)
     when (v!!.id) {
       R.id.runningStartButton -> {
         when (userState) {

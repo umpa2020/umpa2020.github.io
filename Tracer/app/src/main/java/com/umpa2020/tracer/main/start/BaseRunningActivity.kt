@@ -12,6 +12,7 @@ import android.view.View
 import android.view.animation.*
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.preference.PreferenceManager
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
@@ -58,10 +59,14 @@ open class BaseRunningActivity : BaseActivity(), OnMapReadyCallback, OnSingleCli
   var markerCount = 1   //현재 찍힌 마커의 개수
   var timeWhenStopped: Long = 0   //일시정지된 시간
 
-  private var wedgedCamera = true // 사용자 카메라 인식 flag
+  var wedgedCamera = true // 사용자 카메라 인식 flag
   lateinit var locationBroadcastReceiver: LocationBroadcastReceiver
 
-  var zoomLevel: Float? = 16f // 줌 레벨 할당
+  companion object {
+    var zoomLevel: Float? = 16f // 줌 레벨 할당
+  }
+
+  //  var zoomLevel: Float? = 16f // 줌 레벨 할당
   lateinit var progressBar: MyProgressBar
 
   open fun init() {
@@ -88,22 +93,32 @@ open class BaseRunningActivity : BaseActivity(), OnMapReadyCallback, OnSingleCli
       // 예를 들어, 이동, 기울기, 핀치 확대 또는 회전.
       if (it == 1) {
         wedgedCamera = false
+      }else if(it == 3 ){
+        wedgedCamera = false
       }
     }
 
     // 지도가 멈추면 줌 비율 얻어오기
     traceMap.mMap.setOnCameraIdleListener {
-      zoomLevel = traceMap.mMap.cameraPosition.zoom
+      zoomLevel = if (traceMap.mapDownFlag) {
+        traceMap.mapDownFlag = false
+        16F
+      } else {
+        traceMap.mMap.cameraPosition.zoom
+      }
     }
 
     // 내 위치 버튼 클릭 리스너
-    traceMap.mMap.setOnMyLocationButtonClickListener {
-      traceMap.moveCamera(currentLocation!!.toLatLng(), zoomLevel!!)
+    goToMyPosition.setOnClickListener {
+      Logg.d("줌 레벨 : $zoomLevel")
+      traceMap.moveCamera(currentLocation.toLatLng(), zoomLevel!!)
       wedgedCamera = true
-      true
     }
 
-    wedgedCamera = true
+    goToMapButton.setOnClickListener{
+      traceMap.mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(traceMap.trackBounds, 1080, 300, 20))
+      traceMap.mapDownFlag = true
+    }
   }
 
   // 위치를 브로드케스트에서 받아 지속적으로 업데이트
@@ -407,7 +422,8 @@ open class BaseRunningActivity : BaseActivity(), OnMapReadyCallback, OnSingleCli
    *  러닝 기록 측정 SlidingDrawer 애니메이션
    */
   var isOpend = true
-  private fun slidingDrawer(){
+
+  private fun slidingDrawer() {
     if (isOpend) { // 내려가기
       ObjectAnimator.ofFloat(runningDrawer, "translationY", content.height.toFloat()).apply {
         duration = 500
@@ -424,6 +440,7 @@ open class BaseRunningActivity : BaseActivity(), OnMapReadyCallback, OnSingleCli
       isOpend = true
     }
   }
+
   override fun onSingleClick(v: View?) {
     when (v!!.id) {
       R.id.runningHandle -> {
