@@ -8,7 +8,6 @@ import android.location.LocationManager
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.SystemClock
-import android.util.Log
 import android.view.View
 import android.view.animation.*
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -18,7 +17,6 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.SphericalUtil
 import com.umpa2020.tracer.App
-import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.broadcastReceiver.LocationBroadcastReceiver
 import com.umpa2020.tracer.constant.Constants
@@ -30,6 +28,7 @@ import com.umpa2020.tracer.extensions.*
 import com.umpa2020.tracer.gpx.WayPoint
 import com.umpa2020.tracer.gpx.WayPointType.TRACK_POINT
 import com.umpa2020.tracer.lockscreen.util.LockScreen
+import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.main.MainActivity.Companion.locationViewModel
 import com.umpa2020.tracer.map.TraceMap
 import com.umpa2020.tracer.util.*
@@ -38,7 +37,7 @@ import java.lang.String.format
 import java.util.*
 
 
-open class BaseRunningActivity : BaseActivity(), OnMapReadyCallback,OnSingleClickListener{
+open class BaseRunningActivity : BaseActivity(), OnMapReadyCallback, OnSingleClickListener {
   lateinit var traceMap: TraceMap
   var privacy = Privacy.RACING
   var currentLocation = Location(LocationManager.GPS_PROVIDER).apply {
@@ -161,6 +160,8 @@ open class BaseRunningActivity : BaseActivity(), OnMapReadyCallback,OnSingleClic
         userState = UserState.RUNNING
         buttonAnimation()
 
+        isOpend = false
+        slidingDrawer()
         runningTimerTextView.base = SystemClock.elapsedRealtime()
         runningTimerTextView.start()
 
@@ -401,24 +402,33 @@ open class BaseRunningActivity : BaseActivity(), OnMapReadyCallback,OnSingleClic
     runningStopButton.isClickable = true
     runningPauseButton.isClickable = true
   }
-  var isOpend=true
+
+  /**
+   *  러닝 기록 측정 SlidingDrawer 애니메이션
+   */
+  var isOpend = true
+  private fun slidingDrawer(){
+    if (isOpend) { // 내려가기
+      ObjectAnimator.ofFloat(runningDrawer, "translationY", content.height.toFloat()).apply {
+        duration = 500
+        start()
+      }
+      runningHandle.text = "▲"
+      isOpend = false
+    } else { // 올라가기
+      ObjectAnimator.ofFloat(runningDrawer, "translationY", 0f).apply {
+        duration = 500
+        start()
+      }
+      runningHandle.text = "▼"
+      isOpend = true
+    }
+  }
   override fun onSingleClick(v: View?) {
-    when(v!!.id){
-      R.id.runningHandle->{
+    when (v!!.id) {
+      R.id.runningHandle -> {
         Logg.d("Click?")
-        if(isOpend){
-          ObjectAnimator.ofFloat(runningDrawer,"translationY",150f).apply {
-            duration=1000
-            start()
-          }
-          isOpend=false
-        }else{
-          ObjectAnimator.ofFloat(runningDrawer,"translationY",0f).apply {
-            duration=1000
-            start()
-          }
-          isOpend=true
-        }
+        slidingDrawer()
       }
     }
   }

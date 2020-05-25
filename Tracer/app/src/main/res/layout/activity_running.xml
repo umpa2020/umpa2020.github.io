@@ -39,108 +39,102 @@
   <LinearLayout
     android:id="@+id/runningDrawer"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="150dp"
     android:layout_above="@+id/runningBottomFrameLayout"
     android:orientation="vertical">
 
-    <Button
+    <TextView
       android:id="@+id/runningHandle"
       android:layout_width="70dp"
       android:layout_height="27dp"
+      android:layout_gravity="center_horizontal"
       android:background="@drawable/button_white_background"
       android:gravity="center"
-      android:text="▲"
+      android:text="▼"
       android:textColor="@color/red"
-      android:layout_gravity="center_horizontal"
       android:textSize="15dp" />
 
     <LinearLayout
+      android:id="@+id/content"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:orientation="horizontal">
+      android:layout_height="match_parent"
+      android:background="@color/white">
 
       <LinearLayout
-        android:id="@+id/content"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white">
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_weight="1.0"
+        android:gravity="center"
+        android:orientation="vertical">
 
-        <LinearLayout
-          android:layout_width="0dp"
-          android:layout_height="match_parent"
-          android:layout_marginLeft="5dp"
-          android:layout_marginTop="5dp"
-          android:layout_marginRight="5dp"
-          android:layout_weight="1.0"
+        <TextView
+          style="@style/ListDetail"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/Distance_km" />
+
+        <TextView
+          android:id="@+id/runningDistanceTextView"
+          style="@style/blackMediumText18"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="15dp"
           android:gravity="center"
-          android:orientation="vertical">
+          android:text="0.00" />
+      </LinearLayout>
 
-          <TextView
-            style="@style/ListDetail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/Distance_km" />
+      <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_weight="1.0"
+        android:gravity="center"
+        android:orientation="vertical">
 
-          <TextView
-            android:layout_marginTop="15dp"
-            android:id="@+id/runningDistanceTextView"
-            style="@style/blackMediumText18"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="0.00" />
-        </LinearLayout>
+        <TextView
+          style="@style/ListDetail"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/Time" />
 
-        <LinearLayout
-          android:layout_width="0dp"
-          android:layout_height="match_parent"
-          android:layout_marginLeft="5dp"
-          android:layout_marginTop="5dp"
-          android:layout_marginRight="5dp"
-          android:layout_weight="1.0"
+        <Chronometer
+          android:id="@+id/runningTimerTextView"
+          style="@style/blackMediumText18"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="15dp"
+          android:gravity="center" />
+      </LinearLayout>
+
+      <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_weight="1.0"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+          style="@style/ListDetail"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/speed_km" />
+
+        <TextView
+          android:id="@+id/runningSpeedTextView"
+          style="@style/blackMediumText18"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="15dp"
           android:gravity="center"
-          android:orientation="vertical">
-
-          <TextView
-            style="@style/ListDetail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/Time" />
-
-          <Chronometer
-            android:layout_marginTop="15dp"
-            android:id="@+id/runningTimerTextView"
-            style="@style/blackMediumText18"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center" />
-        </LinearLayout>
-
-        <LinearLayout
-          android:layout_width="0dp"
-          android:layout_height="match_parent"
-          android:layout_marginLeft="5dp"
-          android:layout_marginTop="5dp"
-          android:layout_marginRight="5dp"
-          android:layout_weight="1.0"
-          android:gravity="center"
-          android:orientation="vertical">
-
-          <TextView
-            style="@style/ListDetail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/speed_km" />
-
-          <TextView
-            android:layout_marginTop="15dp"
-            android:id="@+id/runningSpeedTextView"
-            style="@style/blackMediumText18"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="0.0" />
-        </LinearLayout>
+          android:text="0.0" />
       </LinearLayout>
     </LinearLayout>
   </LinearLayout>
