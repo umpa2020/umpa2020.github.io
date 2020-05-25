@@ -242,4 +242,5 @@
   <string name="other_achivement">업적</string>
   <string name="not_specified">무기한 연장 (자세한 내용은 홈페이지를 확인해주세요)</string>
   <string name="title_activity_base">BaseActivity</string>
+  <string name="running_tts_regular_time">시간 : %1$s분 거리 : %2$s 속력 : %3$s</string>
 </resources>

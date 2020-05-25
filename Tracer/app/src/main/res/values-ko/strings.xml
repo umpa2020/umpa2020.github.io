@@ -242,5 +242,6 @@
   <string name="other_achivement">업적</string>
   <string name="not_specified">무기한 연장 (자세한 내용은 홈페이지를 확인해주세요)</string>
   <string name="activity_challenge">%1$s 을(를) %2$s 에 도전했습니다.</string>
+  <string name="running_tts_regular_time">시간 : %1$s분 거리 : %2$s 속력 : %3$s</string>
 
 </resources>

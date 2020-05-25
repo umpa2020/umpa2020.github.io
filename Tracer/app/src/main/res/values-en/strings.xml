@@ -242,6 +242,6 @@
   <!--activity_profile-->
   <string name="other_achivement">Achivement</string>
   <string name="not_specified">not specified(Please refer to the website)</string>
-
+  <string name="running_tts_regular_time">time : %1$s minutes\n distance : %2$s speed : %3$s</string>
 
 </resources>

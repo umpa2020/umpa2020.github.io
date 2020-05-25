@@ -157,7 +157,7 @@ open class BaseRunningActivity : BaseActivity(), OnMapReadyCallback, OnSingleCli
   }
 
   private var countDownTimer: CountDownTimer? = null
-
+  private var ttsTimeCount=1L
   open fun start(tts: String) {
     userState = UserState.STOP
     countDownTextView.visibility = View.VISIBLE
@@ -180,7 +180,13 @@ open class BaseRunningActivity : BaseActivity(), OnMapReadyCallback, OnSingleCli
         slidingDrawer()
         runningTimerTextView.base = SystemClock.elapsedRealtime()
         runningTimerTextView.start()
-
+        runningTimerTextView.setOnChronometerTickListener {
+          val a=SystemClock.elapsedRealtime() - it.base
+          if(a/300000==ttsTimeCount){
+            ttsTimeCount++
+            TTS.speech(getString(R.string.running_tts_regular_time,(ttsTimeCount*5).toString(),runningDistanceTextView.text,runningSpeedTextView.text))
+          }
+        }
         runningNotificationTextView.visibility = View.GONE
         lockScreen(true)
         // viewModel 초기값 설정 => 시작 시간 설정
