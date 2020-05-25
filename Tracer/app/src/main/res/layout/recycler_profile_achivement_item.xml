@@ -31,7 +31,6 @@
     android:textSize="18dp"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/profileUserAchievementImageView"
-    tools:text="Title" />
+    app:layout_constraintTop_toBottomOf="@+id/profileUserAchievementImageView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

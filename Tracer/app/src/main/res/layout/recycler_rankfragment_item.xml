@@ -3,8 +3,8 @@
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
   android:background="@color/white"
-  android:paddingTop="7dp"
-  android:paddingBottom="7dp">
+  android:paddingTop="10dp"
+  android:paddingBottom="10dp">
 
   <TextView
     android:id="@+id/rankingFragmentCountTextView"
@@ -34,8 +34,7 @@
     android:layout_width="0dp"
     android:layout_height="wrap_content"
     android:layout_weight="2"
-    android:gravity="right"
-    android:text="test" />
+    android:gravity="right" />
 
   <LinearLayout
     android:layout_width="0dp"
@@ -56,6 +55,7 @@
     <TextView
       android:id="@+id/rankingFragmentModeTextView"
       style="@style/ListDetail"
+      android:textSize="16dp"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:gravity="center_vertical"
