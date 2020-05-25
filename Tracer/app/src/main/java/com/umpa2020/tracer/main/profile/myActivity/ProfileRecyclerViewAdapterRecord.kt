@@ -60,19 +60,19 @@ class ProfileRecyclerViewAdapterRecord(val datas: MutableList<ActivityData>) :
           RACING_FAIL -> {
             holder.activityText.text =
               String.format(context!!.getString(R.string.racing_fail), it, time)
-            holder.activityModeIcon.setImageDrawable(context!!.getDrawable(R.drawable.ic_fail))
+            holder.activityModeIcon.setImageDrawable(context!!.getDrawable(R.drawable.ic_close))
 
           }
           MAP_SAVE -> {
             holder.activityText.text =
               String.format(context!!.getString(R.string.map_save), it, time)
-            holder.activityModeIcon.setImageDrawable(context!!.getDrawable(R.drawable.ic_map_save))
+            holder.activityModeIcon.setImageDrawable(context!!.getDrawable(R.drawable.ic_location))
 
           }
           CHALLENGE -> {
             holder.activityText.text =
               String.format(context!!.getString(R.string.activity_challenge), it, time)
-            holder.activityModeIcon.setImageDrawable(context!!.getDrawable(R.drawable.challenge))
+            holder.activityModeIcon.setImageDrawable(context!!.getDrawable(R.drawable.ic_challenge))
 
           }
         }
