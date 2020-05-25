@@ -91,9 +91,7 @@ open class BaseRunningActivity : BaseActivity(), OnMapReadyCallback, OnSingleCli
     traceMap.mMap.setOnCameraMoveStartedListener {
       // 공개 정적 최종 정수 REASON_GESTURE, 지도에서 사용자의 제스처에 응답하여 카메라 동작이 시작되었습니다.
       // 예를 들어, 이동, 기울기, 핀치 확대 또는 회전.
-      if (it == 1) {
-        wedgedCamera = false
-      }else if(it == 3 ){
+      if (it == 1 || it == 3) {
         wedgedCamera = false
       }
     }
