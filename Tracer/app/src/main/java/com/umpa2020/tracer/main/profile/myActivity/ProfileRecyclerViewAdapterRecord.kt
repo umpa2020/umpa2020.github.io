@@ -2,6 +2,7 @@ package com.umpa2020.tracer.main.profile.myActivity
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -54,18 +55,25 @@ class ProfileRecyclerViewAdapterRecord(val datas: MutableList<ActivityData>) :
           RACING_SUCCESS -> {
             holder.activityText.text =
               String.format(context!!.getString(R.string.racing_go_the_distance), it, time)
+            holder.activityModeIcon.setImageDrawable(context!!.getDrawable(R.drawable.ic_success))
           }
           RACING_FAIL -> {
             holder.activityText.text =
               String.format(context!!.getString(R.string.racing_fail), it, time)
+            holder.activityModeIcon.setImageDrawable(context!!.getDrawable(R.drawable.ic_fail))
+
           }
           MAP_SAVE -> {
             holder.activityText.text =
               String.format(context!!.getString(R.string.map_save), it, time)
+            holder.activityModeIcon.setImageDrawable(context!!.getDrawable(R.drawable.ic_map_save))
+
           }
           CHALLENGE -> {
             holder.activityText.text =
               String.format(context!!.getString(R.string.activity_challenge), it, time)
+            holder.activityModeIcon.setImageDrawable(context!!.getDrawable(R.drawable.challenge))
+
           }
         }
       }
@@ -120,6 +128,7 @@ class ProfileRecyclerViewAdapterRecord(val datas: MutableList<ActivityData>) :
   inner class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     var mapImageView = view.profileUserActivityMapImageView!!
     var activityText = view.profileUserActivityTextView!!
+    var activityModeIcon=view.activityModeIcon!!
   }
 }
 

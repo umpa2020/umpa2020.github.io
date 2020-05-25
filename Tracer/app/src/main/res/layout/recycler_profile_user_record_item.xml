@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@+id/activityItemLayout"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
   android:paddingBottom="10dp">
@@ -8,29 +9,43 @@
     android:id="@+id/divideLine"
     style="@style/divisionTextView"
     android:layout_marginLeft="0dp"
-    android:layout_marginRight="0dp"/>
+    android:layout_marginRight="0dp" />
 
-  <ImageView
+  <RelativeLayout
     android:layout_below="@+id/divideLine"
-    android:layout_marginTop="10dp"
-    android:id="@+id/profileUserActivityMapImageView"
-    android:layout_width="100dp"
-    android:layout_height="100dp"
-    android:background="@color/white"
-    android:scaleType="fitXY" />
-
-  <TextView
-    android:layout_marginTop="10dp"
-    android:layout_below="@+id/divideLine"
-    android:layout_toRightOf="@+id/profileUserActivityMapImageView"
-    android:maxLines="3"
-    android:ellipsize="marquee"
-    android:fontFamily="sans-serif-light"
-    android:textColor="@color/black"
-    android:textSize="17dp"
-    android:id="@+id/profileUserActivityTextView"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
-    android:layout_marginStart="10dp"
-    android:gravity="center_vertical" />
+    android:layout_height="wrap_content"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+      android:id="@+id/profileUserActivityMapImageView"
+      android:layout_width="100dp"
+      android:layout_height="100dp"
+      android:layout_marginTop="10dp"
+      android:background="@color/white" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+      android:background="@drawable/button_empty_background_circle"
+      android:id="@+id/activityModeIcon"
+      android:layout_width="35dp"
+      android:layout_height="35dp"
+      android:layout_margin="5dp"
+      android:layout_alignRight="@id/profileUserActivityMapImageView"
+      android:layout_alignBottom="@id/profileUserActivityMapImageView" />
+
+    <TextView
+      android:id="@+id/profileUserActivityTextView"
+      android:layout_width="match_parent"
+      android:layout_height="100dp"
+      android:layout_marginStart="10dp"
+      android:layout_marginTop="10dp"
+      android:layout_toRightOf="@+id/profileUserActivityMapImageView"
+      android:ellipsize="marquee"
+      android:fontFamily="sans-serif-light"
+      android:gravity="center_vertical"
+      android:maxLines="3"
+      android:textColor="@color/black"
+      android:textSize="17dp" />
+  </RelativeLayout>
 </RelativeLayout>

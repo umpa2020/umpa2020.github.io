@@ -79,7 +79,7 @@ class FBUsersRepository : BaseFB() {
 
   suspend fun listUserMakingActivity(userId: String, limit: Long): List<ActivityData>? {
     return (if (globalStartAfter == null) db.collection(USERS).document(userId).collection(ACTIVITIES)
-    else usersCollectionRef.document(userId).collection(ACTIVITIES).startAfter(globalStartAfter!!))
+    else usersCollectionRef.document(userId).collection(ACTIVITIES).orderBy(TIME).startAfter(globalStartAfter!!))
       .limit(limit).get().await().apply {
         if (documents.isEmpty())
           return null
@@ -90,9 +90,9 @@ class FBUsersRepository : BaseFB() {
   suspend fun listUserRoute(uid: String, limit: Long): List<MapInfo>? {
     val infoDatas =
       if (globalStartAfter == null) {
-        mapsCollectionRef.whereEqualTo(MAKER_ID, uid).whereEqualTo(CHALLENGE, false)
+        mapsCollectionRef.whereEqualTo(MAKER_ID, uid).whereEqualTo(CHALLENGE, false).orderBy(TIME)
       } else {
-        mapsCollectionRef.whereEqualTo(MAKER_ID, uid).startAfter(globalStartAfter!!)
+        mapsCollectionRef.whereEqualTo(MAKER_ID, uid).startAfter(globalStartAfter!!).orderBy(TIME)
       }.limit(limit).get().await().apply {
         if (documents.size == 0)
           return null
