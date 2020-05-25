@@ -19,9 +19,6 @@ import com.umpa2020.tracer.gpx.WayPoint
 import com.umpa2020.tracer.gpx.WayPointType.*
 import com.umpa2020.tracer.network.FBProfileRepository
 import com.umpa2020.tracer.util.GlideApp
-import com.umpa2020.tracer.util.Logg
-import com.umpa2020.tracer.util.MyProgressBar
-import com.umpa2020.tracer.util.ProgressBar
 import kotlinx.android.synthetic.main.profile_marker.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -44,7 +41,7 @@ class TraceMap(val mMap: GoogleMap) {
     wptList: List<WayPoint>
   ): Pair<MutableList<Marker>, MutableList<Marker>> {
 
-    Logg.d("Map is draw")
+
     val track = trkList.map { it.toLatLng() }
     loadTrack =
       mMap.addPolyline(
@@ -65,7 +62,7 @@ class TraceMap(val mMap: GoogleMap) {
   var polyFlag = true
   lateinit var poly: Polyline
   fun drawPolyLine(preLoc: LatLng, curLoc: LatLng) {
-    Logg.d("making polyline $preLoc $curLoc")
+
 
     if (polyFlag) {
       //polyline 그리기
@@ -80,12 +77,12 @@ class TraceMap(val mMap: GoogleMap) {
       val a = poly.points
       a.add(curLoc)
       poly.points = a
-      Logg.d("add new point $curLoc")
+
     }
   }
 
   fun moveCameraUserDirection(curLoc: Location, zoomLevel: Float) {
-    Logg.d("move camera $curLoc")
+
     mMap.animateCamera(
       CameraUpdateFactory.newCameraPosition(
         CameraPosition(curLoc.toLatLng()/*좌표*/, zoomLevel/*줌 레벨*/, 0F/*기울기 각도*/, curLoc.bearing/*베어링 각도*/)
@@ -112,7 +109,7 @@ class TraceMap(val mMap: GoogleMap) {
   }
 
   suspend fun addRacer(latlng: LatLng, racerData: RacerData, mCustomMarkerView: View) {
-    Logg.d("racer : before add")
+
     racerList.add(
       mMap.addMarker(
         MarkerOptions()
@@ -124,7 +121,7 @@ class TraceMap(val mMap: GoogleMap) {
           .draggable(true)
       )
     )
-    Logg.d("racer : after add")
+
   }
 
   suspend fun makeProfileIcon(view: View, uid: String): BitmapDescriptor {

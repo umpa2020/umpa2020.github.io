@@ -22,7 +22,6 @@ import com.umpa2020.tracer.network.BaseFB
 import com.umpa2020.tracer.network.FBChallengeRepository
 import com.umpa2020.tracer.network.FBProfileRepository
 import com.umpa2020.tracer.network.FBUsersRepository
-import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
@@ -80,9 +79,6 @@ class ChallengeRacingFinishActivity : BaseActivity(), OnSingleClickListener {
     rankEntryList.add(Entry(((worstRecord - bestRecord) * 1.00 + bestRecord).toFloat() / 1000, 2f))
     rankEntryList.add(Entry(recordList.last().toFloat() / 1000, recordList.last().calcRank(bestRecord, worstRecord).toFloat()))
     rankEntryList.sortBy { it.x }
-    Logg.d(rankEntryList.joinToString {
-      "${it.x} ${it.y}\n"
-    })
     val yLAxis = combinedChart.axisLeft
     yLAxis.textColor = Color.RED
     yLAxis.axisMaximum = 55f
@@ -100,10 +96,6 @@ class ChallengeRacingFinishActivity : BaseActivity(), OnSingleClickListener {
     lineDataSet.mode = LineDataSet.Mode.CUBIC_BEZIER
 
     val scatter = mutableListOf<Entry>()
-    Logg.d("tlqkf ${recordList.joinToString {
-      it.toString()
-    }
-    }")
     scatter.add(Entry(recordList.last().toFloat() / 1000, recordList.last().calcRank(bestRecord, worstRecord).toFloat()))
     val scatterDataSet = ScatterDataSet(scatter, "MyRecord").apply {
       setColors(Color.parseColor("#FF0000FF"))
@@ -142,7 +134,7 @@ class ChallengeRacingFinishActivity : BaseActivity(), OnSingleClickListener {
       if (i == recordList.size - 1) return@forEachIndexed
       recordEntryList.add(Entry(i.toFloat(), (recordList[i + 1] - d).toFloat() / 1000))
     }
-    Logg.d("Size : ${recordEntryList.size}")
+
     val bestEntryList = mutableListOf<Entry>()
     bestList.forEachIndexed { i, d ->
       if (i == bestList.size - 1) return@forEachIndexed

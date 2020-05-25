@@ -115,7 +115,7 @@ open class BaseRunningActivity : BaseActivity(), OnMapReadyCallback, OnSingleCli
     currentLocation = curLoc
     runningDistanceTextView.text = distance.prettyDistance
     runningSpeedTextView.text = speed.prettySpeed()
-    Logg.d("조졌다 ${speed.prettyDistance()}")
+
     // room DB에 속도, 거리 데이터 업데이트.
 //    recordViewModel.updateSpeedDistance(speed.lockSpeed, distance.lockDistance)
     locationViewModel.setDistanceSpeed(DistanceTimeData(distance.lockDistance, speed.lockSpeed))
@@ -151,7 +151,7 @@ open class BaseRunningActivity : BaseActivity(), OnMapReadyCallback, OnSingleCli
     // 시작 카운트 다운
     countDownTimer = object : CountDownTimer(Constants.MILLISINFUTURE, Constants.COUNTDOWN_INTERVAL) {
       override fun onTick(millisUntilFinished: Long) {
-        Logg.d("${millisUntilFinished / Constants.COUNTDOWN_INTERVAL}")
+
 
         // 3..2..1..로 보여주기 위해서 + 1
         countDownTextView.text =
@@ -243,10 +243,10 @@ open class BaseRunningActivity : BaseActivity(), OnMapReadyCallback, OnSingleCli
       if (wedgedCamera) { // 사용자 카메라 인식 flag
         // 유저 상태에 따라 카메라 설정
         if (userState == UserState.NORMAL) {
-//        Logg.d("노멀 : 유저 바라보는 방향으로 지도 이동 X")
+//
           traceMap.moveCamera(location.toLatLng(), zoomLevel!!)
         } else if (userState == UserState.RUNNING) {
-//        Logg.d("러닝 : 유저 바라보는 방향으로 지도 이동 O")
+//
           traceMap.moveCameraUserDirection(location, zoomLevel!!)
         }
       }
@@ -424,7 +424,7 @@ open class BaseRunningActivity : BaseActivity(), OnMapReadyCallback, OnSingleCli
   override fun onSingleClick(v: View?) {
     when (v!!.id) {
       R.id.runningHandle -> {
-        Logg.d("Click?")
+
         slidingDrawer()
       }
     }

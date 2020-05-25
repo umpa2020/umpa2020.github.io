@@ -111,7 +111,7 @@ class RunningSaveActivity : BaseActivity(), OnMapReadyCallback, OnSingleClickLis
               it.compress(Bitmap.CompressFormat.PNG, 90, out)
               save(myfile.path)
             } catch (e: Exception) {
-              Logg.d(e.toString())
+
             }
           }
           traceMap.captureMapScreen(callback)
@@ -146,7 +146,7 @@ class RunningSaveActivity : BaseActivity(), OnMapReadyCallback, OnSingleClickLis
     }
     routeGPX.addDirectionSign()
     routeGPX.wptList.forEach {
-      Logg.d("lat : ${it.lat} lon : ${it.lon} desc : ${it.desc} ")
+
     }
     val routeGpxFile = routeGPX.classToGpx(saveFolder.path)
 
@@ -179,10 +179,10 @@ class RunningSaveActivity : BaseActivity(), OnMapReadyCallback, OnSingleClickLis
     val activityData = ActivityData(mapInfo.mapId, timestamp, mapInfo.distance, mapInfo.time, BaseFB.ActivityMode.MAP_SAVE)
     val trophyData = TrophyData(mapInfo.mapId, 1)
 
-    Logg.d("Start Upload")
+
     FBMapRepository().uploadMap(mapInfo, rankingData, activityData, timestamp.toString(), routeGpxFile, Uri.fromFile(File(imgPath)), trophyData)
     FBAchievementRepository().incrementPlays(mapInfo.makerId)
-    Logg.d("Finish Upload")
+
 
     launch {
       val uid = UserInfo.autoLoginKey
@@ -198,7 +198,7 @@ class RunningSaveActivity : BaseActivity(), OnMapReadyCallback, OnSingleClickLis
             FBAchievementRepository().setTrackMaker50Emblem(uid)
           }
           null -> {
-            Logg.e("error")
+
           }
         }
         FBAchievementRepository().incrementTrackMake(uid)
@@ -211,7 +211,7 @@ class RunningSaveActivity : BaseActivity(), OnMapReadyCallback, OnSingleClickLis
 
 
   override fun onMapReady(googleMap: GoogleMap) {
-    Logg.d("onMapReady")
+
     traceMap = TraceMap(googleMap) //구글맵
     traceMap.drawRoute(routeGPX.trkList.toList(), routeGPX.wptList.filter { it.type == START_POINT || it.type == FINISH_POINT })
   }

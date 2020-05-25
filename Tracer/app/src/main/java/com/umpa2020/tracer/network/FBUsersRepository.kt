@@ -2,7 +2,6 @@ package com.umpa2020.tracer.network
 
 import com.google.firebase.firestore.DocumentSnapshot
 import com.umpa2020.tracer.dataClass.*
-import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.coroutines.tasks.await
 
@@ -69,9 +68,6 @@ class FBUsersRepository : BaseFB() {
 
   fun createUserInfo(data: Users) {
     usersCollectionRef.document(data.userId).set(data)
-      .addOnSuccessListener { Logg.d("DocumentSnapshot successfully written!") }
-      .addOnFailureListener { e -> Logg.w("Error writing document$e") }
-
     FBAchievementRepository().createAchievement(data.userId)
   }
 

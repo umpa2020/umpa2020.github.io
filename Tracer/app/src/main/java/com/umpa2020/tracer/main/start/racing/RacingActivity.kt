@@ -35,7 +35,6 @@ import com.umpa2020.tracer.network.BaseFB.Companion.MAP_ID
 import com.umpa2020.tracer.network.FBMapRepository
 import com.umpa2020.tracer.network.FBRacingRepository
 import com.umpa2020.tracer.util.ChoicePopup
-import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.TTS
 import kotlinx.android.synthetic.main.activity_running.*
@@ -73,7 +72,7 @@ class RacingActivity : BaseRunningActivity() {
     mapId = intent.getStringExtra(MAP_ID)!!
     racerList = intent.getSerializableExtra(RACER_LIST) as Array<RacerData>
 
-    Logg.d(racerList.joinToString())
+
     launch {
       racerGPXList = FBRacingRepository().listRacingGPX(mapId, racerList.map { it.racerId })
       loadRoute()
@@ -86,7 +85,7 @@ class RacingActivity : BaseRunningActivity() {
     super.onMapReady(googleMap)
     val progressBar = MyProgressBar()
     progressBar.show()
-    
+
     traceMap.drawRoute(mapRouteGPX.trkList, mapRouteGPX.wptList).run {
       markerList = this.first
       turningPointList = this.second
@@ -123,10 +122,10 @@ class RacingActivity : BaseRunningActivity() {
   }
 
   override fun onSingleClick(v: View?) {
-    Logg.d("tlqkf!! before when")
+
     when (v!!.id) {
       R.id.runningStartButton -> {
-        Logg.d("tlqkf!! tqtqtqt")
+
         when (userState) {
           UserState.NORMAL -> {
             Toast.makeText(
@@ -134,10 +133,10 @@ class RacingActivity : BaseRunningActivity() {
               getString(R.string.startpoint) + ARRIVE_BOUNDARY + getString(R.string.only_start),
               Toast.LENGTH_LONG
             ).show()
-            Logg.d("NORMAL")
+
           }
           UserState.READYTORACING -> {
-            Logg.d("READYTORACING")
+
             runningNotificationTextView.visibility = View.GONE
             start(getString(R.string.startRacing)) // tts String 전달
           }
@@ -168,16 +167,16 @@ class RacingActivity : BaseRunningActivity() {
     super.updateLocation(curLoc)
     when (userState) {
       UserState.NORMAL -> {
-        Logg.d("NORMAL")
+
         checkIsReady()
       }
 
       UserState.READYTORACING -> {
-        Logg.d("READYTORACING")
+
         checkIsReadyToRacing()
       }
       UserState.RUNNING -> {
-        Logg.d("RUNNING")
+
         checkMarker()
         checkTurningPoint()
         checkDeviation()
@@ -197,7 +196,7 @@ class RacingActivity : BaseRunningActivity() {
     )
 
     if (!racerGPXList.isNullOrEmpty()) {
-      Logg.d("Start Virtual Racing")
+
       virtualRacing()
     }
   }
@@ -230,7 +229,7 @@ class RacingActivity : BaseRunningActivity() {
               val duration = (wpts[index + 1].time!! - wpts[index].time!!)
               val unitDuration = duration / (wptIndices[index + 1] - wptIndices[index])
 
-              Logg.d("기간 $unitDuration  1 : ${wpts[index + 1].time}   2: ${wpts[index].time}")
+
               (wptIndices[index]..wptIndices[index + 1]).forEach {
                 delay(unitDuration)
                 traceMap.updateMarker(racerNo, racingGPX.trkList[it].toLatLng())
@@ -303,14 +302,6 @@ class RacingActivity : BaseRunningActivity() {
   }
 
   private fun checkDeviation() {
-    Logg.d(
-      PolyUtil.isLocationOnPath(
-        currentLatLng,
-        track,
-        false,
-        Constants.DEVIATION_DISTANCE
-      ).toString()
-    )
     //경로이탈검사
     if (PolyUtil.isLocationOnPath(
         currentLatLng,
