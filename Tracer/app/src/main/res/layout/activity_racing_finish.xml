@@ -407,8 +407,7 @@
               style="@style/recordComparison"
               android:layout_width="130dp"
               android:layout_height="wrap_content"
-              android:gravity="center"
-              android:text="test" />
+              android:gravity="center"/>
 
             <TextView
               android:id="@+id/otherLapTimeTextView"
@@ -416,8 +415,7 @@
               android:layout_width="130dp"
               android:layout_height="wrap_content"
               android:layout_marginLeft="60dp"
-              android:gravity="center"
-              android:text="test" />
+              android:gravity="center" />
           </LinearLayout>
 
           <TextView style="@style/divisionTextView" />
@@ -453,8 +451,7 @@
               style="@style/recordComparison"
               android:layout_width="130dp"
               android:layout_height="wrap_content"
-              android:gravity="center"
-              android:text="test" />
+              android:gravity="center"/>
 
             <TextView
               android:id="@+id/otherMaxSpeedTextView"
@@ -462,8 +459,7 @@
               android:layout_width="130dp"
               android:layout_height="wrap_content"
               android:layout_marginLeft="60dp"
-              android:gravity="center"
-              android:text="test" />
+              android:gravity="center"/>
           </LinearLayout>
 
           <TextView style="@style/divisionTextView" />
@@ -499,8 +495,7 @@
               style="@style/recordComparison"
               android:layout_width="130dp"
               android:layout_height="wrap_content"
-              android:gravity="center"
-              android:text="test" />
+              android:gravity="center"/>
 
             <TextView
               android:id="@+id/otherAvgSpeedTextView"
@@ -508,8 +503,7 @@
               android:layout_width="130dp"
               android:layout_height="wrap_content"
               android:layout_marginLeft="60dp"
-              android:gravity="center"
-              android:text="test" />
+              android:gravity="center"/>
           </LinearLayout>
         </LinearLayout>
 
