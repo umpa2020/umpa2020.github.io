@@ -24,6 +24,7 @@ import com.umpa2020.tracer.network.BaseFB.Companion.MAP_ID
 import com.umpa2020.tracer.network.FBChallengeRepository
 import com.umpa2020.tracer.network.FBMapRepository
 import com.umpa2020.tracer.network.FBStorageRepository
+import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.activity_challenge_map_detail.*
 import kotlinx.coroutines.launch
@@ -46,6 +47,10 @@ class ChallengeRecycleritemClickActivity : BaseActivity(), OnSingleClickListener
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_challenge_map_detail)
+
+    val progressBar = MyProgressBar()
+    progressBar.show()
+
     val smf =
       supportFragmentManager.findFragmentById(R.id.challengeDetailLocation) as SupportMapFragment
     smf.getMapAsync(this)
@@ -64,11 +69,13 @@ class ChallengeRecycleritemClickActivity : BaseActivity(), OnSingleClickListener
           challengeURLDetails.text = link
           challengeURLDetails.paintFlags = Paint.UNDERLINE_TEXT_FLAG
           challengeDetailInformation.text = intro
+          challengeCourseInformation.text = raceDesc
           challengeEnabled = enabled
         }
         routeGPXUri = FBStorageRepository().getFile(FBMapRepository().getMapInfo(challengeId)?.routeGPXPath!!).apply {
           this.gpxToClass().let {
             traceMap.drawRoute(it.trkList.toList(), it.wptList.filter { it.type == WayPointType.START_POINT || it.type == WayPointType.FINISH_POINT })
+            progressBar.dismiss()
           }
         }
         initButton()
