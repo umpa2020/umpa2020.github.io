@@ -29,6 +29,7 @@ import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.extensions.*
 import com.umpa2020.tracer.gpx.WayPoint
 import com.umpa2020.tracer.gpx.WayPointType.*
+import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.main.start.BaseRunningActivity
 import com.umpa2020.tracer.main.start.racing.RacingSelectPeopleActivity.Companion.RACER_LIST
 import com.umpa2020.tracer.network.BaseFB.Companion.MAP_ID
@@ -263,6 +264,7 @@ class RacingActivity : BaseRunningActivity() {
     startActivity(newIntent)
     finish()
   }
+
 
   private fun checkTurningPoint() {
     if (nextTP >= turningPointList.size) return

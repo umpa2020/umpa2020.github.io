@@ -1,6 +1,7 @@
 package com.umpa2020.tracer.main.start
 
 import android.animation.ObjectAnimator
+import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.ActivityInfo
 import android.location.Location
@@ -29,6 +30,7 @@ import com.umpa2020.tracer.gpx.WayPoint
 import com.umpa2020.tracer.gpx.WayPointType.TRACK_POINT
 import com.umpa2020.tracer.lockscreen.util.LockScreen
 import com.umpa2020.tracer.main.BaseActivity
+import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.main.MainActivity.Companion.locationViewModel
 import com.umpa2020.tracer.map.TraceMap
 import com.umpa2020.tracer.util.*
@@ -317,6 +319,9 @@ open class BaseRunningActivity : BaseActivity(), OnMapReadyCallback, OnSingleCli
           View.OnClickListener {
             noticePopup.dismiss()
             lockScreen(false)
+            startActivity(Intent(this, MainActivity::class.java).apply {
+              addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            })
             finish()
           },
           View.OnClickListener {
@@ -326,6 +331,10 @@ open class BaseRunningActivity : BaseActivity(), OnMapReadyCallback, OnSingleCli
       }
       else -> {
         super.onBackPressed()
+        startActivity(Intent(this, MainActivity::class.java).apply {
+          addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        })
+        finish()
       }
     }
   }
