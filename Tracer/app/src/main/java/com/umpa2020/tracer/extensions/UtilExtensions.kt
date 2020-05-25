@@ -2,10 +2,12 @@ package com.umpa2020.tracer.extensions
 
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.net.Uri
 import android.widget.Toast
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.umpa2020.tracer.App
+import java.io.File
 import kotlin.math.ceil
 
 fun String.show() {
@@ -104,4 +106,9 @@ fun Long.calcRank(best: Long, worst: Long): Int {
     this < (worst - best) * 1.00 + best -> 100
     else -> 100
   }
+}
+
+fun String.fileDelete() {
+  val file = File(Uri.parse(this).path!!)
+  file.delete()
 }

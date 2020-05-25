@@ -40,6 +40,7 @@ import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_sign_up.*
 import kotlinx.android.synthetic.main.signup_toolbar.*
 import kotlinx.android.synthetic.main.signup_toolbar.view.*
+import kotlinx.coroutines.launch
 import java.util.*
 import java.util.regex.Pattern
 
@@ -401,7 +402,9 @@ class SignUpActivity : BaseActivity(), OnSingleClickListener {
     UserInfo.birth = birth
     UserInfo.gender = gender
 
-    FBProfileRepository().uploadProfileImage(imageUri, timestamp)
+    launch {
+      FBProfileRepository().uploadProfileImage(imageUri, timestamp)
+    }
 
     val nextIntent = Intent(this@SignUpActivity, MainActivity::class.java)
     startActivity(nextIntent)

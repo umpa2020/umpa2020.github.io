@@ -270,8 +270,11 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener, Cor
       launch {
         if (it.tag != null) {
           FBMapRepository().getMapInfo(it.tag as String)?.let {
-            FBStorageRepository().getFile(it.routeGPXPath).gpxToClass().let {
-              drawMarkerRoute(it)
+            FBStorageRepository().getFile(it.routeGPXPath).apply {
+              gpxToClass().let {
+                drawMarkerRoute(it)
+              }
+              toString().fileDelete()
             }
           }
         }

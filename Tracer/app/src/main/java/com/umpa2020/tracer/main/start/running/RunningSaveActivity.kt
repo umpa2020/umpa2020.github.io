@@ -40,6 +40,7 @@ class RunningSaveActivity : BaseActivity(), OnMapReadyCallback, OnSingleClickLis
   lateinit var traceMap: TraceMap
   val speedList = mutableListOf<Double>()
   lateinit var progressBar: MyProgressBar
+  var routeGPXUri = "init"
 
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,7 +48,7 @@ class RunningSaveActivity : BaseActivity(), OnMapReadyCallback, OnSingleClickLis
     setContentView(R.layout.activity_running_save)
     progressBar = MyProgressBar()
     mapInfo = intent.getParcelableExtra("InfoData")!!
-    val routeGPXUri = intent.getStringExtra(RacingActivity.ROUTE_GPX)
+    routeGPXUri = intent.getStringExtra(RacingActivity.ROUTE_GPX)!!
     routeGPX = Uri.parse(routeGPXUri).gpxToClass()
 
     val wmf =
@@ -109,7 +110,9 @@ class RunningSaveActivity : BaseActivity(), OnMapReadyCallback, OnSingleClickLis
               val myfile = File(saveFolder, path)                //로컬에 파일저장
               val out = FileOutputStream(myfile)
               it.compress(Bitmap.CompressFormat.PNG, 90, out)
-              save(myfile.path)
+              launch {
+                save(myfile.path)
+              }
             } catch (e: Exception) {
 
             }
@@ -139,7 +142,7 @@ class RunningSaveActivity : BaseActivity(), OnMapReadyCallback, OnSingleClickLis
   }
 
 
-  fun save(imgPath: String) {
+  suspend fun save(imgPath: String) {
     val saveFolder = File(baseContext.filesDir, "routeGPX") // 저장 경로
     if (!saveFolder.exists()) {       //폴더 없으면 생성
       saveFolder.mkdir()
@@ -183,6 +186,9 @@ class RunningSaveActivity : BaseActivity(), OnMapReadyCallback, OnSingleClickLis
     FBMapRepository().uploadMap(mapInfo, rankingData, activityData, timestamp.toString(), routeGpxFile, Uri.fromFile(File(imgPath)), trophyData)
     FBAchievementRepository().incrementPlays(mapInfo.makerId)
 
+
+    // 업로드하면 로컬 파일을 삭제
+    routeGPXUri.fileDelete()
 
     launch {
       val uid = UserInfo.autoLoginKey
