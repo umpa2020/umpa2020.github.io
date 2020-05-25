@@ -7,7 +7,6 @@ import android.os.Looper
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.model.LatLng
 import com.umpa2020.tracer.constant.Constants.Companion.LOCATION_INTERAL
-import com.umpa2020.tracer.util.Logg
 
 object LocationUpdatesComponent {
   private var iLocationProvider: ILocationProvider? = null
@@ -164,12 +163,12 @@ object LocationUpdatesComponent {
    *  백그라운드에서 실행 중일 때에도 앱이 정보를 수집할 필요가 없는 경우 위치 업데이트를 중지하면 전력 소모를 줄이는 데 도움이 될 수 있습니다.
    */
   private fun removeLocationUpdates() {
-    Logg.i("Removing location updates")
+
     try {
       fusedLocationClient.removeLocationUpdates(locationCallback)
     } catch (err: Exception) {
       //            Utils.setRequestingLocationUpdates(this, true);
-      Logg.e("Lost location permission. Could not remove updates. $err")
+
     }
   }
 

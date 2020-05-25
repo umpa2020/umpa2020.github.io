@@ -14,7 +14,6 @@ import com.umpa2020.tracer.main.ranking.RankRecyclerItemClickActivity
 import com.umpa2020.tracer.network.BaseFB.Companion.MAP_ID
 import com.umpa2020.tracer.network.FBLikesRepository
 import com.umpa2020.tracer.network.FBMapRepository
-import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.recycler_profilefragment_route_grid_image.view.*
@@ -83,7 +82,7 @@ class ProfileRouteRecyclerViewAdapter(val mdata: ArrayList<MapInfo>) :
 
   //item 사이즈, 데이터의 전체 길이 반ㅎ환
   override fun getItemCount(): Int {
-    Logg.d("데이터 크기 " + mdata.size.toString())
+
     //return 10
     return mdata.size
   }

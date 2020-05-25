@@ -30,7 +30,6 @@ import com.umpa2020.tracer.network.BaseFB.Companion.MAP_ID
 import com.umpa2020.tracer.network.FBMapRepository
 import com.umpa2020.tracer.network.FBStorageRepository
 import com.umpa2020.tracer.util.ChoicePopup
-import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.TTS
 import kotlinx.android.synthetic.main.activity_running.*
@@ -64,6 +63,7 @@ class ChallengeRacingActivity : BaseRunningActivity() {
 
   override fun onMapReady(googleMap: GoogleMap) {
     super.onMapReady(googleMap)
+    goToMapButton.visibility = View.VISIBLE
 
     val progressBar = MyProgressBar()
     progressBar.show()
@@ -72,6 +72,7 @@ class ChallengeRacingActivity : BaseRunningActivity() {
       while (!::mapRouteGPX.isInitialized) {
         delay(100)
       }
+      wedgedCamera=false
       traceMap.drawRoute(mapRouteGPX.trkList, mapRouteGPX.wptList).run {
         markerList = this.first
         turningPointList = this.second
@@ -111,6 +112,7 @@ class ChallengeRacingActivity : BaseRunningActivity() {
   }
 
   override fun onSingleClick(v: View?) {
+    super.onSingleClick(v)
     when (v!!.id) {
       R.id.runningStartButton -> {
         when (userState) {
@@ -120,10 +122,10 @@ class ChallengeRacingActivity : BaseRunningActivity() {
               getString(R.string.startpoint) + ARRIVE_BOUNDARY + getString(R.string.only_start),
               Toast.LENGTH_LONG
             ).show()
-            Logg.d("NORMAL")
+
           }
           UserState.READYTORACING -> {
-            Logg.d("READYTORACING")
+
             runningNotificationTextView.visibility = View.GONE
             start(getString(R.string.startRacing))
           }
@@ -154,17 +156,17 @@ class ChallengeRacingActivity : BaseRunningActivity() {
     super.updateLocation(curLoc)
     when (userState) {
       UserState.NORMAL -> {
-        Logg.d("NORMAL")
+
         if (!::mapRouteGPX.isInitialized) return
         checkIsReady()
       }
 
       UserState.READYTORACING -> {
-        Logg.d("READYTORACING")
+
         checkIsReadyToRacing()
       }
       UserState.RUNNING -> {
-        Logg.d("RUNNING")
+
         checkMarker()
         checkTurningPoint()
         checkDeviation()
@@ -249,14 +251,6 @@ class ChallengeRacingActivity : BaseRunningActivity() {
   }
 
   private fun checkDeviation() {
-    Logg.d(
-      PolyUtil.isLocationOnPath(
-        currentLatLng,
-        track,
-        false,
-        Constants.DEVIATION_DISTANCE
-      ).toString()
-    )
     //경로이탈검사
     if (PolyUtil.isLocationOnPath(
         currentLatLng,

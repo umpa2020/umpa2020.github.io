@@ -11,7 +11,6 @@ import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.gpx.WayPoint
 import com.umpa2020.tracer.gpx.WayPointType
 import com.umpa2020.tracer.gpx.WayPointType.*
-import com.umpa2020.tracer.util.Logg
 import org.w3c.dom.Node
 import java.io.File
 import java.io.FileInputStream
@@ -101,7 +100,7 @@ fun RouteGPX.addDirectionSign(): RouteGPX {
     val bunja = (x1 * y2 - y1 * x2)
     val bunmo = sqrt(x1.pow(2) + y1.pow(2)) * sqrt(x2.pow(2) + y2.pow(2))
     val angle = asin(bunja / bunmo) * 180 / PI
-    Logg.d("x1 : $x1 y1: $y1 x2 : $x2 y2: $y2 angle : $angle")
+
     if (abs(angle) >= TURNING_ANGLE) {
       if (angle > 0) {
         this.wptList.add(

@@ -12,7 +12,6 @@ import com.umpa2020.tracer.extensions.image
 import com.umpa2020.tracer.extensions.toAge
 import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.network.FBProfileRepository
-import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_my_information.*
@@ -52,7 +51,7 @@ class MyInformationActivity : BaseActivity(), OnSingleClickListener {
         finish()
       }
       R.id.profileImage -> {
-        Logg.i("앨범으로")
+
         goToAlbum()
       }
       R.id.profileChangeButton -> {

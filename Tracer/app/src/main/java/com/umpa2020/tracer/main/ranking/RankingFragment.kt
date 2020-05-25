@@ -17,7 +17,6 @@ import com.umpa2020.tracer.constant.Constants.Companion.MAX_DISTANCE
 import com.umpa2020.tracer.constant.Constants.Companion.MAX_SEEKERBAR
 import com.umpa2020.tracer.dataClass.MapInfo
 import com.umpa2020.tracer.network.FBRankingRepository
-import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.UserInfo
@@ -179,17 +178,17 @@ class RankingFragment : Fragment(), OnSingleClickListener, CoroutineScope by Mai
       if (limit == 0L) limit = 20L
       else rootInfoDatas.clear()
 
-      Logg.d("왜 안나와~~~1")
+
       if (rankingLatLng != null) {
         //실행순 버튼에 체크가 되어 있을 경우
         if (requireView().tuneRadioBtnExecute.isChecked) {
           requireView().rankingfiltermode.text = getString(R.string.execute)
           rankingRepo = FBRankingRepository()
 
-          Logg.d("왜 안나와~~~2")
+
 
           launch {
-            Logg.d("왜 안나와~~~3")
+
             progressBar.show()
             rankingRepo.listRanking(rankingLatLng!!, tuneDistance, "plays", limit).let {
               getRank(it, "plays")

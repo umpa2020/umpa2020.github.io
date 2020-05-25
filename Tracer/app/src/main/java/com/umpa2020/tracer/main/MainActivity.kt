@@ -14,7 +14,6 @@ import com.umpa2020.tracer.R
 import com.umpa2020.tracer.locationBackground.LocationBackgroundService
 import com.umpa2020.tracer.locationBackground.ServiceStatus
 import com.umpa2020.tracer.lockscreen.viewModel.LocationViewModel
-import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.TTS
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_main.*
@@ -48,9 +47,6 @@ class MainActivity : BaseActivity() {
     //TTS 한번 실행 해야 뒤에 동작이 정상적으로 됨
     TTS.speech(" ")
     startService() // 서비스 시작.
-
-    Logg.d("restart service")
-
     // FCM 테스트는 해당 함수 실행 후 서버에 저장된 토큰 값으로 Cloud Message 실행.
     registerPushToken()
   }
@@ -72,7 +68,7 @@ class MainActivity : BaseActivity() {
     val map = mutableMapOf<String, Any>()
     FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener { instanceIdResult ->
       pushToken = instanceIdResult.token
-      Logg.d(pushToken.toString())
+
       map["pushtoken"] = pushToken!!
       FirebaseFirestore.getInstance().collection("pushtokens").document(uid).set(map)
     }
@@ -81,12 +77,12 @@ class MainActivity : BaseActivity() {
 
   override fun onPause() {
     super.onPause()
-    Logg.d("onPause()")
+
   }
 
   override fun onDestroy() {
     super.onDestroy()
-    Logg.d("onDestroy()")
+
     stopService()
   }
 

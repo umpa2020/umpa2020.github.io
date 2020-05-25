@@ -13,6 +13,7 @@ import android.view.View
 import android.view.animation.*
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.preference.PreferenceManager
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
@@ -61,10 +62,14 @@ open class BaseRunningActivity : BaseActivity(), OnMapReadyCallback, OnSingleCli
   var markerCount = 1   //현재 찍힌 마커의 개수
   var timeWhenStopped: Long = 0   //일시정지된 시간
 
-  private var wedgedCamera = true // 사용자 카메라 인식 flag
+  var wedgedCamera = true // 사용자 카메라 인식 flag
   lateinit var locationBroadcastReceiver: LocationBroadcastReceiver
 
-  var zoomLevel: Float? = 16f // 줌 레벨 할당
+  companion object {
+    var zoomLevel: Float? = 16f // 줌 레벨 할당
+  }
+
+  //  var zoomLevel: Float? = 16f // 줌 레벨 할당
   lateinit var progressBar: MyProgressBar
 
   open fun init() {
@@ -89,24 +94,32 @@ open class BaseRunningActivity : BaseActivity(), OnMapReadyCallback, OnSingleCli
     traceMap.mMap.setOnCameraMoveStartedListener {
       // 공개 정적 최종 정수 REASON_GESTURE, 지도에서 사용자의 제스처에 응답하여 카메라 동작이 시작되었습니다.
       // 예를 들어, 이동, 기울기, 핀치 확대 또는 회전.
-      if (it == 1) {
+      if (it == 1 || it == 3) {
         wedgedCamera = false
       }
     }
 
     // 지도가 멈추면 줌 비율 얻어오기
     traceMap.mMap.setOnCameraIdleListener {
-      zoomLevel = traceMap.mMap.cameraPosition.zoom
+      zoomLevel = if (traceMap.mapDownFlag) {
+        traceMap.mapDownFlag = false
+        16F
+      } else {
+        traceMap.mMap.cameraPosition.zoom
+      }
     }
 
     // 내 위치 버튼 클릭 리스너
-    traceMap.mMap.setOnMyLocationButtonClickListener {
-      traceMap.moveCamera(currentLocation!!.toLatLng(), zoomLevel!!)
+    goToMyPosition.setOnClickListener {
+      Logg.d("줌 레벨 : $zoomLevel")
+      traceMap.moveCamera(currentLocation.toLatLng(), zoomLevel!!)
       wedgedCamera = true
-      true
     }
 
-    wedgedCamera = true
+    goToMapButton.setOnClickListener{
+      traceMap.mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(traceMap.trackBounds, 1080, 300, 20))
+      traceMap.mapDownFlag = true
+    }
   }
 
   // 위치를 브로드케스트에서 받아 지속적으로 업데이트
@@ -115,7 +128,7 @@ open class BaseRunningActivity : BaseActivity(), OnMapReadyCallback, OnSingleCli
     currentLocation = curLoc
     runningDistanceTextView.text = distance.prettyDistance
     runningSpeedTextView.text = speed.prettySpeed()
-    Logg.d("조졌다 ${speed.prettyDistance()}")
+
     // room DB에 속도, 거리 데이터 업데이트.
 //    recordViewModel.updateSpeedDistance(speed.lockSpeed, distance.lockDistance)
     locationViewModel.setDistanceSpeed(DistanceTimeData(distance.lockDistance, speed.lockSpeed))
@@ -151,7 +164,7 @@ open class BaseRunningActivity : BaseActivity(), OnMapReadyCallback, OnSingleCli
     // 시작 카운트 다운
     countDownTimer = object : CountDownTimer(Constants.MILLISINFUTURE, Constants.COUNTDOWN_INTERVAL) {
       override fun onTick(millisUntilFinished: Long) {
-        Logg.d("${millisUntilFinished / Constants.COUNTDOWN_INTERVAL}")
+
 
         // 3..2..1..로 보여주기 위해서 + 1
         countDownTextView.text =
@@ -243,10 +256,10 @@ open class BaseRunningActivity : BaseActivity(), OnMapReadyCallback, OnSingleCli
       if (wedgedCamera) { // 사용자 카메라 인식 flag
         // 유저 상태에 따라 카메라 설정
         if (userState == UserState.NORMAL) {
-//        Logg.d("노멀 : 유저 바라보는 방향으로 지도 이동 X")
+//
           traceMap.moveCamera(location.toLatLng(), zoomLevel!!)
         } else if (userState == UserState.RUNNING) {
-//        Logg.d("러닝 : 유저 바라보는 방향으로 지도 이동 O")
+//
           traceMap.moveCameraUserDirection(location, zoomLevel!!)
         }
       }
@@ -424,7 +437,7 @@ open class BaseRunningActivity : BaseActivity(), OnMapReadyCallback, OnSingleCli
   override fun onSingleClick(v: View?) {
     when (v!!.id) {
       R.id.runningHandle -> {
-        Logg.d("Click?")
+
         slidingDrawer()
       }
     }

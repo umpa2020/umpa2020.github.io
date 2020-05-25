@@ -7,7 +7,6 @@ import android.view.View
 import android.view.animation.Animation
 import android.view.animation.TranslateAnimation
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.umpa2020.tracer.util.Logg
 
 
 /**
@@ -30,22 +29,22 @@ open class ViewUnLock(val context: Context, val lockScreenView: ConstraintLayout
     when (event.action) {
       MotionEvent.ACTION_DOWN -> {
         firstTouchY = event.y
-        Logg.d("firstTouchY : $firstTouchY") // 위로 올리면 숫자가 줄어듬.
+
         isLockOpen = true
       }
 
       MotionEvent.ACTION_MOVE -> {
         if (isLockOpen) {
-          Logg.d(event.y.toString())
+
           // touchMoveY
           // 위로 올리면 음수
           // 아래로 내리면 양수
           val touchMoveY = event.y - firstTouchY
-          Logg.d("touchMoveY : $touchMoveY")
+
 
           if (touchMoveY < 0)
             lockScreenView.y = lockScreenView.y + touchMoveY
-          Logg.d("이동 : ${lockScreenView.y}")
+
 
 
           lastLayoutY = -lockScreenView.y
@@ -77,10 +76,10 @@ open class ViewUnLock(val context: Context, val lockScreenView: ConstraintLayout
     val displayMetrics = context.resources.displayMetrics
     val mDeviceHeight = displayMetrics.heightPixels
 
-    Logg.d(forgroundY.toString())
+
 
     if (forgroundY > 500) {
-      Logg.d("실행?")
+
       val animation = TranslateAnimation(0f, 0f, -forgroundY, -mDeviceHeight.toFloat())
       animation.duration = 300
       animation.setAnimationListener(object : Animation.AnimationListener {

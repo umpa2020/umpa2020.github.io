@@ -7,7 +7,6 @@ import android.widget.Toast
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.umpa2020.tracer.App
-import com.umpa2020.tracer.util.Logg
 import java.io.File
 import kotlin.math.ceil
 
@@ -96,7 +95,7 @@ fun Int.toDp(): Float {
 }
 
 fun Long.calcRank(best: Long, worst: Long): Int {
-  Logg.d("$this $best $worst")
+
   return when {
     this < (worst - best) * 0.00 + best -> 1
     this < (worst - best) * 0.25 + best -> 10
