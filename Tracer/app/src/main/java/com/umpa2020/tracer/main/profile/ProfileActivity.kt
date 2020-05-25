@@ -3,30 +3,28 @@ package com.umpa2020.tracer.main.profile
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.extensions.image
 import com.umpa2020.tracer.extensions.m_s
 import com.umpa2020.tracer.extensions.prettyDistance
+import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.main.profile.myActivity.ProfileActivityActivity
+import com.umpa2020.tracer.main.profile.myachievement.ProfileAchievementActivity
 import com.umpa2020.tracer.main.profile.myroute.ProfileRouteActivity
 import com.umpa2020.tracer.main.profile.settting.AppSettingActivity
 import com.umpa2020.tracer.network.BaseFB.Companion.USER_ID
 import com.umpa2020.tracer.network.FBProfileRepository
+import com.umpa2020.tracer.network.FBUsersRepository
 import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_profile.*
-import kotlinx.android.synthetic.main.activity_profile.appSettingButton
-import kotlinx.android.synthetic.main.activity_profile.profileFragmentTotalDistance
-import kotlinx.android.synthetic.main.activity_profile.profileFragmentTotalTime
-import kotlinx.android.synthetic.main.activity_profile.profileIdTextView
-import kotlinx.android.synthetic.main.activity_profile.profileImageView
-import kotlinx.android.synthetic.main.fragment_profile.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class ProfileActivity : AppCompatActivity(), OnSingleClickListener, CoroutineScope by MainScope() {
+class ProfileActivity : BaseActivity(), OnSingleClickListener {
   var userId = ""
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,16 +48,23 @@ class ProfileActivity : AppCompatActivity(), OnSingleClickListener, CoroutineSco
         profileImageView.image(it.imgPath)
         profileFragmentTotalDistance.text = it.distance.prettyDistance
         profileFragmentTotalTime.text = it.time.format(m_s)
-        progressBar.dismiss()
       }
       FBProfileRepository().getUserNickname(userId).let {
         profileIdTextView.text = it
+      }
+
+      FBUsersRepository().listUserAchievement(userId).let {
+        otherMedal1th?.text = it[0].toString()
+        otherMedal2nd?.text = it[1].toString()
+        otherMedal3rd?.text = it[2].toString()
+        progressBar.dismiss()
       }
     }
 
     otherProfileRouteTextView.setOnClickListener(this)
     appSettingButton.setOnClickListener(this)
     otherProfileRecordTextView.setOnClickListener(this)
+    otherProfileAchievementTextView.setOnClickListener(this)
   }
 
   override fun onSingleClick(v: View?) {
@@ -74,8 +79,14 @@ class ProfileActivity : AppCompatActivity(), OnSingleClickListener, CoroutineSco
         val nextIntent = Intent(this, AppSettingActivity::class.java)
         startActivity(nextIntent)
       }
-      R.id.profileRecordTextView -> { // 나의 활동 액티비티
+      R.id.otherProfileRecordTextView -> { // 나의 활동 액티비티
         val nextIntent = Intent(this, ProfileActivityActivity::class.java)
+        nextIntent.putExtra(USER_ID, userId)
+        startActivity(nextIntent)
+      }
+      R.id.otherProfileAchievementTextView -> {
+        val nextIntent = Intent(this, ProfileAchievementActivity::class.java)
+        nextIntent.putExtra(USER_ID, userId)
         startActivity(nextIntent)
       }
     }

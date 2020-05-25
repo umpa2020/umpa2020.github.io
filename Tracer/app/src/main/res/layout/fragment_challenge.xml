@@ -87,10 +87,10 @@
           android:text="@string/tournament_search" />
 
         <LinearLayout
-          android:layout_marginTop="10dp"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_marginLeft="20dp"
+          android:layout_marginTop="10dp"
           android:layout_marginRight="20dp"
           android:gravity="center_horizontal"
           android:orientation="horizontal">
@@ -158,20 +158,20 @@
       </LinearLayout>
 
       <LinearLayout
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
         style="@style/subjectRelativeLayoutStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp">
 
         <TextView
-          android:layout_marginLeft="15dp"
           style="@style/subjectName"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_gravity="left"
+          android:layout_marginLeft="15dp"
           android:paddingTop="20dp"
           android:text="@string/tournament_list" />
 

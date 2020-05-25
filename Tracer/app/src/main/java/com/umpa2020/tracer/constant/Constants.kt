@@ -51,7 +51,7 @@ class Constants {
     const val MINIMUM_STOPPING_DISTANCE = 200
 
     //회전 판정 각도
-    const val TURNING_ANGLE = 30
+    const val TURNING_ANGLE = 60
 
     //중복 클릭 방지 시간 설정 ( 해당 시간 이후에 다시 클릭 가능 )
     const val MIN_CLICK_INTERVAL: Long = 600
@@ -64,7 +64,13 @@ class Constants {
     const val MILLISINFUTURE = 3000L
     const val COUNTDOWN_INTERVAL = 1000L
 
+    const val RACE_RESULT = "RACE_RESULT"
+    const val RANKING_DATA = "RANKING_DATA"
+    const val CHALLENGE_ID = "CHALLENGE_ID"
+    const val RACING_DISTANCE = "RACING_DISTANCE"
 
+
+    const val DRAWER_DURATION = 500L
     const val TIMESTAMP_LENGTH = 13
     var testId = 0
   }

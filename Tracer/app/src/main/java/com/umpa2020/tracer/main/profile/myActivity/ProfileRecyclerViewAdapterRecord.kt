@@ -7,18 +7,27 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.umpa2020.tracer.R
+import com.umpa2020.tracer.constant.Constants
+import com.umpa2020.tracer.constant.Constants.Companion.RACE_RESULT
+import com.umpa2020.tracer.constant.Constants.Companion.RANKING_DATA
 import com.umpa2020.tracer.dataClass.ActivityData
 import com.umpa2020.tracer.extensions.Y_M_D
 import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.extensions.image
 import com.umpa2020.tracer.main.ranking.RankRecyclerItemClickActivity
-import com.umpa2020.tracer.network.BaseFB
+import com.umpa2020.tracer.main.start.challengeracing.ChallengeRacingFinishActivity
+import com.umpa2020.tracer.main.start.racing.RacingFinishActivity
+import com.umpa2020.tracer.network.BaseFB.ActivityMode.*
+import com.umpa2020.tracer.network.BaseFB.Companion.MAP_ID
+import com.umpa2020.tracer.network.FBChallengeRepository
 import com.umpa2020.tracer.network.FBMapRepository
+import com.umpa2020.tracer.network.FBRacingRepository
 import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.recycler_profile_user_record_item.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+import org.jetbrains.anko.toast
 
 class ProfileRecyclerViewAdapterRecord(val datas: MutableList<ActivityData>) :
   RecyclerView.Adapter<ProfileRecyclerViewAdapterRecord.MyViewHolder>(), CoroutineScope by MainScope() {
@@ -35,24 +44,28 @@ class ProfileRecyclerViewAdapterRecord(val datas: MutableList<ActivityData>) :
   }
 
   override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-    val singleItem1 = datas[position]
+    val activityData = datas[position]
 
     launch {
-      holder.mapImageView.image(FBMapRepository().getMapImage(singleItem1.mapId!!))
-      FBMapRepository().getMapTitle(singleItem1.mapId)?.let {
-        val time = singleItem1.time!!.toLong().format(Y_M_D)
-        when (singleItem1.mode) {
-          BaseFB.ActivityMode.RACING_SUCCESS -> {
+      holder.mapImageView.image(FBMapRepository().getMapImage(activityData.mapId!!))
+      FBMapRepository().getMapTitle(activityData.mapId)?.let {
+        val time = activityData.time!!.toLong().format(Y_M_D)
+        when (activityData.mode) {
+          RACING_SUCCESS -> {
             holder.activityText.text =
               String.format(context!!.getString(R.string.racing_go_the_distance), it, time)
           }
-          BaseFB.ActivityMode.RACING_FAIL -> {
+          RACING_FAIL -> {
             holder.activityText.text =
               String.format(context!!.getString(R.string.racing_fail), it, time)
           }
-          BaseFB.ActivityMode.MAP_SAVE -> {
+          MAP_SAVE -> {
             holder.activityText.text =
               String.format(context!!.getString(R.string.map_save), it, time)
+          }
+          CHALLENGE -> {
+            holder.activityText.text =
+              String.format(context!!.getString(R.string.activity_challenge), it, time)
           }
         }
       }
@@ -61,9 +74,45 @@ class ProfileRecyclerViewAdapterRecord(val datas: MutableList<ActivityData>) :
     //클릭하면 맵 상세보기 페이지로 이동
     holder.itemView.setOnClickListener(object : OnSingleClickListener {
       override fun onSingleClick(v: View?) {
-        val nextIntent = Intent(context, RankRecyclerItemClickActivity::class.java)
-        nextIntent.putExtra("mapId", singleItem1.mapId) //mapTitle 정보 인텐트로 넘김
-        context!!.startActivity(nextIntent)
+        when (activityData.mode) {
+          MAP_SAVE -> {
+            val nextIntent = Intent(context, RankRecyclerItemClickActivity::class.java)
+            nextIntent.putExtra(MAP_ID, activityData.mapId) //mapTitle 정보 인텐트로 넘김
+            context!!.startActivity(nextIntent)
+          }
+          RACING_SUCCESS -> {
+            launch {
+              val nextIntent = Intent(context, RacingFinishActivity::class.java).apply {
+                putExtra(MAP_ID, activityData.mapId) //mapTitle 정보 인텐트로 넘김
+                putExtra(RACE_RESULT, true)
+                val rankingData = FBRacingRepository().getRankingData(activityData.dataRef!!)
+                putExtra(RANKING_DATA, rankingData)
+              }
+              context!!.startActivity(nextIntent)
+            }
+
+          }
+          RACING_FAIL -> {
+            context!!.toast("실패한 경기는 조회할 수 없습니다")
+          }
+          CHALLENGE -> {
+            launch {
+              val challengeRecordData = FBChallengeRepository().getChallengeRecord(activityData.dataRef!!)
+              val nextIntent = Intent(context, ChallengeRacingFinishActivity::class.java).apply {
+                putExtra(Constants.CHALLENGE_ID, activityData.mapId)
+                putExtra(Constants.RACING_DISTANCE, activityData.mapId)
+                putExtra("RecordList", challengeRecordData!!.recordList!!.toLongArray())
+                putExtra("BestList", challengeRecordData.bestList!!.toLongArray())
+                putExtra("WorstList", challengeRecordData.worstList!!.toLongArray())
+              }
+              context!!.startActivity(nextIntent)
+            }
+          }
+          null -> {
+            //do nothing
+          }
+        }
+
       }
     })
   }

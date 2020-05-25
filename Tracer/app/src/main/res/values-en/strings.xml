@@ -98,6 +98,7 @@
   <string name="racing_go_the_distance">You went the distance %1$s %2$s.</string>
   <string name="racing_fail">"You failed %1$s on %2$s."</string>
   <string name="map_save">"You made %1$s on %2$s."</string>
+  <string name="activity_challenge">"You challenged %1$s on %2$s."</string>
   <string name="renewal">"Unable to break record and not reflected in ranking."</string>
 
 
@@ -147,6 +148,7 @@
   <string name="twohundred_save">If you stop when the distance is less than 200m,\nyou cannot save.\n\nWould you like to stop?</string>
   <string name="stop_save">If you stop now,\nsaving is not possible.\n\nWould you like to stop?</string>
   <string name="like_logout">Would you like to logout?</string>
+  <string name="membership_withdrawal">Would you like to membership withdrawal?</string>
   <string name="sort">Sort by</string>
   <string name="execute_order">Execute order</string>
   <string name="like_order">Like order</string>
@@ -239,7 +241,7 @@
 
   <!--activity_profile-->
   <string name="other_achivement">Achivement</string>
-
+  <string name="not_specified">not specified(Please refer to the website)</string>
 
 
 </resources>

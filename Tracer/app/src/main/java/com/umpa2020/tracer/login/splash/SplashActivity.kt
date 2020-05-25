@@ -6,19 +6,19 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Handler
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.chibatching.kotpref.Kotpref
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.extensions.show
 import com.umpa2020.tracer.login.LoginActivity
+import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_splash.*
 import kotlin.system.exitProcess
 
-class SplashActivity : AppCompatActivity() {
+class SplashActivity : BaseActivity() {
 
   private val multiplePermissionsCode = 100          //권한
   private val requiredPermissions = arrayOf(
@@ -34,21 +34,6 @@ class SplashActivity : AppCompatActivity() {
     Kotpref.init(this) // Kotpref 사용을 위한 singleton context 저장
 
     checkPermissions()          //모든 권한 확인
-  }
-
-  override fun onPause() {
-    super.onPause()
-
-  }
-
-  override fun onStop() {
-    super.onStop()
-
-  }
-
-  override fun onDestroy() {
-    super.onDestroy()
-
   }
 
   override fun onBackPressed() {
@@ -132,6 +117,5 @@ class SplashActivity : AppCompatActivity() {
       }
     }
     launchApp()
-    UserInfo.permission = 1
   }
 }

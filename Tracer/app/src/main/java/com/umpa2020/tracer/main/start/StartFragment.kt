@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Context.LAYOUT_INFLATER_SERVICE
 import android.content.Intent
 import android.content.IntentFilter
-import android.content.pm.PackageInfo
 import android.graphics.Color
 import android.location.Geocoder
 import android.location.Location
@@ -24,7 +23,6 @@ import com.google.android.gms.maps.model.*
 import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
-import com.umpa2020.tracer.dataClass.MapInfo
 import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.extensions.*
 import com.umpa2020.tracer.gpx.WayPointType
@@ -35,9 +33,7 @@ import com.umpa2020.tracer.main.start.running.RunningActivity
 import com.umpa2020.tracer.map.TraceMap
 import com.umpa2020.tracer.network.BaseFB.Companion.MAP_ID
 import com.umpa2020.tracer.network.FBMapRepository
-import com.umpa2020.tracer.network.FBProfileRepository
 import com.umpa2020.tracer.network.FBStorageRepository
-import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.UserInfo
@@ -47,15 +43,10 @@ import kotlinx.coroutines.*
 import java.io.File
 
 
-class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener,CoroutineScope by MainScope() {
+class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener, CoroutineScope by MainScope() {
   var traceMap: TraceMap? = null
   var currentLocation: Location? = null
   var routeMarkers = mutableListOf<Marker>()
-
-  // 처음 화면 시작에서 주변 route 마커 찍어주기 위함
-  val STRAT_FRAGMENT_NEARMAP = 30
-  val NEARMAPFALSE = 41
-  var nearMaps: ArrayList<MapInfo> = arrayListOf()
   var wedgedCamera = true // 카메로 고정 flag
   val progressBar = MyProgressBar()
   var firstFlag = true
@@ -108,16 +99,18 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener,Coro
           saveFolder.mkdir()
         }
         val routeGpxUri = gpx.classToGpx(saveFolder.path).toString()
-        Logg.d("$routeGpxUri")
+
       }
     }
   }
-  val jobList= mutableListOf<Job>()
+
+  val jobList = mutableListOf<Job>()
+
   /**
    *  현재 맵 보이는 범위로 루트 검색
    */
   private fun searchThisArea() {
-    Logg.d("1번선수")
+
     progressBar.show()
     val bound = traceMap!!.mMap.projection.visibleRegion.latLngBounds
     launch {
@@ -133,7 +126,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener,Coro
           routeMarkers.clear()
           nearMapList.forEach { nearMap ->
             //데이터 바인딩
-            Logg.d("asd : ${FBProfileRepository().getProfile(nearMap.makerId).imgPath}")
+
             routeMarkers.add(
               traceMap!!.mMap.addMarker(
                 MarkerOptions()
@@ -143,7 +136,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener,Coro
                   .icon(traceMap?.makeProfileIcon(mCustomMarkerView, nearMap.makerId))
 
               ).apply {
-                Logg.d("nani0-2")
+
                 tag = nearMap.mapId
               }
             )
@@ -167,18 +160,18 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener,Coro
     val addressList =
       geocoder.getFromLocationName(mainStartSearchTextView.text.toString(), 10)
 
-    Logg.i(addressList.size.toString())
+
     for (i in 0 until addressList.size)
-      Logg.i(addressList[i].toString())
+
 
     // 최대 검색 결과 개수
-    if (addressList.size == 0) {
-      getString(R.string.cannot_find).show()
-    } else {
-      // mainStartSearchTextView.setText(addressList[0].getAddressLine(0))
-      traceMap!!.moveCamera(LatLng(addressList[0].latitude, addressList[0].longitude), zoomLevel!!)
-      searchThisArea()
-    }
+      if (addressList.size == 0) {
+        getString(R.string.cannot_find).show()
+      } else {
+        // mainStartSearchTextView.setText(addressList[0].getAddressLine(0))
+        traceMap!!.moveCamera(LatLng(addressList[0].latitude, addressList[0].longitude), zoomLevel!!)
+        searchThisArea()
+      }
 
     // 키보드 숨기기
     (requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
@@ -189,7 +182,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener,Coro
     inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
   ): View? {
 
-    Logg.d("onCreateView()")
+
     val view = inflater.inflate(R.layout.fragment_start, container, false)
 
     view.test.setOnClickListener {
@@ -213,7 +206,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener,Coro
 
     // 검색 창 키보드에서 엔터키 리스너
     view.mainStartSearchTextView.setOnEditorActionListener { p0, p1, p2 ->
-      Logg.i("엔터키 클릭")
+
       search()
       true
     }
@@ -225,7 +218,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener,Coro
   }
 
   override fun onMapReady(googleMap: GoogleMap) {
-    Logg.d("onMapReady")
+
 
     traceMap = TraceMap(googleMap) //구글맵
     traceMap!!.mMap.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
@@ -233,7 +226,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener,Coro
 
 
     // Shared의 값을 받아와서 초기 카메라 위치 설정.
-    Logg.d("${UserInfo.lat} , ${UserInfo.lng}")
+
 
     val latlng = LatLng(UserInfo.lat.toDouble(), UserInfo.lng.toDouble())
     traceMap!!.initCamera(latlng)
@@ -241,7 +234,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener,Coro
     // 카메라 이동 중일 때
     traceMap!!.mMap.setOnCameraMoveListener {
       wedgedCamera = false
-      Logg.d("카메라 이동 중 $wedgedCamera")
+
       mainStartSearchAreaButton.visibility = View.GONE
     }
 
@@ -250,7 +243,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener,Coro
 
       // 여기서 검색 버튼 보여주기
       zoomLevel = traceMap!!.mMap.cameraPosition.zoom
-      Logg.d("카메라 멈춤 $wedgedCamera, 줌 레벨 : $zoomLevel")
+
       mainStartSearchAreaButton.visibility = View.VISIBLE
     }
 
@@ -259,7 +252,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener,Coro
       traceMap!!.mMap
       wedgedCamera = true
       traceMap!!.moveCamera(currentLocation!!.toLatLng(), zoomLevel!!)
-      Logg.d("내 위치로 카메라 이동 $wedgedCamera")
+
       true
     }
 
@@ -274,7 +267,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener,Coro
 
     traceMap!!.mMap.setOnMarkerClickListener {
       it.showInfoWindow()
-     launch {
+      launch {
         if (it.tag != null) {
           FBMapRepository().getMapInfo(it.tag as String)?.let {
             FBStorageRepository().getFile(it.routeGPXPath).gpxToClass().let {
@@ -296,17 +289,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener,Coro
     LocalBroadcastManager.getInstance(this.requireContext())
       .registerReceiver(locationBroadcastReceiver, IntentFilter("custom-event-name"))
 
-    // Shared의 마지막 위치였던거 확인.
-    Logg.d("${UserInfo.lat} , ${UserInfo.lng}")
   }
-
-  fun getVersionInfo() {
-    val info: PackageInfo =
-      requireContext().packageManager.getPackageInfo(App.instance.packageName, 0)
-    val version = info.versionName
-    Logg.d(version.toString())
-  }
-
 
   lateinit var loadTrack: Polyline
 
@@ -372,7 +355,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener,Coro
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    Logg.d("onViewCreated()")
+
 
     view.mainStartRunning.setOnClickListener(this)
     view.mainStartSearchAreaButton.setOnClickListener(this)
@@ -390,11 +373,11 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener,Coro
     // 브로드 캐스트 해제
     LocalBroadcastManager.getInstance(this.requireContext())
       .unregisterReceiver(locationBroadcastReceiver)
-    jobList.forEach {it.cancel() }
+    jobList.forEach { it.cancel() }
     cancel()
     //Shared로 마지막 위치 업데이트
     if (currentLocation != null) {
-      Logg.d("마지막 위치 업데이트")
+
       UserInfo.lat = currentLocation!!.latitude.toFloat()
       UserInfo.lng = currentLocation!!.longitude.toFloat()
     }
@@ -403,7 +386,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener,Coro
   override fun onDestroy() {
     super.onDestroy()
     zoomLevel = 16f
-    Logg.d("onDestroy()")
+
   }
 
   // 초기에 위치 받아오면 카메라 설정.
@@ -419,7 +402,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener,Coro
           firstFlag = false
 //          it.initCamera(currentLocation!!.toLatLng())
         }
-//        Logg.d("${currentLocation}")
+//
       }
     }
   }

@@ -45,16 +45,16 @@
 
         <TextView
           android:id="@+id/informationTextView"
+          style="@style/subjectName"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:text="@string/mapinformation"
-          style="@style/subjectName"/>
+          android:text="@string/mapinformation" />
 
         <LinearLayout
-          android:layout_below="@+id/informationTextView"
           android:id="@+id/linearlayout"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
+          android:layout_below="@+id/informationTextView"
           android:layout_marginTop="20dp"
           android:orientation="horizontal">
 
@@ -119,30 +119,30 @@
           android:src="@drawable/ic_sneaker_for_running" />
 
         <TextView
-          android:layout_marginLeft="0dp"
-          android:layout_marginRight="0dp"
           android:id="@+id/divide"
-          android:layout_marginTop="20dp"
-          android:layout_marginBottom="20dp"
+          style="@style/divisionTextView"
           android:layout_below="@+id/linearlayout"
-          style="@style/divisionTextView"/>
+          android:layout_marginLeft="0dp"
+          android:layout_marginTop="20dp"
+          android:layout_marginRight="0dp"
+          android:layout_marginBottom="20dp" />
 
         <TextView
-          android:layout_marginLeft="10dp"
           android:id="@+id/mapnameTextView"
-          android:layout_below="@id/divide"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="@string/mapname"/>
+          android:layout_below="@id/divide"
+          android:layout_marginLeft="10dp"
+          android:text="@string/mapname" />
 
         <TextView
-          android:paddingBottom="20dp"
-          android:layout_below="@+id/mapnameTextView"
           android:id="@+id/rankRecyclerMapTitle"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
+          android:layout_below="@+id/mapnameTextView"
           android:layout_marginLeft="20dp"
           android:layout_marginTop="10dp"
+          android:paddingBottom="20dp"
           android:textColor="@color/lightblack"
           android:textSize="18dp" />
 

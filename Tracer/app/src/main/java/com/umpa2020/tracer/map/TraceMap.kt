@@ -9,18 +9,19 @@ import android.view.View
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.*
+import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.RacerData
 import com.umpa2020.tracer.extensions.bounds
-import com.umpa2020.tracer.extensions.image
 import com.umpa2020.tracer.extensions.makingIcon
 import com.umpa2020.tracer.extensions.toLatLng
 import com.umpa2020.tracer.gpx.WayPoint
 import com.umpa2020.tracer.gpx.WayPointType.*
 import com.umpa2020.tracer.network.FBProfileRepository
-import com.umpa2020.tracer.util.Logg
+import com.umpa2020.tracer.util.GlideApp
 import kotlinx.android.synthetic.main.profile_marker.view.*
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 
 class TraceMap(val mMap: GoogleMap) {
@@ -34,12 +35,14 @@ class TraceMap(val mMap: GoogleMap) {
   var markerList = mutableListOf<Marker>()
   var turningPointList = mutableListOf<Marker>()
   val unPassedIcon = R.drawable.ic_unpassed_circle.makingIcon()
-
+  var mapDownFlag = false
+  lateinit var trackBounds : LatLngBounds
   fun drawRoute(
     trkList: List<WayPoint>,
     wptList: List<WayPoint>
   ): Pair<MutableList<Marker>, MutableList<Marker>> {
-    Logg.d("Map is draw")
+
+
     val track = trkList.map { it.toLatLng() }
     loadTrack =
       mMap.addPolyline(
@@ -51,16 +54,17 @@ class TraceMap(val mMap: GoogleMap) {
       )        //경로를 그릴 폴리라인 집합
 
     wptList.forEach { addMarker(it) }
-    val trackBounds = track.toMutableList().bounds()
+    trackBounds = track.toMutableList().bounds()
 
     mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(trackBounds, 1080, 300, 20))
+    mapDownFlag = true
     return Pair(markerList, turningPointList)
   }
 
   var polyFlag = true
   lateinit var poly: Polyline
   fun drawPolyLine(preLoc: LatLng, curLoc: LatLng) {
-    Logg.d("making polyline $preLoc $curLoc")
+
 
     if (polyFlag) {
       //polyline 그리기
@@ -75,12 +79,12 @@ class TraceMap(val mMap: GoogleMap) {
       val a = poly.points
       a.add(curLoc)
       poly.points = a
-      Logg.d("add new point $curLoc")
+
     }
   }
 
   fun moveCameraUserDirection(curLoc: Location, zoomLevel: Float) {
-    Logg.d("move camera $curLoc")
+
     mMap.animateCamera(
       CameraUpdateFactory.newCameraPosition(
         CameraPosition(curLoc.toLatLng()/*좌표*/, zoomLevel/*줌 레벨*/, 0F/*기울기 각도*/, curLoc.bearing/*베어링 각도*/)
@@ -107,7 +111,7 @@ class TraceMap(val mMap: GoogleMap) {
   }
 
   suspend fun addRacer(latlng: LatLng, racerData: RacerData, mCustomMarkerView: View) {
-    Logg.d("racer : before add")
+
     racerList.add(
       mMap.addMarker(
         MarkerOptions()
@@ -119,14 +123,20 @@ class TraceMap(val mMap: GoogleMap) {
           .draggable(true)
       )
     )
-    Logg.d("racer : after add")
+
   }
 
   suspend fun makeProfileIcon(view: View, uid: String): BitmapDescriptor {
-    Logg.d("start glide")
-    view.profile_image.image(FBProfileRepository().getProfile(uid).imgPath)
-    delay(100)
-    Logg.d("finish glide")
+    val drawable = withContext(Dispatchers.IO) {
+      GlideApp.with(App.instance.context())
+        .load(FBProfileRepository().getProfile(uid).imgPath)
+        .override(1024, 980)
+        .error(R.drawable.logosquare)
+        .dontAnimate()
+        .dontTransform().submit()
+        .get()
+    }
+    view.profile_image.setImageDrawable(drawable)
     view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
     view.layout(0, 0, view.measuredWidth, view.measuredHeight)
     val bitmap = Bitmap.createBitmap(

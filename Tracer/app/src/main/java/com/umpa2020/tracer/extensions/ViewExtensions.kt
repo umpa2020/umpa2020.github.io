@@ -12,7 +12,7 @@ fun ImageView.image(uri: Uri?) {
     GlideApp.with(App.instance.context())
       .load(it)
       .override(1024, 980)
-      .error(R.drawable.ic_racer1)
+      .error(R.drawable.logosquare)
       .dontAnimate()
       .dontTransform()
       .into(this)

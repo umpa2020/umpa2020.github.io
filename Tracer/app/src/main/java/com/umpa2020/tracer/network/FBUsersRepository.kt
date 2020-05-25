@@ -2,7 +2,6 @@ package com.umpa2020.tracer.network
 
 import com.google.firebase.firestore.DocumentSnapshot
 import com.umpa2020.tracer.dataClass.*
-import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.coroutines.tasks.await
 
@@ -69,9 +68,6 @@ class FBUsersRepository : BaseFB() {
 
   fun createUserInfo(data: Users) {
     usersCollectionRef.document(data.userId).set(data)
-      .addOnSuccessListener { Logg.d("DocumentSnapshot successfully written!") }
-      .addOnFailureListener { e -> Logg.w("Error writing document$e") }
-
     FBAchievementRepository().createAchievement(data.userId)
   }
 
@@ -81,9 +77,9 @@ class FBUsersRepository : BaseFB() {
   }
 
 
-  suspend fun listUserMakingActivity(limit: Long): List<ActivityData>? {
-    return (if (globalStartAfter == null) db.collection(USERS).document(UserInfo.autoLoginKey).collection(ACTIVITIES)
-    else usersCollectionRef.document(UserInfo.autoLoginKey).collection(ACTIVITIES).startAfter(globalStartAfter!!))
+  suspend fun listUserMakingActivity(userId: String, limit: Long): List<ActivityData>? {
+    return (if (globalStartAfter == null) db.collection(USERS).document(userId).collection(ACTIVITIES)
+    else usersCollectionRef.document(userId).collection(ACTIVITIES).startAfter(globalStartAfter!!))
       .limit(limit).get().await().apply {
         if (documents.isEmpty())
           return null
@@ -92,11 +88,9 @@ class FBUsersRepository : BaseFB() {
   }
 
   suspend fun listUserRoute(uid: String, limit: Long): List<MapInfo>? {
-    Logg.d("ssmm11 global = $globalStartAfter")
-
     val infoDatas =
       if (globalStartAfter == null) {
-        mapsCollectionRef.whereEqualTo(MAKER_ID, uid)
+        mapsCollectionRef.whereEqualTo(MAKER_ID, uid).whereEqualTo(CHALLENGE, false)
       } else {
         mapsCollectionRef.whereEqualTo(MAKER_ID, uid).startAfter(globalStartAfter!!)
       }.limit(limit).get().await().apply {

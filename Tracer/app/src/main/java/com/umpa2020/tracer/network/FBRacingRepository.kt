@@ -1,6 +1,7 @@
 package com.umpa2020.tracer.network
 
 import android.net.Uri
+import com.google.firebase.firestore.DocumentReference
 import com.umpa2020.tracer.dataClass.MapInfo
 import com.umpa2020.tracer.dataClass.RankingData
 import com.umpa2020.tracer.dataClass.RouteGPX
@@ -22,7 +23,7 @@ class FBRacingRepository : BaseFB() {
     racerData: MapInfo,
     rankingData: RankingData,
     racerGpxFile: Uri
-  ) {
+  ): DocumentReference {
     val timestamp = Date().time
     //besttime인지 체크
     db.collection(MAPS).document(racerData.mapId).collection(RANKING)
@@ -45,6 +46,8 @@ class FBRacingRepository : BaseFB() {
 
     //upload racerGpxFile
     FBStorageRepository().uploadFile(racerGpxFile, rankingData.racerGPX!!)
+    return db.collection(MAPS).document(racerData.mapId).collection(RANKING)
+      .document(UserInfo.autoLoginKey + timestamp)
   }
 
 
@@ -57,5 +60,9 @@ class FBRacingRepository : BaseFB() {
   suspend fun getOtherData(mapId: String, userId: String): RankingData {
     return mapsCollectionRef.document(mapId).collection(RANKING).whereEqualTo(CHALLENGER_Id, userId).whereEqualTo(BEST_TIME, true)
       .get().await().documents.first().toObject(RankingData::class.java)!!
+  }
+
+  suspend fun getRankingData(rankingData: DocumentReference): RankingData {
+    return rankingData.get().await().toObject(RankingData::class.java)!!
   }
 }

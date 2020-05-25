@@ -3,7 +3,6 @@ package com.umpa2020.tracer.login
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -15,6 +14,7 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.login.join.SignUpActivity
+import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.ProgressBar
@@ -22,7 +22,7 @@ import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_login.*
 
 
-class LoginActivity : AppCompatActivity(), OnSingleClickListener {
+class LoginActivity : BaseActivity(), OnSingleClickListener {
 
 
   // firebase Auth

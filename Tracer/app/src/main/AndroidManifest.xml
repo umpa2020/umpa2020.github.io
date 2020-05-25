@@ -3,6 +3,8 @@
   xmlns:tools="http://schemas.android.com/tools"
   package="com.umpa2020.tracer">
 
+  <uses-permission android:name="android.permission.WAKE_LOCK" />
+
   <uses-permission android:name="android.permission.INTERNET" />
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
   <!--
@@ -35,6 +37,7 @@
     android:supportsRtl="true"
     android:theme="@style/AppTheme"
     tools:ignore="GoogleAppIndexingWarning">
+
     <service
       android:name=".MyFirebaseMessageService"
       android:exported="false">
@@ -42,12 +45,15 @@
         <action android:name="com.google.firebase.MESSAGING_EVENT" />
       </intent-filter>
     </service>
-
-    <activity android:name=".login.join.AgeSelectActivity" />
-    <activity android:name=".main.challenge.ChallengeDataSettingActivity" />
-
+    <service
+      android:name=".locationBackground.LocationBackgroundService"
+      android:exported="false" />
     <service android:name=".lockscreen.service.LockScreenService" />
 
+
+    <activity android:name=".main.BaseActivity" />
+    <activity android:name=".login.join.AgeSelectActivity" />
+    <activity android:name=".main.challenge.ChallengeDataSettingActivity" />
     <activity
       android:name=".lockscreen.LockScreenActivity"
       android:launchMode="singleInstance"
@@ -63,11 +69,6 @@
     <activity android:name=".main.profile.ProfileActivity" />
     <activity android:name=".main.start.challengeracing.ChallengeRacingActivity" />
     <activity android:name=".main.start.challengeracing.ChallengeRacingFinishActivity" />
-
-    <service
-      android:name=".locationBackground.LocationBackgroundService"
-      android:exported="false" />
-
     <activity android:name=".main.start.racing.RacingFinishActivity" />
     <activity android:name=".main.start.racing.RacingActivity" />
     <activity android:name=".login.join.GenderSelectActivity" />
@@ -83,8 +84,7 @@
     <activity android:name=".main.ranking.RankingMapDetailActivity" />
     <activity
       android:name=".main.start.running.RunningSaveActivity"
-      android:windowSoftInputMode="adjustPan" />
-    <!--    <activity android:name=".main.start.BaseRunningActivity"/>-->
+      android:windowSoftInputMode="adjustPan" /> <!-- <activity android:name=".main.start.BaseRunningActivity"/> -->
     <activity android:name=".main.start.running.RunningActivity" />
     <activity android:name=".main.MainActivity" />
     <activity android:name=".login.LoginActivity" />

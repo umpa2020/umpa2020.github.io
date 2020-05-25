@@ -14,7 +14,6 @@ import androidx.preference.PreferenceManager
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.umpa2020.tracer.main.MainActivity
-import com.umpa2020.tracer.util.Logg
 
 /**
  *  FCM(Firebase Cloud Messaging)을 받기 위한 서비스
@@ -26,7 +25,7 @@ class MyFirebaseMessageService : FirebaseMessagingService() {
 
   override fun onMessageReceived(remoteMessage: RemoteMessage) {
     // TODO(developer): Handle FCM messages here.
-    Logg.d("From: " + remoteMessage.from)
+
 
     // 제공되는 기능이 앱 다운 및 첫 실행과 동시에 자동 실행이라 해당 서비스 start,stop 여부가 불명.
     // 그래서 일단 Shared 값으로 메시지만 보이고 안보이도록 설정.
@@ -34,35 +33,12 @@ class MyFirebaseMessageService : FirebaseMessagingService() {
     if (prefs.getBoolean("notificationSetting", true)) {
       // 메시지에 알림 페이로드가 포함되어 있는지 확인하십시오.
       remoteMessage.notification?.let {
-        Logg.d("Message Notification Title:  ${remoteMessage.notification!!.title}")
-        Logg.d("Message Notification Body:  ${remoteMessage.notification!!.body}")
+
+
         sendNotification(remoteMessage.notification!!.title!!, remoteMessage.notification!!.body!!)
       }
     }
   }
-
-  //토큰이 변경되었을때 호출
-//  override fun onNewToken(token: String) {
-//    super.onNewToken(token)
-//    //서버로 바뀐토큰 전송
-//    // If you want to send messages to this application instance or
-//    // manage this apps subscriptions on the server side, send the
-//    // Instance ID token to your app server.
-//
-//    //v17.0.0 이후부터는 onTokenRefresh()-depriciated
-////    var pushToken = FirebaseInstanceId.getInstance().token
-//    var pushToken: String? = null
-//    Logg.d("Refreshed token : $token")
-////    val uid = auth.currentUser!!.uid
-//    val uid = FirebaseAuth.getInstance().currentUser!!.uid
-//    val map = mutableMapOf<String, Any>()
-//    FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener { instanceIdResult ->
-//      pushToken = instanceIdResult.token
-//      Logg.d(pushToken.toString())
-//      map["pushtoken"] = pushToken!!
-//      FirebaseFirestore.getInstance().collection("pushtokens").document(uid).set(map)
-//    }
-//  }
 
   private fun sendNotification(messageTitle: String, messageBody: String) {
     val intent = Intent(this, MainActivity::class.java).apply {

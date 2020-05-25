@@ -6,18 +6,18 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.TimeData
 import com.umpa2020.tracer.lockscreen.util.ViewUnLock
+import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.main.MainActivity.Companion.locationViewModel
 import kotlinx.android.synthetic.main.activity_lock_screen.*
 
 /**
  *   잠금화면 Activity
  */
-class LockScreenActivity : AppCompatActivity() {
+class LockScreenActivity : BaseActivity() {
   companion object {  // 자바에서의 static과 같은 기능.
     fun newIntent(context: Context?): Intent {
       return Intent(context, LockScreenActivity::class.java)

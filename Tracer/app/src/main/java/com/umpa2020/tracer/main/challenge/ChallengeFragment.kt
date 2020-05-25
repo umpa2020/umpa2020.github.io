@@ -15,6 +15,7 @@ import com.umpa2020.tracer.extensions.M_D
 import com.umpa2020.tracer.extensions.Y_M_D
 import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.network.FBChallengeRepository
+import com.umpa2020.tracer.util.MyProgressBar
 import kotlinx.android.synthetic.main.fragment_challenge.*
 import kotlinx.android.synthetic.main.fragment_challenge.view.*
 import kotlinx.coroutines.CoroutineScope
@@ -35,6 +36,8 @@ class ChallengeFragment : Fragment(), CoroutineScope by MainScope() {
   var locale = DEFAULT_LOCALE // 필터링 지역 기본 값
 
   lateinit var regionChoicePopup: RegionChoicePopup // 지역 선택했을 때 팝업
+  val progressBar = MyProgressBar()
+
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -42,6 +45,8 @@ class ChallengeFragment : Fragment(), CoroutineScope by MainScope() {
     // Inflate the layout for this fragment
     val view = inflater.inflate(R.layout.fragment_challenge, container, false)
     initView(view)
+
+    progressBar.show()
     /**
      * 배너에 들어가는 이미지와 아이디를 가져오는 리스너
      */
@@ -140,6 +145,7 @@ class ChallengeFragment : Fragment(), CoroutineScope by MainScope() {
   private fun challengeDataList(listChallengeData: MutableList<ChallengeData>) {
     challenge_recycler_view?.adapter = ChallengeRecyclerViewAdapter(listChallengeData)
     challenge_recycler_view?.layoutManager = GridLayoutManager(context, 2)
+    progressBar.dismiss()
   }
 
   override fun onPause() {

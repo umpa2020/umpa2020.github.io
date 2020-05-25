@@ -34,11 +34,11 @@
       android:layout_height="match_parent">
 
       <ImageView
-        android:paddingBottom="0.2dp"
-        android:background="@drawable/profile_route_bg"
         android:id="@+id/challengeDetailImageView"
         android:layout_width="match_parent"
         android:layout_height="200dp"
+        android:background="@drawable/profile_route_bg"
+        android:paddingBottom="0.2dp"
         android:scaleType="fitXY" />
 
       <RelativeLayout
@@ -48,20 +48,20 @@
         android:layout_below="@+id/challengeDetailImageView">
 
         <TextView
-          android:textColor="@color/red"
-          android:layout_marginTop="20dp"
           android:id="@+id/exactDetailsTextView"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:text="@string/exactDetails"/>
+          android:layout_marginTop="20dp"
+          android:text="@string/exactDetails"
+          android:textColor="@color/red" />
 
 
         <TextView
-          android:layout_below="@+id/exactDetailsTextView"
           android:id="@+id/challengeCompetitionName"
           style="@style/challengeDetail"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
+          android:layout_below="@+id/exactDetailsTextView"
           android:layout_marginTop="20dp"
           android:text="@string/tournament_name" />
 
@@ -76,12 +76,12 @@
 
         <TextView
           android:id="@+id/dividetextveiw1"
-          android:layout_below="@+id/challengeDetailCompetitionName"
           style="@style/divisionTextView"
-          android:layout_marginBottom="10dp"
+          android:layout_below="@+id/challengeDetailCompetitionName"
+          android:layout_marginLeft="0dp"
           android:layout_marginTop="10dp"
           android:layout_marginRight="0dp"
-          android:layout_marginLeft="0dp"/>
+          android:layout_marginBottom="10dp" />
 
         <TextView
           android:id="@+id/challengeCompetitionDate"
@@ -102,20 +102,20 @@
 
         <TextView
           android:id="@+id/dividetextveiw2"
-          android:layout_below="@+id/challengeDetailCompetitionDate"
           style="@style/divisionTextView"
-          android:layout_marginBottom="10dp"
+          android:layout_below="@+id/challengeDetailCompetitionDate"
+          android:layout_marginLeft="0dp"
           android:layout_marginTop="10dp"
           android:layout_marginRight="0dp"
-          android:layout_marginLeft="0dp"/>
+          android:layout_marginBottom="10dp" />
 
         <TextView
-          android:layout_marginTop="10dp"
           android:id="@+id/challengeCompetitionPeriod"
           style="@style/challengeDetail"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_below="@+id/dividetextveiw2"
+          android:layout_marginTop="10dp"
           android:text="@string/reception_period" />
 
         <TextView
@@ -128,12 +128,12 @@
 
         <TextView
           android:id="@+id/dividetextveiw3"
-          android:layout_below="@+id/challengeDetailCompetitionPeriod"
           style="@style/divisionTextView"
-          android:layout_marginBottom="10dp"
+          android:layout_below="@+id/challengeDetailCompetitionPeriod"
+          android:layout_marginLeft="0dp"
           android:layout_marginTop="10dp"
           android:layout_marginRight="0dp"
-          android:layout_marginLeft="0dp"/>
+          android:layout_marginBottom="10dp" />
 
         <TextView
           android:id="@+id/challengeAddress"
@@ -154,12 +154,12 @@
 
         <TextView
           android:id="@+id/dividetextveiw4"
-          android:layout_below="@+id/challengeDetailAddress"
           style="@style/divisionTextView"
-          android:layout_marginBottom="10dp"
+          android:layout_below="@+id/challengeDetailAddress"
+          android:layout_marginLeft="0dp"
           android:layout_marginTop="10dp"
           android:layout_marginRight="0dp"
-          android:layout_marginLeft="0dp"/>
+          android:layout_marginBottom="10dp" />
 
 
         <TextView
@@ -181,41 +181,40 @@
 
         <TextView
           android:id="@+id/dividetextveiw5"
-          android:layout_below="@+id/challengeDetailHost"
           style="@style/divisionTextView"
-          android:layout_marginBottom="10dp"
+          android:layout_below="@+id/challengeDetailHost"
+          android:layout_marginLeft="0dp"
           android:layout_marginTop="10dp"
           android:layout_marginRight="0dp"
-          android:layout_marginLeft="0dp"/>
+          android:layout_marginBottom="10dp" />
 
 
         <TextView
-          android:id="@+id/challengeURI"
+          android:id="@+id/challengeURL"
           style="@style/challengeDetail"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_below="@+id/dividetextveiw5"
           android:layout_marginTop="10dp"
-          android:text="URI" />
+          android:text="URL" />
 
         <TextView
-          android:id="@+id/challengeURIDetails"
+          android:id="@+id/challengeURLDetails"
           style="@style/underSubjectName"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_below="@+id/challengeURI"
-          android:layout_margin="10dp" />
+          android:layout_below="@+id/challengeURL"
+          android:layout_margin="10dp"
+          android:textColor="#0000FF" />
 
         <TextView
           android:id="@+id/dividetextveiw8"
-          android:layout_below="@+id/challengeURIDetails"
           style="@style/divisionTextView"
-          android:layout_marginBottom="10dp"
+          android:layout_below="@+id/challengeURLDetails"
+          android:layout_marginLeft="0dp"
           android:layout_marginTop="10dp"
           android:layout_marginRight="0dp"
-          android:layout_marginLeft="0dp"/>
-
-
+          android:layout_marginBottom="10dp" />
 
 
         <TextView
@@ -237,12 +236,12 @@
 
         <TextView
           android:id="@+id/dividetextveiw6"
-          android:layout_below="@+id/challengeDetailInformation"
           style="@style/divisionTextView"
-          android:layout_marginBottom="10dp"
+          android:layout_below="@+id/challengeDetailInformation"
+          android:layout_marginLeft="0dp"
           android:layout_marginTop="10dp"
           android:layout_marginRight="0dp"
-          android:layout_marginLeft="0dp"/>
+          android:layout_marginBottom="10dp" />
 
         <TextView
           android:id="@+id/challengeLocation"
@@ -264,12 +263,12 @@
 
         <TextView
           android:id="@+id/dividetextveiw7"
-          android:layout_below="@+id/challengeDetailLocation"
           style="@style/divisionTextView"
-          android:layout_marginBottom="10dp"
+          android:layout_below="@+id/challengeDetailLocation"
+          android:layout_marginLeft="0dp"
           android:layout_marginTop="10dp"
           android:layout_marginRight="0dp"
-          android:layout_marginLeft="0dp"/>
+          android:layout_marginBottom="10dp" />
 
 
         <TextView

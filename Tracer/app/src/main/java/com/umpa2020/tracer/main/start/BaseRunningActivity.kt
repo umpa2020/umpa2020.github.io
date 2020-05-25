@@ -1,5 +1,7 @@
 package com.umpa2020.tracer.main.start
 
+import android.animation.ObjectAnimator
+import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.ActivityInfo
 import android.location.Location
@@ -9,9 +11,9 @@ import android.os.CountDownTimer
 import android.os.SystemClock
 import android.view.View
 import android.view.animation.*
-import androidx.appcompat.app.AppCompatActivity
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.preference.PreferenceManager
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
@@ -20,6 +22,7 @@ import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.broadcastReceiver.LocationBroadcastReceiver
 import com.umpa2020.tracer.constant.Constants
+import com.umpa2020.tracer.constant.Constants.Companion.DRAWER_DURATION
 import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.constant.UserState
 import com.umpa2020.tracer.dataClass.DistanceTimeData
@@ -28,20 +31,17 @@ import com.umpa2020.tracer.extensions.*
 import com.umpa2020.tracer.gpx.WayPoint
 import com.umpa2020.tracer.gpx.WayPointType.TRACK_POINT
 import com.umpa2020.tracer.lockscreen.util.LockScreen
+import com.umpa2020.tracer.main.BaseActivity
+import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.main.MainActivity.Companion.locationViewModel
 import com.umpa2020.tracer.map.TraceMap
 import com.umpa2020.tracer.util.*
-import hollowsoft.slidingdrawer.OnDrawerCloseListener
-import hollowsoft.slidingdrawer.OnDrawerOpenListener
-import hollowsoft.slidingdrawer.OnDrawerScrollListener
 import kotlinx.android.synthetic.main.activity_running.*
 import java.lang.String.format
 import java.util.*
 
 
-open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDrawerScrollListener,
-  OnDrawerOpenListener,
-  OnDrawerCloseListener, OnSingleClickListener {
+open class BaseRunningActivity : BaseActivity(), OnMapReadyCallback, OnSingleClickListener {
   lateinit var traceMap: TraceMap
   var privacy = Privacy.RACING
   var currentLocation = Location(LocationManager.GPS_PROVIDER).apply {
@@ -62,16 +62,18 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
   var markerCount = 1   //현재 찍힌 마커의 개수
   var timeWhenStopped: Long = 0   //일시정지된 시간
 
-  private var wedgedCamera = true // 사용자 카메라 인식 flag
+  var wedgedCamera = true // 사용자 카메라 인식 flag
   lateinit var locationBroadcastReceiver: LocationBroadcastReceiver
 
-  var zoomLevel: Float? = 16f // 줌 레벨 할당
+  companion object {
+    var zoomLevel: Float? = 16f // 줌 레벨 할당
+  }
+
+  //  var zoomLevel: Float? = 16f // 줌 레벨 할당
   lateinit var progressBar: MyProgressBar
 
   open fun init() {
-    runningDrawer.setOnDrawerScrollListener(this)
-    runningDrawer.setOnDrawerOpenListener(this)
-    runningDrawer.setOnDrawerCloseListener(this)
+    runningHandle.setOnClickListener(this)
     runningStartButton.setOnClickListener(this)
     runningStopButton.setOnClickListener(this)
     runningPauseButton.setOnClickListener(this)
@@ -92,24 +94,32 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     traceMap.mMap.setOnCameraMoveStartedListener {
       // 공개 정적 최종 정수 REASON_GESTURE, 지도에서 사용자의 제스처에 응답하여 카메라 동작이 시작되었습니다.
       // 예를 들어, 이동, 기울기, 핀치 확대 또는 회전.
-      if (it == 1) {
+      if (it == 1 || it == 3) {
         wedgedCamera = false
       }
     }
 
     // 지도가 멈추면 줌 비율 얻어오기
     traceMap.mMap.setOnCameraIdleListener {
-      zoomLevel = traceMap.mMap.cameraPosition.zoom
+      zoomLevel = if (traceMap.mapDownFlag) {
+        traceMap.mapDownFlag = false
+        16F
+      } else {
+        traceMap.mMap.cameraPosition.zoom
+      }
     }
 
     // 내 위치 버튼 클릭 리스너
-    traceMap.mMap.setOnMyLocationButtonClickListener {
-      traceMap.moveCamera(currentLocation!!.toLatLng(), zoomLevel!!)
+    goToMyPosition.setOnClickListener {
+      Logg.d("줌 레벨 : $zoomLevel")
+      traceMap.moveCamera(currentLocation.toLatLng(), zoomLevel!!)
       wedgedCamera = true
-      true
     }
 
-    wedgedCamera = true
+    goToMapButton.setOnClickListener{
+      traceMap.mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(traceMap.trackBounds, 1080, 300, 20))
+      traceMap.mapDownFlag = true
+    }
   }
 
   // 위치를 브로드케스트에서 받아 지속적으로 업데이트
@@ -154,7 +164,7 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     // 시작 카운트 다운
     countDownTimer = object : CountDownTimer(Constants.MILLISINFUTURE, Constants.COUNTDOWN_INTERVAL) {
       override fun onTick(millisUntilFinished: Long) {
-        Logg.d("${millisUntilFinished / Constants.COUNTDOWN_INTERVAL}")
+
 
         // 3..2..1..로 보여주기 위해서 + 1
         countDownTextView.text =
@@ -166,20 +176,13 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
         userState = UserState.RUNNING
         buttonAnimation()
 
-        runningDrawer.open()
+        isOpend = false
+        slidingDrawer()
         runningTimerTextView.base = SystemClock.elapsedRealtime()
         runningTimerTextView.start()
 
         runningNotificationTextView.visibility = View.GONE
         lockScreen(true)
-        runningTimerTextView.setOnChronometerTickListener {
-          val mille = SystemClock.elapsedRealtime() - runningTimerTextView.base
-          val time = (mille / 1000).toInt()
-          val hour = time / (60 * 60)
-          val min = time % (60 * 60) / 60
-          val sec = time % 60
-//      Logg.d("$hour 시 $min 분 $sec 초")
-        }
         // viewModel 초기값 설정 => 시작 시간 설정
         locationViewModel.setTimes(TimeData(runningTimerTextView.base, true, 0L, ""))
         TTS.speech(tts)
@@ -253,10 +256,10 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
       if (wedgedCamera) { // 사용자 카메라 인식 flag
         // 유저 상태에 따라 카메라 설정
         if (userState == UserState.NORMAL) {
-//        Logg.d("노멀 : 유저 바라보는 방향으로 지도 이동 X")
+//
           traceMap.moveCamera(location.toLatLng(), zoomLevel!!)
         } else if (userState == UserState.RUNNING) {
-//        Logg.d("러닝 : 유저 바라보는 방향으로 지도 이동 O")
+//
           traceMap.moveCameraUserDirection(location, zoomLevel!!)
         }
       }
@@ -296,17 +299,11 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     countDownTimer?.cancel()
   }
 
-  override fun onResume() {
-    super.onResume()
-  }
 
   override fun onDestroy() {
     super.onDestroy()
     LocalBroadcastManager.getInstance(this).unregisterReceiver(locationBroadcastReceiver)
-
-
     // Shared에 마지막 위치 업데이트
-
     UserInfo.lat = currentLocation.latitude.toFloat()
     UserInfo.lng = currentLocation.longitude.toFloat()
 
@@ -322,6 +319,9 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
           View.OnClickListener {
             noticePopup.dismiss()
             lockScreen(false)
+            startActivity(Intent(this, MainActivity::class.java).apply {
+              addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            })
             finish()
           },
           View.OnClickListener {
@@ -331,6 +331,10 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
       }
       else -> {
         super.onBackPressed()
+        startActivity(Intent(this, MainActivity::class.java).apply {
+          addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        })
+        finish()
       }
     }
   }
@@ -408,25 +412,34 @@ open class BaseRunningActivity : AppCompatActivity(), OnMapReadyCallback, OnDraw
     runningPauseButton.isClickable = true
   }
 
-  override fun onScrollStarted() {
-
-  }
-
-  override fun onScrollEnded() {
-
-  }
-
-  override fun onDrawerOpened() {
-    runningHandle.text = "▼"
-
-  }
-
-  override fun onDrawerClosed() {
-    runningHandle.text = "▲"
-
+  /**
+   *  러닝 기록 측정 SlidingDrawer 애니메이션
+   */
+  var isOpend = true
+  private fun slidingDrawer() {
+    if (isOpend) { // 내려가기
+      ObjectAnimator.ofFloat(runningDrawer, "translationY", content.height.toFloat()).apply {
+        duration = DRAWER_DURATION
+        start()
+      }
+      runningHandle.text = "▲"
+      isOpend = false
+    } else { // 올라가기
+      ObjectAnimator.ofFloat(runningDrawer, "translationY", 0f).apply {
+        duration = DRAWER_DURATION
+        start()
+      }
+      runningHandle.text = "▼"
+      isOpend = true
+    }
   }
 
   override fun onSingleClick(v: View?) {
-    Logg.d("tlqkf!! baserunning")
+    when (v!!.id) {
+      R.id.runningHandle -> {
+
+        slidingDrawer()
+      }
+    }
   }
 }

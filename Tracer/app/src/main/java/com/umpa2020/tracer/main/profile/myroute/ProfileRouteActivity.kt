@@ -3,30 +3,27 @@ package com.umpa2020.tracer.main.profile.myroute
 import android.app.Activity
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.MapInfo
+import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.network.BaseFB.Companion.USER_ID
 import com.umpa2020.tracer.network.FBUsersRepository
-import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.android.synthetic.main.activity_profile_route.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
-class ProfileRouteActivity : AppCompatActivity(), CoroutineScope by MainScope() {
+class ProfileRouteActivity : BaseActivity() {
   val progressbar = ProgressBar(App.instance.currentActivity() as Activity)
   var uid = ""
   var nickname = ""
   var isLoding = false
   val rootInfoDatas = arrayListOf<MapInfo>()
   var limit = 0L
-  val repository = FBUsersRepository()
+  var repository = FBUsersRepository()
 
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,11 +59,11 @@ class ProfileRouteActivity : AppCompatActivity(), CoroutineScope by MainScope() 
   override fun onResume() {
     // 마이 루트에 필요한 내용을 받아옴
     limit = rootInfoDatas.size.toLong()
-    Logg.d("ssmm11 limit = $limit")
     if (limit == 0L) limit = 5L
     else rootInfoDatas.clear()
     launch {
-      listProfileRoute(FBUsersRepository().listUserRoute(uid, limit))
+      repository = FBUsersRepository()
+      listProfileRoute(repository.listUserRoute(uid, limit))
     }
     super.onResume()
   }
@@ -79,9 +76,6 @@ class ProfileRouteActivity : AppCompatActivity(), CoroutineScope by MainScope() 
   fun listProfileRoute(mapInfos: List<MapInfo>?) {
     if (mapInfos != null)
       rootInfoDatas.addAll(mapInfos)
-
-    Logg.d("ssmm11 size = ${rootInfoDatas.size}")
-
 
     if (rootInfoDatas.isEmpty()) {
       profileRecyclerRouteisEmpty.visibility = View.VISIBLE

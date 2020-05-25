@@ -7,7 +7,6 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.umpa2020.tracer.App
@@ -17,6 +16,7 @@ import com.umpa2020.tracer.dataClass.*
 import com.umpa2020.tracer.extensions.*
 import com.umpa2020.tracer.gpx.WayPointType.FINISH_POINT
 import com.umpa2020.tracer.gpx.WayPointType.START_POINT
+import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.main.start.racing.RacingActivity
 import com.umpa2020.tracer.map.TraceMap
@@ -29,14 +29,12 @@ import com.umpa2020.tracer.network.FBAchievementRepository
 import com.umpa2020.tracer.network.FBMapRepository
 import com.umpa2020.tracer.util.*
 import kotlinx.android.synthetic.main.activity_running_save.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
 
-class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleClickListener, CoroutineScope by MainScope() {
+class RunningSaveActivity : BaseActivity(), OnMapReadyCallback, OnSingleClickListener {
   lateinit var mapInfo: MapInfo
   lateinit var routeGPX: RouteGPX
   lateinit var traceMap: TraceMap
@@ -113,7 +111,7 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
               it.compress(Bitmap.CompressFormat.PNG, 90, out)
               save(myfile.path)
             } catch (e: Exception) {
-              Logg.d(e.toString())
+
             }
           }
           traceMap.captureMapScreen(callback)
@@ -148,7 +146,7 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
     }
     routeGPX.addDirectionSign()
     routeGPX.wptList.forEach {
-      Logg.d("lat : ${it.lat} lon : ${it.lon} desc : ${it.desc} ")
+
     }
     val routeGpxFile = routeGPX.classToGpx(saveFolder.path)
 
@@ -174,17 +172,17 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
       UserInfo.nickname,
       mapInfo.time,
       true,
-      speedList.max().toString(),
-      speedList.average().toString(),
-      "${BaseFB.MAP_ROUTE}/${mapInfo.mapId}/racingGPX/${UserInfo.autoLoginKey}"
+      speedList.max(),
+      speedList.average(),
+      "${MAP_ROUTE}/${mapInfo.mapId}/racingGPX/${UserInfo.autoLoginKey}"
     )
     val activityData = ActivityData(mapInfo.mapId, timestamp, mapInfo.distance, mapInfo.time, BaseFB.ActivityMode.MAP_SAVE)
     val trophyData = TrophyData(mapInfo.mapId, 1)
 
-    Logg.d("Start Upload")
+
     FBMapRepository().uploadMap(mapInfo, rankingData, activityData, timestamp.toString(), routeGpxFile, Uri.fromFile(File(imgPath)), trophyData)
     FBAchievementRepository().incrementPlays(mapInfo.makerId)
-    Logg.d("Finish Upload")
+
 
     launch {
       val uid = UserInfo.autoLoginKey
@@ -200,7 +198,7 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
             FBAchievementRepository().setTrackMaker50Emblem(uid)
           }
           null -> {
-            Logg.e("error")
+
           }
         }
         FBAchievementRepository().incrementTrackMake(uid)
@@ -212,9 +210,8 @@ class RunningSaveActivity : AppCompatActivity(), OnMapReadyCallback, OnSingleCli
   }
 
 
-
   override fun onMapReady(googleMap: GoogleMap) {
-    Logg.d("onMapReady")
+
     traceMap = TraceMap(googleMap) //구글맵
     traceMap.drawRoute(routeGPX.trkList.toList(), routeGPX.wptList.filter { it.type == START_POINT || it.type == FINISH_POINT })
   }

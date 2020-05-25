@@ -20,6 +20,7 @@ import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.constant.Constants.Companion.ARRIVE_BOUNDARY
 import com.umpa2020.tracer.constant.Constants.Companion.DEVIATION_COUNT
+import com.umpa2020.tracer.constant.Constants.Companion.RACE_RESULT
 import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.constant.UserState
 import com.umpa2020.tracer.dataClass.MapInfo
@@ -34,13 +35,17 @@ import com.umpa2020.tracer.network.BaseFB.Companion.MAP_ID
 import com.umpa2020.tracer.network.FBMapRepository
 import com.umpa2020.tracer.network.FBRacingRepository
 import com.umpa2020.tracer.util.ChoicePopup
-import com.umpa2020.tracer.util.Logg
+import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.TTS
 import kotlinx.android.synthetic.main.activity_running.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.jetbrains.anko.toast
 import java.io.File
 
-class RacingActivity : BaseRunningActivity(),CoroutineScope by MainScope() {
+class RacingActivity : BaseRunningActivity() {
   companion object {
     const val ROUTE_GPX = "RouteGPX"
   }
@@ -67,7 +72,7 @@ class RacingActivity : BaseRunningActivity(),CoroutineScope by MainScope() {
     mapId = intent.getStringExtra(MAP_ID)!!
     racerList = intent.getSerializableExtra(RACER_LIST) as Array<RacerData>
 
-    Logg.d(racerList.joinToString())
+
     launch {
       racerGPXList = FBRacingRepository().listRacingGPX(mapId, racerList.map { it.racerId })
       loadRoute()
@@ -78,10 +83,16 @@ class RacingActivity : BaseRunningActivity(),CoroutineScope by MainScope() {
 
   override fun onMapReady(googleMap: GoogleMap) {
     super.onMapReady(googleMap)
+    val progressBar = MyProgressBar()
+    progressBar.show()
+    
+    goToMapButton.visibility = View.VISIBLE
+    wedgedCamera=false
     traceMap.drawRoute(mapRouteGPX.trkList, mapRouteGPX.wptList).run {
       markerList = this.first
       turningPointList = this.second
     }
+    progressBar.dismiss()
   }
 
   override fun init() {
@@ -113,10 +124,10 @@ class RacingActivity : BaseRunningActivity(),CoroutineScope by MainScope() {
   }
 
   override fun onSingleClick(v: View?) {
-    Logg.d("tlqkf!! before when")
+    super.onSingleClick(v)
     when (v!!.id) {
       R.id.runningStartButton -> {
-        Logg.d("tlqkf!! tqtqtqt")
+
         when (userState) {
           UserState.NORMAL -> {
             Toast.makeText(
@@ -124,10 +135,10 @@ class RacingActivity : BaseRunningActivity(),CoroutineScope by MainScope() {
               getString(R.string.startpoint) + ARRIVE_BOUNDARY + getString(R.string.only_start),
               Toast.LENGTH_LONG
             ).show()
-            Logg.d("NORMAL")
+
           }
           UserState.READYTORACING -> {
-            Logg.d("READYTORACING")
+
             runningNotificationTextView.visibility = View.GONE
             start(getString(R.string.startRacing)) // tts String 전달
           }
@@ -136,9 +147,7 @@ class RacingActivity : BaseRunningActivity(),CoroutineScope by MainScope() {
         }
       }
       R.id.runningStopButton -> {
-        //"종료를 원하시면 길게 눌러주세요".show()
-        Toast.makeText(this, getString(R.string.press_hold), Toast.LENGTH_LONG).show()
-
+        this.toast(getString(R.string.press_hold))
       }
       R.id.runningPauseButton -> {
         if (privacy == Privacy.RACING) {
@@ -160,16 +169,16 @@ class RacingActivity : BaseRunningActivity(),CoroutineScope by MainScope() {
     super.updateLocation(curLoc)
     when (userState) {
       UserState.NORMAL -> {
-        Logg.d("NORMAL")
+
         checkIsReady()
       }
 
       UserState.READYTORACING -> {
-        Logg.d("READYTORACING")
+
         checkIsReadyToRacing()
       }
       UserState.RUNNING -> {
-        Logg.d("RUNNING")
+
         checkMarker()
         checkTurningPoint()
         checkDeviation()
@@ -189,7 +198,7 @@ class RacingActivity : BaseRunningActivity(),CoroutineScope by MainScope() {
     )
 
     if (!racerGPXList.isNullOrEmpty()) {
-      Logg.d("Start Virtual Racing")
+
       virtualRacing()
     }
   }
@@ -222,7 +231,7 @@ class RacingActivity : BaseRunningActivity(),CoroutineScope by MainScope() {
               val duration = (wpts[index + 1].time!! - wpts[index].time!!)
               val unitDuration = duration / (wptIndices[index + 1] - wptIndices[index])
 
-              Logg.d("기간 $unitDuration  1 : ${wpts[index + 1].time}   2: ${wpts[index].time}")
+
               (wptIndices[index]..wptIndices[index + 1]).forEach {
                 delay(unitDuration)
                 traceMap.updateMarker(racerNo, racingGPX.trkList[it].toLatLng())
@@ -256,12 +265,13 @@ class RacingActivity : BaseRunningActivity(),CoroutineScope by MainScope() {
     val routeGpxUri = routeGPX.classToGpx(saveFolder.path).toString()
 
     val newIntent = Intent(this, RacingFinishActivity::class.java)
-    newIntent.putExtra("Result", racingResult)
+    newIntent.putExtra(RACE_RESULT, racingResult)
     newIntent.putExtra("InfoData", infoData)
     newIntent.putExtra(ROUTE_GPX, routeGpxUri)
     startActivity(newIntent)
     finish()
   }
+
 
   private fun checkTurningPoint() {
     if (nextTP >= turningPointList.size) return
@@ -286,7 +296,7 @@ class RacingActivity : BaseRunningActivity(),CoroutineScope by MainScope() {
     ) {
       traceMap.changeMarkerIcon(nextWP)
       nextWP++
-      wpList.add(currentLocation!!.toWayPoint(DISTANCE_POINT))
+      wpList.add(currentLocation.toWayPoint(DISTANCE_POINT))
       if (nextWP == markerList.size) {
         stop(getString(R.string.finishRacing))
       }
@@ -294,14 +304,6 @@ class RacingActivity : BaseRunningActivity(),CoroutineScope by MainScope() {
   }
 
   private fun checkDeviation() {
-    Logg.d(
-      PolyUtil.isLocationOnPath(
-        currentLatLng,
-        track,
-        false,
-        Constants.DEVIATION_DISTANCE
-      ).toString()
-    )
     //경로이탈검사
     if (PolyUtil.isLocationOnPath(
         currentLatLng,

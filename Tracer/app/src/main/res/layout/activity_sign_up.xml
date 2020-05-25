@@ -104,17 +104,17 @@
             android:background="@drawable/redundant_check_change_button" />
             -->
           <Button
-            style="@style/buttonTextRedText"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:textSize="11dp"
             android:id="@+id/redundantCheckButton"
+            style="@style/buttonTextRedText"
             android:layout_width="wrap_content"
             android:layout_height="25dp"
             android:layout_gravity="right|center"
             android:layout_marginBottom="5dp"
+            android:background="@drawable/button_empty_background"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:text="@string/duplicate"
-            android:background="@drawable/button_empty_background" />
+            android:textSize="11dp" />
 
         </FrameLayout>
       </com.google.android.material.textfield.TextInputLayout>

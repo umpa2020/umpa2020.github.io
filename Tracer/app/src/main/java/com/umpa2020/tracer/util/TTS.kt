@@ -18,8 +18,6 @@ object TTS {
   lateinit var tts: TextToSpeech
   private var mAudioManager: AudioManager
   private var mVibrator: Vibrator
-  val timings = longArrayOf(100, 100, 0, 400, 0, 200, 0, 400)
-  val amplitudes = intArrayOf(0, 50, 0, 100, 0, 50, 0, 150)
 
   init {
     tts = TextToSpeech(App.instance.context(), TextToSpeech.OnInitListener {
@@ -60,7 +58,7 @@ object TTS {
     }
   }
 
-  fun speechStop(){
+  fun speechStop() {
     tts.stop()
   }
 }

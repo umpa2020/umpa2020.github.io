@@ -4,7 +4,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import co.lujun.androidtagview.TagView.OnTagClickListener
 import com.umpa2020.tracer.App
@@ -15,17 +14,16 @@ import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.extensions.addDirectionSign
 import com.umpa2020.tracer.extensions.classToGpx
 import com.umpa2020.tracer.extensions.gpxToClass
+import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.main.start.racing.RacingActivity.Companion.ROUTE_GPX
 import com.umpa2020.tracer.network.BaseFB.Companion.MAP_ID
 import com.umpa2020.tracer.network.FBMapRepository
 import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.activity_racing_select_people.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import java.io.File
 
-class RacingSelectPeopleActivity : AppCompatActivity(), OnSingleClickListener, CoroutineScope by MainScope() {
+class RacingSelectPeopleActivity : BaseActivity(), OnSingleClickListener {
   val activity = this
   var likes = 0
   var mapId = ""

@@ -14,7 +14,6 @@ import com.umpa2020.tracer.extensions.m_s
 import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.recycler_rankfragment_topplayer_item.view.*
 import java.util.*
-import kotlin.math.sin
 
 class AllRankingRecyclerViewAdapter(private val mydata: ArrayList<RankingData>) :
   RecyclerView.Adapter<AllRankingRecyclerViewAdapter.myViewHolder>() {

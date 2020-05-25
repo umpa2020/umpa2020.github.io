@@ -6,7 +6,6 @@ import android.widget.Toast
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.umpa2020.tracer.App
-import com.umpa2020.tracer.util.Logg
 import kotlin.math.ceil
 
 fun String.show() {
@@ -23,6 +22,14 @@ fun Int.toRank(): String {
     2 -> "${this}nd"
     3 -> "${this}rd"
     else -> "${this}th"
+  }
+}
+
+fun Int.toNumberUnit(): String {
+  return when {
+    this > 999999 -> "${this / 1000000}m"
+    this > 999 -> "${this / 1000}k"
+    else -> "$this"
   }
 }
 
@@ -86,7 +93,7 @@ fun Int.toDp(): Float {
 }
 
 fun Long.calcRank(best: Long, worst: Long): Int {
-  Logg.d("$this $best $worst")
+
   return when {
     this < (worst - best) * 0.00 + best -> 1
     this < (worst - best) * 0.25 + best -> 10

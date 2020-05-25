@@ -126,6 +126,7 @@ class RunningActivity : BaseRunningActivity() {
   }
 
   override fun onSingleClick(v: View?) {
+    super.onSingleClick(v)
     when (v!!.id) {
       R.id.runningStartButton -> {
         start(getString(R.string.startRunning)) // tts String 전달

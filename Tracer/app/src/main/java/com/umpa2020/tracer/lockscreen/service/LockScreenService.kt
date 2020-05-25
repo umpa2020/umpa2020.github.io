@@ -16,7 +16,6 @@ import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.locationBackground.LocationBackgroundService
 import com.umpa2020.tracer.lockscreen.LockScreenActivity
-import com.umpa2020.tracer.util.Logg
 
 class LockScreenService : Service() {
 
@@ -34,11 +33,11 @@ class LockScreenService : Service() {
       context?.run {
         when (intent.action) {
           Intent.ACTION_SCREEN_OFF -> { // 스크린이 꺼졌을 때
-            Logg.d("화면 꺼짐.")
+
             telephonyManager?.run {
               // callState : Returns the state of all calls on the device. 음성 통화 상태 조회
               isPhoneIdleNum = callState
-              Logg.d(isPhoneIdleNum.toString())
+
             } ?: run {
               getSystemService(TELEPHONY_SERVICE) as TelephonyManager
               // listen(PhoneStateListener listener, int events)
@@ -50,7 +49,7 @@ class LockScreenService : Service() {
             // Device call state: No activity.
             // Constant Value: 0 (0x00000000)
             if (isPhoneIdleNum == TelephonyManager.CALL_STATE_IDLE) {
-              Logg.d("화면이 꺼져도 통화 끝 or action이 없으므로 LockScreenActivity 실행.")
+
               startLockScreenActivity()
             }
           }
@@ -63,7 +62,7 @@ class LockScreenService : Service() {
   private val phoneListener = object : PhoneStateListener() {
     override fun onCallStateChanged(state: Int, incomingNumber: String?) {
       super.onCallStateChanged(state, incomingNumber)
-      Logg.d(state.toString())
+
       isPhoneIdleNum = state
     }
   }
@@ -81,7 +80,7 @@ class LockScreenService : Service() {
 
   private fun createNotificationCompatBuilder(): NotificationCompat.Builder {
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      Logg.d("zzzzzz")
+
       val mBuilder = NotificationCompat.Builder(
         this@LockScreenService,
         NotificationManager.getMainNotificationId()
@@ -93,7 +92,7 @@ class LockScreenService : Service() {
         .setAutoCancel(true) // 사용자가 탭하면 자동으로 알림을 삭제하는 setAutoCancel()을 호출
       mBuilder
     } else {
-      Logg.d("ddddd")
+
       NotificationCompat.Builder(this@LockScreenService, "")
     }
   }
@@ -101,14 +100,14 @@ class LockScreenService : Service() {
 
   override fun onCreate() {
     super.onCreate()
-    Logg.d("onCreate()")
+
 
     /**
      *  포그라운드 서비스로 인해 onCreate()에서 알림창 초기화 및 실행.
      */
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       // 포그라운드 서비스는 알림창이 있어야 실행 가능.
-      Logg.d("이거 실행 안돼??")
+
       // 서비스 id는 0이 아니여야 한다.
       startForeground(
         Constants.FOREGROUND_ID, createNotificationCompatBuilder()
@@ -120,7 +119,7 @@ class LockScreenService : Service() {
 
   override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 //        return super.onStartCommand(intent, flags, startId) // 이걸 지우면 코드에 노란 박스 사라짐.
-    Logg.d("onStartCommand()")
+
     stateReceiver(true)
 
     return START_STICKY
@@ -133,7 +132,7 @@ class LockScreenService : Service() {
   @RequiresApi(Build.VERSION_CODES.O)
   override fun onDestroy() {
     super.onDestroy()
-    Logg.d("onDestroy()")
+
 //    NotificationManager.cancelnNotificationChannel(this@LockScreenService)
 
     // 서비스에 인텐트 action을 줘서 다시 notification 교환.
