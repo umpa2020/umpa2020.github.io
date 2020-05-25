@@ -125,7 +125,6 @@ class RacingActivity : BaseRunningActivity() {
 
   override fun onSingleClick(v: View?) {
     super.onSingleClick(v)
-    Logg.d("tlqkf!! before when")
     when (v!!.id) {
       R.id.runningStartButton -> {
 
