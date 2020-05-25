@@ -1,6 +1,7 @@
 package com.umpa2020.tracer.network
 
 import android.net.Uri
+import com.umpa2020.tracer.extensions.fileDelete
 import kotlinx.coroutines.tasks.await
 import java.io.File
 
@@ -12,8 +13,9 @@ class FBStorageRepository : BaseFB() {
   /**
    * 파일 Uri와 Path만 넘겨줘서 올리는 작업 처리
    */
-  fun uploadFile(uri: Uri, path: String) {
-    storage.reference.child(path).putFile(uri)
+  suspend fun uploadFile(uri: Uri, path: String): String {
+    storage.reference.child(path).putFile(uri).await()
+    return uri.toString()
   }
 
   /**
