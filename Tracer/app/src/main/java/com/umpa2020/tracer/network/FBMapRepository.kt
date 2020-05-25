@@ -8,6 +8,7 @@ import com.umpa2020.tracer.dataClass.ActivityData
 import com.umpa2020.tracer.dataClass.MapInfo
 import com.umpa2020.tracer.dataClass.RankingData
 import com.umpa2020.tracer.dataClass.TrophyData
+import com.umpa2020.tracer.extensions.fileDelete
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.coroutines.tasks.await
 
@@ -85,13 +86,13 @@ class FBMapRepository : BaseFB() {
    * 3. ranking 에 맵 제작자의 ranking 을 업로드
    * 4. users activity 에 map save 로 해당 내용 저장
    */
-  fun uploadMap(mapInfo: MapInfo, rankingData: RankingData, activityData: ActivityData, timestamp: String, gpxUri: Uri, imgPath: Uri, trophyData: TrophyData) {
+  suspend fun uploadMap(mapInfo: MapInfo, rankingData: RankingData, activityData: ActivityData, timestamp: String, gpxUri: Uri, imgPath: Uri, trophyData: TrophyData) {
     //Maps/mapId에 새로운 맵 정보 생성
     mapsCollectionRef.document(mapInfo.mapId).set(mapInfo)
     //racerGPX
-    FBStorageRepository().uploadFile(imgPath, mapInfo.mapImagePath)
-    FBStorageRepository().uploadFile(gpxUri, mapInfo.routeGPXPath)
-    FBStorageRepository().uploadFile(gpxUri, rankingData.racerGPX!!)
+    FBStorageRepository().uploadFile(imgPath, mapInfo.mapImagePath).fileDelete()
+    FBStorageRepository().uploadFile(gpxUri, mapInfo.routeGPXPath).fileDelete()
+    FBStorageRepository().uploadFile(gpxUri, rankingData.racerGPX!!).fileDelete()
     mapsCollectionRef.document(mapInfo.mapId).collection(RANKING)
       .document(UserInfo.autoLoginKey + timestamp).set(rankingData)
     // 히스토리 업로드

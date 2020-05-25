@@ -13,6 +13,7 @@ import com.umpa2020.tracer.dataClass.RankingData
 import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.extensions.addDirectionSign
 import com.umpa2020.tracer.extensions.classToGpx
+import com.umpa2020.tracer.extensions.fileDelete
 import com.umpa2020.tracer.extensions.gpxToClass
 import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.main.start.racing.RacingActivity.Companion.ROUTE_GPX
@@ -27,7 +28,7 @@ class RacingSelectPeopleActivity : BaseActivity(), OnSingleClickListener {
   val activity = this
   var likes = 0
   var mapId = ""
-  lateinit var routeGPX: RouteGPX
+  lateinit var routeGPXUri: String
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -35,8 +36,9 @@ class RacingSelectPeopleActivity : BaseActivity(), OnSingleClickListener {
 
     mapId = intent.getStringExtra(MAP_ID)!!
 
-    val routeGPXUri = intent.getStringExtra(ROUTE_GPX)
-    routeGPX = Uri.parse(routeGPXUri).gpxToClass()
+    intent.getStringExtra(ROUTE_GPX)?.let {
+      routeGPXUri = it
+    }
 
     launch {
       FBMapRepository().listMapRanking(mapId).let {
@@ -99,9 +101,7 @@ class RacingSelectPeopleActivity : BaseActivity(), OnSingleClickListener {
         if (!saveFolder.exists()) {       //폴더 없으면 생성
           saveFolder.mkdir()
         }
-        routeGPX.addDirectionSign()
-        val routeGpxUri = routeGPX.classToGpx(saveFolder.path).toString()
-        intent.putExtra(ROUTE_GPX, routeGpxUri)
+        intent.putExtra(ROUTE_GPX, routeGPXUri)
         intent.putExtra(RACER_LIST, racerList.toTypedArray())
         intent.putExtra(MAP_ID, mapId)
         startActivity(intent)
