@@ -23,7 +23,7 @@ class ProfileRouteActivity : BaseActivity() {
   var isLoding = false
   val rootInfoDatas = arrayListOf<MapInfo>()
   var limit = 0L
-  val repository = FBUsersRepository()
+  var repository = FBUsersRepository()
 
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,7 +62,8 @@ class ProfileRouteActivity : BaseActivity() {
     if (limit == 0L) limit = 5L
     else rootInfoDatas.clear()
     launch {
-      listProfileRoute(FBUsersRepository().listUserRoute(uid, limit))
+      repository = FBUsersRepository()
+      listProfileRoute(repository.listUserRoute(uid, limit))
     }
     super.onResume()
   }

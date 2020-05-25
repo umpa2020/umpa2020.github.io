@@ -23,7 +23,7 @@ class ProfileActivityActivity : BaseActivity() {
   val rootActivityDatas = arrayListOf<ActivityData>()
   val progressbar = MyProgressBar()
   var isLoading = false
-  val userActivityRepo = FBUsersRepository()
+  var userActivityRepo = FBUsersRepository()
   var limit = 0L
   var userId = ""
 
@@ -69,7 +69,8 @@ class ProfileActivityActivity : BaseActivity() {
      */
 
     launch {
-      FBUsersRepository().listUserMakingActivity(userId, limit)?.let {
+      userActivityRepo = FBUsersRepository()
+      userActivityRepo.listUserMakingActivity(userId, limit)?.let {
         activityList(it)
       } ?: kotlin.run {
         activityList(rootActivityDatas)
