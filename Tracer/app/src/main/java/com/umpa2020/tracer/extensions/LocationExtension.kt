@@ -98,9 +98,9 @@ fun RouteGPX.addDirectionSign(): RouteGPX {
     val y1 = firstVec.latitude
     val x2 = secondVec.longitude
     val y2 = secondVec.latitude
-    val bunja=(x1 * y2 - y1 * x2)
-    val bunmo=sqrt(x1.pow(2) + y1.pow(2)) * sqrt(x2.pow(2) + y2.pow(2))
-    val angle = asin( bunja/bunmo )*180/PI
+    val bunja = (x1 * y2 - y1 * x2)
+    val bunmo = sqrt(x1.pow(2) + y1.pow(2)) * sqrt(x2.pow(2) + y2.pow(2))
+    val angle = asin(bunja / bunmo) * 180 / PI
     Logg.d("x1 : $x1 y1: $y1 x2 : $x2 y2: $y2 angle : $angle")
     if (abs(angle) >= TURNING_ANGLE) {
       if (angle > 0) {

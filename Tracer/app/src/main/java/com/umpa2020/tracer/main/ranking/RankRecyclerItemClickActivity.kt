@@ -6,9 +6,9 @@ import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.umpa2020.tracer.App
-import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.extensions.image
+import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.network.BaseFB.Companion.MAP_ID
 import com.umpa2020.tracer.network.FBLikesRepository
 import com.umpa2020.tracer.network.FBMapRepository
@@ -117,7 +117,6 @@ class RankRecyclerItemClickActivity : BaseActivity(), OnSingleClickListener {
       rankRecyclerHeartSwitch.text = "off"
     }
   }
-
 
 
   private fun setPlayed(played: Boolean, getPlays: Int) {

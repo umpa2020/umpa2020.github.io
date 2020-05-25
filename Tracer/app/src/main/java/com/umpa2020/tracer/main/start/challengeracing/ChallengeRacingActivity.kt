@@ -31,16 +31,14 @@ import com.umpa2020.tracer.network.FBMapRepository
 import com.umpa2020.tracer.network.FBStorageRepository
 import com.umpa2020.tracer.util.ChoicePopup
 import com.umpa2020.tracer.util.Logg
+import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.TTS
 import kotlinx.android.synthetic.main.activity_running.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.jetbrains.anko.toast
 
 class ChallengeRacingActivity : BaseRunningActivity() {
-  companion object {
-    const val ROUTE_GPX = "RouteGPX"
-  }
-
   lateinit var mapRouteGPX: RouteGPX
   lateinit var mapId: String
   var racingResult = true
@@ -52,6 +50,7 @@ class ChallengeRacingActivity : BaseRunningActivity() {
   var nextTP: Int = 0
   lateinit var startPoint: WayPoint
   lateinit var mCustomMarkerView: View
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     runningAppBarTextView.text = getString(R.string.challenge)
@@ -66,6 +65,10 @@ class ChallengeRacingActivity : BaseRunningActivity() {
   override fun onMapReady(googleMap: GoogleMap) {
     super.onMapReady(googleMap)
     goToMapButton.visibility = View.VISIBLE
+
+    val progressBar = MyProgressBar()
+    progressBar.show()
+
     launch {
       while (!::mapRouteGPX.isInitialized) {
         delay(100)
@@ -75,6 +78,7 @@ class ChallengeRacingActivity : BaseRunningActivity() {
         markerList = this.first
         turningPointList = this.second
       }
+      progressBar.dismiss()
     }
   }
 
@@ -131,9 +135,7 @@ class ChallengeRacingActivity : BaseRunningActivity() {
         }
       }
       R.id.runningStopButton -> {
-        //"종료를 원하시면 길게 눌러주세요".show()
-        // Toast.makeText(this, "종료를 원하시면 길게 눌러주세요", Toast.LENGTH_LONG).show()
-
+        this.toast(getString(R.string.press_hold))
       }
       R.id.runningPauseButton -> {
         if (privacy == Privacy.RACING) {
@@ -198,8 +200,8 @@ class ChallengeRacingActivity : BaseRunningActivity() {
 
     val newIntent = Intent(this, ChallengeRacingFinishActivity::class.java)
     newIntent.putExtra("Result", racingResult)
-    newIntent.putExtra(Constants.CHALLENGE_ID,mapId)
-    newIntent.putExtra(Constants.RACING_DISTANCE,distance)
+    newIntent.putExtra(Constants.CHALLENGE_ID, mapId)
+    newIntent.putExtra(Constants.RACING_DISTANCE, distance)
     newIntent.putExtra("RecordList", recordList.toTypedArray().toLongArray())
     newIntent.putExtra("BestList", bestList.toTypedArray().toLongArray())
     newIntent.putExtra("WorstList", worstList.toTypedArray().toLongArray())
@@ -322,6 +324,4 @@ class ChallengeRacingActivity : BaseRunningActivity() {
       )
     }
   }
-
-
 }

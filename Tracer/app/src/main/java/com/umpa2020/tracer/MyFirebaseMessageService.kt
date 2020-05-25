@@ -41,29 +41,6 @@ class MyFirebaseMessageService : FirebaseMessagingService() {
     }
   }
 
-  //토큰이 변경되었을때 호출
-//  override fun onNewToken(token: String) {
-//    super.onNewToken(token)
-//    //서버로 바뀐토큰 전송
-//    // If you want to send messages to this application instance or
-//    // manage this apps subscriptions on the server side, send the
-//    // Instance ID token to your app server.
-//
-//    //v17.0.0 이후부터는 onTokenRefresh()-depriciated
-////    var pushToken = FirebaseInstanceId.getInstance().token
-//    var pushToken: String? = null
-//    Logg.d("Refreshed token : $token")
-////    val uid = auth.currentUser!!.uid
-//    val uid = FirebaseAuth.getInstance().currentUser!!.uid
-//    val map = mutableMapOf<String, Any>()
-//    FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener { instanceIdResult ->
-//      pushToken = instanceIdResult.token
-//      Logg.d(pushToken.toString())
-//      map["pushtoken"] = pushToken!!
-//      FirebaseFirestore.getInstance().collection("pushtokens").document(uid).set(map)
-//    }
-//  }
-
   private fun sendNotification(messageTitle: String, messageBody: String) {
     val intent = Intent(this, MainActivity::class.java).apply {
       this.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)

@@ -2,9 +2,9 @@ package com.umpa2020.tracer.main.profile.myachievement
 
 import android.os.Bundle
 import androidx.recyclerview.widget.GridLayoutManager
-import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.EmblemData
+import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.network.BaseFB
 import com.umpa2020.tracer.network.FBAchievementRepository
 import kotlinx.android.synthetic.main.activity_profile_achivement.*

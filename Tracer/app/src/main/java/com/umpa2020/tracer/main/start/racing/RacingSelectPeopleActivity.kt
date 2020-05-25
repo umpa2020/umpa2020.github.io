@@ -7,7 +7,6 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import co.lujun.androidtagview.TagView.OnTagClickListener
 import com.umpa2020.tracer.App
-import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.RacerData
 import com.umpa2020.tracer.dataClass.RankingData
@@ -15,6 +14,7 @@ import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.extensions.addDirectionSign
 import com.umpa2020.tracer.extensions.classToGpx
 import com.umpa2020.tracer.extensions.gpxToClass
+import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.main.start.racing.RacingActivity.Companion.ROUTE_GPX
 import com.umpa2020.tracer.network.BaseFB.Companion.MAP_ID
 import com.umpa2020.tracer.network.FBMapRepository

@@ -36,12 +36,14 @@ import com.umpa2020.tracer.network.FBMapRepository
 import com.umpa2020.tracer.network.FBRacingRepository
 import com.umpa2020.tracer.util.ChoicePopup
 import com.umpa2020.tracer.util.Logg
+import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.TTS
 import kotlinx.android.synthetic.main.activity_running.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.jetbrains.anko.toast
 import java.io.File
 
 class RacingActivity : BaseRunningActivity() {
@@ -82,12 +84,16 @@ class RacingActivity : BaseRunningActivity() {
 
   override fun onMapReady(googleMap: GoogleMap) {
     super.onMapReady(googleMap)
+    val progressBar = MyProgressBar()
+    progressBar.show()
+    
     goToMapButton.visibility = View.VISIBLE
     wedgedCamera=false
     traceMap.drawRoute(mapRouteGPX.trkList, mapRouteGPX.wptList).run {
       markerList = this.first
       turningPointList = this.second
     }
+    progressBar.dismiss()
   }
 
   override fun init() {
@@ -143,9 +149,7 @@ class RacingActivity : BaseRunningActivity() {
         }
       }
       R.id.runningStopButton -> {
-        //"종료를 원하시면 길게 눌러주세요".show()
-        Toast.makeText(this, getString(R.string.press_hold), Toast.LENGTH_LONG).show()
-
+        this.toast(getString(R.string.press_hold))
       }
       R.id.runningPauseButton -> {
         if (privacy == Privacy.RACING) {
@@ -269,6 +273,7 @@ class RacingActivity : BaseRunningActivity() {
     startActivity(newIntent)
     finish()
   }
+
 
   private fun checkTurningPoint() {
     if (nextTP >= turningPointList.size) return

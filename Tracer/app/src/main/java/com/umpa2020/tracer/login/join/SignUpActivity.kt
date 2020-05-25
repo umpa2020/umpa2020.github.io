@@ -23,12 +23,12 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.jakewharton.rxbinding2.widget.RxTextView
-import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.dataClass.Users
 import com.umpa2020.tracer.extensions.show
 import com.umpa2020.tracer.extensions.toAge
+import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.network.FBProfileRepository
 import com.umpa2020.tracer.network.FBUsersRepository
@@ -38,15 +38,12 @@ import com.umpa2020.tracer.util.ProgressBar
 import com.umpa2020.tracer.util.UserInfo
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_sign_up.*
-import kotlinx.android.synthetic.main.activity_sign_up.app_toolbar
 import kotlinx.android.synthetic.main.signup_toolbar.*
 import kotlinx.android.synthetic.main.signup_toolbar.view.*
 import java.util.*
 import java.util.regex.Pattern
 
 class SignUpActivity : BaseActivity(), OnSingleClickListener {
-
-  private var WSY = "WSY"
   var success_request = 0
 
   // 여러 디스포저블 객체를 관리할 수 있는 CompositeDisposable 객체를 초기화 합니다.

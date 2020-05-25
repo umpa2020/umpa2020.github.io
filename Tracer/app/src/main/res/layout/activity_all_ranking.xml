@@ -35,16 +35,16 @@
     android:textSize="16dp" />
 
   <androidx.recyclerview.widget.RecyclerView
-    style="@style/subjectRelativeLayoutStyle"
-    android:paddingTop="0.1dp"
-    android:paddingBottom="0.1dp"
     android:id="@+id/resultPlayerRankingRecycler"
+    style="@style/subjectRelativeLayoutStyle"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_below="@+id/allRankingTextView"
-    android:paddingLeft="20dp"
-    android:paddingRight="20dp"
     android:layout_marginTop="20dp"
-    android:layout_marginBottom="20dp" />
+    android:layout_marginBottom="20dp"
+    android:paddingLeft="20dp"
+    android:paddingTop="0.1dp"
+    android:paddingRight="20dp"
+    android:paddingBottom="0.1dp" />
 
 </RelativeLayout>

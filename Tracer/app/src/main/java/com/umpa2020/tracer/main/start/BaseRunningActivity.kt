@@ -1,6 +1,7 @@
 package com.umpa2020.tracer.main.start
 
 import android.animation.ObjectAnimator
+import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.ActivityInfo
 import android.location.Location
@@ -21,6 +22,7 @@ import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.broadcastReceiver.LocationBroadcastReceiver
 import com.umpa2020.tracer.constant.Constants
+import com.umpa2020.tracer.constant.Constants.Companion.DRAWER_DURATION
 import com.umpa2020.tracer.constant.Privacy
 import com.umpa2020.tracer.constant.UserState
 import com.umpa2020.tracer.dataClass.DistanceTimeData
@@ -30,6 +32,7 @@ import com.umpa2020.tracer.gpx.WayPoint
 import com.umpa2020.tracer.gpx.WayPointType.TRACK_POINT
 import com.umpa2020.tracer.lockscreen.util.LockScreen
 import com.umpa2020.tracer.main.BaseActivity
+import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.main.MainActivity.Companion.locationViewModel
 import com.umpa2020.tracer.map.TraceMap
 import com.umpa2020.tracer.util.*
@@ -180,14 +183,6 @@ open class BaseRunningActivity : BaseActivity(), OnMapReadyCallback, OnSingleCli
 
         runningNotificationTextView.visibility = View.GONE
         lockScreen(true)
-        runningTimerTextView.setOnChronometerTickListener {
-          val mille = SystemClock.elapsedRealtime() - runningTimerTextView.base
-          val time = (mille / 1000).toInt()
-          val hour = time / (60 * 60)
-          val min = time % (60 * 60) / 60
-          val sec = time % 60
-//      Logg.d("$hour 시 $min 분 $sec 초")
-        }
         // viewModel 초기값 설정 => 시작 시간 설정
         locationViewModel.setTimes(TimeData(runningTimerTextView.base, true, 0L, ""))
         TTS.speech(tts)
@@ -304,17 +299,11 @@ open class BaseRunningActivity : BaseActivity(), OnMapReadyCallback, OnSingleCli
     countDownTimer?.cancel()
   }
 
-  override fun onResume() {
-    super.onResume()
-  }
 
   override fun onDestroy() {
     super.onDestroy()
     LocalBroadcastManager.getInstance(this).unregisterReceiver(locationBroadcastReceiver)
-
-
     // Shared에 마지막 위치 업데이트
-
     UserInfo.lat = currentLocation.latitude.toFloat()
     UserInfo.lng = currentLocation.longitude.toFloat()
 
@@ -330,6 +319,9 @@ open class BaseRunningActivity : BaseActivity(), OnMapReadyCallback, OnSingleCli
           View.OnClickListener {
             noticePopup.dismiss()
             lockScreen(false)
+            startActivity(Intent(this, MainActivity::class.java).apply {
+              addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            })
             finish()
           },
           View.OnClickListener {
@@ -339,6 +331,10 @@ open class BaseRunningActivity : BaseActivity(), OnMapReadyCallback, OnSingleCli
       }
       else -> {
         super.onBackPressed()
+        startActivity(Intent(this, MainActivity::class.java).apply {
+          addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        })
+        finish()
       }
     }
   }
@@ -420,18 +416,17 @@ open class BaseRunningActivity : BaseActivity(), OnMapReadyCallback, OnSingleCli
    *  러닝 기록 측정 SlidingDrawer 애니메이션
    */
   var isOpend = true
-
   private fun slidingDrawer() {
     if (isOpend) { // 내려가기
       ObjectAnimator.ofFloat(runningDrawer, "translationY", content.height.toFloat()).apply {
-        duration = 500
+        duration = DRAWER_DURATION
         start()
       }
       runningHandle.text = "▲"
       isOpend = false
     } else { // 올라가기
       ObjectAnimator.ofFloat(runningDrawer, "translationY", 0f).apply {
-        duration = 500
+        duration = DRAWER_DURATION
         start()
       }
       runningHandle.text = "▼"

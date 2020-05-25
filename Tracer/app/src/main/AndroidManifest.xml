@@ -51,7 +51,7 @@
     <service android:name=".lockscreen.service.LockScreenService" />
 
 
-    <activity android:name=".main.BaseActivity"/>
+    <activity android:name=".main.BaseActivity" />
     <activity android:name=".login.join.AgeSelectActivity" />
     <activity android:name=".main.challenge.ChallengeDataSettingActivity" />
     <activity

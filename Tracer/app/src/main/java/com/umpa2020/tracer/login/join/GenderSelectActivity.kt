@@ -4,8 +4,8 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.View
-import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.R
+import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.activity_gender_select.*
 import kotlinx.android.synthetic.main.signup_toolbar.*

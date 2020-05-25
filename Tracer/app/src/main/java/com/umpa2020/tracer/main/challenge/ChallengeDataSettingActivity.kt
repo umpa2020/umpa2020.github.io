@@ -1,10 +1,10 @@
 package com.umpa2020.tracer.main.challenge
 
 import android.os.Bundle
-import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.ChallengeData
 import com.umpa2020.tracer.dataClass.MapInfo
+import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.network.FBChallengeRepository
 import com.umpa2020.tracer.network.FBMapRepository
 import kotlinx.android.synthetic.main.activity_challenge_data_setting.*

@@ -4,9 +4,9 @@ import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.ActivityData
+import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.network.BaseFB
 import com.umpa2020.tracer.network.FBUsersRepository
 import com.umpa2020.tracer.util.MyProgressBar

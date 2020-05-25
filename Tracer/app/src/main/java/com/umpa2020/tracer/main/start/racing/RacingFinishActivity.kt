@@ -5,7 +5,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants.Companion.RACE_RESULT
 import com.umpa2020.tracer.constant.Constants.Companion.RANKING_DATA
@@ -13,6 +12,7 @@ import com.umpa2020.tracer.dataClass.ActivityData
 import com.umpa2020.tracer.dataClass.MapInfo
 import com.umpa2020.tracer.dataClass.RankingData
 import com.umpa2020.tracer.extensions.*
+import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.network.*
 import com.umpa2020.tracer.network.BaseFB.Companion.MAP_ID
@@ -63,16 +63,18 @@ class RacingFinishActivity : BaseActivity(), OnSingleClickListener {
       launch {
 
         //성공했다면 랭킹에 등록
-        val rankingDataReference=if (result)
+        val rankingDataReference = if (result)
           FBRacingRepository().createRankingData(racerData, rankingData, Uri.parse(routeGPXUri))
         else null
         arrRankingData = FBMapRepository().listMapRanking(mapId)
 
         // 유저 히스토리 등록
         FBUsersRepository().createUserHistory(
-          ActivityData(mapId, Date().time, racerData.distance, racerData.time,
+          ActivityData(
+            mapId, Date().time, racerData.distance, racerData.time,
             if (result) BaseFB.ActivityMode.RACING_SUCCESS else BaseFB.ActivityMode.RACING_FAIL,
-            rankingDataReference)
+            rankingDataReference
+          )
         )
         FBMapRepository().getMapInfo(racerData.mapId).let {
           FBAchievementRepository().incrementPlays(it!!.makerId)

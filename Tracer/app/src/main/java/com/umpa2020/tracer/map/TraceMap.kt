@@ -9,18 +9,22 @@ import android.view.View
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.*
+import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.RacerData
 import com.umpa2020.tracer.extensions.bounds
-import com.umpa2020.tracer.extensions.image
 import com.umpa2020.tracer.extensions.makingIcon
 import com.umpa2020.tracer.extensions.toLatLng
 import com.umpa2020.tracer.gpx.WayPoint
 import com.umpa2020.tracer.gpx.WayPointType.*
 import com.umpa2020.tracer.network.FBProfileRepository
+import com.umpa2020.tracer.util.GlideApp
 import com.umpa2020.tracer.util.Logg
+import com.umpa2020.tracer.util.MyProgressBar
+import com.umpa2020.tracer.util.ProgressBar
 import kotlinx.android.synthetic.main.profile_marker.view.*
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 
 class TraceMap(val mMap: GoogleMap) {
@@ -40,6 +44,7 @@ class TraceMap(val mMap: GoogleMap) {
     trkList: List<WayPoint>,
     wptList: List<WayPoint>
   ): Pair<MutableList<Marker>, MutableList<Marker>> {
+
     Logg.d("Map is draw")
     val track = trkList.map { it.toLatLng() }
     loadTrack =
@@ -125,10 +130,16 @@ class TraceMap(val mMap: GoogleMap) {
   }
 
   suspend fun makeProfileIcon(view: View, uid: String): BitmapDescriptor {
-    Logg.d("start glide")
-    view.profile_image.image(FBProfileRepository().getProfile(uid).imgPath)
-    delay(100)
-    Logg.d("finish glide")
+    val drawable = withContext(Dispatchers.IO) {
+      GlideApp.with(App.instance.context())
+        .load(FBProfileRepository().getProfile(uid).imgPath)
+        .override(1024, 980)
+        .error(R.drawable.logosquare)
+        .dontAnimate()
+        .dontTransform().submit()
+        .get()
+    }
+    view.profile_image.setImageDrawable(drawable)
     view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
     view.layout(0, 0, view.measuredWidth, view.measuredHeight)
     val bitmap = Bitmap.createBitmap(

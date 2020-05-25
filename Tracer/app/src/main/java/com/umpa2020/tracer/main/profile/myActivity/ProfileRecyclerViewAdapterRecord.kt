@@ -14,7 +14,6 @@ import com.umpa2020.tracer.dataClass.ActivityData
 import com.umpa2020.tracer.extensions.Y_M_D
 import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.extensions.image
-import com.umpa2020.tracer.main.profile.myachievement.ProfileRecyclerViewAdapterAchievement
 import com.umpa2020.tracer.main.ranking.RankRecyclerItemClickActivity
 import com.umpa2020.tracer.main.start.challengeracing.ChallengeRacingFinishActivity
 import com.umpa2020.tracer.main.start.racing.RacingFinishActivity

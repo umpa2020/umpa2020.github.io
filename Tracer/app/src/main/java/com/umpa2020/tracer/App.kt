@@ -45,28 +45,15 @@ class App : Application() {
     override fun onActivityResumed(activity: Activity?) {
       currentActivity = activity
     }
+
     override fun onActivityPaused(activity: Activity?) {}
     override fun onActivityStopped(activity: Activity?) {}
     override fun onActivityDestroyed(activity: Activity?) {
       activityCount--
 
-      // 앱을 완전히 종료할 때 구독 끊기
-      if (activityCount == 0) {
-        destroyAllRepository()
-      }
     }
 
     override fun onActivitySaveInstanceState(activity: Activity?, outState: Bundle?) {}
-  }
-
-  fun destroyAllRepository() {
-    /* AreaRepository.instance.destroy()
-     NoticeRepository.instance.destroy()
-     UserRepository.instance.destroy()
-     QnaRepository.instance.destroy()
-     DrivingRepository.instance.destroy()
-     MapLocationRepository.instance.destroy()
-     AnalyticsManager.destroy()*/
   }
 
 }

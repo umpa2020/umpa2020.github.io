@@ -114,19 +114,19 @@
         android:orientation="vertical">
 
         <TextView
-          style="@style/subjectName"
           android:id="@+id/challengeFinishAnalysis"
+          style="@style/subjectName"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginTop="20dp"
           android:text="@string/recordanalysis" />
 
         <TextView
-          android:layout_marginTop="10dp"
           style="@style/underSubjectName"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="@string/distributionChart"/>
+          android:layout_marginTop="10dp"
+          android:text="@string/distributionChart" />
 
         <com.github.mikephil.charting.charts.CombinedChart
           android:id="@+id/distributionChart"
@@ -135,11 +135,11 @@
           android:layout_marginTop="15dp" />
 
         <TextView
-          android:layout_marginTop="20dp"
           style="@style/underSubjectName"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="@string/compregensiveChart"/>
+          android:layout_marginTop="20dp"
+          android:text="@string/compregensiveChart" />
 
         <com.github.mikephil.charting.charts.LineChart
           android:id="@+id/rankLineChart"

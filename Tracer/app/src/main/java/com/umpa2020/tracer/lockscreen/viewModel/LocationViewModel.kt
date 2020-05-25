@@ -30,22 +30,4 @@ class LocationViewModel(application: Application) : AndroidViewModel(application
     times.value = timeData
   }
 
-//  fun setDistance(distanceStr: String) = viewModelScope.launch {
-//    distance.value= distanceStr
-//  }
-//
-//  fun updateStartTime(startTime: Long) = viewModelScope.launch {
-//    time.value = startTime
-//  }
-//
-//  fun updateWhenStopped(whenStopped: Long) = viewModelScope.launch {
-//    timeWhenStop.value = whenStopped
-//  }
-//  fun updateTimeFlag( flag: Boolean) = viewModelScope.launch {
-//    timeControl.value = flag
-//  }
-//
-//  fun updateTimeText(timeTextStr: String) = viewModelScope.launch {
-//    timeText.value = timeTextStr
-//  }
 }

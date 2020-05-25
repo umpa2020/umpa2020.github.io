@@ -25,24 +25,25 @@
   </Toolbar>
 
   <LinearLayout
+    style="@style/subjectRelativeLayoutStyle"
     android:layout_marginTop="0dp"
     android:orientation="vertical"
-    style="@style/subjectRelativeLayoutStyle"
-    android:paddingRight="10dp"
-    android:paddingLeft="10dp">
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp">
+
     <TextView
-      android:layout_marginLeft="10dp"
       style="@style/subjectName"
-      android:layout_marginTop="20dp"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:text="@string/badges"/>
+      android:layout_marginLeft="10dp"
+      android:layout_marginTop="20dp"
+      android:text="@string/badges" />
 
     <androidx.recyclerview.widget.RecyclerView
-      android:layout_gravity="center_horizontal"
       android:id="@+id/profileRecyclerAchievement"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
+      android:layout_gravity="center_horizontal"
       app:layoutManager="GridLayoutManager"
       app:spanCount="3" />
 

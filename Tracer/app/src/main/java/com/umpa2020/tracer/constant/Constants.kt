@@ -64,11 +64,13 @@ class Constants {
     const val MILLISINFUTURE = 3000L
     const val COUNTDOWN_INTERVAL = 1000L
 
-    const val RACE_RESULT="RACE_RESULT"
-    const val RANKING_DATA="RANKING_DATA"
-    const val CHALLENGE_ID="CHALLENGE_ID"
-    const val RACING_DISTANCE="RACING_DISTANCE"
+    const val RACE_RESULT = "RACE_RESULT"
+    const val RANKING_DATA = "RANKING_DATA"
+    const val CHALLENGE_ID = "CHALLENGE_ID"
+    const val RACING_DISTANCE = "RACING_DISTANCE"
 
+
+    const val DRAWER_DURATION = 500L
     const val TIMESTAMP_LENGTH = 13
     var testId = 0
   }

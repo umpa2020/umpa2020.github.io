@@ -7,13 +7,13 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.umpa2020.tracer.App
-import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.customUI.WorkaroundMapFragment
 import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.extensions.*
 import com.umpa2020.tracer.gpx.WayPointType.FINISH_POINT
 import com.umpa2020.tracer.gpx.WayPointType.START_POINT
+import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.main.start.racing.RacingActivity.Companion.ROUTE_GPX
 import com.umpa2020.tracer.main.start.racing.RacingSelectPeopleActivity
 import com.umpa2020.tracer.map.TraceMap
@@ -81,7 +81,6 @@ class RankingMapDetailActivity : BaseActivity(), OnSingleClickListener, OnMapRea
       }
     }
   }
-
 
 
   override fun onSingleClick(v: View?) {
