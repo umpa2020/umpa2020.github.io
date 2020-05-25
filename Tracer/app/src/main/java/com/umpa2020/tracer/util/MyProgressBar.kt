@@ -16,4 +16,8 @@ class MyProgressBar {
     switch--
     if (switch == 0) mprogressBar.dismiss()
   }
+
+  fun isShowing(): Boolean {
+    return mprogressBar.isShowing
+  }
 }
