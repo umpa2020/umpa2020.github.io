@@ -51,44 +51,70 @@
     <service android:name=".lockscreen.service.LockScreenService" />
 
 
-    <activity android:name=".main.BaseActivity" />
-    <activity android:name=".login.join.AgeSelectActivity" />
-    <activity android:name=".main.challenge.ChallengeDataSettingActivity" />
+    <activity android:name=".main.BaseActivity"
+      android:screenOrientation="portrait"/>
+    <activity android:name=".login.join.AgeSelectActivity"
+      android:screenOrientation="portrait"/>
+    <activity android:name=".main.challenge.ChallengeDataSettingActivity"
+      android:screenOrientation="portrait"/>
     <activity
       android:name=".lockscreen.LockScreenActivity"
       android:launchMode="singleInstance"
       android:showOnLockScreen="true"
-      android:theme="@style/lockscreenView" />
-    <activity android:name=".main.start.racing.AllRankingActivity" />
-    <activity android:name=".main.start.racing.RacingSelectPeopleActivity" />
-    <activity android:name=".main.profile.myActivity.ProfileActivityActivity" />
-    <activity android:name=".main.profile.settting.MyInformationActivity" />
-    <activity android:name=".main.profile.settting.AppSettingActivity" />
-    <activity android:name=".main.profile.myroute.ProfileRouteActivity" />
-    <activity android:name=".main.profile.myachievement.ProfileAchievementActivity" />
-    <activity android:name=".main.profile.ProfileActivity" />
-    <activity android:name=".main.start.challengeracing.ChallengeRacingActivity" />
-    <activity android:name=".main.start.challengeracing.ChallengeRacingFinishActivity" />
-    <activity android:name=".main.start.racing.RacingFinishActivity" />
-    <activity android:name=".main.start.racing.RacingActivity" />
-    <activity android:name=".login.join.GenderSelectActivity" />
-    <activity android:name=".login.join.SignUpActivity" />
-    <activity android:name=".login.splash.SplashActivity">
+      android:theme="@style/lockscreenView"
+      android:screenOrientation="portrait"/>
+    <activity android:name=".main.start.racing.AllRankingActivity"
+      android:screenOrientation="portrait"/>
+    <activity android:name=".main.start.racing.RacingSelectPeopleActivity"
+      android:screenOrientation="portrait"/>
+    <activity android:name=".main.profile.myActivity.ProfileActivityActivity"
+      android:screenOrientation="portrait"/>
+    <activity android:name=".main.profile.settting.MyInformationActivity"
+      android:screenOrientation="portrait"/>
+    <activity android:name=".main.profile.settting.AppSettingActivity"
+      android:screenOrientation="portrait"/>
+    <activity android:name=".main.profile.myroute.ProfileRouteActivity"
+      android:screenOrientation="portrait"/>
+    <activity android:name=".main.profile.myachievement.ProfileAchievementActivity"
+      android:screenOrientation="portrait"/>
+    <activity android:name=".main.profile.ProfileActivity"
+      android:screenOrientation="portrait"/>
+    <activity android:name=".main.start.challengeracing.ChallengeRacingActivity"
+      android:screenOrientation="portrait"/>
+    <activity android:name=".main.start.challengeracing.ChallengeRacingFinishActivity"
+      android:screenOrientation="portrait"/>
+    <activity android:name=".main.start.racing.RacingFinishActivity"
+      android:screenOrientation="portrait"/>
+    <activity android:name=".main.start.racing.RacingActivity"
+      android:screenOrientation="portrait"/>
+    <activity android:name=".login.join.GenderSelectActivity"
+      android:screenOrientation="portrait"/>
+    <activity android:name=".login.join.SignUpActivity"
+      android:screenOrientation="portrait"/>
+    <activity android:name=".login.splash.SplashActivity"
+      android:screenOrientation="portrait">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
 
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
     </activity>
-    <activity android:name=".main.ranking.RankRecyclerItemClickActivity" />
-    <activity android:name=".main.ranking.RankingMapDetailActivity" />
+    <activity android:name=".main.ranking.RankRecyclerItemClickActivity"
+      android:screenOrientation="portrait"/>
+    <activity android:name=".main.ranking.RankingMapDetailActivity"
+      android:screenOrientation="portrait"/>
     <activity
       android:name=".main.start.running.RunningSaveActivity"
-      android:windowSoftInputMode="adjustPan" /> <!-- <activity android:name=".main.start.BaseRunningActivity"/> -->
-    <activity android:name=".main.start.running.RunningActivity" />
-    <activity android:name=".main.MainActivity" />
-    <activity android:name=".login.LoginActivity" />
-    <activity android:name=".main.challenge.ChallengeRecycleritemClickActivity" />
+      android:windowSoftInputMode="adjustPan"
+      android:screenOrientation="portrait"/> <!-- <activity android:name=".main.start.BaseRunningActivity"/> -->
+    <activity android:name=".main.start.running.RunningActivity"
+      android:screenOrientation="portrait"/>
+    <activity android:name=".main.MainActivity"
+     android:screenOrientation="portrait" />
+    <activity android:name=".login.LoginActivity"
+      android:screenOrientation="portrait"/>
+    <activity android:name=".main.challenge.ChallengeRecycleritemClickActivity"
+      android:screenOrientation="portrait"/>
 
     <meta-data
       android:name="com.google.android.geo.API_KEY"
