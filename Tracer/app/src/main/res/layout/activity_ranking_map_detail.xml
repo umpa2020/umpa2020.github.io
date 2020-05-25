@@ -75,9 +75,8 @@
             style="@style/ListDetail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:includeFontPadding="false"
-            android:text="test"
-            android:textSize="13dp" />
+            android:textSize="13dp"
+            android:includeFontPadding="false"/>
 
           <TextView
             android:id="@+id/rankingDetailNickname"
@@ -85,7 +84,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="test"
             android:textColor="@color/lightblack"
             android:textSize="17dp" />
         </LinearLayout>
@@ -117,7 +115,6 @@
           android:layout_marginTop="20dp"
           android:background="@android:color/transparent"
           android:paddingLeft="10dp"
-          android:text="test"
           android:textColor="@color/lightblack"
           android:textSize="18dp" />
 

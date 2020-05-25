@@ -72,7 +72,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="15dp"
-            android:text="test"
             android:textColor="@color/lightblack"
             android:textSize="18dp" />
         </LinearLayout>
@@ -86,7 +85,6 @@
           android:layout_toLeftOf="@+id/rankRecyclerHeart"
           android:gravity="right"
           android:includeFontPadding="false"
-          android:text="test"
           android:textColor="@color/blackgray"
           android:textSize="20dp" />
 
@@ -108,7 +106,6 @@
           android:layout_toLeftOf="@+id/rankRecyclerExecute"
           android:gravity="right"
           android:includeFontPadding="false"
-          android:text="test"
           android:textColor="@color/blackgray"
           android:textSize="20dp" />
 
@@ -146,7 +143,6 @@
           android:layout_marginLeft="20dp"
           android:layout_marginTop="10dp"
           android:paddingBottom="20dp"
-          android:text="test"
           android:textColor="@color/lightblack"
           android:textSize="18dp" />
 

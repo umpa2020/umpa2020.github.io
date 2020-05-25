@@ -5,6 +5,7 @@ import com.google.firebase.firestore.DocumentReference
 import com.umpa2020.tracer.dataClass.MapInfo
 import com.umpa2020.tracer.dataClass.RankingData
 import com.umpa2020.tracer.dataClass.RouteGPX
+import com.umpa2020.tracer.extensions.fileDelete
 import com.umpa2020.tracer.extensions.gpxToClass
 import com.umpa2020.tracer.util.UserInfo
 import kotlinx.coroutines.tasks.await
@@ -45,7 +46,7 @@ class FBRacingRepository : BaseFB() {
       .document(UserInfo.autoLoginKey + timestamp).set(rankingData)
 
     //upload racerGpxFile
-    FBStorageRepository().uploadFile(racerGpxFile, rankingData.racerGPX!!)
+    FBStorageRepository().uploadFile(racerGpxFile, rankingData.racerGPX!!).fileDelete()
     return db.collection(MAPS).document(racerData.mapId).collection(RANKING)
       .document(UserInfo.autoLoginKey + timestamp)
   }

@@ -69,6 +69,7 @@ class RacingActivity : BaseRunningActivity() {
     val routeGPXUri = intent.getStringExtra(ROUTE_GPX)
     runningAppBarTextView.text = getString(R.string.race)
     mapRouteGPX = Uri.parse(routeGPXUri).gpxToClass()
+    routeGPXUri?.fileDelete()
     mapId = intent.getStringExtra(MAP_ID)!!
     racerList = intent.getSerializableExtra(RACER_LIST) as Array<RacerData>
 
@@ -261,7 +262,6 @@ class RacingActivity : BaseRunningActivity() {
     if (!saveFolder.exists()) {       //폴더 없으면 생성
       saveFolder.mkdir()
     }
-    routeGPX.addDirectionSign()
     val routeGpxUri = routeGPX.classToGpx(saveFolder.path).toString()
 
     val newIntent = Intent(this, RacingFinishActivity::class.java)

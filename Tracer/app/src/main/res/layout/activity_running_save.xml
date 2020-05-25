@@ -95,7 +95,6 @@
               android:layout_height="wrap_content"
               android:layout_marginTop="10dp"
               android:gravity="center"
-              android:text="test"
               android:textColor="@color/lightblack"
               android:textSize="20dp" />
           </LinearLayout>
@@ -120,7 +119,6 @@
               android:layout_height="wrap_content"
               android:layout_marginTop="10dp"
               android:gravity="center"
-              android:text="test"
               android:textColor="@color/lightblack"
               android:textSize="20dp" />
           </LinearLayout>
@@ -144,7 +142,6 @@
               android:layout_height="wrap_content"
               android:layout_marginTop="10dp"
               android:gravity="center"
-              android:text="test"
               android:textColor="@color/lightblack"
               android:textSize="20dp" />
           </LinearLayout>

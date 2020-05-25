@@ -91,7 +91,6 @@ class RankingMapDetailActivity : BaseActivity(), OnSingleClickListener, OnMapRea
         if (!saveFolder.exists()) {       //폴더 없으면 생성
           saveFolder.mkdir()
         }
-        routeGPX.addDirectionSign()
         val routeGpxUri = routeGPX.classToGpx(saveFolder.path).toString()
 
         nextIntent.putExtra(MAP_ID, mapId)

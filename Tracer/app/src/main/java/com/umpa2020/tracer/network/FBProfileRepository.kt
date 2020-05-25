@@ -51,14 +51,14 @@ class FBProfileRepository : BaseFB() {
     // 현재 날짜를 프로필 이름으로 nickname/Profile/현재날짜(영어).jpg 경로 만들기
     val dt = Date()
     FBStorageRepository().uploadFile(selectedImageUri, PROFILE + "/" + UserInfo.autoLoginKey + "/" + dt.time.toString())
-    db.collection(USERS).document(UserInfo.autoLoginKey)
+    usersCollectionRef.document(UserInfo.autoLoginKey)
       .update(PROFILE_IMAGE_PATH, "$PROFILE/${UserInfo.autoLoginKey}/${dt.time}").await()
   }
 
   /**
    * 회원 가입 시 프로필 이미지 storage에 등록
    */
-  fun uploadProfileImage(imageUri: Uri, timestamp: String) {
+  suspend fun uploadProfileImage(imageUri: Uri, timestamp: String) {
     // 현재 날짜를 프로필 이름으로 nickname/Profile/현재날짜 경로 만들기
     FBStorageRepository().uploadFile(imageUri, PROFILE + "/" + UserInfo.autoLoginKey + "/" + timestamp)
   }

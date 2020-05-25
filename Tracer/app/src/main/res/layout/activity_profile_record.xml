@@ -27,9 +27,13 @@
     </Toolbar>
 
     <androidx.recyclerview.widget.RecyclerView
+      android:paddingLeft="20dp"
+      android:paddingRight="20dp"
+      android:background="@drawable/textline_background_down"
+      android:paddingBottom="0.1dp"
       android:id="@+id/profileRecyclerRecord"
       android:layout_width="match_parent"
-      android:layout_height="match_parent" />
+      android:layout_height="wrap_content" />
   </LinearLayout>
 
   <TextView
