@@ -20,9 +20,7 @@ import javax.xml.parsers.DocumentBuilderFactory
 import javax.xml.transform.TransformerFactory
 import javax.xml.transform.dom.DOMSource
 import javax.xml.transform.stream.StreamResult
-import kotlin.math.PI
-import kotlin.math.abs
-import kotlin.math.atan2
+import kotlin.math.*
 
 fun Location.toLatLng(): LatLng {
   return LatLng(latitude, longitude)
@@ -86,33 +84,24 @@ fun RouteGPX.addCheckPoint(): RouteGPX {
 fun RouteGPX.addDirectionSign(): RouteGPX {
   val latlngs = mutableListOf<LatLng>()
   this.trkList.forEach { latlngs.add(it.toLatLng()) }
-  val simplifyLatLngs = PolyUtil.simplify(latlngs, 20.0)
+  val simplifyLatLngs = PolyUtil.simplify(latlngs, 50.0)
   if (wptList.isNullOrEmpty()) wptList = mutableListOf()
   for (i in 1 until simplifyLatLngs.size - 1) {
     val a = simplifyLatLngs[i - 1]
     val b = simplifyLatLngs[i]
     val c = simplifyLatLngs[i + 1]
-    //이전과 현재 좌표직선의 기울기
-    var preGradient = (atan2((b.latitude - a.latitude), (b.longitude - a.longitude))) * 180 / PI
-    //현재와 다음 좌표직선의 기울기
-    var postGradient =
-      (atan2((c.latitude - b.latitude), (c.longitude - b.longitude))) * 180 / PI
 
-    Logg.d("ssmm11 보정 전 post = $postGradient / pre = $preGradient")
-    Logg.d("ssmm11 a.lat = ${a.latitude} / a.long = ${a.longitude} / b.lat = ${b.latitude} / b.long = ${b.longitude} / c.lat = ${c.latitude} / c.long = ${c.longitude}")
+    val firstVec = LatLng(b.latitude - a.latitude, b.longitude - a.longitude)
+    val secondVec = LatLng(c.latitude - b.latitude, c.longitude - b.longitude)
 
-    //만약 값이 범위를 초과하면 보정
-    if (postGradient - preGradient < 180.0 || postGradient - preGradient > -180.0) {
-      if (preGradient < 0) {
-        preGradient += 360.0
-      }
-      if (postGradient < 0) {
-        postGradient += 360.0
-      }
-    }
-    //직선의 회전각
-    val angle = postGradient - preGradient
-    Logg.d("ssmm11 보정 후 angle = $angle / post = $postGradient / pre = $preGradient")
+    val x1 = firstVec.longitude
+    val y1 = firstVec.latitude
+    val x2 = secondVec.longitude
+    val y2 = secondVec.latitude
+    val bunja=(x1 * y2 - y1 * x2)
+    val bunmo=sqrt(x1.pow(2) + y1.pow(2)) * sqrt(x2.pow(2) + y2.pow(2))
+    val angle = asin( bunja/bunmo )*180/PI
+    Logg.d("x1 : $x1 y1: $y1 x2 : $x2 y2: $y2 angle : $angle")
     if (abs(angle) >= TURNING_ANGLE) {
       if (angle > 0) {
         this.wptList.add(
@@ -123,7 +112,6 @@ fun RouteGPX.addDirectionSign(): RouteGPX {
           WayPoint(b.latitude, b.longitude, 0.0, 0.0, "Turning Point", "Turn Right", 0L, TURNING_RIGHT_POINT)
         )
       }
-
     }
   }
   return this
