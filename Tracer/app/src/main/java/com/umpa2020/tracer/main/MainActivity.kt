@@ -6,9 +6,6 @@ import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.iid.FirebaseInstanceId
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.locationBackground.LocationBackgroundService
@@ -47,36 +44,6 @@ class MainActivity : BaseActivity() {
     //TTS 한번 실행 해야 뒤에 동작이 정상적으로 됨
     TTS.speech(" ")
     startService() // 서비스 시작.
-    // FCM 테스트는 해당 함수 실행 후 서버에 저장된 토큰 값으로 Cloud Message 실행.
-    registerPushToken()
-  }
-
-  /**
-   * 토큰 값을 서버에 저장하는 함수지만 토큰 값 없이 Cloud Message만 써도 전송 가능.
-   *  다음과 같은 경우 토큰 재 발급.
-   *  - 앱에서 인스턴스 ID 삭제
-   *  - 새 기기에서 앱 복원
-   *  - 사용자가 앱 삭제/재설치
-   *  - 사용자가 앱 데이터 소거
-   */
-  private fun registerPushToken() {
-    //v17.0.0 이전까지는
-    ////var pushToken = FirebaseInstanceId.getInstance().token
-    //v17.0.1 이후부터는 onTokenRefresh()-depriciated
-    var pushToken: String? = null
-    val uid = FirebaseAuth.getInstance().currentUser!!.uid
-    val map = mutableMapOf<String, Any>()
-    FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener { instanceIdResult ->
-      pushToken = instanceIdResult.token
-
-      map["pushtoken"] = pushToken!!
-      FirebaseFirestore.getInstance().collection("pushtokens").document(uid).set(map)
-    }
-
-  }
-
-  override fun onPause() {
-    super.onPause()
 
   }
 
@@ -85,10 +52,6 @@ class MainActivity : BaseActivity() {
 
     stopService()
   }
-
-  // as google doc says
-  // Handler for incoming messages from the service.
-  // private var mHandler: IncomingMessageHandler? = null
 
   /**
    * start service
