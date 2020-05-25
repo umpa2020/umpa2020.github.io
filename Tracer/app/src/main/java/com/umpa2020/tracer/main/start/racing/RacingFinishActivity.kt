@@ -123,7 +123,7 @@ class RacingFinishActivity : BaseActivity(), OnSingleClickListener {
 
         progressbar.show()
 
-        MainScope().launch {
+        launch {
           FBRacingRepository().getOtherData(mapId, getId!!).let {
             setOtherData(it)
           }
@@ -142,7 +142,6 @@ class RacingFinishActivity : BaseActivity(), OnSingleClickListener {
     super.onActivityResult(requestCode, resultCode, data)
   }
 
-  @SuppressLint("ShowToast")
   private fun setMyUiData(
     rankingData: RankingData,
     resultRankText: Int,
@@ -176,7 +175,7 @@ class RacingFinishActivity : BaseActivity(), OnSingleClickListener {
   }
 
   private fun setOtherData(rankingData: RankingData) {
-    MainScope().launch {
+   launch {
       FBProfileRepository().getProfileImage(rankingData.challengerId!!)?.let { RacingFinishAnalysisOtherProfile.image(it) }
 
     }

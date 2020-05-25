@@ -11,7 +11,6 @@ import com.umpa2020.tracer.dataClass.RankingData
 import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.extensions.m_s
 import com.umpa2020.tracer.extensions.show
-import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.OnSingleClickListener
 import kotlinx.android.synthetic.main.recycler_racing_select_people_item.view.*
 import kotlinx.android.synthetic.main.recycler_rankfragment_topplayer_item.view.rankRecyclerItemClickChallengerNicknameTextView
@@ -90,13 +89,13 @@ class RacingRecyclerViewAdapterMultiSelect(
     val view = LayoutInflater.from(parent.context)
       .inflate(R.layout.recycler_racing_select_people_item, parent, false)
     context = parent.context
-    Logg.d("onCreateViewHolder호출")
+
     return myViewHolder(view) //view 객체는 한개의 리사이클러뷰가 디자인 되어 있는 레이아웃을 의미
   }
 
   //item 사이즈, 데이터의 전체 길이 반환
   override fun getItemCount(): Int {
-    Logg.d("데이터 크기 " + mydata.size.toString())
+
     return mydata.size
   }
 

@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.umpa2020.tracer.dataClass.DistanceTimeData
 import com.umpa2020.tracer.dataClass.TimeData
-import com.umpa2020.tracer.util.Logg
 import kotlinx.coroutines.launch
 
 /**
@@ -22,7 +21,7 @@ class LocationViewModel(application: Application) : AndroidViewModel(application
   }
 
   fun setDistanceSpeed(distanceTimeData: DistanceTimeData) = viewModelScope.launch {
-    Logg.d("셋팅 돼?")
+
     distanceSpeed.value = distanceTimeData
   }
 

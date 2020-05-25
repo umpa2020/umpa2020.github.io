@@ -14,7 +14,6 @@ import androidx.preference.PreferenceManager
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.umpa2020.tracer.main.MainActivity
-import com.umpa2020.tracer.util.Logg
 
 /**
  *  FCM(Firebase Cloud Messaging)을 받기 위한 서비스
@@ -26,7 +25,7 @@ class MyFirebaseMessageService : FirebaseMessagingService() {
 
   override fun onMessageReceived(remoteMessage: RemoteMessage) {
     // TODO(developer): Handle FCM messages here.
-    Logg.d("From: " + remoteMessage.from)
+
 
     // 제공되는 기능이 앱 다운 및 첫 실행과 동시에 자동 실행이라 해당 서비스 start,stop 여부가 불명.
     // 그래서 일단 Shared 값으로 메시지만 보이고 안보이도록 설정.
@@ -34,8 +33,8 @@ class MyFirebaseMessageService : FirebaseMessagingService() {
     if (prefs.getBoolean("notificationSetting", true)) {
       // 메시지에 알림 페이로드가 포함되어 있는지 확인하십시오.
       remoteMessage.notification?.let {
-        Logg.d("Message Notification Title:  ${remoteMessage.notification!!.title}")
-        Logg.d("Message Notification Body:  ${remoteMessage.notification!!.body}")
+
+
         sendNotification(remoteMessage.notification!!.title!!, remoteMessage.notification!!.body!!)
       }
     }

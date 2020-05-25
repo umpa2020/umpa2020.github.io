@@ -33,9 +33,7 @@ import com.umpa2020.tracer.main.start.running.RunningActivity
 import com.umpa2020.tracer.map.TraceMap
 import com.umpa2020.tracer.network.BaseFB.Companion.MAP_ID
 import com.umpa2020.tracer.network.FBMapRepository
-import com.umpa2020.tracer.network.FBProfileRepository
 import com.umpa2020.tracer.network.FBStorageRepository
-import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.MyProgressBar
 import com.umpa2020.tracer.util.OnSingleClickListener
 import com.umpa2020.tracer.util.UserInfo
@@ -101,7 +99,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener, Cor
           saveFolder.mkdir()
         }
         val routeGpxUri = gpx.classToGpx(saveFolder.path).toString()
-        Logg.d("$routeGpxUri")
+
       }
     }
   }
@@ -112,7 +110,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener, Cor
    *  현재 맵 보이는 범위로 루트 검색
    */
   private fun searchThisArea() {
-    Logg.d("1번선수")
+
     progressBar.show()
     val bound = traceMap!!.mMap.projection.visibleRegion.latLngBounds
     launch {
@@ -128,7 +126,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener, Cor
           routeMarkers.clear()
           nearMapList.forEach { nearMap ->
             //데이터 바인딩
-            Logg.d("asd : ${FBProfileRepository().getProfile(nearMap.makerId).imgPath}")
+
             routeMarkers.add(
               traceMap!!.mMap.addMarker(
                 MarkerOptions()
@@ -138,7 +136,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener, Cor
                   .icon(traceMap?.makeProfileIcon(mCustomMarkerView, nearMap.makerId))
 
               ).apply {
-                Logg.d("nani0-2")
+
                 tag = nearMap.mapId
               }
             )
@@ -162,18 +160,18 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener, Cor
     val addressList =
       geocoder.getFromLocationName(mainStartSearchTextView.text.toString(), 10)
 
-    Logg.i(addressList.size.toString())
+
     for (i in 0 until addressList.size)
-      Logg.i(addressList[i].toString())
+
 
     // 최대 검색 결과 개수
-    if (addressList.size == 0) {
-      getString(R.string.cannot_find).show()
-    } else {
-      // mainStartSearchTextView.setText(addressList[0].getAddressLine(0))
-      traceMap!!.moveCamera(LatLng(addressList[0].latitude, addressList[0].longitude), zoomLevel!!)
-      searchThisArea()
-    }
+      if (addressList.size == 0) {
+        getString(R.string.cannot_find).show()
+      } else {
+        // mainStartSearchTextView.setText(addressList[0].getAddressLine(0))
+        traceMap!!.moveCamera(LatLng(addressList[0].latitude, addressList[0].longitude), zoomLevel!!)
+        searchThisArea()
+      }
 
     // 키보드 숨기기
     (requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
@@ -184,7 +182,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener, Cor
     inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
   ): View? {
 
-    Logg.d("onCreateView()")
+
     val view = inflater.inflate(R.layout.fragment_start, container, false)
 
     view.test.setOnClickListener {
@@ -208,7 +206,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener, Cor
 
     // 검색 창 키보드에서 엔터키 리스너
     view.mainStartSearchTextView.setOnEditorActionListener { p0, p1, p2 ->
-      Logg.i("엔터키 클릭")
+
       search()
       true
     }
@@ -220,7 +218,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener, Cor
   }
 
   override fun onMapReady(googleMap: GoogleMap) {
-    Logg.d("onMapReady")
+
 
     traceMap = TraceMap(googleMap) //구글맵
     traceMap!!.mMap.isMyLocationEnabled = true // 이 값을 true로 하면 구글 기본 제공 파란 위치표시 사용가능.
@@ -228,7 +226,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener, Cor
 
 
     // Shared의 값을 받아와서 초기 카메라 위치 설정.
-    Logg.d("${UserInfo.lat} , ${UserInfo.lng}")
+
 
     val latlng = LatLng(UserInfo.lat.toDouble(), UserInfo.lng.toDouble())
     traceMap!!.initCamera(latlng)
@@ -236,7 +234,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener, Cor
     // 카메라 이동 중일 때
     traceMap!!.mMap.setOnCameraMoveListener {
       wedgedCamera = false
-      Logg.d("카메라 이동 중 $wedgedCamera")
+
       mainStartSearchAreaButton.visibility = View.GONE
     }
 
@@ -245,7 +243,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener, Cor
 
       // 여기서 검색 버튼 보여주기
       zoomLevel = traceMap!!.mMap.cameraPosition.zoom
-      Logg.d("카메라 멈춤 $wedgedCamera, 줌 레벨 : $zoomLevel")
+
       mainStartSearchAreaButton.visibility = View.VISIBLE
     }
 
@@ -254,7 +252,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener, Cor
       traceMap!!.mMap
       wedgedCamera = true
       traceMap!!.moveCamera(currentLocation!!.toLatLng(), zoomLevel!!)
-      Logg.d("내 위치로 카메라 이동 $wedgedCamera")
+
       true
     }
 
@@ -291,8 +289,6 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener, Cor
     LocalBroadcastManager.getInstance(this.requireContext())
       .registerReceiver(locationBroadcastReceiver, IntentFilter("custom-event-name"))
 
-    // Shared의 마지막 위치였던거 확인.
-    Logg.d("${UserInfo.lat} , ${UserInfo.lng}")
   }
 
   lateinit var loadTrack: Polyline
@@ -359,7 +355,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener, Cor
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    Logg.d("onViewCreated()")
+
 
     view.mainStartRunning.setOnClickListener(this)
     view.mainStartSearchAreaButton.setOnClickListener(this)
@@ -381,7 +377,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener, Cor
     cancel()
     //Shared로 마지막 위치 업데이트
     if (currentLocation != null) {
-      Logg.d("마지막 위치 업데이트")
+
       UserInfo.lat = currentLocation!!.latitude.toFloat()
       UserInfo.lng = currentLocation!!.longitude.toFloat()
     }
@@ -390,7 +386,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener, Cor
   override fun onDestroy() {
     super.onDestroy()
     zoomLevel = 16f
-    Logg.d("onDestroy()")
+
   }
 
   // 초기에 위치 받아오면 카메라 설정.
@@ -406,7 +402,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener, Cor
           firstFlag = false
 //          it.initCamera(currentLocation!!.toLatLng())
         }
-//        Logg.d("${currentLocation}")
+//
       }
     }
   }

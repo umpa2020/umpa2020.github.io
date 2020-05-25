@@ -16,7 +16,6 @@ import com.umpa2020.tracer.R
 import com.umpa2020.tracer.constant.Constants
 import com.umpa2020.tracer.network.FBUsersRepository
 import com.umpa2020.tracer.util.ChoicePopup
-import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.UserInfo
 
 class SettingPreferenceFragment : PreferenceFragmentCompat() {
@@ -72,7 +71,7 @@ class SettingPreferenceFragment : PreferenceFragmentCompat() {
   var noticePopup: ChoicePopup? = null
 
   private fun authDelete() {
-    Logg.d(mAuth!!.currentUser!!.uid)
+
     noticePopup = ChoicePopup(requireContext(), getString(R.string.please_select), getString(R.string.membership_withdrawal), getString(R.string.yes), getString(R.string.no),
       View.OnClickListener {
         // 예
@@ -90,7 +89,7 @@ class SettingPreferenceFragment : PreferenceFragmentCompat() {
         // firebase Auth 삭제?
         mAuth!!.currentUser!!.delete().addOnCompleteListener {
           if (it.isSuccessful) {
-            Logg.d("탈퇴 성공")
+
             //로그아웃처리
             mAuth!!.signOut()
           }
