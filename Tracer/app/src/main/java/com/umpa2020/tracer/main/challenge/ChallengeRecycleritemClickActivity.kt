@@ -2,6 +2,7 @@ package com.umpa2020.tracer.main.challenge
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Paint
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
@@ -60,6 +61,8 @@ class ChallengeRecycleritemClickActivity : BaseActivity(), OnSingleClickListener
           } else challengeDetailCompetitionPeriod.text = from!!.format(Y_M_D) + " ~ " + getString(R.string.not_specified)
           challengeDetailAddress.text = address
           challengeDetailHost.text = host
+          challengeURLDetails.text = link
+          challengeURLDetails.paintFlags = Paint.UNDERLINE_TEXT_FLAG
           challengeDetailInformation.text = intro
           challengeEnabled = enabled
         }
@@ -74,6 +77,7 @@ class ChallengeRecycleritemClickActivity : BaseActivity(), OnSingleClickListener
 
   private fun initButton() {
     challengeDetailButton.setOnClickListener(this)
+    challengeURLDetails.setOnClickListener(this)
   }
 
   override fun onSingleClick(v: View?) {
@@ -90,6 +94,10 @@ class ChallengeRecycleritemClickActivity : BaseActivity(), OnSingleClickListener
           nextIntent.putExtra(RacingActivity.ROUTE_GPX, routeGPXUri.toString())
           startActivity(nextIntent)
         }
+      }
+      R.id.challengeURLDetails -> {
+        val webViewIntent = Intent(Intent.ACTION_VIEW, Uri.parse(challengeURLDetails.text.toString()))
+        startActivity(webViewIntent)
       }
     }
   }

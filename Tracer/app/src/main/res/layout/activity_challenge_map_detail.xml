@@ -191,25 +191,26 @@
 
 
         <TextView
-          android:id="@+id/challengeURI"
+          android:id="@+id/challengeURL"
           style="@style/challengeDetail"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_below="@+id/dividetextveiw5"
           android:layout_marginTop="10dp"
-          android:text="URI" />
+          android:text="URL" />
 
         <TextView
-          android:id="@+id/challengeURIDetails"
+          android:id="@+id/challengeURLDetails"
           style="@style/underSubjectName"
           android:layout_width="match_parent"
+          android:textColor="#0000FF"
           android:layout_height="wrap_content"
-          android:layout_below="@+id/challengeURI"
+          android:layout_below="@+id/challengeURL"
           android:layout_margin="10dp" />
 
         <TextView
           android:id="@+id/dividetextveiw8"
-          android:layout_below="@+id/challengeURIDetails"
+          android:layout_below="@+id/challengeURLDetails"
           style="@style/divisionTextView"
           android:layout_marginBottom="10dp"
           android:layout_marginTop="10dp"
