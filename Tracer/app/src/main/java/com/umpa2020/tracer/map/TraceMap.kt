@@ -35,7 +35,8 @@ class TraceMap(val mMap: GoogleMap) {
   var markerList = mutableListOf<Marker>()
   var turningPointList = mutableListOf<Marker>()
   val unPassedIcon = R.drawable.ic_unpassed_circle.makingIcon()
-
+  var mapDownFlag = false
+  lateinit var trackBounds : LatLngBounds
   fun drawRoute(
     trkList: List<WayPoint>,
     wptList: List<WayPoint>
@@ -53,9 +54,10 @@ class TraceMap(val mMap: GoogleMap) {
       )        //경로를 그릴 폴리라인 집합
 
     wptList.forEach { addMarker(it) }
-    val trackBounds = track.toMutableList().bounds()
+    trackBounds = track.toMutableList().bounds()
 
     mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(trackBounds, 1080, 300, 20))
+    mapDownFlag = true
     return Pair(markerList, turningPointList)
   }
 

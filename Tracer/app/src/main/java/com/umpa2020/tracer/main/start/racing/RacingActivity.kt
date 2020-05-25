@@ -85,7 +85,9 @@ class RacingActivity : BaseRunningActivity() {
     super.onMapReady(googleMap)
     val progressBar = MyProgressBar()
     progressBar.show()
-
+    
+    goToMapButton.visibility = View.VISIBLE
+    wedgedCamera=false
     traceMap.drawRoute(mapRouteGPX.trkList, mapRouteGPX.wptList).run {
       markerList = this.first
       turningPointList = this.second
@@ -122,7 +124,7 @@ class RacingActivity : BaseRunningActivity() {
   }
 
   override fun onSingleClick(v: View?) {
-
+    super.onSingleClick(v)
     when (v!!.id) {
       R.id.runningStartButton -> {
 
