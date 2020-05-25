@@ -120,8 +120,6 @@ dependencies {
     // Wow 에서 사용하고 있는 maps - 에 대한 util
     implementation 'com.google.maps.android:android-maps-utils:0.5'
 
-    // 맵 달릴때 정확히 뭔진 모르겠으나 윤권이가 알듯 ㅎ
-    implementation 'com.github.moraisigor:slidingdrawer:1.7.1'
     implementation 'androidx.fragment:fragment-ktx:1.2.4'
 
     // chart 그리는 gradle

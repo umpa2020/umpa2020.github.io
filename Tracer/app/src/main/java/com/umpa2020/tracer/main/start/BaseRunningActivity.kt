@@ -1,5 +1,6 @@
 package com.umpa2020.tracer.main.start
 
+import android.animation.ObjectAnimator
 import android.content.IntentFilter
 import android.content.pm.ActivityInfo
 import android.location.Location
@@ -32,17 +33,12 @@ import com.umpa2020.tracer.lockscreen.util.LockScreen
 import com.umpa2020.tracer.main.MainActivity.Companion.locationViewModel
 import com.umpa2020.tracer.map.TraceMap
 import com.umpa2020.tracer.util.*
-import hollowsoft.slidingdrawer.OnDrawerCloseListener
-import hollowsoft.slidingdrawer.OnDrawerOpenListener
-import hollowsoft.slidingdrawer.OnDrawerScrollListener
 import kotlinx.android.synthetic.main.activity_running.*
 import java.lang.String.format
 import java.util.*
 
 
-open class BaseRunningActivity : BaseActivity(), OnMapReadyCallback, OnDrawerScrollListener,
-  OnDrawerOpenListener,
-  OnDrawerCloseListener, OnSingleClickListener {
+open class BaseRunningActivity : BaseActivity(), OnMapReadyCallback,OnSingleClickListener{
   lateinit var traceMap: TraceMap
   var privacy = Privacy.RACING
   var currentLocation = Location(LocationManager.GPS_PROVIDER).apply {
@@ -70,9 +66,7 @@ open class BaseRunningActivity : BaseActivity(), OnMapReadyCallback, OnDrawerScr
   lateinit var progressBar: MyProgressBar
 
   open fun init() {
-    runningDrawer.setOnDrawerScrollListener(this)
-    runningDrawer.setOnDrawerOpenListener(this)
-    runningDrawer.setOnDrawerCloseListener(this)
+    runningHandle.setOnClickListener(this)
     runningStartButton.setOnClickListener(this)
     runningStopButton.setOnClickListener(this)
     runningPauseButton.setOnClickListener(this)
@@ -167,7 +161,6 @@ open class BaseRunningActivity : BaseActivity(), OnMapReadyCallback, OnDrawerScr
         userState = UserState.RUNNING
         buttonAnimation()
 
-        runningDrawer.open()
         runningTimerTextView.base = SystemClock.elapsedRealtime()
         runningTimerTextView.start()
 
@@ -408,26 +401,25 @@ open class BaseRunningActivity : BaseActivity(), OnMapReadyCallback, OnDrawerScr
     runningStopButton.isClickable = true
     runningPauseButton.isClickable = true
   }
-
-  override fun onScrollStarted() {
-
-  }
-
-  override fun onScrollEnded() {
-
-  }
-
-  override fun onDrawerOpened() {
-    runningHandle.text = "▼"
-
-  }
-
-  override fun onDrawerClosed() {
-    runningHandle.text = "▲"
-
-  }
-
+  var isOpend=true
   override fun onSingleClick(v: View?) {
-    Logg.d("tlqkf!! baserunning")
+    when(v!!.id){
+      R.id.runningHandle->{
+        Logg.d("Click?")
+        if(isOpend){
+          ObjectAnimator.ofFloat(runningDrawer,"translationY",150f).apply {
+            duration=1000
+            start()
+          }
+          isOpend=false
+        }else{
+          ObjectAnimator.ofFloat(runningDrawer,"translationY",0f).apply {
+            duration=1000
+            start()
+          }
+          isOpend=true
+        }
+      }
+    }
   }
 }

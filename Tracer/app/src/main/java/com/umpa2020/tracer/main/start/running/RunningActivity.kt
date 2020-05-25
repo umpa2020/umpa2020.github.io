@@ -1,10 +1,12 @@
 package com.umpa2020.tracer.main.start.running
 
+import android.animation.ObjectAnimator
 import android.content.Intent
 import android.location.Location
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.View
+import android.view.animation.AnimationUtils
 import android.widget.Toast
 import com.google.android.gms.maps.SupportMapFragment
 import com.umpa2020.tracer.App
@@ -21,6 +23,7 @@ import com.umpa2020.tracer.gpx.WayPointType.*
 import com.umpa2020.tracer.main.start.BaseRunningActivity
 import com.umpa2020.tracer.main.start.racing.RacingActivity
 import com.umpa2020.tracer.util.ChoicePopup
+import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.TTS
 import kotlinx.android.synthetic.main.activity_running.*
 import java.io.File
@@ -126,6 +129,7 @@ class RunningActivity : BaseRunningActivity() {
   }
 
   override fun onSingleClick(v: View?) {
+    super.onSingleClick(v)
     when (v!!.id) {
       R.id.runningStartButton -> {
         start(getString(R.string.startRunning)) // tts String 전달
