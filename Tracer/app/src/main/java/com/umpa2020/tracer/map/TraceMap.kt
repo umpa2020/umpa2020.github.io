@@ -13,7 +13,6 @@ import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.RacerData
 import com.umpa2020.tracer.extensions.bounds
-import com.umpa2020.tracer.extensions.image
 import com.umpa2020.tracer.extensions.makingIcon
 import com.umpa2020.tracer.extensions.toLatLng
 import com.umpa2020.tracer.gpx.WayPoint
@@ -23,7 +22,6 @@ import com.umpa2020.tracer.util.GlideApp
 import com.umpa2020.tracer.util.Logg
 import kotlinx.android.synthetic.main.profile_marker.view.*
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 
 

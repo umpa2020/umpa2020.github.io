@@ -3,12 +3,12 @@ package com.umpa2020.tracer.main.profile
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.extensions.image
 import com.umpa2020.tracer.extensions.m_s
 import com.umpa2020.tracer.extensions.prettyDistance
+import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.main.profile.myActivity.ProfileActivityActivity
 import com.umpa2020.tracer.main.profile.myachievement.ProfileAchievementActivity
 import com.umpa2020.tracer.main.profile.myroute.ProfileRouteActivity

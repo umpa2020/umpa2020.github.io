@@ -21,10 +21,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : BaseActivity() {
-  private var doubleBackToExitPressedOnce1 = false
-
   companion object {
-
     lateinit var locationViewModel: LocationViewModel
   }
 
@@ -35,7 +32,7 @@ class MainActivity : BaseActivity() {
     val navController = findNavController(R.id.nav_host_fragment)
     bottom_navigation.setupWithNavController(navController)
     // 바텀 아이템 중복 선택 시 중복 작업 제거
-    bottom_navigation.setOnNavigationItemReselectedListener{
+    bottom_navigation.setOnNavigationItemReselectedListener {
       // do nothing
     }
 
@@ -46,11 +43,9 @@ class MainActivity : BaseActivity() {
 
       UserInfo.lat = 37.619606f
       UserInfo.lng = 127.059798f
-    } else {
-
     }
 
-
+    //TTS 한번 실행 해야 뒤에 동작이 정상적으로 됨
     TTS.speech(" ")
     startService() // 서비스 시작.
 
@@ -83,15 +78,6 @@ class MainActivity : BaseActivity() {
     }
 
   }
-//  override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
-//    if (selectedFragment != null) {
-//      supportFragmentManager.putFragment(outState, KEY_FRAGMENT, currentFragment);
-//    }
-//    outState.putString(KEY_LIST_NAME, currentListName);
-//    super.onSaveInstanceState(outState, outPersistentState)
-//
-//  }
-
 
   override fun onPause() {
     super.onPause()

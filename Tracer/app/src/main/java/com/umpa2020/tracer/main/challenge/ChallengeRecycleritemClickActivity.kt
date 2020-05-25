@@ -9,13 +9,13 @@ import android.view.View
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.extensions.Y_M_D
 import com.umpa2020.tracer.extensions.format
 import com.umpa2020.tracer.extensions.gpxToClass
 import com.umpa2020.tracer.extensions.image
 import com.umpa2020.tracer.gpx.WayPointType
+import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.main.start.challengeracing.ChallengeRacingActivity
 import com.umpa2020.tracer.main.start.racing.RacingActivity
 import com.umpa2020.tracer.main.start.racing.RacingSelectPeopleActivity

@@ -102,10 +102,6 @@ object LocationUpdatesComponent {
     locationRequest.priority = priority
   }
 
-  fun getLastLocat(): Location {
-    return lastLocation!!
-  }
-
   /**
    *  마지막으로 알려진 위치 가져오기
    *  위치 서비스 클라이언트를 만든 후 마지막으로 알려진 사용자 기기의 위치를 가져올 수 있습니다
@@ -189,17 +185,4 @@ object LocationUpdatesComponent {
   interface ILocationProvider {
     fun onLocationUpdated(location: Location?)
   }
-
-
-  /**
-   * The desired interval for location updates. Inexact. Updates may be more or less frequent.
-   */
-  private const val UPDATE_INTERVAL_IN_MILLISECONDS = (6 * 1000).toLong()
-
-  /**
-   * The fastest rate for active location updates. Updates will never be more frequent
-   * than this value.
-   */
-  private const val FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = UPDATE_INTERVAL_IN_MILLISECONDS / 2
-
 }

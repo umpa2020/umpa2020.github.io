@@ -6,9 +6,9 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.umpa2020.tracer.App
-import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.MapInfo
+import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.network.BaseFB.Companion.USER_ID
 import com.umpa2020.tracer.network.FBUsersRepository
 import com.umpa2020.tracer.util.ProgressBar

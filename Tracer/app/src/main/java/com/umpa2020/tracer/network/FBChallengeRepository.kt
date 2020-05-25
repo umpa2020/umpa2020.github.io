@@ -71,10 +71,11 @@ class FBChallengeRepository : BaseFB() {
       .documents.map { it.toObject(BannerData::class.java)!! }.toMutableList()
   }
 
-  suspend fun createChallengeRecord(challengeId: String,challengeRecordData: ChallengeRecordData) :DocumentReference?{
+  suspend fun createChallengeRecord(challengeId: String, challengeRecordData: ChallengeRecordData): DocumentReference? {
     return db.collection(CHALLENGES).document(challengeId).collection(RANKING).add(challengeRecordData).await()
   }
-  suspend fun getChallengeRecord(challengeRecordReference: DocumentReference) :ChallengeRecordData?{
+
+  suspend fun getChallengeRecord(challengeRecordReference: DocumentReference): ChallengeRecordData? {
     return challengeRecordReference.get().await().toObject(ChallengeRecordData::class.java)
   }
 }

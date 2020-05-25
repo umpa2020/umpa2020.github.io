@@ -10,13 +10,13 @@ import android.view.View
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.umpa2020.tracer.App
-import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.customUI.WorkaroundMapFragment
 import com.umpa2020.tracer.dataClass.*
 import com.umpa2020.tracer.extensions.*
 import com.umpa2020.tracer.gpx.WayPointType.FINISH_POINT
 import com.umpa2020.tracer.gpx.WayPointType.START_POINT
+import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.main.start.racing.RacingActivity
 import com.umpa2020.tracer.map.TraceMap
@@ -208,7 +208,6 @@ class RunningSaveActivity : BaseActivity(), OnMapReadyCallback, OnSingleClickLis
     progressBar.dismiss()
     finish()
   }
-
 
 
   override fun onMapReady(googleMap: GoogleMap) {

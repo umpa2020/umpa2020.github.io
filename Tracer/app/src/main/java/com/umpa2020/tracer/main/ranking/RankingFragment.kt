@@ -81,7 +81,7 @@ class RankingFragment : Fragment(), OnSingleClickListener, CoroutineScope by Mai
           } else {
             requireView().rankingfiltermode.text = getString(R.string.likes)
             if (!isLoding) {
-             launch {
+              launch {
                 progressBar.show()
                 rankingRepo.listFilterRange(rankingLatLng!!, tuneDistance, "likes", limit).let {
                   getRank(it, "likes")
@@ -148,7 +148,7 @@ class RankingFragment : Fragment(), OnSingleClickListener, CoroutineScope by Mai
           if (requireView().tuneRadioBtnExecute.isChecked) {
             requireView().rankingfiltermode.text = getString(R.string.execute)
 
-           launch {
+            launch {
               progressBar.show()
               rankingRepo.listRanking(rankingLatLng!!, tuneDistance, "plays", limit).let {
                 getRank(it, "plays")
@@ -157,7 +157,7 @@ class RankingFragment : Fragment(), OnSingleClickListener, CoroutineScope by Mai
           } else {
             requireView().rankingfiltermode.text = getString(R.string.likes)
 
-           launch {
+            launch {
               progressBar.show()
               rankingRepo.listRanking(rankingLatLng!!, tuneDistance, "likes", limit).let {
                 getRank(it, "likes")
@@ -188,7 +188,7 @@ class RankingFragment : Fragment(), OnSingleClickListener, CoroutineScope by Mai
 
           Logg.d("왜 안나와~~~2")
 
-         launch {
+          launch {
             Logg.d("왜 안나와~~~3")
             progressBar.show()
             rankingRepo.listRanking(rankingLatLng!!, tuneDistance, "plays", limit).let {

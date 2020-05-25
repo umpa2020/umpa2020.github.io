@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Context.LAYOUT_INFLATER_SERVICE
 import android.content.Intent
 import android.content.IntentFilter
-import android.content.pm.PackageInfo
 import android.graphics.Color
 import android.location.Geocoder
 import android.location.Location
@@ -24,7 +23,6 @@ import com.google.android.gms.maps.model.*
 import com.google.firebase.storage.FirebaseStorage
 import com.umpa2020.tracer.App
 import com.umpa2020.tracer.R
-import com.umpa2020.tracer.dataClass.MapInfo
 import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.extensions.*
 import com.umpa2020.tracer.gpx.WayPointType
@@ -47,15 +45,10 @@ import kotlinx.coroutines.*
 import java.io.File
 
 
-class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener,CoroutineScope by MainScope() {
+class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener, CoroutineScope by MainScope() {
   var traceMap: TraceMap? = null
   var currentLocation: Location? = null
   var routeMarkers = mutableListOf<Marker>()
-
-  // 처음 화면 시작에서 주변 route 마커 찍어주기 위함
-  val STRAT_FRAGMENT_NEARMAP = 30
-  val NEARMAPFALSE = 41
-  var nearMaps: ArrayList<MapInfo> = arrayListOf()
   var wedgedCamera = true // 카메로 고정 flag
   val progressBar = MyProgressBar()
   var firstFlag = true
@@ -112,7 +105,9 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener,Coro
       }
     }
   }
-  val jobList= mutableListOf<Job>()
+
+  val jobList = mutableListOf<Job>()
+
   /**
    *  현재 맵 보이는 범위로 루트 검색
    */
@@ -274,7 +269,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener,Coro
 
     traceMap!!.mMap.setOnMarkerClickListener {
       it.showInfoWindow()
-     launch {
+      launch {
         if (it.tag != null) {
           FBMapRepository().getMapInfo(it.tag as String)?.let {
             FBStorageRepository().getFile(it.routeGPXPath).gpxToClass().let {
@@ -299,14 +294,6 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener,Coro
     // Shared의 마지막 위치였던거 확인.
     Logg.d("${UserInfo.lat} , ${UserInfo.lng}")
   }
-
-  fun getVersionInfo() {
-    val info: PackageInfo =
-      requireContext().packageManager.getPackageInfo(App.instance.packageName, 0)
-    val version = info.versionName
-    Logg.d(version.toString())
-  }
-
 
   lateinit var loadTrack: Polyline
 
@@ -390,7 +377,7 @@ class StartFragment : Fragment(), OnMapReadyCallback, OnSingleClickListener,Coro
     // 브로드 캐스트 해제
     LocalBroadcastManager.getInstance(this.requireContext())
       .unregisterReceiver(locationBroadcastReceiver)
-    jobList.forEach {it.cancel() }
+    jobList.forEach { it.cancel() }
     cancel()
     //Shared로 마지막 위치 업데이트
     if (currentLocation != null) {

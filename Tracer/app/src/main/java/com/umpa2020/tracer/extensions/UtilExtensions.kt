@@ -27,9 +27,9 @@ fun Int.toRank(): String {
 }
 
 fun Int.toNumberUnit(): String {
-  return when  {
-    this > 999999 -> "${this/1000000}m"
-    this > 999 -> "${this/1000}k"
+  return when {
+    this > 999999 -> "${this / 1000000}m"
+    this > 999 -> "${this / 1000}k"
     else -> "$this"
   }
 }

@@ -29,7 +29,6 @@ import com.umpa2020.tracer.dataClass.RouteGPX
 import com.umpa2020.tracer.extensions.*
 import com.umpa2020.tracer.gpx.WayPoint
 import com.umpa2020.tracer.gpx.WayPointType.*
-import com.umpa2020.tracer.main.MainActivity
 import com.umpa2020.tracer.main.start.BaseRunningActivity
 import com.umpa2020.tracer.main.start.racing.RacingSelectPeopleActivity.Companion.RACER_LIST
 import com.umpa2020.tracer.network.BaseFB.Companion.MAP_ID
@@ -39,7 +38,11 @@ import com.umpa2020.tracer.util.ChoicePopup
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.TTS
 import kotlinx.android.synthetic.main.activity_running.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.jetbrains.anko.toast
 import java.io.File
 
 class RacingActivity : BaseRunningActivity() {
@@ -138,9 +141,7 @@ class RacingActivity : BaseRunningActivity() {
         }
       }
       R.id.runningStopButton -> {
-        //"종료를 원하시면 길게 눌러주세요".show()
-        Toast.makeText(this, getString(R.string.press_hold), Toast.LENGTH_LONG).show()
-
+        this.toast(getString(R.string.press_hold))
       }
       R.id.runningPauseButton -> {
         if (privacy == Privacy.RACING) {

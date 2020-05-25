@@ -7,10 +7,10 @@ import android.provider.MediaStore
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
-import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.extensions.image
 import com.umpa2020.tracer.extensions.toAge
+import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.network.FBProfileRepository
 import com.umpa2020.tracer.util.Logg
 import com.umpa2020.tracer.util.OnSingleClickListener
@@ -98,7 +98,6 @@ class MyInformationActivity : BaseActivity(), OnSingleClickListener {
       }
     }
   }
-
 
 
   companion object {

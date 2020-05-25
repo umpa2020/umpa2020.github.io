@@ -7,7 +7,6 @@ import android.os.SystemClock
 import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.preference.PreferenceFragmentCompat
-import androidx.preference.SwitchPreference
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -38,34 +37,6 @@ class SettingPreferenceFragment : PreferenceFragmentCompat() {
       .build()
 
     mGoogleSignInClient = GoogleSignIn.getClient(App.instance, googleSignInOptions) //구글 로그인 클래스
-
-    // TTS 스위치 버튼
-    val switchTTS: SwitchPreference? = findPreference("ttsNotificationSetting") as SwitchPreference?
-
-    // Switch preference change listener
-    switchTTS?.setOnPreferenceChangeListener { preference, newValue ->
-      if (newValue == true) {
-      } else {
-      }
-
-      true
-    }
-
-    // 잠금 화면 스위치 버튼
-
-    // 알람 스위치 버튼
-    val switchNotification: SwitchPreference? = findPreference("notificationSetting") as SwitchPreference?
-
-    // Switch preference change listener
-    switchNotification?.setOnPreferenceChangeListener { preference, newValue ->
-      if (newValue == true) {
-        //TODO 알람 ON 기능 추가
-      } else {
-        //TODO 알람 OFF 기능 추가
-      }
-
-      true
-    }
   }
 
   /**
@@ -154,10 +125,7 @@ class SettingPreferenceFragment : PreferenceFragmentCompat() {
         UserInfo.nickname = ""
         UserInfo.birth = ""
         UserInfo.gender = ""
-//        UserInfo.clear()
-        //TODO : 이건 정빈이가 추가한거 같은데 삭제 하니깐 약간 어플이 꼬이는거 같아서 물어보고 삭제하든가 하기
-//        UserInfo.permission = 0
-//        UserInfo.rankingLatLng = LatLng(0.0, 0.0)
+
 
         // 이거 해주니깐 다시 로그인할 때 아이디 선택 요구함.
         mGoogleSignInClient!!.signOut()

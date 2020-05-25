@@ -94,7 +94,7 @@ class FBUsersRepository : BaseFB() {
   suspend fun listUserRoute(uid: String, limit: Long): List<MapInfo>? {
     val infoDatas =
       if (globalStartAfter == null) {
-        mapsCollectionRef.whereEqualTo(MAKER_ID, uid).whereEqualTo(CHALLENGE,false)
+        mapsCollectionRef.whereEqualTo(MAKER_ID, uid).whereEqualTo(CHALLENGE, false)
       } else {
         mapsCollectionRef.whereEqualTo(MAKER_ID, uid).startAfter(globalStartAfter!!)
       }.limit(limit).get().await().apply {

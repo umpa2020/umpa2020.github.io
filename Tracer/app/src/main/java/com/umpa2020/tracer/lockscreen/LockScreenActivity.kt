@@ -7,10 +7,10 @@ import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
 import androidx.lifecycle.Observer
-import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.R
 import com.umpa2020.tracer.dataClass.TimeData
 import com.umpa2020.tracer.lockscreen.util.ViewUnLock
+import com.umpa2020.tracer.main.BaseActivity
 import com.umpa2020.tracer.main.MainActivity.Companion.locationViewModel
 import kotlinx.android.synthetic.main.activity_lock_screen.*
 
