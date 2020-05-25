@@ -24,8 +24,7 @@
 
 
   <androidx.recyclerview.widget.RecyclerView
-    style="@style/subjectRelativeLayoutStyle"
-    android:paddingTop="0.1dp"
+    android:background="@drawable/textline_background_down"
     android:paddingBottom="0.1dp"
     android:id="@+id/profileRecyclerRoute"
     android:layout_width="match_parent"

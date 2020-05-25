@@ -40,7 +40,7 @@ class ProfileRouteRecyclerViewAdapter(val mdata: ArrayList<MapInfo>) :
     holder.date.text = infoData.createTime.format(Y_M_D)
 
     if (infoData.played) {
-      holder.play.setColorFilter(Color.CYAN)
+      holder.play.setColorFilter(R.color.colorPrimary)
     }
 
     if (infoData.liked) {

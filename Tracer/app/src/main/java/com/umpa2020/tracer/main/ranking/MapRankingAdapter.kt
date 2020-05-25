@@ -46,7 +46,7 @@ class MapRankingAdapter(
       holder.modeIcon.setImageResource(R.drawable.ic_sneaker_for_running)
       holder.modeIcon.tag = R.drawable.ic_sneaker_for_running
       if (infoData.played) {
-        holder.modeIcon.setColorFilter(Color.CYAN)
+        holder.modeIcon.setColorFilter(R.color.colorPrimary)
       }
       holder.modeNo.text = infoData.plays.toNumberUnit()
     } else if (mode == "likes") {

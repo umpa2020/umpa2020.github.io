@@ -123,7 +123,8 @@ class RankRecyclerItemClickActivity : BaseActivity(), OnSingleClickListener {
     rankRecyclerExecuteCount.text = getPlays.toString()
 
     if (played) {
-      rankRecyclerExecute.setColorFilter(Color.CYAN)
+      //rankRecyclerExecute.setColorFilter(Color.GREEN)
+      rankRecyclerExecute.setColorFilter(R.color.colorPrimary)
     }
   }
 }
