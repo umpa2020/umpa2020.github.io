@@ -92,7 +92,7 @@ class FBMapRepository : BaseFB() {
     mapsCollectionRef.document(mapInfo.mapId).set(mapInfo)
     //racerGPX
     FBStorageRepository().uploadFile(imgPath, mapInfo.mapImagePath).fileDelete()
-    FBStorageRepository().uploadFile(gpxUri, mapInfo.routeGPXPath).fileDelete()
+    FBStorageRepository().uploadFile(gpxUri, mapInfo.routeGPXPath)
     FBStorageRepository().uploadFile(gpxUri, rankingData.racerGPX!!).fileDelete()
     mapsCollectionRef.document(mapInfo.mapId).collection(RANKING)
       .document(UserInfo.autoLoginKey + timestamp).set(rankingData)
